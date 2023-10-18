@@ -985,7 +985,7 @@ LoggerIdentifiable, Cloneable {
      */
     @Interchangeable(fieldTitle = ActivityFieldsConstants.ACTIVITY_TYPE, pickIdOnly = true,
             label = "Activity Type", importable = false)
-    protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
+    public Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")

@@ -25,15 +25,15 @@ const override = config => {
             },
             'react-dom': {
                 import: 'react-dom', // the "react" package will be used a provided and fallback module
-                shareKey: 'react-dom', // under this name the shared module will be placed in the share scope
-                shareScope: 'legacy', // share scope with this name will be used
+                shareKey: 'newReactDom', // under this name the shared module will be placed in the share scope
+                shareScope: 'default', // share scope with this name will be used
                 singleton: true, // only a single version of the shared module is allowed
             },
             'react-router-dom': {
                 import: 'react-router-dom',
-                singleton: true,
-                shareKey: 'react-router-dom',
+                shareKey: 'newReactRouterDom',
                 shareScope: 'default',
+                singleton: true
             }
         },
     });

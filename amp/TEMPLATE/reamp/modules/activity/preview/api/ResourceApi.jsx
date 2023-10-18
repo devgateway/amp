@@ -8,8 +8,8 @@ export default class ResourceApi {
         return ApiHelper._fetchData(url);
     }
 
-    static fetchResources(resourceUUID) {
-        const url = RESOURCES_API;
+    static fetchResources(resourceUUID, language = 'en') {
+        const url = `${RESOURCES_API}?language=${language}`;
         return ApiHelper._postData(url, resourceUUID);
     }
 

@@ -3,7 +3,6 @@ import {
   Button, Checkbox, Form, Modal,
 } from 'semantic-ui-react';
 import { Formik, FormikProps } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import styles from './css/Modal.module.css';
 import { useAppDispatch, useAppSelector } from '../utils/hooks';
 import { EditUserProfile, UserProfile } from '../types';
@@ -12,9 +11,9 @@ import { editUserProfile } from '../reducers/editUserProfileReducer';
 import ResultModal from './ResultModal';
 import { updateUser } from '../reducers/fetchUserProfileReducer';
 
-const EditProfile: React.FC = () => {
+const EditProfile = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const translations = useAppSelector((state) => state.translations.translations);
   const editUserProfileState = useAppSelector((state) => state.editUserProfile);
 
@@ -22,13 +21,9 @@ const EditProfile: React.FC = () => {
 
   const userProfile = useAppSelector((state) => state.userProfile.user);
 
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [showResultModal, setShowResultModal] = useState(false);
   const [resultModalContent, setResultModalContent] = useState('');
-
-  useEffect(() => {
-    setShow(true);
-  }, []);
 
   const getNotificationEmailEnabled = () => {
     if (userProfile) {
@@ -45,8 +40,9 @@ const EditProfile: React.FC = () => {
       setShowResultModal(true);
     }
 
-    if (!editUserProfileState.loading && !editUserProfileState.error) {
-      dispatch(updateUser(editUserProfileState.user as UserProfile));
+    if (!editUserProfileState.loading && !editUserProfileState.error && editUserProfileState.user) {
+      const previousUser = userProfile as UserProfile;
+      dispatch(updateUser(editUserProfileState.user as UserProfile || previousUser));
       setResultModalContent('Profile updated successfully.');
       setShowResultModal(true);
     }
@@ -56,20 +52,24 @@ const EditProfile: React.FC = () => {
     handleResult();
   }, [editUserProfileState]);
 
+  console.log('userProfile', userProfile);
+  console.log('showState', show);
+
   if (!userProfile) {
     return;
   }
 
   const handleClose = () => {
-    const previousPath = localStorage.getItem('currentPath');
-    if (previousPath) {
-      const goBackEvent = new CustomEvent('[UserManager] navigated', { detail: previousPath });
-      window.dispatchEvent(goBackEvent);
-    } else {
-      navigate(-1);
-    }
-
+    const previousURL = localStorage.getItem('PREVIOUS_URL');
     setShow(false);
+    if (previousURL) {
+      window.location.replace(previousURL);
+    }
+  };
+
+  const handleCloseResultModal = () => {
+    setShowResultModal(false);
+    handleClose();
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -109,6 +109,7 @@ const EditProfile: React.FC = () => {
                             open={show}
                             ref={modalRef}
                             closeIcon
+                            centered
                             dimmer="blurring"
                         >
                             <Modal.Header>
@@ -321,7 +322,7 @@ const EditProfile: React.FC = () => {
                                           </Button>
                                       </Modal.Actions>
 
-                                      <ResultModal content={resultModalContent} open={showResultModal} />
+                                      <ResultModal onClose={handleCloseResultModal} content={resultModalContent} open={showResultModal} />
 
                                     </>
                                 )}

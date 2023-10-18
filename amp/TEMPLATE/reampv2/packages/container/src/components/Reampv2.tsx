@@ -19,7 +19,11 @@ const Reampv2 = () => {
             if (newPathname === location.pathname) {
                 return;
             }
-            navigate(newPathname);
+            // localStorage.setItem("searchParams", location.search);
+            navigate({
+                pathname: newPathname,
+                search: location.search,
+            });
         };
         window.addEventListener("[reampv2] navigated", reampv2NavigationEventHandler);
 
@@ -38,7 +42,7 @@ const Reampv2 = () => {
             const containerEvent = new CustomEvent("[container] navigated", {
                 detail: location.pathname.replace(reampv2Basename, ""),
             });
-
+            localStorage.setItem("searchParams", location.search);
             window.dispatchEvent(containerEvent);
         }
     }, [location]);

@@ -16,7 +16,6 @@ export const routes: RouteObject[] = [
                     <AmpOfflineLazy/>
                 </Suspense>
             </CrossNavigationManager>
-
         )
     },
     {
@@ -27,7 +26,6 @@ export const routes: RouteObject[] = [
                     <Reampv2Lazy/>
                 </Suspense>
             </CrossNavigationManager>
-
         )
     },
     {
@@ -38,6 +36,7 @@ export const routes: RouteObject[] = [
                     <UserManagerLazy/>
                 </Suspense>
             </CrossNavigationManager>
+
         )
     },
     {
@@ -47,7 +46,6 @@ export const routes: RouteObject[] = [
             <CrossNavigationManager>
                 <div />
             </CrossNavigationManager>
-
         )
     },
 ]

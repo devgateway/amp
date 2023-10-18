@@ -154,7 +154,7 @@ MainMenu.propTypes = {
   _getLayout: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
   id: PropTypes.number,
-  options: PropTypes.object,
+  options: PropTypes.any,
   reportDetails: PropTypes.object,
   columns: PropTypes.object,
   measures: PropTypes.object,

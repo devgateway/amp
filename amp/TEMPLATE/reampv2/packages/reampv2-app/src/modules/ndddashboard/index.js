@@ -9,7 +9,22 @@ import defaultTrnPack from './config/initialTranslations.json';
 import './index.css';
 import '../../open-sans.css';
 
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const checkreduxDevTools = () => {
+  if (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+    return window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+  }
+  return (...args) => {
+    if (args.length === 0) {
+      return undefined;
+    }
+    if (args.some(arg => typeof arg === 'object')) {
+      return compose;
+    }
+    return compose(...args);
+  };
+};
+
+const composeEnhancer = checkreduxDevTools() || compose;
 
 class NDDDashboardApp extends Component {
   constructor(props) {

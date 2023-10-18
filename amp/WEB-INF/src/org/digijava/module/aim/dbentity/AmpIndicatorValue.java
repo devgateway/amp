@@ -27,10 +27,10 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
      * 
      * Thanks!
      */
-    public static final int TARGET=0;
-    public static final int ACTUAL=1;
-    public static final int BASE=2;
-    public static final int REVISED=3;
+    public static final int TARGET = 0;
+    public static final int ACTUAL = 1;
+    public static final int BASE = 2;
+    public static final int REVISED = 3;
     
 
 

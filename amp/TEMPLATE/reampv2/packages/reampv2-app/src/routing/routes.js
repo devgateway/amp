@@ -1,13 +1,13 @@
 import {lazy, Suspense} from "react";
 import NavigationManager from "../NavigationManager";
-import {Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 const SSCDashboardApp = lazy(() => import('../modules/sscdashboard'));
-const AdminNDDApp = lazy(() => import('../modules/admin/ndd'));
+const AdminApps = lazy(() => import('../modules/admin/Admin.routes'));
 const NDDDashboardApp = lazy(() => import('../modules/ndddashboard'));
-const ReportGeneratorApp = lazy(() => import('../modules/report_generator'));
 const GeocoderApp = lazy(() => import('../modules/geocoder'));
 const AmpOfflineApp = lazy(() => import('../modules/ampoffline/Download'));
+const ReportGeneratorApp = lazy(() => import('../modules/report_generator'));
 
 /** @type {import('react-router-dom').RouteObject[]} */
 const routes = [
@@ -37,14 +37,6 @@ const routes = [
                 )
             },
             {
-                path: "ndd",
-                element: (
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <AdminNDDApp />
-                    </Suspense>
-                )
-            },
-            {
                 path: "ndddashboard/*",
                 element: (
                     <Suspense fallback={<div>Loading...</div>}>
@@ -65,6 +57,14 @@ const routes = [
                 element: (
                     <Suspense fallback={<div>Loading...</div>}>
                         <GeocoderApp />
+                    </Suspense>
+                )
+            },
+            {
+                path: "admin/*",
+                element: (
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <AdminApps />
                     </Suspense>
                 )
             }

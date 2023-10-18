@@ -147,7 +147,7 @@ public class FiltersConstants {
     public static final String PRIMARY_PROGRAM_LEVEL_6 = "primary-program-level-6";
     public static final String PRIMARY_PROGRAM_LEVEL_7 = "primary-program-level-7";
     public static final String PRIMARY_PROGRAM_LEVEL_8 = "primary-program-level-8";
-    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL = "primary-program-level";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL = "indirect-primary-program-level";
 
     public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_0 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-0";
     public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_1 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-1";
@@ -201,6 +201,8 @@ public class FiltersConstants {
     public static final String QUINARY_SECTOR_SUB_SUB_SECTOR = "quinary-sector-sub-sub-sector";
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
+
+    public static final String INDICATOR_NAME = "indicator-name";
 
     /** filters IDs to Name mapping */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{

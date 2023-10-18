@@ -466,27 +466,30 @@ public class DbUtil {
             // update user
             session.save(user);
             session.flush();
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
-            try {
-                TruUserData userData = new TruUserData();
-                TruUserData.Data data = new TruUserData.Data();
-                TruUserData.User user1 = new TruUserData.User();
-                user1.setDisplayName(user.getFirstNames()+" "+user.getLastName());
-                user1.setPassword(UmUtil.decrypt(user.getTruBudgetPassword(),user.getTruBudgetKeyGen()));
-                user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
-                data.setUser(user1);
-                userData.setData(data);
-                if(registerUserOnTrubudget(userData, user)) {
-                    user.setTruBudgetEnabled(true);
-                    session.update(user);
-                    session.flush();
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+
+                try {
+                    TruUserData userData = new TruUserData();
+                    TruUserData.Data data = new TruUserData.Data();
+                    TruUserData.User user1 = new TruUserData.User();
+                    user1.setDisplayName(user.getFirstNames() + " " + user.getLastName());
+                    user1.setPassword(UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()));
+                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    data.setUser(user1);
+                    userData.setData(data);
+                    if (registerUserOnTrubudget(userData, user)) {
+                        user.setTruBudgetEnabled(true);
+                        session.update(user);
+                        session.flush();
+                    }
+
+                } catch (Exception e) {
+                    logger.info("Error: " + e.getMessage(), e);
+                    tx.rollback();
                 }
-
-            }catch (Exception e)
-        {
-            logger.info("Error: "+e.getMessage(), e);
-            tx.rollback();
-        }
+            }
 
 
 
@@ -501,7 +504,7 @@ public class DbUtil {
                 session.save(user.getUserLangPreferences());
             }
 
-            session.getTransaction().commit();
+            tx.commit();
 
             // Is becoming a member of Member group of corresponding site
             if(user.getInterests() != null) {

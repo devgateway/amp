@@ -149,6 +149,9 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
 
                 if (refreshExistingDocs)
                     existingTmpDocs = getExistingObject();
+                if (existingTmpDocs==null){
+                    existingTmpDocs=new ArrayList<>();
+                }
                 List<TemporaryComponentFundingDocument> ret = new ArrayList<>(existingTmpDocs);
 
                 if (am.getObject().getComponentFundingDocuments() == null)

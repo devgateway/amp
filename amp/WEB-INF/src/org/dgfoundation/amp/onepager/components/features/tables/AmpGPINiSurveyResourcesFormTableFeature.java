@@ -97,13 +97,14 @@ public class AmpGPINiSurveyResourcesFormTableFeature
                         .ofNullable(getSession().getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS))
                         .orElse(new HashSet<AmpGPINiSurveyResponseDocument>());
 
-                List<TemporaryGPINiDocument> ret = new ArrayList<TemporaryGPINiDocument>();
-
                 if (refreshExistingDocs) {
                     existingTmpDocs = getExistingObject();
                 }
+                if (existingTmpDocs==null){
+                    existingTmpDocs=new ArrayList<>();
+                }
 
-                ret.addAll(existingTmpDocs);
+                List<TemporaryGPINiDocument> ret = new ArrayList<>(existingTmpDocs);
 
                 for (AmpGPINiSurveyResponseDocument d : setModel.getObject()) {
                     if (delItems.contains(d)) {

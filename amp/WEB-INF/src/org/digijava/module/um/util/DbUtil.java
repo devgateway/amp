@@ -389,28 +389,31 @@ public class DbUtil {
 
             session.update(user);
             session.flush();
-            try {
-                TruUserData userData = new TruUserData();
-                TruUserData.Data data = new TruUserData.Data();
-                TruUserData.User user1 = new TruUserData.User();
-                user1.setDisplayName(user.getFirstNames()+" "+user.getLastName());
-                // TODO: 8/28/23 if you are editing a user for the first time with Trubudget integrated. their password will be the email
-                // TODO: 8/28/23 this can be changed later in Trubudget
-                String pass = UmUtil.decrypt(user.getTruBudgetPassword(),user.getTruBudgetKeyGen());
-                user1.setPassword(pass);
-                user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
-                data.setUser(user1);
-                userData.setData(data);
-                if(registerUserOnTrubudget(userData, user)) {
-                    user.setTruBudgetEnabled(true);
-                    session.update(user);
-                    session.flush();
-                }
-            }catch (Exception e)
-            {
-                logger.info("Error: "+e.getMessage(), e);
-                tx.rollback();
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                try {
+                    TruUserData userData = new TruUserData();
+                    TruUserData.Data data = new TruUserData.Data();
+                    TruUserData.User user1 = new TruUserData.User();
+                    user1.setDisplayName(user.getFirstNames() + " " + user.getLastName());
+                    // TODO: 8/28/23 if you are editing a user for the first time with Trubudget integrated. their password will be the email
+                    // TODO: 8/28/23 this can be changed later in Trubudget
+                    String pass = UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen());
+                    user1.setPassword(pass);
+                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    data.setUser(user1);
+                    userData.setData(data);
+                    if (registerUserOnTrubudget(userData, user)) {
+                        user.setTruBudgetEnabled(true);
+                        session.update(user);
+                        session.flush();
+                    }
+                } catch (Exception e) {
+                    logger.info("Error: " + e.getMessage(), e);
+                    tx.rollback();
+
+                }
             }
 
 

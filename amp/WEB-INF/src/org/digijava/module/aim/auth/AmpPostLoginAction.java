@@ -75,18 +75,35 @@ public class AmpPostLoginAction extends Action {
             data.setUser(user1);
             truLoginRequest.setData(data);
             Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
-            try {
-                TruLoginResponse truLoginResponse = truResp.block();
-                // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
-                logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
-                AbstractCache myCache = new EhCacheWrapper("trubudget");
-                myCache.put("truBudgetToken",truLoginResponse.getData().getUser().getToken());
-                myCache.put("truBudgetUser",currentUser.getEmail().split("@")[0]);
-                myCache.put("truBudgetPassword",currentUser.getEmail());
-            } catch (Exception e) {
-                logger.info("Error during login: " + e.getMessage(), e);
-            }
-//            ProjectUtil.createProject(null);
+//            try {
+//                TruLoginResponse truLoginResponse = truResp.block();
+//                // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
+//                logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
+//                AbstractCache myCache = new EhCacheWrapper("trubudget");
+//                myCache.put("truBudgetToken",truLoginResponse.getData().getUser().getToken());
+//                myCache.put("truBudgetUser",currentUser.getEmail().split("@")[0]);
+//                myCache.put("truBudgetPassword",currentUser.getEmail());
+//            } catch (Exception e) {
+//                logger.info("Error during login: " + e.getMessage(), e);
+//            }
+           truResp
+    .doOnSuccess(truLoginResponse -> {
+        // This code block will run on success
+        // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
+        logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
+        AbstractCache myCache = new EhCacheWrapper("trubudget");
+        myCache.put("truBudgetToken", truLoginResponse.getData().getUser().getToken());
+        myCache.put("truBudgetUser", currentUser.getEmail().split("@")[0]);
+        myCache.put("truBudgetPassword", currentUser.getEmail());
+    })
+    .onErrorResume(e -> {
+        // This code block will run if an exception occurs
+        logger.info("Error during trubudget login: " + e.getMessage(), e);
+        // Handle the exception here or return a default value
+        return Mono.empty(); // or any other Mono if you want to continue processing
+    })
+    .block();
+
         }
 
 

@@ -39,13 +39,13 @@ public abstract class Permissible implements Identifiable {
         Class c = permClass;
         while (!c.equals(Object.class)) {
             Field[] declaredFields = c.getDeclaredFields();
-            for (int i = 0; i < declaredFields.length; i++) {
-                if (declaredFields[i]
+            for (Field declaredField : declaredFields) {
+                if (declaredField
                         .isAnnotationPresent(PermissibleProperty.class)) {
-                    PermissibleProperty annotation = declaredFields[i]
+                    PermissibleProperty annotation = declaredField
                             .getAnnotation(PermissibleProperty.class);
                     if (PermissionUtil.arrayContains(annotation.type(), type))
-                        return declaredFields[i].getName();
+                        return declaredField.getName();
                 }
             }
             c = permClass.getSuperclass();

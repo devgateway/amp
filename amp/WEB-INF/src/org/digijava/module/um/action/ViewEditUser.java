@@ -178,7 +178,8 @@ public class ViewEditUser extends Action {
             if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && user.getTruBudgetEnabled()) {
 
                 Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
-                uForm.setTruBudgetPassword(UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()));
+
+                uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"s");
 
                 Collection<TruBudgetIntent> intents = getTruBudgetIntents();
                 intents.forEach(intent ->

@@ -175,7 +175,7 @@ public class ViewEditUser extends Action {
             uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && user.getTruBudgetEnabled()) {
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
 
                 Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
 

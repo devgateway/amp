@@ -195,8 +195,9 @@ public class ViewEditUser extends Action {
                         intent.setUserHas(true);
                     }
                 });
-                uForm.setTruBudgetIntents(intents);
+
             }
+            uForm.setTruBudgetIntents(intents);
 
 
             if (user != null) {

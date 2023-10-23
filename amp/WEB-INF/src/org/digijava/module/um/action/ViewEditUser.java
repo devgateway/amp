@@ -140,7 +140,6 @@ public class ViewEditUser extends Action {
             }
 
             uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
-            uForm.setTruBudgetPassword(UmUtil.decrypt(user.getTruBudgetPassword(),user.getTruBudgetKeyGen()));
             Collection<AmpOrgType> orgTypeCol = DbUtil.getAllOrgTypes();
             if (orgTypeCol != null) {
                 uForm.setOrgTypes(orgTypeCol);
@@ -175,19 +174,22 @@ public class ViewEditUser extends Action {
             uForm.setEmailerror(false);
             uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
-            Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
-
-            Collection<TruBudgetIntent> intents = getTruBudgetIntents();
-            intents.forEach(intent->
-            {
-                if (intentNames.contains(intent.getTruBudgetIntentName()))
-                {
-                    intent.setUserHas(true);
-                }
-            });
-            uForm.setTruBudgetIntents(intents);
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-            uForm.setTruBudgetEnabled(getSettingValue(settings,"isEnabled"));
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && user.getTruBudgetEnabled()) {
+
+                Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
+                uForm.setTruBudgetPassword(UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()));
+
+                Collection<TruBudgetIntent> intents = getTruBudgetIntents();
+                intents.forEach(intent ->
+                {
+                    if (intentNames.contains(intent.getTruBudgetIntentName())) {
+                        intent.setUserHas(true);
+                    }
+                });
+                uForm.setTruBudgetIntents(intents);
+                uForm.setTruBudgetEnabled(getSettingValue(settings, "isEnabled"));
+            }
 
 
             if (user != null) {

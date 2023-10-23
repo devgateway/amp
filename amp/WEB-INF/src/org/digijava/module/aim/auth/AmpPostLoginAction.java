@@ -62,7 +62,7 @@ public class AmpPostLoginAction extends Action {
             throw new RuntimeException(ex);
         }
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-        if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && currentUser.getTruBudgetEnabled()) {
+        if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && currentUser.getTruBudgetEnabled() && currentUser.getTruBudgetPassword()!=null) {
 
 
             //login into TruBudget

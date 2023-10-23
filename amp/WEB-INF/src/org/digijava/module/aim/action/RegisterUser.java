@@ -60,7 +60,7 @@ public class RegisterUser extends Action {
 
                 String keyGen = UmUtil.generateAESKey(128);
                 user.setTruBudgetKeyGen(keyGen);
-                String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(), keyGen);
+                String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword()!=null?userRegisterForm.getTruBudgetPassword():"amptrubudget", keyGen);
                 user.setTruBudgetPassword(encryptedTruPassword);
                 String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
                 List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();

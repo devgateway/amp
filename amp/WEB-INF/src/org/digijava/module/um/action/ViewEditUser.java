@@ -179,7 +179,7 @@ public class ViewEditUser extends Action {
 
                 Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
 
-                uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"s");
+                uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"");
 
                 Collection<TruBudgetIntent> intents = getTruBudgetIntents();
                 intents.forEach(intent ->
@@ -333,7 +333,7 @@ public class ViewEditUser extends Action {
                         String keyGen = UmUtil.generateAESKey(128);
                         user.setTruBudgetKeyGen(keyGen);
 
-                        String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword(), keyGen);
+                        String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword()!=null? uForm.getTruBudgetPassword() : "amptrubudget", keyGen);
                         user.setTruBudgetPassword(encryptedTruPassword);
                     }
 

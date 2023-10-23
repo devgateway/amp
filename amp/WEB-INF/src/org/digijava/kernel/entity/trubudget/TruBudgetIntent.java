@@ -68,4 +68,15 @@ public class TruBudgetIntent implements Serializable {
     public void setUserHas(Boolean userHas) {
         this.userHas = userHas;
     }
+
+    @Override
+    public String toString() {
+        return "TruBudgetIntent{" +
+                "id=" + id +
+                ", truBudgetIntentName='" + truBudgetIntentName + '\'' +
+                ", truBudgetIntentDisplayName='" + truBudgetIntentDisplayName + '\'' +
+                ", users=" + users +
+                ", userHas=" + userHas +
+                '}';
+    }
 }

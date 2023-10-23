@@ -345,7 +345,7 @@ function validateUserInfo(){
 																	<c:if test="${umViewEditUserForm.truBudgetEnabled=='true'}">
 
 																	<tr>
-																		<td align=right style="font-size: 11px;">
+																		<td width="169" align="right" height="30"  style="font-size: 11px;">
 																				<%--																			<FONT color=red>*</FONT>--%>
 																			<digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
 																		<td align="left">

@@ -25,6 +25,8 @@ import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +37,7 @@ import java.util.stream.Collectors;
 import static org.digijava.module.um.util.DbUtil.*;
 
 public class ViewEditUser extends Action {
+    private final static Logger logger = LoggerFactory.getLogger(ViewEditUser.class);
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         
@@ -177,6 +180,8 @@ public class ViewEditUser extends Action {
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
             uForm.setTruBudgetEnabled(getSettingValue(settings, "isEnabled"));
             Collection<TruBudgetIntent> intents = getTruBudgetIntents();
+            logger.info("Intents:  "+intents);
+
             if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && user.getTruBudgetEnabled()) {
 
                 Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());

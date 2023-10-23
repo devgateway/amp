@@ -175,13 +175,15 @@ public class ViewEditUser extends Action {
             uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+            uForm.setTruBudgetEnabled(getSettingValue(settings, "isEnabled"));
+            Collection<TruBudgetIntent> intents = getTruBudgetIntents();
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && user.getTruBudgetEnabled()) {
 
                 Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
 
                 uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"");
 
-                Collection<TruBudgetIntent> intents = getTruBudgetIntents();
+
                 intents.forEach(intent ->
                 {
                     if (intentNames.contains(intent.getTruBudgetIntentName())) {
@@ -189,7 +191,6 @@ public class ViewEditUser extends Action {
                     }
                 });
                 uForm.setTruBudgetIntents(intents);
-                uForm.setTruBudgetEnabled(getSettingValue(settings, "isEnabled"));
             }
 
 

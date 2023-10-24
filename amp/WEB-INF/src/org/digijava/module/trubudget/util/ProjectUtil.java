@@ -76,7 +76,7 @@ public class ProjectUtil {
         }
     }
 
-    public static void createProject(AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents) throws URISyntaxException {
+    public static void createProject(AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents, String name) throws URISyntaxException {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
@@ -91,7 +91,7 @@ public class ProjectUtil {
         project.setAssignee(user);
         project.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         logger.info("Project Name is: "+ampActivityVersion.getName());
-        project.setDisplayName(ampActivityVersion.getName());
+        project.setDisplayName(name);
         project.setDescription(ampActivityVersion.getDescription());
         project.setStatus("open");// TODO: 9/11/23 set correct status
         List<String> tags =Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).trim().split(" ")).filter(x -> x.length() <= 15 && x.length() >= 1).collect(Collectors.toList());
@@ -204,7 +204,7 @@ public class ProjectUtil {
 
 
 
-    public static void updateProject(String projectId, AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents) throws URISyntaxException {
+    public static void updateProject(String projectId, AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents, String name) throws URISyntaxException {
 
         String token = ProjectUtil.getTrubudgetToken();
         logger.info("Trubudget Cached Token:" + token);
@@ -215,7 +215,7 @@ public class ProjectUtil {
         EditProjectModel.Data data = new EditProjectModel.Data();
         data.setProjectId(projectId);
         data.setDescription(ampActivityVersion.getDescription());
-        data.setDisplayName(ampActivityVersion.getName());
+        data.setDisplayName(name);
         editProjectModel.setData(data);
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.update", editProjectModel, EditProjectModel.class, String.class, token).subscribe(res -> {

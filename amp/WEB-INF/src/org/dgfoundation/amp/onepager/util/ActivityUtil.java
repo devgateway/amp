@@ -188,6 +188,7 @@ public class ActivityUtil {
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
         logger.info("Project old name: "+a.getName());
+        String name = a.getName();
 
         a.setDraft(draft);
         a.setDeleted(false);
@@ -348,13 +349,13 @@ public class ActivityUtil {
             TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpActivityId());
             logger.info("TrubudgetActivity found "+truBudgetActivity);
             if (truBudgetActivity==null) {
-                ProjectUtil.createProject(a,query.list());
+                ProjectUtil.createProject(a,query.list(),name);
             }
             else
             {
                 //update project
                 logger.info("Project name: "+a.getName());
-                ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a,query.list());
+                ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a,query.list(),name);
 //                session.flush();
             }
             new Thread(ProjectUtil::end).start();

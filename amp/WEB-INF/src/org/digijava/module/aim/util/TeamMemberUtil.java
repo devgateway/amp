@@ -1160,7 +1160,7 @@ public class TeamMemberUtil {
                     session.saveOrUpdate(comm);
                 }
 
-                qryStr = "delete AmpDesktopTabSelection dts where dts.owner=:memberId";
+                qryStr = "delete "+AmpDesktopTabSelection.class.getName()+" dts where dts.owner=:memberId";
                 qry = session.createQuery(qryStr).setParameter("memberId", amId, LongType.INSTANCE);
                 qry.executeUpdate();
                 deleteTeamMember(ampMember,session);

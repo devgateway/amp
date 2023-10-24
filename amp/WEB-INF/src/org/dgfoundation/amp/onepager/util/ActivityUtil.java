@@ -1127,8 +1127,9 @@ public class ActivityUtil {
 //                tmpDoc.setAmpComponentFunding(null);
                 if (tmpDoc!=null){
                     a.getComponentFundingDocuments().remove(tmpDoc);
+                     session.delete(tmpDoc);
+
                 }
-                       // session.delete(tmpDoc);
 
 
             }

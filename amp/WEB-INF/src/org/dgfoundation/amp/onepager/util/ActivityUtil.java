@@ -318,7 +318,7 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
-//        session.flush();
+        session.flush();
 
         updatePerformanceRules(oldA, a);
 
@@ -335,11 +335,12 @@ public class ActivityUtil {
 //        session.clear();
 //        session.getTransaction().commit();
 //        session.refresh(a);
-        // TODO: 9/12/23 check if project is already existing
-        Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);
-        query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);
+
 //        a.setComponents(new HashSet<>(query.list()));
         if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+            // TODO: 9/12/23 check if project is already existing
+            Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);
+            query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);
             ProjectUtil.init();
             TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpActivityId());
             logger.info("TrubudgetActivity found "+truBudgetActivity);
@@ -1129,16 +1130,16 @@ public class ActivityUtil {
                     tmpDoc.setAmpComponentFunding(null);
                     a.getComponentFundingDocuments().remove(tmpDoc);
 
-//                    if (tmpDoc.getId()!=null) {
-//                        session.delete(tmpDoc);
-//                    }
+                    if (tmpDoc.getId()!=null) {
+                        session.update(tmpDoc);
+                    }
 
                 }
 
 
             }
         }
-//        session.flush();
+        session.flush();
 
 //        transaction.commit();
 //        session.close();

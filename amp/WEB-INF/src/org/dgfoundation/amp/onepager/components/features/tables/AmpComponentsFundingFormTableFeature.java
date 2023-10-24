@@ -24,6 +24,7 @@ import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -36,6 +37,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
+import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
 import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
 import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
@@ -78,12 +80,14 @@ public class AmpComponentsFundingFormTableFeature extends
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES) == null)
                     getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES,  new HashMap<>());
 //                item.add(new AttributeModifier("style",""))
-                if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+                User user = model.getObject().getComponent().getActivity().getActivityCreator().getUser();
+                if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& user.getTruBudgetEnabled()) {
                     if (model.getObject().getTransactionType()==1) {
                         PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + model.getObject().getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().ifPresent(ampComponentFundingTruWF->{
                             WorkflowItemDetailsModel workflowItemDetailsModel = null;
                             try {
                                 List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+                                doActualTruBudgetLogin(user);
                                 String token = ProjectUtil.getTrubudgetToken();
                                 workflowItemDetailsModel = ProjectUtil.getWFItemDetails(ampComponentFundingTruWF,settings,token);
                             } catch (Exception e) {

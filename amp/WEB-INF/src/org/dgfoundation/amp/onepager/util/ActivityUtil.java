@@ -352,6 +352,7 @@ public class ActivityUtil {
             else
             {
                 //update project
+                logger.info("Project name: "+a.getName());
                 ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a,query.list());
 //                session.flush();
             }

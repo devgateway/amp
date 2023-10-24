@@ -642,7 +642,7 @@ public class ActivityUtil {
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
         }
-        logger.info("Project status: "+a.getApprovalStatus().getDbName());
+        logger.info("Project status: "+a.getApprovalStatus());
         if (a.getApprovalStatus().equals(ApprovalStatus.approved)|| a.getApprovalStatus().equals(ApprovalStatus.rejected))
         {
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");

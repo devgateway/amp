@@ -11,7 +11,7 @@
         </id>
         <property name="uuid" column="uuid" type="java.lang.String" />
 <!--        <property name="documentType" column="document_type" type="java.lang.String" />-->
-        <many-to-one name="ampComponentFunding" column="amp_component_funding_id"
+        <many-to-one not-null="false" name="ampComponentFunding" column="amp_component_funding_id"
                      class="org.digijava.module.aim.dbentity.AmpComponentFunding" cascade="none" />
     </class>
 </hibernate-mapping>

@@ -1139,7 +1139,7 @@ public class ActivityUtil {
 
             }
         }
-        session.flush();
+//        session.flush();
 
 //        transaction.commit();
 //        session.close();

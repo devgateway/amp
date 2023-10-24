@@ -97,29 +97,68 @@ public class ProjectUtil {
         List<String> tags =Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).trim().split(" ")).filter(x -> x.length() <= 15 && x.length() >= 1).collect(Collectors.toList());
         project.setTags(tags);
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
-        for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
-            if (ampFunding.getFundingDetails()!=null) {
+//        Map<AmpOrganisation, List<AmpFunding>> fundingGroupedByOrg =  ampActivityVersion.getFunding().stream()
+//                .collect(Collectors.groupingBy(AmpFunding::getAmpDonorOrgId));
+////        fundingGroupedByOrg.forEach((ampOrganisation, ampFundings) -> );
+//        for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
+//            if (ampFunding.getFundingDetails()!=null) {
+//
+//                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+//                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
+//                    Integer transactionType = ampFundingDetail.getTransactionType();
+//
+//                    Double amount = ampFundingDetail.getTransactionAmount();
+//                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
+//                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
+//                    CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
+//                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is created using "actual commitment"
+//                    {
+//                        projectedBudget.setOrganization(organization);
+//                        projectedBudget.setValue(BigDecimal.valueOf(amount).toPlainString());
+//                        projectedBudget.setCurrencyCode(currency);
+//                        project.getProjectedBudgets().add(projectedBudget);
+//                    }
+//
+//
+//                }
+//            }
+//        }
 
-                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-                    Integer transactionType = ampFundingDetail.getTransactionType();
+        Map<String, Map<String, BigDecimal>> groupedData = ampActivityVersion.getFunding().stream()
+                .flatMap(ampFunding -> ampFunding.getFundingDetails().stream())
+                .filter(ampFundingDetail -> ampFundingDetail.getAdjustmentType().getValue().equals("Actual")
+                        && ampFundingDetail.getTransactionType() == 0)
+                .collect(Collectors.groupingBy(
+                        ampFundingDetail -> ampFundingDetail.getAmpCurrencyId().getCurrencyCode(),
+                        Collectors.groupingBy(
+                                ampFundingDetail -> ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName(),
+                                Collectors.reducing(
+                                        BigDecimal.ZERO,
+                                        ampFundingDetail -> BigDecimal.valueOf(ampFundingDetail.getTransactionAmount()),
+                                        BigDecimal::add
+                                )
+                        )
+                ));
 
-                    Double amount = ampFundingDetail.getTransactionAmount();
-                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
-                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
-                    CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
-                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is created using "actual commitment"
-                    {
-                        projectedBudget.setOrganization(organization);
-                        projectedBudget.setValue(BigDecimal.valueOf(amount).toPlainString());
-                        projectedBudget.setCurrencyCode(currency);
-                        project.getProjectedBudgets().add(projectedBudget);
-                    }
+        // Now you have a map where the keys are currency codes, and the values are maps of organizations to sums
+        // You can loop through and process this data as needed
+        for (Map.Entry<String, Map<String, BigDecimal>> currencyEntry : groupedData.entrySet()) {
+            String currency = currencyEntry.getKey();
+            Map<String, BigDecimal> organizationSumMap = currencyEntry.getValue();
 
+            for (Map.Entry<String, BigDecimal> organizationEntry : organizationSumMap.entrySet()) {
+                String organization = organizationEntry.getKey();
+                BigDecimal sum = organizationEntry.getValue();
 
-                }
+                // Create your ProjectedBudget object and add it to your project as needed
+                CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
+                projectedBudget.setOrganization(organization);
+                projectedBudget.setValue(sum.toPlainString());
+                projectedBudget.setCurrencyCode(currency);
+                project.getProjectedBudgets().add(projectedBudget);
             }
         }
+
         project.setThumbnail("sampleThumbNail");
         data.setProject(project);
         projectModel.setData(data);

@@ -569,16 +569,12 @@ public class DbUtil {
         logger.info("Trubudget for user: "+user.getTruBudgetEnabled());
         truResp.subscribe(truLoginResponse -> {
 
-            TruUserData response = null;
+//            TruUserData response = null;
 
-                try {
-                    response =GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).block();
-                    logger.info("Create user response: " + response);
-                }catch (Exception e)
-                {
-                    logger.info("Error occurred during registration to trubudget ",e);
-                }
 
+            try {
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).subscribe(registerResponse->{
+                    logger.info("Create user response: " + registerResponse);
                     List<TruBudgetIntent> toBeRevoked = new ArrayList<>();
                     for (TruBudgetIntent truBudgetIntent : user.getInitialTruBudgetIntents())
                     {
@@ -588,26 +584,24 @@ public class DbUtil {
                         }
                     }
                     if (!user.getTruBudgetIntents().isEmpty()) {
-                        TruUserData finalResponse = response;
                         Flux.range(0, user.getTruBudgetIntents().size())
                                 .flatMap(index -> {
                                     TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
                                     TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
-                                    data1.setIdentity(finalResponse !=null? finalResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
                                     return grantPermRequest(settings, truLoginResponse, permData, data1,new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
 
                                 }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Grant permission response:ss " + permissionResponse));
                     }
-            // TODO: 9/6/23  complete the revoke process.. need to checkout all available permissions
+                    // TODO: 9/6/23  complete the revoke process.. need to checkout all available permissions
 
                     if (!toBeRevoked.isEmpty()) {
-                        TruUserData finalResponse1 = response;
                         Flux.range(0, toBeRevoked.size())
                                 .flatMap(index -> {
                                     TruRevokePermissionRequest permData = new TruRevokePermissionRequest();
                                     TruRevokePermissionRequest.Data data1 = new TruRevokePermissionRequest.Data();
-                                    data1.setIdentity(finalResponse1 !=null? finalResponse1.getData().getUser().getId():user.getEmail().split("@")[0]);
-                                    data1.setUserId(finalResponse1 !=null? finalResponse1.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setUserId(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
                                     data1.setIntent(new ArrayList<>(toBeRevoked).get(index).getTruBudgetIntentName());
                                     permData.setData(data1);
                                     permData.setApiVersion(getSettingValue(settings,"apiVersion"));
@@ -618,6 +612,11 @@ public class DbUtil {
                                     }
                                 }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Revoke permission response:ss " + permissionResponse));
                     }
+
+                });
+            } catch (Exception e) {
+                logger.error("Error during trubudget registration ",e);
+            }
 
 
         });

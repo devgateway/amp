@@ -124,21 +124,7 @@ public class ProjectUtil {
 //            }
 //        }
 
-        Map<String, Map<String, BigDecimal>> groupedData = ampActivityVersion.getFunding().stream()
-                .flatMap(ampFunding -> ampFunding.getFundingDetails().stream())
-                .filter(ampFundingDetail -> ampFundingDetail.getAdjustmentType().getValue().equals("Actual")
-                        && ampFundingDetail.getTransactionType() == 0)
-                .collect(Collectors.groupingBy(
-                        ampFundingDetail -> ampFundingDetail.getAmpCurrencyId().getCurrencyCode(),
-                        Collectors.groupingBy(
-                                ampFundingDetail -> ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName(),
-                                Collectors.reducing(
-                                        BigDecimal.ZERO,
-                                        ampFundingDetail -> BigDecimal.valueOf(ampFundingDetail.getTransactionAmount()),
-                                        BigDecimal::add
-                                )
-                        )
-                ));
+        Map<String, Map<String, BigDecimal>> groupedData =getCurrencyGroups(ampActivityVersion);
 
         // Now you have a map where the keys are currency codes, and the values are maps of organizations to sums
         // You can loop through and process this data as needed
@@ -243,34 +229,79 @@ public class ProjectUtil {
 
         });
 
-        for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
-            if (ampFunding.getFundingDetails()!=null) {
-                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-                    Integer transactionType = ampFundingDetail.getTransactionType();
+//        for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
+//            if (ampFunding.getFundingDetails()!=null) {
+//                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+//                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
+//                    Integer transactionType = ampFundingDetail.getTransactionType();
+//
+//                    Double amount = ampFundingDetail.getTransactionAmount();
+//                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
+//                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
+//                    EditProjectedBudgetModel projectedBudget = new EditProjectedBudgetModel();
+//                    projectedBudget.setApiVersion(getSettingValue(settings, "apiVersion"));
+//                    EditProjectedBudgetModel.Data data1 = new EditProjectedBudgetModel.Data();
+//                    data1.setOrganization(organization);
+//                    data1.setValue(BigDecimal.valueOf(amount).toPlainString());
+//                    data1.setCurrencyCode(currency);
+//                    data1.setProjectId(projectId);
+//                    projectedBudget.setData(data1);
+//                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is edited using "actual commitment"
+//                    {
+//                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+//                                .subscribe(res2 -> logger.info("Update budget response: " + res2));
+//                    }
+//
+//
+//                }
+//            }
+//        }
 
-                    Double amount = ampFundingDetail.getTransactionAmount();
-                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
-                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
-                    EditProjectedBudgetModel projectedBudget = new EditProjectedBudgetModel();
-                    projectedBudget.setApiVersion(getSettingValue(settings, "apiVersion"));
-                    EditProjectedBudgetModel.Data data1 = new EditProjectedBudgetModel.Data();
-                    data1.setOrganization(organization);
-                    data1.setValue(BigDecimal.valueOf(amount).toPlainString());
-                    data1.setCurrencyCode(currency);
-                    data1.setProjectId(projectId);
-                    projectedBudget.setData(data1);
-                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is edited using "actual commitment"
-                    {
-                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-                                .subscribe(res2 -> logger.info("Update budget response: " + res2));
-                    }
 
+        Map<String, Map<String, BigDecimal>> groupedData = getCurrencyGroups(ampActivityVersion);
 
-                }
+        // Now you have a map where the keys are currency codes, and the values are maps of organizations to sums
+        // You can loop through and process this data as needed
+        for (Map.Entry<String, Map<String, BigDecimal>> currencyEntry : groupedData.entrySet()) {
+            String currency = currencyEntry.getKey();
+            Map<String, BigDecimal> organizationSumMap = currencyEntry.getValue();
+
+            for (Map.Entry<String, BigDecimal> organizationEntry : organizationSumMap.entrySet()) {
+                String organization = organizationEntry.getKey();
+                BigDecimal sum = organizationEntry.getValue();
+
+                // Create your ProjectedBudget object and add it to your project as needed
+                EditProjectedBudgetModel projectedBudget = new EditProjectedBudgetModel();
+                projectedBudget.setApiVersion(getSettingValue(settings, "apiVersion"));
+                EditProjectedBudgetModel.Data data1 = new EditProjectedBudgetModel.Data();
+                data1.setOrganization(organization);
+                data1.setValue(sum.toPlainString());
+                data1.setCurrencyCode(currency);
+                data1.setProjectId(projectId);
+                projectedBudget.setData(data1);
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+                        .subscribe(res2 -> logger.info("Update budget response: " + res2));
             }
         }
 
+    }
+
+    private static Map<String, Map<String, BigDecimal>> getCurrencyGroups(AmpActivityVersion ampActivityVersion) {
+        return ampActivityVersion.getFunding().stream()
+                .flatMap(ampFunding -> ampFunding.getFundingDetails().stream())
+                .filter(ampFundingDetail -> ampFundingDetail.getAdjustmentType().getValue().equalsIgnoreCase("Actual")
+                        && ampFundingDetail.getTransactionType() == 0)
+                .collect(Collectors.groupingBy(
+                        ampFundingDetail -> ampFundingDetail.getAmpCurrencyId().getCurrencyCode(),
+                        Collectors.groupingBy(
+                                ampFundingDetail -> ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName(),
+                                Collectors.reducing(
+                                        BigDecimal.ZERO,
+                                        ampFundingDetail -> BigDecimal.valueOf(ampFundingDetail.getTransactionAmount()),
+                                        BigDecimal::add
+                                )
+                        )
+                ));
     }
 
     public static void closeProject(String projectId,List<AmpGlobalSettings> settings, String token, Session session) throws URISyntaxException {

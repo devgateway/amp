@@ -1138,7 +1138,7 @@ public class TeamMemberUtil {
     }
 
 
-    public static void removeTeamMembers(Long id[]) {
+    public static void removeTeamMembers(Long[] id) {
 
         Session session = PersistenceManager.getSession();
 

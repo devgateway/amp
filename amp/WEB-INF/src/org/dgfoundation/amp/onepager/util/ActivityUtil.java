@@ -22,6 +22,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
@@ -57,6 +58,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
+import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
 import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
 import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
@@ -654,14 +656,17 @@ public class ActivityUtil {
         {
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
-            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+            User user=a.getActivityCreator().getUser();
+            logger.info("Activity creator: "+user.getEmail());
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")&&user.getTruBudgetEnabled()) {
 
                 TruBudgetActivity truBudgetActivity  = PersistenceManager.getRequestDBSession().createQuery("FROM "+TruBudgetActivity.class.getName()+" ta WHERE ta.ampActivityId="+a.getAmpActivityId(), TruBudgetActivity.class).stream().findAny().orElse(null);
             if (truBudgetActivity!=null) {
 
                 try {
 
-
+                    doActualTruBudgetLogin(user);
                     String token = ProjectUtil.getTrubudgetToken();
                     new Thread(()-> {
                         logger.info("Started background task for closing project.");

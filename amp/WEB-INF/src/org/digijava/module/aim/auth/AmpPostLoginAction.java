@@ -61,6 +61,20 @@ public class AmpPostLoginAction extends Action {
         } catch(DgException ex) {
             throw new RuntimeException(ex);
         }
+        doActualTruBudgetLogin(currentUser);
+
+
+        ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
+        if(res != null) {
+            out.println(getJsonResponse(res.description));
+        } else {
+            out.println(getJsonResponse("noError", null));
+        }
+
+        return null;
+    }
+
+    public static void doActualTruBudgetLogin(User currentUser) throws Exception {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
         if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && currentUser.getTruBudgetEnabled() && currentUser.getTruBudgetPassword()!=null) {
 
@@ -70,24 +84,12 @@ public class AmpPostLoginAction extends Action {
             truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
             TruLoginRequest.Data data = new TruLoginRequest.Data();
             TruLoginRequest.User user1 = new TruLoginRequest.User();
-            user1.setPassword(UmUtil.decrypt(currentUser.getTruBudgetPassword(),currentUser.getTruBudgetKeyGen()));
+            user1.setPassword(UmUtil.decrypt(currentUser.getTruBudgetPassword(), currentUser.getTruBudgetKeyGen()));
             user1.setId(currentUser.getEmail().split("@")[0]);
             data.setUser(user1);
             truLoginRequest.setData(data);
             Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
-//            try {
-//                TruLoginResponse truLoginResponse = truResp.block();
-//                // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
-//                logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
-//                AbstractCache myCache = new EhCacheWrapper("trubudget");
-//                myCache.put("truBudgetToken",truLoginResponse.getData().getUser().getToken());
-//                myCache.put("truBudgetUser",currentUser.getEmail().split("@")[0]);
-//                myCache.put("truBudgetPassword",currentUser.getEmail());
-//            } catch (Exception e) {
-//                logger.info("Error during login: " + e.getMessage(), e);
-//            }
-           truResp
-    .doOnSuccess(truLoginResponse -> {
+           truResp.doOnSuccess(truLoginResponse -> {
         // This code block will run on success
         // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
         logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
@@ -105,19 +107,8 @@ public class AmpPostLoginAction extends Action {
     .block();
 
         }
-
-
-
-        ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
-        if(res != null) {
-            out.println(getJsonResponse(res.description));
-        } else {
-            out.println(getJsonResponse("noError", null));
-        }
-
-        return null;
     }
-    
+
     private String getJsonResponse(String originalMessage){
         return getJsonResponse(originalMessage,null);
     }

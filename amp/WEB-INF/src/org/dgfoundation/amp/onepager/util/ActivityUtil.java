@@ -187,6 +187,7 @@ public class ActivityUtil {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
+        logger.info("Project old name: "+a.getName());
 
         a.setDraft(draft);
         a.setDeleted(false);

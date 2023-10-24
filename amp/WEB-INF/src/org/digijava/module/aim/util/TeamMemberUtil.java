@@ -184,9 +184,8 @@ public class TeamMemberUtil {
         return members;
     }
 
-    private static void deleteTeamMember(AmpTeamMember teamMember) {
-        Session session = PersistenceManager.getSession();
-        boolean softRemove = false;
+    private static void deleteTeamMember(AmpTeamMember teamMember, Session session) {
+        boolean softRemove;
 
         softRemove = hasInfoRelatedToAmpTeamMember(session, teamMember.getAmpTeamMemId());
 
@@ -1145,7 +1144,7 @@ public class TeamMemberUtil {
 
         for (Long amId : id) {
             if (amId != null) {
-                AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, amId);
+                AmpTeamMember ampMember = session.load(AmpTeamMember.class, amId);
                 if (isTeamLead(ampMember)) {
                     AmpTeam team = ampMember.getAmpTeam();
                     team.setTeamLead(null);
@@ -1164,10 +1163,11 @@ public class TeamMemberUtil {
                 qryStr = "delete AmpDesktopTabSelection dts where dts.owner=:memberId";
                 qry = session.createQuery(qryStr).setParameter("memberId", amId, LongType.INSTANCE);
                 qry.executeUpdate();
-                deleteTeamMember(ampMember);
+                deleteTeamMember(ampMember,session);
 
             }
         }
+        session.flush();
     }
 
     private static boolean isTeamLead(AmpTeamMember member) {

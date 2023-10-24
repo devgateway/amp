@@ -367,8 +367,14 @@ public class ActivityUtil {
         Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class);
         query.setParameter("activity", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE);
         //            z.setActivity(null);//we can also delete this component permanently
-        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId()) && x.getAmpComponentId()!=null).forEach(y->y.setActivity(null));
-
+//        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId()) && x.getAmpComponentId()!=null).forEach(y->y.setActivity(null));
+        for (AmpComponent ampComponent: query.list()){
+            if (!ampActivityVersion.getComponents().contains(ampComponent))
+            {
+                ampComponent.setActivity(null);
+                session.update(ampComponent);
+            }
+        }
     }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {

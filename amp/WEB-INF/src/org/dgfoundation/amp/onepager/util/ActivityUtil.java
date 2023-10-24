@@ -1126,11 +1126,12 @@ public class ActivityUtil {
             for (AmpComponentFundingDocument tmpDoc : deletedResources) {
 //                tmpDoc.setAmpComponentFunding(null);
                 if (tmpDoc!=null){
-//                    a.getComponentFundingDocuments().remove(tmpDoc);
                     tmpDoc.setAmpComponentFunding(null);
-                    if (tmpDoc.getId()!=null) {
-                        session.delete(tmpDoc);
-                    }
+                    a.getComponentFundingDocuments().remove(tmpDoc);
+
+//                    if (tmpDoc.getId()!=null) {
+//                        session.delete(tmpDoc);
+//                    }
 
                 }
 

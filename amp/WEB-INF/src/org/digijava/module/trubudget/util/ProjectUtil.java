@@ -510,17 +510,15 @@ public class ProjectUtil {
                             GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
                                     .subscribe(res2 ->{
                                         logger.info("Update subproject budget response: " + res2) ;
-                                        try {
-                                            createUpdateWorkflowItems(projectId, ampComponentTruSubProject[0].getTruSubProjectId(),ampComponent, settings,ampAuthWebSession);
-                                        } catch (URISyntaxException e) {
-                                            throw new RuntimeException(e);
-                                        }
+
 
                                     } );
 
                         }
                     }
                 }
+                createUpdateWorkflowItems(projectId, ampComponentTruSubProject[0].getTruSubProjectId(),ampComponent, settings,ampAuthWebSession);
+
 
             }
         }
@@ -534,6 +532,7 @@ public class ProjectUtil {
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
+                            refreshSession();
                             AmpComponentFundingTruWF ampComponentFundingTruWF = session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + componentFunding.getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
                             if (ampComponentFundingTruWF == null) {//create new wfItem
                                 CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();

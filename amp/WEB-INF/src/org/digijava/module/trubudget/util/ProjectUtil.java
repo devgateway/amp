@@ -173,7 +173,6 @@ public class ProjectUtil {
         Session session = PersistenceManager.getRequestDBSession();
         Query<TruBudgetActivity> query = session.createQuery("FROM " + TruBudgetActivity.class.getName() + " ta WHERE ta.ampActivityId=:ampActivityId", TruBudgetActivity.class);
         query.setParameter("ampActivityId", activityId, LongType.INSTANCE);
-//        query.setParameter("truBudgetId",truBudgetId, StringType.INSTANCE);
         return query.stream().findAny().orElse(null);
     }
 
@@ -304,7 +303,6 @@ public class ProjectUtil {
 
                 }
         );
-//       session.close();
 
 
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.close", closeProjectModel, CloseProjectModel.class, String.class, token)
@@ -326,8 +324,7 @@ public class ProjectUtil {
         data.setSubprojectId(subProjectId);
         closeSubProjectModel.setData(data);
 
-        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token)
-                ;
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token);
 
     }
     public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {

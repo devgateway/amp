@@ -97,32 +97,7 @@ public class ProjectUtil {
         List<String> tags =Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).trim().split(" ")).filter(x -> x.length() <= 15 && x.length() >= 1).collect(Collectors.toList());
         project.setTags(tags);
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
-//        Map<AmpOrganisation, List<AmpFunding>> fundingGroupedByOrg =  ampActivityVersion.getFunding().stream()
-//                .collect(Collectors.groupingBy(AmpFunding::getAmpDonorOrgId));
-////        fundingGroupedByOrg.forEach((ampOrganisation, ampFundings) -> );
-//        for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
-//            if (ampFunding.getFundingDetails()!=null) {
-//
-//                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-//                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-//                    Integer transactionType = ampFundingDetail.getTransactionType();
-//
-//                    Double amount = ampFundingDetail.getTransactionAmount();
-//                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
-//                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
-//                    CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
-//                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is created using "actual commitment"
-//                    {
-//                        projectedBudget.setOrganization(organization);
-//                        projectedBudget.setValue(BigDecimal.valueOf(amount).toPlainString());
-//                        projectedBudget.setCurrencyCode(currency);
-//                        project.getProjectedBudgets().add(projectedBudget);
-//                    }
-//
-//
-//                }
-//            }
-//        }
+
 
         Map<String, Map<String, BigDecimal>> groupedData =getCurrencyGroups(ampActivityVersion);
 
@@ -229,33 +204,6 @@ public class ProjectUtil {
 
         });
 
-//        for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
-//            if (ampFunding.getFundingDetails()!=null) {
-//                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-//                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-//                    Integer transactionType = ampFundingDetail.getTransactionType();
-//
-//                    Double amount = ampFundingDetail.getTransactionAmount();
-//                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
-//                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
-//                    EditProjectedBudgetModel projectedBudget = new EditProjectedBudgetModel();
-//                    projectedBudget.setApiVersion(getSettingValue(settings, "apiVersion"));
-//                    EditProjectedBudgetModel.Data data1 = new EditProjectedBudgetModel.Data();
-//                    data1.setOrganization(organization);
-//                    data1.setValue(BigDecimal.valueOf(amount).toPlainString());
-//                    data1.setCurrencyCode(currency);
-//                    data1.setProjectId(projectId);
-//                    projectedBudget.setData(data1);
-//                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is edited using "actual commitment"
-//                    {
-//                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-//                                .subscribe(res2 -> logger.info("Update budget response: " + res2));
-//                    }
-//
-//
-//                }
-//            }
-//        }
 
 
         Map<String, Map<String, BigDecimal>> groupedData = getCurrencyGroups(ampActivityVersion);
@@ -305,19 +253,16 @@ public class ProjectUtil {
     }
 
     public static void closeProject(String projectId,List<AmpGlobalSettings> settings, String token, Session session) throws URISyntaxException {
-//        Session session = PersistenceManager.openNewSession();
-//        Transaction transaction = session.beginTransaction();
+
         CloseProjectModel closeProjectModel = new CloseProjectModel();
         closeProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseProjectModel.Data data = new CloseProjectModel.Data();
         data.setProjectId(projectId);
         closeProjectModel.setData(data);
-//        refreshSession();
        session.createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.truProjectId= '" + projectId + "'", AmpComponentTruSubProject.class).list().forEach(
                 subProject->{
                     try {
                         // TODO: 10/16/23 add functionality to close wf
-//                        refreshSession();
                         session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProject.getTruSubProjectId() + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
                                     WorkflowItemDetailsModel workflowItemDetailsModel;
                                     try {
@@ -349,7 +294,7 @@ public class ProjectUtil {
                     }
 
                     try {
-                        String res = closeSubProject(settings,projectId,subProject.getTruSubProjectId(), token);
+                        String res = closeSubProject(settings,projectId,subProject.getTruSubProjectId(), token).block();
                         logger.info("Subproject close response: Item "+subProject.getTruSubProjectId()+":Res : "+res);
 
                     } catch (URISyntaxException e) {
@@ -373,7 +318,7 @@ public class ProjectUtil {
         return (String) myCache.get("truBudgetToken");
     }
 
-    public static String closeSubProject(List<AmpGlobalSettings>settings, String projectId,String subProjectId, String token) throws URISyntaxException {
+    public static Mono<String> closeSubProject(List<AmpGlobalSettings>settings, String projectId,String subProjectId, String token) throws URISyntaxException {
         CloseSubProjectModel closeSubProjectModel = new CloseSubProjectModel();
         closeSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseSubProjectModel.Data data = new CloseSubProjectModel.Data();
@@ -382,7 +327,7 @@ public class ProjectUtil {
         closeSubProjectModel.setData(data);
 
         return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token)
-                .block();
+                ;
 
     }
     public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
@@ -445,8 +390,8 @@ public class ProjectUtil {
 
                                     transaction.commit();
                                     createUpdateWorkflowItems(projectId, subproject.getId(),ampComponent, settings, ampAuthWebSession);
-                                } catch (URISyntaxException e) {
-                                    throw new RuntimeException(e);
+                                } catch (Exception e) {
+                                    logger.error("Error during workflow create/update",e);
                                 }
                                         subIntents.forEach(subIntent -> {
                                             SubProjectGrantRevokePermModel subProjectGrantRevokePermModel = new SubProjectGrantRevokePermModel();
@@ -460,25 +405,26 @@ public class ProjectUtil {
                                             subProjectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                                             try {
                                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.intent.grantPermission", subProjectGrantRevokePermModel, SubProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
-                                                        response ->{
-                                                            logger.info("Grant subproject permission response: " + response);
-
-                                                        } );
-                                            } catch (URISyntaxException e) {
-                                                throw new RuntimeException(e);
+                                                        response -> logger.info("Grant subproject permission response: " + response));
+                                            } catch (Exception e) {
+                                                logger.error("Error during subproject permission grant",e);
                                             }
 
                                         });
+                                try {
+                                    closeSubProject(settings,projectId,subproject.getId(),token)
+                                            .subscribe(closeSubRes->logger.info("Close sub response: "+closeSubRes));
+                                } catch (Exception e) {
+                                    logger.error("Error during sub close ",e);
+                                }
 
-                                    });
+                            });
 
                 }catch (Exception e)
                 {
-                    logger.info("Error during subproject creation");
-                    e.printStackTrace();
+                    logger.error("Error during subproject creation",e);
                 }
 
-//                ampComponent.setAmpComponentTruBudgetSubProjectId(subproject.getId());
 
             }
             else {//update subProject
@@ -494,7 +440,18 @@ public class ProjectUtil {
                 editSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                 //call edit
                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.update", editSubProjectModel, EditSubProjectModel.class, String.class, token)
-                        .subscribe(res2->logger.info("Update subproject response: "+res2));
+                        .subscribe(subProjectUpdateRes->{
+                            logger.info("Update subproject response: "+subProjectUpdateRes);
+                            if (ampComponent.getComponentStatus().getValue().equalsIgnoreCase("closed"))
+                            {
+                                try {
+                                    closeSubProject(settings,projectId,ampComponentTruSubProject[0].getTruSubProjectId(), token)
+                                            .subscribe(closeSubRes->logger.info("Close subproject res: "+closeSubRes));
+                                } catch (Exception e) {
+                                    logger.error("Error during subproject close",e);
+                                }
+                            }
+                        });
                 if (ampComponent.getFundings()!=null) {
                     if (!ampComponent.getFundings().isEmpty()) {
                         for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {

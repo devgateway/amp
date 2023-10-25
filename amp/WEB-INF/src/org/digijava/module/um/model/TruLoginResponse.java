@@ -30,6 +30,14 @@ public class TruLoginResponse {
         this.data = data;
     }
 
+    @Override
+    public String toString() {
+        return "TruLoginResponse{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data {
         @JsonProperty("user")
         private User user;
@@ -42,6 +50,13 @@ public class TruLoginResponse {
 
         public void setUser(User user) {
             this.user = user;
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "user=" + user +
+                    '}';
         }
     }
 
@@ -112,6 +127,18 @@ public class TruLoginResponse {
 
         public void setToken(String token) {
             this.token = token;
+        }
+
+        @Override
+        public String toString() {
+            return "User{" +
+                    "id='" + id + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    ", organization='" + organization + '\'' +
+                    ", allowedIntents=" + allowedIntents +
+                    ", groups=" + groups +
+                    ", token='" + token + '\'' +
+                    '}';
         }
     }
 }

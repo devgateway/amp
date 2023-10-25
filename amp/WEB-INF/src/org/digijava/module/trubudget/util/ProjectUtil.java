@@ -293,7 +293,6 @@ public class ProjectUtil {
 
         try {
             //we have to close all related workflow items before closing the sub project
-            // TODO: 10/16/23 add functionality to close wf
             session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProjectId + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
                 WorkflowItemDetailsModel workflowItemDetailsModel = null;
                 try {

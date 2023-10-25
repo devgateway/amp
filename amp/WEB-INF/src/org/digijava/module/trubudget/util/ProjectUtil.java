@@ -297,7 +297,7 @@ public class ProjectUtil {
                 WorkflowItemDetailsModel workflowItemDetailsModel = null;
                 try {
                     workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF,settings, token);
-                } catch (URISyntaxException e) {
+                } catch (Exception e) {
                     logger.error("Error when fetching wf details",e);
                 }
                 if(workflowItemDetailsModel!=null) {

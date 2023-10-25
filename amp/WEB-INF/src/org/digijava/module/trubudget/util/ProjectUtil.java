@@ -261,41 +261,8 @@ public class ProjectUtil {
        session.createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.truProjectId= '" + projectId + "'", AmpComponentTruSubProject.class).list().forEach(
                 subProject->{
                     try {
-                        // TODO: 10/16/23 add functionality to close wf
-                        session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProject.getTruSubProjectId() + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
-                                    WorkflowItemDetailsModel workflowItemDetailsModel;
-                                    try {
-                                        workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF,settings, token);
-                                    } catch (URISyntaxException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    if(workflowItemDetailsModel!=null) {
-                                        if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
-                                            CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
-                                            closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-                                            CloseWFItemModel.Data data1 = new CloseWFItemModel.Data();
-                                            data1.setProjectId(subProject.getTruProjectId());
-                                            data1.setSubprojectId(subProject.getTruSubProjectId());
-                                            data1.setWorkflowitemId(workflowItemDetailsModel.getData().getWorkflowitem().getData().getId());
-                                            closeWFItemModel.setData(data1);
-                                            try {
-                                               String res = closeWorkFlowItemForReal(closeWFItemModel, settings, token).block();
-                                                logger.info("Workflow close response: Item "+closeWFItemModel.getData().getWorkflowitemId()+":Res : "+res);
-
-                                            } catch (URISyntaxException e) {
-                                                throw new RuntimeException(e);
-                                            }
-                                        }
-                                    }
-                        });
-                        } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    try {
                         String res = closeSubProject(settings,projectId,subProject.getTruSubProjectId(), token).block();
                         logger.info("Subproject close response: Item "+subProject.getTruSubProjectId()+":Res : "+res);
-
                     } catch (URISyntaxException e) {
                         logger.error("Error during subproject close ",e);
                     }
@@ -323,6 +290,39 @@ public class ProjectUtil {
         data.setProjectId(projectId);
         data.setSubprojectId(subProjectId);
         closeSubProjectModel.setData(data);
+
+        try {
+            //we have to close all related workflow items before closing the sub project
+            // TODO: 10/16/23 add functionality to close wf
+            session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProjectId + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
+                WorkflowItemDetailsModel workflowItemDetailsModel = null;
+                try {
+                    workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF,settings, token);
+                } catch (URISyntaxException e) {
+                    logger.error("Error when fetching wf details",e);
+                }
+                if(workflowItemDetailsModel!=null) {
+                    if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
+                        CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
+                        closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                        CloseWFItemModel.Data data1 = new CloseWFItemModel.Data();
+                        data1.setProjectId(projectId);
+                        data1.setSubprojectId(subProjectId);
+                        data1.setWorkflowitemId(workflowItemDetailsModel.getData().getWorkflowitem().getData().getId());
+                        closeWFItemModel.setData(data1);
+                        try {
+                            String res = closeWorkFlowItemForReal(closeWFItemModel, settings, token).block();
+                            logger.info("Workflow close response: Item "+closeWFItemModel.getData().getWorkflowitemId()+":Res : "+res);
+
+                        } catch (URISyntaxException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+           logger.error("There was an error",e);
+        }
 
         return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token);
 

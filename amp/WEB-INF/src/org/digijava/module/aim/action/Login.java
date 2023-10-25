@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
 import static org.digijava.module.um.util.DbUtil.*;
 
 
@@ -145,34 +146,7 @@ public class Login extends Action {
                  * registered user but has not yet been assigned a team
                  */
                 //
-                List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && usr.getTruBudgetEnabled() && usr.getTruBudgetPassword()!=null) {
-
-
-                    //login to trubudget
-                    TruLoginRequest truLoginRequest = new TruLoginRequest();
-                    truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
-                    TruLoginRequest.Data data = new TruLoginRequest.Data();
-                    TruLoginRequest.User user1 = new TruLoginRequest.User();
-
-                    user1.setPassword(UmUtil.decrypt(usr.getTruBudgetPassword(),usr.getTruBudgetKeyGen()));
-                    user1.setId(lForm.getUserId().split("@")[0]);
-                    data.setUser(user1);
-                    truLoginRequest.setData(data);
-                    try {
-                        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
-                        truResp.subscribe(truLoginResponse -> {
-                            logger.info("Trubudget login response: " + truLoginResponse);
-                            AbstractCache myCache = new EhCacheWrapper("trubudget");
-                            myCache.put("truBudgetToken",truLoginResponse.getData().getUser().getToken());
-                            myCache.put("truBudgetUser",usr.getEmail().split("@")[0]);
-                            myCache.put("truBudgetPassword",usr.getEmail());
-                        });
-                    } catch (Exception e) {
-                        logger.info("Trubudget login: " + e.getMessage(), e);
-                    }
-//                    ProjectUtil.createProject(null);
-                }
+                doActualTruBudgetLogin(usr);
 
 
 

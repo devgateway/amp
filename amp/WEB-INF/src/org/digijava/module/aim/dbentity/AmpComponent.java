@@ -8,6 +8,7 @@ package org.digijava.module.aim.dbentity;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.providers.ComponentTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -15,6 +16,8 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -49,6 +52,12 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     @TranslatableField
     private String description;
 
+    @Interchangeable(fieldTitle = COMPONENT_STATUS, importable = true, pickIdOnly = true,
+            fmPath = "/Activity Form/Components/Component/Component Information/" + COMPONENT_STATUS,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            discriminatorOption = CategoryConstants.COMPONENT_STATUS_KEY)
+    private AmpCategoryValue componentStatus;
+
 
 
 
@@ -71,7 +80,13 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     })
     private Set<AmpComponentFunding> fundings = new HashSet<>();
 
+    public AmpCategoryValue getComponentStatus() {
+        return componentStatus;
+    }
 
+    public void setComponentStatus(AmpCategoryValue componentStatus) {
+        this.componentStatus = componentStatus;
+    }
 
 
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
@@ -89,8 +104,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                 return -1;
             if (o1.getTitle() == null)
                 return 1;
-            int ret = o1.getTitle().compareTo(o2.getTitle());
-            return ret;
+            return o1.getTitle().compareTo(o2.getTitle());
         }
     }
 

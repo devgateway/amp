@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.List;
 import java.util.Set;
@@ -72,6 +73,7 @@ public class AmpComponentsFormSectionFeature extends
                 }
 
                 comp.setType(defaultType);
+                comp.setComponentStatus(CategoryConstants.COMPONENT_STATUS_OPEN.getAmpCategoryValueFromDB());
                 target.add(this.getParent());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
             }

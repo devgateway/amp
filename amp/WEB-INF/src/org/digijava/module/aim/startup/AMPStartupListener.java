@@ -380,6 +380,39 @@ public class AMPStartupListener extends HttpServlet implements
 
                 String updateComponents="ALTER TABLE AMP_COMPONENTS ALTER COLUMN amp_activity_id DROP NOT NULL;";
                 statement.executeUpdate(updateComponents);
+
+                String insertComponentStatusClass ="INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)" +
+                        " VALUES (nextval('amp_category_class_seq'), 'Component Status' , 'component_status', '', 'f', 'f') ON CONFLICT(keyname) DO NOTHING";
+                statement.executeUpdate(insertComponentStatusClass);
+
+                String insertComponentStatusValues ="INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Open',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
+                        "    0\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
+                        "        AND category_value = 'Open'\n" +
+                        ");\n" +
+                        "\n" +
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Closed',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
+                        "    1\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
+                        "        AND category_value = 'Closed'\n" +
+                        ");\n";
+                statement.executeUpdate(insertComponentStatusValues);
             } catch (Exception e) {
                 // Handle the exception
                 logger.info("Error occurred during trubudget init db  operations", e);

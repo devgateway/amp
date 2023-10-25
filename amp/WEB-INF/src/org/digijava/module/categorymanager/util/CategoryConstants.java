@@ -98,9 +98,11 @@ public class CategoryConstants {
 
     public static final String ADJUSTMENT_TYPE_NAME         = "Adjustment Type";
     public static final String COMPONENT_FUNDING_STATUS         = "Component Funding Status";
+    public static final String COMPONENT_STATUS         = "Component Status";
     public static final String COMPONENT_FUNDING_DOCUMENTS        = "Component Funding Documents";
     public static final String ADJUSTMENT_TYPE_KEY          = "adjustment_type";
     public static final String COMPONENT_FUNDING_STATUS_KEY          = "component_funding_status";
+    public static final String COMPONENT_STATUS_KEY          = "component_status";
 
     public static final String TRANSACTION_TYPE_NAME        = "Transaction Type";
     public static final String TRANSACTION_TYPE_KEY         = "transaction_type";
@@ -225,6 +227,9 @@ public class CategoryConstants {
 
     public static final HardCodedCategoryValue COMPONENT_FUNDING_STATUS_OPEN =
             new CategoryConstants.HardCodedCategoryValue("component_funding_status", "Open", true);
+
+    public static final HardCodedCategoryValue COMPONENT_STATUS_OPEN =
+            new CategoryConstants.HardCodedCategoryValue("component_status", "Open", true);
 
     public static final HardCodedCategoryValue COMPONENT_FUNDING_STATUS_CLOSED =
             new CategoryConstants.HardCodedCategoryValue("component_funding_status", "Closed", true);

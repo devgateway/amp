@@ -300,6 +300,7 @@ public class ProjectUtil {
                 } catch (Exception e) {
                     logger.error("Error when fetching wf details",e);
                 }
+                // TODO: 10/26/23 change status if ampcomponent/funding accordingly 
                 if(workflowItemDetailsModel!=null) {
                     if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
                         CloseWFItemModel closeWFItemModel = new CloseWFItemModel();

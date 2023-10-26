@@ -77,7 +77,7 @@ import static java.util.stream.Collectors.toCollection;
  * @author Dolghier Constantin
  *
  */
-public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
+public class AmpFundingColumn extends AmpAmountColumn {
 
     /**
      * {@link #getName()} in case this column is used to fetch "Donor Funding"

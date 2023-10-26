@@ -1380,7 +1380,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
     
     @Override
-    public AmpFundingColumn getFundingFetcher(NiReportsEngine engine) {
+    public AmpAmountColumn getFundingFetcher(NiReportsEngine engine) {
         switch(engine.spec.getReportType()) {
             
             case ArConstants.DONOR_TYPE: 
@@ -1398,8 +1398,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             case ArConstants.REGIONAL_TYPE:
                 return regionalFundingColumn;
 
-//            case ArConstants.INDICATOR_TYPE:
-//                return indicatorColumn;
+            case ArConstants.INDICATOR_TYPE:
+                return indicatorColumn;
 
             default:
                 throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));
@@ -1588,7 +1588,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     @Override
     public boolean isTransactionLevelHierarchy(NiReportColumn<?> col, NiReportsEngine engine) {
         //return col.isTransactionLevelHierarchy();
-        AmpFundingColumn funding = this.getFundingFetcher(engine);
+        AmpAmountColumn funding = this.getFundingFetcher(engine);
         return funding.isTransactionLevelHierarchy(col);
         //return super.isTransactionLevelHierarchy(col, engine);
     }

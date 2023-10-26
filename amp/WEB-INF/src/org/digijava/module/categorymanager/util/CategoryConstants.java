@@ -228,14 +228,18 @@ public class CategoryConstants {
     public static final HardCodedCategoryValue COMPONENT_FUNDING_STATUS_OPEN =
             new CategoryConstants.HardCodedCategoryValue("component_funding_status", "Open", true);
 
-    public static final HardCodedCategoryValue COMPONENT_STATUS_OPEN =
-            new CategoryConstants.HardCodedCategoryValue("component_status", "Open", true);
 
     public static final HardCodedCategoryValue COMPONENT_FUNDING_STATUS_CLOSED =
             new CategoryConstants.HardCodedCategoryValue("component_funding_status", "Closed", true);
 
     public static final HardCodedCategoryValue COMPONENT_FUNDING_STATUS_REJECTED =
             new CategoryConstants.HardCodedCategoryValue("component_funding_status", "Rejected", false);
+    public static final HardCodedCategoryValue COMPONENT_STATUS_OPEN =
+            new CategoryConstants.HardCodedCategoryValue("component_status", "Open", true);
+    public static final HardCodedCategoryValue COMPONENT_STATUS_CLOSED =
+            new CategoryConstants.HardCodedCategoryValue("component_status", "Closed", true);
+    public static final HardCodedCategoryValue COMPONENT_STATUS_REJECTED =
+            new CategoryConstants.HardCodedCategoryValue("component_status", "Rejected", true);
 
     public static final HardCodedCategoryValue ADJUSTMENT_TYPE_ODA_SSC =
              new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Official Development Aid", true);

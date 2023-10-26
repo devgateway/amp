@@ -398,7 +398,6 @@ public class AMPStartupListener extends HttpServlet implements
                         "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
                         "        AND category_value = 'Open'\n" +
                         ");\n" +
-                        "\n" +
                         "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
                         "SELECT\n" +
                         "    nextval('amp_category_value_seq'),\n" +
@@ -411,6 +410,19 @@ public class AMPStartupListener extends HttpServlet implements
                         "    WHERE\n" +
                         "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
                         "        AND category_value = 'Closed'\n" +
+                        ");\n"+
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Closed',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
+                        "    1\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
+                        "        AND category_value = 'Rejected'\n" +
                         ");\n";
                 statement.executeUpdate(insertComponentStatusValues);
             } catch (Exception e) {

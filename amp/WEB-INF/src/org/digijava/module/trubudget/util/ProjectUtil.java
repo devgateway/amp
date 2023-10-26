@@ -10,6 +10,7 @@ import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
 import org.digijava.module.trubudget.dbentity.AmpComponentTruSubProject;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
@@ -300,7 +301,7 @@ public class ProjectUtil {
                 } catch (Exception e) {
                     logger.error("Error when fetching wf details",e);
                 }
-                // TODO: 10/26/23 change status if ampcomponent/funding accordingly 
+                // TODO: 10/26/23 change status if ampcomponent/funding accordingly
                 if(workflowItemDetailsModel!=null) {
                     if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
                         CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
@@ -372,10 +373,10 @@ public class ProjectUtil {
                 try {
                     GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.createSubproject", createSubProjectModel, CreateSubProjectModel.class, String.class, token)
                             .subscribe(res-> {
-                                logger.info("Create subproject response: "+res);
+                                logger.info("Create subproject response: " + res);
                                 refreshSession();
 
-                                ampComponentTruSubProject[0] =new AmpComponentTruSubProject();
+                                ampComponentTruSubProject[0] = new AmpComponentTruSubProject();
 
 
                                 ampComponentTruSubProject[0].setAmpComponentId(ampComponent.getAmpComponentId());
@@ -386,34 +387,44 @@ public class ProjectUtil {
                                     session.flush();
 
                                     transaction.commit();
-                                    createUpdateWorkflowItems(projectId, subproject.getId(),ampComponent, settings, ampAuthWebSession);
+                                    createUpdateWorkflowItems(projectId, subproject.getId(), ampComponent, settings, ampAuthWebSession);
                                 } catch (Exception e) {
-                                    logger.error("Error during workflow create/update",e);
+                                    logger.error("Error during workflow create/update", e);
                                 }
-                                        subIntents.forEach(subIntent -> {
-                                            SubProjectGrantRevokePermModel subProjectGrantRevokePermModel = new SubProjectGrantRevokePermModel();
-                                            SubProjectGrantRevokePermModel.Data data2 = new SubProjectGrantRevokePermModel.Data();
-                                            data2.setProjectId(projectId);
-                                            data2.setSubprojectId(subproject.getId());
-                                            data2.setIdentity(user);
-                                            data2.setIntent(subIntent.getSubTruBudgetIntentName());
-                                            subProjectGrantRevokePermModel.setData(data2);
+                                subIntents.forEach(subIntent -> {
+                                    SubProjectGrantRevokePermModel subProjectGrantRevokePermModel = new SubProjectGrantRevokePermModel();
+                                    SubProjectGrantRevokePermModel.Data data2 = new SubProjectGrantRevokePermModel.Data();
+                                    data2.setProjectId(projectId);
+                                    data2.setSubprojectId(subproject.getId());
+                                    data2.setIdentity(user);
+                                    data2.setIntent(subIntent.getSubTruBudgetIntentName());
+                                    subProjectGrantRevokePermModel.setData(data2);
 
-                                            subProjectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-                                            try {
-                                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.intent.grantPermission", subProjectGrantRevokePermModel, SubProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
-                                                        response -> logger.info("Grant subproject permission response: " + response));
-                                            } catch (Exception e) {
-                                                logger.error("Error during subproject permission grant",e);
-                                            }
+                                    subProjectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                    try {
+                                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.intent.grantPermission", subProjectGrantRevokePermModel, SubProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
+                                                response -> logger.info("Grant subproject permission response: " + response));
+                                    } catch (Exception e) {
+                                        logger.error("Error during subproject permission grant", e);
+                                    }
 
-                                        });
-                                try {
-                                    closeSubProject(settings,projectId,subproject.getId(),token)
-                                            .subscribe(closeSubRes->logger.info("Close sub response: "+closeSubRes));
-                                } catch (Exception e) {
-                                    logger.error("Error during sub close ",e);
-                                }
+                                });
+                                if (!ampComponent.getComponentStatus().getValue().equalsIgnoreCase("open"))
+                                {
+                                    try {
+                                        closeSubProject(settings, projectId, subproject.getId(), token)
+                                                .subscribe(closeSubRes -> {
+
+                                                    logger.info("Close sub response: " + closeSubRes);
+                                                    if(!ampComponent.getComponentStatus().getValue().equalsIgnoreCase("rejected")){
+                                                        ampComponent.setComponentStatus(CategoryConstants.COMPONENT_STATUS_CLOSED.getAmpCategoryValueFromDB());
+                                                    }
+//
+                                                });
+                                    } catch (Exception e) {
+                                        logger.error("Error during sub close ", e);
+                                    }
+                            }
 
                             });
 
@@ -439,11 +450,16 @@ public class ProjectUtil {
                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.update", editSubProjectModel, EditSubProjectModel.class, String.class, token)
                         .subscribe(subProjectUpdateRes->{
                             logger.info("Update subproject response: "+subProjectUpdateRes);
-                            if (ampComponent.getComponentStatus().getValue().equalsIgnoreCase("closed"))
+                            if (!ampComponent.getComponentStatus().getValue().equalsIgnoreCase("open"))
                             {
                                 try {
                                     closeSubProject(settings,projectId,ampComponentTruSubProject[0].getTruSubProjectId(), token)
-                                            .subscribe(closeSubRes->logger.info("Close subproject res: "+closeSubRes));
+                                            .subscribe(closeSubRes->{
+                                                logger.info("Close subproject res: "+closeSubRes);
+                                                if(!ampComponent.getComponentStatus().getValue().equalsIgnoreCase("rejected")){
+                                                    ampComponent.setComponentStatus(CategoryConstants.COMPONENT_STATUS_CLOSED.getAmpCategoryValueFromDB());
+                                                }
+                                            });
                                 } catch (Exception e) {
                                     logger.error("Error during subproject close",e);
                                 }

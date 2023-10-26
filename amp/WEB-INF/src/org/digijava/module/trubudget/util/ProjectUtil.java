@@ -478,11 +478,7 @@ public class ProjectUtil {
                             editSubProjectedBudgetModel.setData(data1);
                             editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                             GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-                                    .subscribe(res2 ->{
-                                        logger.info("Update subproject budget response: " + res2) ;
-
-
-                                    } );
+                                    .subscribe(res2 -> logger.info("Update subproject budget response: " + res2));
 
                         }
                     }

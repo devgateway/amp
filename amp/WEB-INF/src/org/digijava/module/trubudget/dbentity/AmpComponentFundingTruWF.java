@@ -33,7 +33,8 @@ public class AmpComponentFundingTruWF implements Serializable {
     private String truProjectId;
     @Column(name = "tru_subproject_id")
     private String truSubprojectId;
-
+    @Column(name = "amp_component_funding_id")//we use the justAnId field.. a unique uuid.
+    private String ampComponentFundingId;
     public String getTruProjectId() {
         return truProjectId;
     }
@@ -57,8 +58,7 @@ public class AmpComponentFundingTruWF implements Serializable {
         this.truWFId = truWFId;
     }
 
-    @Column(name = "amp_component_funding_id")//we use the justAnId field.. a unique uuid.
-    private String ampComponentFundingId;
+
 
     public String getAmpComponentFundingId() {
         return ampComponentFundingId;

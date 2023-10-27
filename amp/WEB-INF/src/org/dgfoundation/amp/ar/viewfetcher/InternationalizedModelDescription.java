@@ -4,6 +4,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Session;
 import org.hibernate.metamodel.internal.MetamodelImpl;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.slf4j.Logger;
@@ -44,15 +45,15 @@ public class InternationalizedModelDescription {
 //          throw new RuntimeException("Could not get RAW JDBC Connection", e);
 //      }
 //  }
-    public static AbstractEntityPersister getPersister(final Class<?> modelClazz) {
-        EntityManager entityManager = PersistenceManager.getRequestDBSession().getEntityManagerFactory().createEntityManager();
+    public static AbstractEntityPersister getPersister(final Class<?> modelClazz, Session session) {
+        EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
         final MetamodelImpl metamodel = (MetamodelImpl) entityManager.getMetamodel();
         return (AbstractEntityPersister) metamodel.entityPersister(modelClazz);
     }
 
     public static boolean isEntity(final Class<?> modelClazz) {
         try {
-            getPersister(modelClazz);
+            getPersister(modelClazz, PersistenceManager.getRequestDBSession());
             return true;
         } catch (Exception e) {
             logger.error("Seems this is not an entity: " + modelClazz);
@@ -61,9 +62,9 @@ public class InternationalizedModelDescription {
     }
 
     public String getColumnNameByPropertyName(String propertyName, Class<?> modelClazz) {
-        int propertyIndex = getPersister(modelClazz).getEntityMetamodel().getPropertyIndex(propertyName);
+        int propertyIndex = getPersister(modelClazz, PersistenceManager.getRequestDBSession()).getEntityMetamodel().getPropertyIndex(propertyName);
         if (propertyIndex != -1) {
-            String[] columnNames = getPersister(modelClazz).getPropertyColumnNames(propertyIndex);
+            String[] columnNames = getPersister(modelClazz, PersistenceManager.getRequestDBSession()).getPropertyColumnNames(propertyIndex);
             // In a single table inheritance strategy, typically there will be only one column name per property
             if (columnNames.length > 0) {
                 return columnNames[0];
@@ -81,8 +82,8 @@ public class InternationalizedModelDescription {
         if (modelClass.getAnnotation(TranslatableClass.class) == null)
             throw new RuntimeException("asked to scan class " + modelClass + ", which is translatable");
 
-        String keyColumnName = Arrays.stream(((AbstractEntityPersister) getPersister(modelClass)).getKeyColumnNames()).iterator().next();
-        String modelTableName = ((AbstractEntityPersister) getPersister(modelClass)).getTableName();
+        String keyColumnName = Arrays.stream(getPersister(modelClass, PersistenceManager.getRequestDBSession()).getKeyColumnNames()).iterator().next();
+        String modelTableName = getPersister(modelClass, PersistenceManager.getRequestDBSession()).getTableName();
         Set<String> existingColumns = SQLUtils.getTableColumns(modelTableName);
         boolean idColumnExists = existingColumns.contains(keyColumnName);
 

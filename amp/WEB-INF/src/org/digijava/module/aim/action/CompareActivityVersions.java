@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.wicket.util.string.Strings;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -588,8 +589,9 @@ public class CompareActivityVersions extends DispatchAction {
                     Class[] params = auxMethod.getParameterTypes();
                     if (params != null && params[0].getName().contains("java.util.Set")) {
                         Class clazz = remOriginalValueObject.getClass();
-                        String idProperty = session.getSessionFactory().getClassMetadata(clazz)
-                                .getIdentifierPropertyName();
+//                        String idProperty = session.getSessionFactory().getClassMetadata(clazz)
+//                                .getIdentifierPropertyName();
+                        String idProperty = InternationalizedModelDescription.getPersister(clazz,session).getIdentifierPropertyName();
 
                         Method method = clazz.getMethod("get" + Strings.capitalize(idProperty));
                         Long remId = (Long) method.invoke(remOriginalValueObject);

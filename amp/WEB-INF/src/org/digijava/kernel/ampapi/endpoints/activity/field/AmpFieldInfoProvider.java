@@ -83,7 +83,7 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
 //            return;
 //        }
         try {
-            AbstractEntityPersister entityPersister = InternationalizedModelDescription.getPersister(clazz);
+            AbstractEntityPersister entityPersister = InternationalizedModelDescription.getPersister(clazz, PersistenceManager.getRequestDBSession());
 
 //        AbstractEntityPersister entityPersister = (AbstractEntityPersister) meta;
             final String tableName = entityPersister.getTableName();

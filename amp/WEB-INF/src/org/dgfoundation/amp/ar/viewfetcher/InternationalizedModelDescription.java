@@ -32,19 +32,7 @@ public class InternationalizedModelDescription {
         scanClass(modelClass);
     }
 
-    //  public static java.sql.Connection connection = initConnection();
-//  
-//  private static java.sql.Connection initConnection()
-//  {
-//      try
-//      {
-//          return PersistenceManager.getJdbcConnection();
-//      }
-//      catch(Exception e)
-//      {
-//          throw new RuntimeException("Could not get RAW JDBC Connection", e);
-//      }
-//  }
+
     public static AbstractEntityPersister getPersister(final Class<?> modelClazz, Session session) {
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
         final MetamodelImpl metamodel = (MetamodelImpl) entityManager.getMetamodel();

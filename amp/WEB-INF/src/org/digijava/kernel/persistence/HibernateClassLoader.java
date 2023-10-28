@@ -122,7 +122,6 @@ public class HibernateClassLoader {
          * org.digijava.kernel.ampapi.postgis.entity need to take the
          * configuration file /repository/hibernate-annotated.xml
          */
-
         for (BeanDefinition bd : scanner
                 .findCandidateComponents("org.digijava.kernel.ampapi.postgis.entity")) {
             String name = bd.getBeanClassName();
@@ -134,7 +133,6 @@ public class HibernateClassLoader {
             }
         }
     }
-
     /**
      * 
      * @param classes
@@ -154,7 +152,6 @@ public class HibernateClassLoader {
             throw new IllegalArgumentException(
                     "classes parameter must be not-null");
         }
-
         Iterator iter = classes.iterator();
         while (iter.hasNext()) {
             HibernateClass hibernateClass = (HibernateClass) iter.next();

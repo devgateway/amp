@@ -150,7 +150,6 @@ public class HibernateClassLoader {
             cfg.addSqlFunction("sum", new ClassicSumFunction());
 //            cfg.registerTypeOverride(new AmpOfflineVersionType(), new String[]{AmpOfflineVersion.class.getName()});
         }
-
         if (classes == null) {
             throw new IllegalArgumentException(
                     "classes parameter must be not-null");

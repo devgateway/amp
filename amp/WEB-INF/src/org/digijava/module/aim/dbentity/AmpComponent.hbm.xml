@@ -15,16 +15,12 @@
 		<property column="description" name="description" type="text" />
 		<property column="code" name="code" type="java.lang.String" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />
-
 		<many-to-one name="activity" column="amp_activity_id" not-null="false" index="i_activity"
 					 class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"/>
-
 		<many-to-one name="componentStatus" column="component_status"
 					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
-
 		<many-to-one name="type" column="type"
 			class="org.digijava.module.aim.dbentity.AmpComponentType" cascade="none" />
-			
 		<set name="fundings" cascade="persist,all-delete-orphan" table="AMP_COMPONENT_FUNDING" order-by="ampComponentFundingId asc">
 			<cache usage="read-write" />
 			<key column="amp_component_id" />

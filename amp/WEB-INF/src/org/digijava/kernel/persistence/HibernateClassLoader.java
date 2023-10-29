@@ -185,9 +185,6 @@ public class HibernateClassLoader {
         }
     }
 
-    /**
-     *
-     */
     public static void buildHibernateSessionFactory() {
         InputStream inp = HibernateClassLoader.class
                 .getResourceAsStream(HIBERNATE_CFG_XML);

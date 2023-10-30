@@ -414,7 +414,7 @@ public class AMPStartupListener extends HttpServlet implements
                         "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
                         "SELECT\n" +
                         "    nextval('amp_category_value_seq'),\n" +
-                        "    'Closed',\n" +
+                        "    'Rejected',\n" +
                         "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
                         "    2\n" +
                         "WHERE NOT EXISTS (\n" +

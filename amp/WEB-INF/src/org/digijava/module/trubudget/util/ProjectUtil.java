@@ -285,7 +285,7 @@ public class ProjectUtil {
         return (String) myCache.get("truBudgetToken");
     }
 
-    public static Mono<String> closeSubProject(List<AmpGlobalSettings> settings, String projectId, String subProjectId, String token) throws URISyntaxException {
+    public static Mono<String> closeSubProject(List<AmpGlobalSettings>settings, String projectId,String subProjectId, String token) throws URISyntaxException {
         CloseSubProjectModel closeSubProjectModel = new CloseSubProjectModel();
         closeSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseSubProjectModel.Data data = new CloseSubProjectModel.Data();

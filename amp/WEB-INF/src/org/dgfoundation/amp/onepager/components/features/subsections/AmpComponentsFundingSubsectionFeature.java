@@ -16,6 +16,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,8 +27,7 @@ import java.util.UUID;
 public class AmpComponentsFundingSubsectionFeature extends
         AmpSubsectionFeaturePanel<AmpComponent> {
 
-    protected AmpComponentsFundingFormTableFeature tableFeature;
-    
+
     /**
      * @param id
      * @param fmName
@@ -55,7 +55,7 @@ public class AmpComponentsFundingSubsectionFeature extends
             throw new Exception("Unknown Transaction Type");
         }
 
-        tableFeature = new AmpComponentsFundingFormTableFeature("tableFeature", componentModel, compFundsModel, activityModel, transactionTypeName + " Table", transactionType);
+        AmpComponentsFundingFormTableFeature tableFeature = new AmpComponentsFundingFormTableFeature("tableFeature", componentModel, compFundsModel, activityModel, transactionTypeName + " Table", transactionType);
         add(tableFeature);
         
         AmpAjaxLinkField addButton=new AmpAjaxLinkField("add", "Add " + transactionTypeName, "Add " + transactionTypeName) {
@@ -70,6 +70,7 @@ public class AmpComponentsFundingSubsectionFeature extends
                 cf.setTransactionDate(null);
                 cf.setTransactionType(transactionType);
                 cf.setAmpComponentFundingId(null);
+                cf.setComponentFundingDocuments(new HashSet<>());
                 cf.setJustAnId(UUID.randomUUID().toString());
 
 

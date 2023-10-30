@@ -24,6 +24,7 @@ import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -284,7 +285,7 @@ public class ProjectUtil {
         return (String) myCache.get("truBudgetToken");
     }
 
-    public static Mono<String> closeSubProject(List<AmpGlobalSettings>settings, String projectId,String subProjectId, String token) throws URISyntaxException {
+    public static Mono<String> closeSubProject(List<AmpGlobalSettings> settings, String projectId, String subProjectId, String token) throws URISyntaxException {
         CloseSubProjectModel closeSubProjectModel = new CloseSubProjectModel();
         closeSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseSubProjectModel.Data data = new CloseSubProjectModel.Data();
@@ -292,42 +293,36 @@ public class ProjectUtil {
         data.setSubprojectId(subProjectId);
         closeSubProjectModel.setData(data);
 
-        try {
-            //we have to close all related workflow items before closing the sub project
-            session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProjectId + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
-                WorkflowItemDetailsModel workflowItemDetailsModel = null;
-                try {
-                    workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF,settings, token);
-                } catch (Exception e) {
-                    logger.error("Error when fetching wf details",e);
-                }
-                // TODO: 10/26/23 change status if ampcomponent/funding accordingly
-                if(workflowItemDetailsModel!=null) {
-                    if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
-                        CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
-                        closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-                        CloseWFItemModel.Data data1 = new CloseWFItemModel.Data();
-                        data1.setProjectId(projectId);
-                        data1.setSubprojectId(subProjectId);
-                        data1.setWorkflowitemId(workflowItemDetailsModel.getData().getWorkflowitem().getData().getId());
-                        closeWFItemModel.setData(data1);
-                        try {
-                            String res = closeWorkFlowItemForReal(closeWFItemModel, settings, token).block();
-                            logger.info("Workflow close response: Item "+closeWFItemModel.getData().getWorkflowitemId()+":Res : "+res);
+        // Create a Flux of Mono instances for closing workflow items
+        Flux<String> closeWorkflows = Flux.fromIterable(session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProjectId + "'", AmpComponentFundingTruWF.class).list())
+                .flatMap(ampComponentFundingTruWF -> {
+                    CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
+                    closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                    CloseWFItemModel.Data data1 = new CloseWFItemModel.Data();
+                    data1.setProjectId(projectId);
+                    data1.setSubprojectId(subProjectId);
+                    data1.setWorkflowitemId(ampComponentFundingTruWF.getTruWFId());
+                    closeWFItemModel.setData(data1);
 
-                        } catch (URISyntaxException e) {
-                            throw new RuntimeException(e);
-                        }
+                    try {
+                        return closeWorkFlowItemForReal(closeWFItemModel, settings, token)
+                                .map(res -> {
+                                    logger.info("Workflow close response: Item " + closeWFItemModel.getData().getWorkflowitemId() + ": Res: " + res);
+                                    return res;
+                                })
+                                .onErrorResume(e -> {
+                                    logger.error("Error closing workflow item", e);
+                                    return Mono.empty();
+                                });
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
                     }
-                }
-            });
-        } catch (Exception e) {
-           logger.error("There was an error",e);
-        }
+                });
 
-        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token);
-
+        return closeWorkflows
+                .then(GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token));
     }
+
     public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");

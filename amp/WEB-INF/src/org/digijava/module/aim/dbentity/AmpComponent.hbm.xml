@@ -24,7 +24,7 @@
 
 		<many-to-one name="type" column="type"
 			class="org.digijava.module.aim.dbentity.AmpComponentType" cascade="none" />
-			
+
 		<set name="fundings" cascade="persist,all-delete-orphan" table="AMP_COMPONENT_FUNDING" order-by="ampComponentFundingId asc">
 			<cache usage="read-write" />
 			<key column="amp_component_id" />

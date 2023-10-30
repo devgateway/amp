@@ -416,7 +416,7 @@ public class AMPStartupListener extends HttpServlet implements
                         "    nextval('amp_category_value_seq'),\n" +
                         "    'Closed',\n" +
                         "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
-                        "    1\n" +
+                        "    2\n" +
                         "WHERE NOT EXISTS (\n" +
                         "    SELECT 1\n" +
                         "    FROM amp_category_value\n" +

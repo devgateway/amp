@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
+import org.digijava.module.aim.dbentity.*;
 
 /**
  * @author Viorel Chihai
@@ -25,13 +26,15 @@ public class SectorIdsValidator implements ConstraintValidator<ValidSectorIds, L
         }
 
         Session session = PersistenceManager.getSession();
-        Integer validSectorIdsFromDb = (Integer) session.createQuery("SELECT count(s.ampSectorId) FROM AmpSector s "
-                        + "WHERE s.ampSectorId in (:sectorIds) AND (s.deleted = false OR s.deleted is null)")
+        long validSectorIdsFromDb = (Long) session.createQuery("SELECT count(s.ampSectorId) FROM " + AmpSector.class.getName()  + " " +
+                        "AS s WHERE s.ampSectorId in (:sectorIds) AND (s.deleted = false OR s.deleted is null)")
                 .setParameterList("sectorIds", sectorIds)
                 .uniqueResult();
 
+        int sectorIdsSize = Math.toIntExact(validSectorIdsFromDb);
 
-        return sectorIds.size() == validSectorIdsFromDb;
+
+        return sectorIds.size() == sectorIdsSize;
     }
 
 }

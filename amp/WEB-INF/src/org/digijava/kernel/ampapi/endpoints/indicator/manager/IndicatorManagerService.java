@@ -179,22 +179,28 @@ public class IndicatorManagerService {
         String startInString = "01/01/" + startYear;
         DateTime dateTime = DateTime.parse(startInString, formatter);
 
-        if (dateTime.isAfter(value.getOriginalValueDate().getTime())) {
-            throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError(error + " Original value date "
-                            + simpleDateFormat.format(value.getOriginalValueDate())
-                            + " should be greater than " + startInString));
+        if (value.getOriginalValueDate() != null) {
+            if (dateTime.isAfter(value.getOriginalValueDate().getTime())) {
+                throw new ApiRuntimeException(BAD_REQUEST,
+                        ApiError.toError(error + " Original value date "
+                                + simpleDateFormat.format(value.getOriginalValueDate())
+                                + " should be greater than " + startInString));
+            }
+
         }
 
         String endInString = "01/01/" + endYear;
         dateTime = DateTime.parse(endInString, formatter);
 
-        if (dateTime.isAfter(value.getRevisedValueDate().getTime())) {
-            throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError(error + "Revised value date "
-                            + simpleDateFormat.format(value.getRevisedValueDate())
-                            + " should be greater than " + endInString));
+        if(value.getRevisedValueDate() != null) {
+            if (dateTime.isAfter(value.getRevisedValueDate().getTime())) {
+                throw new ApiRuntimeException(BAD_REQUEST,
+                        ApiError.toError(error + "Revised value date "
+                                + simpleDateFormat.format(value.getRevisedValueDate())
+                                + " should be greater than " + endInString));
+            }
         }
+
     }
 
 

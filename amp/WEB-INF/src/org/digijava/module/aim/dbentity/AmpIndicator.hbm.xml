@@ -16,7 +16,7 @@
 		<property name="creationDate" column="creation_date" type="java.util.Date" />
 		<property name="defaultInd" column="default_ind" type="java.lang.Boolean" />
 		<property name="unit" column="unit" type="java.lang.String" />
-
+		<property name="indicatorType" column="indicator_type" type="int" />
 		<property name="comments" column="Comments" type="java.lang.String" />
 
 		<set name="indicatorValues" lazy="true" inverse="true" cascade="all-delete-orphan">

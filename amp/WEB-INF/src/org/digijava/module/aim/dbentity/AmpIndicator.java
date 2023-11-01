@@ -14,7 +14,14 @@ import java.util.Set;
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable, Identifiable
 {
-    
+    /*
+    * Indicator types can either be basic, single disagregation, multi disaggreagtion
+    */
+
+    public static final int BASIC = 0;
+    public static final int SINGLE_DISAGGREGATION = 1;
+    public static final int MULTI_DISAGGREGATION = 2;
+
     //IATI-check: to be ignored
     private static final long serialVersionUID = 1L;
 //  @Interchangeable(fieldTitle="Indicator ID")
@@ -71,6 +78,7 @@ public class AmpIndicator implements Serializable, Identifiable
     @Interchangeable(fieldTitle="Risk")
     private AmpIndicatorRiskRatings risk;
 
+    private int indicatorType;
 
     public Long getIndicatorId() {
         return indicatorId;
@@ -202,5 +210,13 @@ public class AmpIndicator implements Serializable, Identifiable
                 .filter(AmpIndicatorGlobalValue::isTargetValue)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public int getIndicatorType() {
+        return indicatorType;
+    }
+
+    public void setIndicatorType(int indicatorType) {
+        this.indicatorType = indicatorType;
     }
 }

@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
  * @since Feb 10, 2011
  */
 public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
-    
+
 
     private static Logger logger = Logger.getLogger(AmpMEItemFeaturePanel.class);
     /**
@@ -85,7 +85,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         final Model<Boolean> valuesSet = new Model<Boolean>(false);
 
         for (AmpIndicatorValue val : values.getObject()){
-            
+
             switch (val.getValueType()) {
                 case AmpIndicatorValue.BASE:
                     val.copyValuesTo(baseVal);
@@ -118,7 +118,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpIndicatorValue value = new AmpIndicatorValue();
-
+                value.setIndicatorConnection(conn.getObject());
                 value.setValueDate(new Date(System.currentTimeMillis()));
                 value.setValueType(AmpIndicatorValue.ACTUAL);
                 valuesTable.getEditorList().addItem(value);

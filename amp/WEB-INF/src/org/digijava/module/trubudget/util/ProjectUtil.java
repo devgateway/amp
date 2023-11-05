@@ -54,16 +54,18 @@ public class ProjectUtil {
 
     public static void  end()
     {
-        Transaction transaction = session.getTransaction();
-        while (true){
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            if (!transaction.isActive()){
-                session.close();
-                break;
+        if(session!=null) {
+            Transaction transaction = session.getTransaction();
+            while (true) {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if (!transaction.isActive()) {
+                    session.close();
+                    break;
+                }
             }
         }
     }

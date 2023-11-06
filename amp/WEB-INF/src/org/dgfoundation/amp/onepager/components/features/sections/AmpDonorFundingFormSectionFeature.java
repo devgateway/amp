@@ -600,7 +600,7 @@ public class AmpDonorFundingFormSectionFeature extends
         for (AmpOrgRole ampOrgRole : orgRoleModel.getObject()) {
             if (ampOrgRole.getOrganisation().getIdentifier().equals(org.getIdentifier()) 
                     && ampOrgRole.getRole().getIdentifier().equals(role.getIdentifier())) {
-                return (AmpOrgRole) ampOrgRole;
+                return ampOrgRole;
             }
         }
         return null;

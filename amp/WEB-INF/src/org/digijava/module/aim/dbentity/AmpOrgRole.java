@@ -115,12 +115,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpOrgRole aux = (AmpOrgRole) obj;
-        String original = "" + this.organisation.getAmpOrgId() + "-" + this.role.getAmpRoleId();
-        String copy = "" + aux.organisation.getAmpOrgId() + "-" + aux.role.getAmpRoleId();
-        if (original.equals(copy)) {
-            return true;
-        }
-        return false;
+        String original = this.organisation.getAmpOrgId() + "-" + this.role.getAmpRoleId();
+        String copy = aux.organisation.getAmpOrgId() + "-" + aux.role.getAmpRoleId();
+        return original.equals(copy);
     }
 
     @Override

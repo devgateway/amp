@@ -215,6 +215,7 @@ public class ActivityUtil {
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
+                a.setMember(new HashSet<>());
                 if (tmpGroup == null) {
                     //we need to create a group for this activity
                     tmpGroup = new AmpActivityGroup();
@@ -231,8 +232,8 @@ public class ActivityUtil {
                         session.merge(a);
 
                 }
-//                session.flush();
-                a.setMember(new HashSet<>());
+
+                session.flush();
 
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
@@ -305,7 +306,7 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
-//        session.flush();
+        session.flush();
 
         updatePerformanceRules(oldA, a);
 
@@ -328,6 +329,12 @@ public class ActivityUtil {
         {
             session.evict(object);
         }
+    }
+    private static void updateFunding(AmpActivityVersion ampActivityVersion)
+    {
+    Session session = PersistenceManager.getRequestDBSession();
+    List<AmpFunding> fundings = session.createQuery("FROM "+ AmpFunding.class.getName()+" af WHERE af.ampActivityId=:activityId",AmpFunding.class).setParameter("activityId",ampActivityVersion.getAmpActivityId(), LongType.INSTANCE).list();
+
     }
 
     private static void updateMultiStakeholderField(AmpActivityVersion a) {

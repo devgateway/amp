@@ -267,7 +267,7 @@
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 		<property name="approvalDate" column="approvalDate" type="java.util.Date" />
 
-		<set name="activityContacts" inverse="true" cascade="delete" lazy="false">
+		<set name="activityContacts" inverse="false" cascade="delete" lazy="false">
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
 		</set>

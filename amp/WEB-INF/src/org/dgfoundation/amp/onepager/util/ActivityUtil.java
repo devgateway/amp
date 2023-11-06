@@ -1437,7 +1437,7 @@ public class ActivityUtil {
     public static boolean hasSectorIndicatorsInActivity(AmpActivityVersion activity, AmpActivitySector sector) {
         Set<IndicatorActivity> indicators = activity.getIndicators();
         for (IndicatorActivity indicator : indicators) {
-            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+            AmpIndicator ind = PersistenceManager.getSession()
                     .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
             List<Long> sectorIds = ind.getSectors().stream()
                     .map(AmpSector::getAmpSectorId)

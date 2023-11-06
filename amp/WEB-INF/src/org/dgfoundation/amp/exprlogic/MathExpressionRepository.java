@@ -10,7 +10,7 @@ import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 
 /**
- * 
+ *
  * @author Sebastian Dimunzio Apr 15, 2009
  */
 public class MathExpressionRepository {
@@ -19,7 +19,7 @@ public class MathExpressionRepository {
     public static final String OVERAGE_PROJECT = "overageProjects";
 
     public static final String AGE_OF_PROJECT = "ageOfProject";
-    
+
     public static final String CALCULATED_PROJECT_LIFE = "calculatedProjectLife";
 
     public static final String PREDICTABILITY_OF_FUNDING = "predictabilityOfFunding";
@@ -61,6 +61,7 @@ public class MathExpressionRepository {
     public static final String UNCOMMITED_CUMULATIVE_BALANCE = "uncommitedCumulativeBalance";
 
     public static final String UNDISBURSED_BALANCE = "undisbursedBalance";
+    public static final String UNEXPENDITURED_BALANCE = "unexpendituredBalance";
 
     public static final String UNCOMMITED_BALANCE = "uncommitedBalance";
 
@@ -126,6 +127,7 @@ public class MathExpressionRepository {
 
         buildUncommitedBalance();
         buildUndisbursedBalance();
+        buildUnexpendituredBalance();
 
         /** Niger Columns **/
         buildPriorActualDisbursements();
@@ -133,7 +135,7 @@ public class MathExpressionRepository {
         buildCumulatedDisbursements();
         buildConsumptionRate();
         buildSelectdYearOfPlannedDisbursements();
-        
+
         buildPercentageOfDisbursement();
         buildPercentageOfTotalCommitments();
 
@@ -152,7 +154,7 @@ public class MathExpressionRepository {
     }
 
     /**
-     * buildPledgesPercentageOfDisbursement (Total disbursed by year/quarter/month)/(TOTAL_ACTUAL_DISBURSEMENT)*100 
+     * buildPledgesPercentageOfDisbursement (Total disbursed by year/quarter/month)/(TOTAL_ACTUAL_DISBURSEMENT)*100
      */
     private static void buildPercentageOfDisbursement() {
         try {
@@ -165,7 +167,7 @@ public class MathExpressionRepository {
     }
 
     /**
-     * buildPercentageOfTotalCommitments (Total disbursed by year/quarter/month)/(TOTAL_ACTUAL_DISBURSEMENT)*100 
+     * buildPercentageOfTotalCommitments (Total disbursed by year/quarter/month)/(TOTAL_ACTUAL_DISBURSEMENT)*100
      */
     private static void buildPercentageOfTotalCommitments() {
         try {
@@ -175,8 +177,8 @@ public class MathExpressionRepository {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-    }       
-    
+    }
+
     /**
      * buildOverageProjects Current Date - Proposed Completion
      */
@@ -202,9 +204,9 @@ public class MathExpressionRepository {
         }
 
     }
-    
+
     /**
-     * calculatedProjectLife (Difference between Planned Start Date AND Original Completion Date) 
+     * calculatedProjectLife (Difference between Planned Start Date AND Original Completion Date)
      */
     private static void buildCalculatedProjectLife() {
         try {
@@ -212,7 +214,7 @@ public class MathExpressionRepository {
             expresions.put(CALCULATED_PROJECT_LIFE, oper);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-        }           
+        }
     }
 
     /**
@@ -471,7 +473,7 @@ public class MathExpressionRepository {
     /**
      * Undisbursed Balance = Actual Commitments (depending on filter) - Actual
      * Disbursements (dependent on filter).
-     * 
+     *
      */
     private static void buildUndisbursedBalance() {
         try {
@@ -483,9 +485,23 @@ public class MathExpressionRepository {
     }
 
     /**
+     * Unexpenditured Balance = Actual Disbursements (depending on filter) - Actual
+     * Expenditures (dependent on filter).
+     *
+     */
+    private static void buildUnexpendituredBalance() {
+        try {
+            MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.ACTUAL_EXPENDITURE_FILTERED);
+            expresions.put(UNEXPENDITURED_BALANCE, m1);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    /**
      * Uncommitted Balance = Proposed project cost - Actual Commitments
      * (dependent on the filter)
-     * 
+     *
      */
     private static void buildUncommitedBalance() {
         try {
@@ -521,7 +537,7 @@ public class MathExpressionRepository {
                     expresions.put(colName, m1);
                 }
             }
-            
+
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -605,10 +621,10 @@ public class MathExpressionRepository {
             logger.error(e.getMessage(), e);
         }
     }
-    
+
     /**
      * Get The expression by Key
-     * 
+     *
      * @param key
      * @return
      */

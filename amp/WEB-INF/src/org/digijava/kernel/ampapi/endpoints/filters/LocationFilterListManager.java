@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -122,19 +122,8 @@ public class LocationFilterListManager implements FilterListManager {
      */
     protected List<Long> getCountriesWithChildrenIds(boolean pShowAllCountries) {
 
-        Session session = PersistenceManager.getSession();
-
-        String queryString = "SELECT loc FROM " + AmpCategoryValueLocations.class.getName()
-                + " loc WHERE loc.parentLocation IS NULL "
-                + " AND (loc.deleted != true)";
-        if (!pShowAllCountries) {
-            queryString += " AND (loc.id IN (SELECT DISTINCT parentLocation FROM "
-                    + AmpCategoryValueLocations.class.getName() + "))";
-        }
-
-        Query qry = session.createQuery(queryString);
-        qry.setCacheable(true);
-        Collection<AmpCategoryValueLocations> countryCollection = qry.list();
+        Collection<AmpCategoryValueLocations> countryCollection =
+                LocationUtil.getCountriesWithChildren(pShowAllCountries);
 
         AmpApplicationSettings appSettings = EndpointUtils.getAppSettings();
         final boolean showAllCountries = appSettings == null ? false : appSettings.getShowAllCountries();
@@ -143,7 +132,8 @@ public class LocationFilterListManager implements FilterListManager {
 
         List<Long> countryIds = countryCollection
                 .stream()
-                .filter(country -> showAllCountries || pShowAllCountries || country.getIso().equals(defaultCountryIso))
+                .filter(country -> showAllCountries || pShowAllCountries
+                        || country.getIso().equals(defaultCountryIso) || defaultCountryIso.equals("zz"))
                 .map(country -> country.getId())
                 .collect(Collectors.toList());
 

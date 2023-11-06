@@ -1323,7 +1323,6 @@ public class ActivityUtil {
             creator = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
         }
         try {
-
             //add or edit activity contact and amp contact
             if (activityContacts != null && activityContacts.size() > 0) {
                 for (AmpActivityContact activityContact : activityContacts) {

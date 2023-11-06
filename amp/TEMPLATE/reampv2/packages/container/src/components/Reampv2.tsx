@@ -10,6 +10,7 @@ const Reampv2 = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+
     // Listen to navigation events dispatched inside reampv2 mfe.
     useEffect(() => {
         const reampv2NavigationEventHandler = (event: Event) => {

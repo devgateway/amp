@@ -8,23 +8,38 @@ export const withRouter = (Component) => {
         const params = useParams();
         const [ searchParams, setSearchParams] = useSearchParams();
 
+        const extractSearchParams = () => {
+            let storedParams = localStorage.getItem('searchParams');
+
+            if (storedParams) {
+                storedParams = storedParams.replace('?', '');
+                const paramsArr  = storedParams.split('&');
+
+                paramsArr.map((param) => {
+                    const [key, value] = param.split('=');
+                    setSearchParams(key, value);
+                    return [key, value];
+
+                });
+            }
+        }
+
         useEffect(() => {
-            setSearchParams(localStorage.getItem("searchParams") || "");
+            extractSearchParams();
         }, []);
+
+        console.log("withRouter searchParams", searchParams);
 
         return (
             <>
-                {searchParams.get('profile') ? (
                     <Component
                         navigate={navigate}
                         location={location}
-                        params={params}
+                        urlParams={params}
                         searchParams={searchParams}
+                        useSearchParams={useSearchParams}
                         {...props}
                     />
-                ) : (
-                    <div>loading...</div>
-                )}
             </>
 
         );

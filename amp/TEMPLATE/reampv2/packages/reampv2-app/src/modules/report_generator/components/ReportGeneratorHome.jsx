@@ -48,7 +48,7 @@ class ReportGeneratorHome extends Component {
     } = this.props;
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
-    const { id } = this.props.params;
+    const { id } = this.props.urlParams;
     const typeFromURL = new URLSearchParams(location.search).get('type');
     const profileFromURL = new URLSearchParams(location.search).get('profile');
 
@@ -283,6 +283,7 @@ ReportGeneratorHome.propTypes = {
   _updateColumnsSelected: PropTypes.func.isRequired,
   _updateMeasuresSelected: PropTypes.func.isRequired,
   _updateMeasuresSorting: PropTypes.func.isRequired,
+  urlParams: PropTypes.object,
 };
 
 ReportGeneratorHome.defaultProps = {
@@ -292,4 +293,5 @@ ReportGeneratorHome.defaultProps = {
 };
 
 ReportGeneratorHome.contextType = ReportGeneratorContext;
+
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ReportGeneratorHome));

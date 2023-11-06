@@ -8,7 +8,7 @@ class ReportGeneratorRouter extends Component {
     return (
       <Routes>
         <Route path="/" exact element={<ReportGeneratorHome/>} />
-        <Route path="/:id" element={<ReportGeneratorHome/>} />
+        <Route path=":id" element={<ReportGeneratorHome/>} />
       </Routes>
     );
   }

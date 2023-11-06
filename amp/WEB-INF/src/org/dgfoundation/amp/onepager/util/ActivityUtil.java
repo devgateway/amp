@@ -1353,7 +1353,6 @@ public class ActivityUtil {
             logger.error("Error saving activity contact:",e);
         }
     }
-
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,
                                                  Session session) {
         if (a.getAmpActivityId() != null) {

@@ -11,6 +11,8 @@ export const withRouter = (Component) => {
         const extractSearchParams = () => {
             let storedParams = localStorage.getItem('searchParams');
 
+            location.search = storedParams;
+
             if (storedParams) {
                 storedParams = storedParams.replace('?', '');
                 const paramsArr  = storedParams.split('&');
@@ -28,16 +30,14 @@ export const withRouter = (Component) => {
             extractSearchParams();
         }, []);
 
-        console.log("withRouter searchParams", searchParams);
-
         return (
             <>
                     <Component
                         navigate={navigate}
-                        location={location}
+                        _location={location}
                         urlParams={params}
                         searchParams={searchParams}
-                        useSearchParams={useSearchParams}
+                        storedSearchParams={localStorage.getItem('searchParams')}
                         {...props}
                     />
             </>

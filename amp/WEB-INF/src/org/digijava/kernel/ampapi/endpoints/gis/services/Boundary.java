@@ -8,9 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Boundary {
-
     private AdmLevel id;
-
     private String label;
 
     @ApiModelProperty("ISO2 Country Code")

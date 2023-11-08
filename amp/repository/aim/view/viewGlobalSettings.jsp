@@ -458,7 +458,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																			<c:out value="${fn:substring(global.value, 0, 50)}..." />
 																		</c:when>
 																		<c:otherwise>
-																			<c:out value="${global.value}" escapeXml="true"/>
+																			<c:out value="${global.value}"/>
 																		</c:otherwise>
 																	</c:choose>
 
@@ -470,7 +470,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																		<c:out value="${fn:substring(global.value, 0, 50)}..." />
 																	</c:when>
 																	<c:otherwise>
-																		<c:out value="${global.value}" escapeXml="true"/>
+																		<c:out value="${global.value}"/>
 																	</c:otherwise>
 																</c:choose>
 

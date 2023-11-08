@@ -1,10 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Octavian Ciubotaru
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Boundary {
 
     private AdmLevel id;
@@ -13,6 +15,7 @@ public class Boundary {
 
     @ApiModelProperty("ISO2 Country Code")
     private String country;
+
 
     public AdmLevel getId() {
         return id;

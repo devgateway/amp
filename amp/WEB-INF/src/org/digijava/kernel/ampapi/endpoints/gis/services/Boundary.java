@@ -16,7 +16,6 @@ public class Boundary {
     @ApiModelProperty("ISO2 Country Code")
     private String country;
 
-
     public AdmLevel getId() {
         return id;
     }

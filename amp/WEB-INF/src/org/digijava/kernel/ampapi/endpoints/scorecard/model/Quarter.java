@@ -132,8 +132,4 @@ public class Quarter {
     public String getLabel() {
         return "Q" + quarterNumber;
     }
-
-    public int getYear() {
-        return year;
-    }
 }

@@ -14,7 +14,6 @@ public class DashboardConstants {
     public static final String TOP_SECTORS = "Top Sectors";
     public static final String AID_PREDICTABILITY = "Aid Predictability";
     public static final String FUNDING_TYPE = "Funding Type";
-    public static final String FINANCING_INSTRUMENT = "Financing Instrument";
     public static final String TOP_DONOR_GROUPS = "Top Donor Groups";
     public static final String TOP_RESPONSIBLE_ORGS = "Responsible Organizations";
     public static final String TOP_BENEFICIARY_ORGS = "Beneficiary Agencies";

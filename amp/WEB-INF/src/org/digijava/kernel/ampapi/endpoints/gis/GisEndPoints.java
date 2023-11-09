@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardResult;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.ssc.SscDashboardXlsResult;
@@ -41,15 +40,7 @@ import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -77,26 +68,14 @@ public class GisEndPoints {
     @ApiOperation("Get available filters")
     public List<AvailableMethod> getAvailableFilters() {
         return EndpointUtils.getAvailableMethods(GisEndPoints.class.getName());
-    }
-
-    @OPTIONS
-    @Path("/cluster")
-    @ApiOperation(
-            value = "Describe options for endpoint",
-            notes = "Enables Cross-Origin Resource Sharing for endpoint")
-    public Response getOptionsClusteredPointsByAdm() {
-        return PublicServices.buildOkResponseWithOriginHeaders("");
-    }
-
+    }   
 
     @POST
     @Path("/cluster")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ClusterPointsByAdmin")
     @ApiOperation("Returns Aggregate ADM info by ADM Level")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Aggregate ADM info by ADM Level",
-            response = FeatureCollectionGeoJSON.class))
-    public final Response getClusteredPointsByAdm(
+    public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
             @ApiParam("filter") final PerformanceFilterParameters config) throws AmpApiException {
 
         List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
@@ -109,7 +88,8 @@ public class GisEndPoints {
                     clusteredPoints.getAdmin(), clusteredPoints.getAdmId()));
             }
         }
-        return PublicServices.buildOkResponseWithOriginHeaders(result);
+
+        return result;
     }
 
     private FeatureGeoJSON getPoint(Double lat, Double lon,

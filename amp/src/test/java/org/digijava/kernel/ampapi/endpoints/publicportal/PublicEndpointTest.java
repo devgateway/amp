@@ -19,7 +19,7 @@ public class PublicEndpointTest {
     public void testTopDataSerialization() throws JsonProcessingException {
         PublicTopData c = new PublicTopData(
                 ImmutableMap.of("donor-agency", "Donor Agency", "actual-disbursements", "Actual Disbursements"),
-                ImmutableMap.of("SubTotal Actual Disbursements", new BigDecimal("533325163.92")),
+                ImmutableMap.of("Total Actual Disbursements", new BigDecimal("533325163.92")),
                 ImmutableList.of(
                         ImmutableMap.of("donor-agency", "Donor 1", "actual-disbursements", "533 202 040,49"),
                         ImmutableMap.of("donor-agency", "Donor 2", "actual-disbursements", "123 123,43")
@@ -32,7 +32,7 @@ public class PublicEndpointTest {
         String actualJson = new ObjectMapper().writeValueAsString(c);
         assertEquals("{\"headers\":"
                 + "{\"donor-agency\":\"Donor Agency\",\"actual-disbursements\":\"Actual Disbursements\"},"
-                + "\"subTotals\":{\"SubTotal Actual Disbursements\":533325163.92},"
+                + "\"totals\":{\"Total Actual Disbursements\":533325163.92},"
                 + "\"data\":["
                 + "{\"donor-agency\":\"Donor 1\",\"actual-disbursements\":\"533 202 040,49\"},"
                 + "{\"donor-agency\":\"Donor 2\",\"actual-disbursements\":\"123 123,43\"}],"

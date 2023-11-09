@@ -1,16 +1,22 @@
 package org.digijava.kernel.ampapi.endpoints.publicportal;
 
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class PublicReportFormParameters {
+    @ApiModelProperty("Page number, starting from 1. Default to 1")
+    private Integer page;
+
+    @ApiModelProperty("The number of records per page to return. Default will be set to the number configured in AMP. "
+            + "Set it to -1 to get the unlimited records, that will provide all records.")
+    private Integer recordsPerPage;
 
     @JsonProperty(EPConstants.REPORT_TYPE)
     @ApiModelProperty(value = "Can be on of \"D\" (Donor), \"C\" (Component), \"P\" (Pledge). "
@@ -64,5 +70,21 @@ public class PublicReportFormParameters {
 
     public void setFilters(Map<String, Object> filters) {
         this.filters = filters;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getRecordsPerPage() {
+        return recordsPerPage;
+    }
+
+    public void setRecordsPerPage(Integer recordsPerPage) {
+        this.recordsPerPage = recordsPerPage;
     }
 }

@@ -1,46 +1,51 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
-import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
-import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
-
-import java.util.List;
-
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.AidPredictabilityChartData;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.AmpColorThresholdWrapper;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.FundingTypeChartData;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMap;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.ProjectAmounts;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.FundingTypeChartData;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.AidPredictabilityChartData;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopDescription;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartData;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartType;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopDescription;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
+
+import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
+import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
+
 /**
- * 
  * @author Diego Dimunzio
  * - All dashboards end points
  */
@@ -56,19 +61,32 @@ public class EndPoints {
     @ApiOperation(
             value = "List properties for top funding charts.",
             notes = "Always returns \"Donor Agency\", \"Region\", \"Primary Sector\".")
-    public List<TopDescription> getAdminLevelsTotalslist() {
+    public List<TopDescription> getAdminLevelsTotalsist() {
         return DashboardsService.getTopsList();
+    }
+
+    @OPTIONS
+    @Path("/tops/{type}")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeTopsDashboard() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @POST
     @Path("/tops/{type}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "tops")
     @ApiOperation("Get top funding by property")
-    public TopChartData getAdminLevelsTotals(SettingsAndFiltersParameters config,
-            @ApiParam("Property") @PathParam("type") TopChartType type,
-            @DefaultValue("5") @QueryParam("limit") Integer limit) {
-        return new TopsChartService(config, type, limit).buildChartDataAggregated();
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top chart data",
+            response = TopChartData.class))
+    public Response getAdminLevelsTotals(SettingsAndFiltersParameters config,
+                                         @ApiParam("Property") @PathParam("type") TopChartType type,
+                                         @DefaultValue("5") @QueryParam("limit") Integer limit) {
+        return PublicServices.buildOkResponseWithOriginHeaders(
+                new TopsChartService(config, type, limit).buildChartDataAggregated());
     }
 
     @POST
@@ -77,8 +95,8 @@ public class EndPoints {
     @ApiMethod(ui = false, id = "topsDataDetail")
     @ApiOperation("List projects for a top funding property value")
     public ProjectAmounts getChartsDataDetail(DashboardFormParameters config,
-            @ApiParam("Property") @PathParam("type") TopChartType type,
-            @ApiParam("Property value") @PathParam("id") Long id) {
+                                              @ApiParam("Property") @PathParam("type") TopChartType type,
+                                              @ApiParam("Property value") @PathParam("id") Long id) {
         int offset = DashboardsService.getOffset(config);
         return new TopsChartService(config, type, id).buildChartData(offset);
     }
@@ -107,14 +125,47 @@ public class EndPoints {
         return DashboardsService.getAidPredictabilityProjects(filter, year, measure);
     }
 
+    @OPTIONS
+    @Path("/ftype")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeFundingTypeDashboard() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
     @POST
     @Path("/ftype")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ftype")
     @ApiOperation("Get funding type chart data")
-    public FundingTypeChartData getFundingType(SettingsAndFiltersParameters config) {
-        return DashboardsService.getFundingTypeChartData(config);
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding type chart data",
+            response = FundingTypeChartData.class))
+    public Response getFundingType(SettingsAndFiltersParameters config) {
+        return PublicServices.buildOkResponseWithOriginHeaders(DashboardsService.getFundingTypeChartData(config));
     }
+
+    @OPTIONS
+    @Path("/finstrument")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeFinancingInstrument() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    @POST
+    @Path("/finstrument")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "ftype")
+    @ApiOperation("Get financing instrument chart data")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding istrumet chart data",
+            response = FundingTypeChartData.class))
+    public Response getFinancingInstrument(SettingsAndFiltersParameters config) {
+        return PublicServices.buildOkResponseWithOriginHeaders(
+                DashboardsService.getFinancingInstrumentChartData(config));
+    }
+
 
     @POST
     @Path("/ftype/{year}/{id}")
@@ -122,8 +173,8 @@ public class EndPoints {
     @ApiMethod(ui = false, id = "ftypeDataDetail")
     @ApiOperation("List projects for funding type & year")
     public ProjectAmounts getFundingTypeProjects(DashboardFormParameters config,
-            @PathParam("year") String year,
-            @ApiParam("id of the funding type") @PathParam("id") Integer id) {
+                                                 @PathParam("year") String year,
+                                                 @ApiParam("id of the funding type") @PathParam("id") Integer id) {
         return DashboardsService.getProjectsByFundingTypeAndYear(config, year, id);
     }
 
@@ -190,9 +241,12 @@ public class EndPoints {
     @ApiMethod(ui = false, id = "heatMapDataDetail")
     @ApiOperation("List projects for one Heat Map cell")
     public ProjectAmounts getHeatMapDataDetail(ListHeatMapProjectsParam config,
-            @ApiParam(allowableValues = "sec, loc, prg") @PathParam("type") String type,
-            @ApiParam("id from x axis of Heat Map matrix.") @PathParam("xId") Long xId,
-            @ApiParam("id from y axis of Heat Map matrix.") @PathParam("yId") Long yId) {
+                                               @ApiParam(allowableValues = "sec, loc, prg")
+                                               @PathParam("type") String type,
+                                               @ApiParam("id from x axis of Heat Map matrix.")
+                                               @PathParam("xId") Long xId,
+                                               @ApiParam("id from y axis of Heat Map matrix.")
+                                               @PathParam("yId") Long yId) {
 
         Integer offset = MoreObjects.firstNonNull(config.getOffset(), 0);
         return new HeatMapService(config, xId, yId).buildHeatMapDetail(offset);

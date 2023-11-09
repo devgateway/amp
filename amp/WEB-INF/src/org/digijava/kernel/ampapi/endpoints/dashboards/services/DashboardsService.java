@@ -1,14 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -36,8 +27,8 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
-import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -54,15 +45,22 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+
 import static org.dgfoundation.amp.nireports.runtime.ColumnReportData.UNALLOCATED_ID;
 
 /**
- *
  * @author Diego Dimunzio
- *
  */
 
-public class DashboardsService {
+public final class DashboardsService {
 
     private static final int RECORDS_PER_PAGE = 50;
     private static final int EXP_1 = 1;
@@ -71,6 +69,10 @@ public class DashboardsService {
     private static final int EXP_4 = 4;
     private static final int EXP_5 = 5;
     private static final int EXP_6 = 6;
+
+    private DashboardsService() {
+
+    }
 
     /**
      * Return a list of the available top __ for the dashboard charts Note -- I
@@ -111,7 +113,7 @@ public class DashboardsService {
     }
 
     protected static void postProcess(GeneratedReport report, ReportSpecificationImpl spec, OutputSettings outSettings,
-            TopChartType type) {
+                                      TopChartType type) {
         if (type == TopChartType.RE) {
             postProcessRE(report, spec, outSettings);
         }
@@ -120,11 +122,13 @@ public class DashboardsService {
     /**
      * Replace "Undefined" region with "International", "National" and actual "Undefined" region
      * (this is one of the workaround solutions)
+     *
      * @param report
      * @param spec
      * @param outSettings
      */
-    protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, OutputSettings outSettings) {
+    protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec,
+                                        OutputSettings outSettings) {
         final DecimalFormat formatter = ReportsUtil.getDecimalFormatOrDefault(spec);
         final AmountsUnits amountsUnits = ReportsUtil.getAmountsUnitsOrDefault(spec);
 
@@ -189,7 +193,8 @@ public class DashboardsService {
     }
 
     private static void updateUndefinedEntry(ReportArea undefined, ReportOutputColumn regionCol,
-            String name, long id, Map<Long, String> entitiesIdsValues, List<ReportArea> children) {
+                                             String name, long id, Map<Long, String> entitiesIdsValues,
+                                             List<ReportArea> children) {
         // recreate the cell to have a correct name for the undefined area
         TextCell uRegionCell = new TextCell(TranslatorWorker.translateText(name), id, entitiesIdsValues);
         undefined.getContents().put(regionCol, uRegionCell);
@@ -210,7 +215,7 @@ public class DashboardsService {
         Map<String, AidPredictabilityAmounts> results = new TreeMap<>(); // accumulator of per-year results
 
         if (report.reportContents.getContents() != null) {
-            for (ReportOutputColumn outputColumn:report.reportContents.getContents().keySet()) {
+            for (ReportOutputColumn outputColumn : report.reportContents.getContents().keySet()) {
                 // ignore non-funding contents
                 if (outputColumn.parentColumn == null) {
                     continue;
@@ -271,7 +276,7 @@ public class DashboardsService {
     }
 
     public static ProjectAmounts getAidPredictabilityProjects(DashboardFormParameters filter, String year,
-            String measure) {
+                                                              String measure) {
         Objects.requireNonNull(year);
         Preconditions.checkArgument(!Strings.isNullOrEmpty(measure));
 
@@ -351,7 +356,15 @@ public class DashboardsService {
     }
 
     public static FundingTypeChartData getFundingTypeChartData(SettingsAndFiltersParameters filter) {
-        ReportSpecificationImpl spec = getFundingTypeChartReportSpec(filter);
+        return getFundingChartData(filter, 1);
+    }
+
+    public static FundingTypeChartData getFinancingInstrumentChartData(SettingsAndFiltersParameters filter) {
+        return getFundingChartData(filter, 2);
+    }
+
+    public static FundingTypeChartData getFundingChartData(SettingsAndFiltersParameters filter, Integer reportType) {
+        ReportSpecificationImpl spec = getFundingTypeChartReportSpec(filter, reportType);
 
         GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
@@ -414,16 +427,23 @@ public class DashboardsService {
             outValues.add(yearBean);
         }
         retlist.setValues(outValues);
+        if (reportType == 1) {
+            retlist.setName(DashboardConstants.FUNDING_TYPE);
+            retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
+        } else {
+            retlist.setName(DashboardConstants.FINANCING_INSTRUMENT);
+            retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FINANCING_INSTRUMENT));
+        }
+        for (ReportMeasure m : spec.getMeasures()) {
+            retlist.addMeasure(m.getMeasureName(), TranslatorWorker.translateText(m.getMeasureName()));
 
-        retlist.setName(fundingTypeConstant);
-        retlist.setTitle(title);
+        }
         retlist.setSource(getSource());
-
         return retlist;
     }
 
     public static ProjectAmounts getProjectsByFundingTypeAndYear(DashboardFormParameters filter, String year,
-            Integer id) {
+                                                                 Integer id) {
         Objects.requireNonNull(year);
         Objects.requireNonNull(id);
 
@@ -434,7 +454,14 @@ public class DashboardsService {
         return buildPaginateJsonBean(report, getOffset(filter));
     }
 
-    private static ReportSpecificationImpl getFundingTypeChartReportSpec(SettingsAndFiltersParameters filter) {
+    /**
+     * @param filter
+     * @param reportType 1- TYPE_OF_ASSISTANCE 2- FINANCING_INSTRUMENT
+     * @return
+     */
+
+    private static ReportSpecificationImpl getFundingTypeChartReportSpec(SettingsAndFiltersParameters filter,
+                                                                         Integer reportType) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
         LinkedHashMap<String, Object> filters = null;
         if (filter != null) {
@@ -447,7 +474,12 @@ public class DashboardsService {
         SettingsUtils.applyExtendedSettings(spec, filter.getSettings());
 
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-        spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
+        if (reportType.equals(1)) {
+            spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
+        } else {
+            spec.addColumn(new ReportColumn(ColumnConstants.FINANCING_INSTRUMENT));
+        }
+
         spec.getHierarchies().addAll(spec.getColumns());
         spec.setSummaryReport(true);
 
@@ -464,7 +496,7 @@ public class DashboardsService {
     }
 
     private static ReportSpecificationImpl getFundingTypeProjectsReportSpec(SettingsAndFiltersParameters params,
-            String yearString, Integer id) {
+                                                                            String yearString, Integer id) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
         LinkedHashMap<String, Object> filters = null;
         if (params != null) {
@@ -585,8 +617,9 @@ public class DashboardsService {
 
     /**
      * Use this method to set the default settings from GS and then customize them with the values from the UI.
+     *
      * @param config Is the JsonBean object from UI.
-     * @param spec Is the current Mondrian Report specification.
+     * @param spec   Is the current Mondrian Report specification.
      */
     public static void setCustomSettings(SettingsAndFiltersParameters config, ReportSpecificationImpl spec) {
         LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.getSettings();
@@ -604,8 +637,8 @@ public class DashboardsService {
     }
 
     /**
-
      * Generate a smaller version of any number (big or small) by adding a suffix kMBT.
+     *
      * @param total
      * @param spec
      * @return

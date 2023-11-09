@@ -1,16 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.publicportal;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -25,19 +14,37 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ActivityType;
+import org.dgfoundation.amp.reports.CachedReportData;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 
 /**
  * Public Portal Service
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class PublicPortalService {
@@ -47,21 +54,27 @@ public class PublicPortalService {
      * Retrieves top 'count' projects based on fixed requirements. <br>
      * NOTE: the requirement is fixed at the moment, however we may need to provide some flexibility
      * => JsonBean config can be used for that
-     * @param config - report config
-     * @param count - the maximum number of results to retrieve  
+     *
+     * @param config      - report config
+     * @param count       - the maximum number of results to retrieve
+     * @param lastUpdated - should order by updated date
      * @return JsonBean object with results
-     * 
      */
     public static PublicTopData getTopProjects(
-            PublicReportFormParameters config, Integer count, Integer months) {
+            PublicReportFormParameters config, Integer count, Integer months, boolean lastUpdated) {
+
+        Set<String> rawMeasures = new HashSet<>();
+        rawMeasures.add(MeasureConstants.ACTUAL_COMMITMENTS);
+        rawMeasures.add(MeasureConstants.ACTUAL_DISBURSEMENTS);
+
         ApiErrorResponse error = ReportsUtil.validateReportConfig(config);
         if (error != null) {
             throw new ApiRuntimeException(error);
         }
-        
+
         ReportSpecificationImpl spec = EndpointUtils.getReportSpecification(config.getReportType(),
                 "PublicPortal_GetTopProjects");
-        
+
         SettingsUtils.applySettings(spec, config.getSettings(), true);
 
         applyFilterRules(config, spec, months);
@@ -71,41 +84,50 @@ public class PublicPortalService {
         // normally, with healthy data, they are not visible due to the sorting rule
         spec.setDisplayEmptyFundingRows(true);
         List<String> projectTypeOptions = config.getProjectType();
-        boolean isSSCActivitiesTop = projectTypeOptions != null && projectTypeOptions.contains(ActivityType.SSC_ACTIVITY.toString());
+        boolean isSSCActivitiesTop =
+                projectTypeOptions != null && projectTypeOptions.contains(ActivityType.SSC_ACTIVITY.toString());
         Set<String> columnsToIgnore = new HashSet<>();
-        
+
         if (isSSCActivitiesTop) {
-            configureTopSSCProjects(spec);
-            columnsToIgnore.add(MeasureConstants.CUMULATED_SSC_COMMITMENTS);
+            configureTopSSCProjects(spec, lastUpdated);
+            if (lastUpdated) {
+                columnsToIgnore.add(MeasureConstants.CUMULATED_SSC_COMMITMENTS);
+            }
         } else {
-            configureTopStandardProjects(spec);
+            configureTopStandardProjects(spec, lastUpdated);
         }
-        
-        return getPublicReport(count, spec, false, null, columnsToIgnore);
+
+        return getPublicReport(count, spec, false, null, columnsToIgnore, rawMeasures);
     }
-    
+
     /**
      * Requirement has a fixed output structure:
-     * Start Date, 
-     * Donor(s), 
-     * Primary Sector(s), 
-     * Project Title, 
-     * Actual Commitments, 
+     * Start Date,
+     * Donor(s),
+     * Primary Sector(s),
+     * Project Title,
+     * Actual Commitments,
      * Actual Disbursements.
+     *
      * @param spec report specification to configure
      */
-    private static void configureTopStandardProjects(ReportSpecificationImpl spec) {
+    private static void configureTopStandardProjects(ReportSpecificationImpl spec, boolean lastUpdated) {
         spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_START_DATE));
+        spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
         spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
-        
+
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-        
-        spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
+        if (lastUpdated) {
+            spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+            spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+        } else {
+            spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
+        }
     }
-    
+
     /**
      * Requirements has a fixed output structure:
      * Project Title,
@@ -114,47 +136,56 @@ public class PublicPortalService {
      * Executing Agency
      * Bilateral SSC Commitments
      * Triangular SSC Commitments
+     *
      * @param spec
      */
-    private static void configureTopSSCProjects(ReportSpecificationImpl spec) {
+    private static void configureTopSSCProjects(ReportSpecificationImpl spec, boolean lastUpdated) {
         spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
         spec.addColumn(new ReportColumn(ColumnConstants.COMPONENT_NAME));
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
-        
+
         spec.addMeasure(new ReportMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS));
-        // using Cumulated SSC Commitments for sorting order 
-        spec.addMeasure(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS));
-        
-        spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS), false));
+        // using Cumulated SSC Commitments for sorting order
+        if (lastUpdated) {
+            spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+            spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+        } else {
+            spec.addMeasure(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS));
+            spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS), false));
+        }
     }
-    
-    
-/**
- * 
- * @param config
- * @param count max amount of records
- * @param months
- * @param fundingType 1 for commitment 2 for disbursements
- * @return
- */
-    public static PublicTopData getDonorFunding(PublicReportFormParameters config, Integer count,
-            Integer months,Integer fundingType) {
-        String measureName=null;
 
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding", ArConstants.DONOR_TYPE);
-        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+
+    /**
+     * @param config
+     * @param count       max amount of records
+     * @param months
+     * @param fundingType 1 for commitment 2 for disbursements
+     * @return
+     */
+    public static PublicTopData getDonorFunding(PublicReportFormParameters config, Integer count,
+                                                Integer months, Integer fundingType, boolean showDonorGroup) {
+        Set<String> measuresName = new HashSet<>();
+
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding",
+                ArConstants.DONOR_TYPE);
+        if (showDonorGroup) {
+            spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+        } else {
+            spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        }
         spec.setHierarchies(spec.getColumns());
-        if(fundingType==1){
+        if (fundingType == 1) {
             spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-            measureName=MeasureConstants.ACTUAL_COMMITMENTS;
+            measuresName.add(MeasureConstants.ACTUAL_COMMITMENTS);
             spec.addSorter(new SortingInfo(new ReportMeasure(
                     MeasureConstants.ACTUAL_COMMITMENTS), false));
 
-        }else{
-            if(fundingType==2){
-                measureName=MeasureConstants.ACTUAL_DISBURSEMENTS;
+        } else {
+            if (fundingType == 2) {
+                measuresName.add(MeasureConstants.ACTUAL_DISBURSEMENTS);
                 spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
                 spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS), false));
             }
@@ -163,22 +194,43 @@ public class PublicPortalService {
         applyFilterRules(config, spec, months);
 
         SettingsUtils.applySettings(spec, config.getSettings(), true);
-        return getPublicReport(count, spec, true, measureName, null);
+        return getPublicReport(count, spec, true, measuresName, null, null);
     }
-    
-    /** 
+
+    private static PublicTopData getPublicReport(Integer count,
+                                                 ReportSpecificationImpl spec, boolean calculateSubTotal,
+                                                 Set<String> measuresName,
+                                                 Set<String> columnsToIgnore,
+                                                 Set<String> measureAsRawNumber) {
+        return getPublicReport(count, spec, calculateSubTotal, measuresName, columnsToIgnore,
+                measureAsRawNumber, null, null);
+    }
+
+    /**
      * Generates the report and retrieves 'count' results
-     * @param count the number of records to show
-     * @param spec report specification
+     *
+     * @param count             the number of records to show
+     * @param spec              report specification
      * @param calculateSubTotal if we should calculate the subtotal for the measure
-     * @param measureName Measure to use for subTotal -  we may need to receive an array of measures
-     * @param columnsToIgnore a list of columns to not include into the output
+     * @param measureName       Measure to use for subTotal -  we may need to receive an array of measures
+     * @param columnsToIgnore   a list of columns to not include into the output
      */
     private static PublicTopData getPublicReport(Integer count,
-            ReportSpecificationImpl spec, boolean calculateSubTotal, String measureName,
-            Set<String> columnsToIgnore) {
-        GeneratedReport report = EndpointUtils.runReport(spec); 
-        
+                                                 ReportSpecificationImpl spec, boolean calculateSubTotal,
+                                                 Set<String> measureName,
+                                                 Set<String> columnsToIgnore,
+                                                 Set<String> measureAsRawNumber, CachedReportData paginatedReport,
+                                                 ReportArea pageArea) {
+        //TODO this could be more generic to avoid executing the report outside
+        // But i want to keep the change isolated from the rest so it doesnt affect other modules
+        GeneratedReport report;
+        if (paginatedReport != null) {
+            report = paginatedReport.report;
+            spec = (ReportSpecificationImpl) paginatedReport.report.spec;
+        } else {
+            report = EndpointUtils.runReport(spec);
+        }
+
         String numberFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
         String currency = spec.getSettings().getCurrencyCode();
 
@@ -186,14 +238,14 @@ public class PublicPortalService {
         Map<String, BigDecimal> totals = new LinkedHashMap<>();
         List<Map<String, String>> topData = new ArrayList<>();
 
-        if (report != null 
-            && report.reportContents != null && report.reportContents.getChildren() != null) {
+        if (report != null
+                && report.reportContents != null && report.reportContents.getChildren() != null) {
             // provide header titles by order Id
             Map<String, String> headersToId = new HashMap<>(report.leafHeaders.size());
             Iterator<ReportColumn> colIter = spec.getColumns().iterator();
             for (ReportOutputColumn leafHeader : report.leafHeaders) {
-                final String columnName = colIter.hasNext() ? 
-                        colIter.next().getColumnName() : leafHeader.originalColumnName;
+                final String columnName = colIter.hasNext()
+                        ? colIter.next().getColumnName() : leafHeader.originalColumnName;
                 if (columnsToIgnore != null && columnsToIgnore.contains(columnName))
                     continue;
                 final String id = StringUtils.replace(StringUtils.lowerCase(columnName), " ", "-");
@@ -201,25 +253,56 @@ public class PublicPortalService {
                 headersToId.put(leafHeader.columnName, id);
             }
             // provide the top projects data
+            ReportArea reportArea = null;
+            if (paginatedReport != null) {
+                reportArea = pageArea;
+            } else {
+                reportArea = report.reportContents;
+            }
             if (count != null) {
                 count = Math.min(count, report.reportContents.getChildren().size());
             } else {
-                count = report.reportContents.getChildren().size();
+                if (paginatedReport == null) {
+                    count = report.reportContents.getChildren().size();
+                } else {
+                    count = reportArea.getChildren().size();
+                }
             }
-            
+
+
             BigDecimal total = new BigDecimal(0);
-            Iterator<ReportArea> iter = report.reportContents.getChildren().iterator();
+            Iterator<ReportArea> iter = reportArea.getChildren().iterator();
             int countCounter = count;
             while (countCounter > 0) {
+                //prepare measures totals
+                if (measureName != null && measureName.size() > 0) {
+                    measureName.forEach(m -> {
+                        totals.put("SubTotal " + m, BigDecimal.ZERO);
+                    });
+                }
                 ReportArea data = iter.next();
                 Map<String, String> rowData = new LinkedHashMap<>();
                 if (data.getContents().size() > 1) {
                     for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
                         if (columnsToIgnore == null || !columnsToIgnore.contains(cell.getKey().columnName)) {
                             rowData.put(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
+                            if (measureAsRawNumber != null
+                                    && measureAsRawNumber.contains(cell.getKey().originalColumnName)) {
+                                rowData.put(headersToId.get(cell.getKey().columnName) + "-raw",
+                                        cell.getValue().value.toString());
+                                if (!headers.containsKey(headersToId.get(cell.getKey().columnName) + "-raw")) {
+                                    headers.put(headersToId.get(cell.getKey().columnName) + "-raw",
+                                            headersToId.get(cell.getKey().columnName) + "-raw");
+                                }
+                            }
                             if (calculateSubTotal) {
-                                if (cell.getKey().columnName.equals(measureName)) {
-                                    total = total.add((BigDecimal) cell.getValue().value);
+                                String measureTotal =
+                                        measureName.stream().filter(m
+                                                -> m.equals(cell.getKey().columnName)).findAny().orElse(null);
+                                if (measureTotal != null) {
+                                    totals.put("SubTotal " + measureTotal,
+                                            totals.get("SubTotal "
+                                                    + measureTotal).add((BigDecimal) cell.getValue().value));
                                 }
                             }
                         }
@@ -228,27 +311,28 @@ public class PublicPortalService {
                 topData.add(rowData);
                 countCounter--;
             }
-            totals.put("Total " + measureName, total);
         }
         count = count == null ? 0 : count;
 
         return new PublicTopData(headers, totals, topData, count, numberFormat, currency);
     }
 
-    public static int getActivitiesPledgesCount(PublicReportFormParameters config) {
+    public static int getActivitiesCount(Map<String, Object> filters, boolean isPledge) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
                 ArConstants.DONOR_TYPE);
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
-        spec.addColumn(new ReportColumn(ColumnConstants.RELATED_PLEDGES));
-        spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+        if (isPledge) {
+            spec.addColumn(new ReportColumn(ColumnConstants.RELATED_PLEDGES));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+        }
 
-        applyFilterRules(config, spec, null);
+        applyFilterRules(filters, spec, null);
 
         spec.setDisplayEmptyFundingRows(true);
 
         GeneratedReport report = EndpointUtils.runReport(spec);
-        int count=0;
-        
+        int count = 0;
+
         if (report != null) {
             for (ReportArea reportArea : report.reportContents.getChildren()) {
                 Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
@@ -256,7 +340,9 @@ public class PublicPortalService {
 
                 for (ReportOutputColumn reportOutputColumn : col) {
                     String columnValue = row.get(reportOutputColumn).displayedValue;
-                    if (ColumnConstants.RELATED_PLEDGES.equals(reportOutputColumn.originalColumnName)) {
+                    if ((ColumnConstants.RELATED_PLEDGES.equals(reportOutputColumn.originalColumnName) && isPledge)
+                            || (ColumnConstants.ACTIVITY_ID.equals(reportOutputColumn.originalColumnName)
+                            && !isPledge)) {
                         if (!columnValue.equals("")) {
                             count++;
                         }
@@ -273,14 +359,82 @@ public class PublicPortalService {
      * See {@link FilterUtils#applyFilterRules(Map, ReportSpecificationImpl, Integer)}.
      *
      * @param config JsonBean containing filters object
-     * @param spec report specification
+     * @param spec   report specification
      * @param months filter by last N months, may be null
      */
     private static void applyFilterRules(PublicReportFormParameters config, ReportSpecificationImpl spec,
-            Integer months) {
+                                         Integer months) {
         if (config != null) {
             FilterUtils.applyFilterRules(config.getFilters(), spec, months);
         }
     }
-    
+
+    private static void applyFilterRules(Map<String, Object> filters, ReportSpecificationImpl spec,
+                                         Integer months) {
+        if (filters != null) {
+            FilterUtils.applyFilterRules(filters, spec, months);
+        }
+    }
+
+    public static PublicTotalsByMeasure getCountByMeasure(SettingsAndFiltersParameters config) {
+        PublicTotalsByMeasure result = new PublicTotalsByMeasure();
+        result.getMeasure().put("original", "Total Activities");
+        result.getMeasure().put("translated", TranslatorWorker.translateText("Total Activities"));
+
+        result.setCount(PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, false));
+        return result;
+    }
+
+    public static PublicTopData searchProjects(ReportFormParameters formParams, Long reportId) {
+        // get the report (from cache if it was cached)
+        CachedReportData cachedReportData = ReportsUtil.getCachedReportData(reportId, formParams);
+        // read pagination data
+        int page = EndpointUtils.getSingleValue(formParams.getPage(), 0);
+        int recordsPerPage = EndpointUtils.getSingleValue(formParams.getRecordsPerPage(),
+                ReportPaginationUtils.getRecordsNumberPerPage());
+        int start = (page - 1) * recordsPerPage;
+
+        // extract data for the requested page
+        ReportArea pageArea = ReportsUtil.getReportAreaBasedOnPagination(recordsPerPage, start, cachedReportData);
+
+        int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
+        PublicTopData result = getPublicReport(null, null, true, cachedReportData.report.spec.getMeasureNames(), null,
+                null, cachedReportData, pageArea);
+        //calculate totals
+        cachedReportData.report.reportContents.getContents().keySet().forEach(rc -> {
+            if (rc.parentColumn != null && rc.parentColumn.originalColumnName.equals("Totals")) {
+                if (result.getTotals() == null) {
+                    result.setTotals(new HashMap<>());
+                }
+                BigDecimal total = (BigDecimal) cachedReportData.report.reportContents.getContents().get(rc).value;
+                result.getTotals().put("Total " + rc.originalColumnName, total);
+            }
+
+        });
+        result.setCount(cachedReportData.report.reportContents.getChildren().size());
+        result.setPage(page);
+        result.setTotalPageCount(totalPageCount);
+        result.setRecordsPerPage(recordsPerPage);
+        return result;
+    }
+
+    public static PublicTotalsByMeasure getTotalByMeasure(SettingsAndFiltersParameters config) {
+        PublicTotalsByMeasure result = new PublicTotalsByMeasure();
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_getTotalByMeasure",
+                ArConstants.DONOR_TYPE);
+        // applies settings, including funding type as a measure
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
+        ReportsUtil.configureFilters(spec, config.getFilters());
+
+        result.setCurrency((String) config.getSettings().get(SettingsConstants.CURRENCY_ID));
+        spec.setSummaryReport(true);
+        GeneratedReport report = EndpointUtils.runReport(spec);
+        Map<ReportOutputColumn, ReportCell> totals = report.reportContents.getContents();
+        totals.entrySet().forEach(c -> {
+            result.setTotal((BigDecimal) c.getValue().value);
+            result.getMeasure().put("original", c.getKey().originalColumnName);
+            result.getMeasure().put("translated", c.getKey().columnName);
+        });
+        return result;
+    }
 } 

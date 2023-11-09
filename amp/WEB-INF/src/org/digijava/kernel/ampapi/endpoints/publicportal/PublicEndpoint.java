@@ -111,8 +111,7 @@ public class PublicEndpoint {
     @ApiOperation("Total funding by measure")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top chart data",
             response = PublicTotalsByMeasure.class))
-    public Response getTotalByMeasure(SettingsAndFiltersParameters config,
-                                      String measure) {
+    public Response getTotalByMeasure(SettingsAndFiltersParameters config) {
         return PublicServices.buildOkResponseWithOriginHeaders(PublicPortalService.getTotalByMeasure(config));
     }
 

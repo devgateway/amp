@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30752</jira>
+    <keyword>Computed measures</keyword>
+    <author>drossi</author>
+    <description>Create new measure: Unexpenditured balance</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                INSERT INTO amp_measures (measureid, measurename, aliasname, type, expression, description)
+                VALUES (nextval('amp_measures_seq'), 'Unexpenditured Balance', 'Unexpenditured Balance', 'A',
+                'unexpendituredBalance', 'Total Actual Dibursement - Total Actual Expenditures');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

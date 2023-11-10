@@ -7,13 +7,17 @@ type IndicatorInitialStateType = {
     loading: boolean;
     error: any;
     sizePerPage?: number;
+    filterSectorSelected: number;
+    currentPage: number;
 }
 
 const initialState: IndicatorInitialStateType = {
     indicators: [],
     loading: false,
     error: null,
-    sizePerPage: 10
+    sizePerPage: 10,
+    filterSectorSelected: 0,
+    currentPage: 1
 }
 
 export const getIndicators = createAsyncThunk(
@@ -53,6 +57,12 @@ const fetchIndicatorSlice = createSlice({
         },
         resetSizePerPage : (state) => {
             state.sizePerPage = initialState.sizePerPage;
+        },
+        setFilterSectorSelected: (state, action) => {
+            state.filterSectorSelected = parseInt(action.payload);
+        },
+        setCurrentPage: (state, action) => {
+            state.currentPage = parseInt(action.payload);
         }
     },
     extraReducers: (builder) => {
@@ -67,17 +77,19 @@ const fetchIndicatorSlice = createSlice({
         builder.addCase(getIndicators.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
-    
+
         });
     }
 });
 
-export const { 
+export const {
     addIndicator,
     removeIndicator,
     updateIndicator,
     setSizePerPage,
-    resetSizePerPage 
+    resetSizePerPage,
+    setFilterSectorSelected,
+    setCurrentPage
 } = fetchIndicatorSlice.actions;
 
 export default fetchIndicatorSlice.reducer;

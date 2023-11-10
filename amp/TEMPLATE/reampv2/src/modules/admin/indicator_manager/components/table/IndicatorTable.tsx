@@ -36,12 +36,19 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
   const [showEditIndicatorModal, setShowEditIndicatorModal] = useState<boolean>(false);
   const [showDeleteIndicatorModal, setShowDeleteIndicatorModal] = useState<boolean>(false);
-  const [selectedSector, setSelectedSector] = useState(0);
   const [indicators, setIndicators] = useState<IndicatorObjectType[]>(fetchedIndicators);
+
+  const filterSectorSelected: number = useSelector((state: any) => state.fetchIndicatorsReducer.filterSectorSelected);
 
   useEffect(() => {
     if (fetchedIndicators) {
-      setIndicators(fetchedIndicators);
+      if (filterSectorSelected !== 0) {
+        const filteredIndicators = fetchedIndicators.filter((indicator: IndicatorObjectType) => {
+          return indicator.sectors.includes(Number(filterSectorSelected));
+        });
+        setIndicators([]);
+        setIndicators(filteredIndicators);
+      } else setIndicators(fetchedIndicators);
     }
   }, [fetchedIndicators]);
 
@@ -153,12 +160,12 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   ], []);
 
   const handleFilterIndicators = () => {
-    if (Number(selectedSector) === 0) {
+    if (Number(filterSectorSelected) === 0) {
       setIndicators(fetchedIndicators);
       return;
     }
     const filteredIndicators = fetchedIndicators.filter((indicator: IndicatorObjectType) => {
-      return indicator.sectors.includes(Number(selectedSector));
+      return indicator.sectors.includes(Number(filterSectorSelected));
     });
     setIndicators([]);
     setIndicators(filteredIndicators);
@@ -166,7 +173,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
 
   useEffect(() => {
     handleFilterIndicators();
-  }, [selectedSector])
+  }, [filterSectorSelected])
 
   return (
     <>
@@ -205,7 +212,6 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
             data={indicators}
             columns={columns}
             sectors={sectorsReducer.sectors}
-            setSelectedSector={setSelectedSector}
             translations={translations}
           />
       }

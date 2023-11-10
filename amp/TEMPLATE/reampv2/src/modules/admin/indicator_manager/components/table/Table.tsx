@@ -12,7 +12,7 @@ import styles from './Table.module.css';
 import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
 import { DefaultComponentProps, SectorObjectType } from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSizePerPage, setFilterSectorSelected} from '../../reducers/fetchIndicatorsReducer';
+import { setSizePerPage, setFilterSectorSelected, setCurrentPage } from '../../reducers/fetchIndicatorsReducer';
 import PropTypes from "prop-types";
 
 interface SkeletonTableProps extends DefaultComponentProps {
@@ -28,11 +28,16 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
   const sizePerPage: number = useSelector((state: any) => state.fetchIndicatorsReducer.sizePerPage);
   const filterSectorSelected: number = useSelector((state: any) => state.fetchIndicatorsReducer.filterSectorSelected);
+  const currentPage: number = useSelector((state: any) => state.fetchIndicatorsReducer.currentPage);
 
   const handleSizePerPageChange = (onSizePerPageChange: (value: number) => void, size: number) => {
     onSizePerPageChange(size);
     dispatch(setSizePerPage(size))
   }
+
+  const handlePageChange = (page: any, sizePerPage: any) => {
+    dispatch(setCurrentPage(page))
+  };
 
   const onFilterSectorChange = (sectorId: number) => {
     dispatch(setFilterSectorSelected(sectorId));
@@ -46,6 +51,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const showAddNewIndicatorModalHandler = () => {
     setShowAddNewIndicatorModal(true);
   };
+
 
 
   // create a pagination factory
@@ -85,6 +91,8 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     lastPageTitle: translations['amp.indicatormanager:last-page'],
     showTotal: true,
     sizePerPage: sizePerPage,
+    page: currentPage,
+    onPageChange: handlePageChange,
     hidePageListOnlyOnePage: true,
     sizePerPageRenderer: ({
       options,

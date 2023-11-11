@@ -54,9 +54,7 @@ public class PIReport3 extends PIAbstractReport {
             }
 
             // Iterate the filtered collection of AmpAhSurveys.
-            Iterator<AmpAhsurvey> iterCommonData = commonData.iterator();
-            while (iterCommonData.hasNext()) {
-                AmpAhsurvey auxAmpAhsurvey = iterCommonData.next();
+            for (AmpAhsurvey auxAmpAhsurvey : commonData) {
                 AmpActivityVersion auxActivity = auxAmpAhsurvey.getAmpActivityId();
                 AmpOrganisation auxOrganisation = auxAmpAhsurvey.getAmpDonorOrgId();
                 AmpOrganisation auxPoDD = auxAmpAhsurvey.getPointOfDeliveryDonor();
@@ -72,16 +70,13 @@ public class PIReport3 extends PIAbstractReport {
                 // the statuses in that list.
                 if (statusFilter != null
                         && !PIUtils.containStatus(statusFilter, CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                                CategoryConstants.ACTIVITY_STATUS_KEY, auxActivity.getCategories()))) {
+                        CategoryConstants.ACTIVITY_STATUS_KEY, auxActivity.getCategories()))) {
                     // Ignore this AmpAhsurvey and continue with the next.
                     continue;
                 }
 
                 // Iterate the collection of fundings.
-                Iterator<AmpFunding> iterFundings = auxActivity.getFunding().iterator();
-                while (iterFundings.hasNext()) {
-                    AmpFunding auxFunding = iterFundings.next();
-
+                for (AmpFunding auxFunding : auxActivity.getFunding()) {
                     // Check if the funding belongs to the original
                     // organization not the PoDD.
                     if (auxAmpAhsurvey.getAmpDonorOrgId().getAmpOrgId().equals(
@@ -99,10 +94,7 @@ public class PIReport3 extends PIAbstractReport {
                         }
 
                         // Iterate the collection of funding details.
-                        Iterator<AmpFundingDetail> iterFundingDetails = auxFunding.getFundingDetails().iterator();
-                        while (iterFundingDetails.hasNext()) {
-                            AmpFundingDetail auxFundingDetail = iterFundingDetails.next();
-
+                        for (AmpFundingDetail auxFundingDetail : auxFunding.getFundingDetails()) {
                             // Filter by years. Check if the transaction date
                             // falls into one of the date ranges.
                             int transactionYear = PIUtils.getTransactionYear(auxFundingDetail.getTransactionDate(),
@@ -113,7 +105,7 @@ public class PIReport3 extends PIAbstractReport {
                             }
 
                             // Check the funding details type.
-                            if (auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+                            if (auxFundingDetail.getTransactionType() == Constants.DISBURSEMENT) {
                                 if (auxFundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                                     auxRow = new PIReport3Row();
 
@@ -137,9 +129,9 @@ public class PIReport3 extends PIAbstractReport {
                                             toExchangeRate = Util.getExchange(currency.getCurrencyCode(),
                                                     new java.sql.Date(auxFundingDetail.getTransactionDate().getTime()));
                                         }
-                                        BigDecimal amount = new BigDecimal(CurrencyWorker.convert1(auxFundingDetail
+                                        BigDecimal amount = BigDecimal.valueOf(CurrencyWorker.convert1(auxFundingDetail
                                                 .getTransactionAmount(), fromExchangeRate, toExchangeRate));
-                                        
+
                                         // Setup row.
                                         if (showColumn[0]) {
                                             auxRow.setColumn1(amount);
@@ -175,22 +167,19 @@ public class PIReport3 extends PIAbstractReport {
         Collection<PIReportAbstractRow> list = new ArrayList<PIReportAbstractRow>(baseReport);
 
         // TODO: make a general comparator???
-        Comparator compareRows = new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                PIReport3Row aux1 = (PIReport3Row) o1;
-                PIReport3Row aux2 = (PIReport3Row) o2;
-                if (aux1 == null && aux2 == null) {
-                    return 0;
-                } else if (aux1 == null) {
-                    return 1;
-                } else if (aux2 == null) {
-                    return -1;
-                } else {
-                    return (aux1.getDonorGroup().getOrgGrpName() + aux1.getYear()).compareTo(aux2.getDonorGroup()
-                            .getOrgGrpName()
-                            + aux2.getYear());
-                }
+        Comparator compareRows = (o1, o2) -> {
+            PIReport3Row aux1 = (PIReport3Row) o1;
+            PIReport3Row aux2 = (PIReport3Row) o2;
+            if (aux1 == null && aux2 == null) {
+                return 0;
+            } else if (aux1 == null) {
+                return 1;
+            } else if (aux2 == null) {
+                return -1;
+            } else {
+                return (aux1.getDonorGroup().getOrgGrpName() + aux1.getYear()).compareTo(aux2.getDonorGroup()
+                        .getOrgGrpName()
+                        + aux2.getYear());
             }
         };
 
@@ -273,10 +262,9 @@ public class PIReport3 extends PIAbstractReport {
         int range = endYear + 1 - startYear;
         BigDecimal[] sumCol1 = new BigDecimal[range];
         BigDecimal[] sumCol2 = new BigDecimal[range];
-        Iterator<PIReportAbstractRow> iterColl = coll.iterator();
-        while (iterColl.hasNext()) {
+        for (PIReportAbstractRow piReportAbstractRow : coll) {
             // Calculate percentages.
-            PIReport3Row auxRow = (PIReport3Row) iterColl.next();
+            PIReport3Row auxRow = (PIReport3Row) piReportAbstractRow;
             if (auxRow.getColumn2().doubleValue() > 0) {
                 auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2(),
                         RoundingMode.HALF_UP).floatValue());
@@ -302,7 +290,7 @@ public class PIReport3 extends PIAbstractReport {
             PIReport3Row auxRow = new PIReport3Row();
             AmpOrgGroup auxDonorGroup = new AmpOrgGroup();
             auxDonorGroup.setOrgGrpName(PIConstants.ALL_DONORS);
-            auxDonorGroup.setAmpOrgGrpId(new Long(0));
+            auxDonorGroup.setAmpOrgGrpId(0L);
             auxRow.setDonorGroup(auxDonorGroup);
             auxRow.setColumn1(sumCol1[i]);
             auxRow.setColumn2(sumCol2[i]);
@@ -323,9 +311,8 @@ public class PIReport3 extends PIAbstractReport {
         Collection ret = new ArrayList();
         AmpOrgGroup auxGroup = null;
         int j = 0;
-        Iterator iter = coll.iterator();
-        while (iter.hasNext()) {
-            PIReport3Row row = (PIReport3Row) iter.next();
+        for (PIReportAbstractRow piReportAbstractRow : coll) {
+            PIReport3Row row = (PIReport3Row) piReportAbstractRow;
             if (auxGroup == null) {
                 auxGroup = row.getDonorGroup();
             }
@@ -343,12 +330,10 @@ public class PIReport3 extends PIAbstractReport {
             j++;
         }
 
-        Iterator iterRet = ret.iterator();
-        while (iterRet.hasNext()) {
-            PIReport3Row rowRet = (PIReport3Row) iterRet.next();
-            Iterator iterOrigen = coll.iterator();
-            while (iterOrigen.hasNext()) {
-                PIReport3Row rowOrigen = (PIReport3Row) iterOrigen.next();
+        for (Object o : ret) {
+            PIReport3Row rowRet = (PIReport3Row) o;
+            for (PIReportAbstractRow piReportAbstractRow : coll) {
+                PIReport3Row rowOrigen = (PIReport3Row) piReportAbstractRow;
                 if (rowRet.getDonorGroup().getAmpOrgGrpId().equals(rowOrigen.getDonorGroup().getAmpOrgGrpId())
                         && rowRet.getYear() == rowOrigen.getYear()) {
                     rowRet.setColumn1(rowOrigen.getColumn1());

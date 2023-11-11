@@ -579,20 +579,18 @@ public class ComponentsUtil {
 
     public static void calculateFinanceByYearInfo(Components<FundingDetail> tempComp, Collection<AmpComponentFunding> fundingComponentActivity) {
         SortedMap<Integer, Map<String, Double>> fbyi = new TreeMap<Integer, Map<String, Double>> ();
-        Iterator<AmpComponentFunding> fundingDetailIterator = fundingComponentActivity.iterator();
-        while (fundingDetailIterator.hasNext()) {
-            AmpComponentFunding fundingDetail = fundingDetailIterator.next();
+        for (AmpComponentFunding fundingDetail : fundingComponentActivity) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(fundingDetail.getTransactionDate());
             int year = cal.get(Calendar.YEAR);
             if (!fbyi.containsKey(year)) {
-                fbyi.put(year, new HashMap<String, Double> ());
+                fbyi.put(year, new HashMap<String, Double>());
             }
             Map<String, Double> yearInfo = fbyi.get(year);
             double montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : 0;
             double montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : 0;
             double montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : 0;
-            if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) ) {
+            if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                 montoProgramado += fundingDetail.getTransactionAmount();
             } else if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
                 montoReprogramado += fundingDetail.getTransactionAmount();
@@ -625,9 +623,8 @@ public class ComponentsUtil {
         public int compare(AmpComponent o1, AmpComponent o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-            
-            int result = (o1.getTitle()==null || o2.getTitle()==null)?0:collator.compare(o1.getTitle().toLowerCase(), o2.getTitle().toLowerCase());
-            return result;
+
+            return (o1.getTitle()==null || o2.getTitle()==null)?0:collator.compare(o1.getTitle().toLowerCase(), o2.getTitle().toLowerCase());
         }
     }
     

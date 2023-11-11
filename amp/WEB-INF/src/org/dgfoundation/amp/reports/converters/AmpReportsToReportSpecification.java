@@ -119,10 +119,8 @@ public class AmpReportsToReportSpecification {
             if(registeredOrderColumns.contains(hierarchy.getColumn()))
                 orderedColumns.add(hierarchy.getColumn());
         }
-        
-        for (AmpColumns col : registeredOrderColumns)
-            if (!orderedColumns.contains(col))
-                orderedColumns.add(col);
+
+        orderedColumns.addAll(registeredOrderColumns);
         
         return orderedColumns;
     }
@@ -138,12 +136,8 @@ public class AmpReportsToReportSpecification {
         //the existing logic rules are applied here from old reports generation mechanism
         String removeEmptyRows = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORTS_REMOVE_EMPTY_ROWS);
         boolean dateFilterHidesProjects = "true".equalsIgnoreCase(removeEmptyRows);
-        if (dateFilterHidesProjects && !report.getDrilldownTab() && 
-                (arFilter.wasDateFilterUsed() || (report.getHierarchies().size() > 0))
-                )
-            spec.setDisplayEmptyFundingRows(false);
-        else 
-            spec.setDisplayEmptyFundingRows(true);
+        spec.setDisplayEmptyFundingRows(!dateFilterHidesProjects || report.getDrilldownTab() ||
+                (!arFilter.wasDateFilterUsed() && (report.getHierarchies().size() == 0)));
 
         spec.setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(true);
     }
@@ -173,7 +167,7 @@ public class AmpReportsToReportSpecification {
                 String[] sortingArray = hierarchySorter.split("_"); 
                 if (isValidHierarchySortingString(sortingArray)) {
                     //column number starts from 1, so we decrese to the actual index by 1
-                    validSortingRules.put(Integer.valueOf(sortingArray[0]) - 1, sortingArray); //keep the latest sorting, which is the valid one
+                    validSortingRules.put(Integer.parseInt(sortingArray[0]) - 1, sortingArray); //keep the latest sorting, which is the valid one
                 }
             }
             
@@ -228,7 +222,7 @@ public class AmpReportsToReportSpecification {
         else if (!StringUtils.isNumeric(sortingInfo[0]))
             err = " is expecting a number on as first argument of its structure '<column_number>_<property to filter by>_{ascending|descending}'";
         else {
-            int colId = Integer.valueOf(sortingInfo[0]) -1;
+            int colId = Integer.parseInt(sortingInfo[0]) -1;
             if (colId < 0 || colId >= spec.getHierarchies().size())
                 err = " is expecting the column number to be within 1 and hiearchies size = " + spec.getHierarchies().size() + ", while it is = " + colId;
             else if (!ASC.equals(sortingInfo[2]) && !DESC.equals(sortingInfo[2]))
@@ -242,9 +236,9 @@ public class AmpReportsToReportSpecification {
     }
     
     private String getSorters(Map<Integer,String[]> sorters) {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for(String[] s : sorters.values()) 
-            str += "," + Arrays.toString(s);
-        return str.length() > 0 ? str.substring(0) : str;
+            str.append(",").append(Arrays.toString(s));
+        return str.toString();
     }
 }

@@ -51,13 +51,11 @@ public class PaginatedReport {
             throw new IllegalStateException("pagination error: asked to scan an area which should not be scanned");
         
         List<PaginatedReportArea> scannedChildren = elem.getChildren() == null ? null : elem.getChildren().stream().filter(areasToInclude::contains).map(z -> scanAreas(z, areasToInclude)).collect(toList());
-        PaginatedReportArea res = duplicate(elem, scannedChildren);
-        return res;
+        return duplicate(elem, scannedChildren);
     }
     
     protected PaginatedReportArea duplicate(ReportArea elem, List<PaginatedReportArea> children) {
-        PaginatedReportArea res = new PaginatedReportArea(elem, children);
-        return res;
+        return new PaginatedReportArea(elem, children);
     }
     
     /**

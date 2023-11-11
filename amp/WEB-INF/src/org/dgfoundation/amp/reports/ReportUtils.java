@@ -17,7 +17,7 @@ import org.digijava.module.aim.util.DbUtil;
  */
 public final class ReportUtils {
 
-    protected static final Logger logger = Logger.getLogger(ReportUtils.class);
+    private static final Logger logger = Logger.getLogger(ReportUtils.class);
 
     private ReportUtils() {
     }

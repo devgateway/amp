@@ -58,9 +58,8 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
         int rowNum = getCurrentRowNumber();
         incCurrentRowNumberBy(1);
         if(startRow==0 && endRow==0) return true;
-        if(startRow<=rowNum && endRow>=rowNum) return true;
-        return false;
-        }
+        return startRow <= rowNum && endRow >= rowNum;
+    }
         
     
     /**
@@ -276,7 +275,7 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
      * However the behavior can be changed easily.
      * Filtering of cells is supported. Thus whenever several ColumnReports are created from one
      * source ColumnReport, the cells are not copied verbatim but through a filter function
-     * @see Cell.#filter(Cell, java.util.Set)
+     * @see Cell#filter(Cell, java.util.Set)
      * @param columnName
      * @return
      * @throws UnidentifiedItemException
@@ -459,8 +458,7 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
         if ( this.splitterCell != null 
                 && this.splitterCell.getColumn() != null && this.splitterCell.getColumn().getWorker() != null) {
             ColumnWorker cw     = this.splitterCell.getColumn().getWorker();
-            String ret          = cw.encodeUnallocatedString(name);
-            return ret;
+            return cw.encodeUnallocatedString(name);
         }
         else
             return name;

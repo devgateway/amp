@@ -271,48 +271,52 @@ public class AmpReportFiltersConverter {
                     new ReportElement(new ReportColumn(filterColumnName)));
 
             if (filterRule != null) {
-                if (paramClass.getName().equals("java.util.Set") || paramClass.getName().equals("java.util.Collection")) {
-                    Set<Object> values = new HashSet();
-                    if (filterRule.values != null) {
-                        Iterator<String> iValues = filterRule.values.iterator();
-                        while (iValues.hasNext()) {
-                            String auxValue = iValues.next();
-                            if (auxValue.equals(Long.toString(ColumnReportData.UNALLOCATED_ID))) {
-                                ampARFilter.getUndefinedOptions().add(ampARFilterFieldName);
-                            } else if (ampARFilterFieldClass.toString().equals("class java.lang.String")) {
-                                values.add(auxValue);
-                            } else if (ampARFilterFieldClass.toString().equals("class java.lang.Integer")) {
-                                values.add(Integer.valueOf(auxValue));
-                            } else if (ampARFilterFieldClass.toString().equals("class java.lang.Double")) {
-                                values.add(Double.valueOf(auxValue));
-                            } else {
-                                Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
-                                values.add(auxEntity);
+                switch (paramClass.getName()) {
+                    case "java.util.Set":
+                    case "java.util.Collection":
+                        Set<Object> values = new HashSet<>();
+                        if (filterRule.values != null) {
+                            for (String auxValue : filterRule.values) {
+                                if (auxValue.equals(Long.toString(ColumnReportData.UNALLOCATED_ID))) {
+                                    ampARFilter.getUndefinedOptions().add(ampARFilterFieldName);
+                                } else if (ampARFilterFieldClass.toString().equals("class java.lang.String")) {
+                                    values.add(auxValue);
+                                } else if (ampARFilterFieldClass.toString().equals("class java.lang.Integer")) {
+                                    values.add(Integer.valueOf(auxValue));
+                                } else if (ampARFilterFieldClass.toString().equals("class java.lang.Double")) {
+                                    values.add(Double.valueOf(auxValue));
+                                } else {
+                                    Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
+                                    values.add(auxEntity);
+                                }
                             }
                         }
-                    }
 
-                    if (cleanup == false) {
-                        // Preserve old values.
-                        Set<Object> previousValues = (Set) getterMethod.invoke(this.ampARFilter);
-                        if (previousValues != null) {
-                            values.addAll(previousValues);
+                        if (!cleanup) {
+                            // Preserve old values.
+                            Set<Object> previousValues = (Set) getterMethod.invoke(this.ampARFilter);
+                            if (previousValues != null) {
+                                values.addAll(previousValues);
+                            }
                         }
-                    }
-                    // Use reflection to call the setter.
-                    setterMethod.invoke(this.ampARFilter, values);
-                    logger.info("Found filter: " + filterColumnName + " with values: " + values.toString());
-                } else if (paramClass.getName().equals("java.lang.String")) {
-                    setterMethod.invoke(this.ampARFilter, filterRule.toString());
-                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
-                } else if (paramClass.getName().equals("java.lang.Integer")) {
-                    setterMethod.invoke(this.ampARFilter, Integer.valueOf(filterRule.toString()));
-                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
-                } else if (paramClass.getName().equals("java.lang.Double")) {
-                    setterMethod.invoke(this.ampARFilter, Double.valueOf(filterRule.toString()));
-                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
-                } else {
-                    throw new RuntimeException(paramClass.getName());
+                        // Use reflection to call the setter.
+                        setterMethod.invoke(this.ampARFilter, values);
+                        logger.info("Found filter: " + filterColumnName + " with values: " + values.toString());
+                        break;
+                    case "java.lang.String":
+                        setterMethod.invoke(this.ampARFilter, filterRule.toString());
+                        logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
+                        break;
+                    case "java.lang.Integer":
+                        setterMethod.invoke(this.ampARFilter, Integer.valueOf(filterRule.toString()));
+                        logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
+                        break;
+                    case "java.lang.Double":
+                        setterMethod.invoke(this.ampARFilter, Double.valueOf(filterRule.toString()));
+                        logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
+                        break;
+                    default:
+                        throw new RuntimeException(paramClass.getName());
                 }
             } else {
                 logger.info("Not found filter: " + filterColumnName);

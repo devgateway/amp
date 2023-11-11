@@ -213,25 +213,23 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         return this.getValue().equals(aux.getValue());
     }
     
-    private static final Comparator<AmpComponentFunding> COMPONENT_FUNDING_COMPARATOR = new Comparator<AmpComponentFunding>() {
-        public int compare(AmpComponentFunding o1, AmpComponentFunding o2) {
+    private static final Comparator<AmpComponentFunding> COMPONENT_FUNDING_COMPARATOR = (o1, o2) -> {
 
-            if (o1.getTransactionType().equals(o2.getTransactionType())) {
-                if (o1.getTransactionAmount().equals(o2.getTransactionAmount())) {
-                    return o1.getTransactionDate().compareTo(o2.getTransactionDate());
-                } else {
-                    return o1.getTransactionAmount().compareTo(o2.getTransactionAmount());
-                }
+        if (o1.getTransactionType().equals(o2.getTransactionType())) {
+            if (o1.getTransactionAmount().equals(o2.getTransactionAmount())) {
+                return o1.getTransactionDate().compareTo(o2.getTransactionDate());
             } else {
-                return o1.getTransactionType().compareTo(o2.getTransactionType());
+                return o1.getTransactionAmount().compareTo(o2.getTransactionAmount());
             }
+        } else {
+            return o1.getTransactionType().compareTo(o2.getTransactionType());
         }
     };
 
     @Override
     public Output getOutput() {
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         
         out.getOutputs().add(
                 new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title

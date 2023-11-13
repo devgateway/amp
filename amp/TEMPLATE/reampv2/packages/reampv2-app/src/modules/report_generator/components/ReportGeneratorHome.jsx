@@ -44,13 +44,15 @@ class ReportGeneratorHome extends Component {
       _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
       _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
       _setInitialHierarchies, _fetchLanguages, _markExistingReportSanitized, _updateColumnsSelected,
-      _updateMeasuresSelected, _updateMeasuresSorting,
+      _updateMeasuresSelected, _updateMeasuresSorting, storedSearchParams
     } = this.props;
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
-    const { id } = this.props.params;
-    const typeFromURL = new URLSearchParams(location.search).get('type');
-    const profileFromURL = new URLSearchParams(location.search).get('profile');
+    const { id } = this.props.urlParams;
+    const searchParams = new URLSearchParams(storedSearchParams || window.location.search);
+
+    const typeFromURL = searchParams.get('type');
+    const profileFromURL = searchParams.get('profile');
 
     // If this is a saved report then ignore type and profile params from the URL.
     if (id) {
@@ -283,6 +285,8 @@ ReportGeneratorHome.propTypes = {
   _updateColumnsSelected: PropTypes.func.isRequired,
   _updateMeasuresSelected: PropTypes.func.isRequired,
   _updateMeasuresSorting: PropTypes.func.isRequired,
+  urlParams: PropTypes.object,
+  storedSearchParams: PropTypes.string,
 };
 
 ReportGeneratorHome.defaultProps = {
@@ -292,4 +296,5 @@ ReportGeneratorHome.defaultProps = {
 };
 
 ReportGeneratorHome.contextType = ReportGeneratorContext;
+
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ReportGeneratorHome));

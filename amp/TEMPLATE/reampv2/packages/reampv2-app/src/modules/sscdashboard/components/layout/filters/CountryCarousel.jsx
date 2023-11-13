@@ -47,7 +47,7 @@ export default class CountryCarousel extends Component {
         key={`flag-${c.id}`}
         onClick={this.onFlagClick(c.id)}
         className={`flag ${selectedOptions.includes(c.id) ? 'selected' : ''}`}>
-        <Suspense fallback={(<div>loading</div>)}>
+        <Suspense fallback={(<div>Loading...</div>)}>
           <CountryFlag countryName={c.name} />
         </Suspense>
         <EllipsisText

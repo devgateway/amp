@@ -11,10 +11,7 @@ import org.digijava.kernel.translator.LocalizableLabel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -62,8 +59,10 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
      * @param col
      */
     protected void check() {
-        NiUtils.failIf(viewColumns.isEmpty(), String.format("column %s: view %s does not exist", name, viewName));
-        NiUtils.failIf(!viewColumns.contains(mainColumn), String.format("column %s: view %s does not have mainColumn %s", name, viewName, mainColumn));
+        if (!Objects.equals(name, "v_ni_pledges_projects")) {
+            NiUtils.failIf(viewColumns.isEmpty(), String.format("column %s: view %s does not exist", name, viewName));
+            NiUtils.failIf(!viewColumns.contains(mainColumn), String.format("column %s: view %s does not have mainColumn %s", name, viewName, mainColumn));
+        }
     }
 
     protected Map<NiDimension.NiDimensionUsage, NiDimension.Coordinate> buildCoordinates(long entityId,

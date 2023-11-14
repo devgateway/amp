@@ -37,7 +37,7 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
     public PsqlSourcedColumn(String columnName, LocalizableLabel label, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
         super(columnName, label, levelColumn, viewName, keyColumnName(viewName, "amp_activity_id"), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
         this.viewColumns = SQLUtils.getTableColumns(viewName);
-        check();
+//        check();
     }
     
     public static String keyColumnName(String viewName, String defaultValue) {
@@ -59,10 +59,9 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
      * @param col
      */
     protected void check() {
-        if (!Objects.equals(name, "v_ni_pledges_projects")) {
             NiUtils.failIf(viewColumns.isEmpty(), String.format("column %s: view %s does not exist", name, viewName));
             NiUtils.failIf(!viewColumns.contains(mainColumn), String.format("column %s: view %s does not have mainColumn %s", name, viewName, mainColumn));
-        }
+
     }
 
     protected Map<NiDimension.NiDimensionUsage, NiDimension.Coordinate> buildCoordinates(long entityId,

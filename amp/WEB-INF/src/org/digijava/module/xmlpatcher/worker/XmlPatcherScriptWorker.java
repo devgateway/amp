@@ -34,15 +34,13 @@ public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script,Object> {
         // always get non generic entities first and process them
         Script script = (Script) entity;
         List<Lang> langs = script.getLang();
-        Iterator<Lang> iterator = langs.iterator();
-        while (iterator.hasNext()) {
-            Lang next = iterator.next();
+        for (Lang next : langs) {
             if (next.equals(generic))
                 continue;
             XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory.createWorker(
                     next, entity, log);
-            if (worker.run()){
-                returnValue=worker.getReturnValue();
+            if (worker.run()) {
+                returnValue = worker.getReturnValue();
                 return true;
             }
         }

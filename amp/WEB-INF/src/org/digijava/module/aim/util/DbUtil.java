@@ -20,9 +20,11 @@ import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 import org.hibernate.type.*;
@@ -1259,6 +1261,15 @@ public class DbUtil {
 
     public static void add(Object object) {
         PersistenceManager.getSession().save(object);
+    }
+    public static void addPatch(AmpXmlPatch ampXmlPatch)
+    {
+        Session session = PersistenceManager.openNewSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(ampXmlPatch);
+        session.flush();
+        transaction.commit();
+        session.close();
     }
 
     public static void update(Object object) {

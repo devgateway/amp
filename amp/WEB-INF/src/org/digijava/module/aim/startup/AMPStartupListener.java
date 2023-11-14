@@ -425,6 +425,13 @@ public class AMPStartupListener extends HttpServlet implements
                         "        AND category_value = 'Rejected'\n" +
                         ");\n";
                 statement.executeUpdate(insertComponentStatusValues);
+//                String view="CREATE OR REPLACE VIEW v_ni_pledges_projects AS\n" +
+//                        "                        SELECT distinct p.pledge_id AS pledge_id, aa.name AS title, aa.amp_activity_id as related_project_id\n" +
+//                        "                        FROM amp_funding_detail fd \n" +
+//                        "                            JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id\n" +
+//                        "                            JOIN amp_activity aa ON fu.amp_activity_id = aa.amp_activity_id\n" +
+//                        "                            JOIN v_pledges_titles p ON p.pledge_id = fd.pledge_id;";
+//                statement.executeUpdate(view);
             } catch (Exception e) {
                 // Handle the exception
                 logger.info("Error occurred during trubudget init db  operations", e);

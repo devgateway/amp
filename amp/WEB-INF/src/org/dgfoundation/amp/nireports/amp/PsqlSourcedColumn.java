@@ -37,7 +37,7 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
     public PsqlSourcedColumn(String columnName, LocalizableLabel label, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
         super(columnName, label, levelColumn, viewName, keyColumnName(viewName, "amp_activity_id"), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
         this.viewColumns = SQLUtils.getTableColumns(viewName);
-//        check();
+        check();
     }
     
     public static String keyColumnName(String viewName, String defaultValue) {

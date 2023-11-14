@@ -425,64 +425,64 @@ public class AMPStartupListener extends HttpServlet implements
                         "        AND category_value = 'Rejected'\n" +
                         ");\n";
                 statement.executeUpdate(insertComponentStatusValues);
-                String reacreateViews="\t\t\t\tUPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'        \t\n";
-                statement.executeUpdate(reacreateViews);
+//                String reacreateViews="\t\t\t\tUPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'        \t\n";
+//                statement.executeUpdate(reacreateViews);
 
-                String dropComponentView="DROP VIEW IF EXISTS v_component_funding;\n";
-                statement.executeUpdate(dropComponentView);
-                String createComponentView = "CREATE OR REPLACE VIEW v_component_funding AS " +
-                        "SELECT " +
-                        "    c.amp_activity_id AS amp_activity_id, " +
-                        "    f.amp_component_funding_id, " +
-                        "    f.amp_component_funding_id AS amp_fund_detail_id, " +
-                        "    c.title AS component_name, " +
-                        "    f.transaction_type, " +
-                        "    f.adjustment_type, " +
-                        "    adj.category_value AS adjustment_type_name, " +
-                        "    f.transaction_date, " +
-                        "    f.transaction_amount, " +
-                        "    f.currency_id, " +
-                        "    cu.currency_code, " +
-                        "    c.component_status, " +
-                        "    f.component_funding_status, " +
-                        "    ct.name AS component_type " +
-                        "FROM " +
-                        "    amp_components c " +
-                        "JOIN " +
-                        "    amp_component_funding f ON f.amp_component_id = c.amp_component_id " +
-                        "JOIN " +
-                        "    amp_currency cu ON cu.amp_currency_id = f.currency_id " +
-                        "JOIN " +
-                        "    amp_category_value adj ON f.adjustment_type = adj.id " +
-                        "JOIN " +
-                        "    amp_component_type ct ON ct.type_id = c.type " +
-                        "WHERE " +
-                        "    f.component_funding_status NOT IN ( " +
-                        "        SELECT " +
-                        "            acv.id " +
-                        "        FROM " +
-                        "            amp_category_class acc " +
-                        "        JOIN " +
-                        "            amp_category_value acv ON acv.amp_category_class_id = acc.id " +
-                        "        WHERE " +
-                        "            acc.keyname = 'component_funding_status' " +
-                        "            AND acv.category_value <> 'Rejected' " +
-                        "    ) " +
-                        "    AND c.component_status NOT IN ( " +
-                        "        SELECT " +
-                        "            acv.id " +
-                        "        FROM " +
-                        "            amp_category_class acc " +
-                        "        JOIN " +
-                        "            amp_category_value acv ON acv.amp_category_class_id = acc.id " +
-                        "        WHERE " +
-                        "            acc.keyname = 'component_status' " +
-                        "            AND acv.category_value <> 'Rejected' " +
-                        "    ) " +
-                        "ORDER BY " +
-                        "    c.amp_activity_id;";
-
-                statement.executeUpdate(createComponentView);
+//                String dropComponentView="DROP VIEW IF EXISTS v_component_funding;\n";
+//                statement.executeUpdate(dropComponentView);
+//                String createComponentView = "CREATE OR REPLACE VIEW v_component_funding AS " +
+//                        "SELECT " +
+//                        "    c.amp_activity_id AS amp_activity_id, " +
+//                        "    f.amp_component_funding_id, " +
+//                        "    f.amp_component_funding_id AS amp_fund_detail_id, " +
+//                        "    c.title AS component_name, " +
+//                        "    f.transaction_type, " +
+//                        "    f.adjustment_type, " +
+//                        "    adj.category_value AS adjustment_type_name, " +
+//                        "    f.transaction_date, " +
+//                        "    f.transaction_amount, " +
+//                        "    f.currency_id, " +
+//                        "    cu.currency_code, " +
+//                        "    c.component_status, " +
+//                        "    f.component_funding_status, " +
+//                        "    ct.name AS component_type " +
+//                        "FROM " +
+//                        "    amp_components c " +
+//                        "JOIN " +
+//                        "    amp_component_funding f ON f.amp_component_id = c.amp_component_id " +
+//                        "JOIN " +
+//                        "    amp_currency cu ON cu.amp_currency_id = f.currency_id " +
+//                        "JOIN " +
+//                        "    amp_category_value adj ON f.adjustment_type = adj.id " +
+//                        "JOIN " +
+//                        "    amp_component_type ct ON ct.type_id = c.type " +
+//                        "WHERE " +
+//                        "    f.component_funding_status NOT IN ( " +
+//                        "        SELECT " +
+//                        "            acv.id " +
+//                        "        FROM " +
+//                        "            amp_category_class acc " +
+//                        "        JOIN " +
+//                        "            amp_category_value acv ON acv.amp_category_class_id = acc.id " +
+//                        "        WHERE " +
+//                        "            acc.keyname = 'component_funding_status' " +
+//                        "            AND acv.category_value <> 'Rejected' " +
+//                        "    ) " +
+//                        "    AND c.component_status NOT IN ( " +
+//                        "        SELECT " +
+//                        "            acv.id " +
+//                        "        FROM " +
+//                        "            amp_category_class acc " +
+//                        "        JOIN " +
+//                        "            amp_category_value acv ON acv.amp_category_class_id = acc.id " +
+//                        "        WHERE " +
+//                        "            acc.keyname = 'component_status' " +
+//                        "            AND acv.category_value <> 'Rejected' " +
+//                        "    ) " +
+//                        "ORDER BY " +
+//                        "    c.amp_activity_id;";
+//
+//                statement.executeUpdate(createComponentView);
 //                 reacreateViews="\t\t\t\tUPDATE amp_global_settings SET settingsvalue = 'false' WHERE settingsname='Recreate the views on the next server restart'        \t\n";
 //                statement.executeUpdate(reacreateViews);
 

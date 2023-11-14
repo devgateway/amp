@@ -21,6 +21,7 @@ import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
+import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -1262,15 +1264,22 @@ public class DbUtil {
     public static void add(Object object) {
         PersistenceManager.getSession().save(object);
     }
-    public static void addPatch(AmpXmlPatch ampXmlPatch)
-    {
+    public static void addPatch(AmpXmlPatch ampXmlPatch) {
         Session session = PersistenceManager.openNewSession();
+
         Transaction transaction = session.beginTransaction();
-        session.save(ampXmlPatch);
-        session.flush();
+
+        // Using Hibernate's native SQL execution
+        session.doWork(connection -> {
+            try (Statement statement = connection.createStatement()) {
+                String insertPatch =String.format("INSERT INTO AMP_XML_PATCH(patch_id,location,state,discovered) VALUES('%s','%s',%d,'%tF %tT')",ampXmlPatch.getPatchId(),ampXmlPatch.getLocation(), ampXmlPatch.getState(), ampXmlPatch.getDiscovered(),ampXmlPatch.getDiscovered());
+                statement.executeUpdate(insertPatch);
+            }
+        });
         transaction.commit();
         session.close();
     }
+
 
     public static void update(Object object) {
         PersistenceManager.getSession().update(object);

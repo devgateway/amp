@@ -96,7 +96,7 @@ public final class XmlPatcherUtil {
             } else {
                 String location = computePatchFileLocation(f, appPath);
                 AmpXmlPatch patch = new AmpXmlPatch(f.getName(), location);
-                DbUtil.add(patch);
+                DbUtil.addPatch(patch);
                 patchNames.add(f.getName());
                 logger.info("Found new patch " + patch.getPatchId() + " in " + patch.getLocation());
             }

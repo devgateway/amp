@@ -483,8 +483,8 @@ public class AMPStartupListener extends HttpServlet implements
                         "    c.amp_activity_id;";
 
                 statement.executeUpdate(createComponentView);
-                 reacreateViews="\t\t\t\tUPDATE amp_global_settings SET settingsvalue = 'false' WHERE settingsname='Recreate the views on the next server restart'        \t\n";
-                statement.executeUpdate(reacreateViews);
+//                 reacreateViews="\t\t\t\tUPDATE amp_global_settings SET settingsvalue = 'false' WHERE settingsname='Recreate the views on the next server restart'        \t\n";
+//                statement.executeUpdate(reacreateViews);
 
             } catch (Exception e) {
                 // Handle the exception

@@ -72,7 +72,6 @@ WHERE
 ORDER BY
     c.amp_activity_id;
 
-
 			]]></lang>
 		</script>
 	</apply>

@@ -144,7 +144,6 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 DbUtil.update(ampPatch);
             }   
         }
-        PersistenceManager.getSession().flush();
 
     }
     

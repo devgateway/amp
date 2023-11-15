@@ -104,7 +104,6 @@ public final class XmlPatcherUtil {
                 logger.info("Found new patch " + patch.getPatchId() + " in " + patch.getLocation());
             }
         }
-        PersistenceManager.getSession().flush();
     }
 
     /**

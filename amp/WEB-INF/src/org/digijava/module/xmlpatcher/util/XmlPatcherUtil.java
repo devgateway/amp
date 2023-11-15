@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -494,10 +495,10 @@ public final class XmlPatcherUtil {
         algorithm.reset();
 
         BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream(f));
+                Files.newInputStream(f.toPath()));
 
         byte[] buffer = new byte[8192];
-        int read = 0;
+        int read;
         while ((read = bis.read(buffer)) > 0) {
             algorithm.update(buffer, 0, read);
         }

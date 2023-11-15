@@ -1282,7 +1282,6 @@ public class DbUtil {
     public static void updateField(String className, Long id, String fieldName, Object newValue) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
-//            String idName = PersistenceManager.sf().getClassMetadata(className).getIdentifierPropertyName();
             String idName = InternationalizedModelDescription.getPersister(Class.forName(className),session).getIdentifierPropertyName();
             Query query = session
                     .createQuery("update " + className + " c set c." + fieldName + "=:val where c." + idName + "=:id");
@@ -1291,7 +1290,7 @@ public class DbUtil {
             query.executeUpdate();
         } catch (Exception ex) {
             logger.error(String.format("Could not update \"%s.%s\"=\"%s\". Cause: %s", className, fieldName,
-                    String.valueOf(newValue), ex.getMessage()));
+                    newValue, ex.getMessage()));
         }
     }
 

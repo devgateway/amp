@@ -69,9 +69,7 @@ public final class XmlPatcherUtil {
             throw new RuntimeException(
                     "Patch discovery location is not a directory!");
         String[] files = dir.list();
-        Session session = PersistenceManager.openNewSession();
 
-        Transaction transaction = session.beginTransaction();
         for (String file : files) {
             File f = new File(dir, file);
             // directories ignored in xmlpatch dir
@@ -101,13 +99,12 @@ public final class XmlPatcherUtil {
             } else {
                 String location = computePatchFileLocation(f, appPath);
                 AmpXmlPatch patch = new AmpXmlPatch(f.getName(), location);
-                DbUtil.addPatch(patch, session);
+                DbUtil.add(patch);
                 patchNames.add(f.getName());
                 logger.info("Found new patch " + patch.getPatchId() + " in " + patch.getLocation());
             }
         }
-        transaction.commit();
-        session.close();
+        PersistenceManager.getSession().flush();
     }
 
     /**

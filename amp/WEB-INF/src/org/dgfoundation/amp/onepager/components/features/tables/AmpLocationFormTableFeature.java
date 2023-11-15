@@ -186,6 +186,9 @@ public class AmpLocationFormTableFeature extends
                     isCountryNationalAndMultiCountry = true;
                     disablePercentagesForInternational.setObject(true);
                     searchLocations.setVisibilityAllowed(false);
+                }else{
+                    disablePercentagesForInternational.setObject(false);
+                    searchLocations.setVisibilityAllowed(true);
                 }
 
                 AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item",
@@ -301,6 +304,8 @@ public class AmpLocationFormTableFeature extends
                             //AmpLocationFormTableFeature.this.getSearchLocations().changeEnabled(false, target);
                             AmpLocationFormTableFeature.this.getSearchLocations().setVisibilityAllowed(false);
                             target.add(AmpLocationFormTableFeature.this.getSearchLocations());
+                        }else{
+                            disablePercentagesForInternational.setObject(false);
                         }
                         locationSelected(choice, am, disablePercentagesForInternational);
 

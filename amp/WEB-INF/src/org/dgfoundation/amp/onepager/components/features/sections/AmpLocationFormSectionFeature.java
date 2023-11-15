@@ -61,7 +61,6 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 
         final Model<Boolean> disablePercentagesForInternational = new Model<Boolean>(false);
-        final Model<Boolean> onlyOneLocationForCountryNationalMultiCountry = new Model<Boolean>(false);
         final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
                 "implementationLocation",
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY,

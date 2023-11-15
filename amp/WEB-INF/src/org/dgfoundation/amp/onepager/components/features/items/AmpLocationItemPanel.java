@@ -50,7 +50,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                                 final AmpComponentPanel locationPercentageRequired,
                                 final IModel<Set<AmpActivityLocation>> setModel,
                                 final ListView<AmpActivityLocation> list, final Label totalLabel,
-                                final boolean isCountryAndMultilingual) {
+                                final boolean isCountryAndMultiCountry) {
         super(id, model, fmName, true);
 
         this.locationModel = model;
@@ -149,7 +149,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                     target.add(totalLabel);
 
                 }
-                if (isCountryAndMultilingual) {
+
+                if (isCountryAndMultiCountry) {
                     disablePercentagesForInternational.setObject(false);
                     locationTable.getSearchLocations().setVisibilityAllowed(true);
                 }

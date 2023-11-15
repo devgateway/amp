@@ -191,6 +191,8 @@ public class ProjectUtil {
         data.setProjectId(projectId);
         data.setDescription(ampActivityVersion.getDescription());
         data.setDisplayName(name);
+        List<String> tags =Arrays.stream((name + " " + ampActivityVersion.getDescription()).trim().split(" ")).filter(x -> x.length() <= 15 && x.length() >= 1).collect(Collectors.toList());
+        data.setTags(tags);
         editProjectModel.setData(data);
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.update", editProjectModel, EditProjectModel.class, String.class, token).subscribe(res -> {

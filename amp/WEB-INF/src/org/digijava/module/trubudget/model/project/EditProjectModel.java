@@ -1,6 +1,8 @@
 package org.digijava.module.trubudget.model.project;
 
 
+import java.util.List;
+
 public class EditProjectModel {
     private String apiVersion;
     private Data data;
@@ -36,6 +38,10 @@ public class EditProjectModel {
         private String displayName;
         private String description;
 
+
+
+        private List<String> tags;
+
         // Getters and setters for projectId, displayName, and description
 
         public String getProjectId() {
@@ -61,6 +67,13 @@ public class EditProjectModel {
         public void setDescription(String description) {
             this.description = description;
         }
+        public List<String> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
 
         @Override
         public String toString() {
@@ -68,6 +81,7 @@ public class EditProjectModel {
                     "projectId='" + projectId + '\'' +
                     ", displayName='" + displayName + '\'' +
                     ", description='" + description + '\'' +
+                    ", tags='" + tags + '\'' +
                     '}';
         }
     }

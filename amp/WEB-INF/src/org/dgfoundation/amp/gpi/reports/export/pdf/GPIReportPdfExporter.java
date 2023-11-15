@@ -1,12 +1,10 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
@@ -15,18 +13,11 @@ import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.FontFactory;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Viorel Chihai
@@ -105,7 +96,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     }
     
     public void renderReportSettings(GPIReport report, Paragraph body) {
-        Font bf10 = new Font(Font.HELVETICA, FONT_SIZE_SETTINGS);
+        Font bf10 = new Font(Font.FontFamily.HELVETICA, FONT_SIZE_SETTINGS);
         
         String units = report.getSpec().getSettings().getUnitsOption().userMessage;
         String currency = report.getSettings().getCurrencyCode();
@@ -124,8 +115,8 @@ public class GPIReportPdfExporter implements GPIReportExporter {
         // set table width a percentage of the page width
         table.setWidthPercentage(100f);
         
-        Font bfBold14 = new Font(Font.HELVETICA, FONT_SIZE_SUMMARY, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.ORANGE;
+        Font bfBold14 = new Font(Font.FontFamily.HELVETICA, FONT_SIZE_SUMMARY, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.ORANGE;
 
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
             GPIReportOutputColumn column = report.getPage().getHeaders().get(i);
@@ -155,8 +146,8 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     }
 
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(Font.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.LIGHT_GRAY;
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.LIGHT_GRAY;
         
         List<GPIReportOutputColumn> columns = getDataTableColumns(report);
         columns.forEach(column -> insertCell(table, getHeaderColumnName(column), 
@@ -167,8 +158,8 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     }
 
     protected void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf10 = new Font(Font.HELVETICA, 10);
-        Color bkgColor = Color.WHITE;
+        Font bf10 = new Font(Font.FontFamily.HELVETICA, 10);
+        BaseColor bkgColor = BaseColor.WHITE;
         
         List<GPIReportOutputColumn> columns = getDataTableColumns(report);
         report.getPage().getContents().forEach(row -> {
@@ -222,12 +213,12 @@ public class GPIReportPdfExporter implements GPIReportExporter {
         return size;
     }
     
-    protected void insertCell(PdfPTable table, String text, int align, int colspan, Font font, Color bkgColor) {
+    protected void insertCell(PdfPTable table, String text, int align, int colspan, Font font, BaseColor bkgColor) {
         insertCell(table, text, align, colspan, 1, font, bkgColor);
     }
     
     protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowspan, Font font,
-            Color bkgColor) {
+            BaseColor bkgColor) {
         
         text = text == null ? "" : text.trim();
         Phrase phrase = new Phrase(text, font);
@@ -245,7 +236,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
         table.addCell(cell);
     }
     
-    protected PdfPCell generatePdfCell(Phrase phrase, int align, int valign, int colspan, int rowspan, Color bkgColor) {
+    protected PdfPCell generatePdfCell(Phrase phrase, int align, int valign, int colspan, int rowspan, BaseColor bkgColor) {
 
         PdfPCell cell = new PdfPCell(phrase);
         cell.setHorizontalAlignment(align);

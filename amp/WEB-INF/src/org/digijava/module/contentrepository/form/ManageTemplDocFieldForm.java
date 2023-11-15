@@ -1,10 +1,10 @@
 package org.digijava.module.contentrepository.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.contentrepository.helper.template.PossibleValueHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
+
+import java.util.List;
 
 public class ManageTemplDocFieldForm extends ActionForm {
     private List<TemplateFieldHelper> templateFields;

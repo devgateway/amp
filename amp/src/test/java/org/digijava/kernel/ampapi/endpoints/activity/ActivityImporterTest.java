@@ -1,62 +1,24 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static java.util.Collections.emptyMap;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.VERSION_FIELD_NAME;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors.ACTIVITY_IS_STALE;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.ACTIVITY_GROUP;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.collection.IsMapContaining.hasValue;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
-import org.digijava.kernel.persistence.InMemoryActivityManager;
-import org.digijava.kernel.persistence.InMemoryPossibleValuesDAO;
-import org.digijava.kernel.persistence.InMemoryTeamManager;
-import org.digijava.kernel.persistence.InMemoryTeamMemberManager;
-import org.digijava.kernel.persistence.InMemoryUserManager;
-import org.digijava.kernel.persistence.InMemoryValueConverter;
-import org.digijava.kernel.persistence.PersistenceTransactionManager;
+import org.digijava.kernel.persistence.*;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.activity.ActivityValidatorUtil;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -73,6 +35,25 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static java.util.Collections.emptyMap;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.VERSION_FIELD_NAME;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors.ACTIVITY_IS_STALE;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.ACTIVITY_GROUP;
+import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
+import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.collection.IsMapContaining.hasValue;
+import static org.mockito.Mockito.when;
 
 /**
  * It is important to set the correct context during the activity importer testing.
@@ -250,7 +231,7 @@ public class ActivityImporterTest {
     
     private ActivityImporter validateAndRetrieveImporter(Map<String, Object> json) {
         AmpActivityVersion activity = new AmpActivityVersion();
-        activity.setApprovalStatus(ApprovalStatus.STARTED);
+        activity.setApprovalStatus(ApprovalStatus.started);
         APIField activityField = new APIField();
         ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false, false));
         importer.validateAndImport(activity, json, true);
@@ -446,13 +427,13 @@ public class ActivityImporterTest {
                         hasProperty("name", equalTo("Activity 1")),
                         hasProperty("draft", equalTo(false)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.STARTED_APPROVED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.startedapproved))
                 )),
                 hasProperty("newActivity", allOf(
                         hasProperty("name", equalTo("Title")),
                         hasProperty("draft", equalTo(true)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.EDITED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.edited))
                 ))));
     }
     
@@ -476,13 +457,13 @@ public class ActivityImporterTest {
                         hasProperty("name", equalTo("Activity 1")),
                         hasProperty("draft", equalTo(false)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.STARTED_APPROVED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.startedapproved))
                 )),
                 hasProperty("newActivity", allOf(
                         hasProperty("name", equalTo("Title")),
                         hasProperty("draft", equalTo(false)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.EDITED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.edited))
                 ))));
     }
     

@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportMeasureType.ALL;
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportMeasureType.DERIVED;
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportMeasureType.PLEDGE;
+import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportMeasureType.*;
 
 /**
  * Fetch the amp measures from the system and provide the needed list based on the report type

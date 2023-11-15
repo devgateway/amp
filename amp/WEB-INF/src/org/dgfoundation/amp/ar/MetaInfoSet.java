@@ -1,7 +1,8 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * holds the metadata of a cell, indexed by category for O(1) lookup

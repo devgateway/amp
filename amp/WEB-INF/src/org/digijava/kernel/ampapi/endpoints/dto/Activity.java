@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.Map;
 
 /**
  * Class that holds the activitiy data to be serialized as a JsonObject.

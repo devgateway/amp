@@ -1,19 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.hamcrest.Matchers.both;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru

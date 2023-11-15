@@ -22,13 +22,6 @@
 
 package org.digijava.module.editor.action.admin;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -41,6 +34,13 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.form.EditorAdminForm;
 import org.digijava.module.editor.util.Constants;
 import org.digijava.module.editor.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MoveEditor extends Action {
     public ActionForward execute(ActionMapping mapping,

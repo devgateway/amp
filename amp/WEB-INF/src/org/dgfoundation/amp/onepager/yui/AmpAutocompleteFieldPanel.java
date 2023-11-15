@@ -4,17 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.yui;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.jcr.RepositoryException;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,6 +38,11 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.proxy.HibernateProxyHelper;
+
+import javax.jcr.RepositoryException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
@@ -121,7 +115,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * {@link #onBeforeRender()} method is overiden and adds a JS function
      * wrapping the {@link AbstractAmpAutoCompleteModel} callbackUrl
      */
-    private AbstractDefaultAjaxBehavior onSelectBehavior;
+    private final AbstractDefaultAjaxBehavior onSelectBehavior;
 
     /**
      * The list model parameters, if any

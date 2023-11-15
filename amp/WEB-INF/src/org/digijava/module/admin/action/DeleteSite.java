@@ -22,24 +22,20 @@
 
 package org.digijava.module.admin.action;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
+import org.apache.struts.action.*;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
+import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
-import org.digijava.kernel.user.User;
+import org.digijava.kernel.security.principal.GroupPrincipal;
+import org.digijava.kernel.user.Group;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.DeleteSiteForm;
 import org.digijava.module.admin.util.DbUtil;
-import java.util.*;
-import org.digijava.kernel.user.Group;
-import org.digijava.kernel.security.principal.GroupPrincipal;
-import org.digijava.kernel.security.DigiSecurityManager;
-import org.digijava.kernel.util.RequestUtils;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /*
  * <p>Title: DiGiJava</p>

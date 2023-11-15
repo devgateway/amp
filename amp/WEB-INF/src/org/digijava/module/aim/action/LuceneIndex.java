@@ -1,10 +1,5 @@
 package org.digijava.module.aim.action;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.struts.action.Action;
@@ -18,6 +13,11 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**

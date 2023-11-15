@@ -1,9 +1,5 @@
 package org.digijava.module.translation.util;
 
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -11,6 +7,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.hibernate.Session;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * class containing all the data regarding a multilingual-input-field

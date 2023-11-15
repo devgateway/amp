@@ -6,17 +6,10 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-
 import org.apache.commons.collections.MapUtils;
 import org.digijava.module.aim.helper.Constants;
+
+import java.util.*;
 
 /**
  * 

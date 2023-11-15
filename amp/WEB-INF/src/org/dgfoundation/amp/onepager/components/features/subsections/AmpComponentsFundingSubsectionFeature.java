@@ -4,8 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentsFundingFormTableFeature;
@@ -17,6 +15,9 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author aartimon@dginternational.org
@@ -62,12 +63,14 @@ public class AmpComponentsFundingSubsectionFeature extends
             public void onClick(AjaxRequestTarget target) {
                 AmpComponentFunding cf = new AmpComponentFunding();
                 cf.setAdjustmentType(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB());
+                cf.setComponentFundingStatus(CategoryConstants.COMPONENT_FUNDING_STATUS_OPEN.getAmpCategoryValueFromDB());
                 cf.setComponent(componentModel.getObject());
                 cf.setTransactionAmount(0d);
                 cf.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
                 cf.setTransactionDate(null);
                 cf.setTransactionType(transactionType);
                 cf.setAmpComponentFundingId(null);
+                cf.setJustAnId(UUID.randomUUID().toString());
 
 
                 tableFeature.getEditorList().addItem(cf);

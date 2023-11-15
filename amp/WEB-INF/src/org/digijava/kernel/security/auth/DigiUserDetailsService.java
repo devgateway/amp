@@ -22,28 +22,14 @@
 
 package org.digijava.kernel.security.auth;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.UserUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,6 +37,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.*;
 
 public class DigiUserDetailsService
     implements UserDetailsService {
@@ -74,8 +62,8 @@ public class DigiUserDetailsService
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from " + User.class.getName() +
-                                          " u where lower(u.email) =? ");
-            q.setString(0, email.toLowerCase());
+                                          " u where lower(u.email) =:email ");
+            q.setParameter("email", email.toLowerCase(), StringType.INSTANCE);
             q.setCacheable(true);
 
             List results = q.list();
@@ -100,15 +88,14 @@ public class DigiUserDetailsService
     protected UserDetails getUserDetails(User user) throws DataAccessException {
         Collection<? extends GrantedAuthority> authorities = getAssignedAuthorities(user);
 
-        UserDetails ud = new org.springframework.security.core.userdetails.User(user.getEmail(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
             user.getPassword(), true, true, true, true, authorities);
 
-        return ud;
     }
 
     protected Collection<? extends GrantedAuthority> getAssignedAuthorities(User user) throws
         DataAccessException {
-        Set authorities = new HashSet();
+        Set<GrantedAuthority> authorities = new HashSet<>();
 
         authorities.add(new SimpleGrantedAuthority("ROLE_AUTHENTICATED"));
        
@@ -125,22 +112,14 @@ public class DigiUserDetailsService
                     "Unable to load groups for user: " + user.getId(), ex);
             }
 
-            Iterator groupIter = user.getGroups().iterator();
-            while (groupIter.hasNext()) {
-                Group group = (Group) groupIter.next();
+            for (Object o : user.getGroups()) {
+                Group group = (Group) o;
                 authorities.add(new SimpleGrantedAuthority(
-                    "GROUP_" +
-                    group.getSite().getSiteId() + "_" + group.getName()));
+                        "GROUP_" +
+                                group.getSite().getSiteId() + "_" + group.getName()));
             }
         }
-        Collection<GrantedAuthority> result = new ArrayList<GrantedAuthority>();
-        Iterator iter = authorities.iterator();
-        int i = 0;
-        while (iter.hasNext()) {
-            GrantedAuthority item = (GrantedAuthority) iter.next();
-            result.add(item);
-        }
-        return  result;
+        return  new ArrayList<>(authorities);
     }
 
     public boolean isPopulateGroupAuthorities() {

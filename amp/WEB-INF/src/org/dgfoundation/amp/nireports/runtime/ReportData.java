@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.util.List;
-import java.util.Set;
-
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+
+import java.util.List;
+import java.util.Set;
 
 
 /**

@@ -1,16 +1,16 @@
 package org.digijava.module.aim.util;
 
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
 
 public class FilteredCurrencyRateUtil {
     
@@ -107,8 +107,8 @@ public class FilteredCurrencyRateUtil {
            String queryString   = "select f from " + AmpFilteredCurrencyRate.class.getName() +  " f  " +
                 "where f.fromCurrency.currencyCode=:fromCurrencyCode AND f.toCurrency.currencyCode=:toCurrencyCode" ;
            Query query              = sess.createQuery(queryString);
-           query.setString("toCurrencyCode", toCurrencyCode);
-           query.setString("fromCurrencyCode", fromCurrencyCode);
+           query.setParameter("toCurrencyCode", toCurrencyCode, StringType.INSTANCE);
+           query.setParameter("fromCurrencyCode", fromCurrencyCode,StringType.INSTANCE);
            
            result   = query.list().size()!=0 ;
        }

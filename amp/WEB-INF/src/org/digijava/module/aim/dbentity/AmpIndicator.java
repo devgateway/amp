@@ -1,15 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
-
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable, Identifiable

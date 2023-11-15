@@ -1,13 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.visibility;
 
-import java.util.Date;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -18,6 +10,9 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  * Verifies if the associated FM path is enabled

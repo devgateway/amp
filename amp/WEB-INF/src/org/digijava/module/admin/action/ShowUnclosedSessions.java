@@ -22,20 +22,12 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.UnclosedSessionsForm;
-import org.hibernate.Session;
 /**
  * 
  * @deprecated

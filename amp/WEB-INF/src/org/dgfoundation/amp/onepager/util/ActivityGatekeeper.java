@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.onepager.util;
 
-import java.util.HashMap;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
@@ -11,6 +9,8 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+
+import java.util.HashMap;
 
 public class ActivityGatekeeper {
     private static HashMap<String, String> timestamp = new HashMap<String, String>();

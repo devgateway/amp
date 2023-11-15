@@ -22,25 +22,13 @@
 
 package org.digijava.module.um.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.entity.ItemBeanInfo;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.module.um.form.UserUpdateForm;
-import org.digijava.module.um.util.DbUtil;
-import java.util.Iterator;
-import org.digijava.kernel.util.DgUtil;
-import java.util.Set;
 
 public class ShowUserUpdate
     extends Action {

@@ -3,17 +3,11 @@
  */
 package org.digijava.module.gateperm.core;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ArrayBlockingQueue;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.gateperm.exception.NotBoundGateInputException;
+
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * GatePermission.java TODO description here

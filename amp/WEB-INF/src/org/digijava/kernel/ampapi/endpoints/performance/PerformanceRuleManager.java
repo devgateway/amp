@@ -1,34 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.performance;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.ImmutableMap;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.DisbursementsAfterActivityDateMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursementsAfterFundingDateMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedStatusAfterFundingDateMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.*;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -50,7 +28,12 @@ import org.hibernate.jdbc.Work;
 import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.util.StringUtils;
 
-import com.google.common.collect.ImmutableMap;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -605,11 +588,7 @@ public final class PerformanceRuleManager {
      */
     public void deleteActivityPerformanceRule(Session session, Long activityId) {
         String deleteQuery = "DELETE FROM amp_activity_performance_rule WHERE amp_activity_id = %s";
-        session.doWork(new Work() {
-            public void execute(Connection conn) throws SQLException {
-                SQLUtils.executeQuery(conn, String.format(deleteQuery, activityId));
-            }
-        });
+        session.doWork(conn -> SQLUtils.executeQuery(conn, String.format(deleteQuery, activityId)));
     }
     
     /**

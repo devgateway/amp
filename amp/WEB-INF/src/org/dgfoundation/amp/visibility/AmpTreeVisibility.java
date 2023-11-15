@@ -12,7 +12,6 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -68,7 +67,7 @@ public class AmpTreeVisibility implements Serializable{
     }
 
     public void initializeItemsCache(Collection<AmpObjectVisibility> items) {       
-        itemsCache = new ConcurrentHashMap<String, AmpObjectVisibility>(items.size());
+        itemsCache = new ConcurrentHashMap<>(items.size());
         for (AmpObjectVisibility ampObjectVisibility : items) {
             itemsCache.put(ampObjectVisibility.getName(), ampObjectVisibility);
         }
@@ -76,8 +75,8 @@ public class AmpTreeVisibility implements Serializable{
     
     public AmpTreeVisibility() {
         super();
-        items = new ConcurrentHashMap();
-        sorteditems = new LinkedHashMap();
+        items = new ConcurrentHashMap<>();
+        sorteditems = new LinkedHashMap<>();
         // root=new AmpObjectVisibility();
         // TODO Auto-generated constructor stub
     }
@@ -85,25 +84,23 @@ public class AmpTreeVisibility implements Serializable{
     public boolean buildAmpTreeVisibilityMultiLevel(
             AmpObjectVisibility ampObjVis) {
         this.root = ampObjVis;
-        this.setItems(new ConcurrentHashMap());
+        this.setItems(new ConcurrentHashMap<>());
         boolean existSubmodules = false;
-        for (Iterator it = ampObjVis.getAllItems().iterator(); it.hasNext();) {
+        for (Object o : ampObjVis.getAllItems()) {
             boolean notEmpty = false;
-            AmpModulesVisibility module = (AmpModulesVisibility) it.next();
+            AmpModulesVisibility module = (AmpModulesVisibility) o;
             AmpTreeVisibility moduleNode = new AmpTreeVisibility();
             if (!module.getSubmodules().isEmpty())
                 existSubmodules = true;
             if (module.getParent() == null) {
                 moduleNode.setRoot(module);
-                moduleNode.setItems(new ConcurrentHashMap());
+                moduleNode.setItems(new ConcurrentHashMap<>());
                 getModuleTree(moduleNode);
                 notEmpty = true;
-            }
-
-            else {
+            } else {
                 existSubmodules = true;
                 ;// ////System.out.println(" si NU are
-                    // submodule:::"+module.getName());
+                // submodule:::"+module.getName());
             }
             if (notEmpty)
                 this.getItems().put(module.getName(), moduleNode);
@@ -111,22 +108,19 @@ public class AmpTreeVisibility implements Serializable{
         return existSubmodules;
     }
 
-    public int getModuleTree(AmpTreeVisibility moduleNode) {
+    public void getModuleTree(AmpTreeVisibility moduleNode) {
         AmpModulesVisibility module = (AmpModulesVisibility) moduleNode
                 .getRoot();
         if (module.getSubmodules().isEmpty()) {
-            for (Iterator jt = module.getSortedAlphaItems().iterator(); jt
-                    .hasNext();) // getItems
-            {
-                AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt
-                        .next();
+            // getItems
+            for (AmpObjectVisibility objectVisibility : module.getSortedAlphaItems()) {
+                AmpFeaturesVisibility feature = (AmpFeaturesVisibility) objectVisibility;
                 AmpTreeVisibility featureNode = new AmpTreeVisibility();
                 featureNode.setRoot(feature);
-                featureNode.setItems(new ConcurrentHashMap());
-                for (Iterator kt = feature.getSortedAlphaItems().iterator(); kt
-                        .hasNext();)// getItems
-                {
-                    AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
+                featureNode.setItems(new ConcurrentHashMap<>());
+                // getItems
+                for (AmpObjectVisibility ampObjectVisibility : feature.getSortedAlphaItems()) {
+                    AmpFieldsVisibility field = (AmpFieldsVisibility) ampObjectVisibility;
                     AmpTreeVisibility fieldNode = new AmpTreeVisibility();
                     fieldNode.setRoot(field);
                     fieldNode.setItems(null);
@@ -134,12 +128,11 @@ public class AmpTreeVisibility implements Serializable{
                 }
                 moduleNode.getItems().put(feature.getName(), featureNode);
             }
-            return 0;
+            return;
         }
 
-        for (Iterator it = module.getSortedAlphaSubModules().iterator(); it
-                .hasNext();) {
-            AmpModulesVisibility moduleAux = (AmpModulesVisibility) it.next();
+        for (Object o : module.getSortedAlphaSubModules()) {
+            AmpModulesVisibility moduleAux = (AmpModulesVisibility) o;
             AmpTreeVisibility moduleNodeAux = new AmpTreeVisibility();
             moduleNodeAux.setRoot(moduleAux);
             {
@@ -147,7 +140,6 @@ public class AmpTreeVisibility implements Serializable{
             }
             moduleNode.getItems().put(moduleAux.getName(), moduleNodeAux);
         }
-        return 1;
     }
 
     public void buildAmpTreeVisibility(AmpObjectVisibility ampObjVis) {
@@ -156,23 +148,23 @@ public class AmpTreeVisibility implements Serializable{
         
         initializeItemsCache(root.getItems());
         
-        this.setItems(new ConcurrentHashMap());
+        this.setItems(new ConcurrentHashMap<>());
         if (ampObjVis.getAllItems() != null)
             if (ampObjVis.getAllItems().iterator() != null)
-                for (Iterator it = ampObjVis.getAllItems().iterator(); it.hasNext();) {
-                    AmpModulesVisibility module = (AmpModulesVisibility) it.next();
+                for (Object o : ampObjVis.getAllItems()) {
+                    AmpModulesVisibility module = (AmpModulesVisibility) o;
                     AmpTreeVisibility moduleNode = new AmpTreeVisibility();
                     moduleNode.setRoot(module);
-                    if (module.getItems() != null){
-                        for (Iterator jt = module.getItems().iterator(); jt.hasNext();) {
-                            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt.next();
+                    if (module.getItems() != null) {
+                        for (AmpObjectVisibility ampObjectVisibility : module.getItems()) {
+                            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) ampObjectVisibility;
                             AmpTreeVisibility featureNode = new AmpTreeVisibility();
                             featureNode.setRoot(feature);
-                            if (feature.getItems() != null){
-                                for (Iterator kt = feature.getItems().iterator(); kt.hasNext();) {
-                                    AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
+                            if (feature.getItems() != null) {
+                                for (AmpObjectVisibility objectVisibility : feature.getItems()) {
+                                    AmpFieldsVisibility field = (AmpFieldsVisibility) objectVisibility;
                                     AmpTreeVisibility fieldNode = new AmpTreeVisibility();
-                                    if(field.getDescription()==null || "".equals(field.getDescription()))
+                                    if (field.getDescription() == null || "".equals(field.getDescription()))
                                         field.setDescription(field.getName());
                                     fieldNode.setRoot(field);
                                     fieldNode.setItems(null);
@@ -190,10 +182,8 @@ public class AmpTreeVisibility implements Serializable{
     }
 
     public void displayVisibilityTreeForDebug(AmpTreeVisibility atv) {
-        for (Iterator it = atv.getItems().values().iterator(); it.hasNext();) {
-            Object obj = it.next();
-            AmpTreeVisibility treeNode = (AmpTreeVisibility) obj;
-            displayRecTreeForDebug(treeNode);
+        for (AmpTreeVisibility obj : atv.getItems().values()) {
+            displayRecTreeForDebug(obj);
         }
 
     }
@@ -203,24 +193,18 @@ public class AmpTreeVisibility implements Serializable{
             return;
         if (atv.getItems().isEmpty())
             return;
-        for (Iterator it = atv.getItems().values().iterator(); it.hasNext();) {
-            AmpTreeVisibility auxTree = (AmpTreeVisibility) it.next();
+        for (AmpTreeVisibility auxTree : atv.getItems().values()) {
             displayRecTreeForDebug(auxTree);
         }
     }
 
     public boolean isVisibleObject(AmpObjectVisibility aov) {
-        if (this.getRoot().getTemplates().contains(aov.getId())) {
-            return true;
-        }
-        return false;
+        return this.getRoot().getTemplates().contains(aov.getId());
     }
 
     public boolean isVisibleId(Long id) {
-        for (Iterator it = this.getRoot().getTemplates().iterator(); it
-                .hasNext();) {
+        for (AmpTemplatesVisibility x : this.getRoot().getTemplates()) {
 
-            AmpTemplatesVisibility x = (AmpTemplatesVisibility) it.next();
             if (x.getId().compareTo(id) == 0)
                 return true;
 
@@ -230,11 +214,8 @@ public class AmpTreeVisibility implements Serializable{
 
     public AmpFieldsVisibility getFieldByNameFromRoot(String fieldName) {
 
-        for (Iterator it = this.getItems().values().iterator(); it.hasNext();) {
-            AmpTreeVisibility module = (AmpTreeVisibility) it.next();
-            for (Iterator jt = module.getItems().values().iterator(); jt
-                    .hasNext();) {
-                AmpTreeVisibility feature = (AmpTreeVisibility) jt.next();
+        for (AmpTreeVisibility module : this.getItems().values()) {
+            for (AmpTreeVisibility feature : module.getItems().values()) {
                 if (feature.getItems().containsKey(fieldName))
                     return (AmpFieldsVisibility) ((AmpTreeVisibility) feature
                             .getItems().get(fieldName)).getRoot();
@@ -244,11 +225,10 @@ public class AmpTreeVisibility implements Serializable{
     }
 
     public AmpFeaturesVisibility getFeatureByNameFromRoot(String featureName) {
-        for(Object obj : this.getItems().values()  ) {
-            AmpTreeVisibility module = (AmpTreeVisibility) obj;
-            if (module.getItems().containsKey(featureName))
-                return (AmpFeaturesVisibility) ((AmpTreeVisibility) module
-                        .getItems().get(featureName)).getRoot();
+        for(AmpTreeVisibility obj : this.getItems().values()  ) {
+            if (obj.getItems().containsKey(featureName))
+                return (AmpFeaturesVisibility) obj
+                        .getItems().get(featureName).getRoot();
 
         }
         return null;
@@ -257,17 +237,16 @@ public class AmpTreeVisibility implements Serializable{
     public AmpFeaturesVisibility getFeatureByNameFromModule(String moduleName, String featureName) {
         AmpTreeVisibility module = this.getModuleTreeByNameFromRoot(moduleName);
         if (module != null && module.getItems().containsKey(featureName)) {
-            return (AmpFeaturesVisibility) ((AmpTreeVisibility) module
-                    .getItems().get(featureName)).getRoot();
+            return (AmpFeaturesVisibility) module
+                    .getItems().get(featureName).getRoot();
         }
         return null;
     }
 
     public AmpTreeVisibility getFeatureTreeByNameFromRoot(String featureName) {
-        for (Iterator it = this.getItems().values().iterator(); it.hasNext();) {
-            AmpTreeVisibility module = (AmpTreeVisibility) it.next();
+        for (AmpTreeVisibility module : this.getItems().values()) {
             if (module.getItems().containsKey(featureName))
-                return (AmpTreeVisibility) module.getItems().get(featureName);
+                return module.getItems().get(featureName);
 
         }
         return null;
@@ -275,7 +254,7 @@ public class AmpTreeVisibility implements Serializable{
 
     public AmpModulesVisibility getModuleByNameFromRoot(String moduleName) {
         
-        AmpTreeVisibility atv   = (AmpTreeVisibility) this.getItems().get( moduleName );
+        AmpTreeVisibility atv   = this.getItems().get( moduleName );
         if ( atv != null ) {
             return (AmpModulesVisibility)atv.getRoot();
         }
@@ -284,12 +263,12 @@ public class AmpTreeVisibility implements Serializable{
 
     public AmpTreeVisibility getModuleTreeByNameFromRoot(String moduleName) {
         if (this.getItems().containsKey(moduleName))
-            return (AmpTreeVisibility) this.getItems().get(moduleName);
+            return this.getItems().get(moduleName);
         return null;
     }
 
     public LinkedHashMap getSorteditems() {
-        TreeMap mySet = new TreeMap(items);
+        TreeMap mySet = new TreeMap<>(items);
         sorteditems.putAll(mySet);
         return sorteditems;
     }

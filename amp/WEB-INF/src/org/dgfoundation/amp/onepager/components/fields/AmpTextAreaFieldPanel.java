@@ -14,7 +14,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
-import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
@@ -62,7 +61,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);
         }
         final IModel<String> finalModel = model;
-        textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
+        textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel(model)){
             @Override
             protected void onInitialize() {
                 //get validators and put them in the {@link TranslatableValidators}

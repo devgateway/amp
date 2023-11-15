@@ -1,19 +1,6 @@
 package org.digijava.module.aim.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.NumberFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
@@ -24,14 +11,23 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.NumberFormat;
+import java.util.*;
 
 public class ActivityVersionUtil {
 
@@ -186,7 +182,7 @@ public class ActivityVersionUtil {
         String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
         if (gsValue != null) {
             try {
-                aux = Integer.valueOf(gsValue).intValue();
+                aux = Integer.parseInt(gsValue);
             } catch (NumberFormatException e) {
                 logger.error(e.getMessage(), e);
             }
@@ -204,7 +200,7 @@ public class ActivityVersionUtil {
             String queryStr = "SELECT v.ampActivityGroup.ampActivityLastVersion.ampActivityId  FROM " +AmpActivityVersion.class.getName() +
                     " v  WHERE v.ampActivityId=:oldActivityId";
             Query query     = session.createQuery(queryStr);
-            query.setLong("oldActivityId", oldActivity);
+            query.setParameter("oldActivityId", oldActivity, LongType.INSTANCE);
             Long id     = (Long)query.uniqueResult();
             return id;
         } catch (Exception e) {
@@ -223,20 +219,22 @@ public class ActivityVersionUtil {
      * @throws CloneNotSupportedException
      */
     public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
-        AmpActivityVersion out = (AmpActivityVersion) in.clone();
-        
-        Class clazz = AmpActivityFields.class;
-        
-        Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (Collection.class.isAssignableFrom(field.getType())){
-                logger.debug("Init set: " + field.getName());
-                initSet(out, field);
-            }
-        }
+//        AmpActivityVersion out = (AmpActivityVersion) in.clone();
+//
+//        Class clazz = AmpActivityFields.class;
+//
+//        Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
+//        for (Field field : fields) {
+//            if (Collection.class.isAssignableFrom(field.getType())) {
+//                logger.debug("Init set: " + field.getName());
+//                initSet(out, field);
+//            }
+//        }
+//
+////        out.setAmpActivityGroup(null);
+        AmpActivityVersion out = SerializationUtils.clone(in);
+//        out.setAmpActivityGroup(null);
 
-        out.setAmpActivityGroup(null);
         return out;
     }
     

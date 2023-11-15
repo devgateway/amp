@@ -61,6 +61,17 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
         this.ampGPISurveyId = ampGPISurveyId;
     }
 
+    @Override
+    public String toString() {
+        return "AmpGPISurveyResponse{" +
+                "ampReponseId=" + ampReponseId +
+                ", ampGPISurveyId=" + ampGPISurveyId +
+                ", ampQuestionId=" + ampQuestionId +
+                ", response='" + response + '\'' +
+                ", references='" + references + '\'' +
+                '}';
+    }
+
     public static class AmpGPISurveyResponseComparator implements Comparator<AmpGPISurveyResponse>, Serializable {
 
         private static final long serialVersionUID = 1L;

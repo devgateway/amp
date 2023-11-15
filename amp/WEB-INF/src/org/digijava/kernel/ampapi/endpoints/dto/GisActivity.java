@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+
+import java.util.Map;
 
 /**
  * DTO object that holds information about activity. It is used in GIS (/gis/activities)

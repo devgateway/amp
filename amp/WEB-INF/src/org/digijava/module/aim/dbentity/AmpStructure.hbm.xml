@@ -6,8 +6,8 @@
 		<cache usage="read-write" />
 
 		<id name="ampStructureId" column="amp_structure_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_STRUCTURE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_STRUCTURE_seq</param>
 			</generator>
 		</id>
 		<property column="title" name="title" type="java.lang.String" not-null="true" />

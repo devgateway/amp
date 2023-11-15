@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.IPAContract" table="IPA_CONTRACT">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">IPA_CONTRACT_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">IPA_CONTRACT_seq</param>
 			</generator>
 		</id>
 		<property name="contractName" column="contract_name" type="java.lang.String" />
@@ -29,7 +29,7 @@
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 
 		<many-to-one name="activity" column="activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 
 		<property name="startOfTendering" column="start_of_tendering" type="java.util.Date" />
 

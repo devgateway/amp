@@ -22,12 +22,6 @@
 
 package org.digijava.module.admin.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
@@ -42,13 +36,19 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.KeyValue;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import java.util.*;
 
 public class DbUtil {
 
-    private static Logger logger = Logger.getLogger(DbUtil.class);
+    private static final Logger logger = Logger.getLogger(DbUtil.class);
 
     public static List getAvailableLanguages() throws AdminException {
 
@@ -72,7 +72,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             Query q = session
                     .createQuery("from " + Locale.class.getName() + " l where l.available=true and l.code=:code");
-            q.setString("code", code);
+            q.setParameter("code", code, StringType.INSTANCE);
             if (q.uniqueResult() != null) {
                 available = true;
             }
@@ -186,16 +186,16 @@ public class DbUtil {
         Group group = null;
         Session session = null;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             Iterator iter = null;
             String queryString = "select g from " + Group.class.getName() + " g where g.key=:key";
-            Query query = session.createQuery(queryString);
-            query.setString("key", key);
-            iter = query.iterate();
-            while (iter.hasNext()) {
-                group = (Group) iter.next();
-                break;
-            }
+            Query<Group> query = session.createQuery(queryString, Group.class);
+            query.setParameter("key", key,StringType.INSTANCE);
+            group = (Group) query.stream().findAny().orElse(null);
+//            while (iter.hasNext()) {
+//                group = (Group) iter.next();
+//                break;
+//            }
         } catch (Exception ex) {
             logger.debug("Unable to get group from database ", ex);
             throw new AdminException("Unable to get group from database ", ex);
@@ -255,15 +255,14 @@ public class DbUtil {
     }
 
     public static List getGroupUsers(Long id) throws AdminException {
-        ArrayList users = new ArrayList();
+        List<User> users = new ArrayList();
         ;
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-            Group group = (Group) session.load(Group.class, id);
-            Iterator iter = group.getUsers().iterator();
-            while (iter.hasNext()) {
-                User user = (User) iter.next();
+            Group group = session.load(Group.class, id);
+            for (Object o : group.getUsers()) {
+                User user = (User) o;
                 users.add(user);
             }
 
@@ -275,13 +274,15 @@ public class DbUtil {
     }
 
     public static void removeUserFromGroup(Long groupId, Long userId) throws AdminException {
-        Session session = null;
+        Session session;
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            User user = (User) session.load(User.class, userId);
+            Group group = session.load(Group.class, groupId);
+            User user = session.load(User.class, userId);
             user.getGroups().remove(group);
+            session.save(user);
+            session.flush();
             // tx.commit();
         } catch (Exception ex) {
             logger.debug("Unable to remove User from group ", ex);
@@ -295,11 +296,13 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            for (int i = 0; i < userIds.length; i++) {
-                User user = (User) session.load(User.class, userIds[i]);
+            Group group = session.load(Group.class, groupId);
+            for (Long userId : userIds) {
+                User user = session.load(User.class, userId);
                 user.getGroups().add(group);
+                session.saveOrUpdate(user);
             }
+            session.flush();
             // tx.commit();
         } catch (Exception ex) {
             logger.debug("Unable to add Users to group ", ex);
@@ -310,7 +313,7 @@ public class DbUtil {
     public static List searchSite(String siteKey) throws AdminException {
 
         Session session = null;
-        List siteList = new ArrayList();
+        List siteList = new ArrayList<>();
 
         try {
             session = PersistenceManager.getSession();
@@ -318,13 +321,13 @@ public class DbUtil {
             siteKey = siteKey.toLowerCase();
 
             StringTokenizer st = new StringTokenizer(siteKey);
-            String domainUrl = new String("");
+            StringBuilder domainUrl = new StringBuilder();
             while (st.hasMoreTokens()) {
-                domainUrl += st.nextToken();
+                domainUrl.append(st.nextToken());
             }
 
             siteKey = "%" + siteKey + "%";
-            domainUrl = "%" + domainUrl + "%";
+            domainUrl = new StringBuilder("%" + domainUrl + "%");
 
             String queryString = "select distinct s from " + SiteDomain.class.getName() + " d, " + Site.class.getName()
                     + " s where (d.site.id = s.id) "
@@ -332,8 +335,8 @@ public class DbUtil {
                     + " or lower(d.siteDbDomain) like :siteKey or lower(d.sitePath) like :siteKey "
                     + " or lower(d.siteDbDomain || d.sitePath) like :domainUrl)";
             Query query = session.createQuery(queryString);
-            query.setString("siteKey", siteKey);
-            query.setString("domainUrl", domainUrl);
+            query.setParameter("siteKey", siteKey,StringType.INSTANCE);
+            query.setParameter("domainUrl", domainUrl.toString(),StringType.INSTANCE);
 
             Iterator iterator = query.iterate();
 
@@ -354,7 +357,7 @@ public class DbUtil {
 
         Session session = null;
         Transaction tx = null;
-        Site site = null;
+        Site site;
 
         try {
             session = PersistenceManager.getSession();
@@ -368,9 +371,8 @@ public class DbUtil {
                 while (iterator.hasNext()) {
                     Group item = (Group) iterator.next();
                     if (item.getPermissions() != null) {
-                        Iterator iter = item.getPermissions().iterator();
-                        while (iter.hasNext()) {
-                            GroupPermission gp = (GroupPermission) iter.next();
+                        for (Object o : item.getPermissions()) {
+                            GroupPermission gp = (GroupPermission) o;
                             session.delete(gp);
                         }
                     }
@@ -430,21 +432,24 @@ public class DbUtil {
                 String queryString = "select sd.site from " + SiteDomain.class.getName()
                         + " sd where sd.siteDbDomain=:siteDomain and sd.sitePath is null";
                 Query query = session.createQuery(queryString);
-                query.setString("siteDomain", domain);
+                query.setParameter("siteDomain", domain,StringType.INSTANCE);
                 iter = query.iterate();
+                site = (Site) query.stream().findAny().orElse(null);
             } else {
                 String queryString = "select sd.site from " + SiteDomain.class.getName()
                         + " sd where sd.siteDbDomain=:siteDomain and sd.sitePath=:sitePath";
                 Query query = session.createQuery(queryString);
-                query.setString("siteDomain", domain);
-                query.setString("sitePath", path);
+                query.setParameter("siteDomain", domain,StringType.INSTANCE);
+                query.setParameter("sitePath", path,StringType.INSTANCE);
 
-                iter = query.iterate();
+//                iter = query.iterate();
+                site = (Site) query.stream().findAny().orElse(null);
+
             }
-            while (iter.hasNext()) {
-                site = (Site) iter.next();
-                break;
-            }
+//            while (iter.hasNext()) {
+//                site = (Site) iter.next();
+//                break;
+//            }
         } catch (Exception ex) {
             logger.debug("Unable to get site from database ", ex);
             throw new AdminException("Unable to get site from database ", ex);
@@ -471,8 +476,8 @@ public class DbUtil {
             String queryString = " from " + ModuleInstance.class.getName()
                     + " m where m.site.id != :siteId and m.realInstance is not null"
                     + " and m.realInstance.site.id = :siteId " + " order by m.site.name, m.moduleName, m.instanceName";
-            Query query = PersistenceManager.getSession().createQuery(queryString);
-            query.setLong("siteId", siteId);
+            Query<ModuleInstance> query = PersistenceManager.getSession().createQuery(queryString, ModuleInstance.class);
+            query.setParameter("siteId", siteId, LongType.INSTANCE);
             return query.list();
         } catch (Exception ex) {
             logger.debug("Unable to get Referenced Instances from database ", ex);
@@ -490,8 +495,8 @@ public class DbUtil {
                     + " mi where mi.site.id != :siteId and mi.moduleName = :moduleName "
                     + " and mi.realInstance is null";
             Query query = session.createQuery(queryString);
-            query.setLong("siteId", siteId);
-            query.setString("moduleName", module);
+            query.setParameter("siteId", siteId, LongType.INSTANCE);
+            query.setParameter("moduleName", module,StringType.INSTANCE);
 
             sites = query.list();
         } catch (Exception ex) {
@@ -569,9 +574,8 @@ public class DbUtil {
             boolean passed = false;
             Site site = (Site) session.load(Site.class, siteId);
 
-            Iterator iter = site.getModuleInstances().iterator();
-            while (iter.hasNext()) {
-                ModuleInstance item = (ModuleInstance) iter.next();
+            for (Object o : site.getModuleInstances()) {
+                ModuleInstance item = (ModuleInstance) o;
                 if (item.getRealInstance() == null) {
                     if (passed) {
                         buff.append(",");
@@ -587,8 +591,8 @@ public class DbUtil {
                         + " p where p.group.site.id != :siteId and p.permissionType = :permissionType "
                         + " and p.targetName in (" + buff.toString() + ")";
                 Query query = session.createQuery(queryString);
-                query.setLong("siteId", siteId);
-                query.setInteger("permissionType", new Integer(GroupPermission.MODULE_INSTANCE_PERMISSION));
+                query.setParameter("siteId", siteId, LongType.INSTANCE);
+                query.setParameter("permissionType", GroupPermission.MODULE_INSTANCE_PERMISSION, IntegerType.INSTANCE);
 
                 groupList = query.list();
             }
@@ -640,8 +644,8 @@ public class DbUtil {
                 + " gr.site.inheritSecurity = :inheritSecurity and gr.parentId = :parentId";
 
         Query query = session.createQuery(queryString);
-        query.setBoolean("inheritSecurity", Boolean.TRUE);
-        query.setLong("parentId", groupId);
+        query.setParameter("inheritSecurity", Boolean.TRUE, BooleanType.INSTANCE);
+        query.setParameter("parentId", groupId, LongType.INSTANCE);
 
         Iterator iter = query.iterate();
         while (iter.hasNext()) {
@@ -655,8 +659,8 @@ public class DbUtil {
 
     public static List getLocales() throws AdminException {
 
-        Session session = null;
-        List locales = null;
+        Session session;
+        List locales;
 
         try {
             session = PersistenceManager.getSession();
@@ -674,7 +678,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getSession();
-            Locale oldLoc = (Locale) session.get(Locale.class, locale.getCode());
+            Locale oldLoc = session.get(Locale.class, locale.getCode());
             oldLoc.setAvailable(locale.isAvailable());
             oldLoc.setLeftToRight(locale.getLeftToRight());
 
@@ -776,7 +780,7 @@ public class DbUtil {
         if (tableName == null || tableName.length() == 0)
             return ret;
 
-        List<Object[]> ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+        List<Object[]> ls = PersistenceManager.getRequestDBSession().createNativeQuery("select id, value from " + tableName).list();
         for (Object[] obj : ls) {
             KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]),
                     PersistenceManager.getString(obj[1]));
@@ -791,7 +795,7 @@ public class DbUtil {
         session = PersistenceManager.getSession();
         qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalSettingsName = :globalSettingsName ";
         qry = session.createQuery(qryStr);
-        qry.setString("globalSettingsName", name);
+        qry.setParameter("globalSettingsName", name,StringType.INSTANCE);
         AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
         updateGlobalSetting(ags, value);
     }
@@ -803,7 +807,7 @@ public class DbUtil {
         session = PersistenceManager.getSession();
         qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
         qry = session.createQuery(qryStr);
-        qry.setLong("id", id.longValue());
+        qry.setParameter("id", id, LongType.INSTANCE);
 
         AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
 

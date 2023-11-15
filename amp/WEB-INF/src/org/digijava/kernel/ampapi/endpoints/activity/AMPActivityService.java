@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.List;
-import java.util.Locale;
-
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.exception.DgException;
@@ -18,8 +15,12 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+
+import java.util.List;
+import java.util.Locale;
 
 import static org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion;
 
@@ -83,10 +84,17 @@ public class AMPActivityService implements ActivityService {
             AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
             EditorStore editorStore, Site site) throws Exception {
         
-        Session session = PersistenceManager.getSession();
-        return saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
+        Session session = PersistenceManager.getRequestDBSession();
+        Transaction transaction= session.getTransaction();
+        if (transaction==null || !transaction.isActive())
+        {
+            transaction=session.beginTransaction();
+        }
+        AmpActivityVersion ampActivityVersion= saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
                 Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                 session, saveContext, editorStore, site);
+        transaction.commit();
+        return ampActivityVersion;
     }
     
     @Override

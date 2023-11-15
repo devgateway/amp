@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.forms;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.dgfoundation.amp.forms.LockVerificationResult.*;
 

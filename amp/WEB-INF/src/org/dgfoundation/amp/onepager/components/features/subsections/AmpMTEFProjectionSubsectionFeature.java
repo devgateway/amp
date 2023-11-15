@@ -4,10 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -21,6 +17,10 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 5, 2010

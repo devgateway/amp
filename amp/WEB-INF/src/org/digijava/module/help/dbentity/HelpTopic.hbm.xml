@@ -3,8 +3,8 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.help.dbentity.HelpTopic" table="HELP_HELP_TOPICS">
 		<id name="helpTopicId" column="helpTopicId" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">HELP_HELP_TOPICS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">HELP_HELP_TOPICS_seq</param>
 			</generator>
 		</id>
 		<property name="keywordsTrnKey" column="keywordsTrnKey" type="java.lang.String" />

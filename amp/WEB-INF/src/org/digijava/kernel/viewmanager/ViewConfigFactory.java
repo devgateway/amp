@@ -22,15 +22,16 @@
 
 package org.digijava.kernel.viewmanager;
 
-import org.digijava.kernel.request.Site;
-import javax.servlet.ServletContext;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collections;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.viewmanager.impl.DefaultViewConfigImpl;
-import org.digijava.kernel.viewmanager.impl.DefaultTemplateViewConfigImpl;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.kernel.viewmanager.impl.DefaultTemplateViewConfigImpl;
+import org.digijava.kernel.viewmanager.impl.DefaultViewConfigImpl;
+
+import javax.servlet.ServletContext;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ViewConfigFactory {
     private static Logger logger = Logger.getLogger(ViewConfigFactory.class);
@@ -93,6 +94,7 @@ public final class ViewConfigFactory {
                if (viewConfig == null) {
                    viewConfig = createTemplateViewConfig(templateName);
                    templateConfigs.put(templateName, viewConfig);
+                   System.out.println(templateConfigs);
                }
                else {
                    synchronized (viewConfig) {

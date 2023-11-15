@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings.FreezeOptions;
+
+import java.util.Date;
 
 public class DataFreezeEvent {
     

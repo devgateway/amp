@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.io.IOException;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiModelProperty;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

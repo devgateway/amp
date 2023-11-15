@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports;
 
+import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
-
-import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
  * A {@link Cell} which holds a text and a fractional number called "percentage". 

@@ -1,12 +1,5 @@
 package org.digijava.module.message.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -16,19 +9,20 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.message.dbentity.AmpAlert;
-import org.digijava.module.message.dbentity.AmpEmail;
-import org.digijava.module.message.dbentity.AmpEmailReceiver;
-import org.digijava.module.message.dbentity.AmpMessage;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
-import org.digijava.module.message.dbentity.AmpMessageState;
-import org.digijava.module.message.dbentity.TemplateAlert;
+import org.digijava.module.message.dbentity.*;
 import org.digijava.module.message.helper.MessageConstants;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class AmpMessageUtil {
     private static Logger logger = Logger.getLogger(AmpMessageUtil.class);
@@ -199,8 +193,9 @@ public class AmpMessageUtil {
             query=session.createQuery(queryString);                         
             query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
-            retValue=((Integer)query.uniqueResult()).intValue();
-                        
+            Long longValue = (Long) query.uniqueResult();
+            retValue=longValue.intValue();
+
                        /* Someone may change msgStoragePerMsgType (make it more then it was previously). 
                         In this case we need to unhide some states which are marked as hidden in db*/
                         
@@ -237,9 +232,8 @@ public class AmpMessageUtil {
             query.setParameter("hidden", true );
             query.setMaxResults(limit);
             if(!query.list().isEmpty()){
-                Iterator<AmpMessageState> iterState=query.list().iterator();
-                while(iterState.hasNext()){
-                    unhideMessageState(iterState.next().getId());
+                for (AmpMessageState ampMessageState : (Iterable<AmpMessageState>) query.list()) {
+                    unhideMessageState(ampMessageState.getId());
                 }
             }                       
         }catch(Exception ex) {          
@@ -280,8 +274,9 @@ public class AmpMessageUtil {
             query=session.createQuery(queryString);                         
             query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
-            retValue=((Integer)query.uniqueResult()).intValue();            
-        }catch(Exception ex) {          
+            Long longValue = (Long) query.uniqueResult();
+            retValue= longValue.intValue();
+        }catch(Exception ex) {
             logger.error("Unable to Load Messages", ex);
             throw new AimException("Unable to Load Messages", ex);          
         }
@@ -443,8 +438,9 @@ public class AmpMessageUtil {
             queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
             " msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=true";  
             query=session.createQuery(queryString);         
-            query.setParameter("tmId", tmId);           
-            hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+            query.setParameter("tmId", tmId);
+            Long longValue =(Long) query.uniqueResult();
+            hiddenMsgs=longValue.intValue();
             if(hiddenMsgs>0){
                 full=true;
             }
@@ -467,9 +463,10 @@ public class AmpMessageUtil {
             queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
             " msg.id=state.message.id and state.senderId = :tmId and msg.draft="+draft+" and state.messageHidden=true"; 
             query=session.createQuery(queryString);         
-            query.setLong("tmId", tmId);    
+            query.setParameter("tmId", tmId, LongType.INSTANCE);
             if(query.list().size()>0){
-                hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+                Long longValue = (Long) query.uniqueResult();
+                hiddenMsgs= longValue.intValue();
                 if(hiddenMsgs>0){
                     full=true;
                 }
@@ -779,7 +776,7 @@ public class AmpMessageUtil {
                     " (SELECT count(rec) from " +AmpEmailReceiver.class.getName() + " rec " +
                             "WHERE rec.email=email AND rec.status like :sentStatus ))" ;
             query=session.createQuery(queryString);
-            query.setString("sentStatus", MessageConstants.SENT_STATUS );
+            query.setParameter("sentStatus", MessageConstants.SENT_STATUS , StringType.INSTANCE);
             emails=query.list();
         } catch (Exception e) {
             logger.error("couldn't load Emails" + e.getMessage());  
@@ -853,7 +850,7 @@ public class AmpMessageUtil {
             queryString="select concat(prop.contact.name,"+"' ',"+"prop.contact.lastname), prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
                     " and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!=''";
             query=session.createQuery(queryString);
-            query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
+            query.setParameter("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL,StringType.INSTANCE);
             contacts=query.list();
         } catch (Exception ex) {
             logger.error("couldn't load Contacts " ,ex);    
@@ -906,8 +903,8 @@ public class AmpMessageUtil {
             queryString="select concat(prop.contact.name,"+"' ',"+"prop.contact.lastname), prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
                     " and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!='' and (lower(prop.contact.lastname) like lower(:searchStr) or lower(prop.contact.name) like lower(:searchStr))";
             query=session.createQuery(queryString);
-            query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
-            query.setString("searchStr", searchStr + "%");
+            query.setParameter("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL,StringType.INSTANCE);
+            query.setParameter("searchStr", searchStr + "%",StringType.INSTANCE);
             contacts=query.list();
         } catch (Exception ex) {
             logger.error("couldn't load Contacts " , ex);

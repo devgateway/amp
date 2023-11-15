@@ -1,20 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.activity.dto;
 
-import java.util.Date;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * @author Nadejda Mandrescu

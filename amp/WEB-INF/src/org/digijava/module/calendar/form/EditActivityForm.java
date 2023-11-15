@@ -1,18 +1,18 @@
 package org.digijava.module.calendar.form;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.ArrayList;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.ActivityIndicator;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 

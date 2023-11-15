@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports;
 
+import org.digijava.module.common.util.DateTimeUtil;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import org.digijava.module.common.util.DateTimeUtil;
 
 
 /**

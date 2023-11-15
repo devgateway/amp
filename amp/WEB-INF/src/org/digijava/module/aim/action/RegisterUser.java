@@ -6,34 +6,34 @@ package org.digijava.module.aim.action;
 
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.ShaCrypt;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpUserExtension;
-import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.security.PasswordPolicyValidator;
+import org.digijava.module.um.util.UmUtil;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.digijava.module.um.util.DbUtil.*;
 
 public class RegisterUser extends Action {
 
@@ -54,6 +54,25 @@ public class RegisterUser extends Action {
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+
+                String keyGen = UmUtil.generateAESKey(128);
+                user.setTruBudgetKeyGen(keyGen);
+                String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword()!=null?userRegisterForm.getTruBudgetPassword():"amptrubudget", keyGen);
+                user.setTruBudgetPassword(encryptedTruPassword);
+                String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
+                List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+                if (intents != null) {
+                    truBudgetIntents = getTruBudgetIntentsByName(intents);
+                }
+                logger.info("Intents: " + truBudgetIntents);
+
+//            user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+                user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
+                user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+            }
 
             // set client IP address
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));
@@ -66,6 +85,7 @@ public class RegisterUser extends Action {
             // set password
             user.setPassword(userRegisterForm.getPassword().trim());
             user.setSalt(userRegisterForm.getPassword().trim());
+
 
             // set Website
             user.setUrl(userRegisterForm.getWebSite());
@@ -85,7 +105,7 @@ public class RegisterUser extends Action {
             // set organization name
             user.setOrganizationName(userRegisterForm.getOrganizationName());
 
-            user.setOrganizationTypeOther(new String(" "));
+            user.setOrganizationTypeOther(" ");
 
             // set country
             ;
@@ -127,6 +147,7 @@ public class RegisterUser extends Action {
             userExt.setOrgGroup(orgGroup);
             AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(userRegisterForm.getSelectedOrganizationId());
             userExt.setOrganization(organ);
+
             // ===== end user extension setup =====
 
             // if email register get error message
@@ -160,10 +181,12 @@ public class RegisterUser extends Action {
 
                 Site site = RequestUtils.getSite(request);
                 Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
-                Long uid[] = new Long[1];
+                Long[] uid = new Long[1];
+                Group translatorGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.TRANSLATORS,site.getId());
                 uid[0] = user.getId();
                 org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
-                
+                org.digijava.module.admin.util.DbUtil.addUsersToGroup(translatorGroup.getId(),uid);
+
                 if (userRegisterForm.getNationalCoordinator()) {
                     Group nationalCoordGroup = org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS);
                     org.digijava.module.admin.util.DbUtil.addUsersToGroup(nationalCoordGroup.getId(),uid);                                          

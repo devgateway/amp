@@ -3,13 +3,12 @@
  */
 package org.digijava.module.budgetexport.reports.implementation;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
+
+import javax.servlet.http.HttpSession;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Alex Gartner

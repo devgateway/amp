@@ -3,11 +3,11 @@
  */
 package org.digijava.module.gateperm.core;
 
+import org.dgfoundation.amp.PropertyListable;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
-
-import org.dgfoundation.amp.PropertyListable;
 
 /**
  * Permission.java TODO description here

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpTheme" table="AMP_THEME">
 		<cache usage="read-write" />
 		<id name="ampThemeId" column="amp_theme_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_THEME_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_THEME_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="parentThemeId" column="parent_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" lazy="false" />
@@ -40,7 +40,7 @@
 		<!-- <many-to-one name="activityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="false" />
 			-->
-		<set name="indicators" lazy="false" cascade="delete-orphan" inverse="true">
+		<set name="indicators" lazy="false" cascade="merge,delete-orphan" inverse="true">
 			<key column="theme_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorTheme" />
 		</set>

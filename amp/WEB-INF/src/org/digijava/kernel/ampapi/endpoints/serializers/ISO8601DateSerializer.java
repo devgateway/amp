@@ -1,17 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.serializers;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.Property;
-import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Important: this deserializer uses JVM default timezone.

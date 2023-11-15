@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.onepager.components.upload;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -20,6 +17,9 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Contributes all CSS/JS resources needed by http://blueimp.github.com/jQuery-File-Upload/
@@ -79,6 +79,7 @@ public class FileUploadBehavior extends Behavior {
         variables.put("uploadFailedMsg", TranslatorUtil.getTranslatedText("Upload failed! Please try again."));
         variables.put("uploadStartedMsg", TranslatorUtil.getTranslatedText("Upload started, please wait..."));
         variables.put("uploadFailedTooBigMsg", TranslatorUtil.getTranslatedText("The file size limit is {size} MB. This file exceeds the limit.").replace("{size}", maxFileSizeGS));
+        variables.put("uploadFailedTooSmallMsg", TranslatorUtil.getTranslatedText("This file is empty.Please upload a non-empty file."));
         variables.put("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
         variables.put("uploadNoFileLabel", TranslatorWorker.translateText("No file chosen"));
 

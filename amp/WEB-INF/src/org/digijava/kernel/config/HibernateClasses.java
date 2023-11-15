@@ -22,8 +22,8 @@
 
 package org.digijava.kernel.config;
 
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Data class, used by Digester to parse digi.xml.
@@ -59,7 +59,7 @@ public class HibernateClasses {
     }
 
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         Iterator iter = hibernateClass.iterator();
         String newLine = System.getProperty("line.separator");
@@ -67,7 +67,7 @@ public class HibernateClasses {
             HibernateClass item = (HibernateClass) iter.next();
             buf.append(item.toString()).append(newLine);
         }
-        buf.append(" REQUIRED - " + required);
+        buf.append(" REQUIRED - ").append(required);
 
         return buf.toString();
     }

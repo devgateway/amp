@@ -1,12 +1,11 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrgType;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class ManageGPIForm extends ActionForm {
 

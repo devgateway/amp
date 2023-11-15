@@ -17,48 +17,46 @@
  *************************************************************************/
 package org.digijava.module.um.util;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.ContentAlert;
-import org.digijava.kernel.entity.HowDidYouHear;
-import org.digijava.kernel.entity.Image;
-import org.digijava.kernel.entity.Interests;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
+import org.digijava.kernel.entity.trubudget.SubIntents;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.ProxyHelper;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.ShaCrypt;
-import org.digijava.kernel.util.UnixCrypt;
-import org.digijava.kernel.util.UserUtils;
+import org.digijava.kernel.util.*;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
+import org.digijava.module.um.model.*;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+import org.jetbrains.annotations.NotNull;
+import reactor.core.CorePublisher;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.util.*;
+
+import static java.util.Objects.isNull;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -72,16 +70,15 @@ public class DbUtil {
                 getSession();
 
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
-            Query query = sess.createQuery(queryString);
-            query.setString("email", email);
-            
-            Iterator iter = query.iterate();
-            
-            while(iter.hasNext()) {
-                User iterUser = (User) iter.next();
-                userId = iterUser.getId().longValue();
-                break;
-            }
+            Query<User> query = sess.createQuery(queryString, User.class);
+            query.setParameter("email", email, StringType.INSTANCE);
+
+//            Iterator iter = query.iterate();
+            User iterUser = query.stream().findAny().orElse(null);
+            if (iterUser!=null)
+                userId = iterUser.getId();
+
+
 
         } catch(Exception ex0) {
             logger.debug("Unable to get user information from database", ex0);
@@ -100,8 +97,8 @@ public class DbUtil {
      */
     public static boolean isCorrectPassword(String user, String pass) throws
         UMException {
-        Session sess = null;
-        String compare = null;
+        Session sess;
+        String compare;
         String encryptPassword = null;
         boolean iscorrect = false;
         try {
@@ -109,13 +106,12 @@ public class DbUtil {
                 getSession();
 
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
-            Query query = sess.createQuery(queryString);
-            query.setString("email", user);
-            
-            Iterator iter = query.iterate();
-//////////////////////
+            Query<User> query = sess.createQuery(queryString, User.class);
+            query.setParameter("email", user,StringType.INSTANCE);
+
+            Iterator<User> iter = query.iterate();
             while(iter.hasNext()) {
-                User iterUser = (User) iter.next();
+                User iterUser = iter.next();
 
                 for(int i = 0; i < 3; i++) {
 
@@ -156,7 +152,6 @@ public class DbUtil {
 
             }
 
-/////////////////////
 
         } catch(Exception ex0) {
             logger.debug("isCorrectPassword() failed", ex0);
@@ -176,31 +171,26 @@ public class DbUtil {
      */
     public static boolean ResetPassword(String email, String code, String newPassword) throws
         UMException {
-        
-        Transaction tx = null;
-        Session session = null;
+
+        Session session;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
-//beginTransaction();
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
-            Query query = session.createQuery(queryString);
-            query.setString("email", email);
-            
-            Iterator iter = query.iterate();
-            User iterUser = null;
-            while(iter.hasNext()) {
-                iterUser = (User) iter.next();
-                break;
-            }
+            Query<User> query = session.createQuery(queryString, User.class);
+            query.setParameter("email", email,StringType.INSTANCE);
+
+            User iterUser = query.stream().findAny().orElse(null);
+
+
             if(iterUser == null) {
                 logger.warn("Attempt to reset password for unknown user: " + email);
                 return false;
             }
 
-            ResetPassword resetPassword = null;
+            ResetPassword resetPassword;
             try {
-                resetPassword = (ResetPassword) session.load(ResetPassword.class,
+                resetPassword = session.load(ResetPassword.class,
                     iterUser.getId());
             } catch(ObjectNotFoundException ex2) {
                 logger.warn("User " + email + " have not requested password reset change");
@@ -213,28 +203,22 @@ public class DbUtil {
             }
 
             iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
+            iterUser.setSalt(Long.toString(newPassword.trim().hashCode()));
             session.update(iterUser);
             session.delete(resetPassword);
-            //tx.commit();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(HibernateException ex1) {
-                    logger.warn("rollback() failed ", ex1);
-                }
-            }
             throw new UMException(
                 "Unable to update user information into database", ex);
         }
         return true;
 
     }
-
+    public static void updatePassword(String user, String newPassword) throws UMException{
+        updatePassword(user, null, newPassword);
+    }
     /**
      * Update password in database see table
      *
@@ -245,26 +229,23 @@ public class DbUtil {
                                       String newPassword) throws
         UMException {
 
-        Session session = null;
+        Session session;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
-            
-            String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-            Query query = session.createQuery(queryString);
-            query.setString("email", user);
-            
-            Iterator iter = query.iterate();
-            User iterUser = null;
-            while(iter.hasNext()) {
-                iterUser = (User) iter.next();
-            }
-//beginTransaction();
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
-            iterUser.updateLastModified();
-            session.save(iterUser);
 
-            //tx.commit();
+            String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
+            Query<User> query = session.createQuery(queryString, User.class);
+            query.setParameter("email", user,StringType.INSTANCE);
+
+            User iterUser = query.stream().findAny().orElse(null);
+
+            if (!isNull(iterUser)) {
+                iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
+                iterUser.setSalt(Long.toString(newPassword.trim().hashCode()));
+                iterUser.updateLastModified();
+                session.saveOrUpdate(iterUser);
+                session.flush();
+            }
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
@@ -307,15 +288,13 @@ public class DbUtil {
     public static void updateUserBio(User user) throws
         UMException {
 
-        Session session = null;
+        Session session;
         try {
             session = PersistenceManager.getSession();
 
             user.updateLastModified();
 
-//beginTransaction();
             session.update(user);
-            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
@@ -339,21 +318,19 @@ public class DbUtil {
     public static void updateUserMarket(User user) throws
         UMException {
 
-        Session session = null;
+        Session session;
         try {
             session = PersistenceManager.getSession();
 
             user.updateLastModified();
 
-//beginTransaction();
             session.update(user);
-            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
             throw new UMException(
                 "Unable to update user information into database", ex);
-        } 
+        }
         try {
             UserUtils.saveUserPreferences(user.getUserPreference());
             UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
@@ -371,35 +348,34 @@ public class DbUtil {
     public static void updateUser(User user) throws
         UMException {
 
-        Transaction tx = null;
-        Session session = null;
+        Transaction tx;
+        Session session;
         try {
             session = PersistenceManager.getRequestDBSession();
-            ArrayList removeArray = new ArrayList();
+            tx = session.getTransaction();
+            ArrayList removeArray = new ArrayList<>();
 
             if(user.getInterests() != null) {
-                Iterator iter = user.getInterests().iterator();
-                while(iter.hasNext()) {
-                    Interests item = (Interests) iter.next();
+                for (Object o : user.getInterests()) {
+                    Interests item = (Interests) o;
 
-                    List list = getGeoupsBySiteId(item.getSite().getId());
-                    Iterator iterGroups = list.iterator();
-                    while(iterGroups.hasNext()) {
-                        Group group = (Group) iterGroups.next();
-                        if(group.isMemberGroup()) {
-                            if(item.getUser() != null) {
+                    List list = getGroupsBySiteId(item.getSite().getId());
+                    for (Object value : list) {
+                        Group group = (Group) value;
+                        if (group.isMemberGroup()) {
+                            if (item.getUser() != null) {
                                 org.digijava.module.admin.util.DbUtil.
-                                    addUsersToGroup(
-                                        group.getId(), new Long[] {user.getId()});
+                                        addUsersToGroup(
+                                                group.getId(), new Long[]{user.getId()});
                             } else {
                                 org.digijava.module.admin.util.DbUtil.
-                                    removeUserFromGroup(
-                                        group.getId(), user.getId());
+                                        removeUserFromGroup(
+                                                group.getId(), user.getId());
                             }
                         }
                     }
 
-                    if(item.getUser() == null) {
+                    if (item.getUser() == null) {
                         session.delete(item);
                         removeArray.add(item);
                     }
@@ -407,12 +383,43 @@ public class DbUtil {
             }
 
             if(removeArray.size() > 0)
-                user.getInterests().removeAll(removeArray);
+                removeArray.forEach(user.getInterests()::remove);
 
             user.updateLastModified();
 
             session.update(user);
-            
+            session.flush();
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                try {
+                    TruUserData userData = new TruUserData();
+                    TruUserData.Data data = new TruUserData.Data();
+                    TruUserData.User user1 = new TruUserData.User();
+                    user1.setDisplayName(user.getFirstNames() + " " + user.getLastName());
+                    // TODO: 8/28/23 if you are editing a user for the first time with Trubudget integrated. their password will be the email
+                    // TODO: 8/28/23 this can be changed later in Trubudget
+                    String pass = user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"amptrubudget";
+                    user1.setPassword(pass);
+                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    data.setUser(user1);
+                    userData.setData(data);
+                    if (registerUserOnTrubudget(userData, user)) {
+                        user.setTruBudgetEnabled(true);
+                        session.update(user);
+                        session.flush();
+                    }
+                } catch (Exception e) {
+                    logger.info("Error: " + e.getMessage(), e);
+                    tx.rollback();
+
+                }
+            }
+
+
+
+
+
             if(user.getUserPreference()!=null){
                 UserUtils.saveUserPreferences(user.getUserPreference());
             }
@@ -426,23 +433,69 @@ public class DbUtil {
                 "Unable to update user information into database", ex);
         }
     }
-    
+
+    // TODO: 9/1/23 rollback if trubudget registration not successful
+    public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
+    }
+    public static List<AmpGlobalSettings> getGlobalSettingsBySection(String sectionName)
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        Query<AmpGlobalSettings> query = session.createQuery("FROM "+AmpGlobalSettings.class.getName()+" gs WHERE gs.section= :sectionName", AmpGlobalSettings.class);
+        query.setCacheable(true);
+        query.setParameter("sectionName", sectionName);
+
+        return query.list();
+    }
+    public static String getSettingValue(List<AmpGlobalSettings> globalSettings, String settingName)
+    {
+    String value = globalSettings.stream().filter(x->x.getGlobalSettingsName().equals(settingName)).findFirst().orElseThrow(()->new RuntimeException("Unable to find setting for name: "+settingName)).getGlobalSettingsValue();
+    logger.info("Setting value: "+value);
+    return value;
+    }
+
     public static void registerUser(User user) throws UMException {
         Transaction tx = null;
         Session session = null;
         try {
-            session = PersistenceManager.getSession();
-//beginTransaction();
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.getTransaction();
 
-            // set encrypted password
             user.setPassword(ShaCrypt.crypt(user.getPassword().trim()).trim());
 
             // set hashed password
-            user.setSalt(new Long(user.getPassword().trim().hashCode()).
-                         toString());
+            user.setSalt(Long.toString(user.getPassword().trim().hashCode()));
 
             // update user
             session.save(user);
+            session.flush();
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+
+                try {
+                    TruUserData userData = new TruUserData();
+                    TruUserData.Data data = new TruUserData.Data();
+                    TruUserData.User user1 = new TruUserData.User();
+                    user1.setDisplayName(user.getFirstNames() + " " + user.getLastName());
+                    user1.setPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"amptrubudget");
+                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    data.setUser(user1);
+                    userData.setData(data);
+                    if (registerUserOnTrubudget(userData, user)) {
+                        user.setTruBudgetEnabled(true);
+                        session.update(user);
+                        session.flush();
+                    }
+
+                } catch (Exception e) {
+                    logger.info("Error: " + e.getMessage(), e);
+                    tx.rollback();
+                }
+            }
+
+
+
 
             // update user preference
             if(user.getUserPreference() != null) {
@@ -454,23 +507,21 @@ public class DbUtil {
                 session.save(user.getUserLangPreferences());
             }
 
-            session.getTransaction().commit();
+            tx.commit();
 
             // Is becoming a member of Member group of corresponding site
             if(user.getInterests() != null) {
-                Iterator iter = user.getInterests().iterator();
-                while(iter.hasNext()) {
-                    Interests item = (Interests) iter.next();
+                for (Object o : user.getInterests()) {
+                    Interests item = (Interests) o;
 
-                    List list = getGeoupsBySiteId(item.getSite().getId());
-                    Iterator iterGroups = list.iterator();
-                    while(iterGroups.hasNext()) {
-                        Group group = (Group) iterGroups.next();
-                        if(group.isMemberGroup()) {
-                            if(item.getUser() != null) {
+                    List list = getGroupsBySiteId(item.getSite().getId());
+                    for (Object value : list) {
+                        Group group = (Group) value;
+                        if (group.isMemberGroup()) {
+                            if (item.getUser() != null) {
                                 org.digijava.module.admin.util.DbUtil.
-                                    addUsersToGroup(
-                                        group.getId(), new Long[] {user.getId()});
+                                        addUsersToGroup(
+                                                group.getId(), new Long[]{user.getId()});
                             }
                         }
                     }
@@ -493,28 +544,163 @@ public class DbUtil {
         }
 
     }
-    
+
+    public static boolean registerUserOnTrubudget(TruUserData userData, User user) throws URISyntaxException {
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (!getSettingValue(settings,"isEnabled").equals("true")) {
+            logger.info("Trubudget is not enabled for this site.");
+            return false;
+        }
+        userData.setApiVersion(getSettingValue(settings, "apiVersion"));
+        userData.getData().getUser().setOrganization(getSettingValue(settings, "organization"));
+        logger.info("Registering user on Trubudget");
+        // TODO: 9/15/23 check why the baseUrl setting is empty on haiti
+        logger.info("Settings: "+settings);
+        TruLoginRequest truLoginRequest = new TruLoginRequest();
+        truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+        TruLoginRequest.Data data = new TruLoginRequest.Data();
+        TruLoginRequest.User user1 = new TruLoginRequest.User();
+
+        user1.setPassword(getSettingValue(settings,"rootPassword"));
+        user1.setId(getSettingValue(settings,"rootUser"));
+        data.setUser(user1);
+        truLoginRequest.setData(data);
+        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
+        logger.info("Trubudget for user: "+user.getTruBudgetEnabled());
+        truResp.subscribe(truLoginResponse -> {
+
+//            TruUserData response = null;
+
+
+            try {
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).subscribe(registerResponse->{
+                    logger.info("Create user response: " + registerResponse);
+                    List<TruBudgetIntent> toBeRevoked = new ArrayList<>();
+                    for (TruBudgetIntent truBudgetIntent : user.getInitialTruBudgetIntents())
+                    {
+                        if (!user.getTruBudgetIntents().contains(truBudgetIntent))
+                        {
+                            toBeRevoked.add(truBudgetIntent);
+                        }
+                    }
+                    if (!user.getTruBudgetIntents().isEmpty()) {
+                        Flux.range(0, user.getTruBudgetIntents().size())
+                                .flatMap(index -> {
+                                    TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
+                                    TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
+                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    return grantPermRequest(settings, truLoginResponse, permData, data1,new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
+
+                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Grant permission response:ss " + permissionResponse));
+                    }
+                    // TODO: 9/6/23  complete the revoke process.. need to checkout all available permissions
+
+                    if (!toBeRevoked.isEmpty()) {
+                        Flux.range(0, toBeRevoked.size())
+                                .flatMap(index -> {
+                                    TruRevokePermissionRequest permData = new TruRevokePermissionRequest();
+                                    TruRevokePermissionRequest.Data data1 = new TruRevokePermissionRequest.Data();
+                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setUserId(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setIntent(new ArrayList<>(toBeRevoked).get(index).getTruBudgetIntentName());
+                                    permData.setData(data1);
+                                    permData.setApiVersion(getSettingValue(settings,"apiVersion"));
+                                    try {
+                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.intent.revokePermission", permData, TruRevokePermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+                                    } catch (URISyntaxException e) {
+                                        return Flux.error(new RuntimeException(e));
+                                    }
+                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Revoke permission response:ss " + permissionResponse));
+                    }
+
+                });
+            } catch (Exception e) {
+                logger.error("Error during trubudget registration ",e);
+            }
+
+
+        });
+        return true;
+
+    }
+
+    @NotNull
+    private static CorePublisher<String> grantPermRequest(List<AmpGlobalSettings> settings, TruLoginResponse truLoginResponse, TruGrantPermissionRequest permData, TruGrantPermissionRequest.Data data1, String intent) {
+        data1.setIntent(intent);
+        permData.setData(data1);
+        permData.setApiVersion(getSettingValue(settings,"apiVersion"));
+        try {
+
+            return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+        } catch (URISyntaxException e) {
+            return Flux.error(new RuntimeException(e));
+        }
+    }
+
+    public static List<SubIntents> getSubIntentsByMother(String motherName)
+    {
+        Session session = PersistenceManager.openNewSession();
+        try {
+            return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_sub_intent t WHERE mother_intent_name='"+motherName+"'", SubIntents.class).setCacheable(true).list();
+
+        }catch (Exception e)
+        {
+            logger.info("Error during intent fetch ",e);
+            throw new RuntimeException(e);
+        }
+    }
+    public static  List<TruBudgetIntent> getTruBudgetIntents()
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            return session.createNativeQuery(" SELECT t.* FROM amp_trubudget_intent t ORDER BY trubudget_intent_name", TruBudgetIntent.class).list();
+
+        }catch (Exception e)
+        {
+           logger.info("Error during intent fetch ",e);
+           throw new RuntimeException(e);
+        }
+
+    }
+
+    public static  List<TruBudgetIntent> getTruBudgetIntentsByName(String [] names)
+    {
+        if (names.length!=0) {
+            Session session = PersistenceManager.getRequestDBSession();
+            StringBuilder convertedNames = new StringBuilder("(");
+            for (String name : names) {
+                convertedNames.append("'").append(name).append("'").append(",");
+            }
+            String c = convertedNames.toString().replaceAll(",$", "");
+            c += ")";
+            logger.info("Intent query: " + c);
+
+            return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_intent t WHERE trubudget_intent_name in " + c, TruBudgetIntent.class).list();
+
+        }
+        return Collections.emptyList();
+
+
+    }
+
     public static boolean registerUser(String id) throws UMException {
-        Session session = null;
+        Session session;
         boolean verified = false;
-        Transaction tx = null;
         BigInteger iduser;
         try {
             session = PersistenceManager.getSession();
-            //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
+            //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false";
             String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
-            Query query = session.createSQLQuery(queryString);
-            query.setString("hash", id);
+            Query query = session.createNativeQuery(queryString);
+            query.setParameter("hash", id,StringType.INSTANCE);
             iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){
-                User user = (User) session.load(User.class, iduser.longValue());
+                User user = session.load(User.class, iduser.longValue());
                 user.setBanned(false);
                 user.setEmailVerified(true);
                 user.updateLastModified();
                 session.update(user);
                 verified = true;
-            }else{
-                verified = false;
             }
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
@@ -526,51 +712,44 @@ public class DbUtil {
 
     public static boolean isRegisteredEmail(String email) throws
         UMException {
-        Session sess = null;
-        boolean iscorrect = false;
+        Session sess;
+        boolean iscorrect;
         try {
             sess = PersistenceManager.getSession();
 
             String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-            Query query = sess.createQuery(queryString);
-            query.setString("email", email.toLowerCase().trim());
-            
-            Iterator iter = query.list().iterator();
-            if(iter.hasNext()) {
-                iscorrect = true;
-            }
+            Query<User> query = sess.createQuery(queryString, User.class);
+            query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
+            iscorrect = query.stream().findAny().isPresent();
+
         } catch(Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
             throw new UMException(ex0.getMessage(), ex0);
         }
         return iscorrect;
     }
-    
+
     public static boolean EmailExist(String email, Long id) throws
     UMException {
-    Session sess = null;
-    boolean iscorrect = false;
+    Session sess;
+    boolean iscorrect;
     try {
         sess = PersistenceManager.getSession();
 
         String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-        Query query = sess.createQuery(queryString);
-        query.setString("email", email.toLowerCase().trim());
-        
-        Iterator iter = query.list().iterator();
-        if(!iter.hasNext()) {
-            iscorrect = true;
-        }
-        for (Iterator iterator = query.list().iterator(); iterator.hasNext();) {
-            User user = (User) iterator.next();
-            if (user.getId().compareTo(id)==0){
+        Query<User> query = sess.createQuery(queryString, User.class);
+        query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
+
+        iscorrect = !query.stream().findAny().isPresent();
+        for (User o : query.list()) {
+            if (o.getId().compareTo(id) == 0) {
                 iscorrect = true;
-            }else{
-                iscorrect =false;
+            } else {
+                iscorrect = false;
                 break;
             }
         }
-        
+
     } catch(Exception ex0) {
         logger.debug("isRegisteredEmail() failed", ex0);
         throw new UMException(ex0.getMessage(), ex0);
@@ -578,18 +757,17 @@ public class DbUtil {
 
     return iscorrect;
 }
-    
+
     public static void saveResetPassword(long userId, String code) throws
         UMException {
-        Session session = null;
+        Session session;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
-//beginTransaction();
 
             ResetPassword resetPassword;
             boolean create = true;
             try {
-                resetPassword = (ResetPassword) session.load(ResetPassword.class, new Long(userId));
+                resetPassword = session.load(ResetPassword.class, userId);
                 create = false;
             } catch(ObjectNotFoundException ex2) {
                 resetPassword = new ResetPassword();
@@ -604,7 +782,6 @@ public class DbUtil {
                 session.update(resetPassword);
             }
 
-            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to put reset password record into database", ex);
             throw new UMException(
@@ -666,17 +843,17 @@ public class DbUtil {
      */
     public static List getList(String className, String order) throws
         UMException {
-        Session session = null;
-        List list = null;
-        String find = null;
+        Session session;
+        List list;
+        String find;
         try {
             session = PersistenceManager.getSession();
 
             if(order != null && order.trim().length() > 0) {
-                find = new String("from " + className +
-                                  " rs order by rs." + order);
+                find = "from " + className +
+                        " rs order by rs." + order;
             } else {
-                find = new String("from " + className);
+                find = "from " + className;
             }
 
             Query query = session.createQuery(find);
@@ -700,11 +877,11 @@ public class DbUtil {
                                        HttpServletRequest request) throws
         UMException {
         User result;
-        Session session = null;
+        Session session;
 
         try {
             session = PersistenceManager.getSession();
-            result = (User) session.load(User.class, activeUserId);
+            result = session.load(User.class, activeUserId);
             ProxyHelper.initializeObject(result);
 
             Site site = RequestUtils.getSite(request);
@@ -726,7 +903,6 @@ public class DbUtil {
 
     public static List searchUsers(String criteria) throws UMException {
 
-        Session session = null;
         List userList;
 
         try {
@@ -749,7 +925,7 @@ public class DbUtil {
      */
     public static Interests getInterestBySite(Site site, User user) throws UMException {
         List interests = null;
-        Session session = null;
+        Session session;
         try {
             if(site != null) {
                 session = PersistenceManager.getSession();
@@ -760,10 +936,8 @@ public class DbUtil {
 
                 interests = query.list();
                 if(interests != null) {
-                    Iterator iter = interests.iterator();
-                    while(iter.hasNext()) {
-                        Interests item = (Interests) iter.next();
-                        return item;
+                    for (Object interest : interests) {
+                        return (Interests) interest;
                     }
                 }
             }
@@ -782,7 +956,7 @@ public class DbUtil {
      */
     public static List getTopicsSites(Site site) throws UMException {
         List sites = null;
-        Session session = null;
+        Session session;
         try {
             if(site != null) {
                 session = PersistenceManager.getSession();
@@ -806,16 +980,17 @@ public class DbUtil {
      * @return
      * @throws UMException
      */
-    public static List getGeoupsBySiteId(Long siteId) throws UMException {
-        List groups = null;
+    public static List getGroupsBySiteId(Long siteId) throws UMException {
+        List groups;
         Session session = null;
         try {
+            session = PersistenceManager.getRequestDBSession();
 
             String queryString = "from " + Group.class.getName() +
                                  " g where g.site.id = :siteId";
             Query query = session.createQuery(queryString);
-            query.setLong("siteId", siteId);
-            
+            query.setParameter("siteId", siteId, LongType.INSTANCE);
+
             groups = query.list();
         } catch(Exception ex) {
             logger.debug("Unable to get Group list from database ", ex);
@@ -831,7 +1006,7 @@ public class DbUtil {
      */
     public static Collection getAllOrgGroup() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         try {
             session = PersistenceManager.getSession();
             String q = "select grp from " + AmpOrgGroup.class.getName() + " grp";
@@ -851,8 +1026,8 @@ public class DbUtil {
     public static Collection getOrgByGroup(Long Id) {
 
         Session sess = null;
-        Collection col = new ArrayList();
-        Query qry = null;
+        Collection col = new ArrayList<>();
+        Query qry;
 
         try {
             sess = PersistenceManager.getSession();
@@ -875,7 +1050,7 @@ public class DbUtil {
      */
     public static Collection getAllOrgTypes() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         try {
             session = PersistenceManager.getSession();
             String q = "select type from " + AmpOrgType.class.getName() + " type order by type asc";
@@ -895,7 +1070,7 @@ public class DbUtil {
     public static Collection getOrgGroupByType(Long Id) {
 
         Session sess = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         Query qry = null;
 
         try {
@@ -921,7 +1096,7 @@ public class DbUtil {
     public static Collection getOrgByType(Long Id) {
 
         Session sess = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         Query qry = null;
 
         try {
@@ -939,8 +1114,8 @@ public class DbUtil {
     }
 
     public static List<SuspendLogin> getSuspendedLoginObjs() {
-        StringBuilder qs = new StringBuilder("From ").append(SuspendLogin.class.getName());
-        return PersistenceManager.getSession().createQuery(qs.toString()).list();
+        String qs = "From " + SuspendLogin.class.getName();
+        return PersistenceManager.getSession().createQuery(qs, SuspendLogin.class).list();
     }
 
     public static void saveSuspendedLoginObj(SuspendLogin sl) {
@@ -960,28 +1135,28 @@ public class DbUtil {
     }
 
     public static SuspendLogin getSuspendedLoginObjByName(String name) {
-        StringBuilder qs = new StringBuilder("From ").
-                append(SuspendLogin.class.getName()).
-                append(" sl where sl.name = :NAME");
-        return (SuspendLogin) PersistenceManager.getSession().createQuery(qs.toString()).setString("NAME", name).uniqueResult();
+        String qs = "From " +
+                SuspendLogin.class.getName() +
+                " sl where sl.name = :NAME";
+        return (SuspendLogin) PersistenceManager.getSession().createQuery(qs).setParameter("NAME", name,StringType.INSTANCE).uniqueResult();
     }
 
     public static List<User> getAllUsers() {
-        StringBuilder qs = new StringBuilder("From ").
-            append(User.class.getName()).
-            append(" u order by u.firstNames");
-        return PersistenceManager.getSession().createQuery(qs.toString()).list();
+        String qs = "From " +
+                User.class.getName() +
+                " u order by u.firstNames";
+        return PersistenceManager.getSession().createQuery(qs, User.class).list();
     }
 
     public static List<SuspendLogin> getUserSuspendReasonsFromDB (User user) {
-        StringBuilder qs = new StringBuilder("From ")
-            .append(SuspendLogin.class.getName())
-            .append(" sl where :USER_ID in elements(sl.users)")
-            .append(" and sl.active = true and (sl.expires=false or")
-            .append(" (sl.expires=true and sl.suspendTil > current_date()))");
-        return PersistenceManager.getSession()
-                .createQuery(qs.toString())
-                .setLong("USER_ID", user.getId())
+        String qs = "From " +
+                SuspendLogin.class.getName() +
+                " sl where :USER_ID in elements(sl.users)" +
+                " and sl.active = true and (sl.expires=false or" +
+                " (sl.expires=true and sl.suspendTil > current_date()))";
+        return PersistenceManager.getRequestDBSession()
+                .createQuery(qs, SuspendLogin.class)
+                .setParameter("USER_ID", user.getId(), LongType.INSTANCE)
                 .setCacheable(true)
                 .list();
     }

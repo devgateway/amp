@@ -6,37 +6,40 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
-import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
+import org.digijava.module.trubudget.model.workflowitem.WorkflowItemDetailsModel;
+import org.digijava.module.trubudget.util.ProjectUtil;
 
+import java.net.URISyntaxException;
 import java.util.*;
 
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_SECOND_REPORTING_ORGANIZATION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
+import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
+import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
+import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 /**
  * @author aartimon@dginternational.org 
@@ -68,10 +71,42 @@ public class AmpComponentsFundingFormTableFeature extends
             @Override
             protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpComponentFunding> item) {
                 IModel<AmpComponentFunding> model = item.getModel();
+                if (model.getObject().getComponentFundingDocuments() == null)
+                    model.getObject().getComponentFundingDocuments().addAll(new HashSet<>());
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS)== null)
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS,new HashMap<>());
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS) == null)
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS,  new HashMap<>());
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES) == null)
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES,  new HashMap<>());
+//                item.add(new AttributeModifier("style",""))
+                User user = model.getObject().getComponent().getActivity().getActivityCreator().getUser();
+                if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& user.getTruBudgetEnabled()) {
+                    if (model.getObject().getTransactionType()==1) {
+                        PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + model.getObject().getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().ifPresent(ampComponentFundingTruWF->{
+                            WorkflowItemDetailsModel workflowItemDetailsModel = null;
+                            try {
+                                List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+                                doActualTruBudgetLogin(user);
+                                String token = ProjectUtil.getTrubudgetToken();
+                                workflowItemDetailsModel = ProjectUtil.getWFItemDetails(ampComponentFundingTruWF,settings,token);
+                            } catch (Exception e) {
+                                logger.info("Error when getting WF details: ",e);
+                            }
+                            if (workflowItemDetailsModel!=null && workflowItemDetailsModel.getData()!=null) {
+                                if (!workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
+                                    item.add(new AttributeModifier("style", "pointer-events: none; opacity: 0.5;"));
+                                }
+                            }
+                       });
+
+
+                    }
+                }
                 try{
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
-                            new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
+                            new PropertyModel<>(model, "adjustmentType"),
                             COMPONENT_FUNDING_ADJUSTMENT_TYPE, //fmname
                             false, false, false, null, false);
                     adjustmentTypes.getChoiceContainer().setRequired(true);
@@ -79,8 +114,60 @@ public class AmpComponentsFundingFormTableFeature extends
                     item.add(adjustmentTypes);
 
                 } catch(Exception e) {
-                    logger.error("AmpCategoryGroupFieldPanel initialization failed");
+                    logger.info("Unable to add adjustment type dropdown: ",e);
                 }
+                try {
+                     AmpTextAreaFieldPanel rejectReason = new AmpTextAreaFieldPanel("componentRejectReason",  new PropertyModel<>(model, "componentRejectReason"), "Reject Reason", false, false, false);
+                    rejectReason.setOutputMarkupId(true);
+//                    rejectReason.setVisible(false);
+                    if (!model.getObject().getComponentFundingStatus().getValue().equalsIgnoreCase("rejected")) {
+                        rejectReason.add(new AttributeModifier("style", "display: none;"));
+                    }
+
+                    item.add(rejectReason);
+
+                    AmpCategorySelectFieldPanel componentFundingStatus = new AmpCategorySelectFieldPanel(
+                            "componentFundingStatus", CategoryConstants.COMPONENT_FUNDING_STATUS_KEY,
+                            new PropertyModel<>(model, "componentFundingStatus"),
+                            COMPONENT_FUNDING_STATUS, //fmname
+                            false, false, false, null, false)
+                            ;
+                    componentFundingStatus.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            String selectedValue = model.getObject().getComponentFundingStatus().getValue();
+                            logger.info("Selected Status: "+selectedValue);
+                            if ("rejected".equalsIgnoreCase(selectedValue)) {
+                                target.appendJavaScript("$('#" + rejectReason.getMarkupId() + "').show();");
+                            } else {
+                                target.appendJavaScript("$('#" + rejectReason.getMarkupId() + "').hide();");
+                            }
+
+
+                        }
+                    });
+                    componentFundingStatus.getChoiceContainer().setRequired(true);
+                    componentFundingStatus.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
+                    item.add(componentFundingStatus);
+                } catch (Exception e)
+                {
+                    logger.info("Unable to add component funding status dropdown: ",e);
+                }
+                try {
+                    final AmpComponentFundingResourcesTableFeature resourcesList =
+                            new AmpComponentFundingResourcesTableFeature("componentFundingDocuments", "Component Funding Documents", model);
+                    item.add(resourcesList);
+
+                    final AmpComponentFundingNewResourceFieldPanel newDoc =
+                        new AmpComponentFundingNewResourceFieldPanel("addNewComponentFundingDocument", model, "Add New Document", resourcesList);
+                newDoc.setOutputMarkupId(true);
+                item.add(newDoc);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+//
 
                 // read the list of organizations from related organizations page, and
                 // create a unique set with the orgs chosen
@@ -99,14 +186,19 @@ public class AmpComponentsFundingFormTableFeature extends
                         model, orgsList);
                 item.add(secondOrgSelect);
 
-                AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
+                AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<>("fundingAmount",
                         model, COMPONENT_FUNDING_AMOUNT, "transactionAmount", COMPONENT_FUNDING_CURRENCY,
-                        "currency", COMPONENT_FUNDING_TRANSACTION_DATE, "transactionDate", false,"6");
+                        "currency", COMPONENT_FUNDING_TRANSACTION_DATE, "transactionDate", false, "6");
                 amountComponent.getAmount().getTextContainer().setRequired(false);
                 item.add(amountComponent);
 
-                AmpTextFieldPanel<String> description = new AmpTextFieldPanel<String>("description", new PropertyModel<String>(model, "description"), COMPONENT_FUNDING_DESCRIPTION, false);
+                AmpTextFieldPanel<String> description = new AmpTextFieldPanel<>("description", new PropertyModel<>(model, "description"), COMPONENT_FUNDING_DESCRIPTION, false);
                 item.add(description);
+
+//                final AmpNewResourceFieldPanel<AmpActivityVersion> newDoc =
+//                        new AmpNewResourceFieldPanel<AmpActivityVersion>("addNewDocument", am, "Add New Document", resourcesList, false);
+//                newDoc.setOutputMarkupId(true);
+//                add(newDoc);
 
                 item.add(new ListEditorRemoveButton("delete", "Delete"));
             }
@@ -120,8 +212,8 @@ public class AmpComponentsFundingFormTableFeature extends
                                                                        IModel<AmpComponentFunding> model,
                                                                        AbstractReadOnlyModel<List<AmpOrganisation>>
                                                                                orgsList) {
-        AmpSelectFieldPanel<AmpOrganisation> selectField = new AmpSelectFieldPanel<AmpOrganisation>(id,
-                new PropertyModel<AmpOrganisation>(model, expression), orgsList, fmName
+        AmpSelectFieldPanel<AmpOrganisation> selectField = new AmpSelectFieldPanel<>(id,
+                new PropertyModel<>(model, expression), orgsList, fmName
                 , false, true, null, false);
         selectField.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
         selectField.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
@@ -141,16 +233,13 @@ public class AmpComponentsFundingFormTableFeature extends
 
             @Override
             public List<AmpComponentFunding> getObject() {
-                List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
+                List<AmpComponentFunding> result = new ArrayList<>();
                 Set<AmpComponentFunding> allComp = compFundsModel.getObject();
                 if (allComp != null){
-                    Iterator<AmpComponentFunding> iterator = allComp.iterator();
-                    while (iterator.hasNext()) {
-                        AmpComponentFunding comp = (AmpComponentFunding) iterator
-                        .next();
+                    for (AmpComponentFunding comp : allComp) {
                         if (comp.getTransactionType() == transactionType)
                             //if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
-                                result.add(comp);
+                            result.add(comp);
                     }
                 }
                 

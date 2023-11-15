@@ -3,13 +3,14 @@ package org.digijava.module.aim.util;
 /*
  * @author Fernando Ferreyra
  */
-import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.Collection;
 
 public class StructuresUtil {
 

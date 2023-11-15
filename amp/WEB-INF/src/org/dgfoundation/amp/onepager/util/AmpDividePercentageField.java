@@ -1,17 +1,15 @@
 package org.dgfoundation.amp.onepager.util;
 
-import java.util.Iterator;
-import java.util.Set;
-
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+
+import java.util.Iterator;
+import java.util.Set;
 
 
 

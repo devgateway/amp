@@ -1,19 +1,14 @@
 package org.digijava.module.aim.validator;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-import java.util.Set;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.validation.groups.Default;
-
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.validator.groups.API;
 import org.junit.Before;
+
+import javax.validation.*;
+import javax.validation.groups.Default;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Octavian Ciubotaru

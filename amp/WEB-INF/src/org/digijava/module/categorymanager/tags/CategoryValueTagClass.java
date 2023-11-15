@@ -1,15 +1,14 @@
 package org.digijava.module.categorymanager.tags;
 
 
+import org.apache.log4j.Logger;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class CategoryValueTagClass extends TagSupport {
     private static Logger logger    = Logger.getLogger( CategoryValueTagClass.class );

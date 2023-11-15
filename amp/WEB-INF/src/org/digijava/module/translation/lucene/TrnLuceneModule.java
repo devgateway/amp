@@ -1,14 +1,14 @@
 package org.digijava.module.translation.lucene;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.util.Version;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.translator.util.TrnUtil;
+
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Separate lucene module for each language in translations 

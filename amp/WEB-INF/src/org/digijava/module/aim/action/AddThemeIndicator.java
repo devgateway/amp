@@ -4,16 +4,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -24,14 +14,16 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.helper.AllPrgIndicators;
-import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.IndicatorThemeBean;
-import org.digijava.module.aim.helper.IndicatorValuesComparator;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 public class AddThemeIndicator extends Action {
@@ -175,32 +167,30 @@ public class AddThemeIndicator extends Action {
 
         Set<IndicatorTheme> themeIndicators=theme.getIndicators();
         List<IndicatorThemeBean> indList=new ArrayList<IndicatorThemeBean>();
-        
-        Iterator<IndicatorTheme> it=themeIndicators.iterator();
-        while(it.hasNext()){
-            List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>();
-            IndicatorTheme indTheme=it.next();
-            if(indTheme.getValues()!=null){
-                            List<AmpIndicatorValue> sortedIndicatorValues=new ArrayList(indTheme.getValues());
-                            Collections.sort(sortedIndicatorValues,new IndicatorValuesComparator());
+
+        for (IndicatorTheme themeIndicator : themeIndicators) {
+            List<AmpPrgIndicatorValue> indValuesList = new ArrayList<AmpPrgIndicatorValue>();
+            if (themeIndicator.getValues() != null) {
+                List<AmpIndicatorValue> sortedIndicatorValues = new ArrayList(themeIndicator.getValues());
+                sortedIndicatorValues.sort(new IndicatorValuesComparator());
                 for (AmpIndicatorValue value : sortedIndicatorValues) {
-                    AmpPrgIndicatorValue bean=new AmpPrgIndicatorValue();
+                    AmpPrgIndicatorValue bean = new AmpPrgIndicatorValue();
                     bean.setCreationDate(DateConversion.convertDateToLocalizedString(value.getValueDate()));
                     bean.setValAmount(value.getValue());
                     bean.setValueType(value.getValueType());
                     bean.setIndicatorValueId(value.getIndValId());
                     bean.setLocation(value.getLocation());
                     indValuesList.add(bean);
-                }           
-            }           
-            IndicatorThemeBean indThemeBean=new IndicatorThemeBean();
-            indThemeBean.setIndicatorThemeId(indTheme.getId());
-            indThemeBean.setIndicator(indTheme.getIndicator());
+                }
+            }
+            IndicatorThemeBean indThemeBean = new IndicatorThemeBean();
+            indThemeBean.setIndicatorThemeId(themeIndicator.getId());
+            indThemeBean.setIndicator(themeIndicator.getIndicator());
             indThemeBean.setProgramIndicatorValues(indValuesList);
-            
+
             indList.add(indThemeBean);
         }
-        Collections.sort(indList, new IndicatorUtil.IndThemeBeanComparatorByIndciatorName());
+        indList.sort(new IndicatorUtil.IndThemeBeanComparatorByIndciatorName());
         themeForm.setProgramIndicators(indList);
         
         

@@ -22,10 +22,9 @@
 
 package org.digijava.kernel.util;
 
-import org.apache.struts.util.MessageResourcesFactory;
-import org.apache.struts.util.MessageResources;
-
 import org.apache.log4j.Logger;
+import org.apache.struts.util.MessageResources;
+import org.apache.struts.util.MessageResourcesFactory;
 
 /**
  *

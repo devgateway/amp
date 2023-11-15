@@ -1,11 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.common.values;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
@@ -14,6 +8,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Nadejda Mandrescu

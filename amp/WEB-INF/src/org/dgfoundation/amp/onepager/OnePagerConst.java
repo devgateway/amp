@@ -4,24 +4,14 @@
 */
 package org.dgfoundation.amp.onepager;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import org.apache.wicket.MetaDataKey;
+import org.dgfoundation.amp.onepager.helper.*;
+import org.digijava.kernel.startup.AmpSessionListener;
+import org.digijava.module.aim.dbentity.*;
 
 import javax.servlet.http.HttpSession;
-import org.apache.wicket.MetaDataKey;
-import org.dgfoundation.amp.onepager.helper.EditorStore;
-import org.dgfoundation.amp.onepager.helper.ResourceTranslationStore;
-import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
-import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
-import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
-import org.digijava.kernel.startup.AmpSessionListener;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityFrozen;
-import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * One Pager Constants
@@ -41,8 +31,11 @@ public final class OnePagerConst {
     
     
     public static final MetaDataKey<HashSet<TemporaryActivityDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryActivityDocument>>(){};
+    public static final MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>> COMPONENT_FUNDING_NEW_ITEMS = new MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>>(){};
     public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
+    public static final MetaDataKey<HashMap<String,HashSet<AmpComponentFundingDocument>>> COMPONENT_FUNDING_DELETED_ITEMS = new MetaDataKey<HashMap<String,HashSet<AmpComponentFundingDocument>>>(){};
     public static final MetaDataKey<HashSet<TemporaryActivityDocument>> RESOURCES_EXISTING_ITEM_TITLES = new MetaDataKey<HashSet<TemporaryActivityDocument>>(){};
+    public static final MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>> COMPONENT_FUNDING_EXISTING_ITEM_TITLES = new MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>>(){};
     public static final MetaDataKey<HashMap<String,ResourceTranslationStore>> RESOURCES_TRANSLATIONS = new MetaDataKey<HashMap<String,ResourceTranslationStore>>(){};
     
     public static final MetaDataKey<HashSet<TemporaryGPINiDocument>> GPI_RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryGPINiDocument>>(){};
@@ -82,6 +75,8 @@ public final class OnePagerConst {
 
     final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
     final static String toggleChildrenJS = "$('#%s').find('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+    final static String toggleChildrenJSComponent = "$('#%s').find('a.slider').click(function(){$(this).closest('tr.wicketFundingRowItem').find('#%s').slideToggle();return false;})";
+
     final static String clickToggleJS= "$('#%s').siblings('div:first').slideToggle();";
     final static String clickToggle2JS= "$('#%s').find('div:first').find('div:first').slideToggle();";
     final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";

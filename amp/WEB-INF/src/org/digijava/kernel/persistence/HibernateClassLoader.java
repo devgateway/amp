@@ -22,21 +22,20 @@
 
 package org.digijava.kernel.persistence;
 
-import org.apache.log4j.Logger;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.persistence.interceptors.AmpEntityInterceptor;
-import org.digijava.kernel.services.AmpOfflineVersion;
-import org.digijava.kernel.services.AmpOfflineVersionType;
-import org.digijava.kernel.util.I18NHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.dialect.function.ClassicAvgFunction;
-import org.hibernate.dialect.function.ClassicCountFunction;
-import org.hibernate.dialect.function.ClassicSumFunction;
+import org.hibernate.dialect.function.SQLFunctionTemplate;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -45,6 +44,7 @@ import javax.persistence.Entity;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Hibernate Class loader, see digi.xml file for more details.
@@ -54,9 +54,7 @@ import java.util.Iterator;
  */
 public class HibernateClassLoader {
 
-    private static Logger logger = I18NHelper
-            .getKernelLogger(HibernateClassLoader.class);
-
+    private static Logger logger = LoggerFactory.getLogger(HibernateClassLoader.class);
     private static SessionFactory sessionFactory;
     private static Configuration cfg = null;
     public static String HIBERNATE_CFG_XML = "/hibernate.cfg.xml";
@@ -101,9 +99,8 @@ public class HibernateClassLoader {
      */
     public static void initialize(HashMap config) {
 
-        Iterator iterModules = config.keySet().iterator();
-        while (iterModules.hasNext()) {
-            String moduleName = (String) iterModules.next();
+        for (Object o : config.keySet()) {
+            String moduleName = (String) o;
             ModuleConfig moduleConfig = (ModuleConfig) config.get(moduleName);
 
             HibernateClasses classes = moduleConfig.getHibernateClasses();
@@ -125,7 +122,6 @@ public class HibernateClassLoader {
          * org.digijava.kernel.ampapi.postgis.entity need to take the
          * configuration file /repository/hibernate-annotated.xml
          */
-
         for (BeanDefinition bd : scanner
                 .findCandidateComponents("org.digijava.kernel.ampapi.postgis.entity")) {
             String name = bd.getBeanClassName();
@@ -137,7 +133,6 @@ public class HibernateClassLoader {
             }
         }
     }
-
     /**
      * 
      * @param classes
@@ -151,14 +146,12 @@ public class HibernateClassLoader {
             cfg.addSqlFunction("count", new ClassicCountFunction());
             cfg.addSqlFunction("avg", new ClassicAvgFunction());
             cfg.addSqlFunction("sum", new ClassicSumFunction());
-            cfg.registerTypeOverride(new AmpOfflineVersionType(), new String[]{AmpOfflineVersion.class.getName()});
+//            cfg.registerTypeOverride(new AmpOfflineVersionType(), new String[]{AmpOfflineVersion.class.getName()});
         }
-
         if (classes == null) {
             throw new IllegalArgumentException(
                     "classes parameter must be not-null");
         }
-
         Iterator iter = classes.iterator();
         while (iter.hasNext()) {
             HibernateClass hibernateClass = (HibernateClass) iter.next();
@@ -182,10 +175,10 @@ public class HibernateClassLoader {
                 cfg.addClass(Class.forName(hibernateClass.getContent()));
             } catch (Exception ex) {
                 if (required) {
-                    logger.fatal("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                     break;
                 } else {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                 }
             }
 
@@ -213,7 +206,7 @@ public class HibernateClassLoader {
                 sessionFactory = newConfig.buildSessionFactory();
             }
         } catch (Exception ex1) {
-            logger.fatal("Unable to build hibernate session factory", ex1);
+            logger.error("Unable to build hibernate session factory", ex1);
             throw new RuntimeException(ex1);
         }
     }
@@ -226,7 +219,7 @@ class LocalHibernateConfig extends Configuration {
      */
     private static final long serialVersionUID = -6375194723506753313L;
 
-    private static Logger logger = Logger.getLogger(HibernateClassLoader.class);
+    private static Logger logger = LoggerFactory.getLogger(HibernateClassLoader.class);
 
     /**
      * @see org.hibernate.cfg.Configuration#getConfigurationInputStream(java.lang.String)
@@ -245,4 +238,69 @@ class LocalHibernateConfig extends Configuration {
         return stream;
     }
 
+}
+class ClassicCountFunction extends SQLFunctionTemplate {
+
+    public ClassicCountFunction() {
+        super(StandardBasicTypes.LONG, "count(*)");
+    }
+
+    @Override
+    public boolean hasArguments() {
+        return false;
+    }
+
+    @Override
+    public boolean hasParenthesesIfNoArguments() {
+        return false;
+    }
+
+    @Override
+    public String render(Type firstArgumentType, List arguments, SessionFactoryImplementor sessionFactory) {
+        return "count(*)";
+    }
+}
+
+class ClassicAvgFunction extends SQLFunctionTemplate {
+
+    public ClassicAvgFunction() {
+        super(StandardBasicTypes.DOUBLE, "avg(?1)");
+    }
+
+    @Override
+    public boolean hasArguments() {
+        return true;
+    }
+
+    @Override
+    public boolean hasParenthesesIfNoArguments() {
+        return false;
+    }
+
+    @Override
+    public String render(Type firstArgumentType, List arguments, SessionFactoryImplementor sessionFactory) {
+        return "avg(" + arguments.get(0) + ")";
+    }
+}
+
+class ClassicSumFunction extends SQLFunctionTemplate {
+
+    public ClassicSumFunction() {
+        super(StandardBasicTypes.DOUBLE, "sum(?1)");
+    }
+
+    @Override
+    public boolean hasArguments() {
+        return true;
+    }
+
+    @Override
+    public boolean hasParenthesesIfNoArguments() {
+        return false;
+    }
+
+    @Override
+    public String render(Type firstArgumentType, List arguments, SessionFactoryImplementor sessionFactory) {
+        return "sum(" + arguments.get(0) + ")";
+    }
 }

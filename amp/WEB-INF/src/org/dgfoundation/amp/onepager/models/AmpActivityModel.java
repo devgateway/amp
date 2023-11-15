@@ -4,13 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -23,13 +16,13 @@ import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import javax.persistence.FlushModeType;
+import java.util.HashMap;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 24, 2010
@@ -108,7 +101,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
         if(hibernateSession==null || !hibernateSession.isOpen())  {
             try {
                 hibernateSession = PersistenceManager.openNewSession();
-                hibernateSession.setFlushMode(FlushMode.MANUAL);
+                hibernateSession.setFlushMode(FlushModeType.COMMIT);
                 hibernateSession.beginTransaction();
                 s.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY, hibernateSession);
             } catch (HibernateException e) {
@@ -177,9 +170,12 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             if(!hibernateSession.isOpen()) throw new RuntimeException("Attempted to close an already closed session!");
             Throwable exceptionToThrow = null;
             try {
-                hibernateSession.flush();        
-                hibernateSession.getTransaction().commit();
-                hibernateSession.setFlushMode(FlushMode.AUTO);
+
+                if (hibernateSession.getTransaction().isActive()) {
+                    hibernateSession.flush();
+                    hibernateSession.getTransaction().commit();
+                }
+                hibernateSession.setFlushMode(FlushModeType.COMMIT);
             }
             catch (Throwable t)
             {
@@ -199,7 +195,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
                     logger.error("Could not rollback transaction after exception!", rbEx);
                 }
             }
-            finally { 
+            finally {
+                hibernateSession.clear();
                 hibernateSession.close(); 
             }
             if (exceptionToThrow != null)

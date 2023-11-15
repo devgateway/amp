@@ -22,35 +22,27 @@
 
 package org.digijava.kernel.translator;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 public class CachedTranslatorWorker extends TranslatorWorker {
 
@@ -66,14 +58,26 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         logger.info("Caching the last accessed 5000 translation entries...");
         Session session = PersistenceManager.openNewSession();
         try {
-            Criteria criteria = session.createCriteria(Message.class);
-            criteria.setMaxResults(5000);
-            criteria.addOrder(Order.desc("lastAccessed"));
-            criteria.add(Restrictions.isNotNull("lastAccessed"));
-        
-            List<Message> lastAccessedMessages = criteria.list();
-            for (Message message : lastAccessedMessages) messageCache.put(message, message);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Message> criteriaQuery = criteriaBuilder.createQuery(Message.class);
+            Root<Message> root = criteriaQuery.from(Message.class);
+
+            // Add conditions and ordering
+            criteriaQuery.select(root)
+                    .where(criteriaBuilder.isNotNull(root.get("lastAccessed")))
+                    .orderBy(criteriaBuilder.desc(root.get("lastAccessed")));
+
+            List<Message> lastAccessedMessages = session.createQuery(criteriaQuery)
+                    .setMaxResults(5000)
+                    .getResultList();
+
+            for (Message message : lastAccessedMessages) {
+                messageCache.put(message, message);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
         finally {
             PersistenceManager.closeSession(session);
         }
@@ -229,15 +233,12 @@ public class CachedTranslatorWorker extends TranslatorWorker {
             ses = PersistenceManager.getSession();
 //beginTransaction();
             Query q = ses.createQuery(queryString);
-            q.setString("msgKey", processKeyCase(key.trim()));
+            q.setParameter("msgKey", processKeyCase(key.trim()), StringType.INSTANCE);
             
             messages = q.list();
-            
-            @SuppressWarnings("unchecked")
-            Iterator it = messages.iterator();
 
-            while (it.hasNext()) {
-                Message msg = (Message) it.next();
+            for (Object message : messages) {
+                Message msg = (Message) message;
                 msg.setCreated(timestamp);
                 ses.update(msg);
                 messageCache.put(msg, msg);

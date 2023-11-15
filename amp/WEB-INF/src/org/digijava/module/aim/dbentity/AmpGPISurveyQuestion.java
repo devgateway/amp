@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-
 public class AmpGPISurveyQuestion implements Serializable {
 
     //IATI-check: to be ignored
@@ -32,6 +30,15 @@ public class AmpGPISurveyQuestion implements Serializable {
     private String status;
 //  @Interchangeable(fieldTitle="Questions", pickIdOnly=true)
     private Set<AmpGPISurveyQuestion> questions;
+    private Set<AmpGPISurveyResponse> responses;
+
+    public Set<AmpGPISurveyResponse> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(Set<AmpGPISurveyResponse> responses) {
+        this.responses = responses;
+    }
 
     public AmpGPISurveyQuestion getParentQuestion() {
         return parentQuestion;

@@ -5,19 +5,10 @@
 
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
-
-import java.io.Serializable;
-import java.util.Date;
-
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -25,6 +16,13 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
 public class AmpComponentFunding implements Cloneable, Serializable {
     // IATI-check: to be ignored
@@ -35,18 +33,53 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     private Integer transactionType;
 
+    private String justAnId;
+
+    public String getJustAnId() {
+        return justAnId;
+    }
+
+    public void setJustAnId(String justAnId) {
+        this.justAnId = justAnId;
+    }
+
+//    private Set<AmpComponentFundingDocuments> fundingDocuments;
+
+
+
+
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_ADJUSTMENT_TYPE,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
     private AmpCategoryValue adjustmentType;
 
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_STATUS, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_STATUS,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            discriminatorOption = CategoryConstants.COMPONENT_FUNDING_STATUS_KEY)
+    private AmpCategoryValue componentFundingStatus;
+
+
+    @Interchangeable(fieldTitle = "Reject Reason", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + "Reject Reason",
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private String componentRejectReason="";
+
+
+    @Interchangeable(fieldTitle = "Component Funding Documents",  fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DOCS, importable = true)
+    @VersionableCollection(fieldTitle = "Component Funding Documents")
+    private Set<AmpComponentFundingDocument> componentFundingDocuments = new HashSet<>();
+
+    public Set<AmpComponentFundingDocument> getComponentFundingDocuments() {
+        return componentFundingDocuments;
+    }
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date transactionDate;
 
-    // @Interchangeable(fieldTitle="Reporting Date")
     private Date reportingDate;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true,
@@ -59,7 +92,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
             dependencies = {ComponentFundingOrgRoleValidator.ORGANIZATION_PRESENT_KEY})
     private AmpOrganisation reportingOrganization;
 
-    //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
     private AmpOrganisation componentSecondResponsibleOrganization;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true,
@@ -73,6 +105,15 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     @InterchangeableBackReference
     private AmpComponent component;
+
+    public String getComponentRejectReason() {
+        return componentRejectReason;
+    }
+
+    public void setComponentRejectReason(String componentRejectReason) {
+        this.componentRejectReason = componentRejectReason;
+    }
+
 
     /**
      * @return Returns the adjustmentType.
@@ -254,6 +295,23 @@ public class AmpComponentFunding implements Cloneable, Serializable {
      *
      * }
      */
+
+    public AmpCategoryValue getComponentFundingStatus() {
+        return componentFundingStatus;
+    }
+
+    public String getComponentFundingStatusFormatted() {
+        return componentFundingStatus.getValue().toLowerCase();
+    }
+
+    public void setComponentFundingDocuments(Set<AmpComponentFundingDocument> componentFundingDocuments) {
+        this.componentFundingDocuments = componentFundingDocuments;
+    }
+
+
+    public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
+        this.componentFundingStatus = componentFundingStatus;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

@@ -5,8 +5,8 @@
 		table="IPA_CONTRACT_DISBURSEMENT">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">IPA_CONTRACT_DISBURSEMENT_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">IPA_CONTRACT_DISBURSEMENT_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />

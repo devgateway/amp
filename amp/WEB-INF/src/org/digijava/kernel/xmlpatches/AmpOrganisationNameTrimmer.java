@@ -1,14 +1,5 @@
 package org.digijava.kernel.xmlpatches;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -18,6 +9,11 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is used by XML Patcher to trim organisation name.

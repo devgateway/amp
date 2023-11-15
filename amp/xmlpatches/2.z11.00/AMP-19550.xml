@@ -25,7 +25,7 @@
 					    qry = "delete from dg_message where message_key='" + newKey;
 					    qry += "' and lang_iso='" + locale + "' and site_id='" + siteId + "'";
 						    	        
-					    session.createSQLQuery(qry).executeUpdate();
+					    session.createNativeQuery(qry).executeUpdate();
 				    } 
 				}
 					
@@ -34,7 +34,7 @@
 					    qry += "' where message_key='" + oldKey;
 					    qry += "' and lang_iso='" + locale + "' and site_id='" + siteId + "'";
 					        
-					    session.createSQLQuery(qry).executeUpdate();
+					    session.createNativeQuery(qry).executeUpdate();
 				}
 				
 				Criteria crit = session.createCriteria(Message.class);

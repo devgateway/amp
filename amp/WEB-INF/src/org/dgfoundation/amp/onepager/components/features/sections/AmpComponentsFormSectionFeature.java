@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.*;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -21,6 +19,11 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author aartimon@dginternational.org since Oct 27, 2010
@@ -33,9 +36,9 @@ public class AmpComponentsFormSectionFeature extends
     public AmpComponentsFormSectionFeature(String id, String fmName,
             final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
-        final PropertyModel<Set<AmpComponent>> setModel=new PropertyModel<Set<AmpComponent>>(am,"components");
+        final PropertyModel<Set<AmpComponent>> setModel= new PropertyModel<>(am, "components");
         if (setModel.getObject() == null)
-            setModel.setObject(new TreeSet<AmpComponent>());
+            setModel.setObject(new TreeSet<>());
         final ListEditor<AmpComponent> list;
 
         IModel<List<AmpComponent>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel); 
@@ -70,6 +73,7 @@ public class AmpComponentsFormSectionFeature extends
                 }
 
                 comp.setType(defaultType);
+                comp.setComponentStatus(CategoryConstants.COMPONENT_STATUS_OPEN.getAmpCategoryValueFromDB());
                 target.add(this.getParent());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
             }

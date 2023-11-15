@@ -12,7 +12,7 @@
         <property name="requestUrl" column="REQUEST_URL" type="text" />
         
         <set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP">
-	         <key column="MENU_ID" property-ref="id"/>
+	         <key column="MENU_ID"/>
 	         <many-to-many column="GROUP_ID" class="org.digijava.kernel.user.Group"/>
       	</set>
 	'
@@ -22,8 +22,8 @@
     <class name="org.digijava.module.aim.dbentity.AmpMenuEntry" table="AMP_MENU_ENTRY" lazy="false">
     	<cache usage="read-write" />
     	<id name="id" column="id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">AMP_MENU_ENTRY_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_MENU_ENTRY_seq</param>
             </generator>
         </id>
         <many-to-one name="parent" column="PARENT_ID" class="org.digijava.module.aim.dbentity.AmpMenuEntry" />
@@ -52,7 +52,7 @@
     </class>
     
     <class name="org.digijava.module.aim.dbentity.AmpMenuEntryInView" table="v_menu_entry" abstract="true" polymorphism="explicit" discriminator-value="null">
-    	<cache usage="read-only" />
+    	<cache usage="read-write" />
     	
     	<id name="menuViewId" type="java.lang.Long" column="menu_view_id"/>
     	<discriminator column="VIEW_TYPE" type="int" force="true" insert="false"/>

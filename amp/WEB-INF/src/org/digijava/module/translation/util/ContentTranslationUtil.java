@@ -1,22 +1,5 @@
 package org.digijava.module.translation.util;
 
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
@@ -34,13 +17,20 @@ import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
+import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  *
@@ -664,11 +654,9 @@ public class ContentTranslationUtil {
             final FieldTranslationPack ftp) {
         PersistenceManager.getSession().doWork(
             new org.hibernate.jdbc.Work() {
-                public void execute(Connection conn) throws SQLException {
-                    Session newSession = null;
-                    try {
-                        newSession = PersistenceManager.sf().withOptions().connection(conn).openSession();
-
+                public void execute(Connection conn) {
+                    try (Session newSession = PersistenceManager.sf().withOptions().connection(conn).openSession()) {
+                        Transaction transaction= newSession.beginTransaction();
                         String objClass = ftp.getObjClass();
                         String fieldName = ftp.getFieldName();
 
@@ -691,14 +679,11 @@ public class ContentTranslationUtil {
                         }
 
                         newSession.flush();
-                    } 
-                    catch (Exception e) {
+                        transaction.commit();
+                    } catch (Exception e) {
                         logger.error("can't save field translations", e);
                         if (e.getCause() != null && e.getCause() instanceof SQLException && ((SQLException) e.getCause()).getNextException() != null)
-                            logger.error("Next exception: "+ ((SQLException) e.getCause()).getNextException());
-                    }
-                    finally {
-                        newSession.close();
+                            logger.error("Next exception: " + ((SQLException) e.getCause()).getNextException());
                     }
                 }
             });
@@ -732,8 +717,8 @@ public class ContentTranslationUtil {
             query.append(" t where t.objectClass=:objectClass");
             query.append(" and t.objectId=:objectId");
             Query qry = session.createQuery(query.toString());
-            qry.setString("objectClass", objClass);
-            qry.setLong("objectId", objectId);
+            qry.setParameter("objectClass", objClass, StringType.INSTANCE);
+            qry.setParameter("objectId", objectId, LongType.INSTANCE);
             qry.executeUpdate();
         } catch (Exception e) {
             logger.error("Can't delete field translations", e);

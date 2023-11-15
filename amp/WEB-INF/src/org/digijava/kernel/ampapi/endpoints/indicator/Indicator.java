@@ -1,20 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.gis.LocalizedDateSerializer;
 import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 
-import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * FIXME This class need a good refactoring.

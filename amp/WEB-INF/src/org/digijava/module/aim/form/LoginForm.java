@@ -1,13 +1,12 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 public class LoginForm extends ValidatorForm {
 

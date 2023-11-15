@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.util.Identifiable;
+
+import java.io.Serializable;
 
 public class AmpRole implements Serializable, Identifiable, Comparable<AmpRole>
 {

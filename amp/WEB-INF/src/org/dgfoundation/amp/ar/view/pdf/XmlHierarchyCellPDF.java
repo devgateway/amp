@@ -3,20 +3,15 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.cell.XmlHierarchyCell;
 import org.dgfoundation.amp.ar.helper.HierarchycalItem;
 import org.digijava.module.aim.action.ExportActivityToPDF;
-
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Font;
-import com.lowagie.text.List;
-import com.lowagie.text.ListItem;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * @author Alex
@@ -31,7 +26,7 @@ public class XmlHierarchyCellPDF extends PDFExporter {
      * @param table
      * @param item
      */
-    public XmlHierarchyCellPDF(PdfPTable table, Viewable item,Long ownerId) {
+    public XmlHierarchyCellPDF(PdfPTable table, Viewable item, Long ownerId) {
         super(table, item,ownerId);
         // TODO Auto-generated constructor stub
     }

@@ -1,7 +1,5 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpHomeThumbnail;

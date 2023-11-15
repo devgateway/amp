@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -15,6 +9,8 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.SubDimensions;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
+
+import java.util.*;
 
 /**
  * an interface describing the Schema of an API's reporting needs.

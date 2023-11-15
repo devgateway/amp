@@ -7,15 +7,14 @@
 
 package org.digijava.module.gateperm.feed.schema.impl.runtime;
 
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import com.sun.xml.bind.GrammarImpl;
 import com.sun.xml.bind.Messages;
 import com.sun.xml.bind.ProxyGroup;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * This class is a facade to a collection of GrammarInfo objects.  It

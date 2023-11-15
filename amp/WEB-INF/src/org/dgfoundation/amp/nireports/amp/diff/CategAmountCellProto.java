@@ -1,23 +1,19 @@
 package org.dgfoundation.amp.nireports.amp.diff;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.MonetaryAmount;
-import org.dgfoundation.amp.nireports.NiPrecisionSetting;
-import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * a "proto cell": a class which contains all the data necessary to translate a transaction to {@link CategAmountCell} once one has been given a Calendar, Locale and a Currency.

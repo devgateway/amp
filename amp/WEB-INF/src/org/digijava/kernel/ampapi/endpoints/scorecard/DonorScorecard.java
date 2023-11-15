@@ -1,23 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.StreamingOutput;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,15 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
 import org.digijava.kernel.ampapi.endpoints.common.model.OrgType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.Donor;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorTreeNode;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorTreeRoot;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorsNoUpdatesWrapper;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.FilteredDonors;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorIdsWrapper;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.QuarterStats;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.SettingsBean;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.*;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardExcelExporter;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardNoUpdateDonor;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardService;
@@ -47,6 +21,15 @@ import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.*;
 
 /**
  * This class should have all endpoints related to the Donor Scorecard -

@@ -15,9 +15,8 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBContext;
@@ -30,7 +29,6 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,40 +67,38 @@ public final class XmlPatcherUtil {
             throw new RuntimeException(
                     "Patch discovery location is not a directory!");
         String[] files = dir.list();
-        for (int i = 0; i < files.length; i++) {
-            File f = new File(dir, files[i]);
+        for (String file : files) {
+            File f = new File(dir, file);
             // directories ignored in xmlpatch dir
-            if (f.isDirectory()){
+            if (f.isDirectory()) {
                 if (f.getName().compareTo(".svn") != 0)
-                    recordNewPatchesInDir(appPath,f,patchNames, patchesMap);
+                    recordNewPatchesInDir(appPath, f, patchNames, patchesMap);
                 continue;
             }
             if (!FilenameUtils.getExtension(f.getName()).equalsIgnoreCase("xml")) {
                 continue;
             }
             if (patchNames.contains(f.getName())) {
-                
-                AmpXmlPatch patch = patchesMap.get(f.getName());                
+
+                AmpXmlPatch patch = patchesMap.get(f.getName());
                 //if no recorded patch is found, then there are two unrecorded patches with same name=>fail
                 //if there is a recorded patch but its path is different than the current file=>fail
-                if(patch==null || !patch.getLocation().equals(computePatchFileLocation(f,appPath))) {
-                    if(patch!=null){
-                        logger.info("old location: "+patch.getLocation());
-                        logger.info("new location: "+computePatchFileLocation(f,appPath));
+                if (patch == null || !patch.getLocation().equals(computePatchFileLocation(f, appPath))) {
+                    if (patch != null) {
+                        logger.info("old location: " + patch.getLocation());
+                        logger.info("new location: " + computePatchFileLocation(f, appPath));
+                    } else {
+                        logger.info("patch is null ");
                     }
-                    else{
-                        logger.info("pacth is null ");
-                    }
-                    logger.error("Patch duplication detected! The name "+f.getName()+" is used by two or more patches." +
+                    logger.error("Patch duplication detected! The name " + f.getName() + " is used by two or more patches." +
                             " Remove duplicates and restart the server.\n You are not allowed to use one patch name twice even if the older patch has been deleted.");
                 }
-            }
-            else {
-                String location=computePatchFileLocation(f, appPath);
+            } else {
+                String location = computePatchFileLocation(f, appPath);
                 AmpXmlPatch patch = new AmpXmlPatch(f.getName(), location);
                 DbUtil.add(patch);
                 patchNames.add(f.getName());
-                logger.info("Found new patch "+patch.getPatchId()+" in "+patch.getLocation());
+                logger.info("Found new patch " + patch.getPatchId() + " in " + patch.getLocation());
             }
         }
     }
@@ -320,17 +316,14 @@ public final class XmlPatcherUtil {
      */
     public static void addLogToPatch(AmpXmlPatch p, AmpXmlPatchLog log) {
         Session sess = null;
-        Transaction tx = null;
 
         try {
-            sess = PersistenceManager.getSession();
-//beginTransaction();
-            AmpXmlPatch lazyPatch = (AmpXmlPatch) sess.load(AmpXmlPatch.class,
+            sess = PersistenceManager.getRequestDBSession();
+            AmpXmlPatch lazyPatch = sess.load(AmpXmlPatch.class,
                     p.getPatchId());
             log.setPatch(lazyPatch);
             lazyPatch.getLogs().add(log);
             sess.saveOrUpdate(lazyPatch);
-            //tx.commit();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
@@ -386,13 +379,12 @@ public final class XmlPatcherUtil {
      * 
      * @see XmlPatcherConstants.PatchStates
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<AmpXmlPatch> getAllDiscoveredUnclosedPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
+        session.clear();
         Query query = session
                 .createQuery("from " + AmpXmlPatch.class.getName()
                         + " p WHERE p.state NOT IN ("
@@ -410,15 +402,12 @@ public final class XmlPatcherUtil {
      * Returns the count of the list of discovered XmlPatches
      * 
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static Integer countAllDiscoveredPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
-            Integer ret= ((Integer)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
-        return ret;
+        return ((Long)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
     }
     
     
@@ -427,12 +416,10 @@ public final class XmlPatcherUtil {
      * Returns the list of discovered XmlPatches
      * 
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<AmpXmlPatch> getAllDiscoveredPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
         Query query = session
@@ -464,12 +451,10 @@ public final class XmlPatcherUtil {
      * @param startIndexInt - the start of index
      * @param records - the max number of records
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<Object[]> getAllDiscoveredPatches(int startIndexInt,int recordsInt,String sortBy,String dir)
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
         if(sortBy.equals("attempts")) sortBy="count(l)";else sortBy="p."+sortBy;
         Query query = session
@@ -513,7 +498,6 @@ public final class XmlPatcherUtil {
         bis.close();
         byte[] md5sum = algorithm.digest();
         BigInteger bigInt = new BigInteger(1, md5sum);
-        String md5 = bigInt.toString(16);
-        return md5;
+        return bigInt.toString(16);
     }
 }

@@ -1,14 +1,13 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * a visitor which digests the values of a given trailCell

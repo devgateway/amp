@@ -1,8 +1,8 @@
 package org.digijava.module.aim.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
+
+import java.util.List;
 public class ListAppliedPatchesForm extends ActionForm {
     List patch = null;
     String content = null;

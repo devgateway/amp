@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.ar.legacy;
 
 
-import static org.digijava.module.categorymanager.util.CategoryConstants.*;
-
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.junit.Test;
+
+import static org.digijava.module.categorymanager.util.CategoryConstants.*;
 
 public class CategoryManagerTests extends ReportsTestCase {
 

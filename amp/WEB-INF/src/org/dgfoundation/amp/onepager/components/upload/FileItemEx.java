@@ -1,13 +1,9 @@
 package org.dgfoundation.amp.onepager.components.upload;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
+
+import java.io.*;
 
 public class FileItemEx implements FileItem {
     private static final long serialVersionUID = 1L;

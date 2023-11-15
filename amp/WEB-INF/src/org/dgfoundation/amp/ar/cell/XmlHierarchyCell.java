@@ -3,13 +3,12 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.helper.HierarchycalItem;
-import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.dgfoundation.amp.ar.workers.XmlHierarchyColWorker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Alex

@@ -67,7 +67,7 @@
                           <module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                         <tr>
                           <td>
-                            <img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif">
+                            <img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif" alt="arrow-image">
                           </td>
                           <td class="admin_box_label">
                             <c:set var="trnFeatureManager">

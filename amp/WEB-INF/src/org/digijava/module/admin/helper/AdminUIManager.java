@@ -22,10 +22,6 @@
 
 package org.digijava.module.admin.helper;
 
-import java.security.Permission;
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
@@ -35,6 +31,10 @@ import org.digijava.kernel.security.ModuleInstancePermission;
 import org.digijava.kernel.security.SitePermission;
 import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.user.Group;
+
+import java.security.Permission;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class AdminUIManager {
 

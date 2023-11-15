@@ -1,20 +1,15 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.GPIDefaultFilters;
-import org.digijava.module.aim.dbentity.GPISetup;
-import org.hibernate.Hibernate;
-import org.hibernate.Query;
+import org.digijava.module.aim.dbentity.*;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class GPISetupUtil {
 
@@ -66,8 +61,8 @@ public class GPISetupUtil {
             Session session = PersistenceManager.getRequestDBSession();
             String qry = "FROM " + GPIDefaultFilters.class.getName() + " as df WHERE df.key LIKE :key_ AND df.value LIKE :value_";
             GPIDefaultFilters filter = (GPIDefaultFilters) session.createQuery(qry)
-                .setString("key_", GPIDefaultFilters.GPI_DEFAULT_FILTER_ORG_GROUP)
-                .setString("value_", id.toString())
+                .setParameter("key_", GPIDefaultFilters.GPI_DEFAULT_FILTER_ORG_GROUP, StringType.INSTANCE)
+                .setParameter("value_", id.toString(),StringType.INSTANCE)
                 .uniqueResult();
             if(filter == null) {
                 filter = new GPIDefaultFilters();
@@ -88,13 +83,9 @@ public class GPISetupUtil {
         Collection<GPIDefaultFilters> defaultFilters =  qrySavedDonorTypes.list();
         
         List<AmpOrgType> types = DbUtil.getAllOrgTypesOfPortfolio();
-        Iterator<AmpOrgType> iterTypes = types.iterator();
-        while(iterTypes.hasNext()) {
-            AmpOrgType type = iterTypes.next();
-            Iterator<GPIDefaultFilters> iFilters = defaultFilters.iterator();
-            while(iFilters.hasNext()) {
-                GPIDefaultFilters auxFilter = iFilters.next();
-                if(type.getAmpOrgTypeId().toString().equals(auxFilter.getValue())) {
+        for (AmpOrgType type : types) {
+            for (GPIDefaultFilters auxFilter : defaultFilters) {
+                if (type.getAmpOrgTypeId().toString().equals(auxFilter.getValue())) {
                     ret.add(auxFilter.getValue());
                 }
             }

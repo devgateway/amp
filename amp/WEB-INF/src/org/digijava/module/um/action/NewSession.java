@@ -22,25 +22,21 @@
 
 package org.digijava.module.um.action;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
+import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionMessage;
-import org.digijava.kernel.entity.ModuleInstance;
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.Cookie;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 public final class NewSession
     extends Action {

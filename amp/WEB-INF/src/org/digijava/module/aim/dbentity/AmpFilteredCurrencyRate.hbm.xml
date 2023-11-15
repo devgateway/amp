@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate" table="AMP_FILTERED_CURRENCY_RATE">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_FILTERED_CURRENCY_RATE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FILTERED_CURRENCY_RATE_seq</param>
 			</generator>
 		</id>
 		

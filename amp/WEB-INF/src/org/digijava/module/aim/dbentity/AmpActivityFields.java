@@ -1,52 +1,22 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.validation.Valid;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityProgramDiscriminatorConfigurer;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingAmountDiscriminationConfigurer;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpOrgRoleDiscriminationConfigurer;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivitySectorDiscriminationConfigurer;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpRegionalFundingDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.*;
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
-import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
-import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
-import org.digijava.kernel.validators.activity.OnBudgetValidator;
-import org.digijava.kernel.validators.activity.ProgramMappingValidator;
-import org.digijava.kernel.validators.activity.RegionLocationValidator;
-import org.digijava.kernel.validators.activity.TreeCollectionValidator;
-import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
+import org.digijava.kernel.validators.activity.*;
 import org.digijava.kernel.validators.common.RegexValidator;
-import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.digijava.module.aim.annotations.interchange.TimestampField;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
-import org.digijava.module.aim.annotations.interchange.Validators;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -63,8 +33,15 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+
+import javax.validation.Valid;
+import java.io.Serializable;
+import java.util.*;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 
 @TranslatableClass (displayName = "Activity Form Field")
 @InterchangeableValidator(UniqueActivityTitleValidator.class)
@@ -160,7 +137,7 @@ LoggerIdentifiable, Cloneable {
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
                     fmPath = "/Activity Form/Identification/Required Validator for Description"))
     @VersionableFieldTextEditor(fieldTitle = "Description")
-    protected String description ;
+    protected String description;
 
     @Interchangeable(fieldTitle = "Project Comments", importable = true, fmPath = "/Activity Form/Identification/Project Comments")
     @VersionableFieldTextEditor(fieldTitle = "Project Comments")
@@ -509,7 +486,7 @@ LoggerIdentifiable, Cloneable {
                             fmPath = "/Activity Form/Funding/Overview Section/Revised Project Cost")
             })
     @VersionableCollection(fieldTitle = "Project Costs")
-    private Set<AmpFundingAmount> costAmounts = new HashSet<>();
+    protected Set<AmpFundingAmount> costAmounts = new HashSet<>();
     
     /**
      * 
@@ -702,7 +679,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
-    private ApprovalStatus approvalStatus;
+    protected ApprovalStatus approvalStatus;
 
     // Aid Harmonization Survey Set
     // @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
@@ -1178,7 +1155,7 @@ LoggerIdentifiable, Cloneable {
         /**
          * @param set
          */
-        public void setFunding(Set set) {
+        public void setFunding(Set<AmpFunding> set) {
             funding = set;
         }
 
@@ -1186,11 +1163,11 @@ LoggerIdentifiable, Cloneable {
         /**
          * @param set
          */
-        public void setInternalIds(Set set) {
+        public void setInternalIds(Set<AmpActivityInternalId> set) {
             internalIds = set;
         }
 
-        public void setIssues(Set set) {
+        public void setIssues(Set<AmpIssues> set) {
             issues = set;
         }
 
@@ -2192,15 +2169,11 @@ LoggerIdentifiable, Cloneable {
                 Session session = PersistenceManager.getSession();
                 String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
                 queryString += " where act.ampActivityId=:activityId";
-                Query qry = session.createQuery(queryString).setLong("activityId", this.getAmpActivityId());
+                Query qry = session.createQuery(queryString).setParameter("activityId", this.getAmpActivityId(), LongType.INSTANCE);
 
                 List<AmpOrganisation> organizations = qry.list();
                 if (organizations != null && organizations.size() > 1) {
-                    Collections.sort(organizations, new Comparator<AmpOrganisation>() {
-                        public int compare(AmpOrganisation o1, AmpOrganisation o2) {
-                            return o1.getName().compareTo(o2.getName());
-                        }
-                    });
+                    organizations.sort(Comparator.comparing(AmpOrganisation::getName));
                 }
 
                 for (AmpOrganisation donor : organizations) {

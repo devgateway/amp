@@ -1,11 +1,5 @@
 package org.digijava.module.aim.startup;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-
 import org.digijava.kernel.jobs.RegisterWithAmpRegistryJob;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
@@ -19,6 +13,11 @@ import org.quartz.SchedulerFactory;
 import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 /**
  * @author Octavian Ciubotaru

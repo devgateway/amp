@@ -4,11 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,13 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
@@ -37,14 +26,12 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
+
+import java.util.*;
 
 /**
  * M&E section
@@ -73,10 +60,10 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         //final IModel<Set<IndicatorActivity>> setModel = new PropertyModel<Set<IndicatorActivity>>(am, "indicators");
         
         if (am.getObject().getIndicators() == null){
-            am.getObject().setIndicators(new HashSet<IndicatorActivity>());
+            am.getObject().setIndicators(new HashSet<>());
         }
         final IModel<List<IndicatorActivity>>  listModel = OnePagerUtil 
-                .getReadOnlyListModelFromSetModel(new PropertyModel(am, "indicators"));
+                .getReadOnlyListModelFromSetModel(new PropertyModel<>(am, "indicators"));
         
         final AmpUniqueCollectionValidatorField<IndicatorActivity> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<IndicatorActivity>(
                 "uniqueMEValidator", listModel, "Unique MEs Validator") {
@@ -182,23 +169,17 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
                     return TranslatorUtil.getTranslation("Descending");
             }
         };
-        add(new AmpSelectFieldPanel("indType", new PropertyModel(newInd, "type"), typeCol, "Type", false, true, cr));
-
-
-        
-        
+        add(new AmpSelectFieldPanel("indType", new PropertyModel<>(newInd, "type"), typeCol, "Type", false, true, cr));
         
         final AmpClassificationConfiguration sectorClassification = SectorUtil.getPrimaryConfigClassification();
-        final IModel<Set<AmpSector>> sectorSetModel = new PropertyModel<Set<AmpSector>>(
+        final IModel<Set<AmpSector>> sectorSetModel = new PropertyModel<>(
                 newInd, "sectors");
 
         IModel<List<AmpSector>> sectorListModel = new AbstractReadOnlyModel<List<AmpSector>>() {
 
             @Override
             public List<AmpSector> getObject() {
-                ArrayList<AmpSector> ret = new ArrayList<AmpSector>();
-                ret.addAll(sectorSetModel.getObject());
-                return ret;
+                return new ArrayList<>(sectorSetModel.getObject());
             }
         };
 
@@ -332,32 +313,21 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     
     private AmpIndicator getNewIndicator() {
         AmpIndicator newInd = new AmpIndicator();
-        newInd.setSectors(new HashSet<AmpSector>());
+        newInd.setSectors(new HashSet<>());
         newInd.setCreationDate(new Date());
         return newInd;
     }
 
     private IModel<AmpIndicator> getNewIndicatorModel() {
-        return new Model(getNewIndicator());
+        return new Model<>(getNewIndicator());
     }
     
     protected void updateVisibility(IModel<AmpIndicator> indicatorModel){
         AmpIndicator ind = indicatorModel.getObject();
-                if(ind.getSectors()==null||ind.getSectors().isEmpty()){
-                    sectorAdded=false;
-                }
-                else{
-                    sectorAdded=true;
-                }
-        if (ind.getCode() == null)
-            codeSelected = false;
-        else
-            codeSelected = true;
-        
-        if (ind.getName() == null || ind.getName() == "")
-            titleSelected = false;
-        else
-            titleSelected = true;
+        sectorAdded= ind.getSectors() != null && !ind.getSectors().isEmpty();
+        codeSelected = ind.getCode() != null;
+
+        titleSelected = ind.getName() != null && !Objects.equals(ind.getName(), "");
 
         if (codeSelected && titleSelected&&sectorAdded){
             indicatorFeedbackContainer.setVisible(false);

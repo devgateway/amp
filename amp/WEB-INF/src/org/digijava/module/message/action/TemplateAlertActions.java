@@ -1,25 +1,12 @@
 package org.digijava.module.message.action;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -31,6 +18,10 @@ import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.util.AmpMessageUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 public class TemplateAlertActions extends DispatchAction {
     

@@ -3,19 +3,8 @@
  */
 package org.dgfoundation.amp.menu;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.collections.CollectionUtils;
-import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
-import org.dgfoundation.amp.menu.dynamic.EmailMenu;
-import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
-import org.dgfoundation.amp.menu.dynamic.PublicSiteMenu;
-import org.dgfoundation.amp.menu.dynamic.WorkspaceMenu;
+import org.dgfoundation.amp.menu.dynamic.*;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -25,6 +14,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+
+import java.util.*;
 
 /**
  * Updates current menu structure based on the current user & state
@@ -60,7 +51,7 @@ public class MenuItemsProcessor {
             currentUserGroupKeys.add(Group.PLEDGERS);
         }
         if (tm != null && tm.getMemberId() != null) {
-            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
+            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
             Set<Group> userGroups = atm != null && atm.getUser() != null ? atm.getUser().getGroups() : null;
             if (userGroups != null) {
                 for(Group group : userGroups) {

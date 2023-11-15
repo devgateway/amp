@@ -4,10 +4,6 @@
  */
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.request.TLSUtils;
@@ -17,6 +13,10 @@ import org.digijava.module.aim.util.AmpThemeSkeleton;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.springframework.beans.BeanWrapperImpl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author mihai

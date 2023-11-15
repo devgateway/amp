@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
-import java.util.List;
-
 import org.digijava.module.aim.dbentity.AmpColorThreshold;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

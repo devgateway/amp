@@ -1,35 +1,11 @@
 package org.digijava.module.message.action;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.mail.internet.InternetAddress;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.config.DigiConfig;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
@@ -45,14 +21,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.message.dbentity.AmpAlert;
-import org.digijava.module.message.dbentity.AmpMessage;
-import org.digijava.module.message.dbentity.AmpMessageReceiver;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
-import org.digijava.module.message.dbentity.AmpMessageState;
-import org.digijava.module.message.dbentity.Approval;
-import org.digijava.module.message.dbentity.CalendarEvent;
-import org.digijava.module.message.dbentity.UserMessage;
+import org.digijava.module.message.dbentity.*;
 import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.helper.MessageHelper;
@@ -62,7 +31,15 @@ import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.util.DbUtil;
 
-import com.lowagie.text.pdf.hyphenation.TernaryTree.Iterator;
+import javax.mail.internet.InternetAddress;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.*;
 
 public class AmpMessageActions extends DispatchAction {
 

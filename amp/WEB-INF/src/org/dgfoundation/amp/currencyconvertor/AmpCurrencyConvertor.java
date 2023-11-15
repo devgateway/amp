@@ -1,15 +1,14 @@
 package org.dgfoundation.amp.currencyconvertor;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * the AMP schema currency convertor. Thread-safe
@@ -37,7 +36,7 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
     protected void checkCache() {
         if (System.currentTimeMillis() - lastTimeTokenChecked > 5 * 1000 * 60) { // check ETL for changes no more frequently than once in 5 minutes
             Long lastCurrencyChange = PersistenceManager.getLong(
-                PersistenceManager.getSession().createSQLQuery("select max(event_id) from amp_etl_changelog where entity_name = 'exchange_rate'").uniqueResult());
+                PersistenceManager.getSession().createNativeQuery("select max(event_id) from amp_etl_changelog where entity_name = 'exchange_rate'").uniqueResult());
 
             lastTimeTokenChecked = System.currentTimeMillis();
 

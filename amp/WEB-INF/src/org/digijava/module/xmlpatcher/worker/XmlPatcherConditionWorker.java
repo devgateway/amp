@@ -5,11 +5,8 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.xml.bind.JAXBElement;
-
+import bsh.EvalError;
+import bsh.Interpreter;
 import org.digijava.module.xmlpatcher.core.XmlPatcherWorkerFactory;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherConditionWorkerException;
@@ -19,8 +16,9 @@ import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.jaxb.Trigger;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 
-import bsh.EvalError;
-import bsh.Interpreter;
+import javax.xml.bind.JAXBElement;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

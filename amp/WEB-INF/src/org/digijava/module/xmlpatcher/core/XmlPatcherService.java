@@ -5,17 +5,6 @@
  */
 package org.digijava.module.xmlpatcher.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -35,6 +24,12 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherWorker;
 import org.hibernate.HibernateException;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -182,10 +177,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
                         XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
                                 serviceContext))));
-            } catch (NoSuchAlgorithmException e) {
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (NoSuchAlgorithmException | IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
@@ -241,7 +233,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
             // workaround a design fault whereas a patch which was deleted and then a different one with the same name was readded remains marked as "deleted" by AMP and never executed.
             // AMP 2.7.1+ does not start without this fix (unless one does manual intervetions to the DB)
             // this has been added here instead of an XML patch because this code has to be run before the XML patches have been discovered
-            // DO NOT CHANGE THIS TO USE PersistenceManager.getSession().createSQLQuery(), as this leads to AMP hanging (Postgres hangs when having the same UPDATE in 2 different transactions open - there is a patch which does the same)
+            // DO NOT CHANGE THIS TO USE PersistenceManager.getSession().createNativeQuery(), as this leads to AMP hanging (Postgres hangs when having the same UPDATE in 2 different transactions open - there is a patch which does the same)
             java.sql.Connection conn = PersistenceManager.getJdbcConnection();
             conn.prepareStatement("UPDATE amp_xml_patch set state=0 WHERE patch_id similar to '((v)|(z)|(zz))%' AND location ='xmlpatches/general/views/' AND state=4;").executeUpdate();
             conn.close();

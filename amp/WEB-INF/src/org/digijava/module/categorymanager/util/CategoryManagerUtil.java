@@ -1,24 +1,5 @@
 package org.digijava.module.categorymanager.util;
 
-import java.lang.reflect.Field;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -32,13 +13,23 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
+import org.hibernate.type.ObjectType;
 import org.hibernate.type.StringType;
 
+import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
 public class CategoryManagerUtil {
-    private static Logger logger = Logger.getLogger(CategoryManagerUtil.class);
+    private static final Logger logger = Logger.getLogger(CategoryManagerUtil.class);
 
     /**
      * Looks up the AmpCategoryValue with id = categoryValueId. If not null it adds it to the Set someSet.
@@ -79,9 +70,9 @@ public class CategoryManagerUtil {
                         + "where (m.locale=:langIso and m.key=:translationKey and m.siteId=:thisSiteId)";
 
             Query qry       = session.createQuery(qryStr);
-            qry.setString("langIso", lang);
-            qry.setString("translationKey", key.toLowerCase());
-            qry.setString("thisSiteId", TLSUtils.getThreadLocalInstance().site.getId().toString());
+            qry.setParameter("langIso", lang,StringType.INSTANCE);
+            qry.setParameter("translationKey", key.toLowerCase(),StringType.INSTANCE);
+            qry.setParameter("thisSiteId", TLSUtils.getThreadLocalInstance().site.getId().toString(),StringType.INSTANCE);
 
             Message m       = (Message)qry.uniqueResult();
             if ( m == null ) {
@@ -104,11 +95,9 @@ public class CategoryManagerUtil {
             logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
             return null;
         }
-        Iterator<AmpCategoryValue> iterator = col.iterator();
-        
-        while ( iterator.hasNext() ) {
-            AmpCategoryValue val        = iterator.next();
-            if ( ampCategoryValueId.equals(val.getId()) )
+
+        for (AmpCategoryValue val : col) {
+            if (ampCategoryValueId.equals(val.getId()))
                 return val;
         }
         return null;
@@ -126,10 +115,9 @@ public class CategoryManagerUtil {
             logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
             return null;
         }
-        Iterator iterator   = values.iterator();
-        while( iterator.hasNext() ) {
-            AmpCategoryValue ampCategoryValue   = (AmpCategoryValue)iterator.next();
-            if ( ampCategoryValue.getAmpCategoryClass().getId().longValue() == categoryId.longValue() ) {
+        for (Object value : values) {
+            AmpCategoryValue ampCategoryValue = (AmpCategoryValue) value;
+            if (ampCategoryValue.getAmpCategoryClass().getId().longValue() == categoryId.longValue()) {
                 return ampCategoryValue;
             }
         }
@@ -160,24 +148,20 @@ public class CategoryManagerUtil {
     public static List<AmpEventType>  getAmpEventColors() throws NoCategoryClassException{
 List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>(); 
         
-        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EVENT_TYPE_KEY);   
-        Iterator<AmpCategoryValue> categoryClassIter = categoryClass.getPossibleValues().iterator();
-         while(categoryClassIter.hasNext()){
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EVENT_TYPE_KEY);
+        for (AmpCategoryValue ampCategoryValue : categoryClass.getPossibleValues()) {
             AmpEventType eventType = new AmpEventType();
-            AmpCategoryValue item = (AmpCategoryValue) categoryClassIter.next();
-             eventType.setName(item.getValue());
-             eventType.setId(item.getId());
-             Set<AmpCategoryValue> usedValues = item.getUsedValues();
-             if (usedValues==null || usedValues.size()==0) {
-                 eventType.setColor("grey"); //here select grey color by default if it's not seted on category manager. Thus the event doesn't lose on calendar view.
-             } else {
-                Iterator<AmpCategoryValue> it = usedValues.iterator();
-                while (it.hasNext()){
-                    AmpCategoryValue categoryValueItem = (AmpCategoryValue) it.next();
+            eventType.setName(ampCategoryValue.getValue());
+            eventType.setId(ampCategoryValue.getId());
+            Set<AmpCategoryValue> usedValues = ampCategoryValue.getUsedValues();
+            if (usedValues == null || usedValues.size() == 0) {
+                eventType.setColor("grey"); //here select grey color by default if it's not seted on category manager. Thus the event doesn't lose on calendar view.
+            } else {
+                for (AmpCategoryValue categoryValueItem : usedValues) {
                     eventType.setColor(categoryValueItem.getValue());
                 }
-             }
-             eventTypeList.add(eventType);
+            }
+            eventTypeList.add(eventType);
         }
         return eventTypeList;
         
@@ -278,8 +262,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             Iterator it=returnCollection.iterator();
             if(it.hasNext())
             {
-                AmpCategoryValue x=(AmpCategoryValue)it.next();
-                return x;
+                return (AmpCategoryValue)it.next();
             }
         }
         return null;
@@ -368,10 +351,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         );
         if ( unorderedSet != null)  {       
             if ( categoryKey != null ) {
-                Iterator<AmpCategoryValue> iter     = unorderedSet.iterator();
-                while ( iter.hasNext() ) {
-                    AmpCategoryValue item               = iter.next();
-                    if ( item.getAmpCategoryClass().getKeyName().equals(categoryKey) )
+                for (AmpCategoryValue item : unorderedSet) {
+                    if (item.getAmpCategoryClass().getKeyName().equals(categoryKey))
                         returnSet.add(item);
                 }
             }
@@ -402,7 +383,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.id=:id";
             qry         = dbSession.createQuery(queryString);
-            qry.setLong("id", categoryId);
+            qry.setParameter("id", categoryId, LongType.INSTANCE);
 
 
 
@@ -439,7 +420,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.name=:name";
             qry         = dbSession.createQuery(queryString);
-            qry.setString("name", name);
+            qry.setParameter("name", name,StringType.INSTANCE);
 
 
 
@@ -482,7 +463,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             shouldOrderAlphabetically   = ampCategoryClass.getIsOrdered();
         }
         else
-            shouldOrderAlphabetically   = ordered.booleanValue();
+            shouldOrderAlphabetically   = ordered;
 
         List<AmpCategoryValue> ampCategoryValues            = ampCategoryClass.getPossibleValues();
 
@@ -497,15 +478,15 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     }
 
     public static boolean isExitingAmpCategoryValue(String categoryKey, Long id, boolean onlyVisible) {
-        Integer count = (Integer) PersistenceManager.getSession().createQuery(
+        Long count = (Long) PersistenceManager.getSession().createQuery(
                 "select count(a) from " + AmpCategoryValue.class.getName()
                 + " a where a.id=:id "
                 + (onlyVisible ? "and (a.deleted=false or a.deleted is null) " : "") 
                 + "and a.ampCategoryClass.keyName=:keyName")
-            .setParameter("id", id)
-            .setParameter("keyName", categoryKey)
+            .setParameter("id", id, LongType.INSTANCE)
+            .setParameter("keyName", categoryKey, StringType.INSTANCE)
             .uniqueResult();
-        return count == 1;
+        return count.intValue() == 1;
     }
 
     /**
@@ -550,7 +531,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     /**
      * because the amp_categories table does not change during the runtime of AMP, we can safely cache them
      */
-    private static Map<String, AmpCategoryClass> categoryValuesByKey = Collections.synchronizedMap(new HashMap<String, AmpCategoryClass>());
+    private static Map<String, AmpCategoryClass> categoryValuesByKey = Collections.synchronizedMap(new HashMap<>());
     /**
      * 
      * @param categoryKey
@@ -620,7 +601,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             shouldOrderAlphabetically   = ampCategoryClass.getIsOrdered();
         }
         else
-            shouldOrderAlphabetically   = ordered.booleanValue();
+            shouldOrderAlphabetically   = ordered;
     
         List<AmpCategoryValue> ampCategoryValues        = ampCategoryClass.getPossibleValues();
     
@@ -640,7 +621,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static String asciiStringFilter (String input) {
         byte [] bytearray       = input.getBytes(); 
         
-        CharsetDecoder decoder  = Charset.forName("US-ASCII").newDecoder();
+        CharsetDecoder decoder  = StandardCharsets.US_ASCII.newDecoder();
         decoder.replaceWith("_");
         decoder.onMalformedInput(CodingErrorAction.REPLACE);
         decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
@@ -655,13 +636,11 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     }
     
     public static String getTranslationKeyForCategoryName(String classKeyName) {
-            String translationKey       = "cm:category_" + classKeyName + "_name";
-            return translationKey;
+        return "cm:category_" + classKeyName + "_name";
         
     }
     public static String getTranslationKeyForCategoryDescription(String classKeyName) {
-        String translationKey       = "cm:category_" + classKeyName + "_description";
-        return translationKey;
+        return "cm:category_" + classKeyName + "_description";
     
     }
     /**
@@ -693,12 +672,13 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static AmpCategoryClass loadAmpCategoryClassByKey(String key)
     {
         Session dbSession = PersistenceManager.getSession();
+        dbSession.clear();
         List<AmpCategoryClass> col;
         try {
             //AmpCategoryClass dbCategory       = new AmpCategoryClass();
                 String queryString  = "select c from " + AmpCategoryClass.class.getName() + " c where c.keyName=:key";
                 Query query         = dbSession.createQuery(queryString);
-                query.setString("key", key);
+                query.setParameter("key", key,StringType.INSTANCE);
                 query.setCacheable(true);
                 col = query.list();
                 if (col.isEmpty())
@@ -742,7 +722,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.keyName=:categoryKey";
             qry         = dbSession.createQuery(queryString);
-            qry.setString("categoryKey", categoryKey );
+            qry.setParameter("categoryKey", categoryKey ,StringType.INSTANCE);
             
             List<AmpCategoryClass> resultList       = qry.list();
             
@@ -758,7 +738,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 ampCategoryValue.setValue(value);
                 ampCategoryValue.setAmpCategoryClass(ampCategoryClass);
                 ampCategoryValue.setIndex( ampCategoryClass.getPossibleValues().size() );
-                
+
                 List<AmpCategoryValue> tempList     = new ArrayList<AmpCategoryValue>();
                 tempList.addAll(ampCategoryClass.getPossibleValues());
                 tempList.add( ampCategoryValue );
@@ -792,18 +772,18 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
      */
     public static boolean verifyDeletionProtectionForCategoryValue (String categoryKey, String valueKey ) {
         Field[] fields  = CategoryConstants.class.getDeclaredFields();
-        for (int i=0; i< fields.length; i++  ) {
-            Class fieldClass    = fields[i].getType();
-            if ( fieldClass.equals( HardCodedCategoryValue.class ) ) {
+        for (Field field : fields) {
+            Class fieldClass = field.getType();
+            if (fieldClass.equals(HardCodedCategoryValue.class)) {
                 HardCodedCategoryValue proprietyValue;
                 try {
-                    proprietyValue = (HardCodedCategoryValue)fields[i].get(null);
+                    proprietyValue = (HardCodedCategoryValue) field.get(null);
                 } catch (Exception e) {
                     e.printStackTrace();
                     continue;
                 }
-                if ( proprietyValue.getCategoryKey().equals(categoryKey) 
-                        && proprietyValue.getValueKey().equals(valueKey) 
+                if (proprietyValue.getCategoryKey().equals(categoryKey)
+                        && proprietyValue.getValueKey().equals(valueKey)
                         && proprietyValue.isProtectOnDelete()) {
                     return true;
                 }
@@ -830,8 +810,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             dbSession = PersistenceManager.getRequestDBSession();
             queryString = "select c from "  + AmpLinkedCategoriesState.class.getName()+ " c where c.mainCategory=:mainCategory and c.linkedCategory=:usedCategory";
             qry         = dbSession.createQuery(queryString);
-            qry.setEntity("mainCategory", mainCategory);
-            qry.setEntity("usedCategory", usedCategory);
+            qry.setParameter("mainCategory", mainCategory, ObjectType.INSTANCE);
+            qry.setParameter("usedCategory", usedCategory, ObjectType.INSTANCE);
             retVal = (AmpLinkedCategoriesState)qry.uniqueResult();
         } catch (Exception e) {
             logger.error("Failed to get state ", e);

@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.jcr.Node;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
@@ -14,11 +8,15 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslationStore;
-import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.Node;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ResourceTranslationModel extends LocaleAwareProxyModel<String> {
     private static final Logger logger = Logger.getLogger(ResourceTranslationModel.class);

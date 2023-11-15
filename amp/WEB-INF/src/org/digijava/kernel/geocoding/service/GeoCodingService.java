@@ -1,13 +1,5 @@
 package org.digijava.kernel.geocoding.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.onepager.util.PercentagesUtil;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.entity.geocoding.GeoCodedActivity;
@@ -34,6 +26,13 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import static org.digijava.kernel.entity.geocoding.GeoCodedActivity.Status.SAVED;
 
 /**
@@ -45,7 +44,7 @@ public class GeoCodingService {
 
     private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
-    private static GeoCoderClient client = new GeoCoderClient();
+    private static final GeoCoderClient client = new GeoCoderClient();
 
     /**
      * Add activities to be geo coded as part of the current process. If the same activity is added twice, previous
@@ -244,9 +243,19 @@ public class GeoCodingService {
     }
 
     public GeoCodingProcess getCurrentGeoCoding() {
-        List<GeoCodingProcess> geoCodingProcesses = PersistenceManager.getSession()
-                .createCriteria(GeoCodingProcess.class)
-                .list();
+
+        CriteriaBuilder builder = PersistenceManager.getRequestDBSession().getCriteriaBuilder();
+        CriteriaQuery<GeoCodingProcess> criteriaQuery = builder.createQuery(GeoCodingProcess.class);
+
+        Root<GeoCodingProcess> root = criteriaQuery.from(GeoCodingProcess.class);
+
+        criteriaQuery.select(root);
+
+        List<GeoCodingProcess> geoCodingProcesses = PersistenceManager.getRequestDBSession()
+                .createQuery(criteriaQuery)
+                .getResultList();
+
+
 
         return geoCodingProcesses.isEmpty() ? null : geoCodingProcesses.get(0);
     }

@@ -18,16 +18,15 @@
 
 package org.digijava.module.um.form;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -89,7 +88,44 @@ public class UserRegisterForm
     
     private Boolean notificationEmailEnabled;
     private String notificationEmail;
-    
+    private Collection<TruBudgetIntent> truBudgetIntents;
+    private String[] selectedTruBudgetIntents;
+    private String truBudgetPassword;
+
+    public String getTruBudgetPasswordConfirmation() {
+        return truBudgetPasswordConfirmation;
+    }
+
+    public void setTruBudgetPasswordConfirmation(String truBudgetPasswordConfirmation) {
+        this.truBudgetPasswordConfirmation = truBudgetPasswordConfirmation;
+    }
+
+    private String truBudgetPasswordConfirmation;
+    private String truBudgetEnabled;
+
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String[] getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
     public String[] getSelectedItems() {
         return this.selectedItems;
     }
@@ -546,6 +582,14 @@ public class UserRegisterForm
 
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
+    }
+    public String getTruBudgetEnabled() {
+
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
     }
     
 }

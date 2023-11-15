@@ -1,14 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.jcr.Node;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -36,6 +27,10 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.Node;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AmpGPINiSurveyResourcesFormTableFeature
         extends AmpFormTableFeaturePanel<AmpGPINiSurveyResponse, TemporaryGPINiDocument> {
@@ -102,13 +97,14 @@ public class AmpGPINiSurveyResourcesFormTableFeature
                         .ofNullable(getSession().getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS))
                         .orElse(new HashSet<AmpGPINiSurveyResponseDocument>());
 
-                List<TemporaryGPINiDocument> ret = new ArrayList<TemporaryGPINiDocument>();
-
                 if (refreshExistingDocs) {
                     existingTmpDocs = getExistingObject();
                 }
+                if (existingTmpDocs==null){
+                    existingTmpDocs=new ArrayList<>();
+                }
 
-                ret.addAll(existingTmpDocs);
+                List<TemporaryGPINiDocument> ret = new ArrayList<>(existingTmpDocs);
 
                 for (AmpGPINiSurveyResponseDocument d : setModel.getObject()) {
                     if (delItems.contains(d)) {
@@ -216,7 +212,7 @@ public class AmpGPINiSurveyResourcesFormTableFeature
                             newItems.remove(item.getModelObject());
                         }
                         target.add(list.getParent());
-                        responseValidationFields.stream().forEach(r -> r.reloadValidationField(target, false));
+                        responseValidationFields.forEach(r -> r.reloadValidationField(target, false));
                     }
                 };
                 item.add(delRelOrg);

@@ -5,8 +5,8 @@
 		table="CR_DOCUMENTS_TO_ORGANISATIONS">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">CR_DOCUMENTS_TO_ORGANISATIONS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">CR_DOCUMENTS_TO_ORGANISATIONS_seq</param>
 			</generator>
 		</id>
 

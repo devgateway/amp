@@ -3,14 +3,13 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.DateCell;
 import org.dgfoundation.amp.ar.cell.NewMetaDateCell;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Alex

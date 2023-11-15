@@ -4,12 +4,12 @@
 	<class name="org.digijava.module.aim.dbentity.AmpOrgRoleBudget" table="AMP_ORG_ROLE_BUDGET">
 		<cache usage="read-write" />
 		<id name="ampOrgRoleBudgetId" column="amp_orgrole_budget_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ORG_ROLE_BUDGET_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ORG_ROLE_BUDGET_seq</param>
 			</generator>
 		</id>
 		<property column="budget_code" name="budgetCode" type="java.lang.String" />
 		<many-to-one name="ampOrgRole" column="amp_org_role_id"
-			class="org.digijava.module.aim.dbentity.AmpOrgRole" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrgRole" />
 	</class>
 </hibernate-mapping>

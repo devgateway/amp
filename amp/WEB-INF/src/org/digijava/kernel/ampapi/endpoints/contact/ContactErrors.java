@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_CONTACT_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_CONTACT_ID;
 
 /**
  * @author Octavian Ciubotaru

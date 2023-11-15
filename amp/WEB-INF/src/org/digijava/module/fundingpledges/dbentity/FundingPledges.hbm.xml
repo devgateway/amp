@@ -3,16 +3,15 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledges" table="AMP_FUNDING_PLEDGES">
 		<cache usage="read-write" />
-		<id name="Id" column="id" type="java.lang.Long"
-			unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">AMP_FUNDING_PLEDGES_seq</param>
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_PLEDGES_seq</param>
 			</generator>
 		</id>
 
 		<property name="createdDate" column="date_created" type="java.util.Date" />
-		<many-to-one name="title" column="title" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
-		<many-to-one name="status" column="status" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
+		<many-to-one name="title" column="title" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="all"/>
+		<many-to-one name="status" column="status" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="all"/>
 		<property name="titleFreeText" column="titleFreeText" type="java.lang.String" />
 		<property name="additionalInformation" column="additionalInformation" type="text" />
 		<property name="whoAuthorizedPledge" column="whoAuthorizedPledge" type="java.lang.String" />

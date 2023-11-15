@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.List;
-
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Octavian Ciubotaru

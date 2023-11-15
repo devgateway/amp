@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Describes a list of fields and allows fast access.

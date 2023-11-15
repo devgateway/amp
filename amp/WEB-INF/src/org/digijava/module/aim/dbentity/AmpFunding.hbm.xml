@@ -5,8 +5,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpFunding" table="AMP_FUNDING">
 		<cache usage="read-write" />
 		<id name="ampFundingId" column="amp_funding_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_FUNDING_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_seq</param>
 			</generator>
 		</id>
 
@@ -58,7 +58,7 @@
 		<property name="projectProblems" column="project_problems" type="java.lang.String" />
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"
-			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" />
 			
 		<many-to-one name="sourceRole" column="source_role_id"
 			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />				

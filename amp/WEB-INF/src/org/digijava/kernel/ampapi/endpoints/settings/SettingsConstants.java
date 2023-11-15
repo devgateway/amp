@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**
  * Settings related constants

@@ -1,22 +1,15 @@
 package org.dgfoundation.amp.currencyconvertor;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * a class which knows how to calculate the exchange rates (base, X) for exactly one currency 

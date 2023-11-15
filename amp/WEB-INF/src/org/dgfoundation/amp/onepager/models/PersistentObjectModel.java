@@ -3,16 +3,17 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.hibernate.Session;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
 
 /**
  * 
@@ -56,20 +57,23 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
         Session session;
         try {
             session = AmpActivityModel.getHibernateSession();//PersistenceManager.getRequestDBSession();
-            String idProperty = session.getSessionFactory().getClassMetadata(clazz)
-                        .getIdentifierPropertyName();
+//            String idProperty = session.getSessionFactory().getClassMetadata(clazz)
+//                        .getIdentifierPropertyName();
+            String idProperty = InternationalizedModelDescription.getPersister(clazz,session).getIdentifierPropertyName();
+
+
             
             Method method = clazz.getMethod("get" + Strings.capitalize(idProperty));
             Object result = method.invoke(object);
             
             if (result != null)
-                ret = new PersistentObjectModel(object);
+                ret = new PersistentObjectModel<>(object);
             else{
                 if (readOnlyModel){
-                    ret = new AmpReadOnlyModel(object);
+                    ret = new AmpReadOnlyModel<>(object);
                 }
                 else
-                    ret = new Model(object);
+                    ret = new Model<>(object);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -92,9 +96,10 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
         Session session;
         try {
             session = AmpActivityModel.getHibernateSession();//PersistenceManager.getRequestDBSession();
-            String idProperty = session.getSessionFactory()
-            .getClassMetadata(_clazz)
-            .getIdentifierPropertyName();
+//            String idProperty = session.getSessionFactory()
+//            .getClassMetadata(_clazz)
+//            .getIdentifierPropertyName();
+            String idProperty = InternationalizedModelDescription.getPersister(_clazz,session).getIdentifierPropertyName();
             
             Method method = _clazz.getMethod("get" + Strings.capitalize(idProperty));
             Object result = method.invoke(object);

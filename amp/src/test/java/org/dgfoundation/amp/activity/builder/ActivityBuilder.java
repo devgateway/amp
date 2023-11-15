@@ -1,25 +1,12 @@
 package org.dgfoundation.amp.activity.builder;
 
+import com.google.common.collect.ImmutableSet;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.google.common.collect.ImmutableSet;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Utility class for creating activities for testing Please add more methods if

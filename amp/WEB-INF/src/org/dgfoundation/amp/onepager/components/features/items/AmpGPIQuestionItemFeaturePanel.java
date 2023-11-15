@@ -1,26 +1,16 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.models.GPIYesNoAnswerModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -29,7 +19,10 @@ import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpGPISurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurveyIndicator> {
     
@@ -42,9 +35,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
         super(id, surveyIndicator, fmName, true);
 
         if (surveyIndicator.getObject() != null) {
-            Iterator<AmpGPISurveyQuestion> it = surveyIndicator.getObject().getQuestions().iterator();
-            while (it.hasNext()) {
-                AmpGPISurveyQuestion qq = (AmpGPISurveyQuestion) it.next();
+            for (AmpGPISurveyQuestion qq : surveyIndicator.getObject().getQuestions()) {
                 qq.getAmpTypeId().getName();
             }
         }
@@ -56,7 +47,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
             public List<AmpGPISurveyQuestion> getObject() {
                 Set<AmpGPISurveyQuestion> set = (Set<AmpGPISurveyQuestion>) surveyIndicator.getObject().getQuestions();
                 ArrayList<AmpGPISurveyQuestion> list = new ArrayList<AmpGPISurveyQuestion>(set);
-                Collections.sort(list, new AmpGPISurveyQuestion.GPISurveyQuestionComparator());
+                list.sort(new AmpGPISurveyQuestion.GPISurveyQuestionComparator());
 
                 ArrayList<AmpGPISurveyQuestion> listOrderedByParent = new ArrayList<AmpGPISurveyQuestion>();
 
@@ -84,9 +75,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
                 Set<AmpGPISurveyResponse> responses = survey.getObject().getResponses();
 
                 AmpGPISurveyResponse response = null;
-                Iterator<AmpGPISurveyResponse> it = responses.iterator();
-                while (it.hasNext()) {
-                    AmpGPISurveyResponse rs = (AmpGPISurveyResponse) it.next();
+                for (AmpGPISurveyResponse rs : responses) {
                     if (rs.getAmpQuestionId().getAmpQuestionId().compareTo(item.getModelObject().getAmpQuestionId()) == 0) {
                         response = rs;
                         break;
@@ -97,7 +86,8 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
                     response.setAmpGPISurveyId(survey.getObject());
                     response.setAmpQuestionId(item.getModelObject());
                     responses.add(response);
-                }               
+                }
+//                logger.info("Responses :"+ responses);
 
                 // Create a label with a dynamic value (in this case a question from DB) that can be translatable and can have a tooltip.
                 /*AmpLabelFieldPanel indName = new AmpLabelFieldPanel("qtext", new Model<String>(""), 

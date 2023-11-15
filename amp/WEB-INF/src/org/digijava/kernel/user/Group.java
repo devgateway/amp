@@ -22,18 +22,18 @@
 
 package org.digijava.kernel.user;
 
+import com.google.common.collect.ImmutableSet;
+import org.digijava.kernel.entity.Entity;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.ResourcePermission;
+import org.digijava.kernel.security.SitePermission;
+import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
+
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.digijava.kernel.entity.Entity;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.security.ResourcePermission;
-import org.digijava.kernel.security.SitePermission;
-
-import com.google.common.collect.ImmutableSet;
 
 public class Group
     extends Entity
@@ -70,7 +70,17 @@ public class Group
 
     private Site site;
     private String key;
-    private Set users;
+    private Set<User> users=new HashSet<>();
+    private Set<AmpMenuEntryInView> menuEntries= new HashSet<>();
+
+    public Set<AmpMenuEntryInView> getMenuEntries() {
+        return menuEntries;
+    }
+
+    public void setMenuEntries(Set<AmpMenuEntryInView> menuEntries) {
+        this.menuEntries = menuEntries;
+    }
+
     private Long parentId;
     private boolean inheritSecurity;
     
@@ -85,9 +95,9 @@ public class Group
         this.key = key;
     }
 
-    public String toString() {
-        return "[" + this.getClass().getName() + "]" + this.name;
-    }
+//    public String toString() {
+//        return "[" + this.getClass().getName() + "]" + this.name;
+//    }
 
     public Site getSite() {
         return site;
@@ -103,7 +113,7 @@ public class Group
      * @deprecated this method is subject of remove
      */
     public Set getPermissions() {
-        return new HashSet();
+        return new HashSet<>();
     }
 
     /**
@@ -182,11 +192,11 @@ public class Group
         return null;
     }
 
-    public Set getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

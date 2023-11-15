@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
+import org.dgfoundation.amp.annotations.checkstyle.IgnoreCanonicalNames;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import org.dgfoundation.amp.annotations.checkstyle.IgnoreCanonicalNames;
 
 /**
  * Defines API Error Message template and stores custom value if needed

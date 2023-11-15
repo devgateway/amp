@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.activity.builder;
 
-import java.util.Date;
-
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+
+import java.util.Date;
 
 /**
  * 

@@ -1,17 +1,5 @@
 package org.dgfoundation.amp.aitranslation;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_MAX_CHARACTERS;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,6 +9,21 @@ import org.digijava.module.aim.dbentity.MachineTranslationCharactersUsed;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_MAX_CHARACTERS;
 
 /**
  * This a IMachineTranslationService wrapper that uses caches translations and limits monthly usage is there is any.
@@ -73,12 +76,14 @@ public class CachedMachineTranslationService implements MachineTranslationServic
 
             for (int i = 0; i < contents.size(); i += BATCH_SIZE) {
                 List<String> batchContents = contents.subList(i,  Math.min(i + BATCH_SIZE, contents.size()));
-                translations.addAll(PersistenceManager.getSession()
-                        .createCriteria(MachineTranslation.class)
-                        .add(Restrictions.eq("sourceLanguage", srcLang))
-                        .add(Restrictions.eq("targetLanguage", destLang))
-                        .add(Restrictions.in("text", batchContents))
-                        .list());
+                Session session = PersistenceManager.getRequestDBSession();
+                CriteriaBuilder builder = session.getCriteriaBuilder();
+                CriteriaQuery<MachineTranslation> criteriaQuery = builder.createQuery(MachineTranslation.class);
+                Root<MachineTranslation> root = criteriaQuery.from(MachineTranslation.class);
+                criteriaQuery.select(root).where(builder.equal(root.get("sourceLanguage"), srcLang),builder.equal(root.get("targetLanguage"), destLang),
+                        builder.equal(root.get("text"), batchContents));
+
+                translations.addAll(session.createQuery(criteriaQuery).list());
             }
 
             return translations.stream().map(o -> ((MachineTranslation) o))
@@ -124,10 +129,13 @@ public class CachedMachineTranslationService implements MachineTranslationServic
     }
 
     private int getCharactersUsedThisMonth() {
-        MachineTranslationCharactersUsed used = (MachineTranslationCharactersUsed) PersistenceManager.getSession()
-                .createCriteria(MachineTranslationCharactersUsed.class)
-                .add(Restrictions.eq("id", 1L))
-                .uniqueResult();
+        Session session = PersistenceManager.getRequestDBSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<MachineTranslationCharactersUsed> criteriaQuery = builder.createQuery(MachineTranslationCharactersUsed.class);
+        Root<MachineTranslationCharactersUsed> root = criteriaQuery.from(MachineTranslationCharactersUsed.class);
+        criteriaQuery.select(root).where(builder.equal(root.get("id"),1L));
+
+        MachineTranslationCharactersUsed used = session.createQuery(criteriaQuery).uniqueResult();
         if (used != null && used.getMonth().equals(getCurrentMonth())) {
             return used.getUsed();
         } else {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.kernel.entity.trubudget.SubIntents" table="amp_trubudget_sub_intent">
+        <id name="id" column="sub_trubudget_intent_id" type="java.lang.Long" unsaved-value="null">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">amp_trubudget_sub_intent_seq</param>
+            </generator>
+        </id>
+        <property name="subTruBudgetIntentName" column="sub_trubudget_intent_name" type="java.lang.String" unique="true" unique-key="unique_intent"/>
+        <property name="subTruBudgetIntentDisplayName" column="sub_trubudget_intent_display_name" not-null="false" type="java.lang.String"/>
+        <property name="motherIntentName" column="mother_intent_name" type="java.lang.String" unique-key="unique_intent"/>
+
+    </class>
+</hibernate-mapping>

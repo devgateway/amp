@@ -331,7 +331,9 @@ function validateUserInfo(){
 																             </html:select>
 																		</td>
 																	</tr>
-                                                          			<tr>
+
+
+																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                     		<digi:trn key="aim:viewEditUser:mailingAddress">Mailing address</digi:trn>
@@ -340,6 +342,40 @@ function validateUserInfo(){
                                                                     		<html:text name="umViewEditUserForm" property="mailingAddress"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;"/>
 																		</td>
                                                           			</tr>
+																	<c:if test="${umViewEditUserForm.truBudgetEnabled=='true'}">
+
+																	<tr>
+																		<td width="169" align="right" height="30"  style="font-size: 11px;">
+																				<%--																			<FONT color=red>*</FONT>--%>
+																			<digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
+																		<td align="left">
+																			<html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">
+																				<c:forEach var="cn"	items="${umViewEditUserForm.truBudgetIntents}">
+																					<option value="${cn.truBudgetIntentName}" <c:if test="${cn.userHas}"> selected </c:if> ><c:out value="${cn.truBudgetIntentDisplayName}"/></option>
+																				</c:forEach>
+																			</html:select>
+																		</td>
+																	</tr>
+
+																	<tr>
+																		<td width="169" align="right" height="30" style="font-size: 11px;
+    font-weight: bold; color:#000;">
+																			<digi:trn key="aim:viewEditUser:truBudgetPassword">New TruBudget Password:</digi:trn>
+																		</td>
+																		<td width="380" height="30" colspan="2"  class="inputcontainer">
+																			<html:password name="umViewEditUserForm" property="truBudgetPassword" redisplay="false"/>
+																		</td>
+																	</tr>
+																		<%--																	<tr>--%>
+																		<%--																		<td width="169" align="right" height="30"style="font-size: 11px;--%>
+																		<%--    font-weight: bold; color:#000;">--%>
+																		<%--																			<digi:trn key="aim:viewEditUser:confirmPassword">Confirm:</digi:trn>--%>
+																		<%--																		</td>--%>
+																		<%--																		<td width="380" height="30" colspan="2"  class="inputcontainer">--%>
+																		<%--																			<html:password name="umViewEditUserForm" property="confirmNewPassword" redisplay="false"/>--%>
+																		<%--																		</td>--%>
+																		<%--																	</tr>--%>
+																	</c:if>
                                                           			<tr>
 																		<td width="169" align="right" height="2">&nbsp;
                                                                             

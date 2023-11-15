@@ -22,8 +22,9 @@
 
 package org.digijava.kernel.entity;
 
-import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.io.Serializable;
 
 /** @author shamir.karkal */
 public class Address implements Serializable {

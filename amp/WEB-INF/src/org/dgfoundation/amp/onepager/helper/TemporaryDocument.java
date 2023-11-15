@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.onepager.helper;
 
-import java.io.Serializable;
-import java.util.Calendar;
-
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+
+import java.io.Serializable;
+import java.util.Calendar;
 /**
  * 
  * @author aartimon@dginternational.org
@@ -17,7 +17,7 @@ public class TemporaryDocument implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    private String title;
+    private String title="Document Title";
     private FileUpload file;
     private boolean existing;
     private double fileSize;

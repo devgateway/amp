@@ -22,29 +22,26 @@
 
 package org.digijava.kernel.user;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.Entity;
-import org.digijava.kernel.entity.Image;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
-import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Identifiable;
+
+import javax.persistence.Transient;
+import javax.security.auth.Subject;
+import java.io.Serializable;
+import java.sql.Clob;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @InterchangeableValue(UserValueProvider.class)
 public class User
@@ -67,7 +64,7 @@ public class User
     private Boolean pledgeSuperUser;
     private Site registeredThrough;
     private Set interests;
-    private java.sql.Clob bio;
+    private Clob bio;
     private Image portrait;
     private String organizationName;
     private OrganizationType organizationType;
@@ -75,7 +72,7 @@ public class User
     private Country country;
     private AmpCategoryValueLocations region;
     private HashMap sitePreferences;
-    private Set groups;
+    private Set<Group> groups=new HashSet<>();
     private HashMap siteContentLocales;
     private String address;
     private Image photo;
@@ -85,6 +82,8 @@ public class User
     private boolean globalAdmin;
     private String organizationTypeOther;
     private Set contacts;
+    private String truBudgetPassword;
+    private String truBudgetKeyGen;
     private AmpUserExtension userExtension;
     private Boolean exemptFromDataFreezing;
     private Boolean notificationEmailEnabled = false;
@@ -92,6 +91,18 @@ public class User
 
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
+    private Set<TruBudgetIntent> truBudgetIntents= new HashSet<>();
+    @Transient
+    private transient Set<TruBudgetIntent> initialTruBudgetIntents= new HashSet<>();
+    private Boolean truBudgetEnabled=false;
+
+    public Boolean getTruBudgetEnabled() {
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(Boolean truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
 
     public User() {}
 
@@ -105,7 +116,7 @@ public class User
         this.lastName = lastName;
         this.emailVerified = false;
         this.emailBouncing = false;
-        this.noAlertsUntil = new Date(java.lang.System.currentTimeMillis());
+        this.noAlertsUntil = new Date(System.currentTimeMillis());
         //this.password = ;
         //this.salt = ;
         //this.passQuestion = passQuestion;
@@ -251,7 +262,7 @@ public class User
         return registeredThrough;
     }
 
-    public Set getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
@@ -315,7 +326,7 @@ public class User
         this.banned = banned;
     }
 
-    public void setGroups(Set groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 
@@ -327,11 +338,11 @@ public class User
         this.photo = photo;
     }
 
-    public java.sql.Clob getBio() {
+    public Clob getBio() {
         return bio;
     }
 
-    public void setBio(java.sql.Clob bio) {
+    public void setBio(Clob bio) {
         this.bio = bio;
     }
 
@@ -452,10 +463,8 @@ public class User
     public boolean hasVerifiedOrganizationId(Long ampOrgId) {
         if(ampOrgId == null) return false;
         //If it's not there, check in the Set<AmpOrganisation> assignedOrgs
-        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-        while(it.hasNext()){
-            AmpOrganisation currentOrganization = it.next();
-            if(currentOrganization.getAmpOrgId().equals(ampOrgId))
+        for (AmpOrganisation currentOrganization : this.assignedOrgs) {
+            if (currentOrganization.getAmpOrgId().equals(ampOrgId))
                 return true;
         }
         return false;
@@ -470,10 +479,8 @@ public class User
             return false;
         }
 
-        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-        while (it.hasNext()) {
-            AmpOrganisation currentOrganization = it.next();
-            if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+        for (AmpOrganisation currentOrganization : this.assignedOrgs) {
+            if (DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
                 return true;
         }
         return false;
@@ -553,5 +560,82 @@ public class User
         
         return email;
     }
+    public Set<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
 
+    public void setTruBudgetIntents(Set<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "subject=" + subject +
+                ", firstNames='" + firstNames + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", emailVerified=" + emailVerified +
+                ", emailBouncing=" + emailBouncing +
+                ", noAlertsUntil=" + noAlertsUntil +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", passQuestion='" + passQuestion + '\'' +
+                ", passAnswer='" + passAnswer + '\'' +
+                ", url='" + url + '\'' +
+                ", banned=" + banned +
+                ", pledger=" + pledger +
+                ", pledgeSuperUser=" + pledgeSuperUser +
+                ", registeredThrough=" + registeredThrough +
+                ", interests=" + interests +
+                ", bio=" + bio +
+                ", portrait=" + portrait +
+                ", organizationName='" + organizationName + '\'' +
+                ", organizationType=" + organizationType +
+                ", referral='" + referral + '\'' +
+                ", country=" + country +
+                ", region=" + region +
+                ", sitePreferences=" + sitePreferences +
+                ", groups=" + groups +
+                ", siteContentLocales=" + siteContentLocales +
+                ", address='" + address + '\'' +
+                ", photo=" + photo +
+                ", userPreference=" + userPreference +
+                ", userLangPreferences=" + userLangPreferences +
+                ", registerLanguage=" + registerLanguage +
+                ", globalAdmin=" + globalAdmin +
+                ", organizationTypeOther='" + organizationTypeOther + '\'' +
+                ", contacts=" + contacts +
+                ", userExtension=" + userExtension +
+                ", exemptFromDataFreezing=" + exemptFromDataFreezing +
+                ", notificationEmailEnabled=" + notificationEmailEnabled +
+                ", notificationEmail='" + notificationEmail + '\'' +
+                ", assignedOrgs=" + assignedOrgs +
+                ", passwordChangedAt=" + passwordChangedAt +
+                '}';
+    }
+
+
+    public Set<TruBudgetIntent> getInitialTruBudgetIntents() {
+        return initialTruBudgetIntents;
+    }
+
+    public void setInitialTruBudgetIntents(Set<TruBudgetIntent> initialTruBudgetIntents) {
+        this.initialTruBudgetIntents = initialTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String getTruBudgetKeyGen() {
+        return truBudgetKeyGen;
+    }
+
+    public void setTruBudgetKeyGen(String truBudgetKeyGen) {
+        this.truBudgetKeyGen = truBudgetKeyGen;
+    }
 }

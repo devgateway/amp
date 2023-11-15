@@ -22,33 +22,17 @@
 
 package org.digijava.kernel.viewmanager.impl;
 
-import org.digijava.kernel.viewmanager.AbstractViewConfig;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.siteconfig.*;
+import org.digijava.kernel.viewmanager.ViewConfigException;
+
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.servlet.ServletContext;
-
-import org.apache.commons.digester.Digester;
-import org.digijava.kernel.siteconfig.Instance;
-import org.digijava.kernel.siteconfig.Layout;
-import org.digijava.kernel.siteconfig.Module;
-import org.digijava.kernel.siteconfig.ModuleLayout;
-import org.digijava.kernel.siteconfig.Page;
-import org.digijava.kernel.siteconfig.Put;
-import org.digijava.kernel.siteconfig.PutItem;
-import org.digijava.kernel.siteconfig.SiteConfig;
-import org.digijava.kernel.siteconfig.SiteLayout;
-import org.apache.log4j.*;
-import org.digijava.kernel.siteconfig.Teaser;
-import org.digijava.kernel.viewmanager.ViewConfigException;
-import org.digijava.kernel.request.Site;
-import java.util.List;
-import org.digijava.kernel.viewmanager.ViewConfig;
-import java.util.Set;
 
 public class DefaultViewConfigImpl
     extends DefaultViewConfigUtil {

@@ -5,8 +5,8 @@
 		table="AMP_COMPONENT_FUNDING">
 		<cache usage="read-write" />
 		<id name="ampComponentFundingId" column="amp_component_funding_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_COMPONENT_FUNDING_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COMPONENT_FUNDING_seq</param>
 			</generator>
 		</id>
 
@@ -14,6 +14,8 @@
 		<!--  property name="adjustmentType" column="adjustment_type" type="java.lang.Integer" /-->
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
+		<property name="componentRejectReason" column="reject_reason" type="java.lang.String" />
+		<property name="justAnId" column="just_an_id" type="java.lang.String" />
 		<property access="field" name="transactionAmount" column="transaction_amount"
 			type="java.lang.Double" />
 		<property name="description" column="description" type="text" />
@@ -28,5 +30,14 @@
 			class="org.digijava.module.aim.dbentity.AmpComponent" />
 		<many-to-one name="adjustmentType" column="adjustment_type" 
 		    class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+
+		<many-to-one name="componentFundingStatus" column="component_funding_status"
+					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+
+		<set name="componentFundingDocuments" lazy="false" cascade="all,delete-orphan">
+<!--			<cache usage="read-write" />-->
+			<key column="amp_component_funding_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFundingDocument" />
+		</set>
 	</class>
 </hibernate-mapping>

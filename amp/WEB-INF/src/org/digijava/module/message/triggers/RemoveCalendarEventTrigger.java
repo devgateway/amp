@@ -1,14 +1,14 @@
 package org.digijava.module.message.triggers;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.message.helper.Event;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RemoveCalendarEventTrigger extends Trigger {
     public static final String PARAM_ID="id";

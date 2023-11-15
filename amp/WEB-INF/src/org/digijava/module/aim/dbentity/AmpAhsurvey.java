@@ -6,11 +6,12 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
+import java.util.*;
 
 
 public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey> {
@@ -136,16 +137,14 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
     
     @Override
     public Output getOutput() {
-        Comparator surveyComparator = new Comparator() {
-            public int compare(Object o1, Object o2) {
-                AmpAhsurveyResponse aux1 = (AmpAhsurveyResponse) o1;
-                AmpAhsurveyResponse aux2 = (AmpAhsurveyResponse) o2;
-                return aux1.getAmpQuestionId().getAmpQuestionId().compareTo(aux2.getAmpQuestionId().getAmpQuestionId());
-            }
+        Comparator surveyComparator = (o1, o2) -> {
+            AmpAhsurveyResponse aux1 = (AmpAhsurveyResponse) o1;
+            AmpAhsurveyResponse aux2 = (AmpAhsurveyResponse) o2;
+            return aux1.getAmpQuestionId().getAmpQuestionId().compareTo(aux2.getAmpQuestionId().getAmpQuestionId());
         };
 
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         out.getOutputs().add(new Output(null, new String[] {"Donor" }, new Object[] { this.ampDonorOrgId.getName() }));
         out.getOutputs().add(new Output(null, new String[] {"PoDD" },
                 new Object[] { (this.pointOfDeliveryDonor == null? "" : this.pointOfDeliveryDonor.getName()) }));
@@ -155,10 +154,8 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
 
         if (this.responses != null) {
             List<AmpAhsurveyResponse> auxList = new ArrayList<AmpAhsurveyResponse>(this.responses);
-            Collections.sort(auxList, surveyComparator);
-            Iterator<AmpAhsurveyResponse> iter = auxList.iterator();
-            while (iter.hasNext()) {
-                AmpAhsurveyResponse auxResponse = iter.next();
+            auxList.sort(surveyComparator);
+            for (AmpAhsurveyResponse auxResponse : auxList) {
                 Output auxOutResp = new Output();
                 auxOutResp.setTitle(auxResponse.getOutput().getTitle());
                 auxOutResp.setValue(auxResponse.getOutput().getValue());
@@ -177,9 +174,8 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
         aux.ampAHSurveyId = null;
         if (aux.responses != null && aux.responses.size() > 0) {
             Set<AmpAhsurveyResponse> responses = new HashSet<AmpAhsurveyResponse>();
-            Iterator<AmpAhsurveyResponse> i = aux.responses.iterator();
-            while (i.hasNext()) {
-                AmpAhsurveyResponse newResp = (AmpAhsurveyResponse) i.next().clone();
+            for (AmpAhsurveyResponse respons : aux.responses) {
+                AmpAhsurveyResponse newResp = (AmpAhsurveyResponse) respons.clone();
                 newResp.setAmpAHSurveyId(aux);
                 newResp.setAmpReponseId(null);
                 responses.add(newResp);
@@ -198,7 +194,7 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
     }
     
     @Override
-    public int compareTo(AmpAhsurvey o) {
+    public int compareTo(@NotNull AmpAhsurvey o) {
         if(this.getAmpActivityId()!=null && o.getAmpAHSurveyId()!=null)
             return this.getAmpAHSurveyId().compareTo(o.getAmpAHSurveyId());
         else return -1;

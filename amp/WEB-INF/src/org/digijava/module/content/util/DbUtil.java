@@ -1,21 +1,17 @@
 package org.digijava.module.content.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.content.dbentity.AmpContentItem;
 import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.JDBCException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.*;
+import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -83,7 +79,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select aci.* from amp_content_item aci "
                     + "where aci.isHomepage = true";
-            Query qry = session.createSQLQuery(queryString).addEntity(
+            Query qry = session.createNativeQuery(queryString).addEntity(
                     AmpContentItem.class);
             Iterator<AmpContentItem> itr = qry.list().iterator();
             if (itr.hasNext()) {

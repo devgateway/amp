@@ -1,17 +1,5 @@
 package org.digijava.module.message.helper;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -39,46 +27,15 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.util.AmpDbUtil;
-import org.digijava.module.message.dbentity.AmpAlert;
-import org.digijava.module.message.dbentity.AmpEmail;
-import org.digijava.module.message.dbentity.AmpEmailReceiver;
-import org.digijava.module.message.dbentity.AmpMessage;
-import org.digijava.module.message.dbentity.AmpMessageReceiver;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
-import org.digijava.module.message.dbentity.AmpMessageState;
-import org.digijava.module.message.dbentity.Approval;
-import org.digijava.module.message.dbentity.CalendarEvent;
-import org.digijava.module.message.dbentity.TemplateAlert;
-import org.digijava.module.message.triggers.AbstractCalendarEventTrigger;
-import org.digijava.module.message.triggers.ActivityActualStartDateTrigger;
-import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger;
-import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
-import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
-import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
-import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
-import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
-import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
-import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
-import org.digijava.module.message.triggers.ActivitySaveTrigger;
-import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
-import org.digijava.module.message.triggers.ApprovedActivityTrigger;
-import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
-import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
-import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
-import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
-import org.digijava.module.message.triggers.CalendarEventTrigger;
-import org.digijava.module.message.triggers.DataFreezeEmailNotificationTrigger;
-import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
-import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
-import org.digijava.module.message.triggers.PendingResourceShareTrigger;
-import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
-import org.digijava.module.message.triggers.RejectResourceSharetrigger;
-import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
-import org.digijava.module.message.triggers.SummaryChangeNotificationTrigger;
-import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
-import org.digijava.module.message.triggers.UserRegistrationTrigger;
+import org.digijava.module.message.dbentity.*;
+import org.digijava.module.message.triggers.*;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.hibernate.jdbc.Work;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AmpMessageWorker {
 

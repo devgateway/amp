@@ -3,8 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
-import java.io.Serializable;
-
 /**
  * @author dan
  *

@@ -1,15 +1,10 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.DimensionLevel;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+
+import java.util.*;
 
 
 /**

@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * A class which tracks the hierarchies which have been applied on top of a cell.

@@ -1,14 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import static org.dgfoundation.amp.algo.AmpCollections.any;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.TextCell;
@@ -16,8 +7,12 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.util.*;
+
+import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 /**
  * A close relative to {@link PercentageTokenBehaviour}.

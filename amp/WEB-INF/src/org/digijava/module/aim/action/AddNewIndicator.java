@@ -1,19 +1,6 @@
 package org.digijava.module.aim.action;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.NewIndicatorForm;
@@ -22,6 +9,12 @@ import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
 
 public class AddNewIndicator
     extends Action {
@@ -71,14 +64,14 @@ public class AddNewIndicator
                  indicator.setCode(newIndForm.getCode());
                  indicator.setType(newIndForm.getType());
                  if (newIndForm.getActivitySectors()!=null && newIndForm.getActivitySectors().size()>0){
-                     indicator.setSectors(new HashSet<AmpSector>());
-                     for (Iterator sectorIt = newIndForm.getActivitySectors().iterator(); sectorIt.hasNext();) {
+                     indicator.setSectors(new HashSet<>());
+                     for (Object o : newIndForm.getActivitySectors()) {
                          //This is awful! why is here AmpActivitySector???!!
-                        ActivitySector actSector = (ActivitySector) sectorIt.next();
-                        AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
-                        sector.setAmpSectorId(actSector.getSectorId());
-                        indicator.getSectors().add(sector);
-                    }
+                         ActivitySector actSector = (ActivitySector) o;
+                         AmpSector sector = SectorUtil.getAmpSector(actSector.getSectorId());
+                         sector.setAmpSectorId(actSector.getSectorId());
+                         indicator.getSectors().add(sector);
+                     }
                  }
                  
                  if (indicator.getSectors() == null

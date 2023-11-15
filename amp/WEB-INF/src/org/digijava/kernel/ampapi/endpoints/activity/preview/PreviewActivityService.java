@@ -1,22 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
-import static java.util.stream.Collectors.groupingBy;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.ws.rs.core.Response;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -31,13 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -48,12 +25,21 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.message.helper.AmpMessageWorker;
 import org.digijava.module.message.helper.Team;
 
+import javax.ws.rs.core.Response;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.groupingBy;
+
 /**
  * @author Viorel Chihai
  */
 public final class PreviewActivityService {
 
-    protected static final int PERCENTAGE_MULTIPLIER = 100;
+    private static final int PERCENTAGE_MULTIPLIER = 100;
     private static final int TEAM_NAME_INDEX = 3;
 
     private static PreviewActivityService previewActivityService;
@@ -181,28 +167,26 @@ public final class PreviewActivityService {
                                         }
                                 )));
         List<PreviewFundingTotal> totals = new ArrayList<>();
-        if (allTransactionsByTypeAndAdjustment.isPresent()) {
-            allTransactionsByTypeAndAdjustment.get().forEach((transactionType, previewFundingTransactions) -> {
-                Map<Long, Double> transactionTotalByAdjustmentType =
-                        previewFundingTransactions.stream().collect(Collectors.
-                                groupingBy(PreviewFundingTransaction::getAdjustmentType,
-                                        Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount)
-                                ));
+        allTransactionsByTypeAndAdjustment.ifPresent(stringListMap -> stringListMap.forEach((transactionType, previewFundingTransactions) -> {
+            Map<Long, Double> transactionTotalByAdjustmentType =
+                    previewFundingTransactions.stream().collect(Collectors.
+                            groupingBy(PreviewFundingTransaction::getAdjustmentType,
+                                    Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount)
+                            ));
 
-                transactionTotalByAdjustmentType.forEach((adjustmentType, totalAmount) -> {
+            transactionTotalByAdjustmentType.forEach((adjustmentType, totalAmount) -> {
 
-                    PreviewFundingTotal total = new PreviewFundingTotal();
-                    total.setTransactionType(transactionType);
-                    total.setAdjustmentType(adjustmentType);
-                    total.setAmount(totalAmount);
-                    totals.add(total);
-                });
+                PreviewFundingTotal total = new PreviewFundingTotal();
+                total.setTransactionType(transactionType);
+                total.setAdjustmentType(adjustmentType);
+                total.setAmount(totalAmount);
+                totals.add(total);
             });
-        }
+        }));
         return totals;
     }
 
-    private ImmutablePair<Double, Double> getTotalActualCommitmentDisbursement(List totals) {
+    private ImmutablePair<Double, Double> getTotalActualCommitmentDisbursement(List<PreviewFundingTotal> totals ) {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
         Double totalActualCommitments = calculateTotal(totals, actualCategoryValueId,
@@ -210,7 +194,7 @@ public final class PreviewActivityService {
 
         Double totalActualDisbursements = calculateTotal(totals, actualCategoryValueId,
                 ArConstants.DISBURSEMENT.toLowerCase());
-        return new ImmutablePair(totalActualCommitments, totalActualDisbursements);
+        return new ImmutablePair<>(totalActualCommitments, totalActualDisbursements);
     }
 
     /**
@@ -250,8 +234,7 @@ public final class PreviewActivityService {
     private Double calculateTotal(List<PreviewFundingTotal> totals, Long actualCategoryValueId, String commitment) {
         return totals.stream()
                 .filter(fd -> fd.getTransactionType().equals(commitment)
-                        && fd.getAdjustmentType().equals(actualCategoryValueId))
-                .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
+                        && fd.getAdjustmentType().equals(actualCategoryValueId)).mapToDouble(PreviewFundingTotal::getAmount).sum();
     }
 
 
@@ -285,15 +268,13 @@ public final class PreviewActivityService {
 
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
-        Double totalActualCommitments = transactions.getOrDefault(ArConstants.COMMITMENT.toLowerCase(),
-                        Collections.emptyList()).stream().filter(t ->
-                        t.getAdjustmentType().equals(actualCategoryValueId)).
-                collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+        double totalActualCommitments = transactions.getOrDefault(ArConstants.COMMITMENT.toLowerCase(),
+                Collections.emptyList()).stream().filter(t ->
+                t.getAdjustmentType().equals(actualCategoryValueId)).mapToDouble(PreviewFundingTransaction::getTransactionAmount).sum();
 
-        Double totalActualDisbursements = transactions.getOrDefault(ArConstants.DISBURSEMENT.toLowerCase(),
-                        Collections.emptyList()).stream().filter(t ->
-                        t.getAdjustmentType().equals(actualCategoryValueId)).
-                collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+        double totalActualDisbursements = transactions.getOrDefault(ArConstants.DISBURSEMENT.toLowerCase(),
+                Collections.emptyList()).stream().filter(t ->
+                t.getAdjustmentType().equals(actualCategoryValueId)).mapToDouble(PreviewFundingTransaction::getTransactionAmount).sum();
 
         return totalActualCommitments != 0 || totalActualDisbursements != 0
                 ? totalActualCommitments - totalActualDisbursements : null;
@@ -342,7 +323,7 @@ public final class PreviewActivityService {
 
             List<AmpTeam> computedTeams = TeamUtil.getAllTeams().stream()
                     .filter(t -> Boolean.TRUE.equals(t.getComputation()) || Boolean.TRUE.equals(t.getUseFilter()))
-                    .filter(t -> t.getAmpTeamId() != ownerTeam.getAmpTeamId())
+                    .filter(t -> !Objects.equals(t.getAmpTeamId(), ownerTeam.getAmpTeamId()))
                     .collect(Collectors.toList());
 
             final StringBuffer wsQueries = new StringBuffer();
@@ -363,9 +344,7 @@ public final class PreviewActivityService {
                     while (teamsInActivityQuery.rs.next()) {
                         // activityTeams
                         Long ampActivityId = teamsInActivityQuery.rs.getLong(1);
-                        if (activityTeams.get(ampActivityId) == null) {
-                            activityTeams.put(ampActivityId, new ArrayList<>());
-                        }
+                        activityTeams.computeIfAbsent(ampActivityId, k -> new ArrayList<>());
                         activityTeams.get(ampActivityId).add(
                                 new Team(teamsInActivityQuery.rs.getLong(2),
                                         teamsInActivityQuery.rs.getString(TEAM_NAME_INDEX)));

@@ -26,11 +26,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.module.admin.form.SiteForm;
-import org.digijava.module.admin.form.SiteInstancesForm;
 import org.digijava.kernel.entity.ModuleInstance;
-import java.util.Iterator;
+import org.digijava.module.admin.form.SiteInstancesForm;
 import org.digijava.module.admin.util.DbUtil;
 
 public class SetMasterInstance extends Action {

@@ -22,22 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.digijava.kernel.request.TLSUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
@@ -46,13 +30,24 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.security.SitePermission;
 import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.siteidentity.SiteIdentityService;
 import org.digijava.kernel.user.Group;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.util.*;
 
 /**
  * This class containts site-related utillity functions. Site must be
@@ -151,8 +146,18 @@ public class SiteUtils {
      * @return Site if found. null - if not
      */
     private static Site getSiteByName(String siteName) {
-        return (Site) PersistenceManager.getSession().createCriteria(Site.class)
-                .add(Restrictions.eq("siteId", siteName))
+        Session session = PersistenceManager.getSession();
+
+        session.clear();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Site> criteriaQuery = criteriaBuilder.createQuery(Site.class);
+        Root<Site> siteRoot = criteriaQuery.from(Site.class);
+
+        criteriaQuery.select(siteRoot)
+                .where(criteriaBuilder.equal(siteRoot.get("siteId"), siteName));
+
+        return session.createQuery(criteriaQuery)
                 .setCacheable(true)
                 .setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION)
                 .uniqueResult();
@@ -351,7 +356,7 @@ public class SiteUtils {
                                           " s, where (s.siteId=:siteId)");
             q.setCacheable(true);
             q.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
-            q.setString("siteId", siteName);
+            q.setParameter("siteId", siteName, StringType.INSTANCE);
 
             List result = q.list();
             if (result.size() != 0) {
@@ -374,16 +379,16 @@ public class SiteUtils {
      * @throws DgException if error occurs
      */
     public static List getChildSites(long parentId) throws DgException {
-        List sites = null;
-        Session session = null;
+        List sites;
+        Session session;
         try {
             session = PersistenceManager.getSession();
             Query query = session.createQuery("from " +
                                               Site.class.getName() +
-                " s where s.parentId = ? order by s.name");
+                " s where s.parentId = :parentId order by s.name");
             query.setCacheable(true);
             query.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
-            query.setParameter(0, new Long(parentId));
+            query.setParameter("parentId", parentId, LongType.INSTANCE);
             sites = query.list();
         }
         catch (Exception ex) {
@@ -405,7 +410,7 @@ public class SiteUtils {
         if (site == null)
             return false;
         Boolean send = SiteCache.getInstance().getSendAlertsToAdmin(site);
-        return send == null ? false : send.booleanValue();
+        return send == null ? false : send;
     }
 
     /**
@@ -418,51 +423,50 @@ public class SiteUtils {
         if (site.getParentId() != null) {
             parentSite = getSite(site.getParentId());
         }
-        HashMap parentDefGroups = new HashMap();
+        HashMap parentDefGroups = new HashMap<>();
         if (parentSite != null) {
-            Iterator iter = parentSite.getGroups().iterator();
-            while (iter.hasNext()) {
-                Group group = (Group) iter.next();
+            for (Object o : parentSite.getGroups()) {
+                Group group = (Group) o;
                 if (group.isDefaultGroup()) {
                     parentDefGroups.put(group.getKey(), group);
                 }
             }
         }
-        HashSet existingDefGroups = new HashSet();
+        HashSet existingDefGroups = new HashSet<>();
         if (site.getGroups() == null) {
-            site.setGroups(new HashSet());
+            site.setGroups(new HashSet<>());
         }
         else {
             // Fix parents for existing default groups
-            Iterator iter = site.getGroups().iterator();
-            while (iter.hasNext()) {
-                Group group = (Group) iter.next();
+            for (Object o : site.getGroups()) {
+                Group group = (Group) o;
                 if (group.isDefaultGroup()) {
                     Group parentGroup = (Group) parentDefGroups.get(group.
-                        getKey());
+                            getKey());
                     if (parentGroup != null &&
-                        (parentGroup.getId() == null ||
-                         !parentGroup.getId().equals(group.getId()))) {
+                            (parentGroup.getId() == null ||
+                                    !parentGroup.getId().equals(group.getId()))) {
                         group.setParentId(parentGroup.getId());
                     }
                     existingDefGroups.add(group.getKey());
                 }
             }
         }
-        Iterator iter = Group.defaultGroups.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry item = (Map.Entry) iter.next();
+        for (Object o : Group.defaultGroups.entrySet()) {
+            Map.Entry item = (Map.Entry) o;
             if (!existingDefGroups.contains(item.getValue())) {
                 Group group = new Group(site, (String) item.getValue(),
-                                        (String) item.getKey());
+                        (String) item.getKey());
                 Group parentGroup = (Group) parentDefGroups.get(group.getKey());
                 if (parentGroup != null) {
                     group.setParentId(parentGroup.getId());
                 }
                 site.getGroups().add(group);
+                PersistenceManager.getRequestDBSession().saveOrUpdate(site);
                 existingDefGroups.add(item.getValue());
             }
         }
+        PersistenceManager.getRequestDBSession().flush();
     }
 
     /**
@@ -472,19 +476,18 @@ public class SiteUtils {
      * @throws DgException if any error occurs
      */
     public static void fixDefaultGroupPermissions(Site site) throws DgException {
-        Iterator iter = site.getGroups().iterator();
-        while (iter.hasNext()) {
-            Group group = (Group)iter.next();
+        for (Object o : site.getGroups()) {
+            Group group = (Group) o;
             if (!group.isDefaultGroup()) {
                 continue;
             }
-            GroupPrincipal gp = new GroupPrincipal(group.getId().longValue(),
-                site.getName(),
-                group.getName());
+            GroupPrincipal gp = new GroupPrincipal(group.getId(),
+                    site.getName(),
+                    group.getName());
 
             PermissionCollection permissions = DigiSecurityManager.getPermissions(gp);
             SitePermission requiredPerm = new SitePermission(site,
-                group.getRequiredActions());
+                    group.getRequiredActions());
 
             boolean found = false;
             if (permissions != null) {

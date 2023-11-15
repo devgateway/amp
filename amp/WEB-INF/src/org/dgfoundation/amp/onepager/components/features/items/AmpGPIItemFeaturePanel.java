@@ -3,30 +3,23 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.*;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpGPIFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.*;
-import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
-import org.dgfoundation.amp.onepager.models.DateToYearModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
-import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.util.DbUtil;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author ginchauspe@developmentgateway.org
@@ -37,7 +30,7 @@ public class AmpGPIItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey> {
     public AmpGPIItemFeaturePanel(String id, String fmName, final IModel<AmpGPISurvey> survey, final IModel<AmpActivityVersion> am) {
         super(id, survey, fmName, true);
         if (survey.getObject().getResponses() == null) {
-            survey.getObject().setResponses(new HashSet<AmpGPISurveyResponse>());
+            survey.getObject().setResponses(new HashSet<>());
         }
 
         final AbstractReadOnlyModel<List<AmpGPISurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpGPISurveyIndicator>>() {
@@ -46,7 +39,7 @@ public class AmpGPIItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey> {
             @Override
             public List<AmpGPISurveyIndicator> getObject() {
                 ArrayList<AmpGPISurveyIndicator> list = new ArrayList<AmpGPISurveyIndicator>(DbUtil.getAllGPISurveyIndicators(true));
-                Collections.sort(list, new AmpGPISurveyIndicator.GPISurveyIndicatorComparator());
+                list.sort(new AmpGPISurveyIndicator.GPISurveyIndicatorComparator());
                 return list;
             }
         };

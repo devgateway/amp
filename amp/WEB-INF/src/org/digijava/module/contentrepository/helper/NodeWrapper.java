@@ -19,14 +19,7 @@ import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.Workspace;
+import javax.jcr.*;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -35,13 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -133,6 +120,7 @@ public class NodeWrapper{
             this.node = newNode;
 
         } catch(RepositoryException e) {
+            e.printStackTrace();
             ActionMessage error = new ActionMessage("error.contentrepository.addFile:badPath");
             errors.add("title", error);
             logger.error(error.getValues(), e);
@@ -379,7 +367,7 @@ public class NodeWrapper{
                     
                 }
                     
-                String encTitle = URLEncoder.encode(tempDoc.getTitle(), "UTF-8");
+                String encTitle = URLEncoder.encode(!Objects.equals(tempDoc.getTitle(), "") ?tempDoc.getTitle():"<missing title>", "UTF-8");
                 newNode = parentNode.addNode(encTitle);
                 newNode.addMixin("mix:versionable");
             }
@@ -389,7 +377,7 @@ public class NodeWrapper{
                 newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
             }
             else{
-                newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
+                newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, 1.0);
             }
             String contentType          = null;
             //HashMap errors = new HashMap();
@@ -427,7 +415,7 @@ public class NodeWrapper{
                 if(tempDoc.getYearofPublication()!=null){
                     Integer yearofPublication = new Integer(tempDoc.yearofPublication);
                     yearofPublicationDate= Calendar.getInstance();
-                    yearofPublicationDate.set(yearofPublication.intValue(), 1, 1);
+                    yearofPublicationDate.set(yearofPublication, Calendar.FEBRUARY, 1);
                 }
                 populateNode(isANewVersion,newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
                     contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId(), yearofPublicationDate,

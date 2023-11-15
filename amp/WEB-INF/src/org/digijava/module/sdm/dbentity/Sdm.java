@@ -22,11 +22,7 @@
 
 package org.digijava.module.sdm.dbentity;
 
-import java.util.Iterator;
 import java.util.Set;
-
-import org.digijava.module.sdm.exception.SDMException;
-import org.digijava.module.sdm.util.DbUtil;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -88,10 +84,7 @@ public class Sdm {
         Set<SdmItem> sdmItems = this.getItems();
         SdmItem  result = null;
 
-        Iterator<SdmItem> iter = sdmItems.iterator();
-        while(iter.hasNext()) {
-            SdmItem item = iter.next();
-
+        for (SdmItem item : sdmItems) {
             if (item.getParagraphOrder().equals(index)) {
                 result = item;
                 break;

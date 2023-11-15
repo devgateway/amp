@@ -40,10 +40,10 @@ package org.digijava.kernel.viewmanager.reposimpl;
 *
 *************************************************************************/
 
-import java.util.Map;
-import javax.servlet.ServletContext;
-
 import org.digijava.kernel.viewmanager.ViewConfigException;
+
+import javax.servlet.ServletContext;
+import java.util.Map;
 
 public class TemplateViewConfigImpl extends ViewConfigUtil {
     private String template;

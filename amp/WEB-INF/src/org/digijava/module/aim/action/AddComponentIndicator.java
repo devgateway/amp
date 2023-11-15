@@ -1,21 +1,14 @@
 package org.digijava.module.aim.action;
 
-import java.util.Iterator;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.*;
+import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
+import org.digijava.module.aim.form.ComponentsForm;
+import org.digijava.module.aim.util.ComponentsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
-import org.digijava.module.aim.form.ComponentsForm;
-import org.digijava.module.aim.util.ComponentsUtil;
 
 public class AddComponentIndicator extends Action 
 {
@@ -51,13 +44,12 @@ public class AddComponentIndicator extends Action
             compForm.setIndicatorId(null);
         }
         else if(event.equalsIgnoreCase("edit")){
-            Iterator itr = ComponentsUtil.getComponentIndicator(new Long(idS)).iterator();
-            while(itr.hasNext()){
-            AmpComponentsIndicators ampComInd = (AmpComponentsIndicators)itr.next();
-            compForm.setIndicatorId(ampComInd.getAmpCompIndId());
-            compForm.setCompIndicatorName(ampComInd.getName());
-            compForm.setCompIndicatorCode(ampComInd.getCode());
-            compForm.setCompIndicatorDesc(ampComInd.getDescription());
+            for (Object o : ComponentsUtil.getComponentIndicator(new Long(idS))) {
+                AmpComponentsIndicators ampComInd = (AmpComponentsIndicators) o;
+                compForm.setIndicatorId(ampComInd.getAmpCompIndId());
+                compForm.setCompIndicatorName(ampComInd.getName());
+                compForm.setCompIndicatorCode(ampComInd.getCode());
+                compForm.setCompIndicatorDesc(ampComInd.getDescription());
             }
         }
         else if(event.equalsIgnoreCase("save"))

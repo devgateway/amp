@@ -3,13 +3,13 @@
  */
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.reports.ActivityType;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.reports.ActivityType;
 
 
 /**

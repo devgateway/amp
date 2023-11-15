@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30712</jira>
+    <keyword>Add trubudget settings to global setting</keyword>
+    <author>brianbrix</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal)
+                VALUES
+                (select(nextval('amp_global_settings_seq')),'apiVersion','1.0','','Trubudget api version','trubudget',NULL,true) ON CONFLICT (settingsname,section) DO NOTHING;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

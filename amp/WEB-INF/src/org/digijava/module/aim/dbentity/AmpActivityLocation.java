@@ -1,20 +1,16 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.TreeNodeAware;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Connection between Activity and Location.
@@ -150,5 +146,19 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     @Override
     public AmpAutoCompleteDisplayable<AmpCategoryValueLocations> getTreeNode() {
         return location;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpActivityLocation that = (AmpActivityLocation) o;
+        return Objects.equals(location.getId(), that.location.getId());
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activity, location);
     }
 }

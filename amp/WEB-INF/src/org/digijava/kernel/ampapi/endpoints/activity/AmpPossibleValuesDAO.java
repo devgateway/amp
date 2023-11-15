@@ -5,14 +5,7 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeMapping;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
@@ -140,7 +133,8 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     private boolean isValid(String tableName, String configColName, String configType, String idColName, Long id) {
         String query = "SELECT count(" + idColName + ") FROM " + tableName + " WHERE " + configColName + "='"
                 + configType + "' AND " + idColName + "=" + id;
-        BigInteger count = (BigInteger) PersistenceManager.getSession().createSQLQuery(query).uniqueResult();
+        Long longCount = (Long)PersistenceManager.getSession().createNativeQuery(query).uniqueResult();
+        BigInteger count = BigInteger.valueOf(longCount);
         return count.intValue() == 1;
     }
 

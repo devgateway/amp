@@ -3,29 +3,9 @@ package org.digijava.module.aim.action;
 * @ author Dan Mihaila
 * co-author dare :D :D
 */
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -39,10 +19,18 @@ import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
-import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.*;
 
 //TODO replaced with ImportExportTranslations.java in translator module. Remove this file. see AMP-9085
 @Deprecated
@@ -81,15 +69,13 @@ public class TranslatorManager extends Action {
             try {
                 trns_in = (Translations) m.unmarshal(inputStream);
                 if (trns_in.getTrn() != null) {
-                    Iterator<Trn> it = trns_in.getTrn().iterator();
-                    while (it.hasNext()) {
-                        Trn element = it.next();
-                        List<Language> langs=element.getLang();
+                    for (Trn element : trns_in.getTrn()) {
+                        List<Language> langs = element.getLang();
                         // translation must have at least one language,so this
                         // list can't be null.
                         for (Language lang : langs) {
                             languagesImport.add(lang.getCode());
-                        }                       
+                        }
                     }
                     tMngForm.setImportedLanguages(languagesImport);
 
@@ -176,7 +162,7 @@ public class TranslatorManager extends Action {
                             if (tMngForm.getSelectedImportedLanguages()[i].compareTo(langSearched) == 0)
                                 searchedLang = true;
                             }
-                        if (searchedLang == false && 
+                        if (!searchedLang &&
                                 request.getParameter("LANG:" + tMngForm.getSelectedImportedLanguages()[i]).compareTo("update") == 0) {
                                 ActionMessages errors = new ActionMessages();                               
                                 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.updateErrorTranslation"));                               
@@ -186,38 +172,34 @@ public class TranslatorManager extends Action {
                         }
                         
                         for(int i=0; i<tMngForm.getSelectedImportedLanguages().length;i++)  {
-                            Iterator<TrnHashMap> it=trnHashMaps.iterator();
-                        while (it.hasNext()) {
-                                TrnHashMap tHP=(TrnHashMap)it.next();
-                            if (tHP.getLang().compareTo(tMngForm.getSelectedImportedLanguages()[i]) == 0) {
-                                // what was selected: overwrite,update or insert
-                                // non-existing
-                                    String actionName=request.getParameter("LANG:"+tMngForm.getSelectedImportedLanguages()[i]);
-                                // what to do with translations,which have
-                                // keywords that were typed by user on import
-                                // page.
-                                    String skipOrUpdateTrnsWithKeywords=tMngForm.getSkipOrUpdateTrnsWithKeywords();
-                                List<String> keywords = null;
-                                if (tMngForm.getKeywords() == null) {
-                                    keywords = new ArrayList<String>();
-                                } else {
-                                    keywords = Arrays.asList(tMngForm.getKeywords());
-                                }
-                                    
-                                    Iterator<Message> trnsIterator=tHP.getTranslations().iterator();                                    
-                                    while(trnsIterator.hasNext()){
-                                        Message msg=(Message)trnsIterator.next();                                       
-                                    // now overwrite,update or insert
-                                    // non-existing translation
-                                        if(actionName.compareTo("nonexisting")==0){
-                                            updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i],request);
-                                            logger.info("updating non existing...."+msg.getKey());
-                                        }else if(actionName.compareTo("update")==0){                                            
-                                            overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
-                                            logger.info("updating new tr msg...."+msg.getKey());
-                                        }else if(actionName.compareTo("overwrite")==0){                                         
-                                            overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
-                                            logger.info("inserting...."+msg.getKey());
+                            for (TrnHashMap tHP : trnHashMaps) {
+                                if (tHP.getLang().compareTo(tMngForm.getSelectedImportedLanguages()[i]) == 0) {
+                                    // what was selected: overwrite,update or insert
+                                    // non-existing
+                                    String actionName = request.getParameter("LANG:" + tMngForm.getSelectedImportedLanguages()[i]);
+                                    // what to do with translations,which have
+                                    // keywords that were typed by user on import
+                                    // page.
+                                    String skipOrUpdateTrnsWithKeywords = tMngForm.getSkipOrUpdateTrnsWithKeywords();
+                                    List<String> keywords = null;
+                                    if (tMngForm.getKeywords() == null) {
+                                        keywords = new ArrayList<String>();
+                                    } else {
+                                        keywords = Arrays.asList(tMngForm.getKeywords());
+                                    }
+
+                                    for (Message message : (Iterable<Message>) tHP.getTranslations()) {
+                                        // now overwrite,update or insert
+                                        // non-existing translation
+                                        if (actionName.compareTo("nonexisting") == 0) {
+                                            updateNonExistingTranslationMessage(message, tMngForm.getSelectedImportedLanguages()[i], request);
+                                            logger.info("updating non existing...." + message.getKey());
+                                        } else if (actionName.compareTo("update") == 0) {
+                                            overrideOrUpdateTrns(message, tMngForm.getSelectedImportedLanguages()[i], actionName, keywords, skipOrUpdateTrnsWithKeywords, request);
+                                            logger.info("updating new tr msg...." + message.getKey());
+                                        } else if (actionName.compareTo("overwrite") == 0) {
+                                            overrideOrUpdateTrns(message, tMngForm.getSelectedImportedLanguages()[i], actionName, keywords, skipOrUpdateTrnsWithKeywords, request);
+                                            logger.info("inserting...." + message.getKey());
                                         }
                                     }
                                 }
@@ -286,26 +268,24 @@ public class TranslatorManager extends Action {
     }
     
     private void fillMapWithTranslationsForALanguage(String language,Map<String,MessageGroup> map){     
-        Session session = null;
-        String qryStr = null;       
+        Session session;
+        String qryStr;
         Query qry;      
         try{
                 session = PersistenceManager.getRequestDBSession();
                 qryStr  = "select m from "+ Message.class.getName() + " m where m.locale='"+language+"'";
                 qry= session.createQuery(qryStr);
-                Iterator<Message> itr = qry.list().iterator();
-                while(itr.hasNext()){
-                    Message msg= (Message)itr.next();
+            for (Message message : (Iterable<Message>) qry.list()) {
                 // MessageGroup class key is equal to the message key, from
                 // which it was created
-                    MessageGroup msgGroup=map.get(msg.getKey());
-                    if(msgGroup==null){
-                        msgGroup=new MessageGroup(msg);
-                    }else{
-                        msgGroup.addMessage(msg);
-                    }
-                    map.put(msgGroup.getKey(), msgGroup);
+                MessageGroup msgGroup = map.get(message.getKey());
+                if (msgGroup == null) {
+                    msgGroup = new MessageGroup(message);
+                } else {
+                    msgGroup.addMessage(message);
                 }
+                map.put(msgGroup.getKey(), msgGroup);
+            }
         } catch (Exception ex) {
             logger.error("Exception : " + ex.getMessage());
             ex.printStackTrace(System.out);
@@ -314,7 +294,7 @@ public class TranslatorManager extends Action {
     
     private void updateNonExistingTranslationMessage(Message msgLocal, String lang,HttpServletRequest request){
         CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
-        Long siteId = RequestUtils.getSite(request).getId();
+        Long siteId = Objects.requireNonNull(RequestUtils.getSite(request)).getId();
         try {
             Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId, false, null);
             if(dbMessage==null){
@@ -336,7 +316,7 @@ public class TranslatorManager extends Action {
             ) throws Exception {
     
         CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
-        Long siteId = RequestUtils.getSite(request).getId();
+        Long siteId = Objects.requireNonNull(RequestUtils.getSite(request)).getId();
         //get message from cache,if exists.
         Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId, false, null);
         if(dbMessage!=null){
@@ -379,13 +359,10 @@ public class TranslatorManager extends Action {
                 }
             }
         }else{
-            boolean insertNewMsg=true;
-            if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && !keyWords.contains(msgLocal.getKeyWords())){
-                // if we have skipOrUpdateTrnsWithKeywords=update case,this
-                // means that only messages with keywords(that match user's
-                // typed ones) should be inserted
-                insertNewMsg=false;
-            }
+            boolean insertNewMsg= !skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") || keyWords.contains(msgLocal.getKeyWords());
+            // if we have skipOrUpdateTrnsWithKeywords=update case,this
+            // means that only messages with keywords(that match user's
+            // typed ones) should be inserted
             if(insertNewMsg){
                 logger.debug("New Key Found adding "+ msgLocal.getKey() + " to local db");
                 Message msg= new Message();

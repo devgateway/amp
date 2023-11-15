@@ -1,13 +1,13 @@
 package org.digijava.module.aim.form;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class VisibilityManagerForm extends ActionForm implements Serializable{
 

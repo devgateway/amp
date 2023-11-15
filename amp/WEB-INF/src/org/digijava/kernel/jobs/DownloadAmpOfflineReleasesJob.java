@@ -1,6 +1,5 @@
 package org.digijava.kernel.jobs;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
 import org.digijava.kernel.ampregistry.AmpRegistryService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpOfflineService;
@@ -21,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,10 +46,10 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
     private AmpVersionService ampVersionService;
     private AmpOfflineService ampOfflineService;
 
-    private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
+    private final AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
-    public void executeNonConcurrentInternal(JobExecutionContext context) throws JobExecutionException {
+    public void executeNonConcurrentInternal(JobExecutionContext context) {
         if (FeaturesUtil.isAmpOfflineEnabled()) {
             Set<AmpOfflineRelease> newReleases = new HashSet<>();
             PersistenceManager.inTransaction(() -> {
@@ -64,7 +62,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
                 }
             });
 
-            newReleases.forEach(release -> persistRelease(release));
+            newReleases.forEach(this::persistRelease);
 
             saveReleasesInDb(newReleases);
             removeIncompatibleReleases();
@@ -145,7 +143,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
         try {
             ampOfflineService.saveToDisk(release, ampRegistryService.releaseFileSupplier(release));
             existingReleases.add(release);
-        } catch (IOException | UniformInterfaceException e) {
+        } catch (Exception e) {
             logger.warn(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }

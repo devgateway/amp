@@ -1,23 +1,6 @@
 package org.dgfoundation.amp.codegenerators;
 
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPOutputStream;
-
-import static org.dgfoundation.amp.algo.AmpCollections.sorted;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -25,11 +8,19 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
+
+import java.io.*;
+import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.zip.GZIPOutputStream;
+
+import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
 /**
  * Code generator for funding columns.

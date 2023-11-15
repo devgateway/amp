@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.testutils;
 
-import java.util.*;
-
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
+import java.util.Comparator;
 
 /**
  * an {@link org.dgfoundation.amp.testutils.ActivityDigest} - mirroring comparator

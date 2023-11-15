@@ -3,16 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.jcr.Node;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -47,6 +37,10 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import javax.jcr.Node;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author aartimon@dginternational.org
@@ -134,19 +128,19 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
                 if (delItems == null)
                     delItems = new HashSet<AmpActivityDocument>();
-                List<TemporaryActivityDocument> ret = new ArrayList<TemporaryActivityDocument>();
 
                 if (refreshExistingDocs)
                     existingTmpDocs = getExistingObject();
-                ret.addAll(existingTmpDocs);
+                if (existingTmpDocs==null)
+                {
+                    existingTmpDocs=new ArrayList<>();
+                }
+                List<TemporaryActivityDocument> ret = new ArrayList<>(existingTmpDocs);
 
                 if (am.getObject().getActivityDocuments() == null)
                     am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
-                Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
 
-                while (it.hasNext()) {
-                    AmpActivityDocument d = (AmpActivityDocument) it
-                            .next();
+                for (AmpActivityDocument d : setModel.getObject()) {
                     //check if marked for delete
                     if (delItems.contains(d)) {
                         for (TemporaryDocument td : existingTmpDocs) {
@@ -230,10 +224,10 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 if (webLink != null && webLink.length() > 0) {
                     if (!webLink.startsWith("http"))
                         webLink = "http://" + webLink;
-                    ExternalLink link = new ExternalLink("download", new Model<String>(webLink));
+                    ExternalLink link = new ExternalLink("download", new Model<>(webLink));
                     item.add(link);
                     WebMarkupContainer downloadLinkImg = new WebMarkupContainer("downloadImage");
-                    downloadLinkImg.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/ico_attachment.png")));
+                    downloadLinkImg.add(new AttributeModifier("src", new Model<>("/TEMPLATE/ampTemplate/img_2/ico_attachment.png")));
                     link.add(downloadLinkImg);
                 } else {
                     Link downloadLink = new Link("download") {
@@ -247,7 +241,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     String contentType = item.getModelObject().getFileName();
                     int index = contentType.lastIndexOf('.');
 
-                    String extension = contentType.substring(index + 1, contentType.length());
+                    String extension = contentType.substring(index + 1);
                     String extPath = "/TEMPLATE/ampTemplate/images/icons/" + extension + ".gif";
                     File extImgFile = new File(WebApplication.get().getServletContext().getRealPath(extPath));
                     if (!extImgFile.exists())
@@ -256,7 +250,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                         extPath = "/TEMPLATE/ampTemplate/images/icons/" + extension + ".gif";
 
                     WebMarkupContainer downloadLinkImg = new WebMarkupContainer("downloadImage");
-                    downloadLinkImg.add(new AttributeModifier("src", new Model(extPath)));
+                    downloadLinkImg.add(new AttributeModifier("src", new Model<>(extPath)));
                     downloadLink.add(downloadLinkImg);
                 }
 
@@ -266,7 +260,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                         if (item.getModelObject().isExisting()) {
                             HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
                             if (delItems == null) {
-                                delItems = new HashSet<AmpActivityDocument>();
+                                delItems = new HashSet<>();
                                 getSession().setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, delItems);
                             }
                             delItems.add(item.getModelObject().getExistingDocument());

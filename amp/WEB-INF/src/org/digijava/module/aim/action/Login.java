@@ -1,23 +1,9 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
+import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -26,19 +12,28 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.LoginForm;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.um.model.TruLoginRequest;
+import org.digijava.module.um.model.TruLoginResponse;
+import org.digijava.module.um.util.UmUtil;
+import reactor.core.publisher.Mono;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
+
+import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
+import static org.digijava.module.um.util.DbUtil.*;
 
 
 /**
@@ -57,11 +52,9 @@ public class Login extends Action {
             HttpServletRequest request, HttpServletResponse response)
             throws java.lang.Exception {
 
-        if (true) {
-            //redirecting to index.do so spring handles the access and we don't give the user an error
-            response.sendRedirect("index.do");
-            //throw new IllegalAccessException("This code must not be accessed any more");
-        }
+        //redirecting to index.do so spring handles the access and we don't give the user an error
+        response.sendRedirect("index.do");
+        //throw new IllegalAccessException("This code must not be accessed any more");
 
         LoginForm lForm = (LoginForm) form; // login form instance
         ampContext = getServlet().getServletContext();
@@ -153,11 +146,15 @@ public class Login extends Action {
                  * registered user but has not yet been assigned a team
                  */
                 //
+                doActualTruBudgetLogin(usr);
+
+
+
                 Collection members = TeamMemberUtil.getTeamMembers(lForm.getUserId());
                 if (members == null || members.size() == 0) {
                     if (siteAdmin == true) { // user is a site admin
                         // set the session variable 'ampAdmin' to the value 'yes'
-                        session.setAttribute("ampAdmin", new String("yes"));
+                        session.setAttribute("ampAdmin", "yes");
                         // create a TeamMember object and set it to a session variabe 'currentMember'
                         TeamMember tm = new TeamMember(usr);
                         tm.setTeamName(TranslatorWorker.translateText("AMP Administrator"));
@@ -176,9 +173,9 @@ public class Login extends Action {
                     }
                 } else {
                     if (siteAdmin == true) {
-                        session.setAttribute("ampAdmin", new String("yes"));
+                        session.setAttribute("ampAdmin", "yes");
                     } else {
-                        session.setAttribute("ampAdmin", new String("no"));
+                        session.setAttribute("ampAdmin", "no");
                     }
                 }
                 if (members.size() == 1) {
@@ -199,16 +196,15 @@ public class Login extends Action {
                             HashMap editActMap = (HashMap) ampContext.getAttribute(Constants.EDIT_ACT_LIST);
                             String sessId = null;
                             if (editActMap != null)  {
-                                Iterator itr1 = editActMap.keySet().iterator();
-                                while (itr1.hasNext()) {
-                                    sessId = (String) itr1.next();
+                                for (Object o : editActMap.keySet()) {
+                                    sessId = (String) o;
                                     Long tempActId = (Long) editActMap.get(sessId);
 
                                     //logger.info("tempActId = " + tempActId + " actId = " + actId);
                                     if (tempActId.longValue() == actId.longValue()) {
                                         editActMap.remove(sessId);
                                         //logger.info("Removed the entry for " + actId);
-                                        ampContext.setAttribute(Constants.EDIT_ACT_LIST,editActMap);
+                                        ampContext.setAttribute(Constants.EDIT_ACT_LIST, editActMap);
                                         break;
                                     }
                                 }

@@ -6,10 +6,6 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -18,6 +14,8 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
+
+import java.util.Iterator;
 
 /**
  * 

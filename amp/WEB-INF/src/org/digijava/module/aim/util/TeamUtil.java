@@ -4,27 +4,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.io.Serializable;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -33,37 +12,29 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeamSummaryNotificationSettings;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.dbentity.NpdSettings;
-import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.ReportsCollection;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.Workspace;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermission;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Persister class for all Team/Workspaces related Objects
@@ -339,7 +310,7 @@ public class TeamUtil {
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
                     + "where (" + teamNameHql + "=:name)";
             Query qry = session.createQuery(qryStr);
-            qry.setString("name", team.getName());
+            qry.setParameter("name", team.getName(),StringType.INSTANCE);
             if(qry.list().size() > 0) {
                 // throw new AimException("Cannot create team: The team name " +
                 // team.getName() + " already exist");
@@ -354,15 +325,15 @@ public class TeamUtil {
                     + AmpFiscalCalendar.class.getName() + " fiscal "
                     + "where (fiscal.name=:cal) or (fiscal.yearOffset=:yearOffset)";
             qry = session.createQuery(qryStr);
-            qry.setString("cal", "Gregorian Calendar");
-            qry.setInteger("yearOffset", 0);
+            qry.setParameter("cal", "Gregorian Calendar",StringType.INSTANCE);
+            qry.setParameter("yearOffset", 0, IntegerType.INSTANCE);
             List<AmpFiscalCalendar> calendars = qry.list();
             AmpFiscalCalendar fiscal = null;
             if(calendars.size() > 0) {
-                for(Iterator<AmpFiscalCalendar> itr = calendars.iterator(); itr.hasNext(); ) {
-                    fiscal = (AmpFiscalCalendar) itr.next();
+                for (AmpFiscalCalendar calendar : calendars) {
+                    fiscal = calendar;
                     logger.debug("[createTeam(-)] fiscal calendar - " + fiscal.getName());
-                    if(fiscal != null)
+                    if (fiscal != null)
                         break;
                 }
             } 
@@ -376,7 +347,7 @@ public class TeamUtil {
             AmpApplicationSettings ampAppSettings = new AmpApplicationSettings();
             ampAppSettings.setTeam(team);
             //ampAppSettings.setMember(null);
-            ampAppSettings.setDefaultRecordsPerPage(new Integer(10));
+            ampAppSettings.setDefaultRecordsPerPage(10);
             ampAppSettings.setCurrency(curr);
             ampAppSettings.setFiscalCalendar(fiscal);
             ampAppSettings.setLanguage("en");
@@ -500,14 +471,10 @@ public class TeamUtil {
                 Iterator itr1 = qry.list().iterator();
                 int numMem = 0;
                 if(itr1.hasNext()) {
-                    Integer num = (Integer) itr1.next();
-                    numMem = num.intValue();
+                    Long longNum= (Long) itr1.next();
+                    numMem = longNum.intValue();
                 }
-                if(numMem == 0) {
-                    workspace.setHasMembers(false);
-                } else {
-                    workspace.setHasMembers(true);
-                }
+                workspace.setHasMembers(numMem != 0);
                 qryStr = "select count(*) from " + AmpActivity.class.getName()
                     + " act " + "where (act.team=:teamId)";
                 qry = session.createQuery(qryStr);
@@ -515,20 +482,15 @@ public class TeamUtil {
                 itr1 = qry.list().iterator();
                 int numAct = 0;
                 if(itr1.hasNext()) {
-                    Integer num = (Integer) itr1.next();
-                    numAct = num.intValue();
+                    numAct = ((Long)  itr1.next()).intValue();
                 }
-                if(numAct == 0) {
-                    workspace.setHasActivities(false);
-                } else {
-                    workspace.setHasActivities(true);
-                }
+                workspace.setHasActivities(numAct != 0);
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
                     + "where (t.parentTeamId.ampTeamId=:teamId)";
                 qry = session.createQuery(qryStr);
                 qry.setParameter("teamId", team.getAmpTeamId(), LongType.INSTANCE);
-                itr1 = qry.list().iterator();
                 Collection childWorkspaces = new ArrayList();
+                itr1 = qry.list().iterator();
                 while(itr1.hasNext()) {
                     AmpTeam childTeam = (AmpTeam) itr1.next();
                     childWorkspaces.add(childTeam);
@@ -600,7 +562,7 @@ public class TeamUtil {
                 updTeam.setFmTemplate(team.getFmTemplate());
                 updTeam.setWorkspacePrefix(team.getWorkspacePrefix());
                 if (updTeam.getFilterDataSet() == null)
-                    updTeam.setFilterDataSet(new HashSet());
+                    updTeam.setFilterDataSet(new HashSet<>());
                 else
                     updTeam.getFilterDataSet().clear();
                 if (team.getFilterDataSet() != null){
@@ -615,9 +577,8 @@ public class TeamUtil {
                 qry.setParameter("parId", updTeam.getAmpTeamId(),
                                  LongType.INSTANCE);
 
-                Iterator itr = qry.list().iterator();
-                while(itr.hasNext()) {
-                    AmpTeam child = (AmpTeam) itr.next();
+                for (Object o : qry.list()) {
+                    AmpTeam child = (AmpTeam) o;
                     child.setParentTeamId(null);
                     session.saveOrUpdate(child);
                 }
@@ -625,12 +586,12 @@ public class TeamUtil {
                 logger.debug("Team updated");
 
                 if(childTeams != null && childTeams.size() > 0) {
-                    itr = childTeams.iterator();
                     logger.info("Size " + childTeams.size());
-                    while(itr.hasNext()) {
-                        AmpTeam childTeam = (AmpTeam) itr.next();
+
+                    for (Object o : childTeams) {
+                        AmpTeam childTeam = (AmpTeam) o;
                         AmpTeam upChildTeam = (AmpTeam) session.load(
-                            AmpTeam.class, childTeam.getAmpTeamId());
+                                AmpTeam.class, childTeam.getAmpTeamId());
                         upChildTeam.setParentTeamId(updTeam);
                         session.saveOrUpdate(upChildTeam);
                     }
@@ -667,8 +628,8 @@ public class TeamUtil {
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 Integer cnt = (Integer) itr.next();
-                logger.info("cnt.intValue = " + cnt.intValue());
-                if (cnt.intValue() > 0) {
+                logger.info("cnt.intValue = " + cnt);
+                if (cnt > 0) {
                     memExist = true;
                 }
             }
@@ -695,8 +656,8 @@ public class TeamUtil {
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 Integer cnt = (Integer) itr.next();
-                logger.info("cnt.intValue = " + cnt.intValue());
-                if(cnt.intValue() > 0)
+                logger.info("cnt.intValue = " + cnt);
+                if(cnt > 0)
                     memExist = true;
             }
 
@@ -750,7 +711,7 @@ public class TeamUtil {
             qryStr = "select act from " + AmpActivityVersion.class.getName() + " act"
                 + " where (act.team=:teamId)";
             qry = session.createQuery(qryStr);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             while(itr.hasNext()) {
                 AmpActivityVersion act = (AmpActivityVersion) itr.next();
@@ -763,7 +724,7 @@ public class TeamUtil {
                 qryStr = "select tr from " + AmpTeamReports.class.getName() + " tr"
                     + " where (tr.team=:teamId)";
                 qry = session.createQuery(qryStr);
-                qry.setLong("teamId", teamId);
+                qry.setParameter("teamId", teamId, LongType.INSTANCE);
                 itr = qry.list().iterator();
                 while(itr.hasNext()) {
                     AmpTeamReports tr = (AmpTeamReports) itr.next();
@@ -776,7 +737,7 @@ public class TeamUtil {
             qryStr = "select t from " + AmpTeam.class.getName() + " t"
                 + " where (t.parentTeamId.ampTeamId=:teamId)";
             qry = session.createQuery(qryStr);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             itr = qry.list().iterator();
             while(itr.hasNext()) {
                 AmpTeam t = (AmpTeam) itr.next();
@@ -788,7 +749,7 @@ public class TeamUtil {
             qryStr = "select t from " + AmpTeam.class.getName() + " t"
                 + " where (t.relatedTeamId=:teamId)";
             qry = session.createQuery(qryStr);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             itr = qry.list().iterator();
             while(itr.hasNext()) {
                 AmpTeam t = (AmpTeam) itr.next();
@@ -800,7 +761,7 @@ public class TeamUtil {
             qryStr = "select a from " + AmpApplicationSettings.class.getName()
                 + " a " + "where (a.team=:teamId)";
             qry = session.createQuery(qryStr);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             itr = qry.list().iterator();
             if(itr.hasNext()) {
                 AmpApplicationSettings as = (AmpApplicationSettings) itr.next();
@@ -895,7 +856,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 //session.flush();
-            member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
+            member = session.load(AmpTeamMember.class, id);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -914,21 +875,24 @@ public class TeamUtil {
             //session.saveOrUpdate(appSettings);
             
             if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
-                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
+                AmpTeam team = session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
                 session.saveOrUpdate(team);
             }
-            User user = (User) session.load(User.class, member.getUser().getId());
+            User user = session.load(User.class, member.getUser().getId());
             String qryStr = "select grp from " + Group.class.getName()
                 + " grp " + "where (grp.key=:key) and (grp.site=:sid)";
             Query qry = session.createQuery(qryStr);
-            qry.setString("key", Group.EDITORS);
-            qry.setLong("sid", site.getId());
+            qry.setParameter("key", Group.EDITORS, StringType.INSTANCE);
+            qry.setParameter("sid", site.getId(), LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
-            Group group = null;
-            if(itr.hasNext())
-                group = (Group) itr.next();
+            Group group =(Group) qry.stream().findAny().orElse(null);
+//            if(itr.hasNext())
+//                group = (Group) itr.next();
             user.getGroups().add(group);
+            session.saveOrUpdate(user);
+            session.flush();
+
             //tx.commit();
             logger.debug("User added to group " + group.getName());
         } catch(Exception e) {
@@ -955,8 +919,8 @@ public class TeamUtil {
                     + " and t.ampTeamId=:teamId";
 
             qry = session.createQuery(qryStr);
-            qry.setString("email", email);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("email", email, StringType.INSTANCE);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             if (qry.list() == null || qry.list().size() == 0) {
                 memberExist = false;
             }
@@ -967,7 +931,7 @@ public class TeamUtil {
     }
 
  
-    public static void removeActivitiesFromTeam(Long activities[],Long teamId) {
+    public static void removeActivitiesFromTeam(Long[] activities, Long teamId) {
         Session session = null;
         Transaction tx = null;
         try {
@@ -978,7 +942,7 @@ public class TeamUtil {
             Query query = session.createQuery(qs);
             query.setParameterList("activity", activities);
             query.executeUpdate();
-            query = session.createSQLQuery("delete from amp_member_activities where amp_activity_id in (:activity)");
+            query = session.createNativeQuery("delete from amp_member_activities where amp_activity_id in (:activity)");
             query.setParameterList("activity", activities);
             query.executeUpdate();
             tx.commit();
@@ -1006,10 +970,7 @@ public class TeamUtil {
                 + " tm where tm.parentTeamId.ampTeamId=:ampTeamId";
             q = session.createQuery(qry);
             q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
-            if(q != null && q.list().size() > 0)
-                ans = false;
-            else
-                ans = true;
+            ans = q.list().size() <= 0;
         } catch(Exception ex) {
             logger.error("Unable to get AmpTeam [checkForParentTeam()]", ex);
             throw new RuntimeException(ex);
@@ -1060,8 +1021,7 @@ public class TeamUtil {
         Query qry = session.createQuery(queryString.toString());
         for (Object[] rs : (List<Object[]>) qry.list()) {
             Long actId = (Long) rs[1];
-            if (result.get(actId) == null)
-                result.put(actId, new ArrayList<AmpActivityDocument>());
+            result.computeIfAbsent(actId, k -> new ArrayList<AmpActivityDocument>());
             result.get(actId).add((AmpActivityDocument) rs[0]);
         }
         return result;
@@ -1106,15 +1066,15 @@ public class TeamUtil {
                 queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
             }
             if(keyword!=null && keyword.length()>0){
-                queryString.append(" and lower(" + activityNameHql + ") like lower(:name)") ;
+                queryString.append(" and lower(").append(activityNameHql).append(") like lower(:name)");
             }
             
             qry = session.createQuery(queryString.toString());
             if(keyword!=null && keyword.length()>0){
-                qry.setString("name", "%" + keyword + "%");
+                qry.setParameter("name", "%" + keyword + "%",StringType.INSTANCE);
             }
             if(teamId!=null){
-                qry.setLong("teamId", teamId);
+                qry.setParameter("teamId", teamId, LongType.INSTANCE);
             }          
             col  = qry.list();
             Map<Long, Object[]> res = new TreeMap<Long, Object[]>();
@@ -1137,26 +1097,13 @@ public class TeamUtil {
      */
     public static Set<Long> fetchIds(PreparedStatement statement)
     {
-        ResultSet rs = null;
-        try
-        {
-            rs = statement.executeQuery();
+        try (ResultSet rs = statement.executeQuery()) {
             Set<Long> res = new HashSet<Long>();
             while (rs.next())
                 res.add(rs.getLong(1));
             return res;
-        }
-        catch(SQLException ex)
-        {
+        } catch (SQLException ex) {
             return null;
-        }
-        finally
-        {
-            if (rs != null)
-            {
-                try{rs.close();}
-                catch(SQLException e){}
-            }
         }
         
     }
@@ -1169,13 +1116,13 @@ public class TeamUtil {
       if (teamId == null) {
           queryString.append(" and (A.amp_team_id is null)") ;
       }else{
-          queryString.append(" and (A.amp_team_id=" + teamId + ")") ;
+          queryString.append(" and (A.amp_team_id=").append(teamId).append(")");
       }
       if (!includedraft){
           queryString.append("  and   (A.draft is null or A.draft=false) ");
       }
       if (keyword != null && keyword.length() > 0){
-          queryString.append(" and lower(" + AmpActivityVersion.sqlStringForName("A.amp_activity_id") + ") like lower(?)") ;
+          queryString.append(" and lower(").append(AmpActivityVersion.sqlStringForName("A.amp_activity_id")).append(") like lower(?)");
       }
 
       final Set<Long> ids = new HashSet<Long>();
@@ -1210,7 +1157,7 @@ public class TeamUtil {
                 }
                 qry = session.createQuery(queryString.toString());
                 if(keyword!=null){
-                    qry.setString("name", "%" + keyword + "%");
+                    qry.setParameter("name", "%" + keyword + "%",StringType.INSTANCE);
                 } 
                 qry.setParameterList("params", childIds);
                 activities = qry.list();
@@ -1262,14 +1209,12 @@ public class TeamUtil {
     public static String getCommaSeparatedList(Collection<?> objs)
     {
         StringBuilder buf = new StringBuilder();
-        buf.append("");
         for(Object obj:objs)
         {
             if (buf.length() > 0)
                 buf.append(", ");
             buf.append(obj.toString());
         }
-        buf.append("");
         return buf.toString();
     }
     
@@ -1308,12 +1253,10 @@ public class TeamUtil {
             queryString += " order by " + reportNameHql;
             qry = session.createQuery(queryString);
             if(keyword != null && keyword.trim().length() > 0){
-                qry.setString("keyword", '%' + keyword + '%');
+                qry.setParameter("keyword", '%' + keyword + '%', StringType.INSTANCE);
             }
             //qry.setLong("id", ampTeamRep.getReport().getAmpReportId());
-            Iterator<AmpReports> itrTemp = qry.list().iterator();
-            while(itrTemp.hasNext()) {
-                AmpReports ampReport = itrTemp.next();
+            for (AmpReports ampReport : (Iterable<AmpReports>) qry.list()) {
                 ReportsCollection rc = new ReportsCollection();
                 rc.setReport(ampReport);
                 rc.setTeamView(map.get(ampReport.getAmpReportId()));
@@ -1356,11 +1299,11 @@ public class TeamUtil {
             Query qry = session.createQuery(queryString);
             
             if(keyword!=null&&keyword.trim().length()>0){
-                qry.setString("keyword", '%' + keyword.trim() + '%');
+                qry.setParameter("keyword", '%' + keyword.trim() + '%', StringType.INSTANCE);
             }
             qry.setFirstResult(currentPage);
             qry.setMaxResults(recordPerPage);
-            qry.setLong("teamId", teamId);            
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             return qry.list();
         } catch(Exception e) {
             logger.debug("Exception from getTeamReportsCollection");
@@ -1393,9 +1336,9 @@ public class TeamUtil {
            
            Query qry = session.createQuery(queryString);
            if(keyword != null && keyword.trim().length() > 0){
-               qry.setString("keyword", '%' + keyword + '%');
+               qry.setParameter("keyword", '%' + keyword + '%', StringType.INSTANCE);
            }
-           qry.setLong("teamId", teamId);
+           qry.setParameter("teamId", teamId, LongType.INSTANCE);
            col = qry.list();
            size=col.size();
        } catch(Exception e) {
@@ -1432,7 +1375,7 @@ public class TeamUtil {
            }
            
             session = PersistenceManager.getRequestDBSession();
-            AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+            AmpTeam team = session.load(AmpTeam.class, teamId);
             
             /*AMP-2685 Team leader should not see all reports*/
             AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
@@ -1463,17 +1406,17 @@ public class TeamUtil {
                    qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                 qry.setParameter("teamid", teamId);
                 if ( getTabs!=null )
-                   qry.setBoolean("getTabs", getTabs);
+                   qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
                 if (name != null) {
-                    qry.setString("name", '%' + name + '%');
+                    qry.setParameter("name", '%' + name + '%', StringType.INSTANCE);
                 }
                 if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
-                 qry.setLong("repCat", reportCategoryId);
+                 qry.setParameter("repCat", reportCategoryId, LongType.INSTANCE);
                 }
                 if (currentPage !=null){
                    qry.setFirstResult(currentPage);
                 }
-                if(reportPerPage!=null && reportPerPage.intValue()>0){
+                if(reportPerPage!=null && reportPerPage >0){
                    qry.setMaxResults(reportPerPage);
                 }
                 col = qry.list();
@@ -1491,20 +1434,20 @@ public class TeamUtil {
 
               //  queryString +=  " order by " + reportNameHql;
                 qry = session.createQuery(queryString);
-                qry.setLong("teamId", teamId);
+                qry.setParameter("teamId", teamId, LongType.INSTANCE);
                 if ( getTabs!=null )
-                   qry.setBoolean("getTabs", getTabs);
+                   qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
                  if (name != null) {
-                    qry.setString("name", '%' + name + '%');
+                    qry.setParameter("name", '%' + name + '%', StringType.INSTANCE);
                 }
                 if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
-                     qry.setLong("repCat", reportCategoryId);
+                     qry.setParameter("repCat", reportCategoryId, LongType.INSTANCE);
                 }
                 
                 if (currentPage !=null){
                    qry.setFirstResult(currentPage);
                 }
-                if(reportPerPage!=null && reportPerPage.intValue()>0){
+                if(reportPerPage!=null && reportPerPage >0){
                    qry.setMaxResults(reportPerPage);
                 }
                 col = qry.list();
@@ -1519,7 +1462,7 @@ public class TeamUtil {
                if(onlyCategorized!=null && onlyCategorized){
                    queryString += " and r.reportCategory is not null ";
                }
-               if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+               if(reportCategoryId !=null && !reportCategoryId.equals(0L)){
                  queryString += " and r.reportCategory=:repCat ";
               }
                if (name != null) 
@@ -1528,20 +1471,20 @@ public class TeamUtil {
                     // queryString +=  " order by " + reportNameHql;                   
                }
               qry = session.createQuery(queryString); 
-              qry.setLong("ampTeamMemId", memberId);
-              qry.setLong("teamId", teamId);
+              qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
+              qry.setParameter("teamId", teamId, LongType.INSTANCE);
               if ( getTabs!=null )
-                  qry.setBoolean("getTabs", getTabs);
+                  qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
                 if (name != null) {
-                    qry.setString("name", '%' + name + '%');
+                    qry.setParameter("name", '%' + name + '%', StringType.INSTANCE);
                 }
                 if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
-                     qry.setLong("repCat", reportCategoryId);
+                     qry.setParameter("repCat", reportCategoryId, LongType.INSTANCE);
                 }
               if (currentPage !=null){
                    qry.setFirstResult(currentPage);
                }
-               if(reportPerPage!=null && reportPerPage.intValue()>0){
+               if(reportPerPage!=null && reportPerPage >0){
                    qry.setMaxResults(reportPerPage);
                }
                col = qry.list();
@@ -1582,13 +1525,12 @@ public class TeamUtil {
             queryString="select distinct r,m.lastView from " + AmpReports.class.getName()+
             "  r inner join r.logs m where "+tabFilter+favourites+" (m.member is not null and m.member.ampTeamMemId=:ampTeamMemId) order by m.lastView desc";
             qry = session.createQuery(queryString); 
-            qry.setLong("ampTeamMemId", memberId);
+            qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
             if ( getTabs!=null )
-              qry.setBoolean("getTabs", getTabs);
+              qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
              
          //Sience we include a new column in the query the return will be an collection havin an array the object    
-         Iterator itData = null;
-         itData = qry.iterate();
+           Iterator itData = qry.iterate();
             while(itData.hasNext()){
                 col.add((AmpReports)((Object[])itData.next())[0]);
             }
@@ -1597,7 +1539,7 @@ public class TeamUtil {
             if (col.isEmpty()){
                 queryString="select distinct r from " + AmpReports.class.getName()+ " r where r.drilldownTab=false AND "+favourites+"  r.ownerId is not null and r.ownerId=:ampTeamMemId";
                 qry = session.createQuery(queryString); 
-                qry.setLong("ampTeamMemId", memberId);
+                qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
                 col = new ArrayList<AmpReports>(qry.list());
             }
             //transaction.commit();
@@ -1642,8 +1584,9 @@ public class TeamUtil {
                                 + " r WHERE " + tabFilter + " 1=1";
                 qry         = session.createQuery(queryString);
                 if ( getTabs!=null )
-                    qry.setBoolean("getTabs", getTabs);
-                count       = (Integer) qry.uniqueResult();
+                    qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
+                Long longCount = (Long) qry.uniqueResult();
+                count       = longCount.intValue();
                 
             } else if (!inlcludeMemberReport){
                 queryString = "select r from "
@@ -1651,7 +1594,7 @@ public class TeamUtil {
                     + "  where " + tabFilter + " (tr.team=:teamId) ";
                 qry = session.createQuery(queryString);
                 if ( getTabs!=null )
-                  qry.setBoolean("getTabs", getTabs);
+                  qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
                 qry.setParameter("teamId", teamId, LongType.INSTANCE);
                count=qry.list().size();
             }else if(inlcludeMemberReport){
@@ -1661,10 +1604,10 @@ public class TeamUtil {
                 " or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
                 " tr inner join  tr.report r2 where tr.team=:teamId))";
               qry = session.createQuery(queryString); 
-              qry.setLong("ampTeamMemId", memberId);
-              qry.setLong("teamId", teamId);
+              qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
+              qry.setParameter("teamId", teamId, LongType.INSTANCE);
                 if ( getTabs!=null )
-                  qry.setBoolean("getTabs", getTabs);
+                  qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
               count=qry.list().size();
             }
         } catch(Exception e) {
@@ -1718,7 +1661,7 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select tr.report.ampReportId from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
             Query qry = session.createQuery(queryString);
-            qry.setLong("teamId", id);
+            qry.setParameter("teamId", id, LongType.INSTANCE);
             List ids=qry.list();
             List<AmpReports> ret=new ArrayList<AmpReports>();
             if(ids.size()>0){
@@ -1750,6 +1693,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
+            session.clear();
             String teamNameHql = AmpTeam.hqlStringForName("t");
             String queryString = "select t from " + AmpTeam.class.getName() + " t "
                     + "left outer join fetch t.organizations "
@@ -1787,6 +1731,7 @@ public class TeamUtil {
         
         try {
             session = PersistenceManager.getSession();
+            session.clear();
             String teamNameHql = AmpTeam.hqlStringForName("t");
             StringBuilder queryString =new StringBuilder();
             queryString.append("select t from ");
@@ -1802,16 +1747,16 @@ public class TeamUtil {
             if(accessType!=null){
                 queryString.append(" and t.accessType=:accessType ");
             }
-            queryString.append("order by " + teamNameHql);
+            queryString.append("order by ").append(teamNameHql);
             qry = session.createQuery(queryString.toString());
             if(keyword!=null&&keyword.trim().length()>0){
-                 qry.setString("keyword", '%' + keyword + '%');
+                 qry.setParameter("keyword", '%' + keyword + '%', StringType.INSTANCE);
             }
             if(computed){
-                qry.setBoolean("computation", Boolean.TRUE);
+                qry.setParameter("computation", Boolean.TRUE, BooleanType.INSTANCE);
             }
             if(accessType!=null){
-                qry.setString("accessType",accessType);
+                qry.setParameter("accessType",accessType, StringType.INSTANCE);
             }
             qry.setCacheable(true);
             teams = qry.list();
@@ -1835,9 +1780,9 @@ public class TeamUtil {
             where += " o.accessType != 'Management' " + (includePrivate ? "" : " and ");
         if (!includePrivate)
             where += " o.isolated in (null, false)";
-        if (where != "")
+        if (!where.equals(""))
             where = "where " + where;
-        return PersistenceManager.getSession().createQuery(" from " + AmpTeam.class.getName() + " o " + where).list();
+        return PersistenceManager.getRequestDBSession().createQuery(" from " + AmpTeam.class.getName() + " o " + where).list();
     }
 
     public static Set<AmpTeam> getAmpLevel0Teams(Long ampTeamId) {
@@ -1868,9 +1813,7 @@ public class TeamUtil {
                         + ampTeam.getAmpTeamId() + ")";
                     qry = session.createQuery(queryString);
                     List<AmpTeam> tempList = qry.list();
-                    Iterator<AmpTeam> it = tempList.iterator();
-                    while (it.hasNext()){
-                        AmpTeam tt = it.next();
+                    for (AmpTeam tt : tempList) {
                         if (!visitedTeams.contains(tt.getAmpTeamId()))
                             list.add(tt);
                     }
@@ -1925,9 +1868,9 @@ public class TeamUtil {
         if (orgId != null ){
             Collection<AmpTeam> teams = getAllTeams();
             for (AmpTeam ampTeam : teams) {
-                for (Iterator iterator = ampTeam.getOrganizations().iterator(); iterator.hasNext();) {
-                    AmpOrganisation org = (AmpOrganisation) iterator.next();
-                    if (org.getAmpOrgId().equals(orgId)){
+                for (Object o : ampTeam.getOrganizations()) {
+                    AmpOrganisation org = (AmpOrganisation) o;
+                    if (org.getAmpOrgId().equals(orgId)) {
                         retValue.add(ampTeam);
                         break;
                     }

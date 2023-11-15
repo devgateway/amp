@@ -5,12 +5,12 @@
 		table="AMP_GPI_NI_SURVEY_RESPONSE_DOCUMENT">
 		<cache usage="read-write" />
 		<id name="id" column="amp_gpi_ni_survey_response_document_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_GPI_NI_SURVEY_RESPONSE_DOCUMENT_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_NI_SURVEY_RESPONSE_DOCUMENT_seq</param>
 			</generator>
 		</id>
 		<property name="uuid" column="uuid" type="java.lang.String" />
 		<many-to-one name="surveyResponse" column="amp_gpi_ni_survey_response_id"
-			class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse" not-null="true" />
 	</class>
 </hibernate-mapping>

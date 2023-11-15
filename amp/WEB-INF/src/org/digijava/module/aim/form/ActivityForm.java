@@ -1,16 +1,12 @@
 package org.digijava.module.aim.form;
 
+import org.apache.struts.action.ActionForm;
+import org.digijava.module.admin.helper.AmpActivityFake;
+
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import org.apache.struts.action.ActionForm;
-import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
-import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class ActivityForm extends ActionForm implements Serializable {
 

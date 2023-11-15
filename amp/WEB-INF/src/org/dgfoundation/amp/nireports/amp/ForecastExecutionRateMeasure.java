@@ -1,23 +1,17 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.nireports.amp.ForecastExecutionRateBehaviour;
-import org.dgfoundation.amp.nireports.amp.MtefColumn;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * the forecast execution rate measure

@@ -5,132 +5,50 @@
 
 package org.digijava.module.aim.action;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.LocalizableLabel;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpGPISurvey;
-import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
-import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
-import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
-import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRegionalObservation;
-import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
-import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
-import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.AmpContactsWorker;
-import org.digijava.module.aim.helper.BudgetStructure;
-import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.Issues;
-import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.Measures;
-import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.RegionalFunding;
-import org.digijava.module.aim.helper.RegionalFundingsHelper;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
-import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.aim.util.ContactInfoUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.util.ValidationStatus;
-import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
-import org.digijava.module.budget.dbentity.AmpDepartments;
-import org.digijava.module.budget.helper.BudgetDbUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.esrigis.dbentity.AmpMapConfig;
-import org.digijava.module.esrigis.helpers.DbHelper;
-import org.digijava.module.esrigis.helpers.MapConstants;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.util.PermissionUtil;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
+ import org.apache.commons.lang3.StringUtils;
+ import org.apache.log4j.Logger;
+ import org.apache.struts.action.*;
+ import org.dgfoundation.amp.Util;
+ import org.dgfoundation.amp.ar.ARUtil;
+ import org.digijava.kernel.dbentity.Country;
+ import org.digijava.kernel.persistence.PersistenceManager;
+ import org.digijava.kernel.request.Site;
+ import org.digijava.kernel.translator.LocalizableLabel;
+ import org.digijava.kernel.translator.TranslatorWorker;
+ import org.digijava.kernel.user.User;
+ import org.digijava.kernel.util.RequestUtils;
+ import org.digijava.module.aim.dbentity.AmpComponent;
+ import org.digijava.module.aim.dbentity.*;
+ import org.digijava.module.aim.form.EditActivityForm;
+ import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
+ import org.digijava.module.aim.form.ProposedProjCost;
+ import org.digijava.module.aim.helper.*;
+ import org.digijava.module.aim.util.*;
+ import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
+ import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
+ import org.digijava.module.budget.dbentity.AmpDepartments;
+ import org.digijava.module.budget.helper.BudgetDbUtil;
+ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+ import org.digijava.module.categorymanager.util.CategoryConstants;
+ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+ import org.digijava.module.contentrepository.helper.DocumentData;
+ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
+ import org.digijava.module.esrigis.helpers.DbHelper;
+ import org.digijava.module.esrigis.helpers.MapConstants;
+ import org.digijava.module.gateperm.core.GatePermConst;
+ import org.digijava.module.gateperm.util.PermissionUtil;
+ import org.hibernate.Hibernate;
+ import org.hibernate.Session;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+ import javax.servlet.RequestDispatcher;
+ import javax.servlet.ServletContext;
+ import javax.servlet.http.HttpServletRequest;
+ import javax.servlet.http.HttpServletResponse;
+ import javax.servlet.http.HttpSession;
+ import java.io.IOException;
+ import java.net.URLEncoder;
+ import java.text.SimpleDateFormat;
+ import java.util.*;
 
 
 /**
@@ -614,42 +532,42 @@ public class EditActivity extends Action {
             getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_KEY, categories);
 
         if (ampCategoryValue != null)
-            eaForm.getIdentification().setAcChapter(new Long(ampCategoryValue.getId()));
+            eaForm.getIdentification().setAcChapter(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.PROCUREMENT_SYSTEM_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.getIdentification().setProcurementSystem(new Long(ampCategoryValue.getId()));
+          eaForm.getIdentification().setProcurementSystem(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
             CategoryConstants.REPORTING_SYSTEM_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.getIdentification().setReportingSystem(new Long(ampCategoryValue.getId()));
+          eaForm.getIdentification().setReportingSystem(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
             CategoryConstants.AUDIT_SYSTEM_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.getIdentification().setAuditSystem(new Long(ampCategoryValue.getId()));
+          eaForm.getIdentification().setAuditSystem(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
             CategoryConstants.INSTITUTIONS_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.getIdentification().setInstitutions(new Long(ampCategoryValue.getId()));
+          eaForm.getIdentification().setInstitutions(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
             CategoryConstants.ACCESSION_INSTRUMENT_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.getIdentification().setAccessionInstrument(new Long(ampCategoryValue.getId()));
+          eaForm.getIdentification().setAccessionInstrument(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.ACTIVITY_STATUS_KEY), activity
                         .getCategories());
         if (ampCategoryValue != null)
-          eaForm.getIdentification().setStatusId(new Long(ampCategoryValue.getId()));
+          eaForm.getIdentification().setStatusId(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, activity.getCategories());
         if (ampCategoryValue != null){
-            eaForm.getIdentification().setProjectImplUnitId(new Long(ampCategoryValue.getId()));
+            eaForm.getIdentification().setProjectImplUnitId(ampCategoryValue.getId());
         }
         eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
 
@@ -745,13 +663,13 @@ public class EditActivity extends Action {
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
               eaForm.getIdentification().setApprovedBy(teamMember);
               eaForm.getIdentification().setApprovalDate(new Date());
-              //eaForm.getIdentification().setApprovalStatus(ApprovalStatus.APPROVED);
+              //eaForm.getIdentification().setApprovalStatus(ApprovalStatus.approved);
               eaForm.getIdentification().setApprovalStatus(actApprovalStatus.getDbName());
               }
 
             else{
               //eaForm.setApprovalStatus(ApprovalStatus.STARTED);//actApprovalStatus);
-                eaForm.getIdentification().setApprovalStatus(ApprovalStatus.EDITED.getDbName());
+                eaForm.getIdentification().setApprovalStatus(ApprovalStatus.edited.getDbName());
             }
         }
         
@@ -988,7 +906,7 @@ public class EditActivity extends Action {
                 eaForm.setGpiSurvey(activity.getGpiSurvey());
                 for (AmpGPISurvey survey : activity.getGpiSurvey()) {
                     List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
-                    Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                    list.sort(new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
                     gpiSurveys.add(list);
                 }
                 request.setAttribute("gpiSurveys", gpiSurveys);
@@ -1048,25 +966,21 @@ public class EditActivity extends Action {
               activity.getProposedCompletionDate()));*/
 
           // loading organizations and thier project ids.
-          Set orgProjIdsSet = activity.getInternalIds();
+          Set<AmpActivityInternalId> orgProjIdsSet = activity.getInternalIds();
           if (orgProjIdsSet != null) {
-            Iterator projIdItr = orgProjIdsSet.iterator();
             Collection temp = new ArrayList();
-            while (projIdItr.hasNext()) {
-              AmpActivityInternalId actIntId = (
-                  AmpActivityInternalId) projIdItr
-                  .next();
-              OrgProjectId projId = new OrgProjectId();
-              projId.setId(actIntId.getId());
-              projId.setOrganisation(actIntId.getOrganisation());
-              projId.setProjectId(actIntId.getInternalId());
-              temp.add(projId);
-            }
-            if (temp != null && temp.size() > 0) {
-              OrgProjectId orgProjectIds[] = new OrgProjectId[
+              for (AmpActivityInternalId o : orgProjIdsSet) {
+                  OrgProjectId projId = new OrgProjectId();
+                  projId.setId(o.getId());
+                  projId.setOrganisation(o.getOrganisation());
+                  projId.setProjectId(o.getInternalId());
+                  temp.add(projId);
+              }
+            if (temp.size() > 0) {
+              OrgProjectId[] orgProjectIds = new OrgProjectId[
                   temp
                   .size()];
-              Object arr[] = temp.toArray();
+              Object[] arr = temp.toArray();
               for (int i = 0; i < arr.length; i++) {
                 orgProjectIds[i] = (OrgProjectId) arr[i];
               }
@@ -1082,7 +996,6 @@ public class EditActivity extends Action {
           if (ampLocs != null && ampLocs.size() > 0) {
            List<Location> locs = new ArrayList<Location>();
 
-            Iterator locIter = ampLocs.iterator();
             boolean maxLevel = false;
 
             AmpCategoryValueLocations defCountry    = DynLocationManagerUtil.getDefaultCountry();
@@ -1090,16 +1003,12 @@ public class EditActivity extends Action {
                     CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
             AmpCategoryValue implLocValue                   = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                     CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
-            boolean setFullPercForDefaultCountry    = false;
-            if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
-                    implLevel!=null && implLocValue!=null &&
-                            CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
-                            CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue)
-            ) {
-                setFullPercForDefaultCountry            = true;
-            }
-
-            while (locIter.hasNext()) {
+            boolean setFullPercForDefaultCountry    = !"true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES)) &&
+                    implLevel != null && implLocValue != null &&
+                    CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+                    CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue);
+              Iterator locIter = ampLocs.iterator();
+              while (locIter.hasNext()) {
                 AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();  //AMP-2250
                 if (actLoc == null)
                     continue;
@@ -1155,7 +1064,7 @@ public class EditActivity extends Action {
               }
             }
 
-              Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
+              locs.sort(new HelperLocationAncestorLocationNamesAsc(langCode));
               eaForm.getLocation().setSelectedLocs(locs);
           }
 
@@ -1201,19 +1110,19 @@ public class EditActivity extends Action {
             List list = null;
             if (regFund.getCommitments() != null) {
               list = new ArrayList(regFund.getCommitments());
-              Collections.sort(list, FundingValidator.dateComp);
+              list.sort(FundingValidator.dateComp);
             }
             regFund.setCommitments(list);
             list = null;
             if (regFund.getDisbursements() != null) {
               list = new ArrayList(regFund.getDisbursements());
-              Collections.sort(list, FundingValidator.dateComp);
+              list.sort(FundingValidator.dateComp);
             }
             regFund.setDisbursements(list);
             list = null;
             if (regFund.getExpenditures() != null) {
               list = new ArrayList(regFund.getExpenditures());
-              Collections.sort(list, FundingValidator.dateComp);
+              list.sort(FundingValidator.dateComp);
             }
             regFund.setExpenditures(list);
             regFunds.set(index++, regFund);
@@ -1439,12 +1348,13 @@ public class EditActivity extends Action {
           if(activityContacts!=null && activityContacts.size()>0){
               for (AmpActivityContact ampActContact : activityContacts) {
                 //donor contact
-                if(ampActContact.getContactType().equals(Constants.DONOR_CONTACT)){
-                    if(contactInfo.getDonorContacts()==null){
-                        contactInfo.setDonorContacts(new ArrayList<AmpActivityContact>());
-                    }
-                    if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
-                        contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
+                  switch (ampActContact.getContactType()) {
+                      case Constants.DONOR_CONTACT:
+                          if (contactInfo.getDonorContacts() == null) {
+                              contactInfo.setDonorContacts(new ArrayList<AmpActivityContact>());
+                          }
+                          if (ampActContact.getPrimaryContact() != null && ampActContact.getPrimaryContact()) {
+                              contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
                         /*
                         contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
                         /*if(contactInfo.getPrimaryDonorContIds()==null){
@@ -1452,16 +1362,16 @@ public class EditActivity extends Action {
                         }
                         contactInfo.getPrimaryDonorContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
-                    }
-                    contactInfo.getDonorContacts().add(ampActContact);
-                }
-                //mofed contact
-                else if(ampActContact.getContactType().equals(Constants.MOFED_CONTACT)){
-                    if(contactInfo.getMofedContacts()==null){
-                        contactInfo.setMofedContacts(new ArrayList<AmpActivityContact>());
-                    }
-                    if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
-                        contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
+                          }
+                          contactInfo.getDonorContacts().add(ampActContact);
+                          break;
+                      //mofed contact
+                      case Constants.MOFED_CONTACT:
+                          if (contactInfo.getMofedContacts() == null) {
+                              contactInfo.setMofedContacts(new ArrayList<AmpActivityContact>());
+                          }
+                          if (ampActContact.getPrimaryContact() != null && ampActContact.getPrimaryContact()) {
+                              contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
                         /*
                         contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
                         /*if(contactInfo.getPrimaryMofedContIds()==null){
@@ -1469,17 +1379,17 @@ public class EditActivity extends Action {
                         }
                         contactInfo.getPrimaryMofedContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
-                    }
-                    contactInfo.getMofedContacts().add(ampActContact);
-                }
-                //project coordinator contact
-                else if(ampActContact.getContactType().equals(Constants.PROJECT_COORDINATOR_CONTACT)){
-                    if(contactInfo.getProjCoordinatorContacts()==null){
-                        contactInfo.setProjCoordinatorContacts(new ArrayList<AmpActivityContact>());
-                    }
+                          }
+                          contactInfo.getMofedContacts().add(ampActContact);
+                          break;
+                      //project coordinator contact
+                      case Constants.PROJECT_COORDINATOR_CONTACT:
+                          if (contactInfo.getProjCoordinatorContacts() == null) {
+                              contactInfo.setProjCoordinatorContacts(new ArrayList<AmpActivityContact>());
+                          }
 
-                    if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
-                        contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
+                          if (ampActContact.getPrimaryContact() != null && ampActContact.getPrimaryContact()) {
+                              contactInfo.setPrimaryProjCoordContId(ampActContact.getContact().getTemporaryId());
                         /*
                         contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
                         /*if(contactInfo.getPrimaryProjCoordContIds()==null){
@@ -1488,16 +1398,16 @@ public class EditActivity extends Action {
                         contactInfo.getPrimaryProjCoordContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
 
-                    }
-                    contactInfo.getProjCoordinatorContacts().add(ampActContact);
-                }
-                //sector ministry contact
-                else if(ampActContact.getContactType().equals(Constants.SECTOR_MINISTRY_CONTACT)){
-                    if(contactInfo.getSectorMinistryContacts()==null){
-                        contactInfo.setSectorMinistryContacts(new ArrayList<AmpActivityContact>());
-                    }
-                    if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
-                        contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
+                          }
+                          contactInfo.getProjCoordinatorContacts().add(ampActContact);
+                          break;
+                      //sector ministry contact
+                      case Constants.SECTOR_MINISTRY_CONTACT:
+                          if (contactInfo.getSectorMinistryContacts() == null) {
+                              contactInfo.setSectorMinistryContacts(new ArrayList<AmpActivityContact>());
+                          }
+                          if (ampActContact.getPrimaryContact() != null && ampActContact.getPrimaryContact()) {
+                              contactInfo.setPrimarySecMinContId(ampActContact.getContact().getTemporaryId());
                         /*
                         contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
                         /*if(contactInfo.getPrimarySecMinContIds()==null){
@@ -1505,16 +1415,16 @@ public class EditActivity extends Action {
                         }
                         contactInfo.getPrimarySecMinContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
-                    }
-                    contactInfo.getSectorMinistryContacts().add(ampActContact);
-                }
-                //implementing/executing agency
-                else if(ampActContact.getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
-                    if(contactInfo.getImplExecutingAgencyContacts()==null){
-                        contactInfo.setImplExecutingAgencyContacts(new ArrayList<AmpActivityContact>());
-                    }
-                    if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
-                        contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
+                          }
+                          contactInfo.getSectorMinistryContacts().add(ampActContact);
+                          break;
+                      //implementing/executing agency
+                      case Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT:
+                          if (contactInfo.getImplExecutingAgencyContacts() == null) {
+                              contactInfo.setImplExecutingAgencyContacts(new ArrayList<AmpActivityContact>());
+                          }
+                          if (ampActContact.getPrimaryContact() != null && ampActContact.getPrimaryContact()) {
+                              contactInfo.setPrimaryImplExecutingContId(ampActContact.getContact().getTemporaryId());
                         /*
                         contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
                         /*if(contactInfo.getPrimaryImplExecutingContIds()==null){
@@ -1522,9 +1432,10 @@ public class EditActivity extends Action {
                         }
                         contactInfo.getPrimaryImplExecutingContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
-                    }
-                    contactInfo.getImplExecutingAgencyContacts().add(ampActContact);
-                }
+                          }
+                          contactInfo.getImplExecutingAgencyContacts().add(ampActContact);
+                          break;
+                  }
             }
 
           }
@@ -1551,16 +1462,15 @@ public class EditActivity extends Action {
       Collection financingInstrValues = CategoryManagerUtil.
           getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
       if (financingInstrValues != null && financingInstrValues.size() > 0) {
-        Iterator itr = financingInstrValues.iterator();
-        while (itr.hasNext()) {
-          AmpCategoryValue financingInstr = (AmpCategoryValue) itr.next();
-          if(financingInstr!=null)
-              if(financingInstr.getValue()!=null)
-                  if (financingInstr.getValue().equalsIgnoreCase("Project Support")) {
-                      eaForm.getFunding().setModality(financingInstr.getId());
-                      break;
-                  }
-        }
+          for (Object financingInstrValue : financingInstrValues) {
+              AmpCategoryValue financingInstr = (AmpCategoryValue) financingInstrValue;
+              if (financingInstr != null)
+                  if (financingInstr.getValue() != null)
+                      if (financingInstr.getValue().equalsIgnoreCase("Project Support")) {
+                          eaForm.getFunding().setModality(financingInstr.getId());
+                          break;
+                      }
+          }
       }
       //Collection levelCol = null;
       // Loading the levels from the database
@@ -1894,11 +1804,11 @@ public class EditActivity extends Action {
     private void getComponents(AmpActivityVersion activity, EditActivityForm eaForm, String toCurrCode) {
 
 //      Collection activityComponents = activity.getComponents();
-        List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
+        List<Components<FundingDetail>> selectedComponents = new ArrayList<>();
 //      Iterator compItr = componets.iterator();
         for(AmpComponent temp : activity.getComponents()) {
 //          AmpComponent temp = (AmpComponent) compItr.next();
-            Components<FundingDetail> tempComp = new Components<FundingDetail>();
+            Components<FundingDetail> tempComp = new Components<>();
             tempComp.setTitle(temp.getTitle());
             tempComp.setComponentId(temp.getAmpComponentId());
             tempComp.setType_Id((temp.getType() != null) ? temp.getType().getType_id() : null);
@@ -1910,28 +1820,26 @@ public class EditActivity extends Action {
             }
             tempComp.setCode(temp.getCode());
             tempComp.setUrl(temp.getUrl());
-            tempComp.setCommitments(new ArrayList<FundingDetail>());
-            tempComp.setDisbursements(new ArrayList<FundingDetail>());
-            tempComp.setExpenditures(new ArrayList<FundingDetail>());
+            tempComp.setCommitments(new ArrayList<>());
+            tempComp.setDisbursements(new ArrayList<>());
+            tempComp.setExpenditures(new ArrayList<>());
 
             Collection<AmpComponentFunding> fundingComponentActivity = temp.getFundings();
-            Iterator<AmpComponentFunding> cItr = fundingComponentActivity.iterator();
 
-            while (cItr.hasNext()) {
-                AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
-
+            for (AmpComponentFunding ampCompFund : fundingComponentActivity) {
                 double disb = 0;
 
                 if (ampCompFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())
-                        && ampCompFund.getTransactionType().intValue() == 1)
-                disb = ampCompFund.getTransactionAmount().doubleValue();
+                        && ampCompFund.getTransactionType() == 1) {
+                    disb = ampCompFund.getTransactionAmount();
+                }
 
                 eaForm.getComponents().setCompTotalDisb(eaForm.getComponents().getCompTotalDisb() + disb);
 
                 FundingDetail fd = new FundingDetail();
-                fd.setAdjustmentTypeName(ampCompFund.getAdjustmentType() );
+                fd.setAdjustmentTypeName(ampCompFund.getAdjustmentType());
 
-            //  fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
+                //  fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
 
                 fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
 
@@ -1945,17 +1853,19 @@ public class EditActivity extends Action {
 
 
                 fd.setCurrencyCode(toCurrCode);
-                fd.setTransactionAmount(FormatHelper.formatNumber( amt.getValue()));
+                fd.setTransactionAmount(FormatHelper.formatNumber(amt.getValue()));
 
 
                 fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
+                fd.setComponentFundingStatus(ampCompFund.getComponentFundingStatus());
+                fd.setComponentRejectReason(ampCompFund.getComponentRejectReason());
                 fd.setTransactionDate(DateConversion.convertDateToLocalizedString(ampCompFund.getTransactionDate()));
                 fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
-                fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+                fd.setTransactionType(ampCompFund.getTransactionType());
                 fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
                 fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
                 fd.setComponentTransactionDescription(ampCompFund.getDescription());
-                
+
                 if (fd.getTransactionType() == 0) {
 
                     tempComp.getCommitments().add(fd);
@@ -1971,33 +1881,31 @@ public class EditActivity extends Action {
         }
 
         // Sort the funding details based on Transaction date.
-        Iterator compIterator = selectedComponents.iterator();
         int index = 0;
-        while (compIterator.hasNext()) {
-            Components components = (Components) compIterator.next();
-            if (components.getType_Id() != null) {
-                AmpComponentType type = ComponentsUtil.getComponentTypeById(components.getType_Id());
-                components.setTypeName(type.getName());
+        for (Components<FundingDetail> selectedComponent : selectedComponents) {
+            if (selectedComponent.getType_Id() != null) {
+                AmpComponentType type = ComponentsUtil.getComponentTypeById(selectedComponent.getType_Id());
+                selectedComponent.setTypeName(type.getName());
             }
             List list = null;
-            if (components.getCommitments() != null) {
-                list = new ArrayList(components.getCommitments());
-                Collections.sort(list, FundingValidator.dateComp);
+            if (selectedComponent.getCommitments() != null) {
+                list = new ArrayList(((Components) selectedComponent).getCommitments());
+                list.sort(FundingValidator.dateComp);
             }
-            components.setCommitments(list);
+            selectedComponent.setCommitments(list);
             list = null;
-            if (components.getDisbursements() != null) {
-                list = new ArrayList(components.getDisbursements());
-                Collections.sort(list, FundingValidator.dateComp);
+            if (((Components) selectedComponent).getDisbursements() != null) {
+                list = new ArrayList<>(selectedComponent.getDisbursements());
+                list.sort(FundingValidator.dateComp);
             }
-            components.setDisbursements(list);
+            selectedComponent.setDisbursements(list);
             list = null;
-            if (components.getExpenditures() != null) {
-                list = new ArrayList(components.getExpenditures());
-                Collections.sort(list, FundingValidator.dateComp);
+            if (selectedComponent.getExpenditures() != null) {
+                list = new ArrayList<>(((Components) selectedComponent).getExpenditures());
+                list.sort(FundingValidator.dateComp);
             }
-            components.setExpenditures(list);
-            selectedComponents.set(index++, components);
+            selectedComponent.setExpenditures(list);
+            selectedComponents.set(index++, selectedComponent);
         }
 
         eaForm.getComponents().setSelectedComponents(selectedComponents);

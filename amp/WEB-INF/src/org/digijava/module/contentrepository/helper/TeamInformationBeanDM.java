@@ -1,8 +1,8 @@
 package org.digijava.module.contentrepository.helper;
 
-import java.util.Collection;
-
 import org.digijava.module.aim.helper.TeamMember;
+
+import java.util.Collection;
 
 public class TeamInformationBeanDM {
     private boolean isTeamLeader                    = false;

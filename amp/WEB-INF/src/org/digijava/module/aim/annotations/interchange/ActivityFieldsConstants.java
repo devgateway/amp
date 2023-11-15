@@ -4,12 +4,12 @@
 package org.digijava.module.aim.annotations.interchange;
 
 
-import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.Map;
 
 /**
  * Stores activity fields related constants used in annotations for reuse
@@ -60,6 +60,9 @@ public class ActivityFieldsConstants {
     public static final String COMPONENT_FUNDING_AMOUNT = "Amount";
     public static final String COMPONENT_FUNDING_TRANSACTION_DATE = "Transaction Date";
     public static final String COMPONENT_FUNDING_ADJUSTMENT_TYPE = CategoryConstants.ADJUSTMENT_TYPE_NAME;
+    public static final String COMPONENT_FUNDING_STATUS = CategoryConstants.COMPONENT_FUNDING_STATUS;
+    public static final String COMPONENT_STATUS = CategoryConstants.COMPONENT_STATUS;
+    public static final String COMPONENT_FUNDING_DOCS = CategoryConstants.COMPONENT_FUNDING_DOCUMENTS;
     public static final String COMPONENT_FUNDING_TRANSACTION_TYPE = "Transaction Type";
     public static final String DONOR_ORGANIZATION = "Donor Organization";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";

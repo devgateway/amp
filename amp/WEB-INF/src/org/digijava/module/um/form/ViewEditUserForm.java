@@ -1,16 +1,16 @@
 package org.digijava.module.um.form;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.CountryBean;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 public class ViewEditUserForm extends ActionForm {
 
@@ -55,6 +55,7 @@ public class ViewEditUserForm extends ActionForm {
     private Collection<AmpCategoryValueLocations> regions;
     
     private String selectedLanguageCode;
+    private String truBudgetEnabled;
     private Collection languages;
 
     private String event;
@@ -72,13 +73,18 @@ public class ViewEditUserForm extends ActionForm {
     private Collection workspaces;
     private Collection ampRoles;
     private Collection assignedWorkspaces;
+    private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetPassword;
+
     private Long teamId;
     private Long role;
     private boolean emailerror;
     private boolean banReadOnly;
     private Boolean exemptFromDataFreezing;
     private boolean nationalCoordinator;
-    
+    private String[] selectedTruBudgetIntents;
+
+
     public boolean isEmailerror() {
         return emailerror;
     }
@@ -433,5 +439,37 @@ public class ViewEditUserForm extends ActionForm {
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
-    
+
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String[] getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String getTruBudgetEnabled() {
+
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
 }

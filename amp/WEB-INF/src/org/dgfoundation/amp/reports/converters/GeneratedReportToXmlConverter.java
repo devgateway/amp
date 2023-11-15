@@ -1,10 +1,5 @@
 package org.dgfoundation.amp.reports.converters;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -12,25 +7,12 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.reports.saiku.export.ExportFilterUtils;
-import org.dgfoundation.amp.reports.xml.AmountFormat;
-import org.dgfoundation.amp.reports.xml.Cell;
-import org.dgfoundation.amp.reports.xml.Children;
-import org.dgfoundation.amp.reports.xml.Column;
-import org.dgfoundation.amp.reports.xml.Config;
-import org.dgfoundation.amp.reports.xml.Contents;
-import org.dgfoundation.amp.reports.xml.Filter;
-import org.dgfoundation.amp.reports.xml.Filters;
-import org.dgfoundation.amp.reports.xml.GroupingOption;
-import org.dgfoundation.amp.reports.xml.Headers;
-import org.dgfoundation.amp.reports.xml.Output;
-import org.dgfoundation.amp.reports.xml.ParentColumn;
-import org.dgfoundation.amp.reports.xml.Report;
-import org.dgfoundation.amp.reports.xml.ReportArea;
-import org.dgfoundation.amp.reports.xml.Settings;
-import org.dgfoundation.amp.reports.xml.Sort;
-import org.dgfoundation.amp.reports.xml.Sorting;
-import org.dgfoundation.amp.reports.xml.Values;
-import org.dgfoundation.amp.reports.xml.YearRange;
+import org.dgfoundation.amp.reports.xml.*;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A utility class to convert a GenerateReport to XML Document

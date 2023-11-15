@@ -19,17 +19,15 @@ package org.digijava.module.um.form;
  *************************************************************************/
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -80,6 +78,9 @@ public class AddUserForm  extends ValidatorForm {
     private Boolean pledgeSuperUser;
     private Collection contentLanguages;
     private Collection navigationLanguages;
+    private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetPassword;
+    private String[] selectedTruBudgetIntents={};
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
@@ -101,7 +102,8 @@ public class AddUserForm  extends ValidatorForm {
     
     private Boolean notificationEmailEnabled;
     private String notificationEmail;
-    
+    private String truBudgetEnabled;
+
     public String[] getSelectedItems() {
         return this.selectedItems;
     }
@@ -397,7 +399,14 @@ public class AddUserForm  extends ValidatorForm {
     public void setContentSelectedLanguages(String[] contentSelectedLanguages) {
         this.contentSelectedLanguages = contentSelectedLanguages;
     }
+    public String getTruBudgetEnabled() {
 
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
     /**
      * Reset all input
      *
@@ -658,5 +667,28 @@ public class AddUserForm  extends ValidatorForm {
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
-    
+
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String[] getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
 }

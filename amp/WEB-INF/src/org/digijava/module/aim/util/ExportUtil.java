@@ -1,21 +1,15 @@
 package org.digijava.module.aim.util;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by anpicca on 24/11/2016.

@@ -1,16 +1,17 @@
 package org.digijava.module.aim.dbentity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableMap;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
+
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,37 +1,23 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**

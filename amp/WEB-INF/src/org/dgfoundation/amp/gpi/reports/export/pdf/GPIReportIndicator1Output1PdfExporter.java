@@ -1,42 +1,25 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import static java.util.stream.Collectors.groupingBy;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.gpi.reports.GPIDocument;
-import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
-import org.dgfoundation.amp.gpi.reports.GPIRemark;
-import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
-import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.gpi.reports.*;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.translator.TranslatorWorker;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.FontFactory;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * @author Viorel Chihai
@@ -84,8 +67,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         // set table width a percentage of the page width
         table.setWidthPercentage(100f);
 
-        Font bfBold14 = new Font(Font.HELVETICA, 11, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.ORANGE;
+        Font bfBold14 = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.ORANGE;
 
         Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()
                 .collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
@@ -107,7 +90,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
      * @param columns
      * @param columnName
      */
-    private void insertSummaryCell(GPIReport report, PdfPTable table, Font bfBold14, Color bkgColor,
+    private void insertSummaryCell(GPIReport report, PdfPTable table, Font bfBold14, BaseColor bkgColor,
             Map<String, GPIReportOutputColumn> columns, String columnName) {
 
         String summaryValue = report.getSummary().get(columns.get(columnName));
@@ -120,8 +103,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
     @Override
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(Font.HELVETICA, 7, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.LIGHT_GRAY;
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.LIGHT_GRAY;
 
         insertCell(table, getHeaderColumnLabel(GPIReportConstants.COLUMN_YEAR), Element.ALIGN_CENTER, 1, 1,
                 bfBold11, bkgColor);
@@ -165,8 +148,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
     @Override
     protected void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf7 = new Font(Font.HELVETICA, 7);
-        Color bkgColor = Color.WHITE;
+        Font bf7 = new Font(Font.FontFamily.HELVETICA, 7);
+        BaseColor bkgColor = BaseColor.WHITE;
 
         Map<String, GPIReportOutputColumn> columns = new HashMap<>();
         
@@ -201,7 +184,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         }
     }
 
-    private void insertDataCell(PdfPTable table, Font font, Color bkgColor, GPIReportOutputColumn column,
+    private void insertDataCell(PdfPTable table, Font font, BaseColor bkgColor, GPIReportOutputColumn column,
             Map<GPIReportOutputColumn, String> rowData) {
 
         String value = rowData.get(column);
@@ -218,7 +201,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         insertCell(table, value, getCellAlignment(column.originalColumnName), 1, 1, font, bkgColor);
     }
 
-    private void insertPrimarySectorsCells(PdfPTable table, Font font, Color bkgColor, GPIReportOutputColumn column,
+    private void insertPrimarySectorsCells(PdfPTable table, Font font, BaseColor bkgColor, GPIReportOutputColumn column,
             Map<GPIReportOutputColumn, String> rowData) {
 
         String sectors = rowData.get(column);
@@ -233,11 +216,11 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         }
     }
 
-    private void insertSupportiveDocumentsCells(PdfPTable table, Color bkgColor,
+    private void insertSupportiveDocumentsCells(PdfPTable table, BaseColor bkgColor,
             Map<String, GPIReportOutputColumn> columns, Map<GPIReportOutputColumn, String> rowData) {
 
-        Font urlFont = new Font(Font.HELVETICA, 7);
-        urlFont.setColor(Color.BLUE);
+        Font urlFont = new Font(Font.FontFamily.HELVETICA, 7);
+        urlFont.setColor(BaseColor.BLUE);
         urlFont.setStyle(Font.UNDERLINE);
 
         String donorId = rowData.get(columns.get(ColumnConstants.DONOR_ID));
@@ -255,7 +238,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         insertDocumentCell(table, urlFont, bkgColor, documentsMap, GPIReportConstants.GPI_1_Q11c);
     }
 
-    private void insertDocumentCell(PdfPTable table, Font font, Color bkgColor,
+    private void insertDocumentCell(PdfPTable table, Font font, BaseColor bkgColor,
             Map<String, List<GPIDocument>> documentsMap, String columnName) {
 
         Phrase cellPhrase = new Phrase("", font);
@@ -289,8 +272,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         // set table width a percentage of the page width
         table.setWidthPercentage(100f);
 
-        Font bfBold10 = new Font(Font.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.LIGHT_GRAY;
+        Font bfBold10 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.LIGHT_GRAY;
         
         insertCell(table, TranslatorWorker.translateText("Date"), Element.ALIGN_CENTER, 1, 1, bfBold10, bkgColor);
         insertCell(table, TranslatorWorker.translateText("Donor"), Element.ALIGN_CENTER, 1, 1, bfBold10, bkgColor);
@@ -298,8 +281,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         
         table.setHeaderRows(1);
         
-        Font font = new Font(Font.HELVETICA, 9);
-        bkgColor = Color.WHITE;
+        Font font = new Font(Font.FontFamily.HELVETICA, 9);
+        bkgColor = BaseColor.WHITE;
         
         List<GPIRemark> remarks = GPIReportUtils.getRemarksForIndicator1(report);
         

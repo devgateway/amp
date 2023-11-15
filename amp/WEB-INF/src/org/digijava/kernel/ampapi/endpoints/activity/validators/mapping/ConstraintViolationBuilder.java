@@ -1,9 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators.mapping;
 
-import java.util.Iterator;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
+import java.util.Iterator;
 
 /**
  * @author Nadejda Mandrescu

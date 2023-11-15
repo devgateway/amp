@@ -1,11 +1,5 @@
 package org.digijava.module.aim.action ;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -15,6 +9,10 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.form.ParisIndicatorManagerForm;
 import org.digijava.module.aim.util.ParisUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 
 /**
  * created on 01/05/06
@@ -100,16 +98,14 @@ public class ParisIndicatorManager extends Action
             String quid2 = request.getParameter("qid2");
             Long a = new Long(quid2);
             Collection editQuest = ParisUtil.getParisQuestionToBeEdited(a);
-            Iterator itr = editQuest.iterator();
-            while(itr.hasNext())
-            {
-                AmpAhsurveyQuestion ampAhSurveyQuestion = (AmpAhsurveyQuestion) itr.next();
+            for (Object o : editQuest) {
+                AmpAhsurveyQuestion ampAhSurveyQuestion = (AmpAhsurveyQuestion) o;
                 parisForm.setPiQuestionId(ampAhSurveyQuestion.getAmpQuestionId());
                 parisForm.setPiQuestionGot(ampAhSurveyQuestion.getQuestionText());
                 parisForm.setPiQuestionIndicatorId(ampAhSurveyQuestion.getAmpIndicatorId().getAmpIndicatorId());
                 parisForm.setPiQuestId(ampAhSurveyQuestion.getQuestionNumber());
                 parisForm.setPiQuestTypeId(ampAhSurveyQuestion.getAmpTypeId().getAmpTypeId());
-                
+
             }
             return mapping.findForward("parisEditQuest");
         }
@@ -139,15 +135,13 @@ public class ParisIndicatorManager extends Action
             
             /*for indicator*/
             Collection indicatorValue =ParisUtil.getParisIndicatorToBeEdited(t);
-            Iterator itr1 = indicatorValue.iterator();
-            while(itr1.hasNext())
-            {
-                AmpAhsurveyIndicator ampAhSurveyIndicator = (AmpAhsurveyIndicator) itr1.next();
+            for (Object o : indicatorValue) {
+                AmpAhsurveyIndicator ampAhSurveyIndicator = (AmpAhsurveyIndicator) o;
                 parisForm.setAddNewIndicatorCode(ampAhSurveyIndicator.getIndicatorCode());
                 parisForm.setAddNewIndicatorText(ampAhSurveyIndicator.getName());
                 parisForm.setIndicatorNumber(ampAhSurveyIndicator.getIndicatorNumber());
                 parisForm.setNumberOfQuestions(ampAhSurveyIndicator.getTotalQuestions());
-                
+
             }
             return mapping.findForward(("parisIndiEdit"));
         }

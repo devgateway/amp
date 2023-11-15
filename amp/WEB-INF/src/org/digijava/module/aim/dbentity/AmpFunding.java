@@ -144,7 +144,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     // private AmpModality modalityId;
     
     @Interchangeable(fieldTitle = "Type of Assistance",
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence",
             discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable = true,
             pickIdOnly = true, requiredDependencies = {FundingWithTransactionsValidator.TRANSACTION_PRESENT_KEY},
             dependencyRequired = ALWAYS)
@@ -404,7 +404,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
             String extraValues = "";
             Output auxOutDetail = null;
             switch (auxDetail.getTransactionType().intValue()) {
-            case Constants.COMMITMENT: 
+            case Constants.COMMITMENT:
                 transactionType = "Commitments";
                 if (auxDetail.getPledgeid() != null) {
                     if (auxDetail.getPledgeid().getTitle() != null) {
@@ -416,8 +416,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
                     trnComm = true;
                 }
                 break;
-            
-            case Constants.DISBURSEMENT: 
+
+            case Constants.DISBURSEMENT:
                 transactionType = " Disbursements";
                 if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0) extraValues += " - " + auxDetail.getDisbOrderId();
                 if (auxDetail.getContract() != null) extraValues += " - " + auxDetail.getContract().getContractName();
@@ -431,8 +431,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
                     trnDisb = true;
                 }
                 break;
-            
-            case Constants.EXPENDITURE: 
+
+            case Constants.EXPENDITURE:
                 transactionType = " Expenditures";
                 if (auxDetail.getExpCategory() != null && auxDetail.getExpCategory().trim().length() > 0) extraValues += " - " + auxDetail.getExpCategory();
                 if (!trnExp) {
@@ -440,8 +440,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
                     trnExp = true;
                 }
                 break;
-            
-            case Constants.DISBURSEMENT_ORDER: 
+
+            case Constants.DISBURSEMENT_ORDER:
                 transactionType = " Disbursement Orders";
                 if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0) extraValues += " - " + auxDetail.getDisbOrderId();
                 if (auxDetail.getContract() != null) extraValues += " - " + auxDetail.getContract().getContractName();
@@ -453,27 +453,27 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
                     trnDisbOrder = true;
                 }
                 break;
-            
-            case Constants.ESTIMATED_DONOR_DISBURSEMENT: 
+
+            case Constants.ESTIMATED_DONOR_DISBURSEMENT:
                 transactionType = " Estimated Donor Disbursements";
                 if (!trnEDD) {
                     out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
                     trnEDD = true;
                 }
                 break;
-            
-            case Constants.RELEASE_OF_FUNDS: 
+
+            case Constants.RELEASE_OF_FUNDS:
                 transactionType = " Release of Funds";
                 if (!trnRoF) {
                     out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
                     trnRoF = true;
                 }
                 break;
-            
-            default: 
+
+            default:
                 error = true;
                 break;
-            
+
             }
             if (!error) {
                 String recipientInfo = "";

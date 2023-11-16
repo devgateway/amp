@@ -1,6 +1,5 @@
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
- *
  */
 package org.dgfoundation.amp.onepager.models;
 
@@ -20,7 +19,15 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.util.*;
+
+import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 13, 2010
@@ -29,14 +36,16 @@ public class AmpLocationSearchModel extends
         AbstractAmpAutoCompleteModel<AmpCategoryValueLocations> {
 
     public static final Logger logger = Logger.getLogger(AmpLocationSearchModel.class);
-    public static final String PARENT_DELIMITER="\\] \\[";
-    
+    public static final String PARENT_DELIMITER = "\\] \\[";
+
     public enum PARAM implements AmpAutoCompleteModelParam {
         LAYER, LEVEL, ALL_SETUP_COUNTRIES
-    };
+    }
 
-    public AmpLocationSearchModel(String input,String language,
-            Map<AmpAutoCompleteModelParam, Object> params) {
+    ;
+
+    public AmpLocationSearchModel(String input, String language,
+                                  Map<AmpAutoCompleteModelParam, Object> params) {
         super(input, language, params);
     }
 
@@ -50,18 +59,18 @@ public class AmpLocationSearchModel extends
         Boolean allSetupCountries = (Boolean) getParam(PARAM.ALL_SETUP_COUNTRIES);
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
         AmpTeamMember currentMember = wicketSession.getAmpCurrentMember();
-        AmpCategoryValueLocations assignedRegion = null;
-        if (currentMember != null){
+        AmpCategoryValueLocations assignedRegionT = null;
+        if (currentMember != null) {
             User user = currentMember.getUser();
-            if (user != null){
-                assignedRegion = user.getRegion();
+            if (user != null) {
+                assignedRegionT = user.getRegion();
             }
         }
 
-        if (layerModel == null || layerModel.getObject().size() < 1 || levelModel==null || levelModel.getObject().size()<1)
+        if (layerModel == null || layerModel.getObject().size() < 1 || levelModel == null || levelModel.getObject().size() < 1)
             return ret;
         AmpCategoryValue cvLayer = layerModel.getObject().iterator().next();
-        AmpCategoryValue cvLevel= levelModel.getObject().iterator().next();
+        AmpCategoryValue cvLevel = levelModel.getObject().iterator().next();
 
         if (!CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(cvLevel)
                 && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(cvLayer)) {
@@ -79,7 +88,7 @@ public class AmpLocationSearchModel extends
                     }
                 }
 
-                ret = new ArrayList<AmpCategoryValueLocations>();
+                ret = new ArrayList<>();
                 ret.addAll(filterCountries);
                 return ret;
 
@@ -89,37 +98,64 @@ public class AmpLocationSearchModel extends
             }
 
         }
-        
-        Integer maxResults = (Integer) getParam(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 
+        Integer maxResults = (Integer) getParam(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
         Session dbSession = PersistenceManager.getSession();
 
-        Criteria criteria = dbSession.createCriteria(AmpCategoryValueLocations.class);
-        criteria.setCacheable(true);
+        CriteriaBuilder builder = dbSession.getCriteriaBuilder();
+
+        CriteriaQuery<AmpCategoryValueLocations> criteriaQuery = builder.createQuery(AmpCategoryValueLocations.class);
+
+        Root<AmpCategoryValueLocations> root = criteriaQuery.from(AmpCategoryValueLocations.class);
+
+        List<Predicate> predicates = new ArrayList<>();
 
         if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
-            criteria.add(Restrictions.eq("parentCategoryValue", cvLayer));
+            predicates.add(builder.equal(root.get("parentCategoryValue"), cvLayer));
         }
-        
-        criteria.add(Restrictions.eqOrIsNull("deleted", false));
 
-        criteria.addOrder(Order.asc("name"));
-        if (maxResults != null && maxResults != 0)
-            criteria.setMaxResults(maxResults);         
-        List<AmpCategoryValueLocations> tempList = criteria.list();
 
+        predicates.add(builder.equal(root.get("deleted"), false));
+        //check fro locations with children if location = admin_0
+
+        if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(cvLayer) &&
+                DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
+            Subquery<AmpCategoryValueLocations> subquery = criteriaQuery.subquery(AmpCategoryValueLocations.class);
+            Root<AmpCategoryValueLocations> subRoot = subquery.from(AmpCategoryValueLocations.class);
+            subquery.select(subRoot);
+
+            Predicate hasChildren = builder.equal(subRoot.get("parentLocation"), root.get("id"));
+            subquery.where(hasChildren);
+
+            predicates.add(builder.exists(subquery));
+        }
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+
+        criteriaQuery.orderBy(builder.asc(root.get("name")));
+
+        TypedQuery<AmpCategoryValueLocations> query = dbSession.createQuery(criteriaQuery);
+
+        if (maxResults != null && maxResults != 0) {
+            query.setMaxResults(maxResults);
+        }
+
+        ret.addAll(getAmpCategoryValueLocations(query, assignedRegionT));
+        return ret;
+    }
+
+    private static List<AmpCategoryValueLocations> getAmpCategoryValueLocations(TypedQuery<AmpCategoryValueLocations> query, AmpCategoryValueLocations assignedRegionT) {
+        List<AmpCategoryValueLocations> tempList = query.getResultList();
+
+        // Additional filtering based on 'assignedRegion'
+        final AmpCategoryValueLocations assignedRegion = assignedRegionT;
         if (assignedRegion != null) {
-            Iterator<AmpCategoryValueLocations> it = tempList.iterator();
-            while (it.hasNext()) {
-                AmpCategoryValueLocations location = it.next();
+            tempList.removeIf(location -> {
                 AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(
                         location, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
-                if (locationRegion == null || !assignedRegion.getId().equals(locationRegion.getId()))
-                    it.remove();
-            }
+                return locationRegion == null || !assignedRegion.getId().equals(locationRegion.getId());
+            });
         }
-        ret.addAll(tempList);
-        return ret;
+        return tempList;
     }
 
 }

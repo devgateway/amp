@@ -104,8 +104,13 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                             if (set != null && set.size() > 0) {
                                 locationsTable.getSetModel().getObject().clear();
                                 locationsTable.getList().removeAll();
+                                //when we remove we need to show the search Component
+                                locationsTable.getSearchLocations().setVisibilityAllowed(true);
                                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
                                 target.add(locationsTable);
+
+
+
                             }
                         }
                         defaultCountryChecks(implementationLevel, implementationLocation,

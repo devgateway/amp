@@ -7,14 +7,13 @@
 
 package org.dgfoundation.amp.visibility.feed.fm.schema.impl.runtime;
 
-import javax.xml.bind.ValidationEvent;
-import javax.xml.namespace.NamespaceContext;
-
+import com.sun.xml.bind.unmarshaller.Tracer;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import com.sun.xml.bind.unmarshaller.Tracer;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.namespace.NamespaceContext;
 
 /**
  * Methods exposed by the unmarshalling coordinator object

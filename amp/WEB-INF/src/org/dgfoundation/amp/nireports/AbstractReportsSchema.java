@@ -1,27 +1,16 @@
 package org.dgfoundation.amp.nireports;
 
+import org.dgfoundation.amp.nireports.amp.SubDimensions;
+import org.dgfoundation.amp.nireports.behaviours.MeasureDividingBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.dgfoundation.amp.nireports.schema.*;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.amp.SubDimensions;
-import org.dgfoundation.amp.nireports.behaviours.MeasureDividingBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.formulas.NiFormula;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiCombinationContextTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.NiFormulaicAverageMeasure;
-import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
-import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.NiPredicateTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
-import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
-import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
-import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 

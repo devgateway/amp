@@ -4,6 +4,19 @@ package org.digijava.module.esrigis.action;
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  * @author Diego Dimunzio
  */
+
+import net.sf.json.JSON;
+import net.sf.json.JSONSerializer;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
+import org.digijava.module.esrigis.helpers.DbHelper;
+import org.digijava.module.esrigis.helpers.MapConstants;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -12,22 +25,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSON;
-import net.sf.json.JSONSerializer;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.esrigis.dbentity.AmpMapConfig;
-import org.digijava.module.esrigis.helpers.DbHelper;
-import org.digijava.module.esrigis.helpers.MapConstants;
 
 public class EsriProxy extends Action {
     

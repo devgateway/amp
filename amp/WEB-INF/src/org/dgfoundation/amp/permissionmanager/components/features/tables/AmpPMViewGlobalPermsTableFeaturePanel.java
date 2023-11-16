@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.tables;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,6 +22,10 @@ import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

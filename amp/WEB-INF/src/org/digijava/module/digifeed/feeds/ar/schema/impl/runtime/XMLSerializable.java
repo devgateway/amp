@@ -7,8 +7,8 @@
 
 package org.digijava.module.digifeed.feeds.ar.schema.impl.runtime;
 
-import org.xml.sax.SAXException;
 import com.sun.xml.bind.JAXBObject;
+import org.xml.sax.SAXException;
 
 /**
  * For a generated class to be serializable, it has to

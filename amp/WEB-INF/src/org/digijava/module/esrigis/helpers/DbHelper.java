@@ -4,36 +4,23 @@ package org.digijava.module.esrigis.helpers;
  * @author Diego Dimunzio
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.exception.AdminException;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureType;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import java.util.*;
 
 public class DbHelper {
     private static Logger logger = Logger.getLogger(DbHelper.class);
@@ -96,7 +83,7 @@ public class DbHelper {
     public static ArrayList<Long> getInActivities(String query)
             throws Exception {
         Session session = PersistenceManager.getRequestDBSession();
-        List<Object> qResult = session.createSQLQuery(query).list();
+        List<Object> qResult = session.createNativeQuery(query).list();
         ArrayList<Long> result = new ArrayList<Long>(qResult.size());
         for (Object obj : qResult) {
             result.add(PersistenceManager.getLong(obj));
@@ -127,7 +114,7 @@ public class DbHelper {
     public static ArrayList<Long> getInActivitiesLong(String query)
             throws Exception {
         Session session = PersistenceManager.getRequestDBSession();
-        ArrayList<Long> result = (ArrayList<Long>) session.createSQLQuery(query).list();
+        ArrayList<Long> result = (ArrayList<Long>) session.createNativeQuery(query).list();
         return result;
     }
     
@@ -160,7 +147,7 @@ public class DbHelper {
         try {
             session = PersistenceManager.getRequestDBSession();
             q = session.createQuery(queryString.toString());
-            q.setString("name", name.trim());
+            q.setParameter("name", name.trim(), StringType.INSTANCE);
             result = (ArrayList) q.list();
             if (result.size() > 0) {
                 stt = (AmpStructureType) result.get(0);

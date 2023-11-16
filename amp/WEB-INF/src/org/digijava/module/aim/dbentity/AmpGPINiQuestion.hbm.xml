@@ -6,8 +6,8 @@
 		table="AMP_GPI_NI_QUESTION">
 		<cache usage="read-write" />
 		<id name="ampGPINiQuestionId" column="amp_gpi_ni_question_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_GPI_NI_QUESTION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_NI_QUESTION_seq</param>
 			</generator>
 		</id>			
 		<property name="code" column="code" type="java.lang.String" not-null="true" />

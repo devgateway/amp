@@ -1,15 +1,13 @@
 package org.digijava.module.contentrepository.util;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class DocumentFilterDAO {
     private static Logger logger    = Logger.getLogger(DocumentFilterDAO.class);

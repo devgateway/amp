@@ -1,9 +1,5 @@
 package org.digijava.kernel.persistence.interceptors;
 
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
@@ -16,6 +12,10 @@ import org.digijava.module.translation.util.TranslationStore;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Hibernate;
 import org.hibernate.type.Type;
+
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Hibernate interceptor to translate all AMP entities and to touch Auditable entities

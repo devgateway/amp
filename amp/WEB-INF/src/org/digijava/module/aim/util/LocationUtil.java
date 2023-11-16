@@ -1,14 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.text.Collator;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
@@ -20,11 +11,15 @@ import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeExcept
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import java.text.Collator;
+import java.util.*;
 
 public final class LocationUtil {
 
@@ -74,9 +69,9 @@ public final class LocationUtil {
                     + " l where l.geoCode =:geoCode order by l.id";
             Query qry = session.createQuery(queryString);
             qry.setString("geoCode", geoCode);
-
-            Collection result = qry.list();
-            if (result != null && result.size() > 0) {
+            
+            Collection result   = qry.list();
+            if ( result != null && result.size() > 0 ) {
                 return (AmpCategoryValueLocations) result.iterator().next();
             }
 

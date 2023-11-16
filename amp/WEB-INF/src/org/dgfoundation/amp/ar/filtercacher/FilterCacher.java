@@ -1,10 +1,9 @@
 package org.dgfoundation.amp.ar.filtercacher;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.sql.Connection;
 
 /**
  * class which caches AmpARFilter generatedFilterQuery results

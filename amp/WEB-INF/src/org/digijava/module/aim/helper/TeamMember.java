@@ -1,8 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -11,6 +8,9 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.Set;
 
 public class TeamMember implements Comparable, Serializable{
 

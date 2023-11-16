@@ -1,20 +1,17 @@
 package org.dgfoundation.amp.nireports.output;
+
+import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.nireports.NiHeaderInfo;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.runtime.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.nireports.NiHeaderInfo;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.runtime.GroupReportData;
-import org.dgfoundation.amp.nireports.runtime.ReportData;
-import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 
 /**
  * a visitor which does reductions on {@link ReportData} (both vertical and horizontal reductions), 

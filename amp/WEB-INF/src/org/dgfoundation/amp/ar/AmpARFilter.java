@@ -6,9 +6,29 @@
  */
 package org.dgfoundation.amp.ar;
 
-import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.toSet;
+import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.PropertyListable;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.IReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.reports.IgnorePersistence;
+import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Constants.GlobalSettings;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.caching.AmpCaching;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+import javax.servlet.http.HttpServletRequest;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -19,59 +39,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.common.collect.ImmutableSet;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.PropertyListable;
-import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.ReportEnvBuilder;
-import org.dgfoundation.amp.newreports.IReportEnvironment;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.annotations.reports.IgnorePersistence;
-import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.Constants.GlobalSettings;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.caching.AmpCaching;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 
 
 /**
@@ -141,21 +112,21 @@ public class AmpARFilter extends PropertyListable {
      * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only
      */
     public static final Set<ApprovalStatus> ACTIVITY_STATUS = ImmutableSet.of(
-            ApprovalStatus.APPROVED,
-            ApprovalStatus.EDITED,
-            ApprovalStatus.STARTED_APPROVED,
-            ApprovalStatus.STARTED,
-            ApprovalStatus.NOT_APPROVED,
-            ApprovalStatus.REJECTED);
+            ApprovalStatus.approved,
+            ApprovalStatus.edited,
+            ApprovalStatus.startedapproved,
+            ApprovalStatus.started,
+            ApprovalStatus.not_approved,
+            ApprovalStatus.rejected);
 
     public static final Set<ApprovalStatus> VALIDATED_ACTIVITY_STATUS = ImmutableSet.of(
-            ApprovalStatus.APPROVED,
-            ApprovalStatus.STARTED_APPROVED);
+            ApprovalStatus.approved,
+            ApprovalStatus.startedapproved);
 
     public static final Set<ApprovalStatus> UNVALIDATED_ACTIVITY_STATUS = ImmutableSet.of(
-            ApprovalStatus.STARTED,
-            ApprovalStatus.EDITED,
-            ApprovalStatus.REJECTED);
+            ApprovalStatus.started,
+            ApprovalStatus.edited,
+            ApprovalStatus.rejected);
 
 
     /**
@@ -906,7 +877,7 @@ public class AmpARFilter extends PropertyListable {
         this.setApprovalStatusSelected(null);
         this.setProjectImplementingUnits(null);
         this.setSortByAsc(true);
-        this.setHierarchySorters(new ArrayList<String>());
+        this.setHierarchySorters(new ArrayList<>());
         this.setIncludeLocationChildren(true);
         this.budgetExport = false;
 
@@ -1113,11 +1084,11 @@ public class AmpARFilter extends PropertyListable {
             Integer maximumFractionDigits, Boolean customUseGroupings, Integer groupingSize) {
         DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
 
-        Character defaultDecimalSymbol  = usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator();
-        Integer defaultDecimalPlaces    = usedDecimalFormat.getMaximumFractionDigits();
-        Character defaultGroupSeparator = usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator();
-        Boolean defaultUseGrouping  = usedDecimalFormat.isGroupingUsed();
-        Integer defaultGroupSize        = usedDecimalFormat.getGroupingSize();
+        char defaultDecimalSymbol  = usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator();
+        int defaultDecimalPlaces    = usedDecimalFormat.getMaximumFractionDigits();
+        char defaultGroupSeparator = usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator();
+        boolean defaultUseGrouping  = usedDecimalFormat.isGroupingUsed();
+        int defaultGroupSize        = usedDecimalFormat.getGroupingSize();
 
         DecimalFormat custom = new DecimalFormat();
         DecimalFormatSymbols ds = new DecimalFormatSymbols();
@@ -1198,11 +1169,10 @@ public class AmpARFilter extends PropertyListable {
     protected static String generatePledgesProgramFilterSubquery(Collection<AmpTheme> s, String classificationName){
         if (s == null || s.isEmpty())
             return null;
-        String subquery = "SELECT fpp.pledge_id FROM amp_funding_pledges_program fpp inner join amp_theme p on fpp.amp_program_id=p.amp_theme_id "
+        return "SELECT fpp.pledge_id FROM amp_funding_pledges_program fpp inner join amp_theme p on fpp.amp_program_id=p.amp_theme_id "
                 + "inner join AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=getprogramsettingid(fpp.amp_program_id) where ps.name='" + classificationName + "' AND "
                 + " fpp.amp_program_id in ("
                 + Util.toCSStringForIN(s) + ")";
-        return subquery;
     }
 
     /**
@@ -1235,8 +1205,7 @@ public class AmpARFilter extends PropertyListable {
 
         String REGION_SELECTED_FILTER = "";
         if (locationSelected != null) {
-            Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
-            allSelectedLocations.addAll(locationSelected);
+            Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>(locationSelected);
 
             DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected, false);
             this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
@@ -1246,11 +1215,10 @@ public class AmpARFilter extends PropertyListable {
             this.relatedLocations = allSelectedLocations;
 
             String allSelectedLocationString = Util.toCSString(allSelectedLocations);
-            String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
+
+            REGION_SELECTED_FILTER  = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
                     "WHERE ( aal.location_id=al.location_id AND " +
                     "al.location_id IN (" + allSelectedLocationString + ") )";
-
-            REGION_SELECTED_FILTER  = subSelect;
         }
 
         if (donnorgAgency != null && donnorgAgency.size() > 0){
@@ -1700,13 +1668,8 @@ public class AmpARFilter extends PropertyListable {
                 if (i < propertyDescriptors.length)
                     ret.append("; ");
             }
-        } catch (IntrospectionException e) {
-            logger.error(e.getMessage(), e);
-        } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage(), e);
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage(), e);
-        } catch (InvocationTargetException e) {
+        } catch (IntrospectionException | IllegalArgumentException | IllegalAccessException |
+                 InvocationTargetException e) {
             logger.error(e.getMessage(), e);
         }
         return ret.toString();

@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import org.dgfoundation.amp.algo.AmpCollections;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
  * a ReportData-to-String outputter useful for debugging and/or testcases

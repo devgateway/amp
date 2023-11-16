@@ -1,12 +1,11 @@
 package org.digijava.module.translation.form;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Form for translations import export action in admin menu of AMP.

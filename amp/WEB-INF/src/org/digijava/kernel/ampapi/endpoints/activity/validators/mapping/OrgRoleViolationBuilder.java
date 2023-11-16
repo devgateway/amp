@@ -1,18 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators.mapping;
 
-import java.util.Map;
-
-import javax.validation.ConstraintViolation;
-
 import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.fundings.FundingOrgRole;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
+
+import javax.validation.ConstraintViolation;
+import java.util.Map;
 
 public class OrgRoleViolationBuilder implements ConstraintViolationBuilder {
     

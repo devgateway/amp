@@ -3,13 +3,6 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
 import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuUtils;
@@ -17,6 +10,8 @@ import org.digijava.module.aim.dbentity.AmpMenuEntryInAdminView;
 import org.digijava.module.aim.dbentity.AmpMenuEntryInPublicView;
 import org.digijava.module.aim.dbentity.AmpMenuEntryInTeamView;
 import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
+
+import java.util.*;
 
 /**
  * Detects visible Menu Entries. <br><br>

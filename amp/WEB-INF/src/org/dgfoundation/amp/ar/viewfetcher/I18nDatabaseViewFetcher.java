@@ -1,13 +1,12 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
+import com.google.common.base.Function;
+import org.dgfoundation.amp.ar.FilterParam;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-
-import org.dgfoundation.amp.ar.FilterParam;
-
-import com.google.common.base.Function;
 
 /**
  * fetches a view which contains internationalized String columns; feeds to the consumer the query result (plus translated values)

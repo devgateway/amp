@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpLocation" table="AMP_LOCATION" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampLocationId" column="amp_location_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_LOCATION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_LOCATION_seq</param>
 			</generator>
 		</id>
 		<property name="iso3Code" column="iso3_code" type="java.lang.String" />

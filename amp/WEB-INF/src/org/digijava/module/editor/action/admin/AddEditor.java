@@ -22,22 +22,20 @@
 
 package org.digijava.module.editor.action.admin;
 
-import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
-import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.form.EditorAdminForm;
 import org.digijava.module.editor.util.Constants;
 import org.digijava.module.editor.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 public class AddEditor
     extends Action {

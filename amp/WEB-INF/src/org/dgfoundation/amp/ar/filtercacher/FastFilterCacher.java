@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.ar.filtercacher;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
 
 /**
  * 

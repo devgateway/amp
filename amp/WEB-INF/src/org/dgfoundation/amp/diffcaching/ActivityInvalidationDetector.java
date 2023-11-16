@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.diffcaching;
 
-import java.sql.Connection;
-import java.util.function.Supplier;
-
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.sql.Connection;
+import java.util.function.Supplier;
 
 /**
  * a supplier for {@link ExpiringCacher} which triggers a cache invalidate when any kind of non-incremental mutating event is logged in the AMP in-db changelog

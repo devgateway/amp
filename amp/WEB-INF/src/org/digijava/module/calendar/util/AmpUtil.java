@@ -1,10 +1,5 @@
 package org.digijava.module.calendar.util;
 
-import java.text.Collator;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -15,15 +10,15 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.calendar.entity.AmpCalendarGraph;
-import org.digijava.module.calendar.entity.AmpCalendarGraphItem;
-import org.digijava.module.calendar.entity.CalendarOptions;
-import org.digijava.module.calendar.entity.DateBreakDown;
-import org.digijava.module.calendar.entity.DateNavigator;
-import org.digijava.module.calendar.entity.DateNavigatorItem;
+import org.digijava.module.calendar.entity.*;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.text.Collator;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new
@@ -233,10 +228,9 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
             List row = (List) it.next();
             if(view.equals(CalendarOptions.CALENDAR_VIEW_WEEKLY) ||
                view.equals(CalendarOptions.CALENDAR_VIEW_DAYLY)) {
-                Iterator itemIt = row.iterator();
-                while(itemIt.hasNext()) {
-                    DateNavigatorItem item = (DateNavigatorItem) itemIt.next();
-                    if(item.isSelected()) {
+                for (Object o : row) {
+                    DateNavigatorItem item = (DateNavigatorItem) o;
+                    if (item.isSelected()) {
                         navigatorItems.add(item);
                     }
                 }
@@ -286,20 +280,19 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
             calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
             calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
          }
-        Iterator it = navigatorItems.iterator();
-        while(it.hasNext()) {
-            DateNavigatorItem navigatorItem = (DateNavigatorItem) it.next();
+        for (Object item : navigatorItems) {
+            DateNavigatorItem navigatorItem = (DateNavigatorItem) item;
             int itemStartTimestamp = getNavigatorItemLeftTimestamp(navigatorItem.getDateBreakDown(), view);
             int itemEndTimestamp = getNavigatorItemRightTimestamp(navigatorItem.getDateBreakDown(), view);
-            String  eventTypeName=null;
-            if(ampCalendar.getEventsType()!=null){
+            String eventTypeName = null;
+            if (ampCalendar.getEventsType() != null) {
                 AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
-                if (ampCategoryValue != null){
-                    eventTypeName=ampCategoryValue.getValue();
+                if (ampCategoryValue != null) {
+                    eventTypeName = ampCategoryValue.getValue();
                 }
             }
             ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(eventTypeName, calendarStartTimestamp,
-                calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
+                    calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
         }
         return ampCalendarGraph;
     }

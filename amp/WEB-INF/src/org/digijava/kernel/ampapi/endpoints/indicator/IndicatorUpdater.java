@@ -2,12 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpIndicatorColor;
-import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
-import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;

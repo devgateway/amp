@@ -1,8 +1,7 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * a class which holds the cached i18n values for a (model, field)  

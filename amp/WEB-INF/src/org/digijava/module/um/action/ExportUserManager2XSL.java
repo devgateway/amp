@@ -1,18 +1,7 @@
 package org.digijava.module.um.action;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -20,12 +9,14 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.UserBean;
 import org.digijava.module.aim.util.AdminXSLExportUtil;
 import org.digijava.module.um.form.ViewAllUsersForm;
+
+import javax.servlet.http.HttpSession;
+import java.util.Collection;
 
 public class ExportUserManager2XSL extends Action {
     private static Logger logger = Logger

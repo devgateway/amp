@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.Map;
-import java.util.Optional;
-
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * a {@link Cell} which holds a text. Coordinates are either empty or with a single entry, depending on the #mainLevel)

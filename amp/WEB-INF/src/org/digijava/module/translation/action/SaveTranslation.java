@@ -32,7 +32,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.form.TranslatorForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.taglib.TrnTag;

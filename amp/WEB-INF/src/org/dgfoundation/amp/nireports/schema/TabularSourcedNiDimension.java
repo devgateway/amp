@@ -1,16 +1,11 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import static org.dgfoundation.amp.algo.AmpCollections.safeGet;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+
+import java.util.*;
+
+import static org.dgfoundation.amp.algo.AmpCollections.safeGet;
 
 /**
  * a NiDimension which uses a tabular bidiarray as a source of data.

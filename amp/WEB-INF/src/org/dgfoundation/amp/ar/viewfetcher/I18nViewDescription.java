@@ -1,8 +1,11 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.util.*;
-
 import org.dgfoundation.amp.Util;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * description of an i18n view: contains a description of all the columns which should be overridden by the translation

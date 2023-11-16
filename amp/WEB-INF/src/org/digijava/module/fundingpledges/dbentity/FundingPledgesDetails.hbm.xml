@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails" table="AMP_FUNDING_PLEDGES_DETAILS">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_FUNDING_PLEDGES_DETAILS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_PLEDGES_DETAILS_seq</param>
 			</generator>
 		</id>
 		

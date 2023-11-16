@@ -3,9 +3,9 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.dgfoundation.amp.ar.ColumnFilteringInfo;
+
+import java.io.Serializable;
 
 /**
  * @author mihai

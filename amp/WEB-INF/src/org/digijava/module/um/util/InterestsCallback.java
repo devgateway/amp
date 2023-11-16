@@ -22,8 +22,8 @@
 
 package org.digijava.module.um.util;
 
-import org.digijava.kernel.translator.util.TranslationCallback;
 import org.digijava.kernel.entity.Interests;
+import org.digijava.kernel.translator.util.TranslationCallback;
 
 /**
  * InterestsCallback instance, which implements TranslationCallback Callback interface to be passed to TrnUtil.sortByTranslation() method

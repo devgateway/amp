@@ -2,7 +2,6 @@
 package org.digijava.module.fundingpledges.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.Identifiable;
 
 public class FundingPledgesLocation implements Identifiable{

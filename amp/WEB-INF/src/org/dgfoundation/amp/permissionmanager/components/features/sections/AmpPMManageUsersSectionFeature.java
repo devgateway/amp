@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.io.Serializable;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListView;
@@ -21,6 +17,10 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUs
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMManageUsersTableFeaturePanel;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+
+import java.io.Serializable;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author dan

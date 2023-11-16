@@ -22,17 +22,12 @@
 
 package org.digijava.module.calendar.action;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.ModuleUtils;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteConfigUtils;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.CalendarSettings;
@@ -41,8 +36,7 @@ import org.digijava.module.calendar.util.CalendarPopulator;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.common.util.ModuleEmailManager;
-import org.digijava.kernel.util.ModuleUtils;
-import org.digijava.kernel.request.Site;
+
 import javax.security.auth.Subject;
 
 /**

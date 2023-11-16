@@ -1,12 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getDoubleFromJsonNumber;
-import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
-import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
-
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -16,6 +9,13 @@ import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getDoubleFromJsonNumber;
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
+import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 
 /**
  * Validates that field value is allowed

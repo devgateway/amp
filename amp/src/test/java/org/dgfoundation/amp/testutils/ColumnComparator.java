@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.testutils;
 
-import java.util.Comparator;
-
 import org.dgfoundation.amp.ar.Column;
+
+import java.util.Comparator;
 
 public class ColumnComparator implements Comparator<Column>
 {

@@ -6,7 +6,6 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 

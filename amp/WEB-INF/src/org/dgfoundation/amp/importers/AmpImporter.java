@@ -3,19 +3,16 @@
  */
 package org.dgfoundation.amp.importers;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.SQLException;
 import java.util.Map;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * @author mihai

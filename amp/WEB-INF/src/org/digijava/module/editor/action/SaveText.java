@@ -23,24 +23,20 @@
 package org.digijava.module.editor.action;
 
 
-import java.util.Date;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.form.EditorForm;
 import org.digijava.module.editor.util.DbUtil;
-import org.hibernate.Hibernate;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.util.Date;
 
 /**
  * <p>Title: DiGiJava</p>

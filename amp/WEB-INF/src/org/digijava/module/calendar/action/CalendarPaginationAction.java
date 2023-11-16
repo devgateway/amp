@@ -23,8 +23,8 @@
 package org.digijava.module.calendar.action;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.common.action.PaginationAction;
 import org.digijava.module.calendar.form.CalendarPaginationForm;
+import org.digijava.module.common.action.PaginationAction;
 
 
 

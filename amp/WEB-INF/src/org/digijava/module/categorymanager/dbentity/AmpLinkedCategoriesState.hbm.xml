@@ -3,8 +3,8 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState" table="AMP_CATEGORIES_STATE" lazy="false">
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_CATEGORIES_STATE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_CATEGORIES_STATE_seq</param>
 			</generator>
 		</id>		
 		

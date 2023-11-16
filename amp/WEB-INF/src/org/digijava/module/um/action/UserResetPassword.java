@@ -22,9 +22,12 @@
 
 package org.digijava.module.um.action;
 
-import org.apache.struts.action.*;
-import org.digijava.module.um.form.*;
-import org.digijava.module.um.util.*;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.um.form.UserResetForm;
+import org.digijava.module.um.util.DbUtil;
 
 /**
  *

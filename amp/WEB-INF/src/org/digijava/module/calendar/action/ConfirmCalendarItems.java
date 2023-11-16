@@ -22,10 +22,6 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -40,6 +36,10 @@ import org.digijava.module.calendar.dbentity.CalendarSettings;
 import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Action displayes confirmation page for selected event items, status of which is being changed
@@ -140,9 +140,8 @@ public class ConfirmCalendarItems
 
        calendForm.setSelected(false);
        if (calendForm.getEventsList() != null ){
-           Iterator iter = calendForm.getEventsList().iterator();
-           while(iter.hasNext()) {
-               CalendarItemForm.EventInfo item = (CalendarItemForm.EventInfo) iter.next();
+           for (Object o : calendForm.getEventsList()) {
+               CalendarItemForm.EventInfo item = (CalendarItemForm.EventInfo) o;
 
                if (item.isSelected()) {
                    calendForm.setSelected(true);

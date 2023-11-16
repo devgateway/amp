@@ -1,22 +1,10 @@
 package org.digijava.module.fundingpledges.action;
 
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
-
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -24,6 +12,12 @@ import org.digijava.module.fundingpledges.action.constants.PledgeActionsConstant
 import org.digijava.module.fundingpledges.form.DocumentShim;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.fundingpledges.form.TransientDocumentShim;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 
 /**
  * misnamed centralized place for the AJAX callback of the PledgeForm (did not want to pollute the application with dozens of Actions which have 2-3 lines of usable code each)

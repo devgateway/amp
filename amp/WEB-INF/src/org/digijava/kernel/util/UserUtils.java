@@ -22,22 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.stream.Stream;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -55,9 +39,17 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * This class containts user-related utillity functions. User must be
@@ -431,14 +423,13 @@ public class UserUtils {
             }
 
             Query query = session.createQuery(queryString);
-            query.setString("criteriaLow", criteriaLow);
-            query.setString("criteriaLowConcat", criteriaLowConcat);
+            query.setParameter("criteriaLow", criteriaLow, StringType.INSTANCE);
+            query.setParameter("criteriaLowConcat", criteriaLowConcat,StringType.INSTANCE);
 
             userList = query.list();
 
-            Iterator userIter = userList.iterator();
-            while (userIter.hasNext()) {
-                User user = (User) userIter.next();
+            for (Object o : userList) {
+                User user = (User) o;
                 ProxyHelper.initializeObject(user);
             }
 

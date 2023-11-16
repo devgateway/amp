@@ -3,8 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.fields;
 
-import java.util.Map;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation;
@@ -17,6 +15,8 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.collections.MicroMap;
+
+import java.util.Map;
 
 /**
  * @author dan

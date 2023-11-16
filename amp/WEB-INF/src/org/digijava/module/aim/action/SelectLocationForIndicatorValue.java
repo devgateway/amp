@@ -1,22 +1,21 @@
     package org.digijava.module.aim.action;
-    
+
+    import org.apache.struts.action.Action;
+    import org.apache.struts.action.ActionForm;
+    import org.apache.struts.action.ActionForward;
+    import org.apache.struts.action.ActionMapping;
+    import org.digijava.kernel.dbentity.Country;
+    import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+    import org.digijava.module.aim.dbentity.AmpLocation;
+    import org.digijava.module.aim.form.ThemeForm;
+    import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+    import org.digijava.module.aim.util.DynLocationManagerUtil;
+    import org.digijava.module.aim.util.FeaturesUtil;
+
+    import javax.servlet.http.HttpServletRequest;
+    import javax.servlet.http.HttpServletResponse;
     import java.util.Collection;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
+    import java.util.Iterator;
 
     /**
  *

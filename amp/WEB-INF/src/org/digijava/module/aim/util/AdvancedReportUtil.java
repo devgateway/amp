@@ -4,31 +4,18 @@
  */
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.hibernate.Query;
+import org.digijava.module.aim.dbentity.*;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.text.Collator;
+import java.util.*;
 
 /**
  * AdvancedReportUtil.java
@@ -150,7 +137,7 @@ public final class AdvancedReportUtil {
     public static AmpColumns getColumnByName(String name){
         return (AmpColumns) PersistenceManager.getSession()
                 .createQuery("SELECT c FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:name")
-                .setString("name", name).uniqueResult();
+                .setParameter("name", name, StringType.INSTANCE).uniqueResult();
     }
     
     public static List<AmpMeasures> getMeasureList()
@@ -170,7 +157,7 @@ public final class AdvancedReportUtil {
     
     public static AmpMeasures getMeasureByName(String name) {
         try {
-            AmpMeasures ret = (AmpMeasures) PersistenceManager.getSession().createQuery("SELECT c FROM " + AmpMeasures.class.getName() + " c WHERE c.measureName = :name").setString("name", name).uniqueResult();
+            AmpMeasures ret = (AmpMeasures) PersistenceManager.getSession().createQuery("SELECT c FROM " + AmpMeasures.class.getName() + " c WHERE c.measureName = :name").setParameter("name", name,StringType.INSTANCE).uniqueResult();
             if (ret == null)
                 throw new RuntimeException("no measure with name " + name + " exists");
             return ret;
@@ -189,7 +176,7 @@ public final class AdvancedReportUtil {
             session = PersistenceManager.getSession();
             String sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c where c.type=:type";
             query = session.createQuery(sqlQuery);
-            query.setString("type", type);
+            query.setParameter("type", type,StringType.INSTANCE);
             return new ArrayList<AmpMeasures>(query.list());
         }
         catch(Exception e)
@@ -225,15 +212,14 @@ public final class AdvancedReportUtil {
                 queryString+=" and report.ampReportId!=:dbReportId";
             }
             query = session.createQuery(queryString);
-            query.setLong("ownerId", ownerId);
-            query.setString("name", reportTitle.trim());
-            query.setBoolean("drilldownTab", drilldownTab);
+            query.setParameter("ownerId", ownerId, LongType.INSTANCE);
+            query.setParameter("name", reportTitle.trim(),StringType.INSTANCE);
+            query.setParameter("drilldownTab", drilldownTab, BooleanType.INSTANCE);
             if (dbReportId != null)
             {
-                query.setLong("dbReportId", dbReportId);
+                query.setParameter("dbReportId", dbReportId, LongType.INSTANCE);
             }
-            boolean exists = !query.list().isEmpty();
-            return exists;
+            return !query.list().isEmpty();
         } 
         catch (Exception ex)
         {

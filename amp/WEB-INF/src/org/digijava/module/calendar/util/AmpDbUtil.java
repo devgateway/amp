@@ -1,32 +1,23 @@
 package org.digijava.module.calendar.util;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.calendar.dbentity.AmpCalendar;
-import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
-import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.calendar.dbentity.CalendarItem;
+import org.digijava.module.calendar.dbentity.*;
 import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.exception.CalendarException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AmpDbUtil {
   private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -431,10 +422,10 @@ public class AmpDbUtil {
               }
             
             if (instanceId != null) {
-                query.setString("instanceId", instanceId);
+                query.setParameter("instanceId", instanceId,StringType.INSTANCE);
             }
             if (siteId != null) {
-                query.setString("siteId", siteId);
+                query.setParameter("siteId", siteId,StringType.INSTANCE);
             }
             
                 return query.list();
@@ -564,7 +555,7 @@ public class AmpDbUtil {
             try {
                 session = PersistenceManager.getSession();
                 String queryString = "select m.module from amp_modules_templates m where m.module=" + amv.getId();
-                qry = session.createSQLQuery(queryString);
+                qry = session.createNativeQuery(queryString);
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
                     return true;

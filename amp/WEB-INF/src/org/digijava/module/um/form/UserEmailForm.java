@@ -22,14 +22,6 @@
 
 package org.digijava.module.um.form;
 
-import org.apache.struts.action.ActionForm;
-import org.digijava.kernel.entity.*;
-import org.apache.struts.action.ActionMapping;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
-//////////////
-import org.apache.struts.action.ActionErrors ;
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.validator.ValidatorForm;
 
 public class UserEmailForm

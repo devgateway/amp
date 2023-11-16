@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -12,6 +8,10 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ActivityPreviewTests extends ReportsTestCase {
 

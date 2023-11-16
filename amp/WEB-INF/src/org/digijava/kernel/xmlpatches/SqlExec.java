@@ -1,11 +1,11 @@
 package org.digijava.kernel.xmlpatches;
 
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+
 import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
-
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * @author Octavian Ciubotaru

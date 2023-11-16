@@ -22,25 +22,17 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.List;
+import org.apache.struts.action.*;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.admin.form.SearchUserForm;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.admin.form.SearchUserForm;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionMessage;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.user.User;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.digijava.kernel.user.Group;
-import org.digijava.kernel.request.Site;
+import java.util.List;
 
 public class SearchUser
     extends Action {

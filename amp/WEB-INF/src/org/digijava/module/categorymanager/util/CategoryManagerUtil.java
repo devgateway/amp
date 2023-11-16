@@ -1,24 +1,5 @@
 package org.digijava.module.categorymanager.util;
 
-import java.lang.reflect.Field;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -32,10 +13,19 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
+import java.util.*;
 
 public class CategoryManagerUtil {
     private static Logger logger = Logger.getLogger(CategoryManagerUtil.class);
@@ -79,9 +69,9 @@ public class CategoryManagerUtil {
                         + "where (m.locale=:langIso and m.key=:translationKey and m.siteId=:thisSiteId)";
 
             Query qry       = session.createQuery(qryStr);
-            qry.setString("langIso", lang);
-            qry.setString("translationKey", key.toLowerCase());
-            qry.setString("thisSiteId", TLSUtils.getThreadLocalInstance().site.getId().toString());
+            qry.setParameter("langIso", lang,StringType.INSTANCE);
+            qry.setParameter("translationKey", key.toLowerCase(),StringType.INSTANCE);
+            qry.setParameter("thisSiteId", TLSUtils.getThreadLocalInstance().site.getId().toString(),StringType.INSTANCE);
 
             Message m       = (Message)qry.uniqueResult();
             if ( m == null ) {
@@ -439,7 +429,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.name=:name";
             qry         = dbSession.createQuery(queryString);
-            qry.setString("name", name);
+            qry.setParameter("name", name,StringType.INSTANCE);
 
 
 
@@ -497,7 +487,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     }
 
     public static boolean isExitingAmpCategoryValue(String categoryKey, Long id, boolean onlyVisible) {
-        Integer count = (Integer) PersistenceManager.getSession().createQuery(
+        Long count = (Long) PersistenceManager.getSession().createQuery(
                 "select count(a) from " + AmpCategoryValue.class.getName()
                 + " a where a.id=:id "
                 + (onlyVisible ? "and (a.deleted=false or a.deleted is null) " : "") 
@@ -505,7 +495,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             .setParameter("id", id)
             .setParameter("keyName", categoryKey)
             .uniqueResult();
-        return count == 1;
+        return count.intValue() == 1;
     }
 
     /**
@@ -550,7 +540,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     /**
      * because the amp_categories table does not change during the runtime of AMP, we can safely cache them
      */
-    private static Map<String, AmpCategoryClass> categoryValuesByKey = Collections.synchronizedMap(new HashMap<String, AmpCategoryClass>());
+    private static Map<String, AmpCategoryClass> categoryValuesByKey = Collections.synchronizedMap(new HashMap<>());
     /**
      * 
      * @param categoryKey
@@ -693,12 +683,13 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static AmpCategoryClass loadAmpCategoryClassByKey(String key)
     {
         Session dbSession = PersistenceManager.getSession();
+        dbSession.clear();
         List<AmpCategoryClass> col;
         try {
             //AmpCategoryClass dbCategory       = new AmpCategoryClass();
                 String queryString  = "select c from " + AmpCategoryClass.class.getName() + " c where c.keyName=:key";
                 Query query         = dbSession.createQuery(queryString);
-                query.setString("key", key);
+                query.setParameter("key", key,StringType.INSTANCE);
                 query.setCacheable(true);
                 col = query.list();
                 if (col.isEmpty())
@@ -742,7 +733,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.keyName=:categoryKey";
             qry         = dbSession.createQuery(queryString);
-            qry.setString("categoryKey", categoryKey );
+            qry.setParameter("categoryKey", categoryKey ,StringType.INSTANCE);
             
             List<AmpCategoryClass> resultList       = qry.list();
             

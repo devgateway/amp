@@ -4,15 +4,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.calendar.form.EditActivityForm;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Vector;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.calendar.form.EditActivityForm;
+
+import java.util.*;
 
 public class SearchOrganisation extends Action {
 
@@ -65,9 +61,8 @@ public class SearchOrganisation extends Action {
                 String[] alphaArray = new String[26];
                 int i = 0;
                 for(char c = 'A'; c <= 'Z'; c++) {
-                    Iterator itr = col.iterator();
-                    while(itr.hasNext()) {
-                        AmpOrganisation org = (AmpOrganisation) itr.next();
+                    for (Object o : col) {
+                        AmpOrganisation org = (AmpOrganisation) o;
                         if (org.getName().toUpperCase().indexOf(c) == 0) {
                             alphaArray[i++] = String.valueOf(c);
                             break;
@@ -85,9 +80,8 @@ public class SearchOrganisation extends Action {
             if (!alpha.equals("viewAll")) {
                 eaForm.setStartAlphaFlag(false);
                 colAlpha = new ArrayList();
-                Iterator itr = col.iterator();
-                while(itr.hasNext()) {
-                    AmpOrganisation org = (AmpOrganisation) itr.next();
+                for (Object o : col) {
+                    AmpOrganisation org = (AmpOrganisation) o;
                     if (org.getName().toUpperCase().startsWith(alpha)) {
                         colAlpha.add(org);
                     }

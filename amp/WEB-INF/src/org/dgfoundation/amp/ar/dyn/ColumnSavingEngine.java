@@ -3,9 +3,6 @@
  */
 package org.dgfoundation.amp.ar.dyn;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.exception.DgException;
@@ -16,6 +13,9 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Session;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Alex Gartner

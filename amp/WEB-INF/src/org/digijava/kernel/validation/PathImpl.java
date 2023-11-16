@@ -1,11 +1,11 @@
 package org.digijava.kernel.validation;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * Implementation of field path.

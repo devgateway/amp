@@ -6,27 +6,20 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.ColumnReportData;
-import org.dgfoundation.amp.ar.Exporter;
-import org.dgfoundation.amp.ar.ReportData;
-import org.dgfoundation.amp.ar.Viewable;
-import org.digijava.kernel.persistence.WorkerException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import org.dgfoundation.amp.ar.*;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ExportActivityToPDF;
-import org.digijava.module.aim.action.PDFExportAction;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -108,7 +101,7 @@ public class ColumnReportDataPDF extends PDFExporter {
                 translatedName += columnReport.getName().substring(columnReport.getName().indexOf(":"));
             }
             
-            PdfPCell pdfc; 
+            PdfPCell pdfc;
             if("".equals(translatedName))
                 pdfc= new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(columnReport.getName()),titleFont));
             else 
@@ -120,7 +113,7 @@ public class ColumnReportDataPDF extends PDFExporter {
         
         // headings
         Font font = new Font(ExportActivityToPDF.basefont, 9, Font.BOLD);
-        font.setColor(new Color(255,255,255));
+        font.setColor(new BaseColor(255,255,255));
         if(! columnReport.getGlobalHeadingsDisplayed()) {
             getExportState().headingCells = new ArrayList<PdfPCell>();
             columnReport.setGlobalHeadingsDisplayed(true);
@@ -156,7 +149,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 
                         pdfc.setColspan(colsp);
                         pdfc.setRowspan(rowsp);
-                        pdfc.setBackgroundColor(new Color(51,102,153));
+                        pdfc.setBackgroundColor(new BaseColor(51,102,153));
                         //table.addCell(pdfc);
                         getExportState().headingCells.add(pdfc);
                     }

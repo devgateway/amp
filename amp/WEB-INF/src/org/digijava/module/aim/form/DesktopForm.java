@@ -1,9 +1,8 @@
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
+
+import java.util.Collection;
 
 public class DesktopForm extends ActionForm {
     // desktop filters

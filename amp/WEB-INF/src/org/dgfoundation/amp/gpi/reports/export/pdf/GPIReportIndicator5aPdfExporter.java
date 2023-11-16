@@ -1,19 +1,16 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import java.awt.Color;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * @author Viorel Chihai
@@ -40,8 +37,8 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
         table.setWidthPercentage(50f);
         table.setHorizontalAlignment(0);
 
-        Font bfBold14 = new Font(Font.HELVETICA, 12, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.ORANGE;
+        Font bfBold14 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.ORANGE;
 
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
             GPIReportOutputColumn column = report.getPage().getHeaders().get(i);
@@ -60,10 +57,10 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
     }
 
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(Font.HELVETICA, 9, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.LIGHT_GRAY;
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.LIGHT_GRAY;
 
-        report.getPage().getHeaders().stream().forEach(
+        report.getPage().getHeaders().forEach(
                 column -> insertCell(table, getHeaderColumnName(column), Element.ALIGN_CENTER, 1, bfBold11, bkgColor));
 
         table.setHeaderRows(1);
@@ -72,8 +69,8 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
 
     @Override
     protected void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf11 = new Font(Font.HELVETICA, 9);
-        Color bkgColor = Color.WHITE;
+        Font bf11 = new Font(Font.FontFamily.HELVETICA, 9);
+        BaseColor bkgColor = BaseColor.WHITE;
 
         report.getPage().getContents().forEach(row -> {
             report.getPage().getHeaders().forEach(col -> {

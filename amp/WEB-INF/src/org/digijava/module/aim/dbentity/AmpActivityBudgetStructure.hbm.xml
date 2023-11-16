@@ -6,13 +6,13 @@
 		table="AMP_ACTIVITY_BUDGET_STRUCTURE">
 		<cache usage="read-write" />
 		<id name="ampActivityBudgetStructureId" column="amp_activity_budget_structure_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_BUDGET_STRUCTURE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_BUDGET_STRUCTURE_seq</param>
 			</generator>
 		</id>
 
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" not-null="true" />
 
 		<property name="budgetStructureName" column="budget_structure_name" type="java.lang.String" />
 

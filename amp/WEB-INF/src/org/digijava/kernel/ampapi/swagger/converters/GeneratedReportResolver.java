@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.swagger.converters;
 
-import java.lang.reflect.Type;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.databind.JavaType;
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
@@ -11,6 +8,9 @@ import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.util.Json;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+
+import java.lang.reflect.Type;
+import java.util.Iterator;
 
 /**
  * Generate dummy object for {@link GeneratedReport} class. This converter is needed because otherwise it will expose

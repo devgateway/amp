@@ -3,11 +3,10 @@
  */
 package org.dgfoundation.amp.ar;
 
+import org.digijava.module.categorymanager.util.CategoryConstants;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-
-import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * @author alex

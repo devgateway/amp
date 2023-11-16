@@ -1,43 +1,24 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
-import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
-import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
-
-import java.util.List;
-
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.AmpColorThresholdWrapper;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMap;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.ProjectAmounts;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.FundingTypeChartData;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.AidPredictabilityChartData;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopDescription;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartData;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartType;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.*;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
+
+import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
+import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
 
 /**
  * 

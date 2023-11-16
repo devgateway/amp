@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
+import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-
-import org.dgfoundation.amp.nireports.TextCell;
 
 
 public class FundingStatusCells extends HardcodedCells<TextCell>{

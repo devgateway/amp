@@ -1,10 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
-
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
+
+import java.util.Map;
 
 /**
  * Stores different mapping between internal constants, classes, types and their JSON representation, etc

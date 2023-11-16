@@ -1,13 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nadejda Mandrescu

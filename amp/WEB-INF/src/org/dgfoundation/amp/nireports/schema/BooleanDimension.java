@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.Arrays;
-
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+
+import java.util.Arrays;
 
 /**
  * NiReports' hardcoded boolean dimension, used for yes/no/undefined columns

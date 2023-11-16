@@ -1,10 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 
 /**
  * This class generates the filter list (tree) object for pledges sectors

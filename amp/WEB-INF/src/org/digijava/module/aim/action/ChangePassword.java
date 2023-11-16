@@ -1,19 +1,13 @@
 package org.digijava.module.aim.action;
 
+import org.apache.log4j.Logger;
+import org.apache.struts.action.*;
+import org.digijava.kernel.security.PasswordPolicyValidator;
+import org.digijava.module.aim.form.ChangePasswordForm;
+import org.digijava.module.um.util.DbUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.ChangePasswordForm;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class ChangePassword extends Action {
 

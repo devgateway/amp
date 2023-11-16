@@ -22,15 +22,14 @@
 
 package org.digijava.module.admin.action;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.admin.form.MailStatusForm;
-import org.digijava.kernel.mail.util.MailUtil;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.mail.util.MailUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.admin.form.MailStatusForm;
 
 public class ShowMailStatus
     extends TilesAction {

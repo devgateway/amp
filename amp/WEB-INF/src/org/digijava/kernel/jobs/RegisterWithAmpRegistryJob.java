@@ -1,18 +1,6 @@
 package org.digijava.kernel.jobs;
 
-import static java.util.stream.Collectors.toList;
-
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.hash.Hashing;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampregistry.AmpInstallation;
 import org.digijava.kernel.ampregistry.AmpRegistryService;
@@ -34,10 +22,14 @@ import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-
-import com.google.common.hash.Hashing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Registers this AMP installation in AMP Registry.

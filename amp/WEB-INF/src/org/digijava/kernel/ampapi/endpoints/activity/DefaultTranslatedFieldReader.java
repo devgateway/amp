@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.lang.reflect.Field;
-
 import org.digijava.module.editor.exception.EditorException;
+
+import java.lang.reflect.Field;
 
 /**
  * @author Octavian Ciubotaru

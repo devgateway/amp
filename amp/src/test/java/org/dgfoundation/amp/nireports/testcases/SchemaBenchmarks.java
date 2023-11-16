@@ -1,15 +1,14 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.nireports.testcases.BenchmarksRunner.BenchmarkResult;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * a benchmarks runner, configured through a schema and a list of specifications

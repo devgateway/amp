@@ -5,8 +5,8 @@
 		table="AMP_PROGRAM_SETTINGS">
 		<cache usage="read-write" />
 		<id name="ampProgramSettingsId" column="amp_program_settings_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_PROGRAM_SETTINGS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_PROGRAM_SETTINGS_seq</param>
 			</generator>
 		</id>
 		<property column="allow_multiple" name="allowMultiple" type="boolean" />

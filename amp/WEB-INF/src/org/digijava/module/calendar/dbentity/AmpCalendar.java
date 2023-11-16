@@ -1,11 +1,11 @@
 package org.digijava.module.calendar.dbentity;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.Set;
 
 public class AmpCalendar implements Serializable {   
 

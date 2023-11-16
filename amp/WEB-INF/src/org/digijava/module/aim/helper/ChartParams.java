@@ -1,9 +1,8 @@
 package org.digijava.module.aim.helper;
 
+import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.util.Collection;
-
-import javax.servlet.http.HttpSession;
 
 
 

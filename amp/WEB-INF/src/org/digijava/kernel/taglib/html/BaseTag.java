@@ -22,16 +22,15 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.io.IOException;
+import org.apache.log4j.Logger;
+import org.apache.struts.Globals;
+import org.digijava.kernel.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.Globals;
-import org.digijava.kernel.Constants;
+import java.io.IOException;
 
 /**
  * <p>Title: DiGiJava</p>

@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Collections;
-import java.util.HashMap;
-
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * 

@@ -1,15 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
-import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
 
 /**
  * @author Octavian Ciubotaru

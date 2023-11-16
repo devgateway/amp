@@ -12,20 +12,11 @@ import org.digijava.module.aim.util.activity.GenericUserHelper;
 import org.hibernate.Session;
 
 import java.math.BigDecimal;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.*;
 import static org.digijava.kernel.ampapi.endpoints.ndd.NDDService.getMappingLevel;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL;
 
@@ -124,10 +115,14 @@ public class IndirectProgramUpdater {
     }
 
     private List<AmpTheme> getIndirectPrograms(Map<AmpTheme, Set<AmpTheme>> themeMapping, AmpTheme program) {
+        if (program!=null){
         while (program.getIndlevel() > getMappingLevel(MAPPING_PROGRAM_LEVEL)) {
             program = program.getParentThemeId();
         }
+            return new ArrayList<>(themeMapping.getOrDefault(program, emptySet()));
+        }
+        return emptyList();
 
-        return new ArrayList<>(themeMapping.getOrDefault(program, emptySet()));
+
     }
 }

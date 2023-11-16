@@ -1,9 +1,11 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.*;
-
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * the generator which will generate Commitment Gap cells

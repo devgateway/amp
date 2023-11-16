@@ -1,19 +1,13 @@
 package org.digijava.module.gpi.form;
 
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.GPISetup;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
+
+import java.util.Collection;
 
 public class GPIForm extends ActionForm {
 

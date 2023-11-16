@@ -1,9 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
@@ -14,6 +10,10 @@ import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import org.digijava.kernel.ampapi.endpoints.gpi.JacksonInTestRule;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Octavian Ciubotaru

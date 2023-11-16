@@ -1,29 +1,18 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.codegenerators.*;
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.StandaloneAMPInitializer;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.codegenerators.ActivityTitlesGenerator;
-import org.dgfoundation.amp.codegenerators.CategoriesTreeGenerator;
-import org.dgfoundation.amp.codegenerators.ColumnGenerator;
-import org.dgfoundation.amp.codegenerators.FundingColumnGenerator;
-import org.dgfoundation.amp.codegenerators.FundingIdsMapper;
-import org.dgfoundation.amp.codegenerators.FundingTypesGenerator;
-import org.dgfoundation.amp.codegenerators.NaturalTreeGenerator;
-import org.dgfoundation.amp.codegenerators.NiDateColumnGenerator;
-import org.dgfoundation.amp.codegenerators.NiDimensionGenerator;
-import org.dgfoundation.amp.codegenerators.NiPercentageTextColumnGenerator;
-import org.dgfoundation.amp.codegenerators.NiTextColumnGenerator;
-import org.dgfoundation.amp.codegenerators.OrganizationsTreeGenerator;
-import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 
 /**
  * 

@@ -47,23 +47,14 @@ import org.digijava.module.translation.lucene.TrnLuceneModule;
 import org.digijava.module.translation.util.ListChangesBuffer;
 import org.digijava.module.translation.util.ListChangesBuffer.OperationFixer;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TrnUtil {
 
@@ -134,7 +125,7 @@ public class TrnUtil {
                 Message.class.getName() + " msg " +
                 " where msg.key=l.messageLangKey and msg.siteId='0' and l.available=true and msg.locale=:locale"
                 );
-            query.setString("locale", isoLanguage);
+            query.setParameter("locale", isoLanguage, StringType.INSTANCE);
             query.setCacheable(true);
             query.setCacheRegion(CACHE_REGION);
             languages = new HashSet<TrnLocale>();
@@ -247,7 +238,7 @@ public class TrnUtil {
                 Message.class.getName() + " msg " +
                 " where msg.key=c.messageLangKey and msg.siteId='0' and c.available=true and msg.locale=:locale"
                 );
-            query.setString("locale", isoLanguage);
+            query.setParameter("locale", isoLanguage,StringType.INSTANCE);
             query.setCacheable(true);
             query.setCacheRegion(CACHE_REGION);
             countries = new HashSet<TrnCountry>();
@@ -303,7 +294,7 @@ public class TrnUtil {
                 Message.class.getName() + " msg " +
                 " where msg.key like \'month%\' and msg.siteId='0' and msg.locale=:locale"
                 );
-            query.setString("locale", isoLanguage);
+            query.setParameter("locale", isoLanguage,StringType.INSTANCE);
             query.setCacheable(true);
             query.setCacheRegion(CACHE_REGION);
             months = new HashSet<TrnMonth>();

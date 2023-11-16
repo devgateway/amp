@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
  * a measure defined as a linear combination between trivial {@link NiTransactionMeasure}s

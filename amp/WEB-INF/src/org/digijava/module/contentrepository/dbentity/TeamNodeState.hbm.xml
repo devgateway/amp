@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.contentrepository.dbentity.TeamNodeState" table="CR_TEAM_NODE_STATE" discriminator-value="s">
 
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">CR_TEAM_NODE_STATE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">CR_TEAM_NODE_STATE_seq</param>
 			</generator>
 		</id>
 

@@ -6,21 +6,9 @@
 package org.digijava.module.xmlpatcher.core;
 
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
-import org.digijava.module.xmlpatcher.jaxb.Condition;
-import org.digijava.module.xmlpatcher.jaxb.Lang;
-import org.digijava.module.xmlpatcher.jaxb.Patch;
-import org.digijava.module.xmlpatcher.jaxb.Script;
-import org.digijava.module.xmlpatcher.jaxb.Trigger;
+import org.digijava.module.xmlpatcher.jaxb.*;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherBSHLangWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherConditionWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherHQLLangWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherNativeLangWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherPatchWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherSQLLangWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherScriptWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherTriggerWorker;
-import org.digijava.module.xmlpatcher.worker.XmlPatcherWorker;
+import org.digijava.module.xmlpatcher.worker.*;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

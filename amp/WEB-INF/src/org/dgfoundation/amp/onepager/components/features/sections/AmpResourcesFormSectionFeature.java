@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.HashSet;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -14,6 +12,8 @@ import org.dgfoundation.amp.onepager.components.fields.AmpExistingDocumentFieldP
 import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
+import java.util.HashSet;
 
 /**
  * Resources section

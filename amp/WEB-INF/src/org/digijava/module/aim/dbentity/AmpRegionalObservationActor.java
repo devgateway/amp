@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+
+import java.io.Serializable;
 @TranslatableClass (displayName = "Regional Observation Actor")
 public class AmpRegionalObservationActor implements Serializable, Cloneable {
 

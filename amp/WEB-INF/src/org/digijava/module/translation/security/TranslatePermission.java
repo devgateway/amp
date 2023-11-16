@@ -22,18 +22,12 @@
 
 package org.digijava.module.translation.security;
 
+import org.digijava.kernel.security.AbstractObjectSecurityManager;
+import org.digijava.kernel.security.permission.ObjectPermission;
+
 import java.io.Serializable;
 import java.security.Permission;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.digijava.kernel.security.permission.ObjectPermission;
-import org.digijava.kernel.security.ResourcePermission;
-import org.digijava.kernel.security.AbstractObjectSecurityManager;
+import java.util.*;
 
 public class TranslatePermission
     extends ObjectPermission implements Serializable {

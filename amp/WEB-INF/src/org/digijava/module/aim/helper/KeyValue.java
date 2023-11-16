@@ -1,9 +1,9 @@
 package org.digijava.module.aim.helper;
 
+import org.dgfoundation.amp.algo.AmpCollections;
+
 import java.io.Serializable;
 import java.util.Comparator;
-
-import org.dgfoundation.amp.algo.AmpCollections;
 
 public class KeyValue implements Serializable, Comparable<KeyValue> {
     String key;

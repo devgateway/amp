@@ -1,11 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -19,6 +13,12 @@ import org.hibernate.Session;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GregorianChronology;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class FiscalCalendarUtil {
     
@@ -327,7 +327,6 @@ public class FiscalCalendarUtil {
         cal.setTime(date);
         DateTime dateTime = new DateTime(chronology);
         dateTime = dateTime.withDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
-        // clear any HH:mm:ss
         dateTime = dateTime.minusMillis(dateTime.getMillisOfDay());
         return dateTime;
     }
@@ -356,7 +355,7 @@ public class FiscalCalendarUtil {
     private static DateTime getDateTime(AmpFiscalCalendar fromCal, Integer year, int daysOffset, 
             AmpFiscalCalendar toCal) {
         Calendar tmpCal = Calendar.getInstance();
-        tmpCal.set(year, 0, 1, 0, 0, 0);
+        tmpCal.set(year, Calendar.JANUARY, 1, 0, 0, 0);
         
         if (fromCal == null) {
             tmpCal.add(Calendar.DAY_OF_YEAR, daysOffset);

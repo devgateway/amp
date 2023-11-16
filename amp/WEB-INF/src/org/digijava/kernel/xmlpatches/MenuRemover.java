@@ -1,14 +1,12 @@
 package org.digijava.kernel.xmlpatches;
 
-import java.sql.Connection;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.Session;
+
+import java.sql.Connection;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Remove a menu without writing a ton of sql.

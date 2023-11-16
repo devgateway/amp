@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpSector" table="AMP_SECTOR" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampSectorId" column="amp_sector_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_SECTOR_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_SECTOR_seq</param>
 			</generator>
 		</id>
 
@@ -33,14 +33,14 @@
 		</set>
 		
 		
-		<set name="sectors" table="AMP_SECTOR" lazy="true" inverse="true" cascade="none">
+		<set name="sectors" table="AMP_SECTOR" lazy="true" inverse="true" cascade="merge">
 			<cache usage="read-write" />
 			<key column="parent_sector_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpSector"/>
 			<filter name="isDeletedFilter" condition="(deleted is null or deleted = :deleted )"/>
 		</set>
 
-		<set name="aidlist" table="AMP_ACTIVITY_SECTOR" lazy="true" cascade="all">
+		<set name="aidlist" table="AMP_ACTIVITY_SECTOR" lazy="true" cascade="merge">
 			<cache usage="read-write"/>
 			<key column="amp_sector_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />

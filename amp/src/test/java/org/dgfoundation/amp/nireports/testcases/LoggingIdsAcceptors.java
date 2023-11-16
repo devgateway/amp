@@ -1,16 +1,11 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

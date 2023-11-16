@@ -10,10 +10,10 @@ package org.digijava.module.aim.form;
  * 
  */
 
+import org.apache.struts.action.ActionForm;
+
 import java.io.Serializable;
 import java.util.Collection;
-
-import org.apache.struts.action.ActionForm;
 
 
 public class ParisIndicatorManagerForm extends ActionForm implements Serializable

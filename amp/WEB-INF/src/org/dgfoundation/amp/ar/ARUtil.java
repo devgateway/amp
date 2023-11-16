@@ -6,23 +6,6 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.lang.reflect.Constructor;
-import java.text.DateFormatSymbols;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -37,14 +20,7 @@ import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
 import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
-import org.dgfoundation.amp.ar.view.xls.ColumnReportDataXLS;
-import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
-import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.ar.view.xls.PlainColumnReportDataXLS;
-import org.dgfoundation.amp.ar.view.xls.PlainGroupReportDataXLS;
-import org.dgfoundation.amp.ar.view.xls.RichColumnReportDataXLS;
-import org.dgfoundation.amp.ar.view.xls.RichGroupReportDataXLS;
-import org.dgfoundation.amp.ar.view.xls.XLSExportType;
+import org.dgfoundation.amp.ar.view.xls.*;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
@@ -55,14 +31,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReportMeasures;
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -71,14 +40,22 @@ import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.budgetexport.reports.implementation.BudgetCategAmountColWorker;
-import org.digijava.module.budgetexport.reports.implementation.BudgetColumnReportDataXLS;
-import org.digijava.module.budgetexport.reports.implementation.BudgetGroupReportDataXLS;
-import org.digijava.module.budgetexport.reports.implementation.BudgetMetaTextColWorker;
-import org.digijava.module.budgetexport.reports.implementation.BudgetTextColWorker;
+import org.digijava.module.budgetexport.reports.implementation.*;
 import org.digijava.module.budgetexport.util.BudgetExportConstants;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.text.DateFormatSymbols;
+import java.util.*;
 
 /**
  * 
@@ -121,12 +98,12 @@ public final class ARUtil {
             queryString +=" order by r.publishedDate desc ";
             Query qry = session.createQuery(queryString);
             if ( getTabs!=null )
-                qry.setBoolean("getTabs", getTabs);
+                qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
              if (name != null) {
-               qry.setString("name", '%' + name+ '%');
+               qry.setParameter("name", '%' + name+ '%', StringType.INSTANCE);
             }
              if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
-                 qry.setLong("repCat", reportCategoryId);
+                 qry.setParameter("repCat", reportCategoryId, LongType.INSTANCE);
              }
 
             col= qry.list();
@@ -194,9 +171,9 @@ public final class ARUtil {
     
     public static Constructor getConstrByParamNo(Class c, int paramNo) {
         Constructor[] clist = c.getConstructors();
-        for (int j = 0; j < clist.length; j++) {
-            if (clist[j].getParameterTypes().length == paramNo)
-                return clist[j];
+        for (Constructor constructor : clist) {
+            if (constructor.getParameterTypes().length == paramNo)
+                return constructor;
         }
         logger.error("Cannot find a constructor with " + paramNo
                 + " parameters for class " + c.getName());
@@ -316,20 +293,19 @@ public final class ARUtil {
             logger.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");
             return ret;
         }
-        Iterator iter = donorGroups.iterator();
-        while (iter.hasNext()) {
-            AmpOrgGroup grp = (AmpOrgGroup) iter.next();
+        for (Object donorGroup : donorGroups) {
+            AmpOrgGroup grp = (AmpOrgGroup) donorGroup;
             if (grp.getOrgType() != null
                     && grp.getOrgType().getOrgType() != null
                     && (grp.getOrgType().getOrgType().toLowerCase().contains(
-                            "gov") || grp.getOrgType().getOrgType()
-                            .toLowerCase().contains("gouv"))) {
+                    "gov") || grp.getOrgType().getOrgType()
+                    .toLowerCase().contains("gouv"))) {
                 continue;
             }
             ret.add(grp);
         }
 
-        Collections.sort((List)ret, new DbUtil.HelperAmpOrgGroupNameComparator());
+        ((List) ret).sort(new DbUtil.HelperAmpOrgGroupNameComparator());
         
         return ret;
     }
@@ -370,9 +346,8 @@ public final class ARUtil {
     public static boolean containsColumn(String columName, Set columns) {
         if (columName == null)
             return false;
-        Iterator i = columns.iterator();
-        while (i.hasNext()) {
-            AmpReportColumn element = (AmpReportColumn) i.next();
+        for (Object column : columns) {
+            AmpReportColumn element = (AmpReportColumn) column;
             if (element.getColumn().getColumnName().indexOf(columName) != -1)
                 return true;
         }
@@ -406,7 +381,7 @@ public final class ARUtil {
     }
     
     public static void insertEmptyColumns (String type, CellColumn src, SortedSet<MetaInfo> destMetaSet, AmpARFilter filter) {
-        Iterator iter                                   = src.iterator();
+        Iterator iter   = src.iterator();
         TreeSet<Comparable<? extends Object>>   periods = new TreeSet<Comparable<? extends Object>>();
         try{
             ARUtil.initializePeriodValues(type, periods, filter);
@@ -426,21 +401,19 @@ public final class ARUtil {
                 Object prevPeriod                   = null;
                 Object first                            = periods.first();
                 Object last                             = periods.last();
-                Iterator periodIter                 = periods.iterator();
-                while ( periodIter.hasNext() ) {
-                    Object period           = periodIter.next();
+                for (Object period : periods) {
                     ////System.out.println("Year found:" + period );
-                    int difference          = 0;
-                    if ( prevPeriod != null && 
-                            (difference=ARUtil.periodDifference(type, prevPeriod, period)) > 1 ) {
-                        for (int i=1; i< difference; i++) {
-                            Comparable comparable   = ARUtil.getFuturePeriod(type, prevPeriod, i, first, last);
+                    int difference = 0;
+                    if (prevPeriod != null &&
+                            (difference = ARUtil.periodDifference(type, prevPeriod, period)) > 1) {
+                        for (int i = 1; i < difference; i++) {
+                            Comparable comparable = ARUtil.getFuturePeriod(type, prevPeriod, i, first, last);
                             if (comparable != null)
-                                destMetaSet.add( new MetaInfo(type, comparable) );
+                                destMetaSet.add(new MetaInfo(type, comparable));
                         }
-                        
+
                     }
-                    prevPeriod      = period;
+                    prevPeriod = period;
                 }
             
             }
@@ -468,7 +441,7 @@ public final class ARUtil {
         
         if ( ArConstants.QUARTER.equals( type ) ) {
             String quarter          = ((String)period ).substring(1);
-            Integer quarterId       = ( Integer.parseInt(quarter) );
+            int quarterId       = ( Integer.parseInt(quarter) );
             if ( quarterId >= 4 )
                 throw new Exception( "There is no quarter greater than: " + quarterId );
             if ( quarterId + step > 4 )
@@ -488,7 +461,7 @@ public final class ARUtil {
                 if ( month.getMonthId() >= 11 )
                     throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
                             ". There is no month greater than: " + month.getMonthId());
-                Integer newMonthId          = month.getMonthId() + step;
+                int newMonthId          = month.getMonthId() + step;
                 if ( newMonthId > 11 )
                     throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
                             ". Max month is 11. Trying to generate month: " + newMonthId);
@@ -499,7 +472,7 @@ public final class ARUtil {
                 if ( month.getMonthId() >= 13 )
                     throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
                             ". There is no month greater than: " + month.getMonthId());
-                Integer newMonthId          = month.getMonthId() + step;
+                int newMonthId = month.getMonthId() + step;
                 if ( newMonthId > 13 )
                     throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
                             ". Max month is 13. Trying to generate month: " + newMonthId);
@@ -567,24 +540,21 @@ public final class ARUtil {
     }
     
     public static void cleanReportOfHtmlCodes(GroupReportData rd){
-        for (Iterator it = rd.getItems().iterator(); it.hasNext();) {
-            Object o  = it.next();
-            if(o instanceof GroupReportData) cleanReportOfHtmlCodes((GroupReportData)o);
-            if(o instanceof ColumnReportData) {
+        for (Object o : rd.getItems()) {
+            if (o instanceof GroupReportData) cleanReportOfHtmlCodes((GroupReportData) o);
+            if (o instanceof ColumnReportData) {
                 ColumnReportData crd = (ColumnReportData) o;
-                for (Iterator j = crd.getItems().iterator(); j.hasNext();) {
-                    Object oo = j.next();
-                    if(oo instanceof CellColumn){
-                        CellColumn cellColumn  = (CellColumn)oo;
-                        for (Iterator k = cellColumn.getItems().iterator(); k.hasNext();) {
-                            Object cell = k.next();
+                for (Object oo : crd.getItems()) {
+                    if (oo instanceof CellColumn) {
+                        CellColumn cellColumn = (CellColumn) oo;
+                        for (Object cell : cellColumn.getItems()) {
                             ARUtil.cleanCell(cell);
                         }
                     }
                 }
-        
+
             }
-    
+
         }
     }
 
@@ -622,8 +592,7 @@ public final class ARUtil {
     public static double retrievePercentageFromCell ( MetaTextCell mtc ) throws Exception {
         MetaInfo<Double> mInfo  = mtc.getMetaInfo(ArConstants.PERCENTAGE);
         if ( mInfo != null && mInfo.getValue() > 0) { // ROTTEN: this "if" throws up on 0.0% cells masked as non-procented ones. See AmountCell::getAmount() for more comments of ways in which this is broken. AMP-13848
-            Double percentage       = mInfo.getValue();
-            return percentage;
+            return mInfo.getValue();
         }
         if ( mInfo == null)
             throw new Exception("Percentage metainfo in MetaTextCell " + mtc + " is null");
@@ -632,14 +601,11 @@ public final class ARUtil {
     
     public static double retrieveParentPercetage( Long ownerId, Cell splitterCell ) throws Exception {
         Column col              = splitterCell.getColumn();
-        Iterator<TextCell> iter = col.getItems().iterator();
-        while (iter.hasNext()) {
-            TextCell    textCell        = iter.next();
-            if ( textCell instanceof MetaTextCell ) {
-                MetaTextCell metaTextCell   = (MetaTextCell) textCell;
-                if ( splitterCell.getValue().equals(metaTextCell.getValue()) && ownerId.equals(metaTextCell.getOwnerId() ) ) {
-                    Double percentage       = retrievePercentageFromCell(metaTextCell);
-                    return percentage;
+        for (TextCell textCell : (Iterable<TextCell>) col.getItems()) {
+            if (textCell instanceof MetaTextCell) {
+                MetaTextCell metaTextCell = (MetaTextCell) textCell;
+                if (splitterCell.getValue().equals(metaTextCell.getValue()) && ownerId.equals(metaTextCell.getOwnerId())) {
+                    return retrievePercentageFromCell(metaTextCell);
                 }
             }
         }
@@ -666,9 +632,8 @@ public final class ARUtil {
         if (session != null ) {
             String budgetTypeReport = (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE );
             if (budgetTypeReport != null ) {
-                GroupReportDataXLS grd  = new BudgetGroupReportDataXLS(wb, sheet, row, rowId,
+                return new BudgetGroupReportDataXLS(wb, sheet, row, rowId,
                         colId, null, rd);
-                return grd;
             }
         }
 
@@ -691,12 +656,10 @@ public final class ARUtil {
         HttpServletRequest request = TLSUtils.getRequest();
         if( report!=null ) {
             TeamMember tm = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-            if( tm==null || tm.getTeamId()==null ) { 
-                if( report.getPublicReport() )
-                    return true;
+            if( tm==null || tm.getTeamId()==null ) {
+                return report.getPublicReport();
             } else {
-                if( AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES.equals(tm.getTeamId()) || tm.getTeamId().equals(report.getOwnerId().getAmpTeam().getAmpTeamId()) )
-                    return true;
+                return AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES.equals(tm.getTeamId()) || tm.getTeamId().equals(report.getOwnerId().getAmpTeam().getAmpTeamId());
             }
         }
         return false;
@@ -704,7 +667,7 @@ public final class ARUtil {
     
     public static AmpColumns getColumnForView(String viewName) {
         String query = "select c from " + AmpColumns.class.getName() + " c WHERE c.extractorView = :ev ORDER BY c.columnId";
-        List<AmpColumns> res = PersistenceManager.getSession().createQuery(query).setString("ev", viewName).list();
+        List<AmpColumns> res = PersistenceManager.getRequestDBSession().createQuery(query).setParameter("ev", viewName,StringType.INSTANCE).list();
         if (res.isEmpty())
             return null;
         return res.get(0);

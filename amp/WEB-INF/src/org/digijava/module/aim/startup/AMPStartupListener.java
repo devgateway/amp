@@ -3,18 +3,6 @@
  */
 package org.digijava.module.aim.startup;
 
-import java.lang.management.ManagementFactory;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.management.MBeanServer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpServlet;
-
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.management.ManagementService;
 import org.apache.jackrabbit.util.TransientFileFactory;
@@ -46,6 +34,17 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+
+import javax.management.MBeanServer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServlet;
+import java.lang.management.ManagementFactory;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Set;
 
 public class AMPStartupListener extends HttpServlet implements
         ServletContextListener {
@@ -180,7 +179,6 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_program_level_caches_internal", "program");
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
-            
             ContentRepositoryManager.initialize();
             
             checkDatabaseSanity();
@@ -226,7 +224,7 @@ public class AMPStartupListener extends HttpServlet implements
      */
     protected void runCacheRefreshingQuery(String funcName, String what) {
         String query = String.format("SELECT %s() FROM (select 1) AS dual", funcName);
-        java.util.List<?> shouldBe1 = PersistenceManager.getSession().createSQLQuery(query).list(); // force recreation of the location cached at each AMP startup
+        java.util.List<?> shouldBe1 = PersistenceManager.getSession().createNativeQuery(query).list(); // force recreation of the location cached at each AMP startup
         
         if (shouldBe1.size() != 1)
             throw new Error("recreating AMP " + what + " caches failed");

@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-
 public class AmpGPISurveyQuestion implements Serializable {
 
     //IATI-check: to be ignored

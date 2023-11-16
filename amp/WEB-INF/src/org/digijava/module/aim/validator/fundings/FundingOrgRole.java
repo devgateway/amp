@@ -1,15 +1,14 @@
 package org.digijava.module.aim.validator.fundings;
 
 
-import static java.lang.annotation.ElementType.FIELD;
-
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * <p>Ensure that the organisation role used in funding matches organisation roles defined in activity.orgRoles</p>

@@ -4,8 +4,8 @@
 	<class name="org.digijava.kernel.entity.Address" table="EP_ADDRESSES"
 		proxy="org.digijava.kernel.entity.Address">
 		<id column="ADDRESS_ID" name="addressId" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">EP_ADDRESSES_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">EP_ADDRESSES_seq</param>
 			</generator>
 		</id>
 		<!--property column="AGENCY_ID" length="22" name="agencyId" type="java.lang.Long"//-->

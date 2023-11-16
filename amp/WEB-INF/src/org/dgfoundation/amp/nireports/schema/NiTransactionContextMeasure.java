@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.dgfoundation.amp.newreports.ReportRenderWarning;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
  * a measure defined as a transaction which is filtered based on context

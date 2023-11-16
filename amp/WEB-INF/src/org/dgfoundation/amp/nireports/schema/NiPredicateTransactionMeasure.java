@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
+
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * a measure defined as being the result of applying a {@link Predicate} on either filtered or unfiltered cells and outputting the nonnull ones

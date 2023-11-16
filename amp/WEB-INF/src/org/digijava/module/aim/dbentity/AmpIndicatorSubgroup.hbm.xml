@@ -5,8 +5,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpIndicatorSubgroup" table="AMP_INDICATOR_SUBGROUP">
 		<cache usage="read-write" />
 		<id name="ampIndicatorSubgroupId" column="amp_indicator_subgroup_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_INDICATOR_SUBGROUP_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_INDICATOR_SUBGROUP_seq</param>
 			</generator>
 		</id>
                 <property name="subgroupName" column="subgroup_name" type="java.lang.String"/>

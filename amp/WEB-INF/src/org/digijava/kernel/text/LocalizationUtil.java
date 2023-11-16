@@ -22,6 +22,9 @@
 
 package org.digijava.kernel.text;
 
+import org.digijava.kernel.text.parser.LocaleData;
+import org.digijava.kernel.text.parser.LocaleParser;
+
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.MessageFormat;
@@ -29,9 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
-import org.digijava.kernel.text.parser.LocaleData;
-import org.digijava.kernel.text.parser.LocaleParser;
 
 public class LocalizationUtil {
 

@@ -1,12 +1,10 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.helper.QuartzJobForm;
+
+import java.util.Collection;
 
 public class QuartzJobManagerForm extends ActionForm {
     /**

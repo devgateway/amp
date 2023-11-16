@@ -22,27 +22,6 @@
 
 package org.digijava.kernel.security;
 
-import java.security.AccessControlException;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.Permissions;
-import java.security.Principal;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.security.auth.Subject;
-
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -51,6 +30,11 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
+import org.hibernate.Session;
+
+import javax.security.auth.Subject;
+import java.security.*;
+import java.util.*;
 
 public class DigiSecurityManager {
     private static Logger logger = Logger.getLogger(DigiSecurityManager.class);

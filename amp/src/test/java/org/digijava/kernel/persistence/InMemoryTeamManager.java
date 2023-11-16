@@ -1,12 +1,12 @@
 package org.digijava.kernel.persistence;
 
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.springframework.util.Assert;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.springframework.util.Assert;
 
 /**
  * Non-persistent implementation of {@code InMemoryManager} which is backed by an in-memory map.

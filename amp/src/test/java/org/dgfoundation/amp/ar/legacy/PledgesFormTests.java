@@ -1,25 +1,23 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Pledges Form tests
@@ -147,7 +145,7 @@ public class PledgesFormTests extends ReportsTestCase {
     {
         FundingPledges pledge = PledgesEntityHelper.getPledgesById(3L);
         assertTrue(PledgesEntityHelper.getPledges().size() > 0); // more like a check on non-crashing
-        assertTrue(PledgesEntityHelper.getFundingRelatedToPledges(pledge).size() == 0);
+        assertEquals(0, PledgesEntityHelper.getFundingRelatedToPledges(pledge).size());
         assertEquals(1, PledgesEntityHelper.getPledgesByDonorGroup(18L).size());
         assertEquals("Test pledge 1", PledgesEntityHelper.getPledgesByDonorGroup(18L).get(0).getTitleFreeText());
         assertEquals(0, PledgesEntityHelper.getPledgesByDonor(21696L).size());

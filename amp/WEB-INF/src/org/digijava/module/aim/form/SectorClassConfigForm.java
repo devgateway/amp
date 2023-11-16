@@ -1,9 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import java.util.List;
 
 public class SectorClassConfigForm extends ActionForm {
 

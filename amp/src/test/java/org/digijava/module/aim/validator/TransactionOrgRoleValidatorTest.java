@@ -1,32 +1,20 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNodeAtKey;
-import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNode;
-import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
-import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Path;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRoleValidator;
 import org.hamcrest.Matcher;
 import org.junit.Test;
+
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+import static org.digijava.module.aim.validator.ConstraintMatchers.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Viorel Chihai

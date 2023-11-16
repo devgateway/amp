@@ -1,12 +1,12 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public class ScorecardManagerForm extends ActionForm {
 

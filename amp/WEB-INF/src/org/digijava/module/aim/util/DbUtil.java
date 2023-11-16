@@ -1262,10 +1262,12 @@ public class DbUtil {
 
     public static void add(Object object) {
         PersistenceManager.getSession().save(object);
+        PersistenceManager.getSession().flush();
     }
 
     public static void update(Object object) {
         PersistenceManager.getSession().update(object);
+        PersistenceManager.getSession().flush();
     }
 
     public static void updateField(String className, Long id, String fieldName, Object newValue) {

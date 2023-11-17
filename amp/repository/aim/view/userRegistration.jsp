@@ -335,77 +335,33 @@
                           <td class=f-names noWrap style="padding-bottom:10px;">
                             <FONT color=red>*</FONT>
                             <digi:trn>Notification Email</digi:trn>
-                        </td>
-                        <td align="right" style="padding-bottom:10px;">
+                          </td>
+                          <td align="right" style="padding-bottom:10px;">
                             <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/>
-                        </td>
-                    </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
-                <digi:trn key="um:countryOfResidence">Country of Residence </digi:trn>              </td>
-              <td align="right"  class="orgtype" style="padding-bottom:10px;">
-              	<html:select  property="selectedCountryResidence" styleClass="inp-text" >
-                  <html:optionsCollection name="aimUserRegisterForm" property="countryResidence" value="iso" label="name" />
-                </html:select>
-              </td>
-              <td>&nbsp;</td>
-              <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
-              <td align="right" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
-            </tr>
-
-            <c:if test="${aimUserRegisterForm.truBudgetEnabled=='true'}">
-
-<%--              <tr>--%>
-<%--                <td align=right class=f-names noWrap>--%>
-<%--                    &lt;%&ndash;													<FONT color=red>*</FONT>&ndash;%&gt;--%>
-<%--                  <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>--%>
-<%--                <td align="left">--%>
-<%--                  <html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">--%>
-<%--                    <c:forEach var="cn"	items="${aimUserRegisterForm.truBudgetIntents}">--%>
-<%--                      <html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>--%>
-<%--                    </c:forEach>--%>
-<%--                  </html:select>--%>
-<%--                </td>--%>
-<%--              </tr>--%>
-              <tr>
-                <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
-                  <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn>              </td>
-                <td align="right"  class="orgtype" style="padding-bottom:10px;">
-                  <html:select property="selectedTruBudgetIntents" multiple="true" styleClass="inp-text" >
-                    <html:optionsCollection name="aimUserRegisterForm" property="truBudgetIntents" value="truBudgetIntentName" label="truBudgetIntentDisplayName" />
-                  </html:select>
-                </td>
-              </tr>
-
-
-
-            <tr>
-              <td valign="top" class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
-                <digi:trn key="um:truBudgetPassword">Enter Trubudget Password </digi:trn>              </td>
-              <td style="padding-bottom:10px;"><html:password property="truBudgetPassword" size="20"
-                                                              styleClass="inp-text"/>
-                <div style="display: none" class="pwd_container" id="pwd_container">
-<%--                  <span class="pwstrength_viewport_verdict">&nbsp;</span>--%>
-<%--                  <span class="pwstrength_viewport_progress"></span>--%>
-                </div>
-              </td>
-              <td class=f-names valign="top" noWrap width="200" style="padding-bottom:10px;display: inline-block;"><FONT color=red>*</FONT>
-                <digi:trn key="um:truBudgetPasswordConfirmation">Repeat TruBudget Password </digi:trn>              </td>
-              <td align="right" valign="top" style="padding-bottom:10px;display: inline-block;"><html:password property="truBudgetPasswordConfirmation" size="20" styleClass="inp-text" />              </td>
-            </tr>
-            </c:if>
-
-            <tr>
-              <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
-                <digi:trn key="um:organizationType">Organization Type </digi:trn>              </td>
-              <td class="orgtype" align="right" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
-                  <html:option value="-1">--
-                    <digi:trn key="um:selectType">Select a type</digi:trn>
-                    --</html:option>
-                  <html:optionsCollection name="aimUserRegisterForm" property="orgTypeColl"
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
+                      <digi:trn key="um:countryOfResidence">Country of Residence </digi:trn>              </td>
+                    <td align="right"  class="orgtype" style="padding-bottom:10px;">
+                      <html:select  property="selectedCountryResidence" styleClass="inp-text" >
+                        <html:optionsCollection name="aimUserRegisterForm" property="countryResidence" value="iso" label="name" />
+                      </html:select>
+                    </td>
+                    <td class=f-names noWrap width="200" style="padding-bottom:10px;display: inline-block;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
+                    <td align="right" style="padding-bottom:10px;display: inline-block;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
+                  </tr>
+                  <tr>
+                    <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
+                      <digi:trn key="um:organizationType">Organization Type </digi:trn>              </td>
+                    <td class="orgtype" align="right" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
+                      <html:option value="-1">--
+                        <digi:trn key="um:selectType">Select a type</digi:trn>
+                        --</html:option>
+                      <html:optionsCollection name="aimUserRegisterForm" property="orgTypeColl"
 
                                               value="ampOrgTypeId" label="orgType" />
                     </html:select>              </td>

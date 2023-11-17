@@ -247,12 +247,14 @@ public class OnePager extends AmpHeaderFooter {
                 // keep alive jdbc connection
                 // AMP-19698
                 // keep alive jdbc connection
-                PersistenceManager.doInTransaction(s -> {
-                    s.doWork(connection -> {
+                AmpActivityModel.getHibernateSession().doWork(new Work() {
+                    @Override
+                    public void execute(Connection connection) throws SQLException {
                         try {
                             java.sql.Statement stm = connection.createStatement();
                             java.sql.ResultSet rs = stm.executeQuery("select 1");
-                            if (rs.next());
+                            if (rs.next())
+                                ;
                             rs.close();
                             stm.close();
                         } catch (Exception e) {
@@ -260,7 +262,7 @@ public class OnePager extends AmpHeaderFooter {
                             //ignore the exception
                             logger.error(e.getMessage(), e);
                         }
-                    });
+                    }
                 });
             }
         };

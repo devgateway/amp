@@ -832,51 +832,56 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
+        try {
 
-        form.process(button);
-        
-            form.visitChildren(AmpAgreementItemPanel.class,new IVisitor<AmpAgreementItemPanel, Void>() {
+            form.process(button);
+
+            form.visitChildren(AmpAgreementItemPanel.class, new IVisitor<AmpAgreementItemPanel, Void>() {
 
                 @Override
                 public void component(AmpAgreementItemPanel object,
-                        IVisit<Void> visit) {
+                                      IVisit<Void> visit) {
                     object.validateIsNewAgreementFormClosed(target);
                     visit.dontGoDeeper();
                 }
-                
+
             });
 
-        form.visitChildren(AbstractTextComponent.class,
-                new IVisitor<Component, Object>() {
-                    @Override
-                    public void component(Component component, IVisit<Object> objectIVisit) {
-                        IModel<?> model = component.getDefaultModel();
-                        AbstractTextComponent atc = (AbstractTextComponent) component;
-                        //logger.error(component.getParent().getId());  
-                        boolean required = false;
-                        List<IValidator> validators = atc.getValidators();
-                        for (IValidator validator : validators) {
-                            if (validator instanceof ValidatorAdapter && ((ValidatorAdapter) validator).getValidator() instanceof TranslatableValidators) {
-                                List<IValidator<? super String>> nestedValidators = ((TranslatableValidators) ((ValidatorAdapter) validator).getValidator()).getValidators();
-                                for (IValidator nValidator : nestedValidators)
-                                    if (nValidator instanceof ValidatorAdapter && ((ValidatorAdapter) nValidator).getValidator() instanceof StringRequiredValidator) {
-                                        required = true;
-                                        break;
-                                    }
-                                break;
+            form.visitChildren(AbstractTextComponent.class,
+                    new IVisitor<Component, Object>() {
+                        @Override
+                        public void component(Component component, IVisit<Object> objectIVisit) {
+                            IModel<?> model = component.getDefaultModel();
+                            AbstractTextComponent atc = (AbstractTextComponent) component;
+                            //logger.error(component.getParent().getId());
+                            boolean required = false;
+                            List<IValidator> validators = atc.getValidators();
+                            for (IValidator validator : validators) {
+                                if (validator instanceof ValidatorAdapter && ((ValidatorAdapter) validator).getValidator() instanceof TranslatableValidators) {
+                                    List<IValidator<? super String>> nestedValidators = ((TranslatableValidators) ((ValidatorAdapter) validator).getValidator()).getValidators();
+                                    for (IValidator nValidator : nestedValidators)
+                                        if (nValidator instanceof ValidatorAdapter && ((ValidatorAdapter) nValidator).getValidator() instanceof StringRequiredValidator) {
+                                            required = true;
+                                            break;
+                                        }
+                                    break;
+                                }
                             }
-                        }
-                        if (model instanceof TranslationDecoratorModel && required) {
-                            TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
+                            if (model instanceof TranslationDecoratorModel && required) {
+                                TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
 
-                            if (tdm.getOriginalModel().getObject() == null || tdm.getOriginalModel().getObject().trim().isEmpty()) {
-                                ((AbstractTextComponent) component).error(new ValidationError().addKey("Required"));
-                                TranslatableValidators.onError(target, atc, null);
-                                target.add(component.getParent());
+                                if (tdm.getOriginalModel().getObject() == null || tdm.getOriginalModel().getObject().trim().isEmpty()) {
+                                    ((AbstractTextComponent) component).error(new ValidationError().addKey("Required"));
+                                    TranslatableValidators.onError(target, atc, null);
+                                    target.add(component.getParent());
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }catch (Exception e)
+        {
+            logger.error("Error occured during save as draft",e);
+        }
 
     }
 

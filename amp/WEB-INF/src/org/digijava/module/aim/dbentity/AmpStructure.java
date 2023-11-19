@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -31,42 +32,42 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampStructureId;
-    
+
     @TranslatableField
     @Interchangeable(fieldTitle = "Title", importable = true, fmPath = "/Activity Form/Structures/Structure Title",
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String title;
-    
+
     @TranslatableField
-    @Interchangeable(fieldTitle = "Description", importable = true, 
+    @Interchangeable(fieldTitle = "Description", importable = true,
             fmPath = "/Activity Form/Structures/Structure Description")
     private String description;
-    
-    @Interchangeable(fieldTitle = "Latitude", importable = true, 
+
+    @Interchangeable(fieldTitle = "Latitude", importable = true,
             fmPath = "/Activity Form/Structures/Structure Latitude")
     private String latitude;
-    
-    @Interchangeable(fieldTitle = "Longitude", importable = true, 
+
+    @Interchangeable(fieldTitle = "Longitude", importable = true,
             fmPath = "/Activity Form/Structures/Structure Longitude")
     private String longitude;
-    
+
     @Interchangeable(fieldTitle = "Shape", importable = true, fmPath = "/Activity Form/Structures/Structure Shape")
     private String shape;
-    
+
     private java.sql.Timestamp creationdate;
-    
-    @Interchangeable(fieldTitle = "Type", pickIdOnly = true, importable = true, 
+
+    @Interchangeable(fieldTitle = "Type", pickIdOnly = true, importable = true,
             fmPath = "/Activity Form/Structures/Structure Type")
     private AmpStructureType type;
 
     @InterchangeableBackReference
     private AmpActivityVersion activity;
-    
+
     private Set<AmpStructureImg> images;
-    
+
     @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")
     private List<AmpStructureCoordinate> coordinates = new ArrayList<>();
-    
+
     private String coords;
 
     @Interchangeable(fieldTitle = "Structure Color", fmPath = "/Activity Form/Structures/Map",
@@ -117,10 +118,10 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     }
 
     public int compareTo(Object obj) {
-        
-        if (!(obj instanceof AmpStructure)) 
+
+        if (!(obj instanceof AmpStructure))
             throw new ClassCastException();
-        
+
         AmpStructure ampStr = (AmpStructure) obj;
         if (this.title != null) {
             if (ampStr.title != null) {
@@ -135,17 +136,17 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
                 return ("".compareTo(ampStr.title.trim().toLowerCase()));
             } else {
                 return 0;
-            }           
+            }
         }
     }
-    
+
     public java.sql.Timestamp getCreationdate() {
         return creationdate;
     }
     public void setCreationdate(java.sql.Timestamp creationdate) {
         this.creationdate = creationdate;
     }
-    
+
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpStructure aux = (AmpStructure) obj;
@@ -179,13 +180,13 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
         String value = " " + this.creationdate + this.description /*+ this.activity*/;
         return value;
     }
-    
+
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpStructure aux = (AmpStructure) clone();
         aux.setActivity(newActivity);
         aux.setAmpStructureId(null);
-        
+
         if (aux.getImages() != null && aux.getImages().size() > 0) {
             Set<AmpStructureImg> auxSetImages = new HashSet<AmpStructureImg>();
             for (AmpStructureImg img : aux.getImages()) {
@@ -196,11 +197,11 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             }
             aux.setImages(auxSetImages);
         } else {
-            aux.setImages(null);
+            aux.setImages(new HashSet<>());
         }
 
         if (aux.getCoordinates() != null && aux.getCoordinates().size() > 0) {
-            List<AmpStructureCoordinate> coords = new ArrayList<AmpStructureCoordinate>();
+            List<AmpStructureCoordinate> coords = new ArrayList<>();
             for (AmpStructureCoordinate coord : aux.getCoordinates()) {
                 AmpStructureCoordinate auxCoord = (AmpStructureCoordinate) coord.clone();
                 auxCoord.setAmpStructureCoordinateId(null);
@@ -209,7 +210,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             }
             aux.setCoordinates(coords);
         } else {
-            aux.setCoordinates(null);
+            aux.setCoordinates(new ArrayList<>());
         }
 
         return aux;
@@ -219,7 +220,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
+
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
@@ -293,7 +294,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     public String toString() {
         return String.format("AmpStructure[id=%s], title = %s, description = %s", this.ampStructureId, this.title, this.description);
     }
-    
+
     public static String hqlStringForTitle(String idSource) {
         return InternationalizedModelDescription.getForProperty(AmpStructure.class, "title").getSQLFunctionCall(idSource + ".ampStructureId");
     }

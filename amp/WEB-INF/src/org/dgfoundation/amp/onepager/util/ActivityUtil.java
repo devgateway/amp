@@ -322,6 +322,7 @@ public class ActivityUtil {
 
         return a;
     }
+
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {
         T object = session.get(objectClass, id);
@@ -1370,8 +1371,15 @@ public class ActivityUtil {
         if (a.getAmpActivityId() != null) {
             for (AmpStructure structure : a.getStructures()) {
                 structure.setActivity(a);
+                AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
+                ampStructureCoordinate.setStructure(structure);
+                ampStructureCoordinate.setLatitude(structure.getLatitude());
+                ampStructureCoordinate.setLongitude(structure.getLongitude());
+                if (!structure.getCoordinates().contains(ampStructureCoordinate)) {
+                    structure.getCoordinates().add(ampStructureCoordinate);
+                }
                 if (structure.getAmpStructureId() == null) {
-                    session.saveOrUpdate(structure);
+                    session.save(structure);
                 } else {
                     session.merge(structure);
                 }

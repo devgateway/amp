@@ -1433,6 +1433,7 @@ public class DbUtil {
 
     public static void delete(Object object) throws JDBCException {
         PersistenceManager.getSession().delete(object);
+        PersistenceManager.getSession().flush();
     }
 
     public static void deleteOrg(AmpOrganisation org) throws JDBCException {

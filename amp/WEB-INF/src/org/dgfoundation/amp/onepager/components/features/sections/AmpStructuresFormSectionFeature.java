@@ -81,7 +81,7 @@ public class AmpStructuresFormSectionFeature extends
                 IModel<AmpStructure> structureModel = item.getModel();
                 final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
                 name.setOutputMarkupId(true);
-                name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
+                name.getTextContainer().add(new AttributeAppender("size", new Model<>("10px"), ";"));
                 name.setTextContainerDefaultMaxSize();
                 name.getTextContainer().setRequired(true);
                 if (name.isComponentMultilingual()) {
@@ -113,7 +113,7 @@ public class AmpStructuresFormSectionFeature extends
                 longitude.setOutputMarkupId(true);
                 longitude.setTextContainerDefaultMaxSize();
 
-                longitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+                longitude.getTextContainer().add(new AttributeAppender("size", new Model<>("7px"), ";"));
                 longitude.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -127,7 +127,7 @@ public class AmpStructuresFormSectionFeature extends
                 latitude.setTextContainerDefaultMaxSize();
                 latitude.setOutputMarkupId(true);
 
-                latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+                latitude.getTextContainer().add(new AttributeAppender("size", new Model<>("7px"), ";"));
                 latitude.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -276,9 +276,9 @@ public class AmpStructuresFormSectionFeature extends
                     }
                 });
                 item.add(structureColorId);               
-                
-                latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
-                longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+//
+//                latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+//                longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
             }
         };

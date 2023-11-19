@@ -49,7 +49,7 @@ public class MEIndicatorDTO {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @NotNull
-    @ApiModelProperty(dataType = "java.util.date", example = "02/02/2023")
+    @ApiModelProperty(dataType = "java.util.Date", example = "02/02/2023")
     private Date creationDate;
 
     @JsonProperty("base")

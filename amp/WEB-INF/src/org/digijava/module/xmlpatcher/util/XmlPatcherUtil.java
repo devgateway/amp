@@ -303,10 +303,9 @@ public final class XmlPatcherUtil {
         Query query = session.createQuery("select p from "
                 + AmpXmlPatch.class.getName() + " p WHERE p.patchId LIKE 'junit-test%'");
         List list = query.list();
-        
-        Iterator iterator = list.iterator();
-        while(iterator.hasNext()) {
-            AmpXmlPatch p=(AmpXmlPatch) iterator.next();
+
+        for (Object o : list) {
+            AmpXmlPatch p = (AmpXmlPatch) o;
             DbUtil.delete(p);
         }
     }

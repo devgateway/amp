@@ -69,10 +69,10 @@ public class AmpFilterData implements Serializable {
                 }
                 Collection<Object> col;
                 if ( fieldObj == null ) {
-                    Class colClass          = Class.forName(this.propertyClassName);
-                    col                     = (Collection<Object>)colClass.newInstance();
-                    Object [] params        = new Object[1];
-                    params[0]               = col;
+                    Class colClass = Class.forName(this.propertyClassName);
+                    col  = (Collection<Object>)colClass.newInstance();
+                    Object [] params = new Object[1];
+                    params[0] = col;
                     pd.getWriteMethod().invoke(parentObject, params);
                 }
                 else

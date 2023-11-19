@@ -835,15 +835,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         form.process(button);
         
-            form.visitChildren(AmpAgreementItemPanel.class,new IVisitor<AmpAgreementItemPanel, Void>() {
-
-                @Override
-                public void component(AmpAgreementItemPanel object,
-                        IVisit<Void> visit) {
-                    object.validateIsNewAgreementFormClosed(target);
-                    visit.dontGoDeeper();
-                }
-                
+            form.visitChildren(AmpAgreementItemPanel.class, (IVisitor<AmpAgreementItemPanel, Void>) (object, visit) -> {
+                object.validateIsNewAgreementFormClosed(target);
+                visit.dontGoDeeper();
             });
 
         form.visitChildren(AbstractTextComponent.class,

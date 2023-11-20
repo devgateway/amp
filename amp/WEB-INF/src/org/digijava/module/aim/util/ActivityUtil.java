@@ -385,7 +385,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
         try {
 //session.flush();
-            result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
+            result = session.get(AmpActivityVersion.class, id);
             session.evict(result);
             result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
             Hibernate.initialize(result.getInternalIds());
@@ -416,6 +416,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
             }
+           for (AmpGPISurvey ampGPISurvey: result.getGpiSurvey())
+           {
+               Hibernate.initialize(ampGPISurvey);
+               for(AmpGPISurveyResponse ampGPISurveyResponse: ampGPISurvey.getResponses())
+               {
+                   Hibernate.initialize(ampGPISurveyResponse);
+               }
+           }
 
             // AMPOFFLINE-1528
             ActivityUtil.setCurrentWorkspacePrefixIntoRequest(result);

@@ -382,7 +382,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            organization = (AmpOrganisation) session.load(AmpOrganisation.class, id);
+            organization = session.load(AmpOrganisation.class, id);
             Hibernate.initialize(organization.getRecipients());
             Hibernate.initialize(organization.getOrganizationBudgetInfos());
             if (organization.getOrganizationBudgetInfos() != null) {

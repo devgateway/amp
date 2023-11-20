@@ -23,14 +23,7 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpIndicatorSector;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.util.caching.AmpCaching;
@@ -43,7 +36,7 @@ import org.hibernate.type.LongType;
 
 /**
  * Utility class for persisting all Sector with Scheme related entities
- * 
+ *
  * @author Govind G Dalwani
  */
 
@@ -133,42 +126,42 @@ public class SectorUtil {
 
         } catch (Exception ex) {
             logger.debug("Unable to search sectors" + ex);
-        } 
+        }
         return col;
     }// End Search Sector.
 
     public static List<AmpSectorScheme> getAllSectorSchemes() {
         return getAllSectorSchemes(false);
     }
-    
+
     /**
      * Get allSector Scheme
-     * @param classificationConfiguration check if the sector scheme has its associated ClassificationConfiguration 
+     * @param classificationConfiguration check if the sector scheme has its associated ClassificationConfiguration
      * @return
      */
     public static List<AmpSectorScheme> getAllSectorSchemes(boolean classificationConfiguration) {
         try {
             String sectorSchemeNameHql = AmpSectorScheme.hqlStringForName("ss");
-            
+
             StringBuffer queryString =new StringBuffer( "select ss from " + AmpSectorScheme.class.getName() + " ss ");
-            if(classificationConfiguration){ 
+            if(classificationConfiguration){
                 queryString.append("where exists ( from "+ AmpClassificationConfiguration.class.getName() +" cc where cc.classification.ampSecSchemeId=ss.ampSecSchemeId )");
             }
             queryString.append(" order by " + sectorSchemeNameHql);
-            
-            
+
+
             Query qry = PersistenceManager.getSession().createQuery(queryString.toString());
             List<AmpSectorScheme> col = new ArrayList<>(qry.list());
             return col;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        } 
+        }
     }
-    
+
     @SuppressWarnings("unchecked")
     public static List<AmpSector> getAllParentSectors(Long secSchemeId){
         try
-        { 
+        {
             String queryString = "select s from " + AmpSector.class.getName()
                     + " s " + "where amp_sec_scheme_id = " + secSchemeId
                     + " and parent_sector_id is null and (s.deleted is null or s.deleted = false)  " + "order by " + AmpSector.hqlStringForName("s");
@@ -211,7 +204,7 @@ public class SectorUtil {
     public static Collection<AmpSector> getAllSectors() {
         if (AmpCaching.getInstance().sectorsCache == null)
         {
-            Session session = null;         
+            Session session = null;
 
             try {
                 session = PersistenceManager.getRequestDBSession();
@@ -224,12 +217,12 @@ public class SectorUtil {
             }
         }
         return AmpCaching.getInstance().sectorsCache.getAllSectors();
-    }   
-    
+    }
+
     public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
         if (AmpCaching.getInstance().sectorsCache == null)
             getAllSectors(); // force initialization of cache
-        
+
         return AmpCaching.getInstance().sectorsCache.getChildSectors(parSecId);
     }
 
@@ -519,8 +512,8 @@ public class SectorUtil {
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @return List of sectors and sub-sectors ordered by sectors alphabetically
      *         and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1,
      *         b2, etc...). The names of the sectors are a embelished (upper
@@ -604,7 +597,7 @@ public class SectorUtil {
         return new TreeSet<>(parents.values());
     }
 
-    
+
     /**
      * TODO: this is poor man's recursion
      * @param configurationName
@@ -616,7 +609,7 @@ public class SectorUtil {
             getAllSectors(); //force rebuilding cache
         if (AmpCaching.getInstance().sectorsCache.sectorsHierarchy.containsKey(configurationName))
             return new ArrayList<AmpSector>(AmpCaching.getInstance().sectorsCache.sectorsHierarchy.get(configurationName));
-        
+
         List<AmpSector> ret = new ArrayList<AmpSector>();
         Long id = null;
 
@@ -655,7 +648,7 @@ public class SectorUtil {
                         }
                     }
                 }
-            }       
+            }
         AmpCaching.getInstance().sectorsCache.sectorsHierarchy.put(configurationName, ret);
         return new ArrayList<AmpSector>(ret);
     }
@@ -753,7 +746,7 @@ public class SectorUtil {
 
     /**
      * Returns All Configurations of Classifications
-     * 
+     *
      * @return All Configurations
      * @throws DgException
      *             If exception occurred
@@ -770,7 +763,7 @@ public class SectorUtil {
 
     /**
      * Returns Classification Configuration by Configuration Id
-     * 
+     *
      * @param configId
      *            Configuration Id
      * @return Classification Configuration using Configuration Id
@@ -800,7 +793,7 @@ public class SectorUtil {
     /**
      * Returns true if specified Scheme is selected as default classification in
      * the configuration otherwise returns false.
-     * 
+     *
      * @param classificationId
      *            Id of classification
      * @return true If specified classification is selected as default
@@ -841,7 +834,7 @@ public class SectorUtil {
     /**
      * Returns true if specified classification is selected as default
      * classification in the configuration otherwise returns false.
-     * 
+     *
      * @param classificationId
      *            Id of classification
      * @return true If specified classification is selected as default
@@ -881,13 +874,13 @@ public class SectorUtil {
 
     /**
      * adds or update classification configuration
-     * 
-     * 
+     *
+     *
      * @param configId
      *            Id of configuration
      * @param configName
      *            Name of configuration
-     * @param description 
+     * @param description
      * @param multiSector
      * @param classification
      *            Default classification
@@ -912,7 +905,7 @@ public class SectorUtil {
 
             }
             config.setName(configName);
-            config.setDescription(description);         
+            config.setDescription(description);
             config.setMultisector(multiSector);
             config.setClassification(classification);
             // beginTransaction();
@@ -953,7 +946,7 @@ public class SectorUtil {
      * Loads AmpClassificationConfiguration bean which is primary. Please see
      * next method which is old version and was not touch to not damage
      * anything.
-     * 
+     *
      * @return primary configuration
      * @throws DgException
      */
@@ -980,8 +973,8 @@ public class SectorUtil {
 
     /**
      * gets id of classification which is selected in primary configuration
-     * 
-     * 
+     *
+     *
      * @return Id of classification
      * @throws DgException
      *             If exception occurred
@@ -1016,7 +1009,7 @@ public class SectorUtil {
     }
 
     /***
-     * 
+     *
      * @param classificationId
      */
     public static void deleteClassification(Long classificationId) {
@@ -1141,8 +1134,8 @@ public class SectorUtil {
     {
         Set<Long> allOutputLocations = getRecursiveChildrenOfSectors(AlgoUtils.collectIds(new HashSet<Long>(), sectors));
         return allOutputLocations;
-    }   
-    
+    }
+
     /**
      * recursively get all children of a set of AmpSectors, by a wave algorithm
      * @param inIds
@@ -1150,10 +1143,10 @@ public class SectorUtil {
      */
     public static Set<Long> getRecursiveAscendantsOfSectors(Collection<Long> inIds)
     {
-        return AlgoUtils.runWave(inIds, 
+        return AlgoUtils.runWave(inIds,
             new DatabaseWaver("SELECT DISTINCT (parent_sector_id) FROM amp_sector WHERE (parent_sector_id IS NOT NULL) AND (amp_sector_id IN ($))"));
     }
-    
+
     /**
      * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
      * @param inIds
@@ -1161,7 +1154,7 @@ public class SectorUtil {
      */
     public static Set<Long> getRecursiveChildrenOfSectors(Collection<Long> inIds)
     {
-        return AlgoUtils.runWave(inIds, 
+        return AlgoUtils.runWave(inIds,
                 new DatabaseWaver("SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN ($)"));
     }
 
@@ -1172,10 +1165,10 @@ public class SectorUtil {
      */
     public static Map<String, List<Long>> distributeSectorsByScheme(final Collection<AmpSector> in) {
         final Map<String, List<Long>> ret = new HashMap<>();
-        
-        if (in == null) 
+
+        if (in == null)
             return ret;
-        
+
         PersistenceManager.getSession().doWork(new Work() {
 
             @Override public void execute(Connection connection) throws SQLException {
@@ -1184,17 +1177,17 @@ public class SectorUtil {
                     while (rs.rs.next()) {
                         Long secId = rs.rs.getLong(1);
                         String secScheme = rs.rs.getString(2);
-                    
+
                         if (!ret.containsKey(secScheme)) ret.put(secScheme, new ArrayList<Long>());
                         ret.get(secScheme).add(secId);
                     }
                 }
             }
-            
+
         });
         return ret;
     }
-    
+
     public static List<AmpActivityVersion> getActivitiesForSector(Long id) {
         Session session = null;
         List<AmpActivityVersion> activities = null;
@@ -1214,7 +1207,7 @@ public class SectorUtil {
         }
         return activities;
     }
-    
+
     public static List<String> getAllSectorColumnNames() {
         // not much benefit from generating names
         return Arrays.asList(
@@ -1222,4 +1215,106 @@ public class SectorUtil {
                 ColumnConstants.SECONDARY_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR,
                 ColumnConstants.TERTIARY_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
     }
+
+    //region Sector Mapping
+    /**
+     * Returns all sector mappings
+     */
+    public static Collection getAllSectorMappings() {
+        String queryString = null;
+        Session session = null;
+        Collection col = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            queryString = "select asm from " + AmpSectorMapping.class.getName() + " asm";
+            qry = session.createQuery(queryString);
+            col = qry.list();
+            session.flush();
+        } catch (Exception ex) {
+            logger.error("Unable to get sectors mappings from database " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return col;
+    }
+
+    public static Collection getSectorMappingsByPrimary(Long idPrimarySector) {
+        String queryString = null;
+        Session session = null;
+        Collection col = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            queryString = "select asm from " + AmpSectorMapping.class.getName() + " asm " +
+                    "where asm.srcSector.ampSectorId=:idPrimarySector";
+            qry = session.createQuery(queryString);
+            qry.setParameter("idPrimarySector", idPrimarySector);
+            col = qry.list();
+            session.flush();
+        } catch (Exception ex) {
+            logger.error("Unable to get sectors mappings from database by primary " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return col;
+    }
+
+    /**
+     * adds an AmpSectorMapping
+     *
+     * @param sectorMapping
+     * @throws DgException
+     *             If exception occurred
+     */
+    public static void createSectorMapping(AmpSectorMapping sectorMapping) throws DgException {
+        Session session = null;
+        if (searchSectorMapping(sectorMapping.getSrcSector().getAmpSectorId(), sectorMapping.getDstSector().getAmpSectorId()) == null) {
+            try {
+                session = PersistenceManager.getRequestDBSession();
+                session.saveOrUpdate(sectorMapping);
+                session.flush();
+            } catch (Exception ex) {
+                logger.error("Unable to save a sector mapping " + ex.getMessage());
+                throw new DgException(ex);
+            }
+        }
+    }
+
+    public static void deleteSectorMapping(Long id) throws DgException {
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            AmpSectorMapping asm = (AmpSectorMapping) session.load(AmpSectorMapping.class, id);
+            session.delete(asm);
+            session.flush();
+        } catch (Exception ex) {
+            logger.error("Unable to delete a sector mapping " + ex.getMessage());
+            throw new DgException(ex);
+        }
+    }
+
+    private static AmpSectorMapping searchSectorMapping(Long pSrcSectorId, Long pDstSectorId) {
+        String queryString = null;
+        Session session = null;
+        Query qry = null;
+        AmpSectorMapping asm = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            queryString = "select asm from " + AmpSectorMapping.class.getName() +
+                    " asm where asm.srcSector.ampSectorId=:srcSectorId and asm.dstSector.ampSectorId=:dstSectorId";
+            qry = session.createQuery(queryString);
+            qry.setParameter("srcSectorId", pSrcSectorId);
+            qry.setParameter("dstSectorId", pDstSectorId);
+            asm = (AmpSectorMapping)qry.uniqueResult();
+        } catch (Exception ex) {
+            logger.error("Unable to get sectors mappings from database " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return asm;
+    }
+
+
+    //endregion
 }

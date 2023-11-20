@@ -1,9 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -32,6 +29,17 @@ public final class ValidationUtils {
         if (!violations.isEmpty()) {
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(violations));
         }
+    }
+
+    public static void valuesValid(Collection possibleValues, Object value) {
+        for (Object possibleValue : possibleValues) {
+            if (possibleValue.equals(value)) {
+                return;
+            }
+        }
+        List<String> violations = new ArrayList<>();
+        violations.add("Invalid value: " + value);
+        throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(violations));
     }
 
     private static <T> List<String> validate(T obj) {

@@ -41,7 +41,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     @Override
     public <T> T get(Object targetObject) {
         Collection<?> collection = getWrappedCollection(targetObject);
-        String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
+        String prefix = String.valueOf(TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX));
         if (multipleValues) {
             return (T) getList(collection, prefix);
         } else {

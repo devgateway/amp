@@ -42,6 +42,7 @@ import org.hibernate.query.Query;
 import org.hibernate.type.*;
 import org.joda.time.Period;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
@@ -424,6 +425,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                    Hibernate.initialize(ampGPISurveyResponse);
                }
            }
+//           initializeObject(result);
 
             // AMPOFFLINE-1528
             ActivityUtil.setCurrentWorkspacePrefixIntoRequest(result);
@@ -436,6 +438,43 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             throw new DgException("Cannot load AmpActivityVersion with id " + id, e);
         }
         return result;
+    }
+
+
+    public static void initializeObject(Object object) {
+        if (object == null) {
+            return;
+        }
+
+        // Initialize the object itself
+        Hibernate.initialize(object);
+
+        // Get all fields of the object, including private and inherited fields
+        Field[] fields = object.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            // Set the field to be accessible, allowing us to access private fields
+            field.setAccessible(true);
+
+            try {
+                // Check if the field is a collection (List, Set, etc.)
+                if (Collection.class.isAssignableFrom(field.getType())) {
+                    // If it's a collection, iterate through its elements and recursively initialize them
+                    Collection<?> collection = (Collection<?>) field.get(object);
+                    if (collection != null) {
+                        for (Object element : collection) {
+                            initializeObject(element);
+                        }
+                    }
+                } else {
+                    // If it's not a collection, recursively initialize the field
+                    Object fieldValue = field.get(object);
+                    initializeObject(fieldValue);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void initializeForApi(AmpActivityVersion activity) {

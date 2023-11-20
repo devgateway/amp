@@ -411,11 +411,11 @@ public class FieldsEnumerator {
             if (discriminator != null) {
                 Interchangeable[] settings = discriminator.settings();
                 Set<String> discriminatorOptions = new HashSet<>();
-                for (int i = 0; i < settings.length; i++) {
-                    context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, settings[i]));
-                    context.getIntchStack().push(settings[i]);
+                for (Interchangeable setting : settings) {
+                    context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, setting));
+                    context.getIntchStack().push(setting);
                     if (isFieldVisible(context)) {
-                        String discriminatorOption = settings[i].discriminatorOption();
+                        String discriminatorOption = setting.discriminatorOption();
                         if (!discriminatorOptions.add(discriminatorOption)) {
                             throw new RuntimeException("Discriminator option " + discriminatorOption
                                     + " must be unique.");
@@ -424,8 +424,8 @@ public class FieldsEnumerator {
                         descr.setDiscriminatorField(discriminator.discriminatorField());
                         descr.setDiscriminationConfigurer(discriminator.configurer());
                         descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field),
-                                discriminator.discriminatorField(), settings[i].discriminatorOption(),
-                                settings[i].multipleValues()));
+                                discriminator.discriminatorField(), setting.discriminatorOption(),
+                                setting.multipleValues()));
                         result.add(descr);
                     }
                     context.getIntchStack().pop();

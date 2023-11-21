@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "start": "DISABLE_ESLINT=true lerna run start",
-    "build": "lerna run build",
+    "build": "DISABLE_ESLINT=true lerna run build",
     "graph": "nx graph"
   },
   "author": "",

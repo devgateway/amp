@@ -12,6 +12,7 @@ import {
 } from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 import { translate, hasFilters } from '../utils/Utils';
+import '@devgateway/amp-filter/dist/amp-filter.css';
 
 const Filter = require('@devgateway/amp-filter/dist/amp-filter');
 
@@ -20,7 +21,6 @@ let filter = null;
 class Filters extends Component {
   constructor(props) {
     super(props);
-    this.filterPopup = React.createRef();
     this.state = {
       show: false, showFiltersList: false, filterLoaded: false,
     };
@@ -45,7 +45,7 @@ class Filters extends Component {
 
       return filter.loaded.then(() => {
         // eslint-disable-next-line react/no-string-refs
-        filter.setElement(this.filterPopup);
+        filter.setElement(this.refs.filterPopup);
 
         /* IMPORTANT: AT THIS POINT WE ASSUME THE REPORT DATA HAVE BEEN FETCHED!
         (through 'loading' prop in FiltersAndSettings.jsx). We deserialize (only one time) with empty/saved
@@ -131,26 +131,27 @@ class Filters extends Component {
       translations, filters, profile, appliedSectionChange, appliedSectionOpen
     } = this.props;
     return (
-      <>
-        {filterLoaded ? (
-          <>
-            <div className="filter-title" onClick={this.showFilterWidget}>
-              {translate('filters', profile, translations)}
-&nbsp;
-            </div>
-            {hasFilters(filters) ? (
-              <div
-                className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
-                onClick={() => appliedSectionChange(filter)}>
-                {appliedSectionOpen
-                  ? translate('hideAppliedFilters', profile, translations)
-                  : translate('showAppliedFilters', profile, translations)}
-              </div>
-            ) : null}
-          </>
-        ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
-        <div id="filter-popup" ref={this.filterPopup} style={{ display: (!show ? 'none' : 'block') }} />
-      </>
+        <>
+          {filterLoaded ? (
+              <>
+                <div className="filter-title" onClick={this.showFilterWidget}>
+                  {translate('filters', profile, translations)}
+                  &nbsp;
+                </div>
+                {hasFilters(filters) ? (
+                    <div
+                        className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
+                        onClick={() => appliedSectionChange(filter)}>
+                      {appliedSectionOpen
+                          ? translate('hideAppliedFilters', profile, translations)
+                          : translate('showAppliedFilters', profile, translations)}
+                    </div>
+                ) : null}
+              </>
+          ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
+          {/* eslint-disable-next-line react/no-string-refs */}
+          <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
+        </>
     );
   }
 }
@@ -181,7 +182,7 @@ Filters.propTypes = {
   _updateAppliedFilters: PropTypes.func.isRequired,
   _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  type: PropTypes.string,
+  type: PropTypes.string.isRequired,
   _getMetadata: PropTypes.func.isRequired,
   profile: PropTypes.string,
   appliedSectionChange: PropTypes.func.isRequired,

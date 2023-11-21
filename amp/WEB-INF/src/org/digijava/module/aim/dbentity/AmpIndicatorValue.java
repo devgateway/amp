@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -35,7 +36,8 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
 
 
     private static final long serialVersionUID = 1L;
-
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "indValId")
     private Long indValId;
 
     @Interchangeable(fieldTitle = "Comment", importable = true)

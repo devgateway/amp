@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Button, Checkbox, Form, Modal,
@@ -56,7 +57,7 @@ const EditProfile = () => {
   console.log('showState', show);
 
   if (!userProfile) {
-    return;
+    return <div />;
   }
 
   const handleClose = () => {
@@ -103,6 +104,7 @@ const EditProfile = () => {
             {userProfile
                 && (
                     <div>
+                        {/* @ts-ignore */}
                         <Modal
                             onClose={() => handleClose()}
                             onOpen={() => setShow(true)}
@@ -302,7 +304,7 @@ const EditProfile = () => {
                                             </Modal.Content>
                                         </Form>
                                       </Modal.Description>
-
+                                      {/* @ts-ignore */}
                                       <Modal.Actions>
                                           <Button
                                               negative

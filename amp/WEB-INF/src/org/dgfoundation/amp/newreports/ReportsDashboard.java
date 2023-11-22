@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 public class ReportsDashboard {
     private String donorAgency;
     private String pillar;
+    private String country;
     private String year;
     private BigDecimal actualCommitment;
+    private BigDecimal actualDisbursment;
 
     public String getDonorAgency() {
         return donorAgency;
@@ -38,5 +40,21 @@ public class ReportsDashboard {
 
     public void setActualCommitment(BigDecimal actualCommitment) {
         this.actualCommitment = actualCommitment;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public BigDecimal getActualDisbursment() {
+        return actualDisbursment;
+    }
+
+    public void setActualDisbursment(BigDecimal actualDisbursment) {
+        this.actualDisbursment = actualDisbursment;
     }
 }

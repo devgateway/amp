@@ -45,6 +45,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ReflectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +79,8 @@ public class Reports {
 
     protected static final Logger logger = Logger.getLogger(Reports.class);
 
+    @Value("${ampDashboard.api}")
+    private String ampDashboardUrl;
     @Context
     private HttpServletRequest httpRequest;
 
@@ -281,8 +284,21 @@ public class Reports {
     @Path("/report/scheduler")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Render a report preview in HTML format.")
-    public final List<ReportsDashboard> getReportScheduler(
-            @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
+    public final GeneratedReport getReportScheduler(
+            @ApiParam("a JSON object with the report's parameters") ReportFormParameters reportFormParams) {
+
+        ReportFormParameters formParams = new ReportFormParameters();
+        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Administrative Level 0");
+        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Administrative Level 0");
+        List<String> additionalMeasures = Arrays.asList("Actual Commitments", "Actual Disbursements");
+        formParams.setAdditionalColumns(additionalColumns);
+        formParams.setAdditionalHierarchies(additionalHierarchies);
+        formParams.setAdditionalMeasures(additionalMeasures);
+        formParams.setGroupingOption("A");
+        formParams.setReportType("D");
+        formParams.setShowEmptyRows(true);
+        formParams.setShowOriginalCurrency(false);
+        formParams.setSummary(true);
         int reportType = ArConstants.DONOR_TYPE;
         if (formParams.getReportType() != null) {
             reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
@@ -324,7 +340,7 @@ public class Reports {
         // Specify the server's endpoint URL
         String serverUrl = "http://localhost:8081/importDonorFunding";
         sendReportsToServer(ampDashboardFunding, serverUrl);
-        return ampDashboardFunding;
+        return report;
     }
 
     public void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {

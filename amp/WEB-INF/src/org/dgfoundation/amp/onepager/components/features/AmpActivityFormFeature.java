@@ -589,7 +589,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 //        String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
 //        onClickSaveAsDraft += "$(\"#" + cancelLink.getButton().getMarkupId() + "\").prop('disabled', true);";
-
         String onClickSaveAsDraft = "$('#" + saveAsDraftAction.getButton().getMarkupId() + "').prop('disabled', true);$('#save_overlay').show();";
         onClickSaveAsDraft += "$('#" + cancelLink.getButton().getMarkupId() + "').prop('disabled', true);";
 
@@ -616,7 +615,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         cancelRejectActivity.getButton().add(isSubmit);
         cancelRejectActivity.getButton().add(new AttributeModifier("onclick", "hideRejectActivityPanel();enableButtons2();"));
         cancelRejectActivity.setVisible(true);
-        cancelRejectActivity.getButton().add(new AttributeModifier("class", new Model<>("sideMenuButtons")));
+        cancelRejectActivity.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(cancelRejectActivity);
         
         
@@ -835,56 +834,51 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
-        try {
 
-            form.process(button);
-
-            form.visitChildren(AmpAgreementItemPanel.class, new IVisitor<AmpAgreementItemPanel, Void>() {
+        form.process(button);
+        
+            form.visitChildren(AmpAgreementItemPanel.class,new IVisitor<AmpAgreementItemPanel, Void>() {
 
                 @Override
                 public void component(AmpAgreementItemPanel object,
-                                      IVisit<Void> visit) {
+                        IVisit<Void> visit) {
                     object.validateIsNewAgreementFormClosed(target);
                     visit.dontGoDeeper();
                 }
-
+                
             });
 
-            form.visitChildren(AbstractTextComponent.class,
-                    new IVisitor<Component, Object>() {
-                        @Override
-                        public void component(Component component, IVisit<Object> objectIVisit) {
-                            IModel<?> model = component.getDefaultModel();
-                            AbstractTextComponent atc = (AbstractTextComponent) component;
-                            //logger.error(component.getParent().getId());
-                            boolean required = false;
-                            List<IValidator> validators = atc.getValidators();
-                            for (IValidator validator : validators) {
-                                if (validator instanceof ValidatorAdapter && ((ValidatorAdapter) validator).getValidator() instanceof TranslatableValidators) {
-                                    List<IValidator<? super String>> nestedValidators = ((TranslatableValidators) ((ValidatorAdapter) validator).getValidator()).getValidators();
-                                    for (IValidator nValidator : nestedValidators)
-                                        if (nValidator instanceof ValidatorAdapter && ((ValidatorAdapter) nValidator).getValidator() instanceof StringRequiredValidator) {
-                                            required = true;
-                                            break;
-                                        }
-                                    break;
-                                }
-                            }
-                            if (model instanceof TranslationDecoratorModel && required) {
-                                TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
-
-                                if (tdm.getOriginalModel().getObject() == null || tdm.getOriginalModel().getObject().trim().isEmpty()) {
-                                    ((AbstractTextComponent) component).error(new ValidationError().addKey("Required"));
-                                    TranslatableValidators.onError(target, atc, null);
-                                    target.add(component.getParent());
-                                }
+        form.visitChildren(AbstractTextComponent.class,
+                new IVisitor<Component, Object>() {
+                    @Override
+                    public void component(Component component, IVisit<Object> objectIVisit) {
+                        IModel<?> model = component.getDefaultModel();
+                        AbstractTextComponent atc = (AbstractTextComponent) component;
+                        //logger.error(component.getParent().getId());  
+                        boolean required = false;
+                        List<IValidator> validators = atc.getValidators();
+                        for (IValidator validator : validators) {
+                            if (validator instanceof ValidatorAdapter && ((ValidatorAdapter) validator).getValidator() instanceof TranslatableValidators) {
+                                List<IValidator<? super String>> nestedValidators = ((TranslatableValidators) ((ValidatorAdapter) validator).getValidator()).getValidators();
+                                for (IValidator nValidator : nestedValidators)
+                                    if (nValidator instanceof ValidatorAdapter && ((ValidatorAdapter) nValidator).getValidator() instanceof StringRequiredValidator) {
+                                        required = true;
+                                        break;
+                                    }
+                                break;
                             }
                         }
-                    });
-        }catch (Exception e)
-        {
-            logger.error("Error occured during save as draft",e);
-        }
+                        if (model instanceof TranslationDecoratorModel && required) {
+                            TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
+
+                            if (tdm.getOriginalModel().getObject() == null || tdm.getOriginalModel().getObject().trim().isEmpty()) {
+                                ((AbstractTextComponent) component).error(new ValidationError().addKey("Required"));
+                                TranslatableValidators.onError(target, atc, null);
+                                target.add(component.getParent());
+                            }
+                        }
+                    }
+                });
 
     }
 

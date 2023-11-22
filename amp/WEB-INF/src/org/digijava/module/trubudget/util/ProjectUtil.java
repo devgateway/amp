@@ -471,7 +471,6 @@ public class ProjectUtil {
                     if (!ampComponent.getFundings().isEmpty()) {
                         for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                             if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
-
                                 EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
                                 EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
                                 data1.setProjectId(projectId);

@@ -643,7 +643,6 @@ public class ActivityUtil {
                 }
 
             }
-
         } else {
             // Validation is OF in GS activity approved
             if (newActivity) {

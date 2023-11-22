@@ -616,7 +616,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         cancelRejectActivity.getButton().add(isSubmit);
         cancelRejectActivity.getButton().add(new AttributeModifier("onclick", "hideRejectActivityPanel();enableButtons2();"));
         cancelRejectActivity.setVisible(true);
-        cancelRejectActivity.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+        cancelRejectActivity.getButton().add(new AttributeModifier("class", new Model<>("sideMenuButtons")));
         activityForm.add(cancelRejectActivity);
         
         

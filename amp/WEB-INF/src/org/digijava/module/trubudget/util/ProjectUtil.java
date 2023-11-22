@@ -297,21 +297,12 @@ public class ProjectUtil {
         try {
             //we have to close all related workflow items before closing the sub project
             session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProjectId + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
-                WorkflowItemDetailsModel workflowItemDetailsModel = null;
-                try {
-                    workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF,settings, token);
-                } catch (Exception e) {
-                    logger.error("Error when fetching wf details",e);
-                }
-                // TODO: 10/26/23 change status if ampcomponent/funding accordingly
-                if(workflowItemDetailsModel!=null) {
-                    if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
                         CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
                         closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                         CloseWFItemModel.Data data1 = new CloseWFItemModel.Data();
                         data1.setProjectId(projectId);
                         data1.setSubprojectId(subProjectId);
-                        data1.setWorkflowitemId(workflowItemDetailsModel.getData().getWorkflowitem().getData().getId());
+                        data1.setWorkflowitemId(ampComponentFundingTruWF.getTruWFId());
                         closeWFItemModel.setData(data1);
                         try {
                             String res = closeWorkFlowItemForReal(closeWFItemModel, settings, token).block();
@@ -320,8 +311,7 @@ public class ProjectUtil {
                         } catch (URISyntaxException e) {
                             throw new RuntimeException(e);
                         }
-                    }
-                }
+
             });
         } catch (Exception e) {
            logger.error("There was an error",e);

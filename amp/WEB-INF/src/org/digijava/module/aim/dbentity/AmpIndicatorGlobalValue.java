@@ -34,7 +34,7 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("originalValueDate")
-    @ApiModelProperty(dataType = "java.util.date", example = "02/02/2023")
+    @ApiModelProperty(dataType = "java.util.Date", example = "02/02/2023")
     private Date originalValueDate;
 
     @JsonProperty("revisedValue")
@@ -43,7 +43,7 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("revisedValueDate")
-    @ApiModelProperty(dataType = "java.util.date", example = "02/02/2023")
+    @ApiModelProperty(dataType = "java.util.Date", example = "02/02/2023")
     private Date revisedValueDate;
 
     @JsonIgnore

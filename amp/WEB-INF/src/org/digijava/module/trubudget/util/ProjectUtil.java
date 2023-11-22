@@ -470,17 +470,20 @@ public class ProjectUtil {
                 if (ampComponent.getFundings()!=null) {
                     if (!ampComponent.getFundings().isEmpty()) {
                         for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
-                            EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
-                            EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
-                            data1.setProjectId(projectId);
-                            data1.setSubprojectId(ampComponentTruSubProject[0].getTruSubProjectId());
-                            data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
-                            data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
-                            data1.setOrganization(componentFunding.getReportingOrganization() != null ? componentFunding.getReportingOrganization().getName() : "Funding Org");
-                            editSubProjectedBudgetModel.setData(data1);
-                            editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-                            GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-                                    .subscribe(res2 -> logger.info("Update subproject budget response: " + res2));
+                            if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
+
+                                EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
+                                EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
+                                data1.setProjectId(projectId);
+                                data1.setSubprojectId(ampComponentTruSubProject[0].getTruSubProjectId());
+                                data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
+                                data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
+                                data1.setOrganization(componentFunding.getReportingOrganization() != null ? componentFunding.getReportingOrganization().getName() : "Funding Org");
+                                editSubProjectedBudgetModel.setData(data1);
+                                editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+                                        .subscribe(res2 -> logger.info("Update subproject budget response: " + res2));
+                            }
 
                         }
                     }

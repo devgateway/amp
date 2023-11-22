@@ -587,8 +587,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         
     
 
-        String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
-        onClickSaveAsDraft += "$(\"#" + cancelLink.getButton().getMarkupId() + "\").prop('disabled', true);";
+//        String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
+//        onClickSaveAsDraft += "$(\"#" + cancelLink.getButton().getMarkupId() + "\").prop('disabled', true);";
+
+        String onClickSaveAsDraft = "$('#" + saveAsDraftAction.getButton().getMarkupId() + "').prop('disabled', true);$('#save_overlay').show();";
+        onClickSaveAsDraft += "$('#" + cancelLink.getButton().getMarkupId() + "').prop('disabled', true);";
 
         saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
         saveAsDraftAction.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));

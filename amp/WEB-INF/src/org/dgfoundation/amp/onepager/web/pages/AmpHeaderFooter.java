@@ -63,14 +63,14 @@ public class AmpHeaderFooter extends WebPage {
         add(new DocumentReadyBehavior());
         AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
         add(ampajax);
-        add(new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
-            @Override
-            protected void onTimer(AjaxRequestTarget target) {
-                // This is where you could perform any server-side logic
-                getSession().getAttribute("dummyAttribute");
-
-            }
-        });
+//        add(new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
+//            @Override
+//            protected void onTimer(AjaxRequestTarget target) {
+//                // This is where you could perform any server-side logic
+//                getSession().getAttribute("dummyAttribute");
+//
+//            }
+//        });
         
         add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
         add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));

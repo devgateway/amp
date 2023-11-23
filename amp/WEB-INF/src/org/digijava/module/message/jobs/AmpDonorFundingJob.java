@@ -84,7 +84,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         }
 
         // Specify the server's endpoint URL
-        String serverUrl = "http://localhost:8081/importDonorFunding";
+//        String serverUrl = "http://localhost:8081/importDonorFunding";
         sendReportsToServer(ampDashboardFunding, ampDashboardUrl);
     }
 

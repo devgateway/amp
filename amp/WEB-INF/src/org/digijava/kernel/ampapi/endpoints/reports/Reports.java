@@ -288,8 +288,8 @@ public class Reports {
             @ApiParam("a JSON object with the report's parameters") ReportFormParameters reportFormParams) {
 
         ReportFormParameters formParams = new ReportFormParameters();
-        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Administrative Level 0");
-        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Administrative Level 0");
+        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0");
+        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0");
         List<String> additionalMeasures = Arrays.asList("Actual Commitments", "Actual Disbursements");
         formParams.setAdditionalColumns(additionalColumns);
         formParams.setAdditionalHierarchies(additionalHierarchies);
@@ -317,31 +317,35 @@ public class Reports {
         for (ReportArea child: report.reportContents.getChildren()){
             if(child.getChildren() != null){
                 for (ReportArea donorData: child.getChildren()){
-                    Map<ReportOutputColumn, ReportCell> contents =donorData.getContents();
+                    for (ReportArea implLevel: donorData.getChildren()) {
+                        for (ReportArea location: implLevel.getChildren()) {
+                            for (Map.Entry<ReportOutputColumn, ReportCell> content : donorData.getContents().entrySet()) {
+                                ReportOutputColumn col = content.getKey();
+                                ReportsDashboard fundingReport = new ReportsDashboard();
 
-                    for (Map.Entry<ReportOutputColumn, ReportCell> content : donorData.getContents().entrySet()) {
-                        ReportOutputColumn col = content.getKey();
-                        ReportsDashboard fundingReport = new ReportsDashboard();
-
-                        if (col.parentColumn != null && col.parentColumn.originalColumnName != null
-                                && !col.parentColumn.originalColumnName.equals("Totals")) {
-                            BigDecimal commitment = (BigDecimal) content.getValue().value;
-                            fundingReport.setDonorAgency(child.getOwner().debugString);
-                            fundingReport.setPillar(donorData.getOwner().debugString);
-                            fundingReport.setYear(col.parentColumn.originalColumnName);
-                            fundingReport.setActualCommitment(commitment.setScale(2, RoundingMode.HALF_UP));
-                            ampDashboardFunding.add(fundingReport);
+                                if (col.parentColumn != null && col.parentColumn.originalColumnName != null
+                                        && !col.parentColumn.originalColumnName.equals("Totals")) {
+                                    BigDecimal commitment = (BigDecimal) content.getValue().value;
+                                    fundingReport.setDonorAgency(child.getOwner().debugString);
+                                    fundingReport.setPillar(donorData.getOwner().debugString);
+                                    fundingReport.setYear(col.parentColumn.originalColumnName);
+                                    fundingReport.setActualCommitment(commitment.setScale(2, RoundingMode.HALF_UP));
+                                    ampDashboardFunding.add(fundingReport);
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+        
 
         // Specify the server's endpoint URL
         String serverUrl = "http://localhost:8081/importDonorFunding";
         sendReportsToServer(ampDashboardFunding, serverUrl);
         return report;
     }
+
 
     public void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {
         try {

@@ -21,6 +21,7 @@ import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.SchemaClassificationDTO;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
@@ -31,8 +32,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 
 /**
  * Utility class for persisting all Sector with Scheme related entities
@@ -156,6 +159,34 @@ public class SectorUtil {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static List<SchemaClassificationDTO> getAllSectorSchemesAndClassification() {
+        String queryString = null;
+        Session session = null;
+        Query qry = null;
+        List<SchemaClassificationDTO> result = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            queryString = "SELECT sch.amp_sec_scheme_id id, sch.sec_scheme_name value, " +
+                    " conf.classification_id classificationId, conf.name classificationName " +
+                    " FROM amp_classification_config conf " +
+                    " FULL OUTER JOIN amp_sector_scheme sch ON conf.classification_id = sch.amp_sec_scheme_id ";
+
+            qry = session.createSQLQuery(queryString)
+                    .addScalar("id", StandardBasicTypes.LONG)
+                    .addScalar("value", StandardBasicTypes.STRING)
+                    .addScalar("classificationId", StandardBasicTypes.LONG)
+                    .addScalar("classificationName", StandardBasicTypes.STRING)
+                    .setResultTransformer(Transformers.aliasToBean(SchemaClassificationDTO.class));
+
+            result = qry.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Schemes and classification from database " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return result;
     }
 
     @SuppressWarnings("unchecked")

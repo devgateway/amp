@@ -2,12 +2,15 @@ package org.digijava.kernel.ampapi.endpoints.sectorMapping;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
+import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.GenericSelectObjDTO;
+import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.MappingConfigurationDTO;
+import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.SchemaClassificationDTO;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.SectorUtil;
 
-import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Diego Rossi
@@ -24,50 +27,11 @@ public class SectorMappingService {
         return sectorClasses.get(id);
     }
 
-    public static class SingleSectorData implements Serializable {
-        private Long id;
-        private String value;
-        private Boolean isPrimary;
+    public List<GenericSelectObjDTO> getSectorsByScheme(final Long schemeId) {
+        List<GenericSelectObjDTO> sectors = new ArrayList<>();
 
-        SingleSectorData(Long id, String value, Boolean isPrimary) {
-            this.id = id;
-            this.value = value;
-            this.isPrimary = isPrimary;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public Boolean getIsPrimary() {
-            return isPrimary;
-        }
-    }
-
-    /**
-     * Returns a list of primary or secondary sectors by parameter.
-     */
-    public List<SingleSectorData> getClassifiedSectors(final Long classSector) {
-        List<SingleSectorData> sectors = new ArrayList<>();
-
-        String sectorClass = getSectorClassById(classSector);
-
-        if (sectorClass == null) {
-            LOGGER.error("Invalid sector class: " + classSector);
-            return sectors;
-        }
-
-        List<AmpClassificationConfiguration> alClassConfig = SectorUtil.getAllClassificationConfigs();
-        AmpClassificationConfiguration classConfig = findByName(alClassConfig, sectorClass);
-
-        Long schemeId = classConfig.getClassification().getAmpSecSchemeId();
-        Boolean isPrimary = classSector == 1L;
         SectorUtil.getSectorLevel1(schemeId.intValue()).forEach(sector -> {
-            sectors.add(new SingleSectorData(((AmpSector) sector).getAmpSectorId(), ((AmpSector) sector).getName(), isPrimary));
+            sectors.add(new GenericSelectObjDTO(((AmpSector) sector).getAmpSectorId(), ((AmpSector) sector).getName()));
         });
 
         return sectors;
@@ -77,18 +41,8 @@ public class SectorMappingService {
         return SectorUtil.getAllSectorMappings();
     }
 
-    public List<SingleSectorData> getSecondSectorsByPrimary(Long idPrimary) {
-        List<SingleSectorData> secondaries = new ArrayList<>();
-        Collection mappings = SectorUtil.getSectorMappingsByPrimary(idPrimary);
-
-        if (mappings != null) {
-            mappings.forEach(mapping -> {
-                AmpSectorMapping sectorMapping = (AmpSectorMapping) mapping;
-                AmpSector sector = sectorMapping.getDstSector();
-                secondaries.add(new SingleSectorData(sector.getAmpSectorId(), sector.getName(), false));
-            });
-        }
-        return secondaries;
+    public List<SchemaClassificationDTO> getAllSchemes() {
+        return SectorUtil.getAllSectorSchemesAndClassification();
     }
 
     public void createSectorsMapping(AmpSectorMapping mapping) throws DgException {
@@ -99,6 +53,38 @@ public class SectorMappingService {
         SectorUtil.deleteSectorMapping(id);
     }
 
+    public MappingConfigurationDTO getMappingsConf() {
+        MappingConfigurationDTO mappingConf = new MappingConfigurationDTO();
+
+        // Schemes with children
+        List<SchemaClassificationDTO> schemes = SectorUtil.getAllSectorSchemesAndClassification();
+        schemes.forEach(schemaClassif -> {
+            schemaClassif.children = getSectorsByScheme(schemaClassif.id);
+        });
+        mappingConf.allSchemes = schemes;
+
+        // All Mappings
+        mappingConf.sectorMapping = SectorUtil.getAllSectorMappings();
+        if (mappingConf.sectorMapping != null && !mappingConf.sectorMapping.isEmpty()) {
+            AmpSector srcSector = ((AmpSectorMapping) ((ArrayList)mappingConf.sectorMapping).get(0)).getSrcSector();
+            AmpSector dstSector = ((AmpSectorMapping) ((ArrayList)mappingConf.sectorMapping).get(0)).getDstSector();
+
+            Long srcSchemeId = srcSector.getAmpSecSchemeId().getAmpSecSchemeId();
+            if (srcSchemeId != null) {
+                mappingConf.srcSchemeSector = findSchemeById(mappingConf.allSchemes, srcSchemeId);
+            }
+
+            Long dstSchemeId = dstSector.getAmpSecSchemeId().getAmpSecSchemeId();
+            if (dstSchemeId != null) {
+                mappingConf.dstSchemeSector = findSchemeById(mappingConf.allSchemes, dstSchemeId);
+            }
+        }
+
+        return mappingConf;
+    }
+
+    //region Private methods
+
     private static AmpClassificationConfiguration findByName(List<AmpClassificationConfiguration> list, String name) {
         for (AmpClassificationConfiguration item : list) {
             if (item.getName().equals(name)) {
@@ -107,4 +93,17 @@ public class SectorMappingService {
         }
         return null;
     }
+
+    private static GenericSelectObjDTO findSchemeById(List<SchemaClassificationDTO> list, Long idScheme) {
+        List<SchemaClassificationDTO> filteredSchemes = list.stream()
+                .filter(scheme -> scheme.id.equals(idScheme))
+                .collect(Collectors.toList());
+
+        if (filteredSchemes != null && !filteredSchemes.isEmpty()) {
+            SchemaClassificationDTO scheme = filteredSchemes.get(0);
+            return new GenericSelectObjDTO(scheme.id, scheme.value);
+        } else return null;
+    }
+
+    //endregion
 }

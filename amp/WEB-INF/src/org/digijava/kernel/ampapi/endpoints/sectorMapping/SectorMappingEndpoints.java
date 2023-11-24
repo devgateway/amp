@@ -4,6 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.gpi.ValidationUtils;
+import org.digijava.kernel.ampapi.endpoints.ndd.IndirectProgramMappingConfiguration;
+import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.GenericSelectObjDTO;
+import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.MappingConfigurationDTO;
+import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.SchemaClassificationDTO;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.exception.DgException;
@@ -25,6 +29,15 @@ public class SectorMappingEndpoints {
     private final SectorMappingService smService = new SectorMappingService();
 
     @GET
+    @Path("sectors-mapping-config")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMappingsConf")
+    @ApiOperation("Returns configuration saved for sectors mapping.")
+    public MappingConfigurationDTO getMappingsConf() {
+        return smService.getMappingsConf();
+    }
+
+    @GET
     @Path("all-mappings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getAllSectorMappings")
@@ -34,23 +47,21 @@ public class SectorMappingEndpoints {
     }
 
     @GET
-    @Path("sectors-classified/{classSector}")
+    @Path("all-schemes")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getClassifiedSectors")
-    @ApiOperation("Returns primary or secondary sectors by parameter. 1: Primary, 2: Secondary")
-    public List<SectorMappingService.SingleSectorData> getClassifiedSectors(@ApiParam("Property value") @PathParam("classSector") Long classSector) {
-        List<Long> paramValuesValid = Arrays.asList(1L, 2L);
-        ValidationUtils.valuesValid(paramValuesValid, classSector);
-        return smService.getClassifiedSectors(classSector);
+    @ApiOperation("Returns all schemes and his classifications.")
+    public List<SchemaClassificationDTO> getAllSchemes() {
+        return smService.getAllSchemes();
     }
 
     @GET
-    @Path("secondaries-by-primary/{primarySectorId}")
+    @Path("sectors-by-scheme/{schemeId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getSecondarySectorsByPrimary")
-    @ApiOperation("Returns a list of secondary sectors by primary sector id.")
-    public List<SectorMappingService.SingleSectorData> getSecondarySectorsByPrimary(@ApiParam("Property value") @PathParam("primarySectorId") Long primarySectorId) {
-        return smService.getSecondSectorsByPrimary(primarySectorId);
+    @ApiMethod(id = "getClassifiedSectors")
+    @ApiOperation("Returns a list of sectors level 1 by scheme id.")
+    public List<GenericSelectObjDTO> getSectorsByScheme(@ApiParam("Property value") @PathParam("schemeId") Long schemeId) {
+        return smService.getSectorsByScheme(schemeId);
     }
 
     @POST

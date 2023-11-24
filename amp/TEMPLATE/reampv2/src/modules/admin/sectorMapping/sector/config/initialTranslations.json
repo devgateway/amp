@@ -1,0 +1,11 @@
+{
+  "amp.admin.sectorMapping:title": "Sectors Mapping",
+  "amp.admin.sectorMapping:tooltip-direct-sector": "The main sector in use. What is selected in the Activity Form for the Source Sector will limit what options are available in the Destination Sector drop down.",
+  "amp.admin.sectorMapping:tooltip-indirect-sector": "The indirect sector is mapped against your reference sector. If your reference sector is your national development strategy, the indirect sector could be any regional/international strategy (ex. SDGs, New Deal, etc.) or vice-versa. Please note that the indirect sector will be displayed in the inner ring of the dashboard. The assigned percentage will be automatically distributed. This sector will not be seen in the activity form.",
+  "amp.admin.sectorMapping:choose_main_src_sector": "Choose a Source Sector",
+  "amp.admin.sectorMapping:choose_main_dst_sector": "Choose a Destination Sector",
+  "amp.admin.sectorMapping:src-sector-lvl-1": "Source Sector",
+  "amp.admin.sectorMapping:dst-sector-lvl-1": "Destination Sector",
+  "amp.admin.sectorMapping:warning_on_change_main_sector": "If you change the Source Sector or the Destination Sector the existing mappings will be deleted, are you sure you want to continue?",
+  "amp.admin.sectorMapping:notification-saved-ok": "All mappings saved correctly."
+}

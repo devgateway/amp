@@ -7,6 +7,7 @@ public class ReportsDashboard {
     private String pillar;
     private String country;
     private String year;
+    private String implimentationLevel;
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursment;
 
@@ -56,5 +57,13 @@ public class ReportsDashboard {
 
     public void setActualDisbursment(BigDecimal actualDisbursment) {
         this.actualDisbursment = actualDisbursment;
+    }
+
+    public String getImplimentationLevel() {
+        return implimentationLevel;
+    }
+
+    public void setImplimentationLevel(String implimentationLevel) {
+        this.implimentationLevel = implimentationLevel;
     }
 }

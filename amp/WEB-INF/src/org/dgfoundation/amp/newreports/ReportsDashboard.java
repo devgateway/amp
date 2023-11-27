@@ -5,13 +5,15 @@ import java.math.BigDecimal;
 public class ReportsDashboard {
     private String donorAgency;
     private String pillar;
-    private String country;
-    private String year;
     private String implimentationLevel;
+
+    private String country;
+    private String status;
+    private String currency;
+    private String year;
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursment;
 
-    private String status;
 
     public String getDonorAgency() {
         return donorAgency;
@@ -75,5 +77,13 @@ public class ReportsDashboard {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

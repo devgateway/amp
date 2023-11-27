@@ -343,6 +343,7 @@ public class Reports {
                                     fundingReport.setDonorAgency(child.getOwner().debugString);
                                     fundingReport.setPillar(donorData.getOwner().debugString);
                                     fundingReport.setYear(col.parentColumn.originalColumnName);
+                                    fundingReport.setCurrency("USD");
                                     ampDashboardFunding.add(fundingReport);
                                 }
                             }
@@ -372,6 +373,7 @@ public class Reports {
             obj.put("actualCommitment", reportsDashboard.getActualCommitment());
             obj.put("actualDisbursment", reportsDashboard.getActualDisbursment());
             obj.put("status", reportsDashboard.getStatus());
+            obj.put("currency", reportsDashboard.getCurrency());
             // Add the converted object to the list
             data.add(obj);
         }

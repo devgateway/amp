@@ -288,8 +288,8 @@ public class Reports {
             @ApiParam("a JSON object with the report's parameters") ReportFormParameters reportFormParams) {
 
         ReportFormParameters formParams = new ReportFormParameters();
-        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0");
-        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0");
+        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0","Status");
+        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0","Status");
         List<String> additionalMeasures = Arrays.asList("Actual Commitments", "Actual Disbursements");
         formParams.setAdditionalColumns(additionalColumns);
         formParams.setAdditionalHierarchies(additionalHierarchies);
@@ -334,6 +334,10 @@ public class Reports {
                                         fundingReport.setActualDisbursment(disbursement.setScale(2, RoundingMode.HALF_UP));
                                     }
 
+                                    if (location.getChildren() != null) {
+                                        fundingReport.setStatus(location.getChildren().get(0).getOwner().debugString);
+                                    }
+
                                     fundingReport.setCountry(location.getOwner().debugString);
                                     fundingReport.setImplimentationLevel(implLevel.getOwner().debugString);
                                     fundingReport.setDonorAgency(child.getOwner().debugString);
@@ -367,7 +371,7 @@ public class Reports {
             obj.put("implimentationLevel", reportsDashboard.getImplimentationLevel());
             obj.put("actualCommitment", reportsDashboard.getActualCommitment());
             obj.put("actualDisbursment", reportsDashboard.getActualDisbursment());
-
+            obj.put("status", reportsDashboard.getStatus());
             // Add the converted object to the list
             data.add(obj);
         }
@@ -384,7 +388,8 @@ public class Reports {
                     String.valueOf(obj.get("pillar")) +
                     String.valueOf(obj.get("country")) +
                     String.valueOf(obj.get("year")) +
-                    String.valueOf(obj.get("implimentationLevel"));
+                    String.valueOf(obj.get("implimentationLevel")) +
+                    String.valueOf(obj.get("status"));
 
             // If the key is already present, merge the values
             if (groupedData.containsKey(key)) {

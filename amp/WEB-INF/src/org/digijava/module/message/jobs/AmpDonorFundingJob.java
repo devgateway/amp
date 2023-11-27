@@ -20,10 +20,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 
@@ -35,9 +32,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         ReportFormParameters formParams = new ReportFormParameters();
-        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1");
-        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1");
-        List<String> additionalMeasures = Arrays.asList("Actual Commitments");
+        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0","Status");
+        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0","Status");
+        List<String> additionalMeasures = Arrays.asList("Actual Commitments", "Actual Disbursements");
         formParams.setAdditionalColumns(additionalColumns);
         formParams.setAdditionalHierarchies(additionalHierarchies);
         formParams.setAdditionalMeasures(additionalMeasures);
@@ -58,34 +55,107 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         SettingsUtils.applySettings(spec, formParams.getSettings(), true);
         FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
         GeneratedReport report = EndpointUtils.runReport(spec);
+        SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<ReportsDashboard>();
         for (ReportArea child: report.reportContents.getChildren()){
             if(child.getChildren() != null){
                 for (ReportArea donorData: child.getChildren()){
-                    Map<ReportOutputColumn, ReportCell> contents =donorData.getContents();
+                    for (ReportArea implLevel: donorData.getChildren()) {
+                        for (ReportArea location: implLevel.getChildren()) {
+                            for (Map.Entry<ReportOutputColumn, ReportCell> content : location.getContents().entrySet()) {
+                                ReportOutputColumn col = content.getKey();
+                                ReportsDashboard fundingReport = new ReportsDashboard();
 
-                    for (Map.Entry<ReportOutputColumn, ReportCell> content : donorData.getContents().entrySet()) {
-                        ReportOutputColumn col = content.getKey();
-                        ReportsDashboard fundingReport = new ReportsDashboard();
+                                if (col.parentColumn != null && col.parentColumn.originalColumnName != null
+                                        && !col.parentColumn.originalColumnName.equals("Totals")) {
+//                                  // check if the field is actual commitment or actual disbursement
+                                    if(col.originalColumnName.equals("Actual Commitments")){
+                                        BigDecimal commitment = (BigDecimal) content.getValue().value;
+                                        fundingReport.setActualCommitment(commitment.setScale(2, RoundingMode.HALF_UP));
+                                    }else {
+                                        BigDecimal disbursement = (BigDecimal) content.getValue().value;
+                                        fundingReport.setActualDisbursment(disbursement.setScale(2, RoundingMode.HALF_UP));
+                                    }
 
-                        if (col.parentColumn != null && col.parentColumn.originalColumnName != null
-                                && !col.parentColumn.originalColumnName.equals("Totals")) {
-                            BigDecimal commitment = (BigDecimal) content.getValue().value;
-                            fundingReport.setDonorAgency(child.getOwner().debugString);
-                            fundingReport.setPillar(donorData.getOwner().debugString);
-                            fundingReport.setYear(col.parentColumn.originalColumnName);
-                            fundingReport.setActualCommitment(commitment.setScale(2, RoundingMode.HALF_UP));
-                            ampDashboardFunding.add(fundingReport);
+                                    if (location.getChildren() != null) {
+                                        fundingReport.setStatus(location.getChildren().get(0).getOwner().debugString);
+                                    }
+
+                                    fundingReport.setCountry(location.getOwner().debugString);
+                                    fundingReport.setImplimentationLevel(implLevel.getOwner().debugString);
+                                    fundingReport.setDonorAgency(child.getOwner().debugString);
+                                    fundingReport.setPillar(donorData.getOwner().debugString);
+                                    fundingReport.setYear(col.parentColumn.originalColumnName);
+                                    ampDashboardFunding.add(fundingReport);
+                                }
+                            }
                         }
                     }
                 }
             }
         }
 
+        List<Map<String, Object>> combinedData = combineObjects(ampDashboardFunding);
         // Specify the server's endpoint URL
-//        String serverUrl = "http://localhost:8081/importDonorFunding";
-        sendReportsToServer(ampDashboardFunding, ampDashboardUrl);
+        String serverUrl = "http://localhost:8081/importDonorFunding";
+        sendReportsToServer(ampDashboardFunding, serverUrl);
+    }
+
+    private static List<Map<String, Object>> combineObjects(List<ReportsDashboard> ampDashboardFunding) {
+        List<Map<String, Object>> data = new ArrayList<>();
+
+        for (ReportsDashboard reportsDashboard : ampDashboardFunding) {
+            Map<String, Object> obj = new HashMap<>();
+            obj.put("donorAgency", reportsDashboard.getDonorAgency());
+            obj.put("pillar", reportsDashboard.getPillar());
+            obj.put("country", reportsDashboard.getCountry());
+            obj.put("year", reportsDashboard.getYear());
+            obj.put("implimentationLevel", reportsDashboard.getImplimentationLevel());
+            obj.put("actualCommitment", reportsDashboard.getActualCommitment());
+            obj.put("actualDisbursment", reportsDashboard.getActualDisbursment());
+            obj.put("status", reportsDashboard.getStatus());
+            // Add the converted object to the list
+            data.add(obj);
+        }
+
+        return resolveSimilarObjects(data);
+    }
+
+    private static List<Map<String, Object>> resolveSimilarObjects(List<Map<String, Object>> data) {
+        Map<String, Map<String, Object>> groupedData = new HashMap<>();
+
+        for (Map<String, Object> obj : data) {
+            // Create a key based on the fields that should be the same
+            String key = String.valueOf(obj.get("donorAgency")) +
+                    String.valueOf(obj.get("pillar")) +
+                    String.valueOf(obj.get("country")) +
+                    String.valueOf(obj.get("year")) +
+                    String.valueOf(obj.get("implimentationLevel")) +
+                    String.valueOf(obj.get("status"));
+
+            // If the key is already present, merge the values
+            if (groupedData.containsKey(key)) {
+                mergeValues(groupedData.get(key), obj);
+            } else {
+                // If the key is not present, add the object to the map
+                groupedData.put(key, new HashMap<>(obj));
+            }
+        }
+
+        // Convert the map values back to a list of combined objects
+        return new ArrayList<>(groupedData.values());
+    }
+
+    private static void mergeValues(Map<String, Object> existingObj, Map<String, Object> newObj) {
+        // Merge the fields "actualCommitment" and "actualDisbursment"
+        Object existingCommitment = existingObj.get("actualCommitment");
+        Object newCommitment = newObj.get("actualCommitment");
+        existingObj.put("actualCommitment", existingCommitment != null ? existingCommitment : newCommitment);
+
+        Object existingDisbursment = existingObj.get("actualDisbursment");
+        Object newDisbursment = newObj.get("actualDisbursment");
+        existingObj.put("actualDisbursment", existingDisbursment != null ? existingDisbursment : newDisbursment);
     }
 
     public void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {

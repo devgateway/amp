@@ -11,6 +11,8 @@ public class ReportsDashboard {
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursment;
 
+    private String status;
+
     public String getDonorAgency() {
         return donorAgency;
     }
@@ -65,5 +67,13 @@ public class ReportsDashboard {
 
     public void setImplimentationLevel(String implimentationLevel) {
         this.implimentationLevel = implimentationLevel;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

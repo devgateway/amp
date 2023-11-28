@@ -100,7 +100,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         List<Map<String, Object>> combinedData = combineObjects(ampDashboardFunding);
         // Specify the server's endpoint URL
         String serverUrl = "http://localhost:8081/importDonorFunding";
-        sendReportsToServer(ampDashboardFunding, serverUrl);
+        sendReportsToServer(combinedData, serverUrl);
     }
 
     private static List<Map<String, Object>> combineObjects(List<ReportsDashboard> ampDashboardFunding) {
@@ -160,7 +160,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         existingObj.put("actualDisbursment", existingDisbursment != null ? existingDisbursment : newDisbursment);
     }
 
-    public void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {
+    public void sendReportsToServer(List<Map<String, Object>> ampDashboardFunding, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
             URL url = new URL(serverUrl);

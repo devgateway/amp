@@ -154,11 +154,11 @@ public class AmpComponentsFundingFormTableFeature extends
                     logger.info("Unable to add component funding status dropdown: ",e);
                 }
                 try {
-                    final AmpComponentFundingResourcesTableFeature resourcesList =
+                     AmpComponentFundingResourcesTableFeature resourcesList =
                             new AmpComponentFundingResourcesTableFeature("componentFundingDocuments", "Component Funding Documents", model);
                     item.add(resourcesList);
 
-                    final AmpComponentFundingNewResourceFieldPanel newDoc =
+                     AmpComponentFundingNewResourceFieldPanel newDoc =
                         new AmpComponentFundingNewResourceFieldPanel("addNewComponentFundingDocument", model, "Add New Document", resourcesList);
                 newDoc.setOutputMarkupId(true);
                 item.add(newDoc);

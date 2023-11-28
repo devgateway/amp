@@ -67,8 +67,8 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
 
         final IModel<Set<AmpComponentFundingDocument>> setModel = new PropertyModel<>(am, "componentFundingDocuments");
 
-        if (am.getObject().getComponentFundingDocuments() == null)
-            am.getObject().getComponentFundingDocuments().addAll(new HashSet<>());
+//        if (am.getObject().getComponentFundingDocuments() == null)
+//            am.getObject().getComponentFundingDocuments().addAll(new HashSet<>());
 
         IModel<List<TemporaryComponentFundingDocument>> listModel = new AbstractReadOnlyModel<List<TemporaryComponentFundingDocument>>() {
 
@@ -154,8 +154,8 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                 }
                 List<TemporaryComponentFundingDocument> ret = new ArrayList<>(existingTmpDocs);
 
-                if (am.getObject().getComponentFundingDocuments() == null)
-                    am.getObject().getComponentFundingDocuments().addAll(new HashSet<>());
+//                if (am.getObject().getComponentFundingDocuments() == null)
+//                    am.getObject().getComponentFundingDocuments().addAll(new HashSet<>());
 
                 for (AmpComponentFundingDocument d : setModel.getObject()) {
                     //check if marked for delete

@@ -1037,9 +1037,9 @@ public class ActivityUtil {
     public static void saveComponentFundingResources(AmpComponentFunding a) {
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
-        if (a.getComponentFundingDocuments() == null) {
-            a.getComponentFundingDocuments().addAll(new HashSet<>());
-        }
+//        if (a.getComponentFundingDocuments() == null) {
+//            a.getComponentFundingDocuments().addAll(new HashSet<>());
+//        }
 
         HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(a.getJustAnId());
         HashSet<AmpComponentFundingDocument> deletedResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS).get(a.getJustAnId());

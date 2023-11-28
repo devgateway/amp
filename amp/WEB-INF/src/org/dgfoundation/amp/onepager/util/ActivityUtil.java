@@ -1044,6 +1044,9 @@ public class ActivityUtil {
         HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(a.getJustAnId());
         HashSet<AmpComponentFundingDocument> deletedResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS).get(a.getJustAnId());
         HashSet<TemporaryComponentFundingDocument> existingTitles = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(a.getJustAnId());
+        newResources= newResources!=null?newResources:new HashSet<>();
+        deletedResources= deletedResources!=null?deletedResources:new HashSet<>();
+        existingTitles= existingTitles!=null?existingTitles:new HashSet<>();
 
         // update titles when multilingual is enabled
         if (ContentTranslationUtil.multilingualIsEnabled()) {
@@ -1056,8 +1059,7 @@ public class ActivityUtil {
         // insert new resources in the system
         insertComponentFundingResources(a, newResources);
         if (!(getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) || a.getTransactionType() != 1) {
-            if (newResources!=null)
-                newResources.clear();
+            newResources.clear();
         }
     }
 

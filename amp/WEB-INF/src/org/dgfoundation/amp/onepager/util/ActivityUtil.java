@@ -1146,7 +1146,7 @@ public class ActivityUtil {
                     a.getComponentFundingDocuments().remove(tmpDoc);
 
                     if (tmpDoc.getId()!=null) {
-                        session.update(tmpDoc);
+                        session.merge(tmpDoc);
                     }
 
                 }

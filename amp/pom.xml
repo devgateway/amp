@@ -41,7 +41,6 @@
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </pluginRepository>
     </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>org.mockito</groupId>

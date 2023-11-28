@@ -259,9 +259,10 @@ public class Reports {
      */
     @POST
     @Path("/report/preview")
-    @Produces(MediaType.TEXT_HTML)
+//    @Produces(MediaType.TEXT_HTML)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Render a report preview in HTML format.")
-    public final String getReportResult(
+    public final GeneratedReport getReportResult(
             @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
         int reportType = ArConstants.DONOR_TYPE;
         if (formParams.getReportType() != null) {
@@ -277,7 +278,7 @@ public class Reports {
         GeneratedReport report = EndpointUtils.runReport(spec);
         SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
 
-        return htmlRenderer.renderTable().toString();
+        return report;
     }
 
     @POST

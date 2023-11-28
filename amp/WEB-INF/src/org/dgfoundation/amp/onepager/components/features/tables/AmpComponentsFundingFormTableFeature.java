@@ -160,7 +160,7 @@ public class AmpComponentsFundingFormTableFeature extends
 
                      AmpComponentFundingNewResourceFieldPanel newDoc =
                         new AmpComponentFundingNewResourceFieldPanel("addNewComponentFundingDocument", model, "Add New Document", resourcesList);
-                newDoc.setOutputMarkupId(true);
+//                newDoc.setOutputMarkupId(true);
                 item.add(newDoc);
                 }catch (Exception e)
                 {

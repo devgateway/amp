@@ -674,7 +674,7 @@ public class ProjectUtil {
                 data.setProjectId(projectId);
                 data.setSubprojectId(subProjectId);
                 data.setWorkflowitemId(workFlowItemId);
-                data.setRejectReason(!Objects.equals(ampComponentFunding.getComponentRejectReason(), "") ?ampComponentFunding.getComponentRejectReason():"Rejected");
+                data.setRejectReason(!Objects.equals(ampComponentFunding.getComponentRejectReason(), "") ?ampComponentFunding.getComponentRejectReason():"This was rejected for reasons only known to who");
                 closeWFItemModel.setData(data);
             }
 

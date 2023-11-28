@@ -1143,10 +1143,10 @@ public class ActivityUtil {
 //                tmpDoc.setAmpComponentFunding(null);
                 if (tmpDoc!=null){
                     tmpDoc.setAmpComponentFunding(null);
-                    a.getComponentFundingDocuments().remove(tmpDoc);
+//                    a.getComponentFundingDocuments().remove(tmpDoc);
 
                     if (tmpDoc.getId()!=null) {
-                        session.merge(tmpDoc);
+                        session.delete(tmpDoc);
                     }
 
                 }

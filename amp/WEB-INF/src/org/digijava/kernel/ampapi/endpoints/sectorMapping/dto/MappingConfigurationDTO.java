@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.sectorMapping.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collection;
 import java.util.List;
 

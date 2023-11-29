@@ -7,11 +7,9 @@ import  rootReducer from './reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations.json';
 import Startup from './components/Startup';
 import SectorMappingAdminNavigator from './components/SectorMappingAdminNavigator';
-// eslint-disable-next-line no-unused-vars
 import style from './components/css/style.css';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 class AdminSectorMappingApp extends Component {
     constructor(props) {
         super(props);

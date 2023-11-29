@@ -2,20 +2,17 @@ import {
   FETCH_SECTOR_MAP_SUCCESS,
   FETCH_SECTOR_MAP_PENDING,
   FETCH_SECTOR_MAP_ERROR,
-  FETCH_SECTORS_SUCCESS,
-  FETCH_SECTORS_PENDING,
-  FETCH_SECTORS_ERROR,
   FETCH_SCHEMES_PENDING,
   FETCH_SCHEMES_SUCCESS,
   FETCH_SCHEMES_ERROR
 } from '../actions/startupAction';
 
 const initialState = {
-  pendingSectorMapping: false, // pendingNDD
-  pendingSchemes: false, // pendingPrograms
-  sectorMappings: [], //NDDs
+  pendingSectorMapping: false,
+  pendingSchemes: false,
+  sectorMappings: [],
   error: null,
-  schemes: [] //programs
+  schemes: []
 };
 
 export default function startupReducer(state = initialState, action) {

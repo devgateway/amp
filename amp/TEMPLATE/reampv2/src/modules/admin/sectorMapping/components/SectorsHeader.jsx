@@ -23,23 +23,21 @@ class SectorsHeader extends Component {
                                 <HelpTooltip labelKey={`${trnPrefix}tooltip-direct-sector`} />
                                 <Select
                                     disabled={busy}
-                                    placeholder={translations[`${trnPrefix}choose_main_src_sector`]}
-                                    label={translations[`${trnPrefix}src-sector-lvl-1`]}
+                                    placeholder={translations[`${trnPrefix}choose_src_scheme`]}
+                                    label={translations[`${trnPrefix}src-scheme-sector`]}
                                     options={schemes.filter(p => p.visible === true)}
                                     selected={src ? [src] : []}
-                                    onChange={onChange.bind(null, TYPE_SRC)}
-                                    level={0} />
+                                    onChange={onChange.bind(null, TYPE_SRC)} />
                             </td>
                             <td style={{ width: '50%' }}>
                                 <HelpTooltip labelKey={`${trnPrefix}tooltip-indirect-sector`} />
                                 <Select
                                     disabled={busy}
-                                    placeholder={translations[`${trnPrefix}choose_main_dst_sector`]}
-                                    label={translations[`${trnPrefix}dst-sector-lvl-1`]}
+                                    placeholder={translations[`${trnPrefix}choose_dst_scheme`]}
+                                    label={translations[`${trnPrefix}dst-scheme-sector`]}
                                     options={schemes.filter(p => p.visible === false)}
                                     selected={dst ? [dst] : []}
-                                    onChange={onChange.bind(null, TYPE_DST)}
-                                    level={0} />
+                                    onChange={onChange.bind(null, TYPE_DST)} />
                             </td>
                         </tr>
                     </tbody>
@@ -59,14 +57,12 @@ SectorsHeader.propTypes = {
     src: PropTypes.object,
     dst: PropTypes.object,
     onChange: PropTypes.func.isRequired,
-    busy: PropTypes.bool.isRequired,
-    level: PropTypes.number
+    busy: PropTypes.bool.isRequired
 };
 
 SectorsHeader.defaultProps = {
     src: undefined,
-    dst: undefined,
-    level: 1
+    dst: undefined
 };
 
 const mapStateToProps = state => ({

@@ -1,6 +1,6 @@
 {
   "amp.admin.sectorMapping:page-title": "Aid Management Platform - Sector Mapping Manager",
-  "amp.admin.sectorMapping:menu-item-sectors-mapping": "Sectors Mapping",
+  "amp.admin.sectorMapping:menu-item-sector-mappings": "Sector Mappings",
   "amp.admin.sectorMapping:mappings-manager": "Sector Mapping Manager",
   "amp.admin.sectorMapping:title": "Sectors Mapping",
   "amp.admin.sectorMapping:sub-title": "This module manages the mappings between primary and secondary sectors.",

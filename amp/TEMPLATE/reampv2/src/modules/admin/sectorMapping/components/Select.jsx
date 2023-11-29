@@ -14,8 +14,8 @@ class Select extends Component {
     this.drawSelector = this.drawSelector.bind(this);
   }
   onChangeSelect(selected) {
-    const { onChange, level } = this.props;
-    onChange(selected, level);
+    const { onChange, rowData, type } = this.props;
+    onChange(selected, rowData, type);
   }
 
   drawSelector() {
@@ -59,7 +59,6 @@ Select.propTypes = {
   placeholder: PropTypes.string.isRequired,
   selected: PropTypes.array,
   onChange: PropTypes.func.isRequired,
-  level: PropTypes.number.isRequired,
   disabled: PropTypes.bool.isRequired
 };
 

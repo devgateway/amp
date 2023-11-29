@@ -1270,33 +1270,8 @@ public class SectorUtil {
         return col;
     }
 
-    public static Collection getSectorMappingsByPrimary(Long idPrimarySector) {
-        String queryString = null;
-        Session session = null;
-        Collection col = null;
-        Query qry = null;
-
-        try {
-            session = PersistenceManager.getSession();
-            queryString = "select asm from " + AmpSectorMapping.class.getName() + " asm " +
-                    "where asm.srcSector.ampSectorId=:idPrimarySector";
-            qry = session.createQuery(queryString);
-            qry.setParameter("idPrimarySector", idPrimarySector);
-            col = qry.list();
-            session.flush();
-        } catch (Exception ex) {
-            logger.error("Unable to get sectors mappings from database by primary " + ex.getMessage());
-            ex.printStackTrace(System.out);
-        }
-        return col;
-    }
-
     /**
      * adds an AmpSectorMapping
-     *
-     * @param sectorMapping
-     * @throws DgException
-     *             If exception occurred
      */
     public static void createSectorMapping(AmpSectorMapping sectorMapping) throws DgException {
         Session session = null;
@@ -1309,6 +1284,25 @@ public class SectorUtil {
                 logger.error("Unable to save a sector mapping " + ex.getMessage());
                 throw new DgException(ex);
             }
+        }
+    }
+
+    public static void createSectorMappings(List<AmpSectorMapping> sectorMappings) throws DgException {
+        Session session = null;
+        Collection<AmpSectorMapping> existingMappings = getAllSectorMappings();
+        try {
+            session = PersistenceManager.getRequestDBSession();
+
+            for (AmpSectorMapping em : existingMappings) {
+                session.delete(em);
+            }
+            for (AmpSectorMapping asm : sectorMappings) {
+                session.save(asm);
+            }
+            session.flush();
+        } catch (Exception ex) {
+            logger.error("Unable to save the list of sector mapping " + ex.getMessage());
+            throw new DgException(ex);
         }
     }
 

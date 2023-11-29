@@ -18,7 +18,6 @@ import fetchSettings from "../actions/fetchSettings";
 import BlockUI from "./common/BlockUI";
 import FormSectors from "./FormSectors";
 
-
 class Main extends Component {
     constructor(props) {
         super(props);
@@ -27,17 +26,14 @@ class Main extends Component {
     }
 
     componentDidMount() {
-        const {
-            _fetchSectorMappings, _fetchSchemes, api, _fetchLayout, _fetchSettings
-        } = this.props;
+        const { _fetchSectorMappings, _fetchSchemes, api, _fetchLayout, _fetchSettings } = this.props;
 
         _fetchSettings().then(settings => {
             _fetchLayout().then(layout => {
                 if (layout && layout.logged && layout.administratorMode === true) {
                     _fetchSectorMappings(api.mappingConfig);
                     _fetchSchemes(api.allSchemes);
-
-                    this.setState({ isSuperAdmin: layout.email.indexOf('super') === 0, settings });
+                    //this.setState({ isSuperAdmin: layout.email.indexOf('super') === 0, settings });
                 } else {
                     window.location.replace('/login.do');
                 }
@@ -45,15 +41,12 @@ class Main extends Component {
         }).catch(e => console.error(e));
     }
 
-    // pendingNDD -> pendingSectorMapping
-    // pendingPrograms -> pendingSectors
     shouldComponentRender() {
         const { pendingSectorMapping, pendingSectors } = this.props;
         return !pendingSectorMapping && !pendingSectors;
     }
 
     render() {
-        // ndd -> mappings
         const { mappings, schemes, api, trnPrefix } = this.props;
         const { translations } = this.context;
         const { isSuperAdmin, settings } = this.state;
@@ -84,8 +77,8 @@ class Main extends Component {
 Main.contextType = SectorMappingContext;
 
 Main.propTypes = {
-    _fetchSectorMappings: PropTypes.func.isRequired, // _fetchNDD
-    _fetchSchemes: PropTypes.func.isRequired, // _fetchPrograms
+    _fetchSectorMappings: PropTypes.func.isRequired,
+    _fetchSchemes: PropTypes.func.isRequired,
     _fetchLayout: PropTypes.func.isRequired,
     _fetchSettings: PropTypes.func.isRequired,
     api: PropTypes.object.isRequired

@@ -45,6 +45,6 @@ Startup.propTypes = {
     translations: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
     _fetchTranslations: PropTypes.func.isRequired,
-    api: PropTypes.object.isRequired,
+    api: PropTypes.object,
     defaultTrnPack: PropTypes.object.isRequired,
 };

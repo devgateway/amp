@@ -8,7 +8,6 @@ import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.SchemaClassificati
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.SectorUtil;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,14 +17,7 @@ import java.util.stream.Collectors;
 public class SectorMappingService {
 
     private static final Logger LOGGER = Logger.getLogger(ValueConverter.class);
-    private Map<Long, String> sectorClasses = new HashMap<>();
-    private String getSectorClassById(Long id) {
-        if (sectorClasses.isEmpty()) {
-            sectorClasses.put(1L, AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
-            sectorClasses.put(2L, AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
-        }
-        return sectorClasses.get(id);
-    }
+
 
     public List<GenericSelectObjDTO> getSectorsByScheme(final Long schemeId) {
         List<GenericSelectObjDTO> sectors = new ArrayList<>();
@@ -45,8 +37,8 @@ public class SectorMappingService {
         return SectorUtil.getAllSectorSchemesAndClassification();
     }
 
-    public void createSectorsMapping(AmpSectorMapping mapping) throws DgException {
-        SectorUtil.createSectorMapping(mapping);
+    public void createSectorMappings(List<AmpSectorMapping> mappings) throws DgException {
+        SectorUtil.createSectorMappings(mappings);
     }
 
     public void deleteSectorMapping(Long id) throws DgException {
@@ -84,7 +76,6 @@ public class SectorMappingService {
     }
 
     //region Private methods
-
     private static AmpClassificationConfiguration findByName(List<AmpClassificationConfiguration> list, String name) {
         for (AmpClassificationConfiguration item : list) {
             if (item.getName().equals(name)) {

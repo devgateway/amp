@@ -2,7 +2,6 @@ import { SAVE_SECTOR_MAP_SUCCESS, SAVE_SECTOR_MAP_PENDING, SAVE_SECTOR_MAP_ERROR
 
 const initialState = {
   saving: false,
-  //NDDs: [],
   SectorMappings: [],
   error: null
 };

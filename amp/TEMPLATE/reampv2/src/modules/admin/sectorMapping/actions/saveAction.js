@@ -8,10 +8,10 @@ export function saveSectorMappingPending() {
   };
 }
 
-export function saveSectorMappingSuccess(ndd) {
+export function saveSectorMappingSuccess(mappings) {
   return {
     type: SAVE_SECTOR_MAP_SUCCESS,
-    payload: ndd
+    payload: mappings
   };
 }
 

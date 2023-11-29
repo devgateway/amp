@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {SectorMappingContext} from '../Startup';
-
-// eslint-disable-next-line no-unused-vars
 import styles from '../css/style.css';
 
 class HelpTooltip extends Component {
@@ -18,7 +16,6 @@ class HelpTooltip extends Component {
     );
     return (
       <OverlayTrigger transition={false} trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <img
           className="info-icon"
           src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { SectorMappingContext } from './Startup';
 import './css/style.css';
-//import * as Utils from '../utils/Utils';
+import * as Validation from '../utils/Validation';
 import {
     DST_SCHEME_SECTOR,
     SRC_SCHEME_SECTOR,
@@ -13,15 +13,21 @@ import {
     DST_SECTOR,
     TYPE_SRC,
     TYPE_DST,
-    ALL_SCHEMES
+    ALL_SCHEMES, SECTOR
 } from '../constants/Constants';
 
-import {sendNDDError, sendNDDPending, sendNDDSaving} from "../../ndd/reducers/saveNDDReducer";
+import {
+    sendSectorMappingError,
+    sendSectorMappingPending,
+    sendSectorMappingSaving
+} from "../reducers/saveSectorMappingReducer";
 import {updateActivitiesError, updateActivitiesPending} from "../../ndd/reducers/updateActivitiesReducer";
-import saveNDD from "../../ndd/actions/saveNDD";
+import saveSectorMappings from "../actions/saveSectorMappings";
 import updateActivities from "../../ndd/actions/updateActivities";
 import SectorsHeader from "./SectorsHeader";
 import Notifications from "./Notifications";
+import HeaderActions from "./HeaderActions";
+import SectorMappingTable from "./SectorMappingTable";
 
 class FormSectors extends Component {
 
@@ -36,15 +42,13 @@ class FormSectors extends Component {
             updatedActivities: false,
             blockUI: false,
             unsavedChanges: false,
-            saved: false,
-            level: 0
+            saved: false
         };
         this.addRow = this.addRow.bind(this);
         this.saveAll = this.saveAll.bind(this);
         this.onRowChange = this.onRowChange.bind(this);
         this.remove = this.remove.bind(this);
         this.clearMessages = this.clearMessages.bind(this);
-        // this.onChangeMainProgram = this.onChangeMainProgram.bind(this);
         this.onChangeMainScheme = this.onChangeMainScheme.bind(this);
         this.clearAll = this.clearAll.bind(this);
     }
@@ -55,7 +59,6 @@ class FormSectors extends Component {
 
         // Load Source Scheme Sector selected
         this.setState(() => {
-            console.log('mappings: ', mappings);
             if (mappings[SRC_SCHEME_SECTOR]) {
                 const src = {id: mappings[SRC_SCHEME_SECTOR].id, value: mappings[SRC_SCHEME_SECTOR].value};
                 return {src};
@@ -115,7 +118,6 @@ class FormSectors extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
-            // eslint-disable-next-line react/no-did-update-set-state
             this.setState(previousState => {
                 if (!previousState.saved) {
                     return { saved: true };
@@ -126,25 +128,49 @@ class FormSectors extends Component {
         }
     }
 
-    //TODO: check addRow()
     addRow() {
         this.clearMessages();
         this.setState(previousState => {
             const data = [...previousState.data];
             const pair = {
+                id: `${Math.random() * -1}`,
                 [SRC_SECTOR]: {},
-                [DST_SECTOR]: {},
-                id: Math.random() * -1
+                [DST_SECTOR]: {}
             };
             data.push(pair);
             setTimeout(() => (window.scrollTo(0, document.body.scrollHeight)), 500);
             return { data, unsavedChanges: true, adding: true };
         });
-
     }
-    onRowChange() {}
 
-    remove(row) {}
+    onRowChange(sector, type, id) {
+        const { data } = this.state;
+
+        this.clearMessages();
+        // Find row.
+        const row = data.find(i => i.id === id);
+        // Remove row.
+        data.splice(data.findIndex(i => i.id === id), 1);
+        // Set row with new values.
+        row[type + SECTOR] = (sector && sector.length === 0) ? {} : sector[0];
+        data.push(row);
+
+        this.setState(data);
+        this.setState({ unsavedChanges: true });
+    }
+
+    remove(row) {
+        const { translations, trnPrefix } = this.context;
+        if (window.confirm(translations[`${trnPrefix}confirm-remove-row`])) {
+            this.clearMessages();
+            this.setState(previousState => {
+                const data = [...previousState.data];
+                data.splice(data.findIndex(i => i.id === row.id), 1);
+                return { data };
+            });
+            this.setState({ unsavedChanges: true });
+        }
+    }
 
     clearMessages() {
         this.setState({
@@ -152,7 +178,36 @@ class FormSectors extends Component {
         });
     }
 
-    saveAll() {}
+    saveAll() {
+        const { data, src, dst } = this.state;
+        const { _saveSectorMappings, translations } = this.props;
+        const { api, trnPrefix } = this.context;
+
+        const checkSchemes = Validation.checkSchemes(src, dst);
+        if (checkSchemes === 0) {
+            const checkMaps = Validation.checkMappings(data);
+            if (checkMaps === 0) {
+                const mappsToSave = [];
+                data.forEach(item => {
+                    const mapping = {};
+                    mapping[SRC_SECTOR] = item[SRC_SECTOR].id;
+                    mapping[DST_SECTOR] = item[DST_SECTOR].id;
+                    mappsToSave.push(mapping);
+                });
+                _saveSectorMappings(mappsToSave, api.baseEndpoint);
+                this.setState({ unsavedChanges: false });
+                this.clearMessages();
+            } else {
+                this.setState({
+                    validationErrors: translations[`${trnPrefix}sector_validation_error_${checkMaps}`],
+                });
+            }
+        } else {
+            this.setState({
+                validationErrors: translations[`${trnPrefix}scheme_validation_error_${checkSchemes}`],
+            });
+        }
+    }
 
     onChangeMainScheme(type, scheme) {
         const { translations, trnPrefix } = this.context;
@@ -181,10 +236,9 @@ class FormSectors extends Component {
                 } else {
                     // Revert to previous Sector.
                     this.setState(previousState => previousState);
-                    // TODO: set focus in the selector.
                 }
             } else {
-                // Nothing -> Program.
+                // Nothing -> Scheme.
                 this.setState(previousState => ({ [type]: newScheme }));
                 this[`${type}_`] = newScheme;
                 autoAddRow = true;
@@ -208,7 +262,7 @@ class FormSectors extends Component {
     }
 
     render() {
-        const { data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved, level } = this.state;
+        const { data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved } = this.state;
         const { error, pending, translations, updating, errorUpdating, saving } = this.props;
 
         const { trnPrefix } = this.context;
@@ -223,7 +277,7 @@ class FormSectors extends Component {
             messages.push({ isError: false, text: translations[`${trnPrefix}notification-saved-ok`] });
         }
 
-        //TODO: check this flags commented
+        //TODO: check this flags
         // if (updatedActivities) {
         //     messages.push({
         //         isError: false,
@@ -250,10 +304,28 @@ class FormSectors extends Component {
                     dst={dst}
                     key={Math.random()}
                     busy={updating}
-                    onChange={this.onChangeMainScheme}
-                />
+                    onChange={this.onChangeMainScheme} />
+
+                <HeaderActions
+                    onAddRow={this.addRow}
+                    onSaveAll={this.saveAll}
+                    onRevertAll={this.revertAllChanges}
+                    onUpdateActivities={this.onUpdateActivities}
+                    src={src}
+                    dst={dst}
+                    busy={updating || pending}
+                    unsavedChanges={unsavedChanges}
+                    dataPresent={data && data.length > 0} />
 
                 <Notifications messages={messages} />
+
+                <SectorMappingTable
+                    list={data}
+                    onChange={this.onRowChange}
+                    remove={this.remove}
+                    src={src}
+                    dst={dst}
+                    busy={updating}/>
             </div>
         );
     }
@@ -268,7 +340,7 @@ FormSectors.propTypes = {
     pending: PropTypes.bool,
     updating: PropTypes.bool,
     errorUpdating: PropTypes.string,
-    _saveSectorMapping: PropTypes.func.isRequired, // _saveNDD
+    _saveSectorMappings: PropTypes.func.isRequired,
     //_updateActivities: PropTypes.func.isRequired,
     saving: PropTypes.bool.isRequired
 };
@@ -282,14 +354,14 @@ FormSectors.defaultProps = {
 
 const mapStateToProps = state => ({
     translations: state.translationsReducer.translations,
-    // error: sendNDDError(state.saveNDDReducer),
-    // saving: sendNDDSaving(state.saveNDDReducer),
-    // pending: sendNDDPending(state.saveNDDReducer),
+    error: sendSectorMappingError(state.saveSectorMappingReducer),
+    saving: sendSectorMappingSaving(state.saveSectorMappingReducer),
+    pending: sendSectorMappingPending(state.saveSectorMappingReducer),
     // updating: updateActivitiesPending(state.updateActivitiesReducer),
     // errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
-    // _saveNDD: saveNDD,
+    _saveSectorMappings: saveSectorMappings,
     // _updateActivities: updateActivities
 }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(FormSectors);

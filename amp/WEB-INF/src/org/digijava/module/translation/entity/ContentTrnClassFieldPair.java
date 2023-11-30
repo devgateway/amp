@@ -1,5 +1,7 @@
 package org.digijava.module.translation.entity;
 
+import java.util.Objects;
+
 /**
  * Created with IntelliJ IDEA.
  * User: flyer
@@ -40,10 +42,8 @@ public class ContentTrnClassFieldPair {
 
         ContentTrnClassFieldPair that = (ContentTrnClassFieldPair) o;
 
-        if (objClass != null ? !objClass.equals(that.objClass) : that.objClass != null) return false;
-        if (objField != null ? !objField.equals(that.objField) : that.objField != null) return false;
-
-        return true;
+        if (!Objects.equals(objClass, that.objClass)) return false;
+        return Objects.equals(objField, that.objField);
     }
 
     @Override

@@ -42,7 +42,7 @@ var DownloadLinks = React.createClass( {
         let name = '';
         switch ( os ) {
             case WINDOWS:
-                name = `Windows Vista/7/8/10 - ${arch} ${this.props.translations['amp.offline:bits']}`;
+                name = `Windows 10/11 - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
             case DEBIAN_LINUX:
                 name = `Ubuntu Linux (.deb) - ${arch} ${this.props.translations['amp.offline:bits']}`;

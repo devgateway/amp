@@ -1,19 +1,19 @@
 package org.digijava.module.message.jobs;
 
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.*;
-import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -24,11 +24,9 @@ import java.util.*;
 
 import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 
-@Component
 public class AmpDonorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
-    @Value("${ampDashboard.api}")
-    private String ampDashboardUrl;
+    protected static final Logger logger = Logger.getLogger(AmpDonorFundingJob.class);
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         ReportFormParameters formParams = new ReportFormParameters();
@@ -55,7 +53,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         SettingsUtils.applySettings(spec, formParams.getSettings(), true);
         FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
         GeneratedReport report = EndpointUtils.runReport(spec);
-        SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<ReportsDashboard>();
         for (ReportArea child: report.reportContents.getChildren()){
@@ -99,11 +96,11 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
 
         List<Map<String, Object>> combinedData = combineObjects(ampDashboardFunding);
         // Specify the server's endpoint URL
-        String serverUrl = "http://localhost:8081/importDonorFunding";
+        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
         sendReportsToServer(combinedData, serverUrl);
     }
 
-    private static List<Map<String, Object>> combineObjects(List<ReportsDashboard> ampDashboardFunding) {
+    public static List<Map<String, Object>> combineObjects(List<ReportsDashboard> ampDashboardFunding) {
         List<Map<String, Object>> data = new ArrayList<>();
 
         for (ReportsDashboard reportsDashboard : ampDashboardFunding) {
@@ -160,7 +157,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         existingObj.put("actualDisbursment", existingDisbursment != null ? existingDisbursment : newDisbursment);
     }
 
-    public void sendReportsToServer(List<Map<String, Object>> ampDashboardFunding, String serverUrl) {
+    public static void sendReportsToServer(List<Map<String, Object>> ampDashboardFunding, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
             URL url = new URL(serverUrl);
@@ -194,14 +191,16 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             if (responseCode == 200) {
                 // The data has been successfully sent to the server
                 System.out.println("Data sent successfully");
+                logger.error("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
             } else {
                 // Handle the error condition (e.g., log an error message)
-                System.out.println("Error sending data. HTTP Response Code: " + responseCode);
+                logger.error("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
             }
 
             // Close the connection
             connection.disconnect();
         } catch (Exception e) {
+            logger.error("Exception raised when sending data to dashboard", e);
             e.printStackTrace();
         }
     }

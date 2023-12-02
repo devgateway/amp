@@ -275,10 +275,10 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(structureColorId);
                     }
                 });
-                item.add(structureColorId);               
-                
-                latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
-                longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+                item.add(structureColorId);
+//
+//                latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+//                longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
             }
         };

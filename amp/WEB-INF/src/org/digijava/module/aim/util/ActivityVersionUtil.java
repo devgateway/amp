@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
@@ -218,10 +219,10 @@ public class ActivityVersionUtil {
      * @throws CloneNotSupportedException
      */
     public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
-        AmpActivityVersion out = (AmpActivityVersion) in.clone();
-        
+        AmpActivityVersion out = SerializationUtils.clone(in);
+
         Class clazz = AmpActivityFields.class;
-        
+
         Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
         for (Field field : fields) {
             if (Collection.class.isAssignableFrom(field.getType())) {
@@ -230,7 +231,7 @@ public class ActivityVersionUtil {
             }
         }
 
-//        out.setAmpActivityGroup(null);
+
         return out;
     }
     
@@ -291,20 +292,18 @@ public class ActivityVersionUtil {
             IllegalAccessException, InvocationTargetException {
         Session session = PersistenceManager.getRequestDBSession();
         Method[] methods = AmpActivityVersion.class.getDeclaredMethods();
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i].getName().contains("get") && methods[i].getReturnType().getName().contains("java.util.Set")) {
-                Object methodValue = methods[i].invoke(act, null);
+        for (Method method : methods) {
+            if (method.getName().contains("get") && method.getReturnType().getName().contains("java.util.Set")) {
+                Object methodValue = method.invoke(act, null);
                 Collection auxColl = (Collection) methodValue;
                 if (auxColl != null) {
                     auxColl.size();
-                    Iterator iInner = auxColl.iterator();
-                    while (iInner.hasNext()) {
-                        Object auxInnerObject = iInner.next();
+                    for (Object auxInnerObject : auxColl) {
                         Method[] innerMethods = auxInnerObject.getClass().getDeclaredMethods();
-                        for (int j = 0; j < innerMethods.length; j++) {
-                            if (innerMethods[j].getName().contains("get")
-                                    && innerMethods[j].getReturnType().getName().contains("java.util.Set")) {
-                                Object innerMethodValue = innerMethods[j].invoke(auxInnerObject, null);
+                        for (Method innerMethod : innerMethods) {
+                            if (innerMethod.getName().contains("get")
+                                    && innerMethod.getReturnType().getName().contains("java.util.Set")) {
+                                Object innerMethodValue = innerMethod.invoke(auxInnerObject, null);
                                 Collection auxInnerColl = (Collection) innerMethodValue;
                                 if (auxInnerColl != null) {
                                     auxInnerColl.size();

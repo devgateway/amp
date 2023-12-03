@@ -1,13 +1,13 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
     <fieldset>
         <legend>
 		<span class=legend_label id="regionalfundinglink" style="cursor: pointer;">
@@ -26,7 +26,7 @@
                                             <span class="word_break bold"><c:out value="${regFunds.regionName}"/></span>
                                         </td>
                                     </tr>
-                                    <module:display name="/Activity Form/Regional Funding/Region Item/Commitments" parentModule="/Activity Form/Regional Funding/Region Item">
+                                    <ampModule:display name="/Activity Form/Regional Funding/Region Item/Commitments" parentModule="/Activity Form/Regional Funding/Region Item">
                                         <c:if test="${!empty regFunds.commitments}">
                                             <tr>
                                                 <td class="prv_right">
@@ -58,8 +58,8 @@
                                                 </td>
                                             </tr>
                                         </c:if>
-                                    </module:display>
-                                    <module:display name="/Activity Form/Regional Funding/Region Item/Disbursements"
+                                    </ampModule:display>
+                                    <ampModule:display name="/Activity Form/Regional Funding/Region Item/Disbursements"
                                                     parentModule="/Activity Form/Regional Funding/Region Item">
                                         <c:if test="${!empty regFunds.disbursements}">
                                             <tr>
@@ -97,9 +97,9 @@
                                                 </td>
                                             </tr>
                                         </c:if>
-                                    </module:display>
+                                    </ampModule:display>
 
-                                    <module:display name="/Activity Form/Regional Funding/Region Item/Expenditures"
+                                    <ampModule:display name="/Activity Form/Regional Funding/Region Item/Expenditures"
                                                     parentModule="/Activity Form/Regional Funding/Region Item">
                                         <c:if test="${!empty regFunds.expenditures}">
                                             <tr>
@@ -136,7 +136,7 @@
                                                 </td>
                                             </tr>
                                         </c:if>
-                                    </module:display>
+                                    </ampModule:display>
                                 </table>
                             </td>
                         </tr>
@@ -154,4 +154,4 @@
             </c:if>
         </div>
     </fieldset>
-</module:display>
+</ampModule:display>

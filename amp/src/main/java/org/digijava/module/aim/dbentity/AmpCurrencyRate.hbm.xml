@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpCurrencyRate" table="AMP_CURRENCY_RATE">
+		<cache usage="read-write" />
+		<id name="ampCurrencyRateId" column="amp_currency_rate_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_CURRENCY_RATE_seq</param>
+			</generator>
+		</id>
+
+		<property column="from_currency_code" name="fromCurrencyCode" type="java.lang.String" not-null="true" />
+		<property column="to_currency_code" name="toCurrencyCode" type="java.lang.String" not-null="true"/>
+
+		<property name="exchangeRate" column="exchange_rate" type="java.lang.Double" not-null="true"/>
+		<property name="exchangeRateDate" column="exchange_rate_date" type="java.util.Date" not-null="true"/>
+		<property name="dataSource" column="data_source" type="java.lang.Integer" />
+
+
+	</class>
+</hibernate-mapping>

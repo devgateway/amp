@@ -13,9 +13,9 @@
   <action-mappings>
 		<action forward="/showLayout.do" path="/index" />
 		<action type="org.digijava.kernel.action.ShowLayout" path="/showLayout" />
-		<action type="org.digijava.module.aim.auth.AmpAuthenticationStatus" path="/aim/getLoginStatus" />
+		<action type="org.digijava.ampModule.aim.auth.AmpAuthenticationStatus" path="/aim/getLoginStatus" />
 		<action name="userLogonForm" forward="/showLayout.do?layout=LoginPrompt" path="/um/showPrompt" />
-		<!-- <action name="userLogonForm" type="org.digijava.module.um.action.LogonAction" validate="true" path="/um/logonAction">
+		<!-- <action name="userLogonForm" type="org.digijava.ampModule.um.action.LogonAction" validate="true" path="/um/logonAction">
 		  <forward name="forward" path="/showLayout.do?layout=LoginPrompt" redirect="true" />
 		</action>-->
 		<!--  Page Forward Actions //  	-->

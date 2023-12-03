@@ -8,14 +8,14 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 
 
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/asynchronous.js"/>"></script>
 <digi:ref
 	href="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/treeview.css"
 	type="text/css" rel="stylesheet" />
@@ -38,14 +38,14 @@ background-color:#FFFFFF;
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>"></script><jsp:include
+	src="<digi:file src="ampModule/aim/scripts/tree/jktreeview.js"/>"></script><jsp:include
 	page="scripts/npdScripts/programTree.jsp" flush="true" />
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/npdScripts/npdGraph.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/npdScripts/npdGraph.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/npdScripts/npdGrid.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/npdScripts/npdGrid.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/npdScripts/changeOptions.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/npdScripts/changeOptions.js"/>"></script>
 <jsp:include page="scripts/npdScripts/activityList.jsp" flush="true" />
 
 
@@ -87,13 +87,13 @@ background-color:#FFFFFF;
     var lastTimeStamp;
 	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
 	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
-<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="2" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.ampModule.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="2" onTrueEvalBody="true">
 	var strThousands="<digi:trn key='aim:NPD:amountMillionsOfDollarsLabel'>All amounts are in millions (000 000) of</digi:trn> ${aimNPDForm.defCurrency}";
 </gs:test>	
-<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="1" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.ampModule.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="1" onTrueEvalBody="true">
 	var strThousands="<digi:trn key='aim:NPD:amountThousandsOfDollarsLabel'>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
 </gs:test>
-<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="0" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.ampModule.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="0" onTrueEvalBody="true">
 	var strThousands="${aimNPDForm.defCurrency}";
 </gs:test>
 	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
@@ -184,14 +184,14 @@ background-color:#FFFFFF;
 		<div id="content" class="yui-skin-sam">
 		<div id="demo" class="yui-navset">
 		<ul class="yui-nav">
-			<module:display name="National Planning Dashboard"
+			<ampModule:display name="National Planning Dashboard"
 				parentModule="NATIONAL PLAN DASHBOARD">
 				<li class="selected"><a style="cursor: default">
 				<div><digi:trn key="aim:nplDashboard">National Planning Dashboard</digi:trn>
 				</div>
 				</a></li>
-			</module:display>
-			<feature:display name="Portfolio Dashboard" module="M & E">
+			</ampModule:display>
+			<feature:display name="Portfolio Dashboard" ampModule="M & E">
 				<li><digi:link
 					href="/viewPortfolioDashboard.do~actId=-1~indId=-1">
 					<div><digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
@@ -238,7 +238,7 @@ background-color:#FFFFFF;
 									align="center"><digi:img src="images/amploading.gif" /><digi:trn
 									key="aim:NPD:loadingGraph">Loading...</digi:trn></div>
 								<div id="divGraphImage" style="display: block"><digi:context
-									name="showChart" property="/module/moduleinstance/npdGraph.do" />
+									name="showChart" property="/ampModule/moduleinstance/npdGraph.do" />
 								<c:url var="fullShowChartUrl" scope="page" value="${showChart}">
 									<c:param name="actionMethod" value="displayChart" />
 									<c:param name="currentProgramId"
@@ -270,7 +270,7 @@ background-color:#FFFFFF;
 							<td valign="top" align="right" style="padding-top: 5px"><digi:trn>Statuses</digi:trn>:</td>
 							<td valign="top"><category:showoptions
 								name="aimNPDForm" property="selectedStatuses"
-								keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>"
+								keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>"
 								multiselect="true" size="5" ordered="true"
 								styleClass="inputx insidex" styleId="selectedStatusesId"/></td>
 								

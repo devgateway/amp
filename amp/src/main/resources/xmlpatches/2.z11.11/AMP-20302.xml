@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false"
+        xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+        <jira>AMP-20302</jira>
+        <keyword>Empty translations cleanup</keyword>
+        <author>vlimasky</author>
+        <description>Clean up report (tab) names with empty translations</description>
+        <apply>
+                <script>
+                        <lang delimiter=";" type="postgres">
+                            delete from amp_content_translation where object_class = 'org.digijava.ampModule.aim.dbentity.AmpReports' and field_name = 'name' and translation = '';
+                        </lang>
+                </script>
+        </apply>
+</tns:patch>

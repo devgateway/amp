@@ -19,7 +19,7 @@
 			  return false;
 		} else {
 			
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/organisationManager.do"/>
 		     url = "<%= searchOrg %>?orgSelReset=false";
 		     document.aimOrgManagerForm.action = url;
 		     document.aimOrgManagerForm.target="_self";
@@ -34,7 +34,7 @@
 			  document.aimOrgManagerForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/organisationManager.do"/>
 			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false";
 		     document.aimOrgManagerForm.action = url;
 		     document.aimOrgManagerForm.target="_self";
@@ -44,7 +44,7 @@
 	}
 	
 	function resetSearch(){
-		<digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
+		<digi:context name="searchOrg" property="context/ampModule/moduleinstance/organisationManager.do"/>
 		url = "<%= searchOrg %>?orgSelReset=true";
 	    document.aimOrgManagerForm.action = url;
 	    document.aimOrgManagerForm.target="_self";
@@ -52,7 +52,7 @@
 		return true;
 	}
     function exportXSL(){
-        <digi:context name="exportUrl" property="context/module/moduleinstance/exportOrgManager.do"/>;
+        <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportOrgManager.do"/>;
         document.aimOrgManagerForm.action="${exportUrl}";
         document.aimOrgManagerForm.target="_blank";
         document.aimOrgManagerForm.submit();

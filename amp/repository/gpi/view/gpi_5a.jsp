@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:form action="/gpi" type="org.digijava.module.gpi.form.GPIForm" name="gpiForm">
+<digi:form action="/gpi" type="org.digijava.ampModule.gpi.form.GPIForm" name="gpiForm">
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
 	    <tr align="center">
@@ -63,7 +63,7 @@
 	    <logic:notEmpty name="gpiForm" property="mainTableRows">
 	       <%int counter = 0; %>
 	       <bean:define id="color" value="" type="String"/>
-	       <logic:iterate id="element" name="gpiForm" property="mainTableRows" indexId="index" type="org.digijava.module.gpi.helper.row.GPIReport5aRow">
+	       <logic:iterate id="element" name="gpiForm" property="mainTableRows" indexId="index" type="org.digijava.ampModule.gpi.helper.row.GPIReport5aRow">
 	           <logic:equal name="element" property="year" value="${gpiForm.selectedStartYear}">
                    <%/*counter++;*/counter=1;%>
                </logic:equal>

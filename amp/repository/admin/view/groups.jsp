@@ -10,7 +10,7 @@
 
 <script>
   function fnOnDelete( param ) {
-      <digi:context name="deleteUrl" property="context/module/moduleinstance/deleteGroup.do" />
+      <digi:context name="deleteUrl" property="context/ampModule/moduleinstance/deleteGroup.do" />
       document.groupsForm.groupId.value = param;
       document.groupsForm.action = "<%= deleteUrl %>";
 
@@ -18,14 +18,14 @@
   }
 
   function pickupGroup(id) {
-      <digi:context name="showPerms" property="context/module/moduleinstance/showPermissions.do" />
+      <digi:context name="showPerms" property="context/ampModule/moduleinstance/showPermissions.do" />
       window.location="<%= showPerms %>?groupId=" + id;
   }
 
 </script>
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:groupAdministration">Group Administration</digi:trn>
@@ -42,7 +42,7 @@
 <tr><td>
 <table border="0">
 <tr><td noWrap><b><digi:trn key="admin:groupName">Group Name</digi:trn></b></td><td noWrap><b><digi:trn key="admin:default">Default</digi:trn></b></td><td>&nbsp;</td></tr>
-<logic:iterate id="group" name="groupsForm" property="groups" type="org.digijava.module.admin.form.GroupsForm.GroupInfo">
+<logic:iterate id="group" name="groupsForm" property="groups" type="org.digijava.ampModule.admin.form.GroupsForm.GroupInfo">
 <tr><td><digi:trn key='<%= "groups:" + group.getName() %>'><c:out value="${group.name}" /></digi:trn></td>
 
 <c:if test="${group.defaultGroup}"><td noWrap><digi:trn key="admin:yes">Yes</digi:trn></td><td>&nbsp;</td></c:if>
@@ -83,8 +83,8 @@
 </table>
 </td></tr>
 <tr><td noWrap>
-<digi:context name="selectGroup" property="context/module/moduleinstance/showPickupGroup.do" />
-<digi:context name="addGroup" property="context/module/moduleinstance/showPermissions.do" />
+<digi:context name="selectGroup" property="context/ampModule/moduleinstance/showPickupGroup.do" />
+<digi:context name="addGroup" property="context/ampModule/moduleinstance/showPermissions.do" />
 <a href="<%= selectGroup %>?targetAction=<%= addGroup %>" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;" target="user" paramId="id" paramName="index"><digi:trn key="admin:addPermToOtherSiteGroup">Add permission to other site's group</digi:trn></a>
 <td></tr>
 </table>

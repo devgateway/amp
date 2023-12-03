@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
 
 <!-- <form class="form-group">  -->
 <digi:instance property="pledgeForm" />
@@ -20,7 +20,7 @@
 			<div class="col-xs-5 text-right"><label class="h5 near-select" for="impl_level_select"><digi:trn>Implementation level</digi:trn></label></div>
 			<div class="col-xs-7">	
 				<c:set var="translation"><digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn></c:set>
-				<category:showoptions multiselect="false" styleId="location_impl_level_select" onchange="locationsController.selectChanged(this);" firstLine="${translation}" name="pledgeForm" property="levelId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" />
+				<category:showoptions multiselect="false" styleId="location_impl_level_select" onchange="locationsController.selectChanged(this);" firstLine="${translation}" name="pledgeForm" property="levelId" keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" />
   			</div>
 		</div>
 		<div class="row">

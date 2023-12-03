@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.message.dbentity.AmpMessageSettings"
+		table="AMP_MESSAGE_SETTINGS">
+
+		<id name="id" column="message_settings_Id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_MESSAGE_SETTINGS_seq</param>
+			</generator>
+		</id>
+
+		<property name="msgRefreshTime" column="msg_refresh_time" type="java.lang.Long" />
+		<property name="msgStoragePerMsgType" column="msg_storage_per_msg_type"
+			type="java.lang.Long" />
+		<property name="daysForAdvanceAlertsWarnings" column="days_for_advance_alerts_warnin"
+			type="java.lang.Long" />
+		<property name="emailMsgs" column="is_emailable" type="java.lang.Long" />
+
+	</class>
+</hibernate-mapping>

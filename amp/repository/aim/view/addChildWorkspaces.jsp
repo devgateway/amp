@@ -16,7 +16,7 @@
 	<!--
 	
 	function searchOrganization() {
-		<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+		<digi:context name="addChild" property="context/ampModule/moduleinstance/addChildWorkspaces.do" />
 		document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=admin&childorgs=true";
 		document.aimUpdateWorkspaceForm.submit();
 		return true;
@@ -74,7 +74,7 @@
 
 		//var tCat   = document.aimUpdateWorkspaceForm.childTeamTypeId.value;
 
-		<digi:context name="getChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+		<digi:context name="getChild" property="context/ampModule/moduleinstance/addChildWorkspaces.do" />
 
 		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+wsType+"&popupReset=true&dest="+dest;
 
@@ -90,7 +90,7 @@
 
 		var dest = document.aimUpdateWorkspaceForm.dest.value;
 
-		<digi:context name="addChild" property="context/module/moduleinstance/childWorkspacesAdded.do" />
+		<digi:context name="addChild" property="context/ampModule/moduleinstance/childWorkspacesAdded.do" />
 
 		document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest="+dest;
 
@@ -106,7 +106,7 @@ function childOrgsAdded() {
 
 		var dest = document.aimUpdateWorkspaceForm.dest.value;
 
-		<digi:context name="addChild" property="context/module/moduleinstance/childWorkspacesAdded.do" />
+		<digi:context name="addChild" property="context/ampModule/moduleinstance/childWorkspacesAdded.do" />
 
 		document.aimUpdateWorkspaceForm.action = "<%=addChild%>?childorgs=true&dest="+dest;
 

@@ -9,11 +9,11 @@
 	<page page="404" name="http404layout" title="Blank site page title http error 404" />
 </secondary-pages>
 
-<module>
+<ampModule>
 	<page name="exceptionPage">exceptionPage.jsp</page>
 	<page name="500">500.jsp</page>
 	<page name="400">400.jsp</page>
 	<page name="404">404.jsp</page>
-</module>
+</ampModule>
 
 </config>

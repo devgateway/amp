@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+<title>AMP - Aid Management Platform</title>
+
+<link href='/TEMPLATE/ampTemplate/css_2/amp-admin-wicket.css' rel='stylesheet' type='text/css'>
+<link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+<link href='/TEMPLATE/ampTemplate/css_2/menu.css' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/button/assets/skins/sam/button.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/tabs/css/bootstrap.css">
+<!--[if IE 6]><link href='/TEMPLATE/ampTemplate/css_2/amp_ie_hacks_6.css' rel='stylesheet' type='text/css'><![endif]-->
+<!--[if IE 7]><link href='/TEMPLATE/ampTemplate/css_2/amp_ie_hacks_7.css' rel='stylesheet' type='text/css'><![endif]-->
+<!--[if IE 8]><link href='/TEMPLATE/ampTemplate/css_2/amp_ie_hacks_8.css' rel='stylesheet' type='text/css'><![endif]-->
+
+
+<wicket:head></wicket:head>
+<!-- real unicode support for regex (required, for example, for cyrillic matching), via xregexp http://xregexp.com -->
+<script src="/TEMPLATE/ampTemplate/js_2/xregexp/xregexp-min.js"></script>
+<script src="/TEMPLATE/ampTemplate/js_2/xregexp/unicode-base.js"></script>    
+    
+
+<script src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/container/container_core-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/js_2/yui/button/button-min.js" type="text/javascript"> </script>
+<script src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js" type="text/javascript"></script>
+<script src="/repository/bootstrap/bootstrap.min.js"></script>
+
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- HEADER START -->
+	 <div id="amp-header"></div>
+	 <div wicket:id="wHeader" style="min-height: 76px; min-width: 1000px;"/>
+	
+<!-- BREADCRUMP START -->
+<div class="breadcrump">
+	<div class="centering">
+		<div class="breadcrump_cont">
+			<a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>
+			&nbsp;&gt;&nbsp;
+			<span class="sec_name">Permissions</span>
+		</div>
+	</div>
+</div>
+<!-- BREADCRUMP END -->
+<div align="right">
+&nbsp;
+</div>
+<div align="right">
+&nbsp;
+</div>
+<!-- MAIN CONTENT PART START -->
+<wicket:child/>
+<!-- MAIN CONTENT PART END -->
+<div align="right">
+<input type="button" wicket:id="fmmode" value="FM Mode" class="buttonx" />
+</div>
+<!-- FOOTER START -->
+	<div wicket:id="wFooter"/>
+
+</body>
+</html>

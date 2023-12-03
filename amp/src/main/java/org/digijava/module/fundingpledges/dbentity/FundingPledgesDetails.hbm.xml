@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesDetails" table="AMP_FUNDING_PLEDGES_DETAILS">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_PLEDGES_DETAILS_seq</param>
+			</generator>
+		</id>
+		
+		<property name="amount" column="amount" type="java.lang.Double"/>
+		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.ampModule.fundingpledges.dbentity.FundingPledges"></many-to-one>
+		<many-to-one name="pledgetype" column="pledge_type" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue"/>
+		<many-to-one name="currency" column="currency" class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+		<many-to-one name="typeOfAssistance" column="type_of_assistance" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue"/>
+		<many-to-one name="aidmodality" column="aid_modality" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue"/>
+		<property name="fundingYear" column="year" type="java.lang.String" />
+		
+		<property name="fundingDateStart" column="dateStart" type="java.util.Date" />
+		<property name="fundingDateEnd" column="dateEnd" type="java.util.Date" />
+	</class>
+</hibernate-mapping>

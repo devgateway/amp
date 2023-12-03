@@ -1,0 +1,29 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading" class="invisible-item">
+	</tr>
+	<tr class="wicketFundingRowItem" wicket:id="listExp">
+		<td>
+    	    <div wicket:id="freezingDateValidator"></div>
+            <div>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="adjustmentType"/>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="fundingAmount"/>
+                <span class="wicketFloatLeft wicketFundingBoxItem wicketClearRight">
+                    &nbsp;
+                </span>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="classification"/>
+                
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="expenditureClass"/>
+                
+                <span  class="wicketFloatLeft wicketFundingBoxItem" wicket:id="expenditureClassRequired"/>
+                
+                
+            </div>
+        </td>
+		<td>
+			<span wicket:id="delExp"/>
+		</td>
+	</tr>
+    <tr>
+        <td><span wicket:id="expandableNavigator" /></td>
+    </tr>
+</wicket:extend>

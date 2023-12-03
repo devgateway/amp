@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-19684</jira>
+	<keyword>gazetteer service PostGIS</keyword>
+	<author>jdeanquin</author>
+	<description>fix gazetteer trigger </description>
+	<apply>
+		<script>
+			<lang delimiter="@" type="postgres">
+				CREATE OR REPLACE FUNCTION update_geometry_amp_locator()
+					RETURNS TRIGGER AS
+						$BODY$
+							BEGIN
+								NEW.thegeometry:=ST_PointFromText('POINT(' || NEW.longitude || ' ' || NEW.latitude || ')', 4326);
+								return NEW;
+							end;
+						$BODY$
+				LANGUAGE plpgsql VOLATILE;@@@
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

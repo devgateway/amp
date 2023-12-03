@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-15637</jira>
+  <keyword>lucene</keyword>
+  <author>mpostelnicu</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			DELETE FROM amp_lucene_index WHERE idxname='activity';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -1,0 +1,30 @@
+<wicket:extend>
+	<div>
+		<table style="padding-top: 3px; padding-bottom: 3px;" width="100%">
+			<tr>
+				<td>
+					<table wicket:id="comment" cellpadding="0px" cellspacing="0px" width="100%" style="line-height: 14px;">
+						<tr style="background: #D6D6D6;" height="10px">
+							<td colspan="2" align="left">
+								By: <span wicket:id="userName">[User Name]</span> 
+							</td>
+							<td width="17px">
+								<span wicket:id="deleteComment"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" wicket:id="body" style="word-break: break-all;">
+								[The comment body]
+							</td>	
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div style="vertical-align: center;">
+		<form wicket:id="form">
+			<input class="inputx" style="width: 250px; font-size: 12px; margin-left:20px; margin-bottom:13px;" wicket:id="addComment"/><img wicket:id="addCommentButton" src="/TEMPLATE/ampTemplate/img_2/ico_add.gif" border="0" />
+		</form>
+	</div>
+</wicket:extend>

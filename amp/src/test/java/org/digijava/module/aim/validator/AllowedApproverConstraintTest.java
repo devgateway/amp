@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ FeaturesUtil.class, DbUtil.class })
-public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest<AllowedApproverConstraint> {
+public class AllowedApproverConstraintTest extends org.digijava.module.aim.validator.AbstractActivityValidatorTest<AllowedApproverConstraint> {
 
     private static final Long NOT_APPROVER_TEAM_MEMBER_ID = 200l;
     private static final Long CROSS_TEAM_ID = 15l;

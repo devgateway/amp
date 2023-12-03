@@ -9,7 +9,7 @@
 <script language="JavaScript">
 
 	function toggleFeature(id) {
-		<digi:context name="urlVal" property="context/module/moduleinstance/featureManager.do" />			  
+		<digi:context name="urlVal" property="context/ampModule/moduleinstance/featureManager.do" />
 		document.aimFeatureManagerForm.action = "<%= urlVal %>?toggle=true&fId="+id;
 		document.aimFeatureManagerForm.submit();		
 	}
@@ -28,7 +28,7 @@
 	</td></tr>
 	<digi:form action="/featureManager.do" method="post" >
 	<logic:iterate name="aimFeatureManagerForm" property="features" id="feature"
-		type="org.digijava.module.aim.dbentity.AmpFeature">	
+		type="org.digijava.ampModule.aim.dbentity.AmpFeature">
 		<tr bgcolor="#ffffff">
 			<html:hidden property="ampFeatures" value="<%=feature.getNameTrimmed() %>" />
 			<td width="9">

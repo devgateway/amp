@@ -1,9 +1,9 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
-<%@ page import="org.digijava.module.aim.util.IndicatorUtil"%>
+<%@ page import="org.digijava.ampModule.aim.helper.ChartGenerator"%>
+<%@ page import="org.digijava.ampModule.aim.util.IndicatorUtil"%>
 <%@ page import="java.io.PrintWriter"%>
-<%@ page import="org.digijava.module.aim.util.TeamMemberUtil"%>
-<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@ page import="org.digijava.ampModule.aim.util.TeamMemberUtil"%>
+<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -14,25 +14,25 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <jsp:include page="activityViewWorkspaces.jsp" flush="true" />
-<%@ page import="org.digijava.module.aim.util.TeamUtil" %>
+<%@ page import="org.digijava.ampModule.aim.util.TeamUtil" %>
 <style type="text/css">
 	.legend_label a.trnClass { color:yellow;}
 </style>
 
-<script language="JavaScript1.2" type="text/javascript"src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"> </script>
+<script language="JavaScript1.2" type="text/javascript"src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"> </script>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/yui/yahoo/yahoo-min.js"/>" ></script>
 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"> </script>
+<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"> </script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/yahoo-dom-event/yahoo-dom-event.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/container/container-min.js'/>" ></script>
@@ -46,19 +46,19 @@
 	</DIV>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
 
 <%
 	//Quick fix AMP-6573 please check it
 	if (request.getParameter("currentlyEditing") != null) {
 %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
 <%
 	}
 %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<link rel="stylesheet" type="text/css" href="<digi:file src= 'module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="<digi:file src= 'ampModule/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
 
 <script language="JavaScript">
 
@@ -100,7 +100,7 @@ function exportToWord (actId) {
 
 function gotoStep(value) {
 	document.aimEditActivityForm.step.value = value;
-	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+	<digi:context name="step" property="context/ampModule/moduleinstance/addActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%=step%>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -108,7 +108,7 @@ function gotoStep(value) {
 
 function backClicked() {
 	document.aimEditActivityForm.step.value = "8";
-	<digi:context name="backStep" property="context/module/moduleinstance/addActivity.do?edit=true" />
+	<digi:context name="backStep" property="context/ampModule/moduleinstance/addActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%=backStep%>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -146,7 +146,7 @@ function disable() {
 
 function viewChanges(){
 	openNewWindow(650,200);
-	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
+	<digi:context name="showLog" property="context/ampModule/moduleinstance/showActivityLog.do" />
 	popupPointer.document.location.href = "<%=showLog%>?activityId=${aimEditActivityForm.activityId}";
 }
 
@@ -405,7 +405,7 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
-			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
+			<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Commitments</digi:trn>:<br/> 
@@ -440,8 +440,8 @@ function collapseAll() {
 		         </c:if>
 		         <hr/>
 		         </c:if>
-		       </module:display>
-			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
+		       </ampModule:display>
+			<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Disbursements</digi:trn>:<br/>
@@ -476,8 +476,8 @@ function collapseAll() {
 		         </c:if>
 			<hr/>
 			</c:if>
-			</module:display>
-			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
+			</ampModule:display>
+			<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
@@ -527,7 +527,7 @@ function collapseAll() {
 		         </c:if>
 			    <hr/>
 			</c:if>
-			</module:display>
+			</ampModule:display>
 			<c:if test="${not empty aimEditActivityForm.funding.totalMtefProjections}">
 					<digi:trn>Total MTEF Projections</digi:trn>:<br/>
 					<b>
@@ -565,7 +565,7 @@ function collapseAll() {
 		<digi:trn>Activity created on</digi:trn>:<br/>
 		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
 		<hr/>
-		<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
+		<ampModule:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 				<digi:trn>Activity last updated by</digi:trn>: <br/>
 				<b>
@@ -573,14 +573,14 @@ function collapseAll() {
 					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
 				</b>
 			</logic:notEmpty>
-		</module:display>
+		</ampModule:display>
 		<hr/>
-		<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
+		<ampModule:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 				<digi:trn>Activity updated on</digi:trn>: <br/>
 				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
 			</logic:notEmpty>
-		</module:display>
+		</ampModule:display>
 		<hr/>
 
 		<digi:trn>Created in workspace</digi:trn>: <br/>
@@ -650,7 +650,7 @@ function collapseAll() {
 
 
 <!-- M & E  SECTION -->
-<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
+<ampModule:display name="M & E" parentModule="MONITORING AND EVALUATING">
 
 	<fieldset>
 		<legend>
@@ -710,7 +710,7 @@ function collapseAll() {
 			</table>
 		</div>
 	</fieldset>
-</module:display>
+</ampModule:display>
 
 <!-- END OF M & E  SECTION -->
 
@@ -742,7 +742,7 @@ function collapseAll() {
 <jsp:include page="activitypreview/budgetStructureSection.jsp" />
 
 <!--Total Number of Funding Sources STRUCTURE		-->
-<module:display name="/Activity Form/Funding/Overview Section/Total Number of Funding Sources"
+<ampModule:display name="/Activity Form/Funding/Overview Section/Total Number of Funding Sources"
 				parentModule="/Activity Form/Funding/Overview Section">
 	<fieldset>
 		<legend>
@@ -765,10 +765,10 @@ function collapseAll() {
 			</table>
 		</div>
 	</fieldset>
-</module:display>
+</ampModule:display>
 <!-- END Total Number of Funding Sources SECTION -->
 
-	<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
+	<ampModule:display name="/Activity Form/Funding" parentModule="/Activity Form">
 		<fieldset>
 			<legend>
 				<span class=legend_label id="fundinglink" style="cursor: pointer;">
@@ -780,11 +780,11 @@ function collapseAll() {
 				<jsp:include page="activitypreview/previewActivityFunding.jsp"/>
 			</div>
 		</fieldset>
-	</module:display>
+	</ampModule:display>
 	<!-- END FUNDING SECTION -->
 
 
-	 <module:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
+	 <ampModule:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
         <fieldset>
             <legend>
                 <span class=legend_label id="aidEffectivenesLink"
@@ -796,17 +796,17 @@ function collapseAll() {
 
             <logic:notEmpty name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
                 <logic:iterate id="option" name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
-                    <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
+                    <ampModule:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
                         parentModule="/Activity Form/Aid Effectivenes">
                         <div>
                             <span class="word_break bold">${fn:escapeXml(option.indicator.ampIndicatorName)}</span> -
                             <span class="word_break">${fn:escapeXml(option.ampIndicatorOptionName)}</span>
                         </div>
-                    </module:display>
+                    </ampModule:display>
                 </logic:iterate>
             </logic:notEmpty>
         </fieldset>
-     </module:display>
+     </ampModule:display>
 
 <!-- REGIONAL FUNDING -->
 <jsp:include page="activitypreview/regionalFundingSection.jsp" />
@@ -834,7 +834,7 @@ function collapseAll() {
 <%}%>
 		
 <c:if test="${(sessionScope.currentMember != null) || (not hideContactsForPublicUsers)}">
-	<module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
+	<ampModule:display name="/Activity Form/Contacts" parentModule="/Activity Form">
 		<fieldset>
 			<legend>
 				<span class=legend_label id="contactlink" style="cursor: pointer;">
@@ -842,51 +842,51 @@ function collapseAll() {
 				</span>	
 			</legend>
 			<div id="contactdiv" class="toggleDiv">
-				<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
+				<ampModule:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
 						<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
 						<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" scope="request" />
 						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if> 
-				</module:display>	
-				<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
+				</ampModule:display>
+				<ampModule:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
 						<digi:trn>MOFED contact information</digi:trn>:&nbsp;
                         <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" scope="request" />
 						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if> 
-				</module:display>
+				</ampModule:display>
 				
-				<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
+				<ampModule:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 						<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
                         <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" scope="request" />
 						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if>
-				</module:display>
+				</ampModule:display>
 						
-				<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
+				<ampModule:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 						<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
                         <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" scope="request" />
 						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if> 
-				</module:display>
+				</ampModule:display>
 							
-				<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information"  parentModule="/Activity Form/Contacts">
+				<ampModule:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information"  parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
                         <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" scope="request" />
 						<jsp:include page="activitypreview/contactInformation.jsp"/>
 					</c:if>
-				</module:display>
+				</ampModule:display>
 			</div>
 		</fieldset>
-	</module:display>
+	</ampModule:display>
 </c:if>
 <!-- END CONTACT INFORMATION -->
 
@@ -909,9 +909,9 @@ function collapseAll() {
 </table>
 </c:if>
 </div>
-<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
+<ampModule:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
  <div id="locationPopupMap" style="visibility:hidden;width:4px; height:3px;position:relative;"></div>
-</module:display>
+</ampModule:display>
 
 <!-- MAIN CONTENT PART END -->
 </digi:form>

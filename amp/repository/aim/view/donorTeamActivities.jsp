@@ -146,7 +146,7 @@
 
 		teamId = document.aimTeamActivitiesForm.teamId.value;
 
-		<digi:context name="sel" property="context/module/moduleinstance/getDonorActivityList.do" />
+		<digi:context name="sel" property="context/ampModule/moduleinstance/getDonorActivityList.do" />
 
 		url = "<%= sel %>~dnrTeamId=" + dnrTeamId + "~teamId=" + teamId + "~type=U" ;
 

@@ -7,12 +7,12 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <html>
 <body>
 <br /> <br />
 <bean:define toScope="request" id="showRemoveButton" value="true" />
-<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
+<bean:define toScope="request" id="documentsType" value="<%=org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
 <bean:define toScope="request" id="versioningRights" value="false" />
 <bean:define toScope="request" id="makePublicRights" value="false" />
 <bean:define toScope="request" id="showVersionsRights" value="false" />

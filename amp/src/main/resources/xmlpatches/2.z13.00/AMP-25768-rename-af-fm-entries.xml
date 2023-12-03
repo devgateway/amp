@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>AMP-25768</jira>
+	<author>ociubotaru</author>
+	<description>Moved two FM entries from /PROJECT MANAGEMENT/Project ID and Planning to /Activity Form</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+
+				-------------------------------------------------------------------------------------
+				-- '/PROJECT MANAGEMENT/Project ID and Planning/Identification/Activity Updated On' -> '/Activity Form/Identification/Activity Updated On'
+				-------------------------------------------------------------------------------------
+
+				-- create new FM ampModule
+				INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent) VALUES (
+				  nextval('amp_modules_visibility_seq'),
+				  '/Activity Form/Identification/Activity Updated On',
+				  NULL,
+				  TRUE,
+				  (SELECT id FROM amp_modules_visibility WHERE name LIKE '/Activity Form/Identification'));
+
+				-- copy template settings
+				INSERT INTO amp_modules_templates
+				SELECT (SELECT id FROM amp_modules_visibility WHERE name LIKE '/Activity Form/Identification/Activity Updated On'), ft.template
+				FROM amp_fields_visibility fv
+				  JOIN amp_features_visibility ftv ON fv.parent = ftv.id
+				  JOIN amp_modules_visibility mv ON ftv.parent = mv.id
+				  JOIN amp_modules_visibility mv2 ON mv.parent = mv2.id
+				  JOIN amp_fields_templates ft ON fv.id = ft.field
+				WHERE fv.name = 'Activity Updated On'
+					  AND ftv.name = 'Identification'
+					  AND mv.name = 'Project ID and Planning'
+					  AND mv2.name = 'PROJECT MANAGEMENT';
+
+				-------------------------------------------------------------------------------------
+				-- '/PROJECT MANAGEMENT/Project ID and Planning/Identification/Activity Last Updated by' -> '/Activity Form/Identification/Activity Last Updated by'
+				-------------------------------------------------------------------------------------
+
+				-- create new FM ampModule
+				INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent) VALUES (
+				  nextval('amp_modules_visibility_seq'),
+				  '/Activity Form/Identification/Activity Last Updated by',
+				  NULL,
+				  TRUE,
+				  (SELECT id FROM amp_modules_visibility WHERE name LIKE '/Activity Form/Identification'));
+
+				-- copy template settings
+				INSERT INTO amp_modules_templates
+				  SELECT (SELECT id FROM amp_modules_visibility WHERE name LIKE '/Activity Form/Identification/Activity Last Updated by'), ft.template
+				  FROM amp_fields_visibility fv
+					JOIN amp_features_visibility ftv ON fv.parent = ftv.id
+					JOIN amp_modules_visibility mv ON ftv.parent = mv.id
+					JOIN amp_modules_visibility mv2 ON mv.parent = mv2.id
+					JOIN amp_fields_templates ft ON fv.id = ft.field
+				  WHERE fv.name = 'Activity Last Updated by'
+						AND ftv.name = 'Identification'
+						AND mv.name = 'Project ID and Planning'
+						AND mv2.name = 'PROJECT MANAGEMENT';
+
+				-- drop old template settings
+				DELETE FROM amp_fields_templates WHERE field IN (
+				  SELECT fv.id
+				  FROM amp_fields_visibility fv
+					JOIN amp_features_visibility ftv ON fv.parent = ftv.id
+					JOIN amp_modules_visibility mv ON ftv.parent = mv.id
+					JOIN amp_modules_visibility mv2 ON mv.parent = mv2.id
+				  WHERE fv.name = 'Activity Last Updated by'
+						AND ftv.name = 'Identification'
+						AND mv.name = 'Project ID and Planning'
+						AND mv2.name = 'PROJECT MANAGEMENT'
+				);
+
+				-- drop FM field
+				DELETE FROM amp_fields_visibility where id IN (
+				  SELECT fv.id
+				  FROM amp_fields_visibility fv
+					JOIN amp_features_visibility ftv ON fv.parent = ftv.id
+					JOIN amp_modules_visibility mv ON ftv.parent = mv.id
+					JOIN amp_modules_visibility mv2 ON mv.parent = mv2.id
+				  WHERE fv.name = 'Activity Last Updated by'
+						AND ftv.name = 'Identification'
+						AND mv.name = 'Project ID and Planning'
+						AND mv2.name = 'PROJECT MANAGEMENT'
+				);
+
+
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -193,21 +193,21 @@
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image"	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image"	width="15" height="10"/>
 														<digi:link href="/editOrgType.do?action=create" >
 															<digi:trn key="aim:addNewOrgType">Add Type</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image"	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image"	width="15" height="10"/>
 														<digi:link href="/organisationManager.do" >
 															<digi:trn key="aim:organizationManager">Organization Manager</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
 													<digi:link href="/admin.do">
 													<digi:trn key="aim:AmpAdminHome">
 													Admin Home

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15322</jira>
+	<keyword>programs</keyword>
+	<author>apopescu</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="sql">
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program','tertiaryprogram_0','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_0', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 1','tertiaryprogram_1','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_1', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 2','tertiaryprogram_2','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_2', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 3','tertiaryprogram_3','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_3', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 4','tertiaryprogram_4','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_4', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 5','tertiaryprogram_5','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_5', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 6','tertiaryprogram_6','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_6', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 7','tertiaryprogram_7','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_7', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+				insert into amp_columns(columnid, columnname, aliasname, celltype, extractorview,relatedcontentpersisterclass,filterretrievable) values(nextval('amp_columns_seq'),'Tertiary Program Level 8','tertiaryprogram_8','org.dgfoundation.amp.ar.cell.MetaTextCell','v_tertiaryprogram_level_8', 'org.digijava.ampModule.aim.dbentity.AmpTheme',true );
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

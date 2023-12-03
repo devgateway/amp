@@ -6,12 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <digi:instance property="aimIndicatorForm" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
     <!--
     function searchIndicators(){	
-    	<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?showAddIndPage=false" />
+    	<digi:context name="searchInd" property="context/ampModule/moduleinstance/searchIndicators.do?showAddIndPage=false" />
         document.aimIndicatorForm.action = "<%=searchInd%>";
         document.aimIndicatorForm.target = "_self";
         document.aimIndicatorForm.submit();	
@@ -24,7 +24,7 @@
         if(addbutton == '2')
         	emptychk = doesItHaveValue2()
         if(emptychk == true) {
-        	<digi:context name="addInd" property="context/module/moduleinstance/addIndicatorsTL.do"/>
+        	<digi:context name="addInd" property="context/ampModule/moduleinstance/addIndicatorsTL.do"/>
             document.aimIndicatorForm.action = "<%=addInd%>~forStep9=true";
             document.aimIndicatorForm.target = window.opener.name;
             document.aimIndicatorForm.submit();
@@ -35,7 +35,7 @@
     function addNewIndicatorTL(selectedSectsSize) {	
     	var valid = validateForm(selectedSectsSize);
         if (valid == true) {
-        	<digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
+        	<digi:context name="addNewInd" property="context/ampModule/moduleinstance/addNewIndicatorTL.do"/>
             document.aimIndicatorForm.action = "<%=addNewInd%>";
             document.aimIndicatorForm.target = "_self";
             document.aimIndicatorForm.submit();
@@ -97,22 +97,22 @@
     }        
 
     function clearform() {
-    	<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?action=clear"/>
+    	<digi:context name="searchInd" property="context/ampModule/moduleinstance/searchIndicators.do?action=clear"/>
         document.aimIndicatorForm.action = "<%= searchInd%>";
         document.aimIndicatorForm.submit();
     }
         
     function addSectors() {		
-    	<digi:context name="addSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
+    	<digi:context name="addSector" property="context/ampModule/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
         openURLinWindow('<%= addSector%>',550,400);          
-        <digi:context name="justSubmit" property="context/module/moduleinstance/sectorActions.do?actionType=justSubmit" /> 
+        <digi:context name="justSubmit" property="context/ampModule/moduleinstance/sectorActions.do?actionType=justSubmit" />
         aimIndicatorForm.action = "<%=justSubmit%>";  
         aimIndicatorForm.submit();    
     }
 
     function removeSelSectors() {	
     	if (validateSector()) {
-        	<digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
+        	<digi:context name="remSec" property="context/ampModule/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
             document.aimIndicatorForm.action = "<%= remSec%>";
             document.aimIndicatorForm.target = "_self"
             document.aimIndicatorForm.submit();
@@ -146,7 +146,7 @@
  	}
     
     function gotoCreateIndPage() {
-    	<digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
+    	<digi:context name="addIndPage" property="context/ampModule/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
         document.aimIndicatorForm.action = "<%=addIndPage%>";		
         document.aimIndicatorForm.submit();
     }

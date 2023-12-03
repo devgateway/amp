@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.ampModule.um.dbentity.SuspendLogin" table="DG_SUSPEND_LOGIN" lazy="false">
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">dg_suspend_login_seq</param>
+            </generator>
+        </id>
+        <property column="name" name="name" type="java.lang.String" />
+        <property column="SUSPEND_TIL" name="suspendTil" type="java.util.Calendar" />
+        <property column="REASON_TEXT" name="reasonText" type="java.lang.String" />
+        <property column="EXPIRES" name="expires" type="java.lang.Boolean" />
+        <property column="ACTIVE" name="active" type="java.lang.Boolean" />
+
+
+        <set name="users" table="DG_SUSPEND_LOGIN_USERS" lazy="true" cascade="none">
+            <key column="id" />
+            <many-to-many class="org.digijava.kernel.user.User"/>
+        </set>
+
+
+    </class>
+</hibernate-mapping>

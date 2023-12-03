@@ -9,7 +9,7 @@
 
 <html>
 <body bgcolor="#ffffff">
-<digi:form method="post" action="/exceptionReport.do" module="exception">
+<digi:form method="post" action="/exceptionReport.do" ampModule="exception">
 
 <script language="JavaScript">
 <!--
@@ -95,7 +95,7 @@
         				<br/>
         				<span style="font-size:14px">
 				        	<b><digi:trn key="exception:newErrorText2">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience. </digi:trn></b><br/>
-				        	<c:if test="<%= org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_ECS).compareTo(\"true\") == 0 %>">
+				        	<c:if test="<%= org.digijava.ampModule.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.ampModule.aim.helper.Constants.GLOBALSETTINGS_ECS).compareTo(\"true\") == 0 %>">
 					        	<b><font color="blue"><digi:trn key="exception:errorHandled">This issue has been reported to the technical support team for resolution.</digi:trn></font></b><br/>
 				        	</c:if>
 				        	<br/>
@@ -126,7 +126,7 @@
 				        		<li><digi:trn key="exception:goToThe">Go to the</digi:trn> 
 					        		<logic:present name="ampAdmin" scope="session">
 										<logic:equal name="ampAdmin" value="yes">
-											<digi:link href="/admin.do" module="aim" >
+											<digi:link href="/admin.do" ampModule="aim" >
 						                        <digi:trn key="aim:adminPage">Admin Page</digi:trn>
 						                    </digi:link>
 										</logic:equal>

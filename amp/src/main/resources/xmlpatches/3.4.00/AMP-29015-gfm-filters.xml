@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-29015</jira>
+    <keyword>clean filters values from feature manager</keyword>
+    <author>vchihai</author>
+    <description>Clean filter values from feature manager</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                DELETE FROM amp_features_templates WHERE feature IN (
+					SELECT id FROM amp_features_visibility
+					WHERE name = 'Filters');
+
+				DELETE FROM amp_features_visibility WHERE name = 'Filters';
+
+				DELETE FROM amp_modules_templates WHERE ampModule IN (
+				    SELECT id FROM amp_modules_visibility
+				    WHERE name = 'Public Reports and Tabs');
+
+			    DELETE FROM amp_modules_visibility WHERE name = 'Public Reports and Tabs';
+
+			    DELETE FROM amp_features_templates WHERE feature IN (
+					SELECT id FROM amp_features_visibility
+					WHERE name = 'Archived');
+
+				DELETE FROM amp_features_visibility WHERE name = 'Archived';
+
+				DELETE FROM amp_features_templates WHERE feature IN (
+					SELECT id FROM amp_features_visibility
+					WHERE name = 'Actual Approval Year');
+
+				DELETE FROM amp_features_visibility WHERE name = 'Actual Approval Year';
+
+				UPDATE amp_features_visibility SET name = 'Computed Year' WHERE name = 'Computed Columns Filters';
+
+				UPDATE amp_modules_visibility SET name = 'Filter Widget' WHERE name = 'Filter Section';
+
+				DELETE FROM amp_filter_data WHERE property_name = 'showArchived';
+
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

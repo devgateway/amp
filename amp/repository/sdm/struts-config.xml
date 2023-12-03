@@ -3,7 +3,7 @@
 
 <struts-config>
   <form-beans>
-    <form-bean name="sdmForm" type="org.digijava.module.sdm.form.SdmForm" />
+    <form-bean name="sdmForm" type="org.digijava.ampModule.sdm.form.SdmForm" />
   </form-beans>
 
   <action-mappings>
@@ -13,77 +13,77 @@
       <action forward="/sdm/showDocumentsList.do" path="/sdm/index" />
  	<!-- End default view definition -->
 
-<!--    <action type="org.digijava.module.sdm.action.ShowImage" scope="request" path="/sdm/showImage" /> -->
-    <action type="org.digijava.module.sdm.action.RenderTeaser" scope="request" path="/sdm/renderTeaser" />
+<!--    <action type="org.digijava.ampModule.sdm.action.ShowImage" scope="request" path="/sdm/showImage" /> -->
+    <action type="org.digijava.ampModule.sdm.action.RenderTeaser" scope="request" path="/sdm/renderTeaser" />
     <!-- -->
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowImage" scope="session" path="/sdm/showImage" />
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowFile" scope="session" path="/sdm/showFile" />
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowImage" scope="session" path="/sdm/showImage" />
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowFile" scope="session" path="/sdm/showFile" />
 
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowDocumentsList" scope="request" path="/sdm/showDocumentsList">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowDocumentsList" scope="request" path="/sdm/showDocumentsList">
       <forward name="forward" path="/showLayout.do?layout=sdm_DocList" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowCreateDocument" scope="request" path="/sdm/showCreateDocument">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowCreateDocument" scope="request" path="/sdm/showCreateDocument">
       <forward name="forward" path="/showLayout.do?layout=sdm_createDoc" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.CreateDocument" scope="request" path="/sdm/createDocument">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.CreateDocument" scope="request" path="/sdm/createDocument">
       <forward name="forward" path="/showLayout.do?layout=sdm_createDoc" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowEditDocument" scope="session" path="/sdm/showEditDocument">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowEditDocument" scope="session" path="/sdm/showEditDocument">
       <forward name="forward" path="/showLayout.do?layout=sdm_editDoc" />
     </action>
     <!-- -->
     <!-- -->
-    <action name="sdmForm" type="org.digijava.module.sdm.action.SaveFile" scope="session" input="/showLayout.do?layout=sdm_file" path="/sdm/saveFile" >
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.SaveFile" scope="session" input="/showLayout.do?layout=sdm_file" path="/sdm/saveFile" >
       <forward name="forward" path="/sdm/showEditDocument.do" redirect="true" />
       <forward name="error" path="/showLayout.do?layout=sdm_error" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.SaveHTMLCode" scope="session" path="/sdm/saveHTMLCode" >
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.SaveHTMLCode" scope="session" path="/sdm/saveHTMLCode" >
       <forward name="forward" path="/sdm/showEditDocument.do" redirect="true" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.SaveHyperLink" scope="session" path="/sdm/saveHyperLink" >
-      <forward name="forward" path="/sdm/showEditDocument.do" redirect="true" />
-      <forward name="error" path="/showLayout.do?layout=sdm_error" />
-    </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.SavePicture" scope="session" input="/showLayout.do?layout=sdm_picture" path="/sdm/savePicture" >
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.SaveHyperLink" scope="session" path="/sdm/saveHyperLink" >
       <forward name="forward" path="/sdm/showEditDocument.do" redirect="true" />
       <forward name="error" path="/showLayout.do?layout=sdm_error" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.SaveText" scope="session" path="/sdm/saveText" >
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.SavePicture" scope="session" input="/showLayout.do?layout=sdm_picture" path="/sdm/savePicture" >
+      <forward name="forward" path="/sdm/showEditDocument.do" redirect="true" />
+      <forward name="error" path="/showLayout.do?layout=sdm_error" />
+    </action>
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.SaveText" scope="session" path="/sdm/saveText" >
 <!--      <forward name="forward" path="/showLayout.do?layout=sdm_editDoc" /> -->
       <forward name="forward" path="/sdm/showEditDocument.do" redirect="true" />
     </action>
     <!-- -->
-    <action name="sdmForm" type="org.digijava.module.sdm.action.DeleteItem" scope="session" path="/sdm/deleteItem">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.DeleteItem" scope="session" path="/sdm/deleteItem">
       <forward name="forward" path="/sdm/showEditDocument.do" redirect="true" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.MoveUpItem" scope="session" path="/sdm/moveUpItem" >
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.MoveUpItem" scope="session" path="/sdm/moveUpItem" >
       <forward name="forward" path="/showLayout.do?layout=sdm_editDoc" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.MoveDownItem" scope="session" path="/sdm/moveDownItem" >
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.MoveDownItem" scope="session" path="/sdm/moveDownItem" >
       <forward name="forward" path="/showLayout.do?layout=sdm_editDoc" />
     </action>
     <!-- -->
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowEditText" scope="session" path="/sdm/showEditText">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowEditText" scope="session" path="/sdm/showEditText">
       <forward name="forward" path="/showLayout.do?layout=sdm_text" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowEditHTMLCode" scope="session" path="/sdm/showEditHTMLCode">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowEditHTMLCode" scope="session" path="/sdm/showEditHTMLCode">
       <forward name="forward" path="/showLayout.do?layout=sdm_html" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowEditLink" scope="session" path="/sdm/showEditLink">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowEditLink" scope="session" path="/sdm/showEditLink">
       <forward name="forward" path="/showLayout.do?layout=sdm_link" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowEditPicture" scope="session" path="/sdm/showEditPicture">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowEditPicture" scope="session" path="/sdm/showEditPicture">
       <forward name="forward" path="/showLayout.do?layout=sdm_picture" />
     </action>
-    <action name="sdmForm" type="org.digijava.module.sdm.action.ShowEditFile" scope="session" path="/sdm/showEditFile">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.ShowEditFile" scope="session" path="/sdm/showEditFile">
       <forward name="forward" path="/showLayout.do?layout=sdm_file" />
     </action>
      <!-- -->
-    <action name="sdmForm" type="org.digijava.module.sdm.action.PreviewDocument" scope="session" path="/sdm/previewDocument">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.PreviewDocument" scope="session" path="/sdm/previewDocument">
       <forward name="forward" path="/showLayout.do?layout=sdm_preview" />
     </action>
     <!-- -->
-    <action name="sdmForm" type="org.digijava.module.sdm.action.DeleteDocument" scope="session" path="/sdm/deleteDocument">
+    <action name="sdmForm" type="org.digijava.ampModule.sdm.action.DeleteDocument" scope="session" path="/sdm/deleteDocument">
       <forward name="forward" path="/sdm/showCreateDocument.do" redirect="true" />
     </action>
 

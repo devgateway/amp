@@ -7,12 +7,12 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <!--<logic:present name="addButton" scope="request">-->
 <!--	<script language="JavaScript">-->
@@ -29,7 +29,7 @@
 		var check = checkSectorEmpty();
 		if(check)
 		{
- // <digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do?edit=true"/>
+ // <digi:context name="selSector" property="context/ampModule/moduleinstance/sectorSelected.do?edit=true"/>
 	    // document.aimSelectSectorForm.action = "<%= selSector %>";
 		// document.aimSelectSectorForm.target = window.opener.name;
 	    document.aimSelectSectorForm.submit();
@@ -55,7 +55,7 @@
 				document.aimSelectSectorForm.subsectorLevel2.value = -1;
 			}
 		}
-		<digi:context name="selSector" property="context/module/moduleinstance/selectSectors.do?edit=true"/>
+		<digi:context name="selSector" property="context/ampModule/moduleinstance/selectSectors.do?edit=true"/>
 	    document.aimSelectSectorForm.action = "<%= selSector %>";
   		document.aimSelectSectorForm.submit();									
 	}	
@@ -140,7 +140,7 @@ function checkNumeric(objName,comma,period,hyphen)
 			var flg=checkEmpty();
 			if(flg)
 			{
-			 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectors.do?edit=true"/>
+			 <digi:context name="searchSctr" property="context/ampModule/moduleinstance/searchSectors.do?edit=true"/>
 			 document.aimSelectSectorForm.action = "<%= searchSctr %>";
 			 document.aimSelectSectorForm.submit();
 			 return true;

@@ -50,7 +50,7 @@ function deleteEvent(){
                       <img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"/>
                   </a>
                   <a target="_blank"   title="Printing" onclick="window.close();" style="cursor: pointer;" >
-                      <digi:img src="module/aim/images/close.gif" border="0" alt="Close" height="30"/>
+                      <digi:img src="ampModule/aim/images/close.gif" border="0" alt="Close" height="30"/>
                   </a>
               </div>
           </td>
@@ -123,7 +123,7 @@ function deleteEvent(){
 				              </td>
 				             </tr>
 				             <tr height="3px"><td colspan="2"></td></tr>
-				            <feature:display name="Event Type" module="Calendar">
+				            <feature:display name="Event Type" ampModule="Calendar">
 				            	<tr>
 					              <td style="font-family: Arial;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 					                <digi:trn key="calendar:eventsType">Event type</digi:trn>
@@ -135,7 +135,7 @@ function deleteEvent(){
 					            </tr>
 					            <tr height="3px"><td colspan="2"></td></tr>
 				            </feature:display>			            
-				            <feature:display name="Donors" module="Calendar">
+				            <feature:display name="Donors" ampModule="Calendar">
 				            	<tr>
 					              <td style="font-family: Arial;font-size: 12px; font-weight:bold;"nowrap="nowrap">
 					                <digi:trn key="cal:organizations">Organizations</digi:trn>

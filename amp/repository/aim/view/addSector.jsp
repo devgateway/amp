@@ -52,7 +52,7 @@
 
 			 {
 
-			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
+			<digi:context name="addSector" property="context/ampModule/moduleinstance/addSector.do?event=addSector" />
 
 			document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent=scheme";
 

@@ -3,10 +3,10 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 
 
-<module:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
 	<fieldset>
 	<legend>
 		<span class=legend_label id="lineMinistryObsLink" style="cursor: pointer;">
@@ -18,7 +18,7 @@
 		<c:if test="${not empty aimEditActivityForm.lineMinistryObservations.issues}">
 		<logic:iterate name="aimEditActivityForm" id="lineMinistryObs" property="lineMinistryObservations.issues">
 			<table style="width: 100%;">
-			<module:display name="/Activity Form/Line Ministry Observations/Observation" parentModule="/Activity Form/Line Ministry Observations">
+			<ampModule:display name="/Activity Form/Line Ministry Observations/Observation" parentModule="/Activity Form/Line Ministry Observations">
 				<tr bgcolor="#F0F0F0">
 				<td width="20%;">
 					<b><digi:trn>Observation</digi:trn>:</b>
@@ -27,8 +27,8 @@
 					<span class="word_break bold"><c:out value="${lineMinistryObs.name}"/></span>
 				</td>	
 				</tr>	
-			</module:display>
-			<module:display name="/Activity Form/Line Ministry Observations/Observation/Date" parentModule="/Activity Form/Line Ministry Observations/Observation">
+			</ampModule:display>
+			<ampModule:display name="/Activity Form/Line Ministry Observations/Observation/Date" parentModule="/Activity Form/Line Ministry Observations/Observation">
 				<tr bgcolor="#F0F0F0">
 				<td>
 					<digi:trn>Observation Date</digi:trn>:
@@ -38,7 +38,7 @@
 					<c:out value="${lineMinistryObs.issueDate}"/>
 				</td>
 				</tr>
-			</module:display>			
+			</ampModule:display>
 			<logic:iterate name="lineMinistryObs" id="measure" property="measures">
 			<tr bgcolor="#F0F0F0">
 			<td>
@@ -73,4 +73,4 @@
 		</c:if>
 	</div>
 	</fieldset>
-</module:display>
+</ampModule:display>

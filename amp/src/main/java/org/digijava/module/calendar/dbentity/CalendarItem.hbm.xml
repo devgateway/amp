@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.calendar.dbentity.CalendarItem" table="DG_CALENDAR_ITEM">
+		<!--<cache usage="read-write"/>-->
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_calendar_item_seq</param>
+			</generator>
+		</id>
+		<many-to-one name="calendar" column="CALENDAR_ID"
+			class="org.digijava.ampModule.calendar.dbentity.Calendar" cascade="none" />
+		<property name="userId" column="USER_ID" type="java.lang.Long" />
+		<property name="language" column="LANGUAGE" type="java.lang.String" />
+		<property name="title" column="TITLE" type="java.lang.String" />
+		<property name="description" column="DESCRIPTION" type="text" />
+		<property name="creationIp" column="CREATION_IP" type="java.lang.String" />
+		<property name="creationDate" column="CREATION_DATE" type="java.util.Date" />
+		<property name="approve" column="approve" type="java.lang.Integer" />
+		
+	</class>
+</hibernate-mapping>

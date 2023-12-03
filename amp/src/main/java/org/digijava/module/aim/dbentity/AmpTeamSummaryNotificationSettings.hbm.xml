@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.ampModule.aim.dbentity.AmpTeamSummaryNotificationSettings" table="amp_team_summary_notification_settings">
+        <cache usage="read-write" />
+        <id name="id" column="id">
+            <generator class="foreign">
+                <param name="property">ampTeam</param>
+            </generator>
+        </id>
+
+        <property name="notifyManager" column="notify_manager" type="java.lang.Boolean" />
+        <property name="notifyApprover" column="notify_approver" type="java.lang.Boolean" />
+
+        <one-to-one name="ampTeam" constrained="true" class="org.digijava.ampModule.aim.dbentity.AmpTeam" />
+
+    </class>
+</hibernate-mapping>

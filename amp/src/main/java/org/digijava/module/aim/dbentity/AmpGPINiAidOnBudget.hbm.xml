@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpGPINiAidOnBudget"
+		table="AMP_GPI_NI_AID_ON_BUDGET">
+		<cache usage="read-write" />
+		<id name="ampGPINiAidOnBudgetId" column="amp_gpi_ni_aid_on_budget_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_NI_AID_ON_BUDGET_seq</param>
+			</generator>
+		</id>
+			
+		<property name="amount" column="amount" type="java.lang.Double" access="field" />	
+		<property name="indicatorDate" column="indicator_date" type="java.util.Date" />			
+						
+		<many-to-one name="currency" column="currency_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none"
+			not-null="true" index = "amp_gpi_ni_aid_on_budget_currency_id"/>
+			
+		<many-to-one name="donor" column="donor_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none"
+			not-null="true"  index="idx_amp_gpi_ni_aid_on_budget_donor_id"/>
+	</class>
+</hibernate-mapping>

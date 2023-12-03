@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility" table="AMP_FEATURES_VISIBILITY" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_features_visibility_seq</param>
+			</generator>
+		</id>
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="description" column="description" type="java.lang.String" />
+		<property name="hasLevel" column="hasLevel" type="java.lang.Boolean" />
+
+		<set name="items" table="AMP_FIELDS_VISIBILITY" inverse="true" cascade="all-delete-orphan" lazy="false">
+			<cache usage="read-write" />
+			<key column="parent" />
+			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility" />
+		</set>
+
+		<many-to-one name="parent" column="parent"
+			class="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility" />
+
+		<set name="templates" table="amp_features_templates" inverse="true" lazy="false">
+			<cache usage="read-write" />
+			<key column="feature" />
+			<many-to-many column="template" class="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" />
+		</set>
+
+	</class>
+</hibernate-mapping>

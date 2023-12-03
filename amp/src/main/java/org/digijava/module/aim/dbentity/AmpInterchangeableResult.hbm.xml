@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.ampModule.aim.dbentity.AmpInterchangeableResult" table="AMP_INTERCHANGEABLE_RESULT" >
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_INTERCHANGEABLE_RESULT_seq</param>
+            </generator>
+        </id>
+        <property column="date" name="date" type="java.sql.Date" />
+        <property column="project_id" name="projectId" type="java.lang.String" />
+        <property column="activity_id" name="ampActivityId" type="java.lang.String" />
+        <property name="status" column="status">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.digijava.ampModule.aim.dbentity.AmpInterchangeableResult$AmpResultStatus</param>
+                <param name="useNamed">false</param>
+            </type>
+        </property>
+        <property column="errors" name="errorDetails" type="java.lang.String" />
+        <property column="operation" name="operation" type="java.lang.String" />
+
+    </class>
+</hibernate-mapping>

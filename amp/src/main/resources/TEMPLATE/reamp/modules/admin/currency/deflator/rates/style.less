@@ -1,0 +1,27 @@
+.inflation-rate-entry{
+  td{
+    width: 33%;
+  }
+}
+
+.form-control.view{
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.edit-on-hover{
+  &:not(:hover) .edit:not(:focus){
+    width: 1px;
+    height: 1px;
+    float: right;
+    opacity: 0;
+  }
+
+  &:hover .edit, .edit:focus{
+    &+.view{
+      display: none;
+    }
+  }
+}

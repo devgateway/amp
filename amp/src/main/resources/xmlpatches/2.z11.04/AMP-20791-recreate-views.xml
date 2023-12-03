@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-20791</jira>
+	<keyword>Last imported by, Last imported at</keyword>
+	<author>vlimansky</author>
+	<description>Add 'Last imported by', 'Last imported at' columns</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -50,7 +50,7 @@ function checkSelActivities() {
 
 
 	function sortMe(val) {
-		<digi:context name="sel" property="context/module/moduleinstance/updateTeamActivity.do" />
+		<digi:context name="sel" property="context/ampModule/moduleinstance/updateTeamActivity.do" />
 			url = "<%= sel %>" ;
 			
 			var sval = document.aimTeamActivitiesForm.sort.value;
@@ -71,7 +71,7 @@ function checkSelActivities() {
 	}
 
 	function resetSearch() {
-		<digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>     
+		<digi:context name="searchOrg" property="context/ampModule/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>
 		url = "<%= searchOrg %>?reset=true";
 	     document.aimTeamActivitiesForm.action = url;
 	     document.aimTeamActivitiesForm.submit();
@@ -80,7 +80,7 @@ function checkSelActivities() {
 	}
 
 	function searchActivity(teamId) {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>			 
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>
 		     url = "<%= searchOrg %>";
 		     document.aimTeamActivitiesForm.action = url;
 		     document.aimTeamActivitiesForm.submit();

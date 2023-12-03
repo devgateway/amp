@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 
 <DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -26,7 +26,7 @@
 	}
 
 	function move() {
-		<digi:context name="selectLoc" property="context/module/moduleinstance/orgTypeManager.do" />
+		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/orgTypeManager.do" />
 		url = "<%= selectLoc %>";
 		document.location.href = url;
 	}
@@ -152,7 +152,7 @@
 																	</tr>
 																	<tr>
                                                                         <td colspan="2" align="center">                                   
-                                                                         <feature:display name="Organization Manager Type" module="Organization Manager" >                                      	
+                                                                         <feature:display name="Organization Manager Type" ampModule="Organization Manager" >
                                                                             <fieldset class="org-type-fieldset">
                                                                             <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>

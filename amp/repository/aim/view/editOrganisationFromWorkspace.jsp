@@ -7,16 +7,16 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 
 
 <%@page
-	import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%><script
+	import="org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument"%><script
 	language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <style type="text/css">
@@ -124,7 +124,7 @@ initContactScript();
     addLoadEvent(initScripts);
 
     function refreshPage(){
-        <digi:context name="reload" property="context/module/moduleinstance/editOrganisation.do" />
+        <digi:context name="reload" property="context/ampModule/moduleinstance/editOrganisation.do" />
         document.aimAddOrgForm.action = "${reload}";
         document.aimAddOrgForm.actionFlag.value='reload'
         document.aimAddOrgForm.submit();
@@ -161,7 +161,7 @@ initContactScript();
                 return false;
             }
 
-    <digi:context name="addStaff" property="context/module/moduleinstance/editOrganisation.do" />
+    <digi:context name="addStaff" property="context/ampModule/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addStaffInfo";
             document.aimAddOrgForm.action = "${addStaff}";
             document.aimAddOrgForm.target = "_self";
@@ -185,7 +185,7 @@ initContactScript();
                 	document.aimAddOrgForm.selectedStaffId.value=null;
                 }
             }
-    		<digi:context name="deleteStaff" property="context/module/moduleinstance/editOrganisation.do" />
+    		<digi:context name="deleteStaff" property="context/ampModule/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="deleteStaffInfo";
             document.aimAddOrgForm.action = "${deleteStaff}";
             document.aimAddOrgForm.target = "_self";
@@ -228,7 +228,7 @@ initContactScript();
             	alert('<digi:trn jsFriendly="true">Please choose at least one sector to remove</digi:trn>');
             	return false;
         	}else{
-        		<digi:context name="removeSectors" property="context/module/moduleinstance/editOrganisation.do" />
+        		<digi:context name="removeSectors" property="context/ampModule/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.actionFlag.value="removeSector";
                 document.aimAddOrgForm.action = "${removeSectors}";
                 document.aimAddOrgForm.target = "_self";
@@ -237,7 +237,7 @@ initContactScript();
         }
         
         function addSector() {
-    		<digi:context name="addSectors" property="context/module/moduleinstance/editOrganisation.do" />
+    		<digi:context name="addSectors" property="context/ampModule/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addSector";
             document.aimAddOrgForm.action = "${addSectors}";
             document.aimAddOrgForm.target = "_self";
@@ -245,7 +245,7 @@ initContactScript();
         }
        
             function editStaffInfo(index){
-                <digi:context name="editStaffInfo" property="context/module/moduleinstance/editOrganisation.do" />
+                <digi:context name="editStaffInfo" property="context/ampModule/moduleinstance/editOrganisation.do" />
                     document.aimAddOrgForm.action = "${editStaffInfo}?staffInfoIndex="+index;
                     document.aimAddOrgForm.target = "_self"
                     document.aimAddOrgForm.actionFlag.value="editStaffInfo";
@@ -259,7 +259,7 @@ initContactScript();
         
 
         function cancel() {
-    		<digi:context name="selectLoc" property="context/module/moduleinstance/organisationManager.do" />
+    		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/organisationManager.do" />
             url = "<%=selectLoc%>?orgSelReset=true";
             document.location.href = url;
         }
@@ -300,7 +300,7 @@ initContactScript();
           	   
         function addDocumentsDM(documentsType, showTheFollowingDocuments) {
         	//submit organization parameters first
-           	<digi:context name="getInf" property="context/module/moduleinstance/editOrganisation.do?skipReset=true" />
+           	<digi:context name="getInf" property="context/ampModule/moduleinstance/editOrganisation.do?skipReset=true" />
            	var url="${getInf}";
            	var params=getResourceParams();
 
@@ -371,7 +371,7 @@ initContactScript();
         
         function validateSaveOrg() {
             if(check()){
-    			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
+    			<digi:context name="save" property="context/ampModule/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${save}";
                 document.aimAddOrgForm.actionFlag.value = "save";
                 document.aimAddOrgForm.submit();
@@ -442,7 +442,7 @@ initContactScript();
        
 
         function removeContact(selContactId){
-    		<digi:context name="remLocs" property="context/module/moduleinstance/editOrganisation.do" />
+    		<digi:context name="remLocs" property="context/ampModule/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.action = "${remLocs}";
             document.aimAddOrgForm.target = "_self"
             document.aimAddOrgForm.actionFlag.value="deleteContact";
@@ -462,7 +462,7 @@ initContactScript();
                 }
             
         	if (atLeastOneIsChecked) {
-            	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
+            	<digi:context name="remConts" property="context/ampModule/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${remConts}";
                 document.aimAddOrgForm.target = "_self"
                 document.aimAddOrgForm.actionFlag.value="deleteContact";
@@ -568,7 +568,7 @@ initContactScript();
 				value="${aimAddOrgForm.resetBudgetSectors}" name="aimAddOrgForm"
 				property="resetBudgetSectors" />
 
-			<feature:display name="NGO Form" module="Organization Manager"></feature:display>
+			<feature:display name="NGO Form" ampModule="Organization Manager"></feature:display>
 
 			<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=1000
 				align=center>
@@ -873,7 +873,7 @@ initContactScript();
 																		<digi:trn>Please select a status from below</digi:trn>
 																	</c:set> <category:showoptions firstLine="${translation}"
 																		name="aimAddOrgForm" property="typeOfStaff"
-																		keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ORGANIZATION_STAFF_INFO_KEY%>"
+																		keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.ORGANIZATION_STAFF_INFO_KEY%>"
 																		styleClass="selectStyle" /></td>
 																<td style="text-align: center"><html:text
 																		name="aimAddOrgForm" property="numberOfStaff"
@@ -1048,7 +1048,7 @@ initContactScript();
 											</td>
 										</tr>
 										<c:if test="${aimAddOrgForm.type!='NGO'}">
-											<module:display name="Document"
+											<ampModule:display name="Document"
 												parentModule="PROJECT MANAGEMENT">
 												<tr>
 													<td colspan="2" align=center class="yui-skin-sam">
@@ -1058,7 +1058,7 @@ initContactScript();
 																<td bgcolor=#f4f4f2 align=left><bean:define
 																		toScope="request" id="showRemoveButton" value="true" />
 																	<bean:define toScope="request" id="documentsType"
-																		value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%>" />
+																		value="<%=org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%>" />
 																	<bean:define toScope="request" id="versioningRights"
 																		value="false" /> <bean:define toScope="request"
 																		id="viewAllRights" value="true" /> <bean:define
@@ -1073,7 +1073,7 @@ initContactScript();
 																	<jsp:include
 																		page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp" />
 																		<c:set var="showTheFollowingDocuments" value="PUBLIC" />
-																	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
+																	<c:set var="documentsType"><%=org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
 																	<html:button styleClass="buttonx_sm"
 																		property="submitButton"
 																		onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
@@ -1084,7 +1084,7 @@ initContactScript();
 													</td>
 													<td></td>
 												</tr>
-											</module:display>
+											</ampModule:display>
 											
 										</c:if>
 

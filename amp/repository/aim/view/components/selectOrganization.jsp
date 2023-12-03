@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8"
-	import="org.digijava.module.aim.dbentity.AmpOrganisation,java.util.*"%>
+	import="org.digijava.ampModule.aim.dbentity.AmpOrganisation,java.util.*"%>
 <%@page import="org.digijava.kernel.util.SiteUtils"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -101,7 +101,7 @@
 	
 	
 	function setOrganization(id) {
-		<digi:context name="selOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=organizationSelected"/>
+		<digi:context name="selOrg" property="context/ampModule/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=organizationSelected"/>
 	    document.aimSelectOrganizationForm.action = "<%= selOrg %>&id="+id;
 		document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
 	    document.aimSelectOrganizationForm.submit();
@@ -114,7 +114,7 @@
 			return false;
 
 		
-		<digi:context name="selOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=organizationSelected"/>
+		<digi:context name="selOrg" property="context/ampModule/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=organizationSelected"/>
 	    document.aimSelectOrganizationForm.action = "<%= selOrg %>";
 		//document.aimSelectOrganizationForm.target = window.opener.name;
 		document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
@@ -134,7 +134,7 @@
 
 
 	function selectOrganizationPages(page) {
-	   <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=selectPage&page=" />
+	   <digi:context name="searchOrg" property="context/ampModule/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=selectPage&page=" />
 	   var val = "<%=searchOrg%>";
 	   val = val + page;
 	   document.aimSelectOrganizationForm.action = val;
@@ -151,7 +151,7 @@
 			    document.aimSelectOrganizationForm.tempNumResults.focus();
 			    return false;
 			} else {
-			    <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search"/>
+			    <digi:context name="searchOrg" property="context/ampModule/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search"/>
 			    document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
 			    document.aimSelectOrganizationForm.submit();
 				return true;
@@ -166,7 +166,7 @@
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/selectOrganizationComponent.do"/>
 			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";
 		     document.aimSelectOrganizationForm.action = url;
 		     document.aimSelectOrganizationForm.submit();
@@ -180,7 +180,7 @@
 			  document.aimSelectOrganizationForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search&viewAll=viewAll"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search&viewAll=viewAll"/>
 			    document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
 		      var aux= document.aimSelectOrganizationForm.tempNumResults.value;
 		      //Moved to backend
@@ -212,7 +212,7 @@
 <digi:form action="/selectOrganizationComponent.do" method="post">
 
 <html:hidden property="selectedOrganisationFromPages" />
-<html:hidden property="<%= org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"/>
+<html:hidden property="<%= org.digijava.ampModule.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"/>
 
 	<script language="JavaScript">
 	//if use client yes
@@ -335,7 +335,7 @@
 								<tr>
 									<td align="left" vAlign="top">
 										<table width="100%" cellPadding="3" id="searchResults">
-											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">		
+											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 												<tr>
 													<td bgcolor=#F8F8F8 width="1%">&nbsp;</td>		
                                                         <logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">

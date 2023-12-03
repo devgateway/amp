@@ -7,12 +7,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <bean:define id="ampTeam" name="teamWrk"
-	type="org.digijava.module.aim.dbentity.AmpTeam" scope="request"
+	type="org.digijava.ampModule.aim.dbentity.AmpTeam" scope="request"
 	toScope="page" />
 
 <div style='position:relative;display:none;' id='team-<bean:write name="ampTeam" property="ampTeamId"/>'> 
@@ -32,7 +32,7 @@
 			<li>
 				<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
 				<ul>
-				<logic:iterate id="org" name="ampTeam" property="organizations" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+				<logic:iterate id="org" name="ampTeam" property="organizations" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 					<li>
 					<bean:write name="org" property="name" />
 					</li>
@@ -45,7 +45,7 @@
 			<li>
 				<digi:trn key="aim:childrenWorkspaces">Children (Workspaces)</digi:trn>
 				<ul>
-				<logic:iterate id="team" name="ampTeam" property="childrenWorkspaces" type="org.digijava.module.aim.dbentity.AmpTeam">
+				<logic:iterate id="team" name="ampTeam" property="childrenWorkspaces" type="org.digijava.ampModule.aim.dbentity.AmpTeam">
 					<li>
 					<bean:write name="team" property="name" />
 					</li>

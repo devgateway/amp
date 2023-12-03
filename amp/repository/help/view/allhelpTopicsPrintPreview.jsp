@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<%@page import="org.digijava.module.help.util.HelpUtil"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@page import="org.digijava.ampModule.help.util.HelpUtil"%>
 
 <digi:instance property="helpForm" />
 

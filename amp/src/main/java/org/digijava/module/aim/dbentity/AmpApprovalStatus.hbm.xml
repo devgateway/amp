@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpApprovalStatus" table="AMP_APPROVAL_STATUS">
+		<cache usage="read-write" />
+		<id name="ampApprovalStatusId" column="amp_approval_status_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_approval_status_seq</param>
+			</generator>
+		</id>
+
+		<property name="approvalStatus" column="approval_status" type="java.lang.String" />
+
+	</class>
+</hibernate-mapping>

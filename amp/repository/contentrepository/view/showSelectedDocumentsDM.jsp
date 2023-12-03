@@ -6,8 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ page import="org.digijava.module.contentrepository.action.SelectDocumentDM"%>
-<%@ page import="org.digijava.module.aim.helper.ActivityDocumentsConstants"%>
+<%@ page import="org.digijava.ampModule.contentrepository.action.SelectDocumentDM"%>
+<%@ page import="org.digijava.ampModule.aim.helper.ActivityDocumentsConstants"%>
 
 <%@include file="addDocumentPanel.jsp" %>
 <logic:notEmpty name="checkBoxToHide" scope="request">
@@ -21,7 +21,7 @@
 
 <%@include file="documentManagerDivHelper.jsp" %>
 <% String documentsType = (String)pageContext.findAttribute("documentsType"); %>
-<logic:notEmpty scope="session" name="<%= org.digijava.module.contentrepository.action.SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>">
+<logic:notEmpty scope="session" name="<%= org.digijava.ampModule.contentrepository.action.SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>">
 
 	<logic:notEmpty name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" scope="session" property="<%=documentsType %>">		
 		<bean:define name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" property="<%=documentsType %>"  id="relDocs" scope="session" toScope="page"/>

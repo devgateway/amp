@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15995</jira>
+	<keyword>Quartz Job</keyword>
+	<author>Dolghier Constantin</author>
+	<description>Configure a daily-running Quartz job to </description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_quartz_job_class (jc_id,jc_name, jc_class_fullname) VALUES
+				(nextval('amp_quartz_job_class_seq'),'Automatically close expired unclosed activities', 'org.digijava.ampModule.message.jobs.CloseExpiredActivitiesJob');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

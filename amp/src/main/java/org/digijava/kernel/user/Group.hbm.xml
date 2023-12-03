@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.user.Group" table="DG_GROUP" lazy="false">
+		<cache usage="read-write" />
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_group_seq</param>
+			</generator>
+		</id>
+		<property name="inheritSecurity" column="INHERIT_SECURITY" type="boolean" />
+		<property name="creationDate" column="CREATION_DATE" type="java.util.Date" />
+		<property name="creationIP" column="CREATION_IP" type="java.lang.String" />
+		<property name="lastModified" column="LAST_MODIFIED" type="java.util.Date" />
+		<property name="modifyingIP" column="MODIFYING_IP" type="java.lang.String" />
+		<property name="parentId" column="PARENT_ID" type="java.lang.Long" not-null="false" />
+		<property name="name" column="GROUP_NAME" type="java.lang.String" />
+
+		<many-to-one name="site" column="SITE_ID" class="org.digijava.kernel.request.Site" />
+		<property name="key" column="GROUP_KEY" type="java.lang.String" />
+		<set name="users" table="DG_USER_GROUP" lazy="true">
+			<key column="GROUP_ID" />
+			<many-to-many class="org.digijava.kernel.user.User" column="USER_ID" />
+		</set>
+
+		<set name="menuEntries" table="AMP_MENU_ENTRY_DG_GROUP" cascade="all" inverse="true">
+			<key column="GROUP_ID" />
+			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInView" column="menu_id" />
+		</set>
+
+	</class>
+</hibernate-mapping>

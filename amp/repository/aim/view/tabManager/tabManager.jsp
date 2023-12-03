@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <c:set var="connectionErrMsg">
 	<digi:trn key="aim:tabmanager:connecionProblem">There was a problem connecting to the server. Please close this panel and try again. </digi:trn>

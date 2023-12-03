@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ page import="org.digijava.module.aim.form.ActivityForm"%>
+<%@ page import="org.digijava.ampModule.aim.form.ActivityForm"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -11,7 +11,7 @@
 
 <script language="JavaScript">
 <!--
-	<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
+	<digi:context name="searchOrg" property="context/ampModule/moduleinstance/activityManager.do"/>
 	
 	function deleteIndicator()
 	{
@@ -30,7 +30,7 @@
      	if(tIds.length>0){
      		if(deleteActs()){ 
       			tIds=tIds.substring(0,tIds.length-1);
-      			<digi:context name="deleteActs" property="context/module/moduleinstance/activityManager.do?action=delete"/>
+      			<digi:context name="deleteActs" property="context/ampModule/moduleinstance/activityManager.do?action=delete"/>
   				document.aimActivityForm.action = "<%=deleteActs %>&tIds="+tIds+"";
 				document.aimActivityForm.target = "_self";
 				document.aimActivityForm.submit();	
@@ -47,7 +47,7 @@
 		if(activityIds.length > 0){
      		if(confirm("<digi:trn jsFriendly='true'>Are you sure you want to unfreeze the selected activities?</digi:trn>")){ 
       			activityIds=activityIds.substring(0,activityIds.length-1);
-      			<digi:context name="unfreezeAction" property="context/module/moduleinstance/activityManager.do?action=unfreeze"/>
+      			<digi:context name="unfreezeAction" property="context/ampModule/moduleinstance/activityManager.do?action=unfreeze"/>
   				document.aimActivityForm.action = "<%=unfreezeAction %>&activityIds="+activityIds+"";
 				document.aimActivityForm.target = "_self";
 				document.aimActivityForm.submit();				
@@ -88,7 +88,7 @@
 			  return false;
 		} else {
 			
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/activityManager.do"/>
 		     url = "<%= searchOrg %>?action=search";
 		     document.aimActivityForm.action = url;
 		     document.aimActivityForm.target="_self";
@@ -105,7 +105,7 @@
 			  document.aimActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/activityManager.do"/>
 			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false";
 		     document.aimActivityForm.action = url;
 		     document.aimActivityForm.target="_self";
@@ -147,7 +147,7 @@
 		
 		document.aimActivityForm.sort.value=val;
 
-		<digi:context name="sorting" property="context/module/moduleinstance/activityManager.do" />
+		<digi:context name="sorting" property="context/ampModule/moduleinstance/activityManager.do" />
 		url = "<%= sorting %>?action=sort";
 	    document.aimActivityForm.action = url;
 	    document.aimActivityForm.target="_self";
@@ -155,7 +155,7 @@
 	}
 	
 	function resetSearch() {
-		<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>     
+		<digi:context name="searchOrg" property="context/ampModule/moduleinstance/activityManager.do"/>
 		url = "<%= searchOrg %>?action=reset";
 	     document.aimActivityForm.action = url;
 	     document.aimActivityForm.submit();
@@ -163,7 +163,7 @@
 
 	}
 	  function exportXSL(){
-	        <digi:context name="exportUrl" property="context/module/moduleinstance/exportActivityManagerXSL.do"/>;
+	        <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportActivityManagerXSL.do"/>;
 	        document.aimActivityForm.action="${exportUrl}";
 	        document.aimActivityForm.target="_blank";
 	        document.aimActivityForm.submit();
@@ -393,7 +393,7 @@
 													<tbody class="yui-dt-data">
 															<logic:iterate name="aimActivityForm"
 																property="activityList" id="activities"
-																type="org.digijava.module.admin.helper.AmpActivityFake">
+																type="org.digijava.ampModule.admin.helper.AmpActivityFake">
 																<tr bgcolor="#ffffff">
 																	<logic:notEmpty name="activities" property="team">
 																		<td width="9" height="15" class="inside ignore"><img

@@ -10,7 +10,7 @@
 
 <digi:instance property="crDocumentManagerForm" />
 <bean:define id="myForm" name="crDocumentManagerForm" toScope="page"
-	type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
+	type="org.digijava.ampModule.contentrepository.form.DocumentManagerForm" />
 	
 	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">
 		<bean:define name="crDocumentManagerForm" property="otherDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />

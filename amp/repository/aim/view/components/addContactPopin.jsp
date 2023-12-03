@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
@@ -183,7 +183,7 @@
 					</c:set> <category:showoptions multiselect="false"
 						firstLine="${translation}" name="aimAddContactForm"
 						property="title"
-						keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>"
+						keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>"
 						styleClass="selectStyle" outerid="contactTitle" /></td>
 				</tr>
 				<tr>
@@ -242,7 +242,7 @@
 								<div>
 									<c:set var="translationNone"><digi:trn>None</digi:trn></c:set> 
 									<category:showoptions multiselect="false"	firstLine="${translationNone}" name="aimAddContactForm"	property="phones[${ctr}].phoneTypeId"
-									keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="selectStyle" outerid="phoneType_${ctr}" /> <%--
+									keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="selectStyle" outerid="phoneType_${ctr}" /> <%--
 											<html:text name="aimAddContactForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
 											--%> 
 									<html:text name="aimAddContactForm"	property="phones[${ctr}].value" size="16" styleId="phoneNum_${ctr}" /> 

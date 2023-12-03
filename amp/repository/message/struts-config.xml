@@ -3,10 +3,10 @@
 
 <struts-config>
 <form-beans>
-	<form-bean name="messageForm" type="org.digijava.module.message.form.AmpMessageForm"/>
+	<form-bean name="messageForm" type="org.digijava.ampModule.message.form.AmpMessageForm"/>
 </form-beans>
 <action-mappings>
- 	<action path="/message/messageActions" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.AmpMessageActions">
+ 	<action path="/message/messageActions" name="messageForm" scope="session" parameter="actionType" type="org.digijava.ampModule.message.action.AmpMessageActions">
      	<forward name="addOrEditAmpMessage" path="/showLayout.do?layout=ampMessageLayout" />
      	<forward name="viewMessage" path="/showLayout.do?layout=viewSelectedMessage" />
      	<forward name="viewMyDesktop" path="/aim/viewMyDesktop.do"  redirect="true"/>
@@ -16,16 +16,16 @@
 	<forward name="createMessageError" path="/message/messageActions.do?editingMessage=false&amp;actionType=fillTypesAndLevels"/>
 
      </action>
-     <action path="/message/getMessages" name="messageForm" scope="session" type="org.digijava.module.message.action.ViewMessages" />
-     <action path="/message/msgSettings" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.MsgSettingsAction">
+     <action path="/message/getMessages" name="messageForm" scope="session" type="org.digijava.ampModule.message.action.ViewMessages" />
+     <action path="/message/msgSettings" name="messageForm" scope="session" parameter="actionType" type="org.digijava.ampModule.message.action.MsgSettingsAction">
      	<forward name="settingsPage" path="/showLayout.do?layout=messageSettings" />
      	<forward name="index" path="/aim/index.do" redirect="true" />
      </action>
-     <action path="/message/templatesManager" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.TemplateAlertActions">
+     <action path="/message/templatesManager" name="messageForm" scope="session" parameter="actionType" type="org.digijava.ampModule.message.action.TemplateAlertActions">
      	<forward name="addOrEditPage" path="/showLayout.do?layout=addOrEditTemplate" />
      	<forward name="templatesManager" path="/showLayout.do?layout=templateAlertsManager"/>
      </action>
-     <action path="/message/exportImportTemplates" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.ExportAndImportTemplates">     	
+     <action path="/message/exportImportTemplates" name="messageForm" scope="session" parameter="actionType" type="org.digijava.ampModule.message.action.ExportAndImportTemplates">
      	<forward name="gotoPage" path="/showLayout.do?layout=exportImportTemplatesPage" />
      	<forward name="viewTemplates" path="/message/templatesManager.do?actionType=viewTemplates" />
      </action>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-16483</jira>
+	<keyword>Mondrian cache</keyword>
+	<author>cdolghier</author>
+	<description>DO NOT MERGE THIS FILE TO AMP 2.7</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP TABLE IF EXISTS cached_v_contracting_arrangements;
+				CREATE TABLE cached_v_contracting_arrangements AS SELECT * FROM v_contracting_arrangements;
+				DROP TABLE IF EXISTS cached_v_activity_modified_by;
+				CREATE TABLE cached_v_activity_modified_by AS SELECT * FROM v_activity_modified_by;
+				
+				CREATE INDEX ON cached_v_contracting_arrangements(amp_activity_id);
+				CREATE INDEX ON cached_v_contracting_arrangements(act_id);
+
+				CREATE INDEX ON cached_v_activity_modified_by(amp_activity_id);
+				CREATE INDEX ON cached_v_activity_modified_by(user_id);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

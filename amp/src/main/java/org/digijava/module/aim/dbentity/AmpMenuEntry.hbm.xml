@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" [
+	<!ENTITY menuFields
+	'
+		<property name="id" column="ID" type="java.lang.Long" />
+		<property name="name" column="NAME" type="java.lang.String" not-null="true" unique-key="menuNameUniqueKey"/>
+		<property name="title" column="TITLE" type="java.lang.String" />
+		<property name="tooltip" column="TOOLTIP" type="java.lang.String" />
+		<property name="url" column="URL" type="java.lang.String"/>
+		<property name="flags" column="FLAGS" type="java.lang.String"/>
+        <property name="position" column="POSITION" type="int" />
+        <property name="requestUrl" column="REQUEST_URL" type="text" />
+        
+        <set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP">
+	         <key column="MENU_ID"/>
+	         <many-to-many column="GROUP_ID" class="org.digijava.kernel.user.Group"/>
+      	</set>
+	'
+	>
+]>
+<hibernate-mapping>
+    <class name="org.digijava.ampModule.aim.dbentity.AmpMenuEntry" table="AMP_MENU_ENTRY" lazy="false">
+    	<cache usage="read-write" />
+    	<id name="id" column="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_MENU_ENTRY_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="parent" column="PARENT_ID" class="org.digijava.ampModule.aim.dbentity.AmpMenuEntry" />
+    	&menuFields;
+    	
+    	<map name="viewVisibilityMap" cascade="all" table="AMP_MENU_ENTRY_VIEW">
+        	<cache usage="read-write" />
+			<key column="MENU_ID" not-null="true"/>
+			<map-key column="VIEW_TYPE" type="java.lang.Integer" />
+			<element column="RULE_ID" type="java.lang.Long"/>
+        </map>
+        
+        <map name="viewURLMap" cascade="all" table="AMP_MENU_ENTRY_VIEW">
+        	<cache usage="read-write" />
+			<key column="MENU_ID" not-null="true"/>
+			<map-key column="VIEW_TYPE" type="java.lang.Integer" />
+			<element column="URL" type="java.lang.String" />
+        </map>
+        
+        <set name="items" cascade="all" inverse="true" lazy="true">
+			<cache usage="read-write" />
+			<key column="PARENT_ID" />
+			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpMenuEntry" />
+		</set>
+		
+    </class>
+    
+    <class name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInView" table="v_menu_entry" abstract="true" polymorphism="explicit" discriminator-value="null">
+    	<cache usage="read-write" />
+    	
+    	<id name="menuViewId" type="java.lang.Long" column="menu_view_id"/>
+    	<discriminator column="VIEW_TYPE" type="int" force="true" insert="false"/>
+    	
+    	<many-to-one name="parent" column="PARENT_ID" class="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInView" />
+    	&menuFields;
+    	
+    	<property name="viewType" column="VIEW_TYPE" insert="false" update="false">
+    		<type name="org.hibernate.type.EnumType">
+    			<param name="enumClass">org.dgfoundation.amp.menu.AmpView</param>
+    			<param name="useNamed">false</param>
+    		</type>
+    	</property>
+    	
+    	<many-to-one name="rule" column="RULE_ID" class="org.digijava.ampModule.aim.dbentity.AmpVisibilityRule" />
+    	
+    	<set name="items" cascade="all" inverse="true" lazy="true">
+			<cache usage="read-write" />
+			<key column="PARENT_ID" />
+			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInView" />
+		</set>
+		
+		<subclass name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInPublicView" discriminator-value="0" />
+		<subclass name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInAdminView" discriminator-value="1" />
+		<subclass name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInTeamView" discriminator-value="2" />
+		
+    </class>
+</hibernate-mapping>

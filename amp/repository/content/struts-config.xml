@@ -3,20 +3,20 @@
 
 <struts-config>
   <form-beans>
-    <form-bean name="contentForm" type="org.digijava.module.content.form.ContentForm" />
-    <form-bean name="contentManagerForm" type="org.digijava.module.content.form.ContentManagerForm" />
+    <form-bean name="contentForm" type="org.digijava.ampModule.content.form.ContentForm" />
+    <form-bean name="contentManagerForm" type="org.digijava.ampModule.content.form.ContentManagerForm" />
   </form-beans>
   <action-mappings>
-    <action name="contentForm" path="/content/contentManager" parameter="action" scope="session" type="org.digijava.module.content.action.ContentManager" validate="false">
+    <action name="contentForm" path="/content/contentManager" parameter="action" scope="session" type="org.digijava.ampModule.content.action.ContentManager" validate="false">
       <forward name="list" path="/showLayout.do?layout=contentList" />
       <forward name="addEdit" path="/showLayout.do?layout=contentEdit"  />
       <forward name="save" path="/content/contentManager.do?action=list" redirect="true" />
       <forward name="homepage" path="/content/contentManager.do?action=list" redirect="true" />
       <forward name="delete" path="/content/contentManager.do?action=list" redirect="true" />
     </action>
-    <action name="contentForm" path="/content/displayThumbnail" scope="request" type="org.digijava.module.content.action.DisplayThumbnail" validate="false" />
- 	<action name="contentForm" path="/content/downloadFile" type="org.digijava.module.content.action.DownloadFile" validate="false" />
- 	<action name="contentForm" path="/content/contentView" type="org.digijava.module.content.action.ContentView" validate="false" />
+    <action name="contentForm" path="/content/displayThumbnail" scope="request" type="org.digijava.ampModule.content.action.DisplayThumbnail" validate="false" />
+ 	<action name="contentForm" path="/content/downloadFile" type="org.digijava.ampModule.content.action.DownloadFile" validate="false" />
+ 	<action name="contentForm" path="/content/contentView" type="org.digijava.ampModule.content.action.ContentView" validate="false" />
   </action-mappings>
 </struts-config>
 

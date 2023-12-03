@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-19540</jira>
+	<keyword>FM</keyword>
+	<author>nmandrescu</author>
+	<description>remove duplicate empty 'GIS Dashboard' FM modules</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				<!-- remember only empty duplicates for "GIS DASHBOARD" FM ampModule (no sub-modules or features) -->
+				CREATE TEMP TABLE tmp_dup_gis_dash AS
+				SELECT * FROM amp_modules_visibility amv1 
+				WHERE amv1.parent IS NULL AND lower(amv1.name) LIKE 'gis dashboard'
+				AND
+				(SELECT count(*) FROM amp_modules_visibility amv2 WHERE amv2.parent = amv1.id) = 0
+				AND
+				(SELECT count(*) FROM amp_features_visibility afv2 WHERE afv2.parent = amv1.id) = 0;
+
+				<!-- cleanup template references and remove the actual ampModule -->
+				DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM tmp_dup_gis_dash);
+				DELETE FROM amp_modules_visibility WHERE id IN (SELECT id FROM tmp_dup_gis_dash);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

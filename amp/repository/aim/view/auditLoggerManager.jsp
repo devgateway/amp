@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
+<%@page import="org.digijava.ampModule.aim.services.auditcleaner.AuditCleaner"%>
 <style>
 .contentbox_border{
 	border:1px solid #666666;
@@ -61,7 +61,7 @@ function submitClean(){
 		return;
 	}
 
- <digi:context name="cleanurl" property="context/module/moduleinstance/auditLoggerManager.do?clean=true" />
+ <digi:context name="cleanurl" property="context/ampModule/moduleinstance/auditLoggerManager.do?clean=true" />
 	document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>";
 	document.aimAuditLoggerManagerForm.target = "_self";
 	document.aimAuditLoggerManagerForm.submit();
@@ -69,7 +69,7 @@ function submitClean(){
 
 function toggleLoggs(){
 	log = document.getElementById("login").checked;
-	<digi:context name="cleanurl" property="context/module/moduleinstance/auditLoggerManager.do?withLogin=" />
+	<digi:context name="cleanurl" property="context/ampModule/moduleinstance/auditLoggerManager.do?withLogin=" />
 	document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>"+log;
 	document.aimAuditLoggerManagerForm.target = "_self";
 	document.aimAuditLoggerManagerForm.submit();
@@ -377,7 +377,7 @@ function exportScorecard () {
                                         </td>
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
-								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
+								id="log" type="org.digijava.ampModule.aim.dbentity.AmpAuditLogger">
 								<tr>
 								<td class="auditloggername" width="280" height="18" align="center" title="${log.objectName}">
 									<c:choose>

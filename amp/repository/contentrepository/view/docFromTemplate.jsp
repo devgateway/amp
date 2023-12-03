@@ -1,4 +1,4 @@
-<%@page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
+<%@page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>

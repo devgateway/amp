@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
@@ -33,7 +33,7 @@
 		if (temp == true)
 		{
           document.aimIndicatorForm.addBtn.disabled = true;   
-          <digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
+          <digi:context name="addInd" property="context/ampModule/moduleinstance/addIndicator.do" />
           document.forms[0].action = "<%=addInd%>";
           document.forms[0].target = window.opener.name;
           document.forms[0].submit();		 
@@ -46,7 +46,7 @@
 
 	function load(){
 		if (document.aimIndicatorForm.errorFlag.value == "false") {
-			<digi:context name="indMan" property="context/module/moduleinstance/indicatorManager.do"/>
+			<digi:context name="indMan" property="context/ampModule/moduleinstance/indicatorManager.do"/>
             document.forms[0].action = "<%= indMan %>";
             document.forms[0].target = window.opener.name;
             document.forms[0].submit();

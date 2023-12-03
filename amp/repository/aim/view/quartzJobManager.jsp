@@ -14,7 +14,7 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/asynchronous.js"/>"></script>
 
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
@@ -125,7 +125,7 @@
                                 <c:set var="translation">
                                     <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                                 </c:set>
-                                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+                                <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                                     <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                                 </digi:link>&nbsp;&gt;&nbsp;
                                 <digi:trn key="aim:jobManager">Job Manager</digi:trn>
@@ -258,7 +258,7 @@
 															<b style="font-size:12px; color:#000000; padding-left:5px;">
 															<digi:trn>Other links</digi:trn>
 															</b></td>
-															<td width="17" height="17" background="module/aim/images/corner-r.gif">&nbsp;</td>
+															<td width="17" height="17" background="ampModule/aim/images/corner-r.gif">&nbsp;</td>
 														</tr>
 													</tbody></table>
 						
@@ -266,13 +266,13 @@
 						
 						<table width="150" cellspacing="0" cellpadding="0" class="inside">
 														<tbody><tr>
-															<td class="inside"><img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif"> <digi:link module="aim"  href="/admin.do" > <digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></td>
+															<td class="inside"><img width="15" height="10" src="/TEMPLATE/ampTemplate/ampModule/aim/images/arrow-014E86.gif"> <digi:link ampModule="aim"  href="/admin.do" > <digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></td>
 														</tr>
 														<tr>
 														<td class="inside">
-														<img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif">
+														<img width="15" height="10" src="/TEMPLATE/ampTemplate/ampModule/aim/images/arrow-014E86.gif">
 														<c:set var="trn"><digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn></c:set>
-            <digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}"><digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn></digi:link>
+            <digi:link ampModule="aim" href="/quartzJobClassManager.do" title="${trn}"><digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn></digi:link>
 														
 														</td>
 														</tr>								

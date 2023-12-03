@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpLocationIndicatorValue" table="AMP_LOCATION_INDICATOR_VALUE" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_LOCATION_INDICATOR_VALUE_seq</param>
+			</generator>
+		</id>
+		<many-to-one name="location" column="location_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" not-null="true" lazy="false" />
+		<many-to-one name="indicator" column="indicator_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpIndicatorLayer" cascade="none" not-null="true" lazy="false" />
+		<property name="value" column="value" type="java.lang.Double" />
+		
+	</class>
+</hibernate-mapping>

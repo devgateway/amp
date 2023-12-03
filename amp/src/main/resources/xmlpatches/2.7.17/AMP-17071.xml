@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17071</jira>
+	<keyword>Default value for settings for currency webservice</keyword>
+	<author>jdeanquin</author>
+	<description>Weve added another webservice for exchange rate configuration. You can choose what service to use configuring the class that implements the webservice. you have to add two the username and pasword if needed</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.ampModule.currencyrates.WSCurrencyClientImp','WebserviceX.net');
+				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.ampModule.currencyrates.FxtopWSCurrencyClientImpl','FXTop (preferred)');
+				CREATE OR REPLACE VIEW v_g_settings_ws_currency_impl AS 
+ 					SELECT util_global_settings_possible_.value_id AS id, 
+    				util_global_settings_possible_.value_shown AS value
+   					FROM util_global_settings_possible_
+  					WHERE util_global_settings_possible_.setting_name::text = 'Currency WS implementation'::text;
+  				
+				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice username','VHAUKP',null,'Username for webservice exchangerate subscription','general');
+				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice password','DEVGATE',null,'password for webservice exchangerate subscription','general');
+				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice implementation','org.digijava.ampModule.currencyrates.FxtopWSCurrencyClientImpl','v_g_settings_ws_currency_impl','Username for webservice exchangerate subscription','general');
+        	</lang>
+		</script>
+	</apply>
+</tns:patch>

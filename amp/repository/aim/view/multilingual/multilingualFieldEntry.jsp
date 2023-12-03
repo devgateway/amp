@@ -1,4 +1,4 @@
-<%@page import="org.digijava.module.translation.util.MultilingualInputFieldValues"%>
+<%@page import="org.digijava.ampModule.translation.util.MultilingualInputFieldValues"%>
 
 <%@ page pageEncoding="UTF-8" %>
 <%-- tabbed input for entering a field in multiple languages

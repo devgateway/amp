@@ -5,7 +5,7 @@
 <form-validation>
 	<global></global>
 	<formset>
-        <!-- AIM module -->
+        <!-- AIM ampModule -->
 	    <!-- aim User Registration Form -->
 		<form name="aimUserRegisterForm">
 			<field property="firstNames" depends="required,maxlength">

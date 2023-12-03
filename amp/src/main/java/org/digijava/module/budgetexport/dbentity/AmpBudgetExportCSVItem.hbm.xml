@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportCSVItem" table="amp_budget_export_csv_item">
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_budget_export_csv_item_seq</param>
+			</generator>
+		</id>
+		<property name="code" column="code" type="java.lang.String"/>
+        <property name="label" column="label" type="java.lang.String"/>
+        <many-to-one name="rule" column="rule" class="org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportMapRule" cascade="none"/>
+	</class>
+
+</hibernate-mapping>

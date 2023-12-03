@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <digi:instance property="invalidDataList" />
 
@@ -48,7 +48,7 @@ a.itr:hover {
 
 <script type="text/javascript">
 	function saveAsDraft(actId){		
-		<digi:context name="save" property="context/module/moduleinstance/invalidSectorPercentages.do" />
+		<digi:context name="save" property="context/ampModule/moduleinstance/invalidSectorPercentages.do" />
 	    document.invalidDataList.action = "<%= save %>?saveDraft=true&actId="+actId;
 	    document.invalidDataList.submit();
 	}

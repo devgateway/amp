@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-29939</jira>
+    <keyword>NDD Dashboard - Remove old entries</keyword>
+    <author>jdeanquin</author>
+    <description>Hide settings</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                DELETE
+                FROM amp_modules_templates
+                WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'NDD Mappings Manager');
+                DELETE
+                FROM amp_modules_visibility
+                WHERE name = 'NDD Mappings Manager';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

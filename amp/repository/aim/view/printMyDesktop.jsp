@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 <digi:context name="digiContext" property="context" />
 <digi:errors/>
 <body bgcolor="#ffffff" onLoad="init()" onunload="unload()">
@@ -23,7 +23,7 @@
                   <TD bgColor=#c9c9c7 class=box-title>
                     &nbsp;<digi:trn key="aim:portfolio">Portfolio</digi:trn>
                   </TD>
-                  <TD style="background-image:url(module/aim/images/corner-r.gif);" height=17 width=17></TD>
+                  <TD style="background-image:url(ampModule/aim/images/corner-r.gif);" height=17 width=17></TD>
                     <div align="right">
                       <input type="button" value="Close" onclick="window.close()" />
                     </div>

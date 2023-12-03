@@ -10,15 +10,15 @@
 <%@ page import="org.digijava.kernel.util.RequestUtils"%>
 <%@ page import="org.digijava.kernel.util.UserUtils"%>
 
-<%@page import="org.digijava.module.aim.helper.GlobalSettings"%>
-<%@page import="org.digijava.module.aim.form.GlobalSettingsForm"%>
-<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.ampModule.aim.helper.GlobalSettings"%>
+<%@page import="org.digijava.ampModule.aim.form.GlobalSettingsForm"%>
+<%@page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
 <%@page import="java.util.Date"%>
-<%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
+<%@page import="org.digijava.ampModule.aim.services.auditcleaner.AuditCleaner"%>
 
-<%@page import="org.digijava.module.aim.util.DbUtil"%>
-<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<%@page import="org.digijava.ampModule.aim.util.DbUtil"%>
+<%@page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 <!-- dynamic tooltip -->
 <!-- JavaScript Dependencies for Tabview: -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
@@ -71,7 +71,7 @@
 <script langauage="JavaScript"><!--
 function saveClicked() {
 
-  <digi:context name="preview" property="context/module/moduleinstance/GlobalSettings.do?action=save" />
+  <digi:context name="preview" property="context/ampModule/moduleinstance/GlobalSettings.do?action=save" />
   document.aimGlobalSettingsForm.action = "<%=preview%>";
   document.aimGlobalSettingsForm.target = "_self";
   document.aimGlobalSettingsForm.submit();
@@ -282,7 +282,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 <h1 style="text-align:left;" class="admintitle">General Settings</h1>
 <digi:errors/>
 <logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
-	<logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
+	<logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.ampModule.aim.dbentity.AmpGlobalSettings ">
 		<script type="text/javascript">
 			// haha Alexei, here is some nice global vars. I know you like them
 			if (typeof(window.oldGsValues) == 'undefined') {
@@ -336,10 +336,10 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                <div class="yui-content" > 
 
 									<!-- Start - Sorting settings based on its name  -->
-									<jsp:useBean id="aimGlobalSettingsForm" class="org.digijava.module.aim.form.GlobalSettingsForm" scope="page"/>
+									<jsp:useBean id="aimGlobalSettingsForm" class="org.digijava.ampModule.aim.form.GlobalSettingsForm" scope="page"/>
 									<jsp:useBean id="sortedglobalSett" class="java.util.TreeMap" scope="page" />
 									<logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
-		                            <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
+		                            <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.ampModule.aim.dbentity.AmpGlobalSettings ">
 										<c:set var="key" scope="page"><digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn></c:set>
 										<jsp:useBean id="key" class="java.lang.String" scope="page"/>
 										<%
@@ -370,7 +370,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 										</tr>
 									<logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
 		                            <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
-		                            			   type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
+		                            			   type="org.digijava.ampModule.aim.dbentity.AmpGlobalSettings ">
 		 
 									<logic:equal name="globalSett" property="section" value="${sectionName}">
 									    <%
@@ -436,7 +436,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
  				                                %>
 			                                    
 			                                    <html:select   property="gsfValue" alt="prueba" style="max-width: 750px;" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
-			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
+			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.ampModule.aim.helper.KeyValue">
 			                                      	<%
 			                                      		String key2 = "aim:globalSettings:"+ globalSett.getGlobalSettingsName()+ ":"+ global.getValue();
 			                                      	%>
@@ -498,7 +498,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    		<digi:trn key="aim:globalSettings:day">Day</digi:trn>: 
 				                                    		<select styleClass="inp-text" id="<%=dayId%>" onchange="createDateString('<%=monthId%>','<%=dayId%>');">
 				                                    			<%
-				                                    				for (int k = 1; k <= org.digijava.module.aim.action.GlobalSettings
+				                                    				for (int k = 1; k <= org.digijava.ampModule.aim.action.GlobalSettings
 				                                    														.numOfDaysInMonth(monthNum); k++) {
 				                                    													if (k == Integer
 				                                    															.parseInt(dateValues[0])) {
@@ -592,7 +592,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    		<%
  				                                    			java.text.DateFormat formatter = new java.text.SimpleDateFormat(
  				                                    													"hh:mm:ss a");
- 				                                    											String sdate = org.digijava.module.common.util.DateTimeUtil
+ 				                                    											String sdate = org.digijava.ampModule.common.util.DateTimeUtil
  				                                    													.formatDate(new java.util.Date());
  				                                    		%> 
 						                                    <%=sdate
@@ -745,7 +745,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																if (!globalSett
 																										.getGlobalSettingsValue()
 																										.equalsIgnoreCase("-1")) {
-																									String sdate = org.digijava.module.common.util.DateTimeUtil
+																									String sdate = org.digijava.ampModule.common.util.DateTimeUtil
 																											.formatDate(AuditCleaner
 																													.getInstance()
 																													.getNextcleanup());

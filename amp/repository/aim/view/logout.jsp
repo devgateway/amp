@@ -5,11 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<table cellpadding="0" cellspacing="0" width="100%" background="module/aim/images/bg-home.jpg">
+<table cellpadding="0" cellspacing="0" width="100%" background="ampModule/aim/images/bg-home.jpg">
 	<tr>
 		<td valign="top">
 			<table class=r-dotted height=93 cellspacing="0" cellpadding="0" width=757 
-			background="module/aim/images/bg-home.jpg" valign="top">
+			background="ampModule/aim/images/bg-home.jpg" valign="top">
 				<tr>
 					<td>
 						<table cellspacing="0" cellpadding="0" width="100%">

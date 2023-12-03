@@ -1,14 +1,14 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="/Activity Form/Issues Section" parentModule="/Activity Form">
-    <module:display name="/Activity Form/Issues Section/Issue" parentModule="/Activity Form/Issues Section">
+<ampModule:display name="/Activity Form/Issues Section" parentModule="/Activity Form">
+    <ampModule:display name="/Activity Form/Issues Section/Issue" parentModule="/Activity Form/Issues Section">
         <fieldset>
             <legend>
 		<span class=legend_label id="issueslink" style="cursor: pointer;">
@@ -25,12 +25,12 @@
                                         <digi:trn key="aim:issuename:${issue.id}">
                                             <span class="word_break"><c:out value="${issue.name}" /></span>
                                         </digi:trn>
-                                        <module:display name="/Activity Form/Issues Section/Issue/Date" parentModule="/Activity Form/Issues Section/Issue">
+                                        <ampModule:display name="/Activity Form/Issues Section/Issue/Date" parentModule="/Activity Form/Issues Section/Issue">
                                             <c:out value="${issue.issueDate}" />
-                                        </module:display>
+                                        </ampModule:display>
                                     </b>						</li>					</td>
                             </tr>
-                            <module:display name="/Activity Form/Issues Section/Issue/Measure" parentModule="/Activity Form/Issues Section/Issue">
+                            <ampModule:display name="/Activity Form/Issues Section/Issue/Measure" parentModule="/Activity Form/Issues Section/Issue">
                                 <c:if test="${!empty issue.measures}">
                                     <c:forEach var="measure" items="${issue.measures}">
                                         <tr>
@@ -38,12 +38,12 @@
                                             <td colspan="2">
                                                 <li class="level2"><i> <digi:trn key="aim:${measure.nameTrimmed}">
                                                     <span class="word_break"><c:out value="${measure.name}" /></digi:trn></span>
-                                                    <module:display name="/Activity Form/Issues Section/Issue/Measure/Date" parentModule="/Activity Form/Issues Section/Issue/Measure">
+                                                    <ampModule:display name="/Activity Form/Issues Section/Issue/Measure/Date" parentModule="/Activity Form/Issues Section/Issue/Measure">
                                                         <c:out value="${measure.measureDate}" />
-                                                    </module:display>
+                                                    </ampModule:display>
                                                 </i></li></td>
                                         </tr>
-                                        <module:display name="/Activity Form/Issues Section/Issue/Measure/Actor" parentModule="/Activity Form/Issues Section/Issue/Measure">
+                                        <ampModule:display name="/Activity Form/Issues Section/Issue/Measure/Actor" parentModule="/Activity Form/Issues Section/Issue/Measure">
                                             <c:if test="${!empty measure.actors}">
                                                 <c:forEach var="actor" items="${measure.actors}">
                                                     <tr>
@@ -57,14 +57,14 @@
                                                     </tr>
                                                 </c:forEach>
                                             </c:if>
-                                        </module:display>
+                                        </ampModule:display>
                                     </c:forEach>
                                 </c:if>
-                            </module:display>
+                            </ampModule:display>
                         </c:forEach>
                     </table>
                 </c:if>
             </div>
         </fieldset>
-    </module:display>
-</module:display>
+    </ampModule:display>
+</ampModule:display>

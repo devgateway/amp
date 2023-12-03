@@ -6,10 +6,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 
-<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
-<%@page import="org.digijava.module.aim.util.CurrencyUtil"%>
+<%@page import="org.digijava.ampModule.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.ampModule.aim.util.CurrencyUtil"%>
 
-<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%><digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<%@page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%><digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="aimCurrencyRateForm" />
 
 
@@ -19,7 +19,7 @@
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 
 <script language="JavaScript">
@@ -149,7 +149,7 @@ function closePopup() {
 								</td>
 								<td>
 								    <p style="padding-left: 5px;">
-                                        <digi:trn key="aim:currencyformat">Format: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %> </digi:trn><br/>
+                                        <digi:trn key="aim:currencyformat">Format: <%=org.digijava.ampModule.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.ampModule.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %> </digi:trn><br/>
                                         <digi:trn key="aim:groupSymbol">Group Symbol: "<%=FormatHelper.getGroupSymbol()%>"</digi:trn><br/>
                                         <digi:trn key="aim:decimalSymbol">Decimal symbol: "<%=FormatHelper.getDecimalSymbol()%>"</digi:trn>
                                     </p>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-16857</jira>
+    <keyword>remove duplicates from amp_global_settings</keyword>
+    <author>cdolghier</author>
+    <description>regional funding processing. Set initial value for new "nonnull" field is_regional_funding</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+				DELETE FROM amp_global_settings ags WHERE (SELECT COUNT(*) FROM amp_global_settings gs WHERE gs.id &lt; ags.id AND gs.settingsname = ags.settingsname) &gt; 0;
+<!-- 				ALTER TABLE amp_global_settings ADD CONSTRAINT amp_global_settings_unique_name UNIQUE(settingsname); -->
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

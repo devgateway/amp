@@ -64,7 +64,7 @@
 
 
 	function resetSearch() {
-		<digi:context name="searchOrg" property="context/module/moduleinstance/teamActivities.do"/>     
+		<digi:context name="searchOrg" property="context/ampModule/moduleinstance/teamActivities.do"/>
 		url = "<%= searchOrg %>?reset=true";
 	     document.aimTeamActivitiesForm.action = url;
 	     document.aimTeamActivitiesForm.submit();
@@ -73,7 +73,7 @@
 	}
 
 	function searchActivity(teamId) {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamActivities.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/teamActivities.do"/>
 		     url = "<%= searchOrg %>?id="+teamId;
 		     document.aimTeamActivitiesForm.action = url;
 		     document.aimTeamActivitiesForm.submit();
@@ -288,7 +288,7 @@
 													</digi:trn>
 												</b>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
+											<td background="ampModule/aim/images/corner-r.gif" height="17" width="17"></td>
 										</tr>
 									</table>
 								</td>
@@ -302,7 +302,7 @@
 												<c:set target="${urlParams}" property="id">
 												<bean:write name="aimTeamActivitiesForm" property="teamId" />
 												</c:set>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToAssignActivity">
 												<digi:trn key="aim:clickToAssignActivity">Click here to Assign Activity</digi:trn>
 												</c:set>
@@ -314,7 +314,7 @@
 										</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToViewAdmin">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

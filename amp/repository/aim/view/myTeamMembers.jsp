@@ -8,7 +8,7 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <script language="JavaScript">
 	function addActivity() {
@@ -39,7 +39,7 @@
 							title='<digi:trn jsFriendly="true" key="aim:WorkspaceMemberListAssocWithTeam">List of Workspace Members associated with Workspace</digi:trn>'>
 								<digi:trn key="aim:workspaceMembers">Workspace Members</digi:trn>
 							</TD>
-                    	<TD background="module/aim/images/corner-r.gif" 
+                    	<TD background="ampModule/aim/images/corner-r.gif"
 							height=17 width=17></TD>
 						</TR>
 					</TABLE>
@@ -51,7 +51,7 @@
 				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<TABLE border="0" cellpadding="1" cellspacing="1" width="100%" >
 					<logic:iterate name="myTeamMembers" id="tm" scope="session" 
-					type="org.digijava.module.aim.helper.TeamMember"> 
+					type="org.digijava.ampModule.aim.helper.TeamMember">
 						<TR><TD title="${trnclickToViewMemberDetails}">
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width="10">
 							<A href="javascript:showUserProfile(<c:out value="${tm.memberId}"/>)">
@@ -86,7 +86,7 @@
 
 							<logic:present name="activity_level" scope="request">
 							<category:showoptions firstLine="${translation}" name="xx" outerId="activityLevel"
-							property="activityLevel"  styleClass="inp-text" keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_LEVEL_KEY%>"/>
+							property="activityLevel"  styleClass="inp-text" keyName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.ACTIVITY_LEVEL_KEY%>"/>
 							</logic:present>
 							
 							</div>

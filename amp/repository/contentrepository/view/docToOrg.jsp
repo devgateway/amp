@@ -11,7 +11,7 @@
 
 
 <digi:instance property="crDocToOrgForm" />
-<bean:define id="myForm" name="crDocToOrgForm" toScope="page" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
+<bean:define id="myForm" name="crDocToOrgForm" toScope="page" type="org.digijava.ampModule.contentrepository.form.DocToOrgForm" />
 
 <logic:notEmpty name="myForm" property="messages">
 	<c:forEach var="msg" items="${myForm.messages}">

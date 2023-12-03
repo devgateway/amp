@@ -8,10 +8,10 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ page import="java.util.List"%>
 
-<%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
+<%@page import="org.digijava.ampModule.categorymanager.util.CategoryManagerUtil"%>
 
 <digi:instance property="cmCategoryManagerForm" />
-<bean:define id="myForm" name="cmCategoryManagerForm" toScope="session" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
+<bean:define id="myForm" name="cmCategoryManagerForm" toScope="session" type="org.digijava.ampModule.categorymanager.form.CategoryManagerForm" />
 
 <!--  AMP Admin Logo -->
 <%-- <jsp:include page="teamPagesHeader.jsp" flush="true" /> --%> 
@@ -322,7 +322,7 @@
 					<td rowspan="2" bgcolor=#F2F2F2 style="font-size: small; font-weight: bold; text-align: center;" class="inside"><digi:trn key="aim:actions">Actions</digi:trn></td>
 				</tr>
 					<logic:notEmpty name="myForm" property="usedCategories">
-					<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg">
+					<logic:iterate name="myForm" property="usedCategories" type="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass" id="usedCateg">
 						<td style="font-size: x-small; font-weight: bold; text-align: center;" class="inside">
 							<digi:trn><c:out value="${usedCateg.name}"></c:out></digi:trn>
 							<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return delLabelCategory(${usedCateg.id})" 
@@ -335,7 +335,7 @@
 				<tr>
 				</tr>
 			<c:forEach var="possibleVals" items="${myForm.possibleVals}" varStatus="index">
-				<bean:define id="pVal" toScope="page" name="possibleVals" type="org.digijava.module.categorymanager.util.PossibleValue" />
+				<bean:define id="pVal" toScope="page" name="possibleVals" type="org.digijava.ampModule.categorymanager.util.PossibleValue" />
                <%-- <c:choose>
                	<c:when test="${possibleVals.disable}">
                		<c:set var="textDecorationStyle" scope="page">text-decoration:line-through;</c:set>
@@ -394,7 +394,7 @@
 					</c:choose>
 				</td>
 				<logic:notEmpty name="myForm" property="usedCategories">
-				<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg" indexId="countCateg">
+				<logic:iterate name="myForm" property="usedCategories" type="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass" id="usedCateg" indexId="countCateg">
 					<td align="center" class="inside">
 						<c:forEach var="valId" items="${possibleVals.labelCategories[countCateg].labelsId}">
 							<category:getoptionvalue categoryValueId="${valId}"/> <br />

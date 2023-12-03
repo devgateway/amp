@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-14933</jira>
+	<keyword>ModuleInstance</keyword>
+	<author>vlymanskyi</author>
+	<description>Update ampModule instance name for admin help</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				update DG_MODULE_INSTANCE set MODULE_INSTANCE = 'admin' where MODULE_INSTANCE_ID = 46;
+       		</lang>
+		</script>
+	</apply>
+</tns:patch>

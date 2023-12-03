@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 
 	<name>aim</name>
 	<security login-required="true" default="READ">
@@ -73,190 +73,190 @@
 
 	<!-- AIM classes Begin-->
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyIndicatorCalcFormula</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityInternalId</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAgreement</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpPledge</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpSector</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivitySector</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityBudgetStructure</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpLocation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRole</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpKmDocuments</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTheme</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFiscalCalendar</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFunding</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpModulesVisibility</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTemplatesVisibility</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFeaturesVisibility</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAuditLogger</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardOrganisation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpDataFreezeSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpDataFreezeExclusion</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityFrozen</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFieldsVisibility</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingDetail</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingMTEFProjection</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrency</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrencyRate</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpInflationRate</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpInflationSource</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeam</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamSummaryNotificationSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicatorValue</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicators</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamMemberRoles</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamMember</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpApplicationSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReports</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLog</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpSectorScheme</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>				
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentType</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponent</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentsIndicators</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgType</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgGroup</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpField</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpComments</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRole</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRoleBudget</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumns</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsFilters</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsOrder</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpMeasures</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIssues</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpMeasure</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActor</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalObservation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalObservationActor</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentFunding</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalFunding</hibernate-class>		
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportsOptions</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurvey</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyIndicator</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyQuestion</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyResponse</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurvey</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyIndicator</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestion</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyResponse</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestionType</hibernate-class>		
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiIndicator</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiQuestion</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiQuestionOption</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurvey</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument</hibernate-class>		
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiDonorNotes</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFeature</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpSiteFlag</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpHomeThumbnail</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGlobalSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.FeatureTemplates</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.NpdSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityReferenceDoc</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityDocument</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisationDocument</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicator</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityProgramSettings</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityProgram</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityLocation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpUserExtension</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.IPAContract</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractDisbursement</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractAmendment</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorValue</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.IndicatorConnection</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpClassificationConfiguration</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpCategoryValueLocations</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorLayer</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorWorkspace</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorColor</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpLocationIndicatorValue</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpDesktopTabSelection</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorSubgroup</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAhsurveyIndicatorCalcFormula</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPISurveyIndicatorCalcFormula</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityInternalId</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAgreement</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpPledge</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpSector</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivitySector</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityBudgetStructure</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpLocation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrganisation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpRole</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpKmDocuments</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpTheme</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFiscalCalendar</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFunding</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpModulesVisibility</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAuditLogger</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpScorecardSettingsCategoryValue</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpScorecardSettings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpScorecardOrganisation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpDataFreezeSettings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpDataFreezeExclusion</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityFrozen</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFundingDetail</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFundingMTEFProjection</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpCurrency</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpCurrencyRate</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpInflationRate</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpInflationSource</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFilteredCurrencyRate</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpTeam</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpTeamSummaryNotificationSettings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpMEIndicatorValue</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpMEIndicators</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpTeamMemberRoles</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpTeamMember</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpApplicationSettings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpReports</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpReportLog</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpSectorScheme</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpTeamReports</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpComponentType</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpComponent</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpComponentsIndicators</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrgType</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrgGroup</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpField</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpComments</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrgRole</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrgRoleBudget</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpColumns</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpColumnsFilters</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpColumnsOrder</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpMeasures</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIssues</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpMeasure</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActor</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpRegionalObservation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpRegionalObservationMeasure</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpRegionalObservationActor</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpLineMinistryObservation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpLineMinistryObservationMeasure</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpLineMinistryObservationActor</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpComponentFunding</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpRegionalFunding</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpReportsOptions</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndicatorRiskRatings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAhsurvey</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAhsurveyIndicator</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAhsurveyQuestion</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAhsurveyResponse</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAhsurveyQuestionType</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPISurvey</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPISurveyIndicator</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPISurveyQuestion</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPISurveyResponse</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPISurveyQuestionType</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiAidOnBudget</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiIndicator</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiQuestion</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiQuestionOption</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiSurvey</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiSurveyResponse</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiSurveyResponseDocument</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGPINiDonorNotes</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFeature</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpSiteFlag</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpHomeThumbnail</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpGlobalSettings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.FeatureTemplates</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.NpdSettings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityReferenceDoc</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityDocument</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndicator</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityProgramSettings</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityProgram</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityLocation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpUserExtension</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.IPAContract</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.IPAContractDisbursement</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.IPAContractAmendment</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndicatorValue</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.IndicatorConnection</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpClassificationConfiguration</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndicatorLayer</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndicatorWorkspace</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndicatorColor</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpLocationIndicatorValue</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpDesktopTabSelection</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndicatorSubgroup</hibernate-class>
 		<hibernate-class>org.dgfoundation.amp.ar.dbentity.AmpFilterData</hibernate-class>
 		<hibernate-class>org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpQuartzJobClass</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpChapter</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpImputation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpColorThreshold</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpQuartzJobClass</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpChapter</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpImputation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpColorThreshold</hibernate-class>
 		
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroup</hibernate-class>		
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityVersion</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAnnualProjectBudget</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingAmount</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityGroup</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityVersion</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAnnualProjectBudget</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFundingAmount</hibernate-class>
                 
 		<!-- Pledges classes -->
-		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledges</hibernate-class>
-		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation</hibernate-class>
-		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram</hibernate-class>
-		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesSector</hibernate-class>
-		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument</hibernate-class>		
-		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.fundingpledges.dbentity.FundingPledges</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesLocation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesProgram</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesSector</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesDocument</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesDetails</hibernate-class>
 		
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgStaffInformation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRecipient</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrgLocation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrgStaffInformation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrganizationBudgetInformation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrgRecipient</hibernate-class>
 		
-		<hibernate-class>org.digijava.module.budget.dbentity.AmpDepartments</hibernate-class>
-		<hibernate-class>org.digijava.module.budget.dbentity.AmpBudgetSector</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpContact</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityContact</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpContactProperty</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisationContact</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.budget.dbentity.AmpDepartments</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.budget.dbentity.AmpBudgetSector</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpContact</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityContact</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpContactProperty</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOrganisationContact</hibernate-class>
 		
 		<!--  GIS Structures Classes -->
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureType</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructure</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureImg</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureCoordinate</hibernate-class>	
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpStructureType</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpStructure</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpStructureImg</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpStructureCoordinate</hibernate-class>
 
-        <hibernate-class>org.digijava.module.aim.dbentity.OnepagerSection</hibernate-class>
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpContentTranslation</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.OnepagerSection</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpContentTranslation</hibernate-class>
         
-        <hibernate-class>org.digijava.module.aim.dbentity.GPISetup</hibernate-class>
-        <hibernate-class>org.digijava.module.aim.dbentity.GPIDefaultFilters</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.GPISetup</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.GPIDefaultFilters</hibernate-class>
 
         <!-- Aid Effectiveness Indicators -->
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpAidEffectivenessIndicatorOption</hibernate-class>
         
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpInterchangeableResult</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpInterchangeableResult</hibernate-class>
         
         <!-- Menu -->
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpMenuEntry</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpMenuEntry</hibernate-class>
         
         <!-- Visibility -->
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpVisibilityRule</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpVisibilityRule</hibernate-class>
         
         <!-- Performance Rules -->
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpPerformanceRule</hibernate-class>
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpPerformanceRule</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpPerformanceRuleAttribute</hibernate-class>
         
         <!-- Allowed MimeTypes -->
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpFileType</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpFileType</hibernate-class>
 
-        <hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOfflineCompatibleVersionRange</hibernate-class>
 
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineRelease</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOfflineRelease</hibernate-class>
 
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineChangelog</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpOfflineChangelog</hibernate-class>
 
 
 		<!-- Geo Coding -->
@@ -265,13 +265,13 @@
 		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedLocation</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedField</hibernate-class>
 
-		<hibernate-class>org.digijava.module.aim.dbentity.MachineTranslation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.MachineTranslationCharactersUsed</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndirectTheme</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityIndirectProgram</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpThemeMapping</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.MachineTranslation</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.MachineTranslationCharactersUsed</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpIndirectTheme</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpActivityIndirectProgram</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.aim.dbentity.AmpThemeMapping</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->
 
-</module-config>
+</ampModule-config>

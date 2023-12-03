@@ -16,7 +16,7 @@ function onDelete() {
 function addType()
 {
   openNewWindow(550, 300);
-  <digi:context name="addComponentType" property="context/module/moduleinstance/updateComponentType.do?event=add" />
+  <digi:context name="addComponentType" property="context/ampModule/moduleinstance/updateComponentType.do?event=add" />
   document.aimComponentsTypeForm.action = "<%= addComponentType %>";
   document.aimComponentsTypeForm.target = popupPointer.name;
   document.aimComponentsTypeForm.submit();
@@ -25,7 +25,7 @@ function addType()
 
 function editType(id){
   openNewWindow(600, 400);
-  <digi:context name="editComponentType" property="context/module/moduleinstance/updateComponentType.do?event=edit" />
+  <digi:context name="editComponentType" property="context/ampModule/moduleinstance/updateComponentType.do?event=edit" />
   document.aimComponentsTypeForm.action = "<%= editComponentType %>&id="+id;
   document.aimComponentsTypeForm.target = popupPointer.name;
   document.aimComponentsTypeForm.submit();
@@ -33,7 +33,7 @@ function editType(id){
 
 function deleteType(id){
 if (onDelete()){
-  <digi:context name="delComponentType" property="context/module/moduleinstance/updateComponentType.do?event=delete" />
+  <digi:context name="delComponentType" property="context/ampModule/moduleinstance/updateComponentType.do?event=delete" />
   document.aimComponentsTypeForm.action = "<%= delComponentType %>&id="+id;
   document.aimComponentsTypeForm.target = "_self";
   document.aimComponentsTypeForm.submit();
@@ -103,7 +103,7 @@ if (onDelete()){
                           </logic:empty>
                           <logic:notEmpty name="aimComponentsTypeForm" property="componentTypesList">
                             <logic:iterate name="aimComponentsTypeForm" property="componentTypesList" id="componentTypesList"
-                            type="org.digijava.module.aim.dbentity.AmpComponentType">
+                            type="org.digijava.ampModule.aim.dbentity.AmpComponentType">
                               <tr>
                                 <td height="20" class="inside">
                                 
@@ -166,7 +166,7 @@ if (onDelete()){
             <td bgColor=#c9c9c7>
               <digi:trn key="aim:otherLinks">Other links</digi:trn>
             </td>
-            <td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
+            <td background="ampModule/aim/images/corner-r.gif" height="17" width="17"></td>
           </tr>
         </table>
       </td>
@@ -176,7 +176,7 @@ if (onDelete()){
         <table cellPadding=5 cellspacing="1" width="100%" class="inside">
           <tr>
             <td nowrap="nowrap" class="inside" style="font-size:12px;">
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+              <digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>

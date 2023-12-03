@@ -7,7 +7,7 @@
 	<uri>http://digijava.org</uri>
 	<tag>
 		<name>putInScope</name>
-		<tagclass>org.digijava.module.gateperm.core.GatePermScopeTag</tagclass>
+		<tagclass>org.digijava.ampModule.gateperm.core.GatePermScopeTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<attribute>
 			<name>key</name>

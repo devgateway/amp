@@ -7,7 +7,7 @@
 	<page page="globaladdkey" name="globaladdkey" title="Translation-Add New Key" />
 </secondary-pages>
 
-<module>
+<ampModule>
 		<teaser-file>teaser1.jsp</teaser-file>
 		<teaser name="translate" action="Translate.do">TranslatorPortlet.jsp</teaser>
 		<page name="ChangeNavLang">ChangeNavLang.jsp</page>
@@ -16,6 +16,6 @@
 		<page name="addkey">addkey.jsp</page>
 		<teaser name="globalTranslation" action="GlobalTranslation.do">globaltranslation.jsp</teaser>
 		<page name="globaladdkey">globaladdkey.jsp</page>
-</module>
+</ampModule>
 
 </config>

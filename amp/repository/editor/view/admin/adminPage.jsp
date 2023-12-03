@@ -4,8 +4,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<%@ page import="org.digijava.module.editor.dbentity.Editor" %>
-<%@ page import="org.digijava.module.editor.util.Constants" %>
+<%@ page import="org.digijava.ampModule.editor.dbentity.Editor" %>
+<%@ page import="org.digijava.ampModule.editor.util.Constants" %>
 
 
 <digi:instance property="editorAdminForm" />
@@ -14,7 +14,7 @@
 
 <script language="JavaScript">
 	function addEditor() {
-      <digi:context name="addEditor" property="context/module/moduleinstance/addEditor.do" />
+      <digi:context name="addEditor" property="context/ampModule/moduleinstance/addEditor.do" />
       document.editorAdminForm.action = "<%= addEditor %>";
       document.editorAdminForm.submit();	
 	}

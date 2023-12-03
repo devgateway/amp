@@ -8,8 +8,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />
 
@@ -55,7 +55,7 @@
 	</div>
 	
 	<div class="clearfix">&nbsp;</div>
-	<feature:display name="Pledge Status" module="Pledges">
+	<feature:display name="Pledge Status" ampModule="Pledges">
 		<div class="label-and-select">
 			<div class="col-xs-4 h6 bold">
 				<span class="red">*</span> 

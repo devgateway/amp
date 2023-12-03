@@ -10,7 +10,7 @@
 
 <script>
   function fnOnExpand( param ) {
-      <digi:context name="expandUrl" property="context/module/moduleinstance/showPickupSite.do" />
+      <digi:context name="expandUrl" property="context/ampModule/moduleinstance/showPickupSite.do" />
       document.pickupForm.expand.value=param;
       document.pickupForm.action = "<%= expandUrl %>";
 

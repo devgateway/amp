@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-27787</jira>
+	<keyword>gis</keyword>
+	<author>vchihai</author>
+	<description>Remove old gis ampModule and translations</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				
+				DELETE FROM amp_modules_templates 
+				    WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Result Matrix Settings');
+				    
+				DELETE FROM amp_modules_visibility WHERE name = 'Result Matrix Settings'; 
+				
+				DELETE FROM dg_message WHERE message_key = '1344614052'; <!-- 'Click here to view Result Matrix/GIS Settings page' -->
+				DELETE FROM dg_message WHERE message_key = '-666851683'; <!-- 'Result Matrix/GIS Settings' -->
+				
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

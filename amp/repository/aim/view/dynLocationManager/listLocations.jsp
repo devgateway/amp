@@ -9,16 +9,16 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <logic:notEmpty scope="request" name="locCollection">
 	<ul>
 		<c:set var="lvlIndex" scope="request" value="${lvlIndex+1}" />
-		<logic:iterate scope="request" name="locCollection" id="loc" type="org.digijava.module.aim.dbentity.AmpCategoryValueLocations">
+		<logic:iterate scope="request" name="locCollection" id="loc" type="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations">
 			<c:if test="${loc.deleted != true}"> 
-				<bean:define id="locCV" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" name="loc" property="parentCategoryValue" />
+				<bean:define id="locCV" type="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" name="loc" property="parentCategoryValue" />
 			
 				<bean:define id="liClassString" toScope="page" value=""/>
 				<logic:empty name="loc" property="childLocations">

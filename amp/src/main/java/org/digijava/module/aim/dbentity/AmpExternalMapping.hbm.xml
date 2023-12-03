@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpExternalMapping"
+		table="AMP_EXTERNAL_MAPPING">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator" />
+		</id>
+		<property name="ampId" column="amp_id" type="java.lang.String" />
+		<property name="externalId" column="external_id" type="java.lang.String" />
+		<property name="objectType" column="obj_type" type="java.lang.String" />
+		<property name="externalSource" column="external_source" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

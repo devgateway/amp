@@ -4,9 +4,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
-<%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
-<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%>
+<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
 
 <digi:instance property="pledgeForm" />
 

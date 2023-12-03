@@ -7,12 +7,12 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addFunding.js"/>"></script>
 
 <script language="JavaScript">
     var openImg;
@@ -88,7 +88,7 @@
 function addIndicator(id){
 	var windowname = "popup"+new Date().getTime();
 	openNewWindowWithName(800, 500, windowname);
-	<digi:context name="addIndicator" property="context/module/moduleinstance/assignNewIndicator.do" />
+	<digi:context name="addIndicator" property="context/ampModule/moduleinstance/assignNewIndicator.do" />
  	var referLink = document.createElement('a');
  	referLink.href = "<%= addIndicator %>?parentid=" + id + "&type=program";
  	referLink.target = windowname;
@@ -98,12 +98,12 @@ function addIndicator(id){
 
 
 function editIndicator(id,parentid,type){
-  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
+  <digi:context name="viewEditIndicator" property="context/ampModule/moduleinstance/viewEditIndicator.do" />
   openURLinWindow("<%=viewEditIndicator%>?id=" + id + "&parentid="+parentid+"&type=program&event=edit",500, 300);
 }
 
 function addData(id){
-  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do" />
+  <digi:context name="addEditIndicator" property="context/ampModule/moduleinstance/addEditData.do" />
   openURLinWindow("<%= addEditIndicator %>?parent=" + id,625, 550);
 }
 
@@ -167,7 +167,7 @@ function saveProgram(id,indId)
   if (temp == true)
   {
 
-    <digi:context name="addThmInd" property="context/module/moduleinstance/addThemeIndicator.do?event=save"/>
+    <digi:context name="addThmInd" property="context/ampModule/moduleinstance/addThemeIndicator.do?event=save"/>
     document.aimThemeForm.action = "<%=addThmInd%>&themeId=" + id + "&indicatorId=" + indId;
     document.aimThemeForm.target = "_self";
     document.aimThemeForm.submit();
@@ -179,7 +179,7 @@ function saveProgram(id,indId)
 
 function addIndVal(id)
 {
-  <digi:context name="addIndVal" property="context/module/moduleinstance/addThemeIndicator.do?event=indValue"/>
+  <digi:context name="addIndVal" property="context/ampModule/moduleinstance/addThemeIndicator.do?event=indValue"/>
   document.aimThemeForm.action = "<%=addIndVal%>&themeId=" +id;
   document.aimThemeForm.target = "_self";
   document.aimThemeForm.submit();
@@ -192,7 +192,7 @@ function load(){}
 function unload(){}
 
 function closeWindow(){
-	<digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
+	<digi:context name="closeInd" property="context/ampModule/moduleinstance/closeThemeIndicator.do"/>
 	document.aimThemeForm.action = "<%=closeInd%>";
 	document.aimThemeForm.submit();
 	window.close();
@@ -201,7 +201,7 @@ function closeWindow(){
 
   function closeWindow(indiType)
   {
-    <digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
+    <digi:context name="closeInd" property="context/ampModule/moduleinstance/closeThemeIndicator.do"/>
     document.aimThemeForm.action = "<%=closeInd%>?type="+indiType;
     document.aimThemeForm.target = window.opener.name;
     document.aimThemeForm.submit();
@@ -277,7 +277,7 @@ function closeWindow(){
   	function removeIndicators() {
 		var flag = validate(2);
 		if (flag == false) return false;
-	    <digi:context name="remInd" property="context/module/moduleinstance/addThemeIndicator.do?event=Delete" />
+	    <digi:context name="remInd" property="context/ampModule/moduleinstance/addThemeIndicator.do?event=Delete" />
 		    document.aimThemeForm.action = "<%= remInd %>";
 		    document.aimThemeForm.target = "_self";
 		    document.aimThemeForm.submit();
@@ -418,7 +418,7 @@ function closeWindow(){
                                                  </td>
                                             </tr>
                                         <logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">
-                                           <logic:iterate name="prgIndicatorItr" property="programIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
+                                           <logic:iterate name="prgIndicatorItr" property="programIndicatorValues" id="prgIndicatorValues" type="org.digijava.ampModule.aim.helper.AmpPrgIndicatorValue">
                                             <tr bgcolor="#ffffff">
                                                 <td width="40" bgcolor="#ffffff" align="center" class="inside">																		
                                                     <c:if test="${prgIndicatorValues.valueType=='0'}"><digi:trn key="aim:addeditdata:target">Target</digi:trn></c:if>

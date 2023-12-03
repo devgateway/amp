@@ -13,14 +13,14 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
 
 <c:set var="ct_nr">${param.ct_nr}</c:set>
 <c:set var="feature_name">Pledge Contact ${ct_nr}</c:set>
 <c:set var="contact_var">contact${ct_nr}</c:set>
 <digi:instance property="pledgeForm" />
-<feature:display name="${feature_name}" module="Pledges">
+<feature:display name="${feature_name}" ampModule="Pledges">
 	<aim:renderFormSubsection title="${param.sectiontitle}" styleId="pledge_form_contact_${ct_nr}">
 		<div id="pledge_contact_${ct_nr}">
 			<c:if test="${not empty param.checkboxtext}">

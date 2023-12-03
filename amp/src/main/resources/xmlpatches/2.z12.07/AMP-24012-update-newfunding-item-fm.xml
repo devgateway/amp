@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-24012</jira>
+    <keyword>FM new funding item</keyword>
+    <author>vchihai</author>
+    <description>Update new funding item button FM path</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            
+            	<!-- 1.      Create the new 'New Funding Item' FM -->
+           		INSERT INTO amp_modules_visibility (id, name, haslevel, parent)
+				SELECT (select nextval('amp_modules_visibility_seq')), '/Activity Form/Funding/Funding Group/New Funding Item', true,
+				(SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Funding Group');
+            	
+            	<!-- 2.  	ADD the new 'New Funding Item' FM to the templat if the was already added -->
+				INSERT INTO amp_modules_templates (template, ampModule)
+				SELECT 
+					(SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+					(SELECT id AS ampModule FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Funding Group/New Funding Item')
+				WHERE EXISTS (
+						SELECT template FROM amp_modules_templates 
+						WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+						AND ampModule = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/New Funding Item')
+				);
+				
+				<!-- 3.   	REMOVE old 'New Funding Item' FM -->
+				DELETE FROM amp_modules_templates WHERE ampModule IN (
+						SELECT id from amp_modules_visibility WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/New Funding Item');
+
+				DELETE FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/New Funding Item';
+				
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-21938</jira>
+	<keyword>double Organizations in GFM Activity form</keyword>
+	<author>apicca</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%/Related Organizations%');
+				delete from amp_modules_visibility where name like '%/Related Organizations%' and id not in (select parent from amp_modules_visibility where name like '%/Related Organizations%');
+				delete from amp_modules_visibility where name like '%/Related Organizations%';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

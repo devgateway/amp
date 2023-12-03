@@ -1,13 +1,13 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="/Activity Form/Budget Structure" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Budget Structure" parentModule="/Activity Form">
     <fieldset>
         <legend>
 		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
@@ -40,4 +40,4 @@
             </c:if>
         </div>
     </fieldset>
-</module:display>
+</ampModule:display>

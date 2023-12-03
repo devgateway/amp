@@ -2,27 +2,27 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
 	<form-beans>
-		<form-bean name="mainmapform" type="org.digijava.module.esrigis.form.MainMapForm"/>
-		<form-bean name="datadispatcherform" type="org.digijava.module.esrigis.form.DataDispatcherForm"/>
-		<form-bean name="proxyform" type="org.digijava.module.esrigis.form.EsryProxyForm"/>
-		<form-bean name="structuretypeform" type="org.digijava.module.esrigis.form.StructureTypeForm"/>
-		<form-bean name="structuresimporterform" type="org.digijava.module.esrigis.form.StructuresImporterForm"/>
-		<form-bean name="mapsconfigurationform" type="org.digijava.module.esrigis.form.MapsConfigurationForm"/>
+		<form-bean name="mainmapform" type="org.digijava.ampModule.esrigis.form.MainMapForm"/>
+		<form-bean name="datadispatcherform" type="org.digijava.ampModule.esrigis.form.DataDispatcherForm"/>
+		<form-bean name="proxyform" type="org.digijava.ampModule.esrigis.form.EsryProxyForm"/>
+		<form-bean name="structuretypeform" type="org.digijava.ampModule.esrigis.form.StructureTypeForm"/>
+		<form-bean name="structuresimporterform" type="org.digijava.ampModule.esrigis.form.StructuresImporterForm"/>
+		<form-bean name="mapsconfigurationform" type="org.digijava.ampModule.esrigis.form.MapsConfigurationForm"/>
 		
 	</form-beans>
 	<action-mappings>
-	    <action name="structuretypeform" path="/esrigis/structureTypeManager" parameter="action" scope="session" type="org.digijava.module.esrigis.action.StructureTypeManager" validate="false">
+	    <action name="structuretypeform" path="/esrigis/structureTypeManager" parameter="action" scope="session" type="org.digijava.ampModule.esrigis.action.StructureTypeManager" validate="false">
 	      <forward name="list" path="/showLayout.do?layout=list" />
 	      <forward name="addEdit" path="/showLayout.do?layout=edit" />
 	      <forward name="save" path="/esrigis/structureTypeManager.do?action=list" redirect="true" />
 	      <forward name="delete" path="/esrigis/structureTypeManager.do?action=list" />
 	    </action>
 	    
-	    <action name="structuresimporterform" path="/esrigis/StructuresImporter" scope="session" validate="false" type="org.digijava.module.esrigis.action.StructuresImporter">
+	    <action name="structuresimporterform" path="/esrigis/StructuresImporter" scope="session" validate="false" type="org.digijava.ampModule.esrigis.action.StructuresImporter">
 	    	<forward name="forward" path="/showLayout.do?layout=importstructures"/>
 	    </action>
 	    
-	    <action name="mapsconfigurationform" path="/esrigis/MapsConfiguration" parameter="action" scope="session" type="org.digijava.module.esrigis.action.MapsConfiguration" validate="false">
+	    <action name="mapsconfigurationform" path="/esrigis/MapsConfiguration" parameter="action" scope="session" type="org.digijava.ampModule.esrigis.action.MapsConfiguration" validate="false">
 	      <forward name="list" path="/showLayout.do?layout=mapconfigurationList" />
 	      <forward name="addEdit" path="/showLayout.do?layout=mapconfigurationEdit"  />
 	      <forward name="save" path="/esrigis/MapsConfiguration.do?action=list" redirect="true" />
@@ -30,12 +30,12 @@
 	    </action>
 	    
 	     
-		<action name="datadispatcherform" path="/esrigis/mainmap" scope="session" type="org.digijava.module.esrigis.action.MainMap">
+		<action name="datadispatcherform" path="/esrigis/mainmap" scope="session" type="org.digijava.ampModule.esrigis.action.MainMap">
 			<forward name="forward" path="/showLayout.do?layout=mainmap" />
 			<forward name="popup" path="/showLayout.do?layout=mainmapPopup" />
 		</action>
-		<action name="datadispatcherform" path="/esrigis/datadispatcher" scope="session" validate="false" type="org.digijava.module.esrigis.action.DataDispatcher"/>
-		<action name="proxyform"  path="/esrigis/esriproxy" type="org.digijava.module.esrigis.action.EsriProxy"/>
-		<action name="datadispatcherform"  path="/esrigis/excelexporter" type="org.digijava.module.esrigis.action.ExcelExporter"/>
+		<action name="datadispatcherform" path="/esrigis/datadispatcher" scope="session" validate="false" type="org.digijava.ampModule.esrigis.action.DataDispatcher"/>
+		<action name="proxyform"  path="/esrigis/esriproxy" type="org.digijava.ampModule.esrigis.action.EsriProxy"/>
+		<action name="datadispatcherform"  path="/esrigis/excelexporter" type="org.digijava.ampModule.esrigis.action.ExcelExporter"/>
 	</action-mappings>
 </struts-config>

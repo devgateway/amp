@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>contentrepository</name>
 	<security>
 		<action login-required="true" pattern="/tempDocManager">ADMIN</action>
@@ -16,28 +16,28 @@
 
 	<hibernate-classes required="true">
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes
+			org.digijava.ampModule.contentrepository.dbentity.CrDocumentNodeAttributes
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.CrSharedDoc
+			org.digijava.ampModule.contentrepository.dbentity.CrSharedDoc
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.TeamNodeState
+			org.digijava.ampModule.contentrepository.dbentity.TeamNodeState
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations
+			org.digijava.ampModule.contentrepository.dbentity.CrDocumentsToOrganisations
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.template.TemplateDoc
+			org.digijava.ampModule.contentrepository.dbentity.template.TemplateDoc
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.template.TemplateField
+			org.digijava.ampModule.contentrepository.dbentity.template.TemplateField
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.template.PossibleValue
+			org.digijava.ampModule.contentrepository.dbentity.template.PossibleValue
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.contentrepository.dbentity.filter.DocumentFilter
+			org.digijava.ampModule.contentrepository.dbentity.filter.DocumentFilter
 		</hibernate-class>
 	</hibernate-classes>
-</module-config>
+</ampModule-config>

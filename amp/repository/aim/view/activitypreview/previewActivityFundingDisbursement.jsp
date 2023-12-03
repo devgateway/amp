@@ -10,9 +10,9 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <digi:instance property="aimEditActivityForm" />
-<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
+<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 <c:set var="transaction" value="Disbursements/Disbursements Table" scope="page"/>
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
@@ -33,7 +33,7 @@
 	<!-- Start Planned Disbursements -->
 	<c:if test="${!empty funding.fundingDetails}">	
 	<logic:iterate name="funding" property="fundingDetails"
-		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">			
 				<%@include file="previewActivityFundingDetail.jspf" %>
@@ -76,7 +76,7 @@
 
 	<!-- Start Actual Disbursements -->
 	<c:if test="${!empty funding.fundingDetails}">	
-	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
 				<%@include file="previewActivityFundingDetail.jspf" %>
@@ -118,7 +118,7 @@
 
 	<!-- Start Pipeline Disbursements -->
 	<c:if test="${!empty funding.fundingDetails}">	
-	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Pipeline">
 				<%@include file="previewActivityFundingDetail.jspf" %>
@@ -143,7 +143,7 @@
 	</c:if>
 	
 	<tr><td colspan="4" height="7px"></td></tr>
-</module:display>
+</ampModule:display>
 
 
 

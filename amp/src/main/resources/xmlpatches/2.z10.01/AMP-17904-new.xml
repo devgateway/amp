@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17904</jira>
+	<keyword>Admin ampModule for managing boundary data</keyword>
+	<author>Jdeanquin</author>
+	<description>re - Enable PostGIS in the database. </description>
+	 <trigger type="all">
+      <condition type="custom">
+          <script returnVar="y">
+              <lang type="sql">SELECT count(*) FROM information_schema.tables 
+					WHERE table_schema='public' and table_name='amp_locator'</lang>
+          </script>
+          <test>y.intValue()==0</test>
+      </condition>
+  </trigger>  
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				--POST gis needs to be installed first!! http://postgis.net/install/
+				-- Enable PostGIS (includes raster)
+				CREATE EXTENSION if not exists postgis;
+				-- Enable Topology
+				CREATE EXTENSION if not exists postgis_topology;
+				-- fuzzy matching needed for Tiger
+				CREATE EXTENSION if not exists fuzzystrmatch;
+				-- Enable US Tiger Geocoder
+				CREATE EXTENSION if not exists postgis_tiger_geocoder;
+				SET search_path TO "$user", public, tiger;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

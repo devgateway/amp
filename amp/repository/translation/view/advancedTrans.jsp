@@ -8,10 +8,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language=JavaScript type=text/javascript>
-<digi:context name="updateMsg" property="context/module/moduleinstance/updateMessage.do" />
+<digi:context name="updateMsg" property="context/ampModule/moduleinstance/updateMessage.do" />
 
 function fnOnSearch() {
-	<digi:context name="searchMsg" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+	<digi:context name="searchMsg" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
 	var form   = document.forms['advancedTranslationForm'];
 	form.action = "<%=searchMsg%>";
         form.submit();
@@ -20,7 +20,7 @@ function fnOnSearch() {
 }
 
 function onChangeList(paramName, paramValue) {
-	<digi:context name="changeTLang" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+	<digi:context name="changeTLang" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
 	var form  = document.forms['advancedTranslationForm'];
 	var query = "<%=changeTLang%>?selected"+paramName+"="+paramValue+"&showExpired="+form.showExpired.checked;
 
@@ -29,7 +29,7 @@ function onChangeList(paramName, paramValue) {
 }
 
 function saveAll() {
-	<digi:context name="saveAllAction" property="context/module/moduleinstance/saveAllMessages.do" />
+	<digi:context name="saveAllAction" property="context/ampModule/moduleinstance/saveAllMessages.do" />
 	
 	var form   		= document.forms['advancedTranslationForm'];
 	var targetValue = '';
@@ -190,13 +190,13 @@ function getPageId() {
 }
 
 function onShowExpired() {
-	<digi:context name="changePref" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+	<digi:context name="changePref" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
 	var szQuery = "<%=changePref%>?selectedPrefix="+document.advancedTranslationForm.selectedPrefix.value+"&showExpired="+document.advancedTranslationForm.showExpired.checked;
 	document.location.href = szQuery;
 }
 
 function fnOnDeleteKey(key) {
-	<digi:context name="deleteKey" property="context/module/moduleinstance/deleteKey.do" />
+	<digi:context name="deleteKey" property="context/ampModule/moduleinstance/deleteKey.do" />
 	document.advancedTranslationForm.action = "<%=deleteKey%>?key="+key;
 	alert("<%=deleteKey%>?key="+key);
 	return;
@@ -204,31 +204,31 @@ function fnOnDeleteKey(key) {
 }
 
 function fnOnSwitchToGlobal() {
-	<digi:context name="switchToGlobal" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+	<digi:context name="switchToGlobal" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
 	document.advancedTranslationForm.action = "<%=switchToGlobal%>?switchToGlobal=true";
 	document.advancedTranslationForm.submit();
 }
 
 function fnOnSwitchToSite() {
-	<digi:context name="switchToSite" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+	<digi:context name="switchToSite" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
 	document.advancedTranslationForm.action = "<%=switchToSite%>?switchToGlobal=false";
 	document.advancedTranslationForm.submit();
 }
 
 function fnOnAddKey() {
-	<digi:context name="addKey" property="context/module/moduleinstance/addKey.do" />
+	<digi:context name="addKey" property="context/ampModule/moduleinstance/addKey.do" />
 	document.advancedTranslationForm.action = "<%=addKey%>";
 	document.advancedTranslationForm.submit();
 }
 
 function Next(param) {
-	<digi:context name="next" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+	<digi:context name="next" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
 	document.advancedTranslationForm.action = "<%=next%>?nav="+param;
 	document.advancedTranslationForm.submit();
 }
 
 function Prev(param) {
-	<digi:context name="prev" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+	<digi:context name="prev" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
 	document.advancedTranslationForm.action = "<%=prev%>?nav="+param;
 	document.advancedTranslationForm.submit();
 }
@@ -589,8 +589,8 @@ table.trnrow {
   <!-- Start of Content -->
 <tr><td colspan=6>
   <bean:define id="trns" name="advancedTranslationForm" property="translations" scope="page" />
-  <bean:define id="trnForm" name="advancedTranslationForm" scope="page" type="org.digijava.module.translation.form.AdvancedTranslationForm"/>
-  <digi:context name="pagination" property="context/module/moduleinstance/showAdvancedTranslation.do" />
+  <bean:define id="trnForm" name="advancedTranslationForm" scope="page" type="org.digijava.ampModule.translation.form.AdvancedTranslationForm"/>
+  <digi:context name="pagination" property="context/ampModule/moduleinstance/showAdvancedTranslation.do" />
   
   				<c:set var="banerFirst">&nbsp;<span class="pagelinks">[<digi:trn key="displayTag:first">First</digi:trn>/<digi:trn key="displayTag:prev">Prev</digi:trn>] {0} [<a href="{3}"><digi:trn key="displayTag:next">Next</digi:trn></a>/<a href="{4}"><digi:trn key="displayTag:last">Last</digi:trn></a>]</span></c:set>
 				<c:set var="banerFull">&nbsp;<span class="pagelinks">[<a href="{1}"><digi:trn key="displayTag:first">First</digi:trn></a>/<a href="{2}"><digi:trn key="displayTag:prev">Prev</digi:trn></a>] {0} [<a href="{3}"><digi:trn key="displayTag:next">Next</digi:trn></a>/<a href="{4}"><digi:trn key="displayTag:last">Last</digi:trn></a>]</span></c:set>

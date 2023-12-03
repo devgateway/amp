@@ -8,14 +8,14 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
     function addProgram() {
-      <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+      <digi:context name="selPrg" property="context/ampModule/moduleinstance/addProgram.do?edit=true"/>
       var prgSels=document.getElementsByName("selPrograms");
       var urlParams;
       var flag=false;
@@ -46,7 +46,7 @@
     }
 
     function reloadProgram(selectedProgram) {
-       	<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+       	<digi:context name="selProgram" property="context/ampModule/moduleinstance/addProgram.do?edit=true"/>
 
         var prgSels=document.getElementsByName("selPrograms");
         var flag=false;
@@ -72,7 +72,7 @@
       }
 
     function resetResults(){
-        <digi:context name="resetPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+        <digi:context name="resetPrg" property="context/ampModule/moduleinstance/addProgram.do?edit=true"/>
         var urlParams="<%=resetPrg%>";
 	    document.aimEditActivityForm.action = urlParams;
   		document.aimEditActivityForm.submit();

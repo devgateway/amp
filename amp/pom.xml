@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
+            <artifactId>powermock-ampModule-junit4</artifactId>
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
@@ -1086,6 +1086,42 @@
             <artifactId>commons-text</artifactId>
             <version>1.9</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.6.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-ampModule-junit4</artifactId>
+            <version>1.6.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.3.28</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -1101,13 +1137,13 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
 
         <finalName>${project.artifactId}</finalName>
 
         <resources>
             <resource>
-                <directory>WEB-INF/src</directory>
+                <directory>${project.basedir}/src</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
@@ -1139,15 +1175,15 @@
                     <webResources>
                         <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
                         <resource>
-                            <directory>${project.basedir}/TEMPLATE/ampTemplate</directory>
+                            <directory>src/main/resources/TEMPLATE/ampTemplate</directory>
                             <includes>
                                 <include>site-config.xml</include>
                             </includes>
                             <filtering>true</filtering>
-                            <targetPath>TEMPLATE/ampTemplate</targetPath>
+                            <targetPath>src/main/resources/TEMPLATE/ampTemplate</targetPath>
                         </resource>
                         <resource>
-                            <directory>${project.basedir}</directory>
+                            <directory>src/main/resources/</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
@@ -1182,8 +1218,110 @@
                             </excludes>
                         </resource>
                     </webResources>
-                    <webXml>WEB-INF/web.xml</webXml>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>2.5.0</version>
+
+                <executions>
+<!--                    schema 1-->
+                    <execution>
+                        <id>Translation</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <packageName>org.digijava.ampModule.translation.jaxb</packageName>
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+
+                            <sources>
+                                <source>
+                                    ${project.basedir}/doc/translation.xsd
+
+                                </source>
+                            </sources>
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
+                    </execution>
+<!-- schema 2 -->
+                    <execution>
+                        <id>Help</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <packageName>org.digijava.ampModule.help.jaxbi</packageName>
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+
+                            <sources>
+                                <source>
+                                      ${project.basedir}/doc/help.xsd
+
+                                </source>
+                            </sources>
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
+                    </execution>
+<!--                    schema 3-->
+                    <execution>
+                        <id>XmlPatcher</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <packageName>org.digijava.ampModule.xmlpatcher.jaxb</packageName>
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+
+                            <sources>
+                                <source>
+
+                                      ${project.basedir}/doc/xmlpatcher.xsd
+
+                                </source>
+                            </sources>
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
+                    </execution>
+<!--                    schema 4-->
+                    <execution>
+                        <id>Reports</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <packageName>org.dgfoundation.amp.reports.xml</packageName>
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <sources>
+                               <source>
+                                   ${project.basedir}/src/main/resources/schemas/report.xsd
+                               </source>
+
+
+                            </sources>
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
+                    </execution>
+
+                </executions>
+
+                <configuration>
+
+                    <!-- Package configurations -->
+                    <packageName>org.digijava.ampModule.translation.jaxb</packageName>
+                    <packageName>org.digijava.ampModule.help.jaxbi</packageName>
+                    <packageName>org.digijava.ampModule.xmlpatcher.jaxb</packageName>
+                    <packageName>org.dgfoundation.amp.reports.xml</packageName>
+
+                </configuration>
+
             </plugin>
 
             <plugin>
@@ -1206,56 +1344,58 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <target>
-                                <property name="compile_classpath" refid="maven.compile.classpath" />
-                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
-                                <property name="test_classpath" refid="maven.test.classpath" />
-                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
-                                <property name="jdbc.db" value="amp_drc" />
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-antrun-plugin</artifactId>-->
+<!--                <version>1.6</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>generate-resources</phase>-->
+<!--                        <configuration>-->
+<!--                            <target>-->
+<!--                                <property name="compile_classpath" refid="maven.compile.classpath" />-->
+<!--                                <property name="runtime_classpath" refid="maven.runtime.classpath" />-->
+<!--                                <property name="test_classpath" refid="maven.test.classpath" />-->
+<!--                                <property name="plugin_classpath" refid="maven.plugin.classpath" />-->
+<!--                                <property name="jdbc.db" value="amp_drc" />-->
 
-                                <ant antfile="${basedir}/build.xml">
-                                    <target name="deployForServer" />
-                                    <target name="jaxb" />
-                                </ant>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
+<!--                                <ant antfile="${basedir}/build.xml">-->
+<!--                                    <target name="deployForServer" />-->
+<!--                                    <target name="jaxb" />-->
+<!--                                </ant>-->
+<!--                            </target>-->
+<!--                        </configuration>-->
+<!--                        <goals>-->
+<!--                            <goal>run</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
 
-                    <execution>
-                        <id>clean</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <target>
-                                <property name="compile_classpath" refid="maven.compile.classpath" />
-                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
-                                <property name="test_classpath" refid="maven.test.classpath" />
-                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+<!--                    <execution>-->
+<!--                        <id>clean</id>-->
+<!--                        <phase>clean</phase>-->
+<!--                        <configuration>-->
+<!--                            <target>-->
+<!--                                <property name="compile_classpath" refid="maven.compile.classpath" />-->
+<!--                                <property name="runtime_classpath" refid="maven.runtime.classpath" />-->
+<!--                                <property name="test_classpath" refid="maven.test.classpath" />-->
+<!--                                <property name="plugin_classpath" refid="maven.plugin.classpath" />-->
 
-                                <ant antfile="${basedir}/build.xml">
-                                    <target name="clean" />
-                                </ant>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                                <ant antfile="${basedir}/build.xml">-->
+<!--                                    <target name="clean" />-->
+<!--                                </ant>-->
+<!--                            </target>-->
+<!--                        </configuration>-->
+<!--                        <goals>-->
+<!--                            <goal>run</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <!-- Integrate node.js with Maven -->
             <plugin>
+
+
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.12.1</version>
@@ -1270,7 +1410,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1280,7 +1420,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1290,7 +1430,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1301,7 +1441,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1311,7 +1451,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1322,7 +1462,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1332,7 +1472,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1343,7 +1483,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1354,7 +1494,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1364,7 +1504,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1375,7 +1515,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1386,7 +1526,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1396,7 +1536,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1407,7 +1547,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1418,7 +1558,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1428,7 +1568,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1439,7 +1579,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1450,7 +1590,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1461,7 +1601,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1472,7 +1612,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1483,7 +1623,7 @@
                         <phase>test</phase>
                         <configuration>
                             <arguments>run test</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1493,7 +1633,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/reampv2</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1504,7 +1644,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/reampv2</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1515,7 +1655,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/reampv2</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1525,7 +1665,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/reamp</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1536,7 +1676,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/reamp</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1547,7 +1687,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/reamp</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1558,7 +1698,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1569,7 +1709,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/resources/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -1688,6 +1828,8 @@
                         <useIncrementalCompilation>false</useIncrementalCompilation>
                     </configuration>
                 </plugin>
+
+
 
                 <!--This plugin's configuration is used to store Eclipse m2e settings
                     only. It has no influence on the Maven build itself. -->

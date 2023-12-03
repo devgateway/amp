@@ -26,7 +26,7 @@
 
 			openNewWindow(500, 300);
 
-			<digi:context name="addIndicator" property="context/module/moduleinstance/parisIndicatorManager.do?parisIndicator=add" />
+			<digi:context name="addIndicator" property="context/ampModule/moduleinstance/parisIndicatorManager.do?parisIndicator=add" />
 
 			document.aimParisIndicatorManagerForm.currUrl.value = "<%= addIndicator %>";
 
@@ -110,7 +110,7 @@
 
 				<logic:iterate name="aimParisIndicatorForm" property="parisIndicatorsList" id="quest"
 
-				type="org.digijava.module.aim.helper.ParisIndicatorHelper">
+				type="org.digijava.ampModule.aim.helper.ParisIndicatorHelper">
 
 				<tr>
 
@@ -118,7 +118,7 @@
 
 				<!--	<td class=f-names noWrap>
 
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>
 
 											<c:set var="translation">
 

@@ -191,8 +191,8 @@
 											</tr>
 										</logic:empty>
 										<logic:notEmpty name="aimTeamReportsForm" property="reports">
-											<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" type="org.digijava.module.aim.helper.ReportsCollection">
-												<bean:define id="ampReports" name="reports" property="report" type="org.digijava.module.aim.dbentity.AmpReports" />
+											<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" type="org.digijava.ampModule.aim.helper.ReportsCollection">
+												<bean:define id="ampReports" name="reports" property="report" type="org.digijava.ampModule.aim.dbentity.AmpReports" />
 													<tr>
 														<td width="5" align="center" class="inside">
 															<html:multibox property="selReports" >
@@ -533,7 +533,7 @@ function validate() {
 	}
 	
 	function submitTabs(reset){
-		<digi:context name="lala" property="context/module/moduleinstance/teamDesktopTabList.do"/>
+		<digi:context name="lala" property="context/ampModule/moduleinstance/teamDesktopTabList.do"/>
 		url = "<%= lala %>";
 		if(reset=='yes'){
 			url +="?reset=true";
@@ -544,7 +544,7 @@ function validate() {
 	}
 	
 	function submitReports(reset){
-		 <digi:context name="lala" property="context/module/moduleinstance/teamReportList.do"/>
+		 <digi:context name="lala" property="context/ampModule/moduleinstance/teamReportList.do"/>
 		 url = "<%= lala %>";
 		 if(reset=='yes'){
  			url +="?reset=true";

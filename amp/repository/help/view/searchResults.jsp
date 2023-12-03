@@ -58,7 +58,7 @@
 																					</c:choose>
 																					<tr height="20px" style="background-color: ${backGround};" >
 																						<td width="100%" nowrap>
-                                                                                                                                                                                    <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
+                                                                                                                                                                                    <digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
 																							<a href="${url}&topicKey=${helpTopic.topicKey}">
 																								<digi:trn key="${helpTopic.titleTrnKey}"></digi:trn>
 																							</a>
@@ -97,7 +97,7 @@
 			                 			<TD bgColor=#c9c9c7 class=box-title>
 			                 				<digi:trn key="help:search">Search</digi:trn>
 			                 			</TD>
-			                    		<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
+			                    		<TD background="ampModule/aim/images/corner-r.gif"	height=17 width=17></TD>
 									</TR>
 								</TABLE>
 							</TD></TR>

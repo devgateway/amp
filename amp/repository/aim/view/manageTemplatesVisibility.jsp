@@ -66,14 +66,14 @@ div.fakefile2 input{
 	}
     function deleteTemplate(id) {
     	if(!onDelete) return false;
-        <digi:context name="url" property="context/module/moduleinstance/visibilityManager.do?delete=true" />
+        <digi:context name="url" property="context/ampModule/moduleinstance/visibilityManager.do?delete=true" />
         document.aimFlagUploaderForm.action = "<%=url%>&templateId="+id;
         document.aimFlagUploaderForm.submit();
 	}
 	
 	function editTemplate(id) {
     	// if(!onDelete) return false;
-        <digi:context name="url" property="context/module/moduleinstance/visibilityManager.do?edit=true" />
+        <digi:context name="url" property="context/ampModule/moduleinstance/visibilityManager.do?edit=true" />
         document.aimFlagUploaderForm.action = "<%=url%>&templateId="+id;
         document.aimFlagUploaderForm.submit();
 	}
@@ -101,7 +101,7 @@ div.fakefile2 input{
 	
 	<logic:iterate name="aimVisibilityManagerForm" property="templates" id="template"
 	
-		type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility">	
+		type="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility">
 		<tr bgcolor="#ffffff">
 		<c:set target="${urlParams10}" property="action" value="edit"/>
 		<c:set target="${urlParams10}" property="templateId" value="<%=template.getId() %>"/>
@@ -209,7 +209,7 @@ div.fakefile2 input{
 	</digi:form>
 </table>
 
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
    	
 
 <script type="text/javascript">

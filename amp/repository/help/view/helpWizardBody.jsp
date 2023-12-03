@@ -6,14 +6,14 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
-<%@page import="org.digijava.module.help.util.HelpUtil"%>
+<%@page import="org.digijava.ampModule.help.util.HelpUtil"%>
 <digi:instance property="helpForm" />
 <html:hidden name="helpForm" property="glossaryMode"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script langauage="JavaScript">
 	function next(){
-             <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
+             <digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=createHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();
@@ -21,7 +21,7 @@
 	}
 
 	function cancel(){
-                <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=cancelHelpTopic" />
+                <digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=cancelHelpTopic" />
 		helpForm.action="${url}";
   		helpForm.target = "_self";
   		helpForm.submit();
@@ -30,14 +30,14 @@
 	function finish (edit){
 		if(edit=='true'){
 			document.getElementsByName('wizardStep')[0].value=2;
-                        <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=editHelpTopic" />
+                        <digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=editHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();
 		}
 		if(edit=='false'){
 			document.getElementsByName('wizardStep')[0].value=3;
-                        <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
+                        <digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=createHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();
@@ -47,7 +47,7 @@
 		function back(){
 			document.getElementsByName('actionBack')[0].value=true;
 			document.getElementsByName('wizardStep')[0].value=0;
-			<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
+			<digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=createHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();
@@ -74,11 +74,11 @@
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
 														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
+															<td width="13" height="20" background="ampModule/aim/images/left-side.gif"/>
 															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
 																Help Topic Wizard: Step 1 of 2
 															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
+															<td width="13" height="20" background="ampModule/aim/images/right-side.gif"/>
 														</tr>
 													</table>
 												</td>
@@ -186,11 +186,11 @@
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
 														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
+															<td width="13" height="20" background="ampModule/aim/images/left-side.gif"/>
 															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
 																Help Topic Wizard: Step 2 of 2
 															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
+															<td width="13" height="20" background="ampModule/aim/images/right-side.gif"/>
 														</tr>
 													</table>
 												</td>
@@ -284,11 +284,11 @@
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
 														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
+															<td width="13" height="20" background="ampModule/aim/images/left-side.gif"/>
 															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
 																Help Topic Wizard: Step 1 of 2
 															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
+															<td width="13" height="20" background="ampModule/aim/images/right-side.gif"/>
 														</tr>
 													</table>
 												</td>

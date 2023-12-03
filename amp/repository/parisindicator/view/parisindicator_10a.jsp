@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
-<digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
+<digi:form action="/parisindicator" type="org.digijava.ampModule.parisindicator.form.PIForm" name="parisIndicatorForm">
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
 	    <tr align="center">
@@ -53,7 +53,7 @@
 	       <%int counter = 0; %>
 	       <bean:define id="color" value="" type="String"/>
 	       <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index" 
-	        type="org.digijava.module.parisindicator.helper.row.PIReport10aRow">
+	        type="org.digijava.ampModule.parisindicator.helper.row.PIReport10aRow">
 	           <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
                    <%/*counter++;*/counter=1;%>
                </logic:equal>

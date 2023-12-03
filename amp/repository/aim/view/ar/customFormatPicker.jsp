@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <%
     pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
@@ -178,7 +178,7 @@
             <html:submit styleClass="buttonx" property="applyFormat" styleId="applyFormatBtn">
                 <digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>
             </html:submit>&nbsp;
-            <c:set var="maxFractionDigits"><%= org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %>
+            <c:set var="maxFractionDigits"><%= org.digijava.ampModule.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %>
             </c:set>
 
             <input type="hidden" name="apply" value="true">

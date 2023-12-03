@@ -1,7 +1,7 @@
-<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
-<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
 <%@ page pageEncoding="UTF-8" %>
-<%@ page import="org.digijava.module.aim.form.ReportsForm"%>
+<%@ page import="org.digijava.ampModule.aim.form.ReportsForm"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
@@ -11,18 +11,18 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-<%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
+<%@ page language="java" import="org.digijava.ampModule.aim.helper.TeamMember" %>
 
 <%if(FeaturesUtil.isVisibleModule("Public Reports")){ %> 
 
 <!-- this is for the nice tooltip widgets -->
 
 <DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-	<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-	<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+	<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
+	<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/arFunctions.js"/>"></script>
 <script type="text/javascript">
 <!--
 function popup(mylink, windowname)
@@ -322,7 +322,7 @@ function submitForm(action){
 																	<c:otherwise>
 																		<logic:iterate name="aimTeamReportsForm"
 																			property="reportsList" id="report" indexId="idx"
-																			type="org.digijava.module.aim.dbentity.AmpReports">
+																			type="org.digijava.ampModule.aim.dbentity.AmpReports">
 																			<c:set var="color">
 																				<c:choose>
 																					<c:when test="${idx%2==1}">
@@ -497,7 +497,7 @@ function submitForm(action){
 																						<!--  
 																						<feature:display
 																							name="Show Printer Friendly option"
-																							module="Public Reports">
+																							ampModule="Public Reports">
                          																	&nbsp;
                          																	<c:set var="translation">
 																								<digi:trn>Get report in printer friendly version</digi:trn>&nbsp;

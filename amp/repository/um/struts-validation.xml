@@ -5,7 +5,7 @@
 <form-validation>
 	<global></global>
 	<formset>
-        <!-- UM module -->
+        <!-- UM ampModule -->
 	    <!-- User Registration Form -->
 		<form name="userRegisterForm">
 			<field property="firstNames" depends="required,maxlength">
@@ -206,7 +206,7 @@
 		</form>
 		<!-- End Update Form -->
 
-  	    <!-- End of UM module -->
+  	    <!-- End of UM ampModule -->
 	</formset>
 	<!-- An example formset for another locale     <formset language="fr">          <constant>             <constant-name>postalCode</constant-name>             <constant-value>^[0-9a-zA-Z]*$</constant-value>         </constant>     </formset>    -->
 </form-validation>

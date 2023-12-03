@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-14784</jira>
+	<keyword>Views</keyword>
+	<author>jdeanquin</author>
+	<description>recreate view, this will always be the last version of the
+		view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where
+					settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+					DROP VIEW IF EXISTS v_project_implementation_mode;
+					CREATE OR REPLACE VIEW v_project_implementation_mode AS 
+					 SELECT a.amp_activity_id, 
+					        CASE
+					            WHEN acv.id IS NULL THEN ''
+					            ELSE acv.category_value
+					        END AS project_implementation_mode, 
+					    acv.id AS project_implementation_mode_id
+					   FROM amp_activities_categoryvalues aac
+					   JOIN amp_category_value acv ON aac.amp_categoryvalue_id = acv.id
+					   JOIN amp_category_class acc ON acc.id = acv.amp_category_class_id AND acc.keyname = 'project_implementation_mode'
+					   RIGHT JOIN amp_activity_version a ON a.amp_activity_id = aac.amp_activity_id;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -10,7 +10,7 @@
 	<!--
 		function editIndicator(id) {
 			openNewWindow(500, 300);
-			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?event=edit" />
+			<digi:context name="addIndicator" property="context/ampModule/moduleinstance/addIndicator.do?event=edit" />
 			document.aimIndicatorForm.action = "<%= addIndicator %>&indId=" + id;
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
@@ -19,7 +19,7 @@
 		function addingIndicators()
 		{
 			openNewWindow(500, 300);
-			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?event=add" />
+			<digi:context name="addIndicator" property="context/ampModule/moduleinstance/addIndicator.do?event=add" />
 			document.aimIndicatorForm.action = "<%= addIndicator %>";
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
@@ -28,16 +28,16 @@
 		function deleteIndicator(id)
 		{
 			openNewWindow(600, 300);
-			<digi:context name="deleteInd" property="context/module/moduleinstance/deleteIndicator.do?action=delete"/>
+			<digi:context name="deleteInd" property="context/ampModule/moduleinstance/deleteIndicator.do?action=delete"/>
 			document.aimIndicatorForm.action = "<%= deleteInd %>&id=" +id;
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
 		}
     function setOverImg(index){
-       document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+       document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-righthover1.gif"
     }
     function setOutImg(index){
-      document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+      document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif"
     }
 	-->
 </script>
@@ -102,7 +102,7 @@
 																																</digi:link>
 																											 			</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img1" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                          <img id="img1" alt="" src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
 																														<c:set var="MultiProgramIndicators">
@@ -115,7 +115,7 @@
 																																</digi:link>
 																														</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                          <img id="img2" alt="" src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
 																														<c:set var="EProjectIndicators">
@@ -129,7 +129,7 @@
 																																</digi:link>
 																														</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img3" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif" width="20" height="19" />
+                                                                                                                          <img id="img3" alt="" src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-right1.gif" width="20" height="19" />
                                                                                                                         </td>
 																												</tr>
 																										</table>
@@ -157,7 +157,7 @@
 															<table width="100%" cellspacing="1" cellpadding=3 bgcolor="#d7eafd">
 
 																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators"
-																type="org.digijava.module.aim.helper.AmpMEIndicatorList">
+																type="org.digijava.ampModule.aim.helper.AmpMEIndicatorList">
 
 																	<tr bgcolor="#ffffff">
 																	<td width="9">

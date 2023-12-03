@@ -1,5 +1,5 @@
-<%@ page import="org.digijava.module.aim.util.TeamUtil" %>
-<%@ page import="org.digijava.module.aim.util.TeamMemberUtil" %>
+<%@ page import="org.digijava.ampModule.aim.util.TeamUtil" %>
+<%@ page import="org.digijava.ampModule.aim.util.TeamMemberUtil" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -98,7 +98,7 @@ function validate(){
 				<tr class="input_row_container">
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap width="18%">
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span>
 						<digi:trn key="aim:email">
 							User ID
@@ -125,7 +125,7 @@ function validate(){
 				<tr class="input_row_container">
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:oldPassword">Old Password</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">
@@ -135,7 +135,7 @@ function validate(){
 				<tr class="input_row_container">
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:newPassword">New Password</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">
@@ -149,7 +149,7 @@ function validate(){
 				<tr class="input_row_container">
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:confirmNewPassword">Confirm New
 						Password</digi:trn>
 					</td>

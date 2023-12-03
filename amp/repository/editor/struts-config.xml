@@ -2,42 +2,42 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
   <form-beans>
-    <form-bean name="editorForm" type="org.digijava.module.editor.form.EditorForm" />
-    <form-bean name="editorAdminForm" type="org.digijava.module.editor.form.EditorAdminForm" />
+    <form-bean name="editorForm" type="org.digijava.ampModule.editor.form.EditorForm" />
+    <form-bean name="editorAdminForm" type="org.digijava.ampModule.editor.form.EditorAdminForm" />
   </form-beans>
   <action-mappings>
-    <action name="editorForm" type="org.digijava.module.editor.action.ShowEditText" scope="session" path="/editor/showEditText">
+    <action name="editorForm" type="org.digijava.ampModule.editor.action.ShowEditText" scope="session" path="/editor/showEditText">
       <forward name="forward" path="/showLayout.do?layout=editor_editText" />
     </action>
-    <action name="editorForm" type="org.digijava.module.editor.action.SaveText" scope="session" path="/editor/saveText" />
-    <action path="/editor/cancelText" name="editorForm" type="org.digijava.module.editor.action.CancelText" scope="session"  />
+    <action name="editorForm" type="org.digijava.ampModule.editor.action.SaveText" scope="session" path="/editor/saveText" />
+    <action path="/editor/cancelText" name="editorForm" type="org.digijava.ampModule.editor.action.CancelText" scope="session"  />
     
-    <action name="editorForm" type="org.digijava.module.editor.action.ShowInEnglish" scope="session" path="/editor/showInEnglish">
+    <action name="editorForm" type="org.digijava.ampModule.editor.action.ShowInEnglish" scope="session" path="/editor/showInEnglish">
       <forward name="forward" path="/showLayout.do?layout=editor_viewEng" />
     </action>
-    <action name="editorAdminForm" type="org.digijava.module.editor.action.admin.ShowAdmin" validate="true" input="/showLayout.do?layout=editor_adminPage" scope="request" path="/editor/admin">
+    <action name="editorAdminForm" type="org.digijava.ampModule.editor.action.admin.ShowAdmin" validate="true" input="/showLayout.do?layout=editor_adminPage" scope="request" path="/editor/admin">
       <forward name="showAdmin" path="/showLayout.do?layout=editor_adminPage" />
     </action>
-    <action name="editorAdminForm" type="org.digijava.module.editor.action.admin.MoveEditor" validate="true" input="/editor/admin.do" scope="request" path="/editor/moveEditor">
+    <action name="editorAdminForm" type="org.digijava.ampModule.editor.action.admin.MoveEditor" validate="true" input="/editor/admin.do" scope="request" path="/editor/moveEditor">
       <forward name="showAdmin" path="/editor/admin.do" redirect="true" />
     </action>
-    <action name="editorForm" type="org.digijava.module.editor.action.ShowPage" validate="true" input="/showLayout.do?layout=editor_showPage" scope="session" path="/editor/showPage">
+    <action name="editorForm" type="org.digijava.ampModule.editor.action.ShowPage" validate="true" input="/showLayout.do?layout=editor_showPage" scope="session" path="/editor/showPage">
       <forward name="showPage" path="/showLayout.do?layout=editor_showPage" />
     </action>
-    <action name="editorForm" type="org.digijava.module.editor.action.ShowNavigationBar" validate="true" input="/showLayout.do?layout=editor_showNavigation" scope="session" path="/editor/showNavigation">
+    <action name="editorForm" type="org.digijava.ampModule.editor.action.ShowNavigationBar" validate="true" input="/showLayout.do?layout=editor_showNavigation" scope="session" path="/editor/showNavigation">
       <forward name="showNavBar" path="/showLayout.do?layout=editor_showNavigation" />
     </action>
-    <action name="editorForm" type="org.digijava.module.editor.action.ShowNavigationBar" validate="true" input="/showLayout.do?layout=editor_showVerticalNavigation" scope="session" path="/editor/showVerticalNavigation">
+    <action name="editorForm" type="org.digijava.ampModule.editor.action.ShowNavigationBar" validate="true" input="/showLayout.do?layout=editor_showVerticalNavigation" scope="session" path="/editor/showVerticalNavigation">
       <forward name="showNavBar" path="/showLayout.do?layout=editor_showVerticalNavigation" />
     </action>
-    <action name="editorAdminForm" type="org.digijava.module.editor.action.admin.AddEditor" validate="true" input="/editor/admin.do" scope="request" path="/editor/addEditor">
+    <action name="editorAdminForm" type="org.digijava.ampModule.editor.action.admin.AddEditor" validate="true" input="/editor/admin.do" scope="request" path="/editor/addEditor">
       <forward name="showAdmin" path="/editor/admin.do" redirect="true" />
     </action>
-    <action name="editorAdminForm" type="org.digijava.module.editor.action.admin.DeleteEditor" validate="true" input="/editor/admin.do" scope="request" path="/editor/deleteEditor">
+    <action name="editorAdminForm" type="org.digijava.ampModule.editor.action.admin.DeleteEditor" validate="true" input="/editor/admin.do" scope="request" path="/editor/deleteEditor">
       <forward name="showAdmin" path="/editor/admin.do" redirect="true" />
     </action>
     <action forward="/editor/admin.do" path="/editor/index" />
-    <action name="editorForm" type="org.digijava.module.editor.action.UploadImage"  scope="session" path="/editor/uploadImg" />
+    <action name="editorForm" type="org.digijava.ampModule.editor.action.UploadImage"  scope="session" path="/editor/uploadImg" />
     
   </action-mappings>
 </struts-config>

@@ -48,7 +48,7 @@ function checkSelMembers() {
 }	
 
 function addTeamMember(id) {
-	<digi:context name="add" property="context/module/moduleinstance/showAddTeamMember.do" />
+	<digi:context name="add" property="context/ampModule/moduleinstance/showAddTeamMember.do" />
 	document.aimTeamMemberForm.action = "<%= add %>~teamId="+id+"~fromPage=0";
 	document.aimTeamMemberForm.target = "_self";
 	document.aimTeamMemberForm.submit();

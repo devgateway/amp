@@ -6,10 +6,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <TABLE align="center" border="0" cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
-<!--<feature:display name="My Tasks" module="Desktop Sections">-->
+<!--<feature:display name="My Tasks" ampModule="Desktop Sections">-->
 <!--	<TR>-->
 <!--		<TD class=r-dotted-lg-buttom valign="top">-->
 <!--			<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >-->
@@ -20,7 +20,7 @@
 <!--							title='<digi:trn key="aim:myTaskListOfTeamLeader">List of activities pending for approval</digi:trn>'>-->
 <!--								<digi:trn key="aim:myTaskList">My Tasks</digi:trn>-->
 <!--							</TD>-->
-<!--                    	<TD background="module/aim/images/corner-r.gif" -->
+<!--                    	<TD background="ampModule/aim/images/corner-r.gif" -->
 <!--							height=17 width=17></TD>-->
 <!--						</TR>-->
 <!--					</TABLE>-->
@@ -58,7 +58,7 @@
 <!--		</TD>-->
 <!--	</TR>-->
 <!--</feature:display>-->
-<!--<feature:display name="My Messages" module="Desktop Sections">-->
+<!--<feature:display name="My Messages" ampModule="Desktop Sections">-->
 <!--	<TR>-->
 <!--		<TD class=r-dotted-lg-buttom valign="top">-->
 <!--			<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >-->
@@ -69,7 +69,7 @@
 <!--							title='<digi:trn key="aim:myMessageListOfTeamLeader">List of activities to be closed</digi:trn>'>-->
 <!--								<digi:trn key="aim:myMessageList">My Messages</digi:trn>-->
 <!--							</TD>-->
-<!--                    	<TD background="module/aim/images/corner-r.gif" -->
+<!--                    	<TD background="ampModule/aim/images/corner-r.gif" -->
 <!--							height=17 width=17></TD>-->
 <!--						</TR>-->
 <!--					</TABLE>-->

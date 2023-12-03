@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" import="org.digijava.module.aim.dbentity.AmpOrganisation, java.util.* "%>
+<%@ page pageEncoding="UTF-8" import="org.digijava.ampModule.aim.dbentity.AmpOrganisation, java.util.* "%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>

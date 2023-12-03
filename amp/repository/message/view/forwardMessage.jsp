@@ -10,7 +10,7 @@
 <digi:instance property="messageForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/message/script/messages.js"/>"></script>
 <script langauage="JavaScript">
 
 	function validate(){

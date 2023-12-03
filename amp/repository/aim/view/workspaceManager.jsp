@@ -155,7 +155,7 @@
     }
 
 </style>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/asynchronous.js"/>"></script>
 <!-- Individual YUI JS files -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
@@ -478,7 +478,7 @@
     	viewTeamDetails='false';
     	var msg = '<digi:trn jsFriendly="true">Delete this workspace?</digi:trn>';
     	if (confirm(msg)){
-	        <digi:context name="deleteUrl" property="context/module/moduleinstance/deleteWorkspace.do"/>;
+	        <digi:context name="deleteUrl" property="context/ampModule/moduleinstance/deleteWorkspace.do"/>;
 	        document.aimWorkspaceForm.action="${deleteUrl}?event=delete&tId="+id;
 	        document.aimWorkspaceForm.target="_self";
 	        document.aimWorkspaceForm.submit();	
@@ -574,7 +574,7 @@
     function addNewUser()	{
         var msg='\n<digi:trn jsFriendly="true">AMP View Settings</digi:trn>';
         showPanelLoading(msg);
-            <digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>  
+            <digi:context name="commentUrl" property="context/ampModule/moduleinstance/addUser.do"/>
             var url = "<%=commentUrl %>";
         YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
     }
@@ -610,7 +610,7 @@
             oldKeyword=document.getElementsByName('keyword')[0].value;
             oldWorkspaceType=document.getElementsByName('workspaceType')[0].value;
             oldWorkspaceGroup=document.getElementsByName('workspaceGroup')[0].value;
-                <digi:context name="commentUrl" property="context/module/moduleinstance/workspaceManager.do"/>  
+                <digi:context name="commentUrl" property="context/ampModule/moduleinstance/workspaceManager.do"/>
                 var url = "<%=commentUrl %>";
             url += "?"+getParams();
             var async=new Asynchronous();
@@ -715,7 +715,7 @@
         myPanel.cfg.setProperty("width","400px");
         myPanel.cfg.setProperty("height","350px"); 
         showPanelLoading(msg);	
-            <digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;  
+            <digi:context name="commentUrl" property="context/ampModule/moduleinstance/getTeamMemberDetailsJSON.do"/>;
         var url = "<%=commentUrl %>";
         url += "?action="+action+"&id="+id;
         YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
@@ -725,7 +725,7 @@
         if(validateAction()){
             checkAndClose=true;
             lastFunction="showDetails";
-                <digi:context name="commentUrl" property="context/module/moduleinstance/updateTeamMemberJSON.do"/>  
+                <digi:context name="commentUrl" property="context/ampModule/moduleinstance/updateTeamMemberJSON.do"/>
                 var url = "<%=commentUrl %>";
             url += "?teamId="+document.getElementsByName('teamId')[0].value+
                 "&teamMemberId="+document.getElementsByName('teamMemberId')[0].value+
@@ -861,7 +861,7 @@
     	YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
         YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
         YAHOO.util.Dom.replaceClass('addNew','visibleTable','invisibleTable');
-            <digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>  
+            <digi:context name="commentUrl" property="context/ampModule/moduleinstance/removeTeamActivityJSON.do"/>
             var url = "<%=commentUrl %>";
         url += "?selActivities="+id+"&teamId="+ document.getElementsByName('teamId')[0].value;
         YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
@@ -983,7 +983,7 @@
     };
 
     function assignNewMember(){
-        <digi:context name="exportUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>;
+        <digi:context name="exportUrl" property="context/ampModule/moduleinstance/showAddTeamMemberJSON.do"/>;
         var fromPage=myPaginator.getCurrentPage();
         var recordID = YAHOO.example.XHR_JSON.myDataTable.getSelectedRows()[0];
         var selectedRow= YAHOO.example.XHR_JSON.myDataTable.getTrIndex(recordID);
@@ -997,7 +997,7 @@
             checkAndClose=true;
             lastFunction="showDetails";
             var msg='<digi:trn jsFriendly="true">Assign Member</digi:trn>';
-                <digi:context name="commentUrl" property="context/module/moduleinstance/addTeamMemberJSON.do"/>;
+                <digi:context name="commentUrl" property="context/ampModule/moduleinstance/addTeamMemberJSON.do"/>;
             var url = "<%=commentUrl %>";
             url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value+"&email="+document.getElementsByName('email')[0].value+"&role="+document.getElementsByName('role')[0].value;
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
@@ -1018,7 +1018,7 @@
         myPanel.cfg.setProperty("height","400px"); 
         showPanelLoading(msg);
 
-            <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>  
+            <digi:context name="commentUrl" property="context/ampModule/moduleinstance/assignActivityJSON.do"/>
             var url = "<%=commentUrl %>";
         url += "~id="+id;
 	
@@ -1130,7 +1130,7 @@
         if(validate()){
             checkAndClose=true;
             lastFunction="showDetails";
-                <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;  
+                <digi:context name="commentUrl" property="context/ampModule/moduleinstance/assignActivityJSON.do"/>;
             var url = "<%=commentUrl %>";
             url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
             var bodymsg='<div style="text-align: center">' + 
@@ -1143,7 +1143,7 @@
 </script>
 <script language="javascript">
     function exportXSL(){
-            <digi:context name="exportUrl" property="context/module/moduleinstance/exportWorkspaceManager2XSL.do"/>;
+            <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportWorkspaceManager2XSL.do"/>;
         document.aimWorkspaceForm.action="${exportUrl}";
         document.aimWorkspaceForm.target="_blank";
         document.aimWorkspaceForm.submit();
@@ -1232,7 +1232,7 @@
 													<td  style="text-align:left;">
 														<digi:trn>Workspace Group</digi:trn><br/>	
 														<c:set var="translationAll"><digi:trn>All</digi:trn></c:set>												
-														<category:showoptions firstLine="${translationAll}" name="aimWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
+														<category:showoptions firstLine="${translationAll}" name="aimWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
 													</td>
                             <td align="left">
                             <c:set var="translation">

@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
-<%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants" %>
+<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil" %>
+<%@ page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -97,7 +97,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 							<td class="inside">
 								<%
 								String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
-								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
+								Long id = ((org.digijava.ampModule.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
 								if( request.getParameter("id") != null && value.equalsIgnoreCase("true") && id.equals(new Long(request.getParameter("id")))){
 									org.digijava.kernel.user.User user = (org.digijava.kernel.user.User) session.getAttribute("org.digijava.kernel.user");
 									String encryptedPass = org.digijava.kernel.util.ShaCrypt.crypt(user.getEmail() + "_" + user.getPassword());

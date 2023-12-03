@@ -23,14 +23,14 @@
 
     function deleteTemplate(id) {
     	if(!onDelete) return false;
-        <digi:context name="url" property="context/module/moduleinstance/featureManager.do?delete=true" />
+        <digi:context name="url" property="context/ampModule/moduleinstance/featureManager.do?delete=true" />
         document.aimFlagUploaderForm.action = "<%=url%>&templateId="+id;
         document.aimFlagUploaderForm.submit();
 	}
 	
 	function editTemplate(id) {
     	// if(!onDelete) return false;
-        <digi:context name="url" property="context/module/moduleinstance/featureManager.do?edit=true" />
+        <digi:context name="url" property="context/ampModule/moduleinstance/featureManager.do?edit=true" />
         document.aimFlagUploaderForm.action = "<%=url%>&templateId="+id;
         document.aimFlagUploaderForm.submit();
 	}
@@ -64,7 +64,7 @@
 	
 	<logic:iterate name="aimFeatureManagerForm" property="templates" id="template"
 	
-		type="org.digijava.module.aim.dbentity.FeatureTemplates">	
+		type="org.digijava.ampModule.aim.dbentity.FeatureTemplates">
 		<tr bgcolor="#ffffff">
 		<c:set target="${urlParams10}" property="event" value="edit"/>
 		<c:set target="${urlParams10}" property="templateId" value="<%=template.getTemplateId() %>"/>
@@ -72,7 +72,7 @@
 		<c:set target="${urlParams11}" property="templateId" value="<%=template.getTemplateId() %>"/>
 		
 			<td width="70%"> <bean:write name="template" property="featureTemplateName"/> &nbsp;&nbsp;&nbsp; 
-			<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
+			<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil" %>
 			<font color="#ff0000"> <%= FeaturesUtil.isDefault(template.getTemplateId())?"in use":""%> </font></td>
 
 			<td width="30%" align="center">

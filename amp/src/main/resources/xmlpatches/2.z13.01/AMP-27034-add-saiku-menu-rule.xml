@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-27034</jira>
+	<keyword>menu saiku entry rule</keyword>
+	<author>apicca</author>
+	<description>Add menu entry rule for Saiku</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_modules_visibility (id,name,haslevel,parent)
+				SELECT (select nextval('amp_modules_visibility_seq')),'Saiku',true,
+				(SELECT id FROM amp_modules_visibility WHERE name = 'REPORTING')
+				WHERE
+				NOT EXISTS (SELECT id from amp_modules_visibility  WHERE name  = 'Saiku');
+
+				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
+				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Saiku');
+				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'),
+				(SELECT id FROM amp_modules_visibility WHERE name = 'Saiku'
+				AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'REPORTING')));
+
+				INSERT INTO amp_modules_templates (template, ampModule)
+				SELECT
+				(SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+				(SELECT id AS ampModule FROM amp_modules_visibility WHERE name = 'Saiku')
+				WHERE NOT EXISTS (
+				SELECT template FROM amp_features_templates
+				WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+				AND feature = (SELECT id FROM amp_features_visibility WHERE name = 'Saiku')
+				);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -9,15 +9,15 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <digi:instance property="aimDynLocationManagerForm" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 
 
-<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
-<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
+<link rel="stylesheet" href="<digi:file src="ampModule/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
+<link rel="stylesheet" href="<digi:file src="ampModule/aim/css/css_dhtmlsuite/context-menu.css" />" />
 
 <style type="text/css">
 	a.atree {
@@ -72,7 +72,7 @@
 	function deleteLocation(deleteLocationId) {
 		if ( confirm("<digi:trn>Are you sure you want to delete this location and all the locations it contains ?</digi:trn>") ) {
 			var myForm							= document.getElementById("dynLocationManagerForm");
-		    <digi:context name="delete" property="context/module/moduleinstance/dynLocationManager.do"/>;
+		    <digi:context name="delete" property="context/ampModule/moduleinstance/dynLocationManager.do"/>;
 			myForm.action="${delete}?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked;
 			myForm.deleteLocationId.value		= deleteLocationId;
 			myForm.target="_self";
@@ -200,7 +200,7 @@
 
 	YAHOOAmp.util.Event.addListener(window, "load", initTree) ;
 	 function exportXSL(){
-	        <digi:context name="exportUrl" property="context/module/moduleinstance/exportDynLocationManager2XSL.do"/>;
+	        <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportDynLocationManager2XSL.do"/>;
 			var myForm= document.getElementById("dynLocationManagerForm");
 	        myForm.action="${exportUrl}?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked;
 	        myForm.target="_blank";

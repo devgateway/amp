@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-29110</jira>
+    <keyword>Views</keyword>
+    <author>vchihai</author>
+    <description>Add IATI identifier read only fm path</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Identification/IATI Identifier',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name LIKE '/Activity Form/Identification'));
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Identification/IATI Identifier Read Only',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Identification'));
+
+                INSERT INTO amp_modules_templates (template, ampModule)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS ampModule FROM amp_modules_visibility WHERE name = '/Activity Form/Identification/IATI Identifier');
+
+                INSERT INTO amp_modules_templates (template, ampModule)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS ampModule FROM amp_modules_visibility WHERE name = '/Activity Form/Identification/IATI Identifier Read Only')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND ampModule = (SELECT id FROM amp_modules_visibility WHERE name = (
+                                SELECT CASE settingsvalue
+                                    WHEN 'cris_number' THEN '/Activity Form/Identification/Cris Number'
+                                    ELSE '/Activity Form/Identification/Budget Extras/Project Code'
+                                END
+                                FROM amp_global_settings WHERE settingsname = 'IATI Identifier AMP field'))
+                        );
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

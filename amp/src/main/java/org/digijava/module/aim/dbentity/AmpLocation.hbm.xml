@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpLocation" table="AMP_LOCATION" lazy="false">
+		<cache usage="read-write" />
+		<id name="ampLocationId" column="amp_location_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_LOCATION_seq</param>
+			</generator>
+		</id>
+		<property name="iso3Code" column="iso3_code" type="java.lang.String" />
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="description" column="description" type="text" />
+		<property name="gisCoordinates" column="gis_coordinates" type="java.lang.String" />
+		<property name="language" column="language" type="java.lang.String" />
+		<property name="version" column="version" type="java.lang.String" />
+		<property name="geoCode" column="geo_code" type="java.lang.String" />
+
+		<many-to-one name="location" column="location_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+		<many-to-one name="regionLocation" column="region_location_id" 
+			class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+	</class>
+</hibernate-mapping>

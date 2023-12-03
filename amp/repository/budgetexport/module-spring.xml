@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- digi module specific spring configuration, normally used to add http auth exception patterns -->
+<!-- digi ampModule specific spring configuration, normally used to add http auth exception patterns -->
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
@@ -7,7 +7,7 @@
                     http://www.springframework.org/schema/security 
                     http://www.springframework.org/schema/security/spring-security.xsd">
 
-<!--  add <http pattern> exceptions here for unauthenticated pages. Search for other module-spring.xml files to see examples-->
+<!--  add <http pattern> exceptions here for unauthenticated pages. Search for other ampModule-spring.xml files to see examples-->
 
    <http pattern="/budgetexport/reportsWrapper.do**" security="none" />
    

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.ampModule.contentrepository.dbentity.template.TemplateField" table="AMP_TEMPL_DOC_FIELDS" discriminator-value="tf">
+    	<id name="id" column="tf_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_TEMPL_DOC_FIELDS_seq</param>
+			</generator>
+		</id>
+		
+		<discriminator column="field_clazz" />
+		   
+       	<property name="ordinalNumber" type="java.lang.Integer" column="ordinal_num"/>
+       
+       	<set name="possibleValues" lazy="false" inverse="false" cascade="delete">
+			<key column="field_id" />
+			<one-to-many class="org.digijava.ampModule.contentrepository.dbentity.template.PossibleValue" />
+	   	</set>
+		
+		<many-to-one name="templateDoc" column="template_doc_Id" class="org.digijava.ampModule.contentrepository.dbentity.template.TemplateDoc" cascade="none" />
+			
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.CheckboxField" discriminator-value="chf" />
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.DropDownField" discriminator-value="ssf" />
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.MultiboxField" discriminator-value="mbf" />
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.MultipleSelect" discriminator-value="msf" />
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.RadioButtonField" discriminator-value="rbf" />
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.StaticTextField" discriminator-value="stf" />
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.TextAreaField" discriminator-value="taf" />
+        <subclass name="org.digijava.ampModule.contentrepository.dbentity.template.TextBoxField" discriminator-value="tbf" />
+        
+    </class>
+</hibernate-mapping>

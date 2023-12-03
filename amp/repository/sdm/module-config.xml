@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>sdm</name>
 	<security>
 		<action pattern="/createDocument">ADMIN</action>
@@ -51,9 +51,9 @@
 
         <!-- sdm classes Begin-->
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.module.sdm.dbentity.Sdm</hibernate-class>
-		<hibernate-class>org.digijava.module.sdm.dbentity.SdmItem</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.sdm.dbentity.Sdm</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.sdm.dbentity.SdmItem</hibernate-class>
 	</hibernate-classes>
         <!-- sdm classes End-->
 
-</module-config>
+</ampModule-config>

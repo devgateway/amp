@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.gateperm.core.PermissionMap" table="PERM_MAP" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">PERM_MAP_SEQ</param>
+			</generator>
+		</id>
+
+		<properties name="permissibleAndIdentifier" unique="true">
+			<property name="permissibleCategory" column="permissible_category" type="java.lang.String"
+			index="perm_map_permissible_category_idx" />
+			<property name="objectIdentifier" column="object_identifier" type="java.lang.Long"
+			index="perm_map_obj_identifier_idx" />
+		</properties>
+
+		<many-to-one name="permission" column="permission_id"
+			class="org.digijava.ampModule.gateperm.core.Permission" cascade="save-update" />
+
+	</class>
+</hibernate-mapping>

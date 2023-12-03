@@ -98,14 +98,14 @@
 								<tr>
 									<td width="10%" height="38">
 										<digi:link href="/viewMonthEvents.do" paramName="calendarItemForm" paramId="nav" paramProperty="prev">
-										<digi:img border="0" src="module/calendar/images/arrowl.gif"/></digi:link>
+										<digi:img border="0" src="ampModule/calendar/images/arrowl.gif"/></digi:link>
 									</td>
 									<td width="80%" height="38" class="dgtitle" align="center">
 										<bean:write name="calendarItemForm" property="infoText"/>
 									</td>
 									<td width="10%" height="38" align="right">
 										<digi:link href="/viewMonthEvents.do" paramName="calendarItemForm" paramId="nav" paramProperty="next">
-										<digi:img border="0" src="module/calendar/images/arrowr.gif"/></digi:link>
+										<digi:img border="0" src="ampModule/calendar/images/arrowr.gif"/></digi:link>
 									</td>
 								</tr>
 							</table>
@@ -168,7 +168,7 @@
 						<logic:present name="calendarItemForm" property="eventsList">
 						<logic:iterate id="eventsList" name="calendarItemForm" property="eventsList" type="java.util.List">
 						<tr>
-							<logic:iterate id="weekEvents" name="eventsList" type="org.digijava.module.calendar.form.CalendarItemForm.Events">
+							<logic:iterate id="weekEvents" name="eventsList" type="org.digijava.ampModule.calendar.form.CalendarItemForm.Events">
 							<logic:equal name="weekEvents" property="today" value="false">
 							<logic:equal name="weekEvents" property="monthDay" value="false">
 							<td width="14%" nowrap height="50" valign="top"></logic:equal>
@@ -180,7 +180,7 @@
 										<bean:write name="weekEvents" property="day"/></span>
 										<logic:present name="weekEvents" property="events">
 										<table width="100%">
-											<logic:iterate id="events" name="weekEvents" property="events" type="org.digijava.module.calendar.form.CalendarItemForm.EventInfo">
+											<logic:iterate id="events" name="weekEvents" property="events" type="org.digijava.ampModule.calendar.form.CalendarItemForm.EventInfo">
 											<tr>
 												<td colspan="2" nowrap>
 													<logic:present name="events" property="title">

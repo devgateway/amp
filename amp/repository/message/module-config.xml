@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module-config>
+<ampModule-config>
 	<name>message</name>
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/messageActions" />
@@ -9,23 +9,23 @@
 	</security>
 		<hibernate-classes required="false">
 			<hibernate-class>
-                      org.digijava.module.message.dbentity.AmpMessage
+                      org.digijava.ampModule.message.dbentity.AmpMessage
             </hibernate-class>
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.AmpMessageState
+					  org.digijava.ampModule.message.dbentity.AmpMessageState
 			</hibernate-class>
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.AmpMessageSettings
+					  org.digijava.ampModule.message.dbentity.AmpMessageSettings
 			</hibernate-class>
 			<hibernate-class>
-                      org.digijava.module.message.dbentity.AmpMessageReceiver
+                      org.digijava.ampModule.message.dbentity.AmpMessageReceiver
             </hibernate-class>
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.AmpEmail
+					  org.digijava.ampModule.message.dbentity.AmpEmail
 			</hibernate-class>
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.AmpEmailReceiver
+					  org.digijava.ampModule.message.dbentity.AmpEmailReceiver
 			</hibernate-class>
 			
 		</hibernate-classes>
-</module-config>
+</ampModule-config>

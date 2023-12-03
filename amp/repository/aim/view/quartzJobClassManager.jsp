@@ -69,13 +69,13 @@ function addJc(){
                 <c:set var="translation">
                   <digi:trn>Click here to goto Admin Home</digi:trn>
                 </c:set>
-                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+                <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn>Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
                 <c:set var="trn">
                   <digi:trn>Click here to goto Job Manager</digi:trn>
                 </c:set>
-                <digi:link module="aim" href="/quartzJobManager.do~action=all" styleClass="comment" title="${trn}" >
+                <digi:link ampModule="aim" href="/quartzJobManager.do~action=all" styleClass="comment" title="${trn}" >
                   <digi:trn>Job Manager</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
                 <digi:trn>Job Class Manager</digi:trn>
@@ -119,7 +119,7 @@ function addJc(){
                     <b style="font-size:12px; color:#000000; padding-left:5px;">
                       <digi:trn>Other links</digi:trn>
                     </b></td>
-                  <td width="17" height="17" background="module/aim/images/corner-r.gif">&nbsp;</td>
+                  <td width="17" height="17" background="ampModule/aim/images/corner-r.gif">&nbsp;</td>
                 </tr>
                 </tbody>
               </table>
@@ -127,16 +127,16 @@ function addJc(){
                 <tbody>
                 <tr>
                   <td class="inside"><img width="15" height="10"
-                                          src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif"> <digi:link
-                          module="aim" href="/admin.do"> <digi:trn
+                                          src="/TEMPLATE/ampTemplate/ampModule/aim/images/arrow-014E86.gif"> <digi:link
+                          ampModule="aim" href="/admin.do"> <digi:trn
                           key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></td>
                 </tr>
                 <tr>
                   <td class="inside">
-                    <img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif">
+                    <img width="15" height="10" src="/TEMPLATE/ampTemplate/ampModule/aim/images/arrow-014E86.gif">
                     <c:set var="trn"><digi:trn
                             key="aim:viewSettings">Click here to view Job Manager</digi:trn></c:set>
-                    <digi:link module="aim" href="/quartzJobManager.do~action=all" title="${trn}">
+                    <digi:link ampModule="aim" href="/quartzJobManager.do~action=all" title="${trn}">
                       <digi:trn key="aim:jobManager">Job Manager</digi:trn>
                     </digi:link>
                   </td>

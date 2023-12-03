@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>calendar</name>
 	<security>
 		<action login-required="true" pattern="/showCreateCalendarItem" />
@@ -40,13 +40,13 @@
 
 	<!-- calendar classes Begin -->
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.module.calendar.dbentity.Calendar</hibernate-class>
-		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarItem</hibernate-class>
-		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarSettings</hibernate-class>
-        <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendar</hibernate-class>
-        <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendarAttendee</hibernate-class>
-		<hibernate-class>org.digijava.module.calendar.dbentity.RecurrCalEvent</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.calendar.dbentity.Calendar</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.calendar.dbentity.CalendarItem</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.calendar.dbentity.CalendarSettings</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.calendar.dbentity.AmpCalendar</hibernate-class>
+        <hibernate-class>org.digijava.ampModule.calendar.dbentity.AmpCalendarAttendee</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.calendar.dbentity.RecurrCalEvent</hibernate-class>
 	</hibernate-classes>
 	<!-- calendar classes End -->
 
-</module-config>
+</ampModule-config>

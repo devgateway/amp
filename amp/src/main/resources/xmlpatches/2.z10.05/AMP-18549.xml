@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18549</jira>
+	<keyword>Tables</keyword>
+	<author>jdeanquin</author>
+	<description>Drop null check on structure type of AmpStructure / delete feature from FM</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				ALTER TABLE amp_structure
+				ALTER COLUMN type DROP NOT NULL;
+				delete from amp_modules_templates where ampModule in(
+				select id from amp_modules_visibility where name like '/Activity Form/Structures/Structure Type');
+				delete from amp_modules_visibility where name like '/Activity Form/Structures/Structure Type';
+				
+				CREATE OR REPLACE VIEW v_g_settings_structure_type AS
+				select typeid as id,name as value from amp_structure_type	  
+				ORDER BY id;
+				INSERT INTO amp_global_settings(id, settingsName, settingsValue, possibleValues, description, section) VALUES
+				(nextval('amp_global_settings_seq'), 'Default Structure Type', '-1', 'v_g_settings_structure_type', 'Default Structure Type for the activity form', 'general');
+				
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

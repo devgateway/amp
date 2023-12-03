@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="org.digijava.ampModule.aim.dbentity.AmpContact" table="AMP_CONTACT" lazy="false">
+	<cache usage="read-write" />
+  	<id name="id" column="contact_id" type="java.lang.Long">
+		<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+			<param name="sequence_name">AMP_CONTACT_seq</param>
+		</generator>
+	</id>
+	
+	<property name="name" column="name" type="java.lang.String" />
+	<property name="lastname" column="lastname" type="java.lang.String" />
+	<property name="organisationName" column="organisation_name" type="java.lang.String" />	
+	<property name="shared" column="is_shared" type="java.lang.Boolean" />
+	<property name="function" column="function" type="java.lang.String" />
+	<property name="officeaddress" column="officeaddress" type="java.lang.String" />
+	
+	<many-to-one name="creator" column="creator_id"	class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" cascade="none" />
+	<many-to-one name="title" column="title" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" />
+
+	<set name="properties" inverse="true" cascade="all-delete-orphan" lazy="false" sort="natural">
+		<cache usage="read-write" />
+		<key column="contact_id" />
+		<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpContactProperty" />
+	</set>
+	<set name="activityContacts" inverse="true" cascade="delete" lazy="true" sort="natural">
+		<cache usage="read-write" />
+		<key column="contact_id" />
+		<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpActivityContact" />
+	</set>
+	<set name="organizationContacts" inverse="true" cascade="all-delete-orphan" lazy="false">
+		<cache usage="read-write" />
+		<key column="contact_id" />
+		<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisationContact" />
+	</set>
+    <property name="fullname"  formula="name||$cnt$ $cnt$||lastname||$cnt$($cnt$||contact_Id||$cnt$)$cnt$" />
+
+	<!--
+		<set name="organizations" table="AMP_ORG_CONTACTS" lazy="false" >
+    	<key column="contact_id"/>
+        <many-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" column="amp_org_id"/>
+    </set>
+	 -->    
+  </class>
+</hibernate-mapping>

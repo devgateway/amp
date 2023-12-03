@@ -7,11 +7,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.List"%>
  
-<%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
-<%@ page import="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" %>
+<%@page import="org.digijava.ampModule.categorymanager.util.CategoryManagerUtil"%>
+<%@ page import="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" %>
 <%@ page import="java.util.Collection" %>
 <digi:instance property="cmCategoryManagerForm" />
-<bean:define id="myForm" name="cmCategoryManagerForm" toScope="page" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
+<bean:define id="myForm" name="cmCategoryManagerForm" toScope="page" type="org.digijava.ampModule.categorymanager.form.CategoryManagerForm" />
 
 <!--  AMP Admin Logo -->
 <%-- <jsp:include page="teamPagesHeader.jsp"  /> --%>
@@ -24,7 +24,7 @@ function confirmDelete() {
 	return ret;
 }
 function exportXSL(){
-    <digi:context name="exportUrl" property="context/module/moduleinstance/exportCatManager2XSL.do"/>;
+    <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportCatManager2XSL.do"/>;
     document.cmCategoryManagerForm.action="${exportUrl}";
     document.cmCategoryManagerForm.target="_blank";
     document.cmCategoryManagerForm.submit();
@@ -79,7 +79,7 @@ function exportXSL(){
 						</tr>
 						</thead>
 						<tbody class="yui-dt-data">
-						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass">
+						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass">
 						<tr align="center">
 							<td class="inside">
 								<digi:trn key='<%= CategoryManagerUtil.getTranslationKeyForCategoryName( category.getKeyName() ) %>'>
@@ -107,7 +107,7 @@ function exportXSL(){
 									Collection<AmpCategoryValue> orderedPossibleValues = CategoryManagerUtil.getOrderedPossibleValues(category);
 								%>
 								<c:set var="orderedPossibleValues" value="<%=orderedPossibleValues%>" scope="page" />
-								<logic:iterate name="orderedPossibleValues" id="categoryValue" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
+								<logic:iterate name="orderedPossibleValues" id="categoryValue" type="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue">
 								<logic:notEmpty name="categoryValue">
 								<%  String keyForValue	= CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue);
 									String deletedStyle = "";

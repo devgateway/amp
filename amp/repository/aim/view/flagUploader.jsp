@@ -174,7 +174,7 @@ function upload() {
 
 function setAsDefault(id) {
 
-  <digi:context name="url" property="context/module/moduleinstance/setDefaultFlag.do" />
+  <digi:context name="url" property="context/ampModule/moduleinstance/setDefaultFlag.do" />
 
   document.aimFlagUploaderForm.action = "<%=url%>?id="+id;
 
@@ -186,7 +186,7 @@ function setAsDefault(id) {
 
 function deleteFlag(id) {
 	if ( confirm("<digi:trn>Are you sure you want to delete this flag</digi:trn>?") ) {
-  		<digi:context name="url" property="context/module/moduleinstance/deleteFlag.do" />
+  		<digi:context name="url" property="context/ampModule/moduleinstance/deleteFlag.do" />
   		document.aimFlagUploaderForm.action = "<%=url%>?CountryId="+id;
 		document.aimFlagUploaderForm.submit();
 	}
@@ -198,7 +198,7 @@ function deleteFlag(id) {
 
 
 
-<digi:context name="displayFlag" property="context/module/moduleinstance/displayFlag.do" />
+<digi:context name="displayFlag" property="context/ampModule/moduleinstance/displayFlag.do" />
 
 
 
@@ -271,7 +271,7 @@ function deleteFlag(id) {
 
                     <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
 
-                    type="org.digijava.module.aim.helper.Flag">
+                    type="org.digijava.ampModule.aim.helper.Flag">
 
                     <tr bgColor=#ffffff>
 
@@ -513,7 +513,7 @@ function deleteFlag(id) {
 
 
 </table>
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
    	
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');

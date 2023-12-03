@@ -12,7 +12,7 @@ pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
 %>
 
 <bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
-<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports" toScope="page"/>
 
 <!-- html2 paginator: visibleRows = ${generatedReport.visibleRows}, recordsPerPage = ${recordsPerPage}  -->
 

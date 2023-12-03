@@ -2,186 +2,186 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
   <form-beans>
-    <form-bean name="siteForm" type="org.digijava.module.admin.form.SiteForm" />
-    <form-bean name="searchSiteForm" type="org.digijava.module.admin.form.SearchSiteForm" />
-    <form-bean name="deleteSiteForm" type="org.digijava.module.admin.form.DeleteSiteForm" />
-    <form-bean name="siteInstancesForm" type="org.digijava.module.admin.form.SiteInstancesForm" />
-    <form-bean name="groupsForm" type="org.digijava.module.admin.form.GroupsForm" />
-    <form-bean name="groupPermissionsForm" type="org.digijava.module.admin.form.GroupPermissionsForm" />
-    <form-bean name="groupMembersForm" type="org.digijava.module.admin.form.GroupMembersForm" />
-    <form-bean name="searchUserForm" type="org.digijava.module.admin.form.SearchUserForm" />
-    <form-bean name="administrateUserForm" type="org.digijava.module.admin.form.AdministrateUserForm" />
-    <form-bean name="referencedInstForm" type="org.digijava.module.admin.form.ReferencedInstForm" />
-    <form-bean name="allSitesForm" type="org.digijava.module.admin.form.AllSitesForm" />
-    <form-bean name="localesForm" type="org.digijava.module.admin.form.LocalesForm" />
-    <form-bean name="pickupForm" type="org.digijava.module.admin.form.PickupForm" />
-    <form-bean name="cacheForm" type="org.digijava.module.admin.form.CacheForm" />
-    <form-bean name="configurationForm" type="org.digijava.module.admin.form.ConfigurationForm" />
-    <form-bean name="emailTemplatesForm" type="org.digijava.module.admin.form.EmailTemplatesForm" />
-    <form-bean name="mailStatusForm" type="org.digijava.module.admin.form.MailStatusForm" />
-    <form-bean name="commonInstancesForm" type="org.digijava.module.admin.form.CommonInstancesForm" />
-    <form-bean name="unclosedSessionsForm" type="org.digijava.module.admin.form.UnclosedSessionsForm" />
+    <form-bean name="siteForm" type="org.digijava.ampModule.admin.form.SiteForm" />
+    <form-bean name="searchSiteForm" type="org.digijava.ampModule.admin.form.SearchSiteForm" />
+    <form-bean name="deleteSiteForm" type="org.digijava.ampModule.admin.form.DeleteSiteForm" />
+    <form-bean name="siteInstancesForm" type="org.digijava.ampModule.admin.form.SiteInstancesForm" />
+    <form-bean name="groupsForm" type="org.digijava.ampModule.admin.form.GroupsForm" />
+    <form-bean name="groupPermissionsForm" type="org.digijava.ampModule.admin.form.GroupPermissionsForm" />
+    <form-bean name="groupMembersForm" type="org.digijava.ampModule.admin.form.GroupMembersForm" />
+    <form-bean name="searchUserForm" type="org.digijava.ampModule.admin.form.SearchUserForm" />
+    <form-bean name="administrateUserForm" type="org.digijava.ampModule.admin.form.AdministrateUserForm" />
+    <form-bean name="referencedInstForm" type="org.digijava.ampModule.admin.form.ReferencedInstForm" />
+    <form-bean name="allSitesForm" type="org.digijava.ampModule.admin.form.AllSitesForm" />
+    <form-bean name="localesForm" type="org.digijava.ampModule.admin.form.LocalesForm" />
+    <form-bean name="pickupForm" type="org.digijava.ampModule.admin.form.PickupForm" />
+    <form-bean name="cacheForm" type="org.digijava.ampModule.admin.form.CacheForm" />
+    <form-bean name="configurationForm" type="org.digijava.ampModule.admin.form.ConfigurationForm" />
+    <form-bean name="emailTemplatesForm" type="org.digijava.ampModule.admin.form.EmailTemplatesForm" />
+    <form-bean name="mailStatusForm" type="org.digijava.ampModule.admin.form.MailStatusForm" />
+    <form-bean name="commonInstancesForm" type="org.digijava.ampModule.admin.form.CommonInstancesForm" />
+    <form-bean name="unclosedSessionsForm" type="org.digijava.ampModule.admin.form.UnclosedSessionsForm" />
   </form-beans>
   <action-mappings>
     <action path="/admin/blankForward" type="org.apache.struts.actions.ForwardAction" />
     <action forward="/showLayout.do?layout=admin" path="/admin/showLayout" />
     <action forward="/showLayout.do?layout=admin" path="/admin/index" />
-    <action name="siteForm" path="/admin/showCreateSite" type="org.digijava.module.admin.action.ShowCreateSite" validate="false">
+    <action name="siteForm" path="/admin/showCreateSite" type="org.digijava.ampModule.admin.action.ShowCreateSite" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_createSite" />
     </action>
-    <action input="/showLayout.do?layout=admin_createSite" name="siteForm" path="/admin/createSite" type="org.digijava.module.admin.action.CreateSite" validate="true">
+    <action input="/showLayout.do?layout=admin_createSite" name="siteForm" path="/admin/createSite" type="org.digijava.ampModule.admin.action.CreateSite" validate="true">
       <forward name="forward" path="/admin/showAllSites.do" redirect="true" />
       <forward name="error" path="/showLayout.do?layout=admin_createSite" />
     </action>
-    <action name="siteForm" path="/admin/showEditSite" type="org.digijava.module.admin.action.ShowEditSite" validate="false">
+    <action name="siteForm" path="/admin/showEditSite" type="org.digijava.ampModule.admin.action.ShowEditSite" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_editSite" />
     </action>
-    <action name="siteForm" path="/admin/addDomain" type="org.digijava.module.admin.action.AddDomain" validate="false">
+    <action name="siteForm" path="/admin/addDomain" type="org.digijava.ampModule.admin.action.AddDomain" validate="false">
       <forward name="forwardEdit" path="/showLayout.do?layout=admin_editSite" />
       <forward name="forwardCreate" path="/showLayout.do?layout=admin_createSite" />
     </action>
-    <action name="siteForm" path="/admin/deleteDomain" type="org.digijava.module.admin.action.DeleteDomain" validate="false">
+    <action name="siteForm" path="/admin/deleteDomain" type="org.digijava.ampModule.admin.action.DeleteDomain" validate="false">
       <forward name="forwardEdit" path="/showLayout.do?layout=admin_editSite" />
       <forward name="forwardCreate" path="/showLayout.do?layout=admin_createSite" />
     </action>
-    <action input="/showLayout.do?layout=admin_editSite" name="siteForm" path="/admin/editSite" type="org.digijava.module.admin.action.EditSite" validate="true">
+    <action input="/showLayout.do?layout=admin_editSite" name="siteForm" path="/admin/editSite" type="org.digijava.ampModule.admin.action.EditSite" validate="true">
       <forward name="forward" path="/showLayout.do?layout=admin_editSite" />
       <forward name="error" path="/showLayout.do?layout=admin_editSite" />
     </action>
-    <action name="siteForm" path="/admin/addChildSite" type="org.digijava.module.admin.action.AddChildSite" validate="false">
+    <action name="siteForm" path="/admin/addChildSite" type="org.digijava.ampModule.admin.action.AddChildSite" validate="false">
       <forward name="forward" path="/admin/showEditSite.do" />
     </action>
-    <action name="siteForm" path="/admin/removeChildSite" type="org.digijava.module.admin.action.RemoveChildSite" validate="false">
+    <action name="siteForm" path="/admin/removeChildSite" type="org.digijava.ampModule.admin.action.RemoveChildSite" validate="false">
       <forward name="forward" path="/admin/showEditSite.do" />
     </action>
-    <action name="siteForm" path="/admin/clearParentSite" type="org.digijava.module.admin.action.ClearParentSite" validate="false">
+    <action name="siteForm" path="/admin/clearParentSite" type="org.digijava.ampModule.admin.action.ClearParentSite" validate="false">
       <forward name="forward" path="/admin/showEditSite.do" />
     </action>
     <action forward="/showLayout.do?layout=admin_searchSite" name="searchSiteForm" path="/admin/showSearchSite" validate="false" />
-    <action input="/showLayout.do?layout=admin_searchSite" name="searchSiteForm" path="/admin/searchSite" type="org.digijava.module.admin.action.SearchSite" validate="true">
+    <action input="/showLayout.do?layout=admin_searchSite" name="searchSiteForm" path="/admin/searchSite" type="org.digijava.ampModule.admin.action.SearchSite" validate="true">
       <forward name="forward" path="/showLayout.do?layout=admin_searchSite" />
     </action>
-    <action input="/showLayout.do?layout=admin_searchSite" name="searchSiteForm" path="/admin/adminLink" type="org.digijava.module.admin.action.AdminLink" validate="false">
+    <action input="/showLayout.do?layout=admin_searchSite" name="searchSiteForm" path="/admin/adminLink" type="org.digijava.ampModule.admin.action.AdminLink" validate="false">
       <forward name="forward" path="/showLayout.do" redirect="true" />
     </action>
-    <action input="/showLayout.do?layout=admin_searchSite" name="deleteSiteForm" path="/admin/deleteSite" type="org.digijava.module.admin.action.DeleteSite" validate="false">
+    <action input="/showLayout.do?layout=admin_searchSite" name="deleteSiteForm" path="/admin/deleteSite" type="org.digijava.ampModule.admin.action.DeleteSite" validate="false">
       <forward name="forward" path="/admin/showSearchSite.do" />
     </action>
-    <action input="/showLayout.do?layout=admin_allSites" name="allSitesForm" path="/admin/showAllSites" type="org.digijava.module.admin.action.ShowAllSites" validate="false">
+    <action input="/showLayout.do?layout=admin_allSites" name="allSitesForm" path="/admin/showAllSites" type="org.digijava.ampModule.admin.action.ShowAllSites" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_allSites" />
     </action>
-    <action name="localesForm" path="/admin/showLocales" type="org.digijava.module.admin.action.ShowLocales" validate="false">
+    <action name="localesForm" path="/admin/showLocales" type="org.digijava.ampModule.admin.action.ShowLocales" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_locales" />
     </action>
-    <action input="/showLayout.do?layout=admin_locales" name="localesForm" path="/admin/editLocales" type="org.digijava.module.admin.action.EditLocales" validate="false">
+    <action input="/showLayout.do?layout=admin_locales" name="localesForm" path="/admin/editLocales" type="org.digijava.ampModule.admin.action.EditLocales" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_locales" />
     </action>
-    <action name="siteInstancesForm" path="/admin/showSiteInstances" type="org.digijava.module.admin.action.ShowSiteInstances" validate="false">
+    <action name="siteInstancesForm" path="/admin/showSiteInstances" type="org.digijava.ampModule.admin.action.ShowSiteInstances" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_siteInstances" />
     </action>
-    <action name="siteInstancesForm" path="/admin/addInstance" type="org.digijava.module.admin.action.AddInstance" validate="false">
+    <action name="siteInstancesForm" path="/admin/addInstance" type="org.digijava.ampModule.admin.action.AddInstance" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_siteInstances" />
     </action>
-    <action name="siteInstancesForm" path="/admin/deleteInstance" type="org.digijava.module.admin.action.DeleteInstance" validate="false">
+    <action name="siteInstancesForm" path="/admin/deleteInstance" type="org.digijava.ampModule.admin.action.DeleteInstance" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_siteInstances" />
     </action>
-    <action input="/showLayout.do?layout=admin_siteInstances" name="siteInstancesForm" path="/admin/saveInstances" type="org.digijava.module.admin.action.SaveInstances" validate="true">
+    <action input="/showLayout.do?layout=admin_siteInstances" name="siteInstancesForm" path="/admin/saveInstances" type="org.digijava.ampModule.admin.action.SaveInstances" validate="true">
       <forward name="forward" path="/admin/showSiteInstances.do" />
       <forward name="error" path="/showLayout.do?layout=admin_siteInstances" />
     </action>
-    <action name="referencedInstForm" path="/admin/showMasterInstances" type="org.digijava.module.admin.action.ShowMasterInstances" validate="false">
+    <action name="referencedInstForm" path="/admin/showMasterInstances" type="org.digijava.ampModule.admin.action.ShowMasterInstances" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_instPopupLayout" />
     </action>
-    <action name="siteInstancesForm" path="/admin/setMasterInstance" type="org.digijava.module.admin.action.SetMasterInstance" validate="false">
+    <action name="siteInstancesForm" path="/admin/setMasterInstance" type="org.digijava.ampModule.admin.action.SetMasterInstance" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_siteInstances" />
     </action>
-    <action name="siteInstancesForm" path="/admin/changeInstanceModule" type="org.digijava.module.admin.action.ChangeInstanceModule" validate="false">
+    <action name="siteInstancesForm" path="/admin/changeInstanceModule" type="org.digijava.ampModule.admin.action.ChangeInstanceModule" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_siteInstances" />
     </action>
-    <action name="siteInstancesForm" path="/admin/clearMasterInstance" type="org.digijava.module.admin.action.ClearMasterInstance" validate="false">
+    <action name="siteInstancesForm" path="/admin/clearMasterInstance" type="org.digijava.ampModule.admin.action.ClearMasterInstance" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_siteInstances" />
     </action>
     <action forward="/showLayout.do?layout=admin_searchUser" name="searchUserForm" path="/admin/showSearchUser" validate="false" />
-    <action input="/showLayout.do?layout=admin_searchUser" name="searchUserForm" path="/admin/searchUser" type="org.digijava.module.admin.action.SearchUser" validate="true">
+    <action input="/showLayout.do?layout=admin_searchUser" name="searchUserForm" path="/admin/searchUser" type="org.digijava.ampModule.admin.action.SearchUser" validate="true">
       <forward name="searchUser" path="/showLayout.do?layout=admin_searchUser" />
       <forward name="searchUsers" path="/showLayout.do?layout=admin_usersPopupLayout" />
     </action>
-    <action input="/showLayout.do?layout=admin_searchUser" name="administrateUserForm" path="/admin/showAdministrateUser" type="org.digijava.module.admin.action.ShowAdministrateUser" validate="true">
+    <action input="/showLayout.do?layout=admin_searchUser" name="administrateUserForm" path="/admin/showAdministrateUser" type="org.digijava.ampModule.admin.action.ShowAdministrateUser" validate="true">
       <forward name="forward" path="/showLayout.do?layout=admin_administrateUser" />
     </action>
-    <action input="/showLayout.do?layout=admin_administrateUser" name="administrateUserForm" path="/admin/administrateUser" type="org.digijava.module.admin.action.AdministrateUser" validate="true">
+    <action input="/showLayout.do?layout=admin_administrateUser" name="administrateUserForm" path="/admin/administrateUser" type="org.digijava.ampModule.admin.action.AdministrateUser" validate="true">
       <forward name="forward" path="/admin/showAdministrateUser.do" />
     </action>
-    <action input="/showLayout.do?layout=admin_administrateUser" name="administrateUserForm" path="/admin/becomeUser" type="org.digijava.module.admin.action.BecomeUser" validate="false">
+    <action input="/showLayout.do?layout=admin_administrateUser" name="administrateUserForm" path="/admin/becomeUser" type="org.digijava.ampModule.admin.action.BecomeUser" validate="false">
       <forward name="forward" path="/showLayout.do" redirect="true" />
     </action>
-    <action name="groupsForm" path="/admin/showGroups" type="org.digijava.module.admin.action.ShowGroups" validate="false">
+    <action name="groupsForm" path="/admin/showGroups" type="org.digijava.ampModule.admin.action.ShowGroups" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_groups" />
     </action>
-    <action name="groupsForm" path="/admin/deleteGroup" type="org.digijava.module.admin.action.DeleteGroup" validate="false">
+    <action name="groupsForm" path="/admin/deleteGroup" type="org.digijava.ampModule.admin.action.DeleteGroup" validate="false">
       <forward name="forward" path="/admin/showGroups.do" />
       <forward name="error" path="/showLayout.do?layout=admin_groups" />
     </action>
-    <action input="/showLayout.do?layout=admin_groups" name="groupsForm" path="/admin/addGroup" type="org.digijava.module.admin.action.AddGroup" validate="true">
+    <action input="/showLayout.do?layout=admin_groups" name="groupsForm" path="/admin/addGroup" type="org.digijava.ampModule.admin.action.AddGroup" validate="true">
       <forward name="forward" path="/admin/showGroups.do" />
       <forward name="error" path="/showLayout.do?layout=admin_groups" />
     </action>
-    <action name="groupPermissionsForm" path="/admin/showPermissions" type="org.digijava.module.admin.action.ShowPermissions" validate="false">
+    <action name="groupPermissionsForm" path="/admin/showPermissions" type="org.digijava.ampModule.admin.action.ShowPermissions" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_groupPermissions" />
       <forward name="error" path="/showLayout.do?layout=admin" />
     </action>
-    <action name="groupPermissionsForm" path="/admin/deletePermission" type="org.digijava.module.admin.action.DeletePermission" validate="false">
+    <action name="groupPermissionsForm" path="/admin/deletePermission" type="org.digijava.ampModule.admin.action.DeletePermission" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_groupPermissions" />
     </action>
-    <action name="groupPermissionsForm" path="/admin/addPermission" type="org.digijava.module.admin.action.AddPermission" validate="false">
+    <action name="groupPermissionsForm" path="/admin/addPermission" type="org.digijava.ampModule.admin.action.AddPermission" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_groupPermissions" />
     </action>
-    <action name="groupPermissionsForm" path="/admin/savePermissions" type="org.digijava.module.admin.action.SavePermissions" validate="false">
+    <action name="groupPermissionsForm" path="/admin/savePermissions" type="org.digijava.ampModule.admin.action.SavePermissions" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_groupPermissions" />
     </action>
-    <action name="pickupForm" path="/admin/showPickupSite" type="org.digijava.module.admin.action.ShowPickupSite" validate="false">
+    <action name="pickupForm" path="/admin/showPickupSite" type="org.digijava.ampModule.admin.action.ShowPickupSite" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_pickupSite" />
     </action>
-    <action name="groupMembersForm" path="/admin/showGroupMembers" type="org.digijava.module.admin.action.ShowGroupMembers" validate="false">
+    <action name="groupMembersForm" path="/admin/showGroupMembers" type="org.digijava.ampModule.admin.action.ShowGroupMembers" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_groupMembers" />
       <forward name="error" path="/showLayout.do?layout=admin" />
     </action>
-    <action name="groupMembersForm" path="/admin/removeMemberUser" type="org.digijava.module.admin.action.RemoveMemberUser" validate="false">
+    <action name="groupMembersForm" path="/admin/removeMemberUser" type="org.digijava.ampModule.admin.action.RemoveMemberUser" validate="false">
       <forward name="forward" path="/admin/showGroupMembers.do" />
     </action>
-    <action name="groupMembersForm" path="/admin/addUsersToGroup" type="org.digijava.module.admin.action.AddUsersToGroup" validate="false">
+    <action name="groupMembersForm" path="/admin/addUsersToGroup" type="org.digijava.ampModule.admin.action.AddUsersToGroup" validate="false">
       <forward name="forward" path="/admin/showGroupMembers.do" />
     </action>
     <action forward="/showLayout.do?layout=admin_usersPopupLayout" name="searchUserForm" path="/admin/showSelectUsers" validate="false" />
-    <action name="pickupForm" path="/admin/showPickupGroup" type="org.digijava.module.admin.action.ShowPickupGroup" validate="false">
+    <action name="pickupForm" path="/admin/showPickupGroup" type="org.digijava.ampModule.admin.action.ShowPickupGroup" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_pickupGroupPopupLayout" />
     </action>
-    <action name="cacheForm" path="/admin/showCaches" scope="session" type="org.digijava.module.admin.action.ShowCaches" validate="false">
+    <action name="cacheForm" path="/admin/showCaches" scope="session" type="org.digijava.ampModule.admin.action.ShowCaches" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_caches" />
     </action>
-    <action name="configurationForm" path="/admin/showConfiguration" scope="request" type="org.digijava.module.admin.action.ShowConfiguration">
+    <action name="configurationForm" path="/admin/showConfiguration" scope="request" type="org.digijava.ampModule.admin.action.ShowConfiguration">
       <forward name="configPage" path="/showLayout.do?layout=admin_configurationPage" />
     </action>
-    <action name="emailTemplatesForm" path="/admin/showEmailTemplates" scope="request" type="org.digijava.module.admin.action.ShowEmailTemplates">
+    <action name="emailTemplatesForm" path="/admin/showEmailTemplates" scope="request" type="org.digijava.ampModule.admin.action.ShowEmailTemplates">
       <forward name="forward" path="/showLayout.do?layout=admin_emailTemplates" />
     </action>
-    <action name="mailStatusForm" path="/admin/showMailStatus" scope="request" type="org.digijava.module.admin.action.ShowMailStatus" />
-    <action name="commonInstancesForm" path="/admin/showCommonInstances" type="org.digijava.module.admin.action.ShowCommonInstances" validate="false">
+    <action name="mailStatusForm" path="/admin/showMailStatus" scope="request" type="org.digijava.ampModule.admin.action.ShowMailStatus" />
+    <action name="commonInstancesForm" path="/admin/showCommonInstances" type="org.digijava.ampModule.admin.action.ShowCommonInstances" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_commonInstances" />
     </action>
-    <action name="commonInstancesForm" path="/admin/addCommonInstance" type="org.digijava.module.admin.action.AddCommonInstance" validate="false">
+    <action name="commonInstancesForm" path="/admin/addCommonInstance" type="org.digijava.ampModule.admin.action.AddCommonInstance" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_commonInstances" />
     </action>
-    <action name="commonInstancesForm" path="/admin/deleteCommonInstance" type="org.digijava.module.admin.action.DeleteCommonInstance" validate="false">
+    <action name="commonInstancesForm" path="/admin/deleteCommonInstance" type="org.digijava.ampModule.admin.action.DeleteCommonInstance" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_commonInstances" />
       <forward name="error" path="/showLayout.do?layout=admin_commonInstances" />
     </action>
-    <action input="/showLayout.do?layout=admin_commonInstances" name="commonInstancesForm" path="/admin/saveCommonInstances" type="org.digijava.module.admin.action.SaveCommonInstances" validate="true">
+    <action input="/showLayout.do?layout=admin_commonInstances" name="commonInstancesForm" path="/admin/saveCommonInstances" type="org.digijava.ampModule.admin.action.SaveCommonInstances" validate="true">
       <forward name="forward" path="/showLayout.do?layout=admin_commonInstances" />
     </action>
-    <action name="unclosedSessionsForm" path="/admin/showUnclosedSessions" type="org.digijava.module.admin.action.ShowUnclosedSessions" validate="false">
+    <action name="unclosedSessionsForm" path="/admin/showUnclosedSessions" type="org.digijava.ampModule.admin.action.ShowUnclosedSessions" validate="false">
       <forward name="forward" path="/showLayout.do?layout=admin_unclosedSessions" />
     </action>
-    <action path="/admin/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
+    <action path="/admin/switchDevelopmentMode" type="org.digijava.ampModule.admin.action.SwitchDevelopmentMode" />
   </action-mappings>
 </struts-config>

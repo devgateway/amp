@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>parisindicator</name>
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/parisindicator/parisindicator" />
 	</security>
-</module-config>
+</ampModule-config>

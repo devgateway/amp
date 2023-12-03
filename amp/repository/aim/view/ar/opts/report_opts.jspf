@@ -20,7 +20,7 @@
                 <%
                 	AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
                 	if (arf.isPublicView()==false){%>
-                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
+                <feature:display name="Save Report/Tab with Filters" ampModule="Report and Tab Options">
 	          	 	|
 	          	 	<a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}" >
 	                	${saveFilters}

@@ -5,9 +5,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/asynchronous.js"/>"></script>
 
 <div id="popin" class="invisible-item">
     <div id="popinContent" class="content">
@@ -404,7 +404,7 @@ function myAddSectors(params) {
 function myAddLocation(params) {
     var msg='\n<digi:trn jsFriendly="true" key="aim:addLocation">Add Location</digi:trn>';
     showPanelLoading(msg);
-    <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+    <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocation.do" />
     var url = "<%=selectLoc%>";
     YAHOO.util.Connect.asyncRequest("POST", url, callback, params);
 }
@@ -413,7 +413,7 @@ function locationChanged( selectId ) {
 	var selectEl		= document.getElementById(selectId).value;   
     if ( selectEl != "-1" ) {
         //document.selectLocationForm.parentLocId.value=selectEl.value;
-		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocation.do" />
         var url = "<%=selectLoc%>";
         YAHOO.util.Connect.asyncRequest("POST", url, callback , "edit=true&"+generateFieldsLocation()+"&parentLocId="+selectEl);
     }

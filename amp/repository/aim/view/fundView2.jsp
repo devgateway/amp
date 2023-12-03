@@ -24,7 +24,7 @@
 	</logic:equal>
 
 	<logic:iterate name="records" property="ampFund" id="ampFund"
-		type="org.digijava.module.aim.helper.AmpFund">
+		type="org.digijava.ampModule.aim.helper.AmpFund">
 		
 		<logic:equal name="aimAdvancedReportForm" property="acCommFlag"
 			value="true">

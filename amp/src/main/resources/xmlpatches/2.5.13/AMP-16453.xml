@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-16453</jira>
+	<keyword>Additional Info popup is blank in donor dashboard</keyword>
+	<author>ginchauspe</author>
+	<description>Changes in some FM fields for Dashboards</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_modules_templates (template, ampModule)
+				SELECT 1, (SELECT id FROM amp_modules_visibility WHERE name LIKE 'Dashboard Org. Info')
+				WHERE NOT EXISTS (SELECT id FROM amp_modules_visibility WHERE name LIKE 'Dashboard Org. Info');
+				
+				INSERT INTO amp_features_templates (template, feature)
+				SELECT 1, (SELECT id FROM amp_features_visibility WHERE name LIKE 'Background of organization')
+				WHERE NOT EXISTS (SELECT id FROM amp_features_visibility WHERE name LIKE 'Background of organization');
+				
+				INSERT INTO amp_features_templates (template, feature)
+				SELECT 1, (SELECT id FROM amp_features_visibility WHERE name LIKE 'Org. Description')
+				WHERE NOT EXISTS (SELECT id FROM amp_features_visibility WHERE name LIKE 'Org. Description');
+				
+				INSERT INTO amp_features_templates (template, feature)
+				SELECT 1, (SELECT id FROM amp_features_visibility WHERE name LIKE 'Key Areas of Focus')
+				WHERE NOT EXISTS (SELECT id FROM amp_features_visibility WHERE name LIKE 'Key Areas of Focus');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

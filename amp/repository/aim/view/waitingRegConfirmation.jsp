@@ -21,12 +21,12 @@
 					<td width="3%">&nbsp;</td>
 					<td align=left class=title noWrap colspan="2">
 						<b>
-                            <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL%>" compareWith="true" >
+                            <gs:test name="<%= org.digijava.ampModule.aim.helper.GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL%>" compareWith="true" >
                                 <digi:trn>Registration is Successful!</digi:trn> <br/>
                                     <digi:trn>A confirmation email has been sent to the address you specified</digi:trn> ${aimUserRegisterForm.email}. <br/> <digi:trn key="aim:newUserConfirmRegSuccessPart2">
                                     You need to read and respond to this email before you can use your account. If you don't do this, the new account will be deleted automatically after a few days.</digi:trn>
                             </gs:test>
-                             <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL%>" compareWith="false" >
+                             <gs:test name="<%= org.digijava.ampModule.aim.helper.GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL%>" compareWith="false" >
                                 <digi:trn>
                                   You have been successfully registered!
                                 </digi:trn><br/>

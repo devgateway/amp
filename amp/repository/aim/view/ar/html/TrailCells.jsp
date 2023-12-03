@@ -17,7 +17,7 @@
 <%-- UNUSED FILE, TO BE REMOVED --%>
 
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
+<bean:define id="reportMeta" name="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 
 <!-- generate total row -->
 <tr>
@@ -49,7 +49,7 @@
 	<c:if test="${reportData.levelDepth == 3}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 			<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 15px;padding-right: 3px">
-				<img src="module/aim/images/hierarchies.gif" align="top">
+				<img src="ampModule/aim/images/hierarchies.gif" align="top">
 			<%= ARUtil.getNameFromReportData(reportData) %>
 			<!-- *************************************************** 
 					WARNING:
@@ -62,7 +62,7 @@
 		<c:set var="paddingLeft" value="${15+(reportData.levelDepth-3)*10}" />
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 		<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: ${paddingLeft}px;padding-right: 3px">
-			<img src="module/aim/images/hierarchies.gif" align="top">
+			<img src="ampModule/aim/images/hierarchies.gif" align="top">
 			<%= ARUtil.getNameFromReportData(reportData) %>
 			<!-- *************************************************** 
 					WARNING:

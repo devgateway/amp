@@ -11,7 +11,7 @@
 
 
 <digi:instance property="crDocumentManagerForm" />
-<bean:define id="myForm" name="crDocumentManagerForm" toScope="page" type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
+<bean:define id="myForm" name="crDocumentManagerForm" toScope="page" type="org.digijava.ampModule.contentrepository.form.DocumentManagerForm" />
 	<div id="loadingDiv" style="text-align: center;display: none;">
 		<digi:trn>Loading...</digi:trn> <br>
 		<img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' height='15px' align="middle"/>
@@ -32,7 +32,7 @@
 								<th><digi:trn>Actions</digi:trn></th>
 							</tr>
 						</thead>											
-						<logic:iterate name="crDocumentManagerForm"	property="otherDocuments" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData">
+						<logic:iterate name="crDocumentManagerForm"	property="otherDocuments" id="documentData"	type="org.digijava.ampModule.contentrepository.helper.DocumentData">
 							<tr>
 								<td>									
 									 <bean:write name="documentData" property="versionNumber" />									 

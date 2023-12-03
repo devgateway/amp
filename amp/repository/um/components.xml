@@ -37,7 +37,7 @@
 
 </secondary-pages>
 
-<module>
+<ampModule>
 	<teaser-file>logon.jsp</teaser-file>
 	<page name="userUpdate">update.jsp</page>
 	<page name="userReset">reset.jsp</page>
@@ -53,6 +53,6 @@
 
 	<page name="emailExists">emailExists.jsp</page>
 
-</module>
+</ampModule>
 
 </config>

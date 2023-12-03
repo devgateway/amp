@@ -15,7 +15,7 @@ import lxml.etree as ET
 xsl = '''<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
          <xsl:output omit-xml-declaration="yes" />
         <xsl:template match="/" >
-          <xsl:for-each select="visibilityTemplates/template//module[starts-with(@name,'/Activity Form/') and (@visible='true') and (count(ancestor::module)= count(ancestor::module[@visible='true']))]">
+          <xsl:for-each select="visibilityTemplates/template//ampModule[starts-with(@name,'/Activity Form/') and (@visible='true') and (count(ancestor::ampModule)= count(ancestor::ampModule[@visible='true']))]">
             <xsl:sort select="@name"/>
             <xsl:value-of select="@name"/>
             <xsl:text>&#xa;</xsl:text>
@@ -82,8 +82,8 @@ def convert( file_name ):
   input_str = fin.read(-1)
   fin.close()
   input_str = input_str.replace("xmlns=\"http://dgfoundation.org/amp/visibility/feed/fm/schema.xml\"", "")
-  # workaround AF root FM bug: <module name="/Activity Form" visible="false">
-  input_str = input_str.replace("<module name=\"/Activity Form\" visible=\"false\">", "<module name=\"/Activity Form\" visible=\"true\">")
+  # workaround AF root FM bug: <ampModule name="/Activity Form" visible="false">
+  input_str = input_str.replace("<ampModule name=\"/Activity Form\" visible=\"false\">", "<ampModule name=\"/Activity Form\" visible=\"true\">")
   dom = ET.fromstring(input_str)
   xslt = ET.fromstring(xsl)
   transform = ET.XSLT(xslt)

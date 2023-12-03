@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>autopatcher</name>
 	<hibernate-classes required="true">
-	<hibernate-class>org.digijava.module.autopatcher.core.PatchFile</hibernate-class>
+	<hibernate-class>org.digijava.ampModule.autopatcher.core.PatchFile</hibernate-class>
 			
 	</hibernate-classes>
-</module-config>
+</ampModule-config>

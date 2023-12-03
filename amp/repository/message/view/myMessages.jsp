@@ -9,9 +9,9 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
-<module:display name="Messaging System">
+<ampModule:display name="Messaging System">
 
   <digi:instance property="messageForm"/> 
   <digi:form action="/messageActions.do" style="margin-bottom:0;">
@@ -20,8 +20,8 @@
     <c:set var="teamType">${sessionScope.currentMember.teamAccessType}</c:set>
 
 
-    <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-    <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+    <script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+    <script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/asynchronous.js"/>"></script>
     <script type="text/javascript">
     var inboxFull='<digi:trn key="message:fullMailBox" jsFriendly="true">Your MailBox Is Full</digi:trn>';
     var deleteData='<digi:trn key="message:plzDeleteData" jsFriendly="true">Please delete messages or you will not get newer ones</digi:trn>';
@@ -153,7 +153,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       li.title=clickToViewMsg;
       li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>');
       li.addClass('tri');
-	  <feature:display name="Message tab" module="Messages">
+	  <feature:display name="Message tab" ampModule="Messages">
       	div.append(li);
       </feature:display>
       
@@ -161,7 +161,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       li.title=clickToViewMsg;
       li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+''+newalerts+'</a>');
       li.addClass('tri');
-      <feature:display name="Alert tab" module="Messages">
+      <feature:display name="Alert tab" ampModule="Messages">
       	div.append(li);
       </feature:display>
       
@@ -169,7 +169,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       li.title=clickToViewMsg;
       li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+''+newapprovals+'</a>');
       li.addClass('tri');
-      <feature:display name="Approval Tab" module="Messages">
+      <feature:display name="Approval Tab" ampModule="Messages">
       	div.append(li);
       </feature:display>
 	 
@@ -177,7 +177,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       li.title=clickToViewMsg;
       li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+''+newcalevents+'</a>');
       li.addClass('tri');
-      <feature:display name="Event Tab" module="Messages">
+      <feature:display name="Event Tab" ampModule="Messages">
       	div.append(li);
       </feature:display>
       
@@ -196,7 +196,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
     }
     </script>
     
-    <feature:display name="My Messages" module="Messages">
+    <feature:display name="My Messages" ampModule="Messages">
     <div class="right_menu" style="margin-top:20px;">
 		<div class="right_menu_header">
 			<div class="right_menu_header_cont"><digi:trn>My Messages</digi:trn></div>
@@ -229,4 +229,4 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       checkForNewMessages();
     //});
   </script>
-</module:display>
+</ampModule:display>

@@ -2,7 +2,7 @@
 <div id="viewVersions" style="display:none">
 	<div align="center">
 		<digi:trn>Loading... </digi:trn><br />
-		<digi:img skipBody="true" src="module/contentrepository/images/ajax-loader-darkblue.gif" border="0" align="absmiddle" />
+		<digi:img skipBody="true" src="ampModule/contentrepository/images/ajax-loader-darkblue.gif" border="0" align="absmiddle" />
 	</div>
 </div>
 
@@ -13,7 +13,7 @@
 				<td bgcolor=#CCCCCC class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; color:#FFFFFF; padding-bottom: 1px; padding-top: 1px">
 					<a style="cursor:pointer" >
 						<img border="0" align="absmiddle" src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" name="otherDocumentsImg"/>
-						<digi:img skipBody="true" height="16" border="0" align="absmiddle"	src="module/contentrepository/images/folder_folder.gif" />
+						<digi:img skipBody="true" height="16" border="0" align="absmiddle"	src="ampModule/contentrepository/images/folder_folder.gif" />
 					</a>
 					<button class="dr-menu" type="button" name="otherDocumentsButton" 
 						style="font-size: 9px;">

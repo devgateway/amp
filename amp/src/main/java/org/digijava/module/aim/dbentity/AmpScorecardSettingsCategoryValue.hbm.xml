@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpScorecardSettingsCategoryValue"
+		table="AMP_SCORECARD_SETTINGS_CATEGORY_VALUE">
+		<cache usage="read-write" />
+		<id name="ampScorecardSettingsCategoryValueId" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_SCORECARD_SETTINGS_CATEGORY_VALUE_SEQ</param>
+			</generator>
+		</id>
+	<many-to-one column="AMP_SCORECARD_SETTINGS_ID" name="ampScorecardSettings"
+		class="org.digijava.ampModule.aim.dbentity.AmpScorecardSettings" />
+	<many-to-one column="AMP_CATEGORY_VALUE_ID" name="ampCategoryValueStatus"
+		class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" />
+	</class>
+</hibernate-mapping>

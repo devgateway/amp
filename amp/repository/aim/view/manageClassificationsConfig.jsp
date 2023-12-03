@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <script langauage="JavaScript">
     <c:set var="translation">
@@ -83,7 +83,7 @@
                                                 	</thead>
                                                 	<logic:notEmpty name="aimSectorClassConfigForm" property="classifications">
                                                  		<logic:iterate name="aimSectorClassConfigForm" property="classificationConfigs" id="classConfig"
-															type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
+															type="org.digijava.ampModule.aim.dbentity.AmpClassificationConfiguration">
                                                       		<tr>
                                                          		<td width="80%" bgcolor="#ffffff" class="inside">
                                                              		<c:out value="${classConfig.name}"/>
@@ -141,7 +141,7 @@
                                                 <table cellPadding=5 cellspacing="1" width="100%" class="inside">
                                                   <tr>
                                                   	<td class="inside">
-                                                    	<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+                                                    	<digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                         <c:set var="trnAddScheme">
                                                          	<digi:trn key="aim:clickToAddConfiguration">Click here to Add a Configuration</digi:trn>
                                                          </c:set>
@@ -152,7 +152,7 @@
                                                         </tr>
                                               		 <tr>
                                                         <td class="inside">
-                                                            <digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+                                                            <digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                             <c:set var="trnViewAdmin">
                                                                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                                                             </c:set>

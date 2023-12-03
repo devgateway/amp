@@ -3,15 +3,15 @@
 
 <struts-config>
 	<form-beans>
-		<form-bean name="cmCategoryManagerForm" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
+		<form-bean name="cmCategoryManagerForm" type="org.digijava.ampModule.categorymanager.form.CategoryManagerForm" />
 	</form-beans>
 	<action-mappings>
-		<action name="cmCategoryManagerForm" path="/categorymanager/categoryManager" scope="session" type="org.digijava.module.categorymanager.action.CategoryManager" validate="false">
+		<action name="cmCategoryManagerForm" path="/categorymanager/categoryManager" scope="session" type="org.digijava.ampModule.categorymanager.action.CategoryManager" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=viewCategoryManager" />
 			<forward name="createOrEditCategory" path="/showLayout.do?layout=createOrEditCategory" />
 		</action>
-		<action name="cmCategoryManagerForm" path="/categorymanager/exportCatManager2XSL" scope="session" type="org.digijava.module.categorymanager.action.ExportCategoryManager2XSL" validate="false"/>
-		<action name="cmCategoryManagerForm" path="/categorymanager/categoryLabelsAction" scope="session" type="org.digijava.module.categorymanager.action.CategoryLabelsAction" validate="false">
+		<action name="cmCategoryManagerForm" path="/categorymanager/exportCatManager2XSL" scope="session" type="org.digijava.ampModule.categorymanager.action.ExportCategoryManager2XSL" validate="false"/>
+		<action name="cmCategoryManagerForm" path="/categorymanager/categoryLabelsAction" scope="session" type="org.digijava.ampModule.categorymanager.action.CategoryLabelsAction" validate="false">
 			<forward name="createOrEditCategory" path="/showLayout.do?layout=createOrEditCategory" />
 		</action>
 	</action-mappings>

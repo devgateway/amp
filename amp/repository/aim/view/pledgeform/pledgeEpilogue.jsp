@@ -5,11 +5,11 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />
 
-<feature:display name="Pledge Attached Files" module="Pledges">
+<feature:display name="Pledge Attached Files" ampModule="Pledges">
 	<aim:renderFormSubsection title="Pledge Documents" styleId="pledge_form_documents">
 		<jsp:include page="pledgeDocuments.jsp"></jsp:include>
 		<div class="text-center"><button type="button" onclick="documentsController.showAdditionArea(this);" class="btn btn-success btn-sm" id='pledge_form_documents_data_add'><digi:trn>Add Document</digi:trn></button></div>
@@ -17,7 +17,7 @@
 	</aim:renderFormSubsection>
 </feature:display>
 
-<feature:display name="Pledge Additional Information" module="Pledges">
+<feature:display name="Pledge Additional Information" ampModule="Pledges">
 	<aim:renderFormSubsection title="Additional Information">
 		<html:textarea property="additionalInformation" rows="6" cols="80" styleClass="form-control" style="width: 80%; margin-left: 7%" />
 	</aim:renderFormSubsection>

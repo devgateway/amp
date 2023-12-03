@@ -1,4 +1,4 @@
-<%@page import="org.digijava.module.aim.helper.FormatHelper,org.dgfoundation.amp.ar.AmpARFilter"%>
+<%@page import="org.digijava.ampModule.aim.helper.FormatHelper,org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -9,13 +9,13 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <c:choose>
 <c:when test="${pledgeUser}">
 
-	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 <jsp:include page="teamPagesHeader.jsp"  />
 
 <style type="text/css">
@@ -263,7 +263,7 @@ function setHoveredRow(rowId) {
 	</tr>
 </table>
 
-<feature:display name="Add Pledge Button" module="Pledges">
+<feature:display name="Add Pledge Button" ampModule="Pledges">
 	<div style="text-align:center;padding:10px;">
 			<html:button styleClass="buttonx" property="submitButton" onclick="window.location.assign('/addPledge.do?reset=true')">
 	    		<digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>

@@ -11,7 +11,7 @@
 
 <script>
   function fnOnExpand( param ) {
-      <digi:context name="expandUrl" property="context/module/moduleinstance/showPickupGroup.do" />
+      <digi:context name="expandUrl" property="context/ampModule/moduleinstance/showPickupGroup.do" />
       document.pickupForm.expand.value=param;
       document.pickupForm.action = "<%= expandUrl %>";
       document.pickupForm.submit();
@@ -29,7 +29,7 @@
 <input type="hidden" name="expand" />
 <table><tr><td noWrap align="center"><h3><b><digi:trn key="admin:selectGroups">Select Groups</digi:trn></h3></b></td></tr></table>
 <table border="0">
-<logic:iterate id="item" name="pickupForm" property="items" type="org.digijava.module.admin.helper.pickup.PickupItem">
+<logic:iterate id="item" name="pickupForm" property="items" type="org.digijava.ampModule.admin.helper.pickup.PickupItem">
 <tr><td align="left">
    <table><tr>
       <td>
@@ -40,8 +40,8 @@
  <td style="text-decoration: none; color: blue;">
 <a href="javascript:fnOnExpand('<%= item.getKey()%>')">+</a></td>
  <td>
-<c:if test="${!empty item.id}"><digi:img src="module/admin/images/group.gif" border="0"/></c:if>
-<c:if test="${empty item.id}"><digi:img src="module/admin/images/site.gif" border="0"/></c:if>
+<c:if test="${!empty item.id}"><digi:img src="ampModule/admin/images/group.gif" border="0"/></c:if>
+<c:if test="${empty item.id}"><digi:img src="ampModule/admin/images/site.gif" border="0"/></c:if>
 </td>
  <td>
 <html:hidden name="item" property="expand" indexed="true" />

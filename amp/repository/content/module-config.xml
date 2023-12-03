@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>content</name>
 	<security login-required="true" default="READ">
 		<action login-required="false" pattern="/displayThumbnail" />
@@ -11,7 +11,7 @@
 	</security>
 	
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.module.content.dbentity.AmpContentItem</hibernate-class>
-		<hibernate-class>org.digijava.module.content.dbentity.AmpContentItemThumbnail</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.content.dbentity.AmpContentItem</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.content.dbentity.AmpContentItemThumbnail</hibernate-class>
 	</hibernate-classes>
-</module-config>
+</ampModule-config>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>translation</name>
 	<security login-required="false">
 		<action login-required="true" pattern="/showAdvancedTranslation" /> 
@@ -24,4 +24,4 @@
 
 	</security>
 	
-</module-config>
+</ampModule-config>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.gateperm.core.Permission" table="PERM_PERMISSION" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">perm_permission_seq</param>
+			</generator>
+		</id>
+		<set name="compositeLinkedPermissions" table="PERM_COMP_PERMISSION_MAP" inverse="true" lazy="false">
+			<cache usage="read-write"/>
+			<key column="linked_perm_id" />
+			<many-to-many class="org.digijava.ampModule.gateperm.core.Permission" column="perm_id" />
+		</set>
+		<set name="permissibleObjects" table="PERM_MAP" cascade="all-delete-orphan" lazy="false">
+			<cache usage="read-write"/>
+			<key column="permission_id" />
+			<one-to-many class="org.digijava.ampModule.gateperm.core.PermissionMap" />
+		</set>
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="dedicated" column="dedicated" type="java.lang.Boolean" />
+		<property name="description" column="description" length="2000" type="java.lang.String" />
+		<joined-subclass name="org.digijava.ampModule.gateperm.core.GatePermission"
+			table="PERM_GATE_PERMISSION" lazy="false">		
+			<key column="perm_id" />
+			<property name="gateTypeName" column="gate_type_name" type="java.lang.String" />
+			<list name="gateParameters" table="PERM_GATE_PARAMETER" cascade="all" lazy="false">
+				<cache usage="read-write"/>
+				<key column="perm_id" />
+				<index column="index_column" />
+				<element column="parameter" type="java.lang.String" length="5000" />
+			</list>
+			<set name="actions" table="PERM_GATE_ACTION" cascade="all" lazy="false">
+				<cache usage="read-write"/>
+				<key column="perm_id" />
+				<element column="action_name" type="string" />
+			</set>
+		</joined-subclass>
+		<joined-subclass name="org.digijava.ampModule.gateperm.core.CompositePermission"
+			table="PERM_COMP_PERMISSION" lazy="false">
+			<key column="perm_id" />
+			<property name="intersection" column="intersection" type="java.lang.Boolean" />
+			<set name="permissions" table="PERM_COMP_PERMISSION_MAP" cascade="all" lazy="false">
+				<cache usage="read-write" />
+				<key column="perm_id" />
+				<many-to-many class="org.digijava.ampModule.gateperm.core.Permission"
+					column="linked_perm_id" />
+			</set>
+		</joined-subclass>
+	</class>
+</hibernate-mapping>

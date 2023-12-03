@@ -14,7 +14,7 @@
 	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
 %>
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports" toScope="page"/>
 
 <!-- generate total row 2 -->
 
@@ -23,7 +23,7 @@
 		<span style="font-family: Arial;color:black; font-weight: bold;font-size: 12px;margin-left: 2px">
 			<digi:trn key="rep:popup:reporttotals">Report Totals:</digi:trn>
 		</span>
-		<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" id="repHierarchy" scope="page" indexId="hierIdx">
+		<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.ampModule.aim.dbentity.AmpReportHierarchy" id="repHierarchy" scope="page" indexId="hierIdx">
 			<c:if test="${ hierIdx > 0}">
 	  			<td style="border-bottom:black 1px solid;border-right:#E2E2E2 1px solid;" height="18px">&nbsp;</td>
 	  		</c:if>
@@ -53,7 +53,7 @@
 	<c:if test="${reportData.levelDepth == 3}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 			<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 15px;padding-right: 3px">
-				<img src="module/aim/images/hierarchies.gif" align="top">
+				<img src="ampModule/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
 			<!-- *************************************************** 
 					WARNING:
@@ -67,7 +67,7 @@
 	<c:if test="${reportData.levelDepth == 4}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 		<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 25px;padding-right: 3px">
-			<img src="module/aim/images/hierarchies.gif" align="top">
+			<img src="ampModule/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
 			<!-- *************************************************** 
 					WARNING:

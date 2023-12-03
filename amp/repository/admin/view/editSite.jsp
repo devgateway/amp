@@ -12,12 +12,12 @@
 
 <script>
   function fnOnAddDomain() {
-      <digi:context name="addUrl" property="context/module/moduleinstance/addDomain.do" />
+      <digi:context name="addUrl" property="context/ampModule/moduleinstance/addDomain.do" />
       document.siteForm.action = "<%= addUrl %>";
       document.siteForm.submit();
   }
   function fnOnDeleteDomain( index, param ) {
-      <digi:context name="deleteUrl" property="context/module/moduleinstance/deleteDomain.do" />
+      <digi:context name="deleteUrl" property="context/ampModule/moduleinstance/deleteDomain.do" />
       document.siteForm.action = "<%= deleteUrl %>?id=" + index;
       document.siteForm.submit();
   }
@@ -25,7 +25,7 @@
 </script>
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:editSite">Edit Site</digi:trn>
@@ -159,7 +159,7 @@
           	<table cellpadding="0" cellspacing="0" border="0">
 
              <tr><td>&nbsp;</td><td><digi:trn key="admin:domain">Domain</digi:trn></td><td>&nbsp;<digi:trn key="admin:path">Path</digi:trn></td><td>&nbsp;<digi:trn key="admin:language">Language</digi:trn></td><td>&nbsp;<digi:trn key="admin:enableSecurity">Security</digi:trn></td></tr>
-    	     <logic:iterate indexId="index" name="siteForm" id="siteDomain" property="siteDomains" type="org.digijava.module.admin.form.SiteForm.SiteDomainInfo">
+    	     <logic:iterate indexId="index" name="siteForm" id="siteDomain" property="siteDomains" type="org.digijava.ampModule.admin.form.SiteForm.SiteDomainInfo">
              <tr><td>
              <html:radio name="siteForm" property="defDomain" value='index' idName="siteDomain" />
              </td><td>
@@ -200,7 +200,7 @@
           <TR>
             <TD> 
             <table>
-            <logic:iterate id="childSite" name="siteForm" property="children" indexId="index" type="org.digijava.module.admin.form.SiteForm.SiteInfo">
+            <logic:iterate id="childSite" name="siteForm" property="children" indexId="index" type="org.digijava.ampModule.admin.form.SiteForm.SiteInfo">
             <tr><td class="text"><c:out value="${childSite.site.name}" /></td>
             <td class="text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<digi:link href="/removeChildSite.do" paramId="id" paramName="childSite" paramProperty="site.id"><digi:trn key="admin:remove">Remove</digi:trn></digi:link></td>      
             <td class="text">&nbsp;<a href='<%= childSite.getViewSite() %>'><digi:trn key="admin:view">View</digi:trn></a></td>
@@ -210,15 +210,15 @@
             </table> </TD>      
           </TR>
           <TR bgColor=#FFFFFF>
-            <digi:context name="editSiteLink" property="/module/moduleinstance/showEditSite.do" />
-            <digi:context name="createChild" property="context/module/moduleinstance/showCreateSite.do" />
+            <digi:context name="editSiteLink" property="/ampModule/moduleinstance/showEditSite.do" />
+            <digi:context name="createChild" property="context/ampModule/moduleinstance/showCreateSite.do" />
             <c:set var="siteId" value="${siteForm.id}" scope="page" />
             <TD align=left noWrap class=text><a href='<%= createChild %>?parentId=<c:out value="${pageScope.siteId}" />&targetAction=<%= editSiteLink %>'><digi:trn key="admin:createChildSite">Create child site</digi:trn></a></TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
           </TR>
           <TR bgColor=#FFFFFF>
-            <digi:context name="pickup" property="context/module/moduleinstance/showPickupSite.do" />
-            <digi:context name="addChild" property="context/module/moduleinstance/addChildSite.do" />
+            <digi:context name="pickup" property="context/ampModule/moduleinstance/showPickupSite.do" />
+            <digi:context name="addChild" property="context/ampModule/moduleinstance/addChildSite.do" />
             <TD align=left noWrap class=text><a href="<%= pickup %>?targetAction=<%= addChild %>"><digi:trn key="admin:addChildSite">Add a child site</digi:trn></a></TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
           </TR>

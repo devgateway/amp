@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.ampModule.aim.dbentity.AmpOfflineRelease" table="amp_offline_release" lazy="false">
+        <cache usage="read-write" />
+        <id name="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">amp_offline_release_seq</param>
+            </generator>
+        </id>
+        <property name="version" type="java.lang.String" not-null="true" unique-key="uq_release" />
+        <property name="os" type="java.lang.String" not-null="true" unique-key="uq_release" />
+        <property name="arch" type="java.lang.String" not-null="true" unique-key="uq_release" />
+        <property name="critical" type="boolean" not-null="true" />
+        <property name="date" type="java.util.Date" not-null="true" />
+    </class>
+</hibernate-mapping>

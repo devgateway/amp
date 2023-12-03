@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 
@@ -29,7 +29,7 @@
 <script language="JavaScript" type="text/javascript">
 
 function addBudgetsector(){
-        <digi:context name="Url" property="context/module/moduleinstance/BudgetManager.do?new=true" />
+        <digi:context name="Url" property="context/ampModule/moduleinstance/BudgetManager.do?new=true" />
         document.BudgetManagerForm.target = "_self";
     	document.BudgetManagerForm.action = "<%=Url%>";
     	document.BudgetManagerForm.submit();
@@ -62,7 +62,7 @@ function validatesector(){
 
 function editsector(id) {
 	openNewWindow(450, 200);
-	<digi:context name="edit" property="context/module/moduleinstance/editbudgetsector.do" />
+	<digi:context name="edit" property="context/ampModule/moduleinstance/editbudgetsector.do" />
 	document.BudgetManagerForm.action = "<%=edit%>~id="+id;
 	document.BudgetManagerForm.target = popupPointer.name;
 	document.BudgetManagerForm.submit();
@@ -70,7 +70,7 @@ function editsector(id) {
 
 function setprogram() {
 	openNewWindow(450, 150);
-	<digi:context name="program" property="context/module/moduleinstance/setbudgetprogram.do" />
+	<digi:context name="program" property="context/ampModule/moduleinstance/setbudgetprogram.do" />
 	document.BudgetManagerForm.action = "<%=program%>";
 	document.BudgetManagerForm.target = popupPointer.name;
 	document.BudgetManagerForm.submit();
@@ -168,7 +168,7 @@ function onDelete() {
 											</tr>
 										</logic:empty>
 										<logic:notEmpty name="BudgetManagerForm" property="budgetsectors">
-										<logic:iterate name="BudgetManagerForm" property="budgetsectors" id="sector" type="org.digijava.module.budget.dbentity.AmpBudgetSector">
+										<logic:iterate name="BudgetManagerForm" property="budgetsectors" id="sector" type="org.digijava.ampModule.budget.dbentity.AmpBudgetSector">
 											<tr> 
 												<td style="font-size:12px;" bgcolor="#ffffff" class="inside">
 													<bean:write name="sector" property="code"/> - <bean:write name="sector" property="sectorname"/>
@@ -226,7 +226,7 @@ function onDelete() {
 											<td style="font-size:12px;" bgColor=#c9c9c7 class=box-title>
 												<b style="padding-left:5px;"><digi:trn key="aim:otherLinks">Other links</digi:trn></b>
 											</td>
-											<td style="font-size:12px;" background="module/aim/images/corner-r.gif" height="17" width=17></td>
+											<td style="font-size:12px;" background="ampModule/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 									</td>
@@ -235,7 +235,7 @@ function onDelete() {
 									<td style="font-size:12px;" bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="230" class="inside">
 										<tr>
-											<td style="font-size:12px;" class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+											<td style="font-size:12px;" class="inside"><digi:img src="ampModule/aim/images/arrow-014E86.gif"
 												width="15" height="10" /> <c:set var="trnViewAdmin">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 											</c:set> <digi:link href="/admin.do" title="${trnViewAdmin}">
@@ -247,7 +247,7 @@ function onDelete() {
 										<field:display name="Add Scheme Link" feature="Sectors">
 											<tr>
 												<td style="font-size:12px;" class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" /> 
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10" />
 													<a href="javascript:setprogram();">
 													<digi:trn>
                                                   		Set Budget Program

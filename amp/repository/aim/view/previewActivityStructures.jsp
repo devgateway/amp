@@ -1,10 +1,10 @@
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<module:display name="/Activity Form/Structures" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Structures" parentModule="/Activity Form">
 <c:set var="maxImagesCount" value="6"></c:set>
 <style type="text/css">
 
@@ -137,31 +137,31 @@ function moveDisplayedImages(structureId, imgCount, next){
 					</td>
 				</tr>
 				
-				<module:display
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Type"
 					parentModule="/Activity Form/Structures">
 					<tr>
 						<td bgcolor="#f0f0f0" style="padding-left:5px;" width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
 						<td align="left"><b> ${structure.type.name} </b></td>
 					</tr>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Title"
 					parentModule="/Activity Form/Structures">
 					<tr>
 						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:title">Title</digi:trn></td>
 						<td align="left"> <b> ${fn:escapeXml(structure.title)} </b></td>
 					</tr>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Description"
 					parentModule="/Activity Form/Structures">
 					<tr>
 						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:description">Description</digi:trn></td>
 						<td align="left"><b> ${fn:escapeXml(structure.description)} </b></td>
 					</tr>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Latitude"
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.latitude}">
@@ -170,8 +170,8 @@ function moveDisplayedImages(structureId, imgCount, next){
 						<td align="left"> <b> ${structure.latitude} </b></td>
 					</tr>
 					</c:if>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Longitude"
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.longitude}">
@@ -180,7 +180,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 						<td align="left"><b> ${structure.longitude} </b></td>
 					</tr>
 					</c:if>
-				</module:display>
+				</ampModule:display>
 				<c:if test="${not empty structure.coordinates}">
 					<tr>
 						<td bgcolor="#f0f0f0" valign="top" style="padding-left:5px;"><digi:trn
@@ -188,7 +188,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 						<td>
 							<table>
 								<logic:iterate id="coordinate" name="structure" property="coordinates"
-											   type="org.digijava.module.aim.dbentity.AmpStructureCoordinate">
+											   type="org.digijava.ampModule.aim.dbentity.AmpStructureCoordinate">
 									<tr>
 										<td><b> ${coordinate.latitude}</b></td>
 										<td><b> ${coordinate.longitude}</b></td>
@@ -236,7 +236,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 	</logic:iterate>
 	</div>
 	</fieldset>
-</module:display>
+</ampModule:display>
 
 
 <%--

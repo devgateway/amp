@@ -10,27 +10,27 @@
 
 <script>
   function fnOnAdd() {
-      <digi:context name="addUrl" property="context/module/moduleinstance/addInstance.do" />
+      <digi:context name="addUrl" property="context/ampModule/moduleinstance/addInstance.do" />
       document.siteInstancesForm.action = "<%= addUrl %>";
       document.siteInstancesForm.submit();
   }
   function fnOnDelete( index) {
-      <digi:context name="deleteUrl" property="context/module/moduleinstance/deleteInstance.do" />
+      <digi:context name="deleteUrl" property="context/ampModule/moduleinstance/deleteInstance.do" />
       document.siteInstancesForm.action = "<%= deleteUrl %>?index=" + index;
       document.siteInstancesForm.submit();
   }
   function fnChangeModule( index ) {
-      <digi:context name="changeUrl" property="context/module/moduleinstance/changeInstanceModule.do" />
+      <digi:context name="changeUrl" property="context/ampModule/moduleinstance/changeInstanceModule.do" />
       document.siteInstancesForm.action = "<%= changeUrl %>?index=" + index;
       document.siteInstancesForm.submit();
   }
   function fnOnClearMaster( index) {
-      <digi:context name="deleteUrl" property="context/module/moduleinstance/clearMasterInstance.do" />
+      <digi:context name="deleteUrl" property="context/ampModule/moduleinstance/clearMasterInstance.do" />
       document.siteInstancesForm.action = "<%= deleteUrl %>?index=" + index;
       document.siteInstancesForm.submit();
   }
   function setMapping(index, instanceId) {
-      <digi:context name="setMappingUrl" property="context/module/moduleinstance/setMasterInstance.do" />
+      <digi:context name="setMappingUrl" property="context/ampModule/moduleinstance/setMasterInstance.do" />
       document.siteInstancesForm.action = "<%= setMappingUrl %>?index=" + index + "&mapId=" + instanceId;
       document.siteInstancesForm.submit();
   }
@@ -39,7 +39,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:moduleInstances">MODULE INSTANCES</digi:trn>
@@ -55,7 +55,7 @@
 <table border="1" cellspacing="0" cellpadding="3" bordercolor="#E3DDC1" style="border-collapse: collapse;">
 <tr>
 	<td noWrap class="text">Default</td>
-	<td noWrap class="text"><digi:trn key="admin:module">Module</digi:trn></td>
+	<td noWrap class="text"><digi:trn key="admin:ampModule">Module</digi:trn></td>
 	<td noWrap class="text"><digi:trn key="admin:instance">Instance</digi:trn></td>
 	<td noWrap class="text"><digi:trn key="admin:numOfItemsInTeaser">Number of items in teaser</digi:trn></td>
 	<td noWrap class="text"><digi:trn key="admin:mastersSite">Master's site</digi:trn></td>
@@ -63,7 +63,7 @@
 	<td noWrap class="text"><digi:trn key="admin:permitted">Permitted?</digi:trn></td>
 	<td colspan="3">&nbsp;</td>
 </tr>
-<logic:iterate indexId="index" name="siteInstancesForm" id="instance" property="instances" type="org.digijava.module.admin.form.SiteInstancesForm.InstanceInfo">
+<logic:iterate indexId="index" name="siteInstancesForm" id="instance" property="instances" type="org.digijava.ampModule.admin.form.SiteInstancesForm.InstanceInfo">
 <tr>
 <td align="right">
 	<html:radio name="siteInstancesForm" property="defaultModeuleIndex" value="<%=String.valueOf(instance.getId())%>"/>
@@ -76,7 +76,7 @@
 <html:hidden name="instance" property="mappingInstance" indexed="true"/>
 <html:hidden name="instance" property="permitted" indexed="true"/>
 </c:if>
-<html:select name="instance" property="module" indexed="true" onchange='<%= "fnChangeModule(" + index + ")" %>'>
+<html:select name="instance" property="ampModule" indexed="true" onchange='<%= "fnChangeModule(" + index + ")" %>'>
    <html:options property="modules" />
 </html:select>
 </td>
@@ -102,8 +102,8 @@
 </c:if>
 </td>
 <td noWrap>
-<digi:context name="masterUrl" property="context/module/moduleinstance/showMasterInstances.do" />
-<a href="<%= masterUrl + "?module=" + instance.getModule() + "&index=" + index %>" onclick="window.open(this.href, 'masterInstances', 'HEIGHT=300,resizable=yes,scrollbars=no,WIDTH=300');return false;" target="masterInstances"><digi:trn key="admin:assignMapping">Assign Mapping</digi:trn></a></td>
+<digi:context name="masterUrl" property="context/ampModule/moduleinstance/showMasterInstances.do" />
+<a href="<%= masterUrl + "?ampModule=" + instance.getModule() + "&index=" + index %>" onclick="window.open(this.href, 'masterInstances', 'HEIGHT=300,resizable=yes,scrollbars=no,WIDTH=300');return false;" target="masterInstances"><digi:trn key="admin:assignMapping">Assign Mapping</digi:trn></a></td>
 <td noWrap>
 	<a href='javascript:fnOnClearMaster("<%= index %>")'>
 		<digi:trn key="admin:clearMapping">Clear Mapping</digi:trn>
@@ -130,7 +130,7 @@
 <table>
 <tr>
 <td noWrap><digi:trn key="admin:permit">Permit</digi:trn></td>
-<td noWrap><digi:trn key="admin:module">Module</digi:trn></td>
+<td noWrap><digi:trn key="admin:ampModule">Module</digi:trn></td>
 <td noWrap><digi:trn key="admin:instance">Instance</digi:trn></td>
 <td noWrap><digi:trn key="admin:mappingSite">Mapping site</digi:trn></td>
 <td noWrap><digi:trn key="admin:mappedInstance">Mapped instance</digi:trn></td>

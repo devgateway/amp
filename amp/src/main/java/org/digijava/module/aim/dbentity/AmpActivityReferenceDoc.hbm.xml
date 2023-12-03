@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityReferenceDoc"
+		table="AMP_ACTIVITY_REFERENCEDOC">
+		<cache usage="read-write" />
+		<id name="id" column="amp_activity_referencedoc_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_REFERENCEDOC_seq</param>
+			</generator>
+		</id>
+		
+		<property name="comment" column="comment_" type="text" />
+		<property name="created" column="created" type="java.util.Date" />
+		<property name="lastEdited" column="lastEdited" type="java.util.Date" />
+
+		<many-to-one name="activity" column="activity_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+
+		<many-to-one name="categoryValue" column="categoryValueId"
+			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
+
+	</class>
+</hibernate-mapping>

@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ page import="org.digijava.module.aim.util.FeaturesUtil,org.digijava.module.aim.helper.Constants" %>
+<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil,org.digijava.ampModule.aim.helper.Constants" %>
 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -22,7 +22,7 @@ border: none;
 
 <bean:define id="firstReportFound"  value="false" toScope="page"/>
 
-<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
+<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.ampModule.aim.dbentity.AmpReports" indexId="position">
 	<logic:equal name="report" property="publicReport" value="true"> 
 		<logic:equal name="report" property="drilldownTab" value="true">
 			<logic:equal name="firstReportFound" value="false">
@@ -93,7 +93,7 @@ function preventTabClickEvent(e){
 
 <logic:present name="firstReportName">
 <ul id="PublicTabs" class="yui-nav">
-<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
+<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.ampModule.aim.dbentity.AmpReports" indexId="position">
 			<logic:equal name="report" property="publicReport" value="true">
 				<logic:equal name="report" property="drilldownTab" value="true">
                         <li><a id='Tab-<bean:write name="report" property="id"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><div><bean:write name="report" property="name"/></div></a></li> 

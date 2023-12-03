@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.GPIDefaultFilters"
+		table="AMP_GPI_DEFAULT_FILTERS" lazy="false">
+		<cache usage="read-write" />
+		<id name="gpiDefaultFiltersId" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_DEFAULT_FILTERS_seq</param>
+			</generator>
+		</id>
+
+		<property name="key" column="key" type="java.lang.String" />
+		<property name="value" column="value" type="java.lang.String" />
+
+	</class>
+</hibernate-mapping>

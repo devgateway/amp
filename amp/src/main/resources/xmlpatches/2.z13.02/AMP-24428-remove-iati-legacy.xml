@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-24428</jira>
+    <keyword>remove IATI legacy</keyword>
+    <author>vchihai</author>
+    <description>remove the legacy IATI Import code</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                DELETE FROM dg_module_instance WHERE module_name = 'dataExchange';
+                
+                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Export Manager');
+                DELETE FROM amp_modules_visibility WHERE name = 'Activity Export Manager';
+                
+                DELETE FROM amp_features_templates WHERE feature IN (SELECT id FROM amp_features_visibility WHERE name = 'Synergy Client');
+                DELETE FROM amp_features_visibility WHERE name = 'Synergy Client';
+                
+                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Import Manager');
+                DELETE FROM amp_modules_visibility WHERE name = 'Activity Import Manager';
+                
+                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Code Chapitre Importer');
+                DELETE FROM amp_modules_visibility WHERE name = 'Code Chapitre Importer';
+                
+                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Budget Codes Exporter');
+                DELETE FROM amp_modules_visibility WHERE name = 'Budget Codes Exporter';
+                
+                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Partial Import Manager');
+                DELETE FROM amp_modules_visibility WHERE name = 'Activity Partial Import Manager';
+                
+                DROP TABLE IF EXISTS amp_de_mapping_fields CASCADE;
+				DROP SEQUENCE IF EXISTS amp_de_mapping_fields_seq;
+				
+				DROP TABLE IF EXISTS de_iati_code_item CASCADE;
+				DROP SEQUENCE IF EXISTS de_iati_code_item_seq;
+				
+				DROP TABLE IF EXISTS de_iati_code_type CASCADE;
+				DROP SEQUENCE IF EXISTS de_iati_code_type_seq;
+				
+				DROP TABLE IF EXISTS de_log_per_execution CASCADE;
+				DROP SEQUENCE IF EXISTS de_log_per_execution_seq;
+				
+				DROP TABLE IF EXISTS de_log_per_item CASCADE;
+				DROP SEQUENCE IF EXISTS de_log_per_item_seq;
+				
+				DROP TABLE IF EXISTS de_source_setting CASCADE;
+				DROP SEQUENCE IF EXISTS de_source_setting_seq;
+				
+				DROP TABLE IF EXISTS de_upload_session CASCADE;
+				DROP SEQUENCE IF EXISTS de_upload_session_seq;
+				
+				DROP TABLE IF EXISTS de_mapping_fields_up_sessions CASCADE;
+				DROP TABLE IF EXISTS de_source_setting_fields CASCADE;
+                
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

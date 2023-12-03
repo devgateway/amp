@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18322</jira>
+	<keyword>autocloser</keyword>
+	<author>cdolghier</author>
+	<description>rename autocloser global settings</description>
+	 <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+				UPDATE amp_global_settings SET settingsname = 'Change activity status once the Actual End Date has passed' 
+					WHERE settingsname='Change activity status once the Planned End Date has passed';
+				UPDATE amp_global_settings SET description = 'Automatically change the status of activities which have passed their Actual End Date to a preset one (usually "Closed")' 
+					WHERE settingsname='Change activity status once the Actual End Date has passed';
+            </lang>
+        </script>
+	</apply>
+</tns:patch>

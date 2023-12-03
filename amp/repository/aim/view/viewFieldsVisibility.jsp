@@ -44,12 +44,12 @@
 			<td class="inside" height=20 bgcolor=#F2F2f2 align=center width=15%><digi:trn key="aim:ampAction"><b>Action</b></digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelModule" type="java.util.Map" class="java.util.HashMap"/>
-		<logic:iterate name="aimVisibilityManagerForm" property="allModules" id="module"
-			type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
+		<logic:iterate name="aimVisibilityManagerForm" property="allModules" id="ampModule"
+			type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility">
 			<tr>
-				<td align="left" class="inside"><digi:trn key="<%=\"fm:\" + module.getNameTrimmed() %>"><bean:write name="module" property="name"/></digi:trn></td>
+				<td align="left" class="inside"><digi:trn key="<%=\"fm:\" + ampModule.getNameTrimmed() %>"><bean:write name="ampModule" property="name"/></digi:trn></td>
 				<c:set target="${urlParamsDelModule}" property="action" value="deleteFFM"/>
-				<c:set target="${urlParamsDelModule}" property="moduleId" value="<%=module.getId()%>"/>
+				<c:set target="${urlParamsDelModule}" property="moduleId" value="<%=ampModule.getId()%>"/>
 				<td class="inside" align=center>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteModule">Click here to Delete Module</digi:trn>
@@ -86,7 +86,7 @@
 		</tr>
 		<jsp:useBean id="urlParamsDelFeature" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allFeatures" id="feature"
-			type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">
+			type="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility">
 			<tr>
 				<td align="left" class="inside">
 				<digi:trn key='<%="fm:" + feature.getNameTrimmed()%>'>
@@ -97,7 +97,7 @@
 					<i>
 					<%if(feature.getParent() != null){%>
 						<digi:trn key='<%="fm:"+feature.getParent().getNameTrimmed()%>'>
-						<bean:write name="module" property="name"/> 
+						<bean:write name="ampModule" property="name"/>
 						</digi:trn>
 					<%}%>
 					</i>
@@ -142,10 +142,10 @@
 		</tr>
 		<jsp:useBean id="urlParamsDelField" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allFields" id="field"
-			type="org.digijava.module.aim.dbentity.AmpFieldsVisibility">
+			type="org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility">
 			<tr>
-				<bean:define id="feature" name="field" property="parent" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
-				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
+				<bean:define id="feature" name="field" property="parent" type="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility"/>
+				<bean:define id="ampModule" name="feature" property="parent" type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility"/>
 				<td align="left" class="inside">
 					<digi:trn key='<%="fm:"+field.getNameTrimmed() %>'>
 						<bean:write name="field" property="name"/>
@@ -159,8 +159,8 @@
 				</td>
 				<td class="inside" align=center>
 					<i>
-					<digi:trn key='<%="fm:"+module.getNameTrimmed()%>'>
-						<bean:write name="module" property="name"/>
+					<digi:trn key='<%="fm:"+ampModule.getNameTrimmed()%>'>
+						<bean:write name="ampModule" property="name"/>
 					</digi:trn>
 					</i>
 				</td>

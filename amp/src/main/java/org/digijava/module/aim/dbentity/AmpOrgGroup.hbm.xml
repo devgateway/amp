@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpOrgGroup" table="AMP_ORG_GROUP" lazy="false">
+		<cache usage="read-write" />
+		<id name="ampOrgGrpId" column="amp_org_grp_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ORG_GROUP_seq</param>
+			</generator>
+		</id>
+		<property name="orgGrpName" column="org_grp_name" type="java.lang.String" />
+		<property name="orgGrpCode" column="org_grp_code" type="java.lang.String" />
+
+		<many-to-one name="orgType" column="org_type"
+			class="org.digijava.ampModule.aim.dbentity.AmpOrgType" cascade="none" />
+        <property name="orgGrpBackground" column="org_grp_background" type="java.lang.String" />
+        <property name="orgGrpDescription" column="org_grp_description" type="java.lang.String" />
+        <property name="orgGrpKeyAreas" column="org_grp_keyareas" type="java.lang.String" />
+		<property name="deleted" column="deleted" type="java.lang.Boolean" />
+	</class>
+</hibernate-mapping>

@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 
 <%
@@ -63,10 +63,10 @@
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
 <link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>"></script>
+<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/reportWizard/prefilters.js'/>"></script>
 <script type="text/javascript"
-        src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>"></script>
+        src="<digi:file src='ampModule/aim/scripts/filters/filters.js'/>?version=fantastic_15"></script>
+<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/filters/searchManager.js'/>"></script>
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
@@ -74,7 +74,7 @@
 <script src="/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript"
         src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
+<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <c:set var="filterPanelName">
     <digi:trn key="rep:filter:filters">Filters</digi:trn>
@@ -273,10 +273,10 @@
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"/>
 
 <digi:form action="/updateWorkspace.do" method="post" name="aimUpdateWorkspaceForm"
-           type="org.digijava.module.aim.form.UpdateWorkspaceForm"
+           type="org.digijava.ampModule.aim.form.UpdateWorkspaceForm"
            onsubmit="return validateAimUpdateWorkspaceForm(this);">
 
-    <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+    <script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
     <script language="JavaScript">
         <!--
 
@@ -299,7 +299,7 @@
         function addChildWorkspaces() {
             if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
                 openNewWindow(650, 380);
-                <digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+                <digi:context name="addChild" property="context/ampModule/moduleinstance/addChildWorkspaces.do" />
                 document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=admin";
                 document.aimUpdateWorkspaceForm.target = popupPointer.name;
                 document.aimUpdateWorkspaceForm.addFlag.value = false;
@@ -314,7 +314,7 @@
         function addChildOrgs() {
 
             openNewWindow(650, 380);
-            <digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+            <digi:context name="addChild" property="context/ampModule/moduleinstance/addChildWorkspaces.do" />
             document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=admin&childorgs=true";
             document.aimUpdateWorkspaceForm.target = popupPointer.name;
             document.aimUpdateWorkspaceForm.addFlag.value = false;
@@ -328,7 +328,7 @@
                 document.aimUpdateWorkspaceForm.submit();
                 return false;
             } else {
-                <digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
+                <digi:context name="update" property="context/ampModule/moduleinstance/removeChildWorkspace.do" />
                 document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&childorgs=true&tId=" + id;
                 document.aimUpdateWorkspaceForm.target = "_self";
                 document.aimUpdateWorkspaceForm.addFlag.value = false;
@@ -340,7 +340,7 @@
         function removeChildWorkspace(id) {
             var temp = confirm("<digi:trn key="aim:deletechildworkspace">Do you want to delete this child workspace ?</digi:trn>");
             if (temp == true) {
-                <digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
+                <digi:context name="update" property="context/ampModule/moduleinstance/removeChildWorkspace.do" />
                 document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&tId=" + id;
                 document.aimUpdateWorkspaceForm.target = "_self";
                 document.aimUpdateWorkspaceForm.addFlag.value = false;
@@ -395,7 +395,7 @@
         function update1(action, tid) {
 
             if (action == "editreset") {
-                <digi:context name="update" property="context/module/moduleinstance/getWorkspace.do" />
+                <digi:context name="update" property="context/ampModule/moduleinstance/getWorkspace.do" />
                 //document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event="+action;
                 //document.aimUpdateWorkspaceForm.target = "_self";
                 //document.aimUpdateWorkspaceForm.submit();
@@ -406,7 +406,7 @@
 
         function update(action) {
             if (action == "reset") {
-                <digi:context name="update" property="context/module/moduleinstance/createWorkspace.do" />
+                <digi:context name="update" property="context/ampModule/moduleinstance/createWorkspace.do" />
                 document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event=" + action;
                 document.aimUpdateWorkspaceForm.target = "_self";
                 //document.aimUpdateWorkspaceForm.submit();
@@ -430,7 +430,7 @@
 
                         document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
                         document.aimUpdateWorkspaceForm.addFlag.value = false;
-                        <digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
+                        <digi:context name="update" property="context/ampModule/moduleinstance/updateWorkspace.do" />
                         document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&event=" + action;
                         document.aimUpdateWorkspaceForm.target = "_self";
                         document.aimUpdateWorkspaceForm.submit();
@@ -485,7 +485,7 @@
 
                     document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
                     document.aimUpdateWorkspaceForm.addFlag.value = false;
-                    <digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
+                    <digi:context name="update" property="context/ampModule/moduleinstance/updateWorkspace.do" />
                     document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&event=" + action;
                     document.aimUpdateWorkspaceForm.target = "_self";
                     document.aimUpdateWorkspaceForm.submit();
@@ -554,7 +554,7 @@
                     if (val3 != "0") {
                         document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "yes";
                         document.aimUpdateWorkspaceForm.addFlag.value = false;
-                        <digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
+                        <digi:context name="update" property="context/ampModule/moduleinstance/updateWorkspace.do" />
                         document.aimUpdateWorkspaceForm.action = "<%=update%>";
                         document.aimUpdateWorkspaceForm.target = "_self";
                         document.aimUpdateWorkspaceForm.submit();
@@ -830,7 +830,7 @@
                                                                                                     firstLine="${translation}"
                                                                                                     name="aimUpdateWorkspaceForm"
                                                                                                     property="workspaceGroup"
-                                                                                                    keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>"
+                                                                                                    keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>"
                                                                                                     styleClass="inp-text"/>
                                                                                         </logic:equal>
                                                                                         <logic:equal
@@ -841,7 +841,7 @@
                                                                                                     firstLine="${translation}"
                                                                                                     name="aimUpdateWorkspaceForm"
                                                                                                     property="workspaceGroup"
-                                                                                                    keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>"
+                                                                                                    keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>"
                                                                                                     styleClass="inp-text"/>
                                                                                         </logic:equal>
                                                                                     </td>
@@ -912,7 +912,7 @@
                                                                                     </c:if>
                                                                                 </tr>
                                                                                 <feature:display name="FM Template"
-                                                                                                 module="Workspace Manager">
+                                                                                                 ampModule="Workspace Manager">
                                                                                     <tr>
                                                                                         <td width="150" align="right"
                                                                                             bgcolor="#f4f4f2">
@@ -985,7 +985,7 @@
                                                                                     </tr>
                                                                                 </feature:display>
                                                                                 <feature:display name="Workspace Prefix"
-                                                                                                 module="Workspace Manager">
+                                                                                                 ampModule="Workspace Manager">
                                                                                     <tr>
                                                                                         <td width="150" align="right"
                                                                                             bgcolor="#FFFFFF">
@@ -1021,7 +1021,7 @@
                                                                                                         firstLine="${translation}"
                                                                                                         name="aimUpdateWorkspaceForm"
                                                                                                         property="workspacePrefix"
-                                                                                                        keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_PREFIX_KEY %>"
+                                                                                                        keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.WORKSPACE_PREFIX_KEY %>"
                                                                                                         styleClass="inp-text"/>
                                                                                             </logic:equal>
                                                                                             <logic:equal
@@ -1032,7 +1032,7 @@
                                                                                                         firstLine="${translation}"
                                                                                                         name="aimUpdateWorkspaceForm"
                                                                                                         property="workspacePrefix"
-                                                                                                        keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_PREFIX_KEY %>"
+                                                                                                        keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.WORKSPACE_PREFIX_KEY %>"
                                                                                                         styleClass="inp-text"/>
                                                                                             </logic:equal>
                                                                                         </td>
@@ -1406,7 +1406,7 @@
                                                                                                         selectOrg = function (params) {
                                                                                                             var selectedItems = getSelectedItems();
 
-                                                                                                            selectOrgSelectedAware(params + "&" + "<%= org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"
+                                                                                                            selectOrgSelectedAware(params + "&" + "<%= org.digijava.ampModule.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"
                                                                                                                 + "=" + selectedItems);
                                                                                                         }
 
@@ -1521,7 +1521,7 @@
                                                                                 <digi:trn
                                                                                         key="aim:otherLinks">Other links</digi:trn></b>
                                                                         </td>
-                                                                        <td background="module/aim/images/corner-r.gif"
+                                                                        <td background="ampModule/aim/images/corner-r.gif"
                                                                             height="17" width=17>&nbsp;
                                                                         </td>
                                                                     </tr>
@@ -1535,7 +1535,7 @@
                                                                     <tr>
                                                                         <td class="inside">
                                                                             <digi:img
-                                                                                    src="module/aim/images/arrow-014E86.gif"
+                                                                                    src="ampModule/aim/images/arrow-014E86.gif"
                                                                                     width="15" height="10"/>
                                                                             <digi:link href="/workspaceManager.do">
                                                                                 <digi:trn key="aim:teams">
@@ -1549,7 +1549,7 @@
                                                                     <tr>
                                                                         <td class="inside">
                                                                             <digi:img
-                                                                                    src="module/aim/images/arrow-014E86.gif"
+                                                                                    src="ampModule/aim/images/arrow-014E86.gif"
                                                                                     width="15" height="10"/>
                                                                             <digi:link href="/admin.do">
                                                                                 <digi:trn key="aim:AmpAdminHome">

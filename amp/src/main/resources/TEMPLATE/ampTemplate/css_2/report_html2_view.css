@@ -1,0 +1,137 @@
+tr.firstLevel, td.firstLevel {
+	background:#BFC9CE; 
+	border-bottom: black 1px solid;
+	border-right: 1px solid black;
+	padding-left: 5px;
+	padding-right: 3px;
+	font-family:Arial, Helvetica, sans-serif; 
+	font-size:11px;
+}
+
+tr.secondLevel, td.secondLevel {
+	background: #D6DCDF;
+	border-bottom:#A9A9A9 2px solid;
+	border-right: #383838 1px solid;
+	padding-left: 5px;
+	padding-right: 3px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+tr.thirdLevel, td.thirdLevel {
+	background: #E9EBED;
+	border-bottom:#A9A9A9 2px solid;
+	border-right:#8B9EA3 1px solid;
+	padding-left: 5px;
+	padding-right: 3px;
+	width: 170px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+tr.fourthLevel, td.fourthLevel {
+	background: #EDE9ED;
+	border-bottom:#A9A9A9 2px solid;
+	border-right:#DBEEF3 1px solid;
+	padding-left: 5px;
+	padding-right: 3px;
+	width: 170px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+tr.fifthLevel, td.fifthLevel {
+	background: #FFFFFF;
+	border-bottom:#A9A9A9 2px solid;
+	border-right:#DBEEF3 1px solid;
+	padding-left: 5px;
+	padding-right: 3px;
+	width: 170px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+tr.oddActivity {
+	
+}
+
+td.hierarchyCell{
+}
+
+td.reportTotals{
+	border-bottom: 1px solid black; 
+	border-right: 1px solid rgb(226, 226, 226);
+	font-family: Arial;
+	color:black; 
+	font-weight: bold;
+	font-size: 12px;
+	margin-left: 2px;
+}
+
+tr.reportHeader, td.reportHeader {
+	background-color: #B4C0C6;
+	color: #000000;
+	border-bottom:white 1px solid;
+	border-right:white 1px solid;
+
+	font-weight: normal;
+	font:11px Arial;
+	text-align: center;
+	cursor: pointer;
+	font-weight:bold;
+	
+}
+
+table.html2ReportTable {
+	border-collapse: collapse;
+	font-size:11px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+.clsTableCellDataHtml {
+    border-bottom: 1px solid #E0E0E0;
+    border-right: 1px solid #E0E0E0;
+    color: black;
+    cursor: default;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+a.settingsLink:link, a.settingsLink, A.settingsLink:active, A.settingsLink:visited{
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;		  
+	font-weight:normal;
+	text-decoration:none;
+	cursor: pointer;
+}
+a.settingsLink:hover{
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;		  
+	font-weight:normal;
+	text-decoration:none;
+	cursor: pointer;
+}
+
+	
+a.settingsLinkDisable{
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;		  
+	font-weight:normal;
+	text-decoration:none;
+	color: #EEEEEE ;
+	cursor: pointer;
+}
+
+a.nohoverlink{
+	text-decoration:none;
+}
+a.nohoverlink:hover{
+	background-color:transparent;
+}
+
+.clsTableCellDataHtml div {padding-left:5px !important;}
+
+.table-cell-padding {
+	padding-left: 5px;
+	padding-right: 5px;
+}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.fundingpledges.dbentity.FundingPledges" table="AMP_FUNDING_PLEDGES">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_PLEDGES_seq</param>
+			</generator>
+		</id>
+
+		<property name="createdDate" column="date_created" type="java.util.Date" />
+		<many-to-one name="title" column="title" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="all"/>
+		<many-to-one name="status" column="status" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="all"/>
+		<property name="titleFreeText" column="titleFreeText" type="java.lang.String" />
+		<property name="additionalInformation" column="additionalInformation" type="text" />
+		<property name="whoAuthorizedPledge" column="whoAuthorizedPledge" type="java.lang.String" />
+		<property name="furtherApprovalNedded" column="furtherApprovalNedded" type="java.lang.String" />
+		<property name="contactName" column="contactName" type="java.lang.String"/>
+		<property name="contactAddress" column="contactAddress" type="java.lang.String"/>
+		<property name="contactEmail" column="contactEmail" type="java.lang.String"/>
+		<property name="contactTitle" column="contactTitle" type="java.lang.String"/>
+		<property name="contactMinistry" column="contactMinistry" type="java.lang.String"/>
+		<property name="contactTelephone" column="contactTelephone" type="java.lang.String"/>
+		<property name="contactFax" column="contactFax" type="java.lang.String"/>
+		<property name="contactAlternativeName" column="contactAlternativeName" type="java.lang.String"/>
+		<property name="contactAlternativeTelephone" column="contactAlternativeTelephone" type="java.lang.String"/>
+		<property name="contactAlternativeEmail" column="contactAlternativeEmail" type="java.lang.String"/>
+		
+		<property name="contactName_1" column="contactName_1" type="java.lang.String"/>
+		<property name="contactAddress_1" column="contactAddress_1" type="java.lang.String"/>
+		<property name="contactEmail_1" column="contactEmail_1" type="java.lang.String"/>
+		<property name="contactTitle_1" column="contactTitle_1" type="java.lang.String"/>
+		<property name="contactMinistry_1" column="contactMinistry_1" type="java.lang.String"/>
+		<property name="contactTelephone_1" column="contactTelephone_1" type="java.lang.String"/>
+		<property name="contactFax_1" column="contactFax_1" type="java.lang.String"/>
+		<property name="contactAlternativeName_1" column="contactAlternativeName_1" type="java.lang.String"/>
+		<property name="contactAlternativeTelephone_1" column="contactAlternativeTelephone_1" type="java.lang.String"/>
+		<property name="contactAlternativeEmail_1" column="contactAlternativeEmail_1" type="java.lang.String"/>
+		
+		<many-to-one name="organization" column="amp_org_id" class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" lazy="false"/>
+		<many-to-one name="organizationGroup" column="amp_org_grp_id" class="org.digijava.ampModule.aim.dbentity.AmpOrgGroup" cascade="none" lazy="false"/>
+		<many-to-one name="contactOrganization" column="contactOrganization" class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none"/>
+		<many-to-one name="contactOrganization_1" column="contactOrganization_1" class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none"/>
+	
+		<set name="programlist" lazy="true" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
+			<key column="pledge_id"/>
+			<one-to-many class="org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesProgram" />
+		</set>
+		  
+		<set name="locationlist" lazy="true" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
+			<key column="pledge_id"/>
+			<one-to-many class="org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesLocation" />
+		</set>
+		<set name="sectorlist" lazy="true" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
+			<key column="pledge_id"/>
+			<one-to-many class="org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesSector" />
+		</set>
+		<set name="documents" lazy="true" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
+			<key column="pledge_id"/>
+			<one-to-many class="org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesDocument" />
+		</set>		
+		<set name="fundingPledgesDetails" lazy="true" cascade="all-delete-orphan" table="AMP_FUNDING_PLEDGES_DETAILS">
+			<cache usage="read-write" />
+			<key column="pledge_id" />
+			<one-to-many class="org.digijava.ampModule.fundingpledges.dbentity.FundingPledgesDetails" />
+		</set>		
+		
+	</class>
+</hibernate-mapping>

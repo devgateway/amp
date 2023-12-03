@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.contentrepository.dbentity.CrSharedDoc" table="CR_SHARED_DOC">
+		<cache usage="read-write" />
+		<id name="id" column="Id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">CR_SHARED_DOC_seq</param>
+			</generator>
+		</id>
+
+		<property name="nodeUUID" column="node_uuid" type="java.lang.String"/>
+		<property name="state" type="java.lang.Integer"/>
+		<many-to-one name="team" column="team_id"	class="org.digijava.ampModule.aim.dbentity.AmpTeam" cascade="none" />
+		<property name="sharedPrivateNodeUUID" column="shared_private_res_uuid" type="java.lang.String"/>
+		<property name="sharedNodeVersionUUID" column="shared_node_version_uuid" type="java.lang.String"/>
+		
+	</class>
+</hibernate-mapping>

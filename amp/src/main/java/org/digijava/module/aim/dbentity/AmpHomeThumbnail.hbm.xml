@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpHomeThumbnail" table="AMP_HOME_THUMBNAIL">
+		<id name="thumbnailId" column="THUMBNAIL_ID" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator" >
+			<param name="sequence_name">AMP_HOME_THUMBNAIL_seq</param>
+			</generator>
+		</id>
+		<property name="thumbnail" column="THUMBNAIL" type="binary" length="500000"/>
+		<property name="placeholder" column="PLACEHOLDER" type="java.lang.Integer" />
+
+		<property name="optionalFile" column="OPTIONAL_FILE" type="binary" length="500000"/>
+		<property name="optionalFileName" column="OPTIONAL_FILE_NAME" type="java.lang.String" />
+		<property name="optionalFileContentType" column="OPTIONAL_FILE_CONTENT_TYPE" type="java.lang.String" />
+		<property name="thumbnailContentType" column="THUMBNAIL_CONTENT_TYPE" type="java.lang.String" />
+		<property name="thumbnailLabel" column="THUMBNAIL_LABEL" type="java.lang.String" />
+
+	</class>
+</hibernate-mapping>

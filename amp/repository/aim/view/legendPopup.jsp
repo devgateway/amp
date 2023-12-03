@@ -7,11 +7,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <c:choose>
 	<c:when test="${param.queryEngine!='true' }">
@@ -26,9 +26,9 @@
 <div id="show_legend_pop_box" style="font-size: 11px;font-family: Arial,sans-serif; ${divAlign}">
 	<b class="red">*<digi:trn key="aim:redtext">red</digi:trn></b> - <digi:trn key="aim:newDraftText">New Draft. These are new activities that have been saved as drafts.</digi:trn>
 	<hr/>
-	<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
+	<ampModule:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
 		<b class="green">*<digi:trn key="aim:greentext">green text</digi:trn></b> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activities that have never been approved by the workspace manager.</digi:trn>
-	</module:display>
+	</ampModule:display>
 	<hr/>
 	<b class="blue"><digi:trn key="aim:bluetext">blue text</digi:trn></b> - <digi:trn key="aim:validatedText">Validated activities</digi:trn>
 	<hr/>

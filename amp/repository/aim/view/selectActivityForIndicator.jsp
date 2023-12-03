@@ -9,7 +9,7 @@
 <script language="javascript">
 function selectActivity(){
 
-  <digi:context name="addprogram" property="context/module/moduleinstance/selectActivityForIndicator.do?action=add" />
+  <digi:context name="addprogram" property="context/ampModule/moduleinstance/selectActivityForIndicator.do?action=add" />
   document.aimNewIndicatorForm.action="<%=addprogram%>";
   document.aimNewIndicatorForm.target = window.opener.name;
   document.aimNewIndicatorForm.submit();

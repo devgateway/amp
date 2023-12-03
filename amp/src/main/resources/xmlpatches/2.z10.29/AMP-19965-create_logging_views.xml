@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-19965</jira>
+	<keyword>etl logs</keyword>
+	<author>cdolghier</author>
+	<description>Create human-consumption-only logs to be used while analyzing AMP logs</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				CREATE OR REPLACE VIEW v_etl_log_translations AS
+					SELECT ch.*, msg.* FROM amp_etl_changelog ch JOIN dg_message msg ON ch.entity_id = COALESCE(msg.message_key::bigint, 999999999) AND ch.entity_name = 'translation' WHERE msg.message_key ~E'^\\d+$' ORDER BY ch.event_id ASC;
+				
+				CREATE OR REPLACE VIEW v_etl_log_activities AS
+					SELECT ch.*, aa.name, aa.date_updated FROM amp_etl_changelog ch JOIN amp_activity_version aa ON ch.entity_id = aa.amp_activity_id AND ch.entity_name = 'activity' order by ch.event_id ASC;					
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

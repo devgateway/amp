@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<%@page import="org.digijava.module.help.util.HelpUtil"%>
+<%@page import="org.digijava.ampModule.help.util.HelpUtil"%>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -75,7 +75,7 @@ function IsEmpty(){
 }
 
   	function exp() {
-        	<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=export" />
+        	<digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=export" />
 			helpForm.action="${url}";
   			helpForm.submit();
   }
@@ -85,7 +85,7 @@ function IsEmpty(){
   	  		
 				alert("The content of the imported file is not ok. Please import a .zip file exported from this menu.");
   	  		}else{
-	  			<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=importing" />
+	  			<digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=importing" />
 				helpForm.action="${url}";
 	  			helpForm.submit();
   	  		}
@@ -94,14 +94,14 @@ function IsEmpty(){
 	function editTopic(topic,heltType){
 			if(heltType == "admin"){
 				openNewWindow(400,300);
-				<digi:context name="edit" property="context/module/moduleinstance/../help~admin/helpActions.do?actionType=editHelpTopic"/>
+				<digi:context name="edit" property="context/ampModule/moduleinstance/../help~admin/helpActions.do?actionType=editHelpTopic"/>
 				document.helpForm.action = "<%= edit %>&topicKey="+topic+"&wizardStep=0&page=admin";
 				document.helpForm.target = popupPointer.name;
 				document.helpForm.submit();
 			
 			}else{
 				openNewWindow(400,300);
-				<digi:context name="edit" property="context/module/moduleinstance/helpActions.do?actionType=editHelpTopic"/>
+				<digi:context name="edit" property="context/ampModule/moduleinstance/helpActions.do?actionType=editHelpTopic"/>
 				document.helpForm.action = "<%= edit %>&topicKey="+topic+"&wizardStep=0&page=admin";
 				document.helpForm.target = popupPointer.name;
 				document.helpForm.submit();
@@ -226,7 +226,7 @@ function IsEmpty(){
 	         }
 	        if(tIds.length>0){
 	        	tIds=tIds.substring(0,tIds.length-1);
-	        	<digi:context name="deleteMsgs" property="context/module/moduleinstance/helpActions.do?actionType=deleteHelpTopics"/>
+	        	<digi:context name="deleteMsgs" property="context/ampModule/moduleinstance/helpActions.do?actionType=deleteHelpTopics"/>
 	    		document.helpForm.action = "<%=deleteMsgs %>&multi="+true+"&tIds="+tIds+"&page=admin";
 	    		document.helpForm.target = "_self";
 	    		document.helpForm.submit();	
@@ -400,7 +400,7 @@ function IsEmpty(){
 </table>
  </digi:form>
  </center>
- <script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+ <script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
  <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 </script>

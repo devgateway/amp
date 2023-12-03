@@ -2,133 +2,133 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
   <form-beans>
-    <form-bean name="userRegisterForm" type="org.digijava.module.um.form.UserRegisterForm" />
-    <form-bean name="userUpdateForm" type="org.digijava.module.um.form.UserUpdateForm" />
-    <form-bean name="userUpdateMarketForm" type="org.digijava.module.um.form.UserUpdateMarketForm" />
-    <form-bean name="userChangePasswordForm" type="org.digijava.module.um.form.UserChangePasswordForm" />
-    <form-bean name="userResetForm" type="org.digijava.module.um.form.UserResetForm" />
-    <form-bean name="userAccountForm" type="org.digijava.module.um.form.UserAccountForm" />
-    <form-bean name="userEmailForm" type="org.digijava.module.um.form.UserEmailForm" />
-    <form-bean name="userLogonForm" type="org.digijava.module.um.form.LogonForm" />
-    <form-bean name="userBioForm" type="org.digijava.module.um.form.UserBioForm" />
-    <form-bean name="userProfileForm" type="org.digijava.module.um.form.UserProfileForm" />
-    <form-bean name="userContactForm" type="org.digijava.module.um.form.UserContactForm" />
-    <form-bean name="userUnSubscribeForm" type="org.digijava.module.um.form.UserUnSubscribeForm" />
-    <form-bean name="umViewAllUsersForm" type="org.digijava.module.um.form.ViewAllUsersForm" />
-    <form-bean name="umViewEditUserForm" type="org.digijava.module.um.form.ViewEditUserForm" />
-    <form-bean name="umAddUserForm" type="org.digijava.module.um.form.AddUserForm" />    
-    <form-bean name="suspendLoginManagerForm" type="org.digijava.module.um.form.SuspendLoginManagerForm" />    
+    <form-bean name="userRegisterForm" type="org.digijava.ampModule.um.form.UserRegisterForm" />
+    <form-bean name="userUpdateForm" type="org.digijava.ampModule.um.form.UserUpdateForm" />
+    <form-bean name="userUpdateMarketForm" type="org.digijava.ampModule.um.form.UserUpdateMarketForm" />
+    <form-bean name="userChangePasswordForm" type="org.digijava.ampModule.um.form.UserChangePasswordForm" />
+    <form-bean name="userResetForm" type="org.digijava.ampModule.um.form.UserResetForm" />
+    <form-bean name="userAccountForm" type="org.digijava.ampModule.um.form.UserAccountForm" />
+    <form-bean name="userEmailForm" type="org.digijava.ampModule.um.form.UserEmailForm" />
+    <form-bean name="userLogonForm" type="org.digijava.ampModule.um.form.LogonForm" />
+    <form-bean name="userBioForm" type="org.digijava.ampModule.um.form.UserBioForm" />
+    <form-bean name="userProfileForm" type="org.digijava.ampModule.um.form.UserProfileForm" />
+    <form-bean name="userContactForm" type="org.digijava.ampModule.um.form.UserContactForm" />
+    <form-bean name="userUnSubscribeForm" type="org.digijava.ampModule.um.form.UserUnSubscribeForm" />
+    <form-bean name="umViewAllUsersForm" type="org.digijava.ampModule.um.form.ViewAllUsersForm" />
+    <form-bean name="umViewEditUserForm" type="org.digijava.ampModule.um.form.ViewEditUserForm" />
+    <form-bean name="umAddUserForm" type="org.digijava.ampModule.um.form.AddUserForm" />
+    <form-bean name="suspendLoginManagerForm" type="org.digijava.ampModule.um.form.SuspendLoginManagerForm" />
 
   </form-beans>
   <action-mappings>
     <!--- UM (USER MANAGMENT) -->
-    <action type="org.digijava.module.um.action.ShowImage" path="/showImage" />
-    <action name="userRegisterForm" type="org.digijava.module.um.action.ShowUserRegister" validate="false" path="/um/showUserRegister">
+    <action type="org.digijava.ampModule.um.action.ShowImage" path="/showImage" />
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.ShowUserRegister" validate="false" path="/um/showUserRegister">
       <forward name="forward" path="/showLayout.do?layout=userRegister" />
       <forward name="return" path="/showLayout.do" />
     </action>
-    <action name="userRegisterForm" type="org.digijava.module.um.action.ShowUserRegisterBlank" validate="false" path="/um/showUserRegisterBlank" />
-    <action name="userRegisterForm" type="org.digijava.module.um.action.ShowUserRegisterGateway" validate="false" path="/um/showUserRegisterGateway" />
-    <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserSuccessGateway" validate="false" path="/um/showUserSuccessGateway" />
-    <action name="userRegisterForm" type="org.digijava.module.um.action.UserRegisterBlank" input="/showLayout.do?layout=userRegister" path="/um/userRegisterBlank">
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.ShowUserRegisterBlank" validate="false" path="/um/showUserRegisterBlank" />
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.ShowUserRegisterGateway" validate="false" path="/um/showUserRegisterGateway" />
+    <action name="userAccountForm" type="org.digijava.ampModule.um.action.ShowUserSuccessGateway" validate="false" path="/um/showUserSuccessGateway" />
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.UserRegisterBlank" input="/showLayout.do?layout=userRegister" path="/um/userRegisterBlank">
       <forward name="failure" path="/showLayout.do?layout=um_emailExists" />
       <forward name="success" path="/um/showUserRegisterSuccess.do" />
     </action>
-    <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserSuccessMarket" validate="false" path="/um/showUserSuccessMarket" />
-    <action name="userRegisterForm" type="org.digijava.module.um.action.UserRegisterGateway" input="/showLayout.do?layout=userRegister" path="/um/userRegisterGateway">
+    <action name="userAccountForm" type="org.digijava.ampModule.um.action.ShowUserSuccessMarket" validate="false" path="/um/showUserSuccessMarket" />
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.UserRegisterGateway" input="/showLayout.do?layout=userRegister" path="/um/userRegisterGateway">
       <forward name="success" path="/um/showUserRegisterSuccess.do" />
     </action>
-    <action name="userRegisterForm" type="org.digijava.module.um.action.ShowUserRegisterMarket" validate="false" path="/um/showUserRegisterMarket" />
-    <action name="userRegisterForm" type="org.digijava.module.um.action.UserRegisterMarket" input="/showLayout.do?layout=userRegister" path="/um/userRegisterMarket">
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.ShowUserRegisterMarket" validate="false" path="/um/showUserRegisterMarket" />
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.UserRegisterMarket" input="/showLayout.do?layout=userRegister" path="/um/userRegisterMarket">
       <forward name="success" path="/um/showUserRegisterSuccess.do" />
     </action>
-    <action name="userUpdateForm" type="org.digijava.module.um.action.ShowUserUpdate" validate="false" path="/um/showUserUpdate">
+    <action name="userUpdateForm" type="org.digijava.ampModule.um.action.ShowUserUpdate" validate="false" path="/um/showUserUpdate">
       <forward name="forward" path="/showLayout.do?layout=updateUserProfile" />
     </action>
-    <action name="userUpdateForm" type="org.digijava.module.um.action.ShowUserUpdateBlank" validate="false" path="/um/showUserUpdateBlank" />
-    <action name="userUpdateForm" type="org.digijava.module.um.action.ShowUserUpdateGateway" validate="false" path="/um/showUserUpdateGateway" />
-    <action name="userUpdateForm" type="org.digijava.module.um.action.UserUpdate" input="/showLayout.do?layout=userAccount" path="/um/userUpdate">
+    <action name="userUpdateForm" type="org.digijava.ampModule.um.action.ShowUserUpdateBlank" validate="false" path="/um/showUserUpdateBlank" />
+    <action name="userUpdateForm" type="org.digijava.ampModule.um.action.ShowUserUpdateGateway" validate="false" path="/um/showUserUpdateGateway" />
+    <action name="userUpdateForm" type="org.digijava.ampModule.um.action.UserUpdate" input="/showLayout.do?layout=userAccount" path="/um/userUpdate">
       <forward name="success" path="/showLayout.do?layout=userAccount" />
     </action>
-    <action name="userUpdateForm" type="org.digijava.module.um.action.UserUpdateBlank" input="/showLayout.do?layout=userAccount" path="/um/userUpdateBlank">
+    <action name="userUpdateForm" type="org.digijava.ampModule.um.action.UserUpdateBlank" input="/showLayout.do?layout=userAccount" path="/um/userUpdateBlank">
       <forward name="success" path="/showLayout.do?layout=userAccount" />
     </action>
-    <action name="userUpdateForm" type="org.digijava.module.um.action.UserUpdateGateway" input="/showLayout.do?layout=userAccount" path="/um/userUpdateGateway">
+    <action name="userUpdateForm" type="org.digijava.ampModule.um.action.UserUpdateGateway" input="/showLayout.do?layout=userAccount" path="/um/userUpdateGateway">
       <forward name="success" path="/showLayout.do?layout=userAccount" />
     </action>
-    <action name="userChangePasswordForm" type="org.digijava.module.um.action.ShowUserChangePassword" validate="false" path="/um/showUserChangePassword">
+    <action name="userChangePasswordForm" type="org.digijava.ampModule.um.action.ShowUserChangePassword" validate="false" path="/um/showUserChangePassword">
       <forward name="forward" path="/showLayout.do?layout=userChangePassword" />
     </action>
-    <action name="userChangePasswordForm" type="org.digijava.module.um.action.UserChangePassword" input="/showLayout.do?layout=userChangePassword" path="/um/userChangePassword">
+    <action name="userChangePasswordForm" type="org.digijava.ampModule.um.action.UserChangePassword" input="/showLayout.do?layout=userChangePassword" path="/um/userChangePassword">
       <forward name="success" path="/showLayout.do?layout=userAccount" />
     </action>
 
-    <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccount" validate="false" path="/um/showUserAccount">
+    <action name="userAccountForm" type="org.digijava.ampModule.um.action.ShowUserAccount" validate="false" path="/um/showUserAccount">
       <forward name="forward" path="/showLayout.do?layout=userAccount" />
     </action>
 
-    <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccountBlank" validate="false" path="/um/showUserAccountBlank" />
-    <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccountGateway" validate="false" path="/um/showUserAccountGateway" />
-    <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccountMarket" validate="false" path="/um/showUserAccountMarket" />
-    <action name="userRegisterForm" type="org.digijava.module.um.action.UserRegister" input="/showLayout.do?layout=userRegister" path="/um/userRegister">
+    <action name="userAccountForm" type="org.digijava.ampModule.um.action.ShowUserAccountBlank" validate="false" path="/um/showUserAccountBlank" />
+    <action name="userAccountForm" type="org.digijava.ampModule.um.action.ShowUserAccountGateway" validate="false" path="/um/showUserAccountGateway" />
+    <action name="userAccountForm" type="org.digijava.ampModule.um.action.ShowUserAccountMarket" validate="false" path="/um/showUserAccountMarket" />
+    <action name="userRegisterForm" type="org.digijava.ampModule.um.action.UserRegister" input="/showLayout.do?layout=userRegister" path="/um/userRegister">
       <forward name="failure" path="/showLayout.do?layout=um_emailExists" />
       <forward name="success" path="/showLayout.do" />
     </action>
-    <action name="userResetForm" type="org.digijava.module.um.action.UserResetPassword" input="/showLayout.do?layout=userReset" path="/um/userResetPassword">
+    <action name="userResetForm" type="org.digijava.ampModule.um.action.UserResetPassword" input="/showLayout.do?layout=userReset" path="/um/userResetPassword">
       <forward name="success" path="/index.do" redirect="true" />
       <forward name="error" path="/showLayout.do?layout=errorResetPassword" />
     </action>
-    <action name="userEmailForm" type="org.digijava.module.um.action.UserEmail" input="/showLayout.do?layout=userEmail" path="/um/userEmail">
+    <action name="userEmailForm" type="org.digijava.ampModule.um.action.UserEmail" input="/showLayout.do?layout=userEmail" path="/um/userEmail">
       <forward name="success" path="/showLayout.do?layout=successResetPassword" />
     </action>
     <action name="userResetForm" forward="/showLayout.do?layout=userReset" validate="false" path="/um/showResetForm" />
-    <action name="userBioForm" type="org.digijava.module.um.action.ShowUserBio" validate="false" input="/showLayout.do?layout=userBio" path="/um/showUserBio">
+    <action name="userBioForm" type="org.digijava.ampModule.um.action.ShowUserBio" validate="false" input="/showLayout.do?layout=userBio" path="/um/showUserBio">
       <forward name="forward" path="/showLayout.do?layout=um_popupLayout" />
     </action>
-    <action name="userBioForm" type="org.digijava.module.um.action.UserBio" input="/showLayout.do?layout=um_popupLayout" path="/um/userBio">
+    <action name="userBioForm" type="org.digijava.ampModule.um.action.UserBio" input="/showLayout.do?layout=um_popupLayout" path="/um/userBio">
       <forward name="forward" path="/showLayout.do?layout=um_popupLayout" />
     </action>
     <action name="userEmailForm" forward="/showLayout.do?layout=userEmail" validate="false" path="/um/showEmailForm" />
     <action name="userLogonForm" forward="/showLayout.do?layout=loginPrompt" path="/um/showPrompt" scope="request" />
-    <action name="userLogonForm" type="org.digijava.module.um.action.Logout" validate="false" path="/um/logoutAction" scope="request">
+    <action name="userLogonForm" type="org.digijava.ampModule.um.action.Logout" validate="false" path="/um/logoutAction" scope="request">
       <forward name="forward" path="/showLayout.do" />
     </action>
-    <action name="userLogonForm" type="org.digijava.module.um.action.Logout" validate="false" path="/um/logout" scope="request">
+    <action name="userLogonForm" type="org.digijava.ampModule.um.action.Logout" validate="false" path="/um/logout" scope="request">
       <forward name="forward" path="/showLayout.do" />
     </action>
-    <action name="userLogonForm" type="org.digijava.module.um.action.NewSession" validate="false" path="/um/newSession" scope="request" />
-    <action name="userLogonForm" type="org.digijava.module.um.action.RenderTeaser" path="/um/renderTeaser" scope="request" />
-    <action name="userLogonForm" type="org.digijava.module.um.action.Login" validate="true" input="/showLayout.do" path="/um/logonAction" scope="request">
+    <action name="userLogonForm" type="org.digijava.ampModule.um.action.NewSession" validate="false" path="/um/newSession" scope="request" />
+    <action name="userLogonForm" type="org.digijava.ampModule.um.action.RenderTeaser" path="/um/renderTeaser" scope="request" />
+    <action name="userLogonForm" type="org.digijava.ampModule.um.action.Login" validate="true" input="/showLayout.do" path="/um/logonAction" scope="request">
       <forward name="forward" path="/showLayout.do" redirect="true" />
     </action>
-    <action name="userLogonForm" type="org.digijava.module.um.action.Login" validate="true" input="/showLayout.do" path="/um/login" scope="request">
+    <action name="userLogonForm" type="org.digijava.ampModule.um.action.Login" validate="true" input="/showLayout.do" path="/um/login" scope="request">
       <forward name="forward" path="/showLayout.do" redirect="true" />
     </action>
-    <action name="userProfileForm" type="org.digijava.module.um.action.ShowUserProfile" validate="false" input="/showLayout.do?layout=srchBody" scope="session" path="/um/showUserProfile">
+    <action name="userProfileForm" type="org.digijava.ampModule.um.action.ShowUserProfile" validate="false" input="/showLayout.do?layout=srchBody" scope="session" path="/um/showUserProfile">
       <forward name="forward" path="/showLayout.do?layout=userProfile" />
     </action>
-    <action name="userContactForm" type="org.digijava.module.um.action.ShowUserContact" validate="false" input="/showLayout.do?layout=um_popupLayoutContact" scope="session" path="/um/showUserContact">
+    <action name="userContactForm" type="org.digijava.ampModule.um.action.ShowUserContact" validate="false" input="/showLayout.do?layout=um_popupLayoutContact" scope="session" path="/um/showUserContact">
       <forward name="forward" path="/showLayout.do?layout=um_popupLayoutContact" />
     </action>
-    <action name="userContactForm" type="org.digijava.module.um.action.ShowUserTell" validate="false" input="/showLayout.do?layout=um_popupLayoutTell" scope="session" path="/um/showUserTell">
+    <action name="userContactForm" type="org.digijava.ampModule.um.action.ShowUserTell" validate="false" input="/showLayout.do?layout=um_popupLayoutTell" scope="session" path="/um/showUserTell">
       <forward name="forward" path="/showLayout.do?layout=um_popupLayoutTell" />
     </action>
-    <action name="userContactForm" type="org.digijava.module.um.action.UserContact" input="/showLayout.do?layout=um_popupLayoutContact" path="/um/userContact">
+    <action name="userContactForm" type="org.digijava.ampModule.um.action.UserContact" input="/showLayout.do?layout=um_popupLayoutContact" path="/um/userContact">
       <forward name="success" path="/showLayout.do?layout=um_popupLayoutContactSuccess" />
     </action>
-    <action name="userContactForm" type="org.digijava.module.um.action.UserTell" input="/showLayout.do?layout=um_popupLayoutTell" path="/um/userTell">
+    <action name="userContactForm" type="org.digijava.ampModule.um.action.UserTell" input="/showLayout.do?layout=um_popupLayoutTell" path="/um/userTell">
       <forward name="success" path="/showLayout.do?layout=um_popupLayoutTellSuccess" />
     </action>
-    <action name="userUnSubscribeForm" type="org.digijava.module.um.action.ShowUserUnSubscribe" validate="false" path="/um/showUserUnSubscribe">
+    <action name="userUnSubscribeForm" type="org.digijava.ampModule.um.action.ShowUserUnSubscribe" validate="false" path="/um/showUserUnSubscribe">
       <forward name="forward" path="/showLayout.do?layout=userUnSubscribe" />
     </action>
-    <action name="userUnSubscribeForm" type="org.digijava.module.um.action.UnSubscribeTemporarly" input="/showLayout.do?layout=userUnSubscribe" path="/um/unSubscribeTemporarly">
+    <action name="userUnSubscribeForm" type="org.digijava.ampModule.um.action.UnSubscribeTemporarly" input="/showLayout.do?layout=userUnSubscribe" path="/um/unSubscribeTemporarly">
       <forward name="unsubscribedTmp" path="/showLayout.do?layout=userAccount" redirect="true" />
     </action>
-    <action name="userUnSubscribeForm" type="org.digijava.module.um.action.UnSubscribePermanently" input="/showLayout.do?layout=userUnSubscribe" path="/um/unSubscribePermanently">
+    <action name="userUnSubscribeForm" type="org.digijava.ampModule.um.action.UnSubscribePermanently" input="/showLayout.do?layout=userUnSubscribe" path="/um/unSubscribePermanently">
       <forward name="unsubscribedPerm" path="/showLayout.do?layout=userAccount" redirect="true" />
     </action>
-    <action name="userUnSubscribeForm" type="org.digijava.module.um.action.ReactivateEmail" validate="false" path="/um/reactivateEmail">
+    <action name="userUnSubscribeForm" type="org.digijava.ampModule.um.action.ReactivateEmail" validate="false" path="/um/reactivateEmail">
       <forward name="forward" path="/showLayout.do?layout=userAccount" />
     </action>
     <action forward="/showLayout.do?layout=userRegisterSuccess" path="/um/showUserRegisterSuccess" />
@@ -136,39 +136,39 @@
     <action forward="/showLayout.do?layout=saveLogin" path="/um/saveLogin" />
     <!--  end -->
 
-    <action name="umViewAllUsersForm" path="/um/viewAllUsers" scope="session" type="org.digijava.module.um.action.ViewAllUsers" validate="false">
+    <action name="umViewAllUsersForm" path="/um/viewAllUsers" scope="session" type="org.digijava.ampModule.um.action.ViewAllUsers" validate="false">
       <forward name="forward" path="/showLayout.do?layout=umViewAllUsers" />
     </action>
-    <action name="umViewAllUsersForm" path="/um/exportUserManager" scope="session" type="org.digijava.module.um.action.ExportUserManager2XSL" validate="false"/>
-    <action name="umViewEditUserForm" path="/um/viewEditUser" scope="session" type="org.digijava.module.um.action.ViewEditUser" validate="false">
+    <action name="umViewAllUsersForm" path="/um/exportUserManager" scope="session" type="org.digijava.ampModule.um.action.ExportUserManager2XSL" validate="false"/>
+    <action name="umViewEditUserForm" path="/um/viewEditUser" scope="session" type="org.digijava.ampModule.um.action.ViewEditUser" validate="false">
       <forward name="forward" path="/showLayout.do?layout=umViewEditUser" />
       <forward name="saved" path="/um/viewAllUsers.do?currentAlpha=viewAll" redirect="false"/>
       <forward name="assignWorkspace" path="/showLayout.do?layout=assignWorkspaceToUser" />
     </action>
-    <action input="/um/registerUser.do" name="umAddUserForm" path="/um/addWorkSpaceUser" scope="session" type="org.digijava.module.um.action.addWorkSpaceUser" validate="true">
+    <action input="/um/registerUser.do" name="umAddUserForm" path="/um/addWorkSpaceUser" scope="session" type="org.digijava.ampModule.um.action.addWorkSpaceUser" validate="true">
       <forward name="forward" path="/showLayout.do?layout=addWorkSpaceUser" />
       <forward name="index" path="/um/addUser.do" redirect="true" />
     </action>
 
-    <action input="/um/addUser.do" name="umAddUserForm" path="/um/registerUser" scope="session" type="org.digijava.module.um.action.RegisterUser" validate="true">
+    <action input="/um/addUser.do" name="umAddUserForm" path="/um/registerUser" scope="session" type="org.digijava.ampModule.um.action.RegisterUser" validate="true">
       <forward name="forward" path="/showLayout.do?layout=addWorkSpaceUser" />
       <forward name="index" path="/showLayout.do?layout=umAddUser" />
       <forward name="login" path="/aim/index.do" redirect="true" />
     </action>
 
-    <action name="umAddUserForm" path="/um/addUser" scope="session" type="org.digijava.module.um.action.AddUser" validate="false">
+    <action name="umAddUserForm" path="/um/addUser" scope="session" type="org.digijava.ampModule.um.action.AddUser" validate="false">
       <forward name="forward" path="/showLayout.do?layout=umAddUser"/>
       <forward name="saved" path="/um/viewAllUsers.do" redirect="false"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
  
-    <action name="umViewAllUsersForm" path="/um/userSearch" scope="session" type="org.digijava.module.um.action.UserSearch">
+    <action name="umViewAllUsersForm" path="/um/userSearch" scope="session" type="org.digijava.ampModule.um.action.UserSearch">
    		<forward name="index" path="/aim/index.do" redirect="true" />
    		<forward name="forward" path="/showLayout.do?layout=umViewAllUsers" /> 
     </action>
 
     <!-- Suspend LogIn Manager  -->
-    <action name="suspendLoginManagerForm" type="org.digijava.module.um.action.SuspendLoginManager" scope="request" path="/um/suspendLoginManager" parameter="action">
+    <action name="suspendLoginManagerForm" type="org.digijava.ampModule.um.action.SuspendLoginManager" scope="request" path="/um/suspendLoginManager" parameter="action">
       <forward name="forward" path="/showLayout.do?layout=suspendLoginManager" />
       <forward name="add" path="/showLayout.do?layout=addEditSuspendLogin" />
       <forward name="users" path="/showLayout.do?layout=suspendLoginUserManager" />

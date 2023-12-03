@@ -2,7 +2,7 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
   <form-beans>
-    <form-bean name="exceptionReportForm" type="org.digijava.module.exception.form.DigiExceptionReportForm" />
+    <form-bean name="exceptionReportForm" type="org.digijava.ampModule.exception.form.DigiExceptionReportForm" />
   </form-beans>
 
 
@@ -11,8 +11,8 @@
 		<action type="org.digijava.kernel.action.ShowLayout" path="/exception/showLayout" />
 		<action name="exceptionReportForm" type="org.digijava.kernel.exception.DigiExceptionHandler" validate="false" path="/exceptionHandle" scope="session" />
 -->
-		<action name="exceptionReportForm" type="org.digijava.module.exception.action.ExceptionReport" input="/exception/exceptionReport" path="/exception/exceptionReport" scope="request"/>
-		<action name="exceptionReportForm" type="org.digijava.module.exception.action.ShowExceptionReport" input="/exception/showExceptionReport" path="/exception/showExceptionReport" scope="request"/>
-		<action name="exceptionReportForm" type="org.digijava.module.exception.action.GetConfluenceDocs" input="/exception/getConfluenceDocs" path="/exception/getConfluenceDocs" scope="request"/>		
+		<action name="exceptionReportForm" type="org.digijava.ampModule.exception.action.ExceptionReport" input="/exception/exceptionReport" path="/exception/exceptionReport" scope="request"/>
+		<action name="exceptionReportForm" type="org.digijava.ampModule.exception.action.ShowExceptionReport" input="/exception/showExceptionReport" path="/exception/showExceptionReport" scope="request"/>
+		<action name="exceptionReportForm" type="org.digijava.ampModule.exception.action.GetConfluenceDocs" input="/exception/getConfluenceDocs" path="/exception/getConfluenceDocs" scope="request"/>
   </action-mappings>
 </struts-config>

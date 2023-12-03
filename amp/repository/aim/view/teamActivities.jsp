@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@page import="org.digijava.module.aim.action.GetTeamActivities"%>
+<%@page import="org.digijava.ampModule.aim.action.GetTeamActivities"%>
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
@@ -73,7 +73,7 @@
 	     var archiveselected =true ;	
      </c:if>
 			
-		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
+		<digi:context name="sel" property="context/ampModule/moduleinstance/teamActivityList.do" />
 			 url = "<%= sel %>" ;
            // url = '/aim/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0';
            if (typeof archiveselected != 'undefined') 
@@ -118,14 +118,14 @@
 	}
 
 	function page(val) {
-		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
+		<digi:context name="sel" property="context/ampModule/moduleinstance/teamActivityList.do" />
 		<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
 		<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
 		<c:if test="${selectedSubTab==unarchivedTab}">
-		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0" />	
+		<digi:context name="sel" property="context/ampModule/moduleinstance/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0" />
     	</c:if>
     	<c:if test="${selectedSubTab==archivedTab}">
-		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=true~dest=teamLead~tId=-1~subtab=0" />	
+		<digi:context name="sel" property="context/ampModule/moduleinstance/teamActivityList.do~showArchivedActivities=true~dest=teamLead~tId=-1~subtab=0" />
     	</c:if>
 			url = "<%= sel %>?page=" + val ;
 			document.aimTeamActivitiesForm.action = url;
@@ -134,7 +134,7 @@
 	
 	
 	function resetSearch() {
-		<digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>     
+		<digi:context name="searchOrg" property="context/ampModule/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>
 		url = "<%= searchOrg %>?reset=true";
 	     document.aimTeamActivitiesForm.action = url;
 	     document.aimTeamActivitiesForm.submit();
@@ -143,7 +143,7 @@
 	}
 
 	function searchActivity(teamId) {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>			 
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>
 		     url = "<%= searchOrg %>";
 		     document.aimTeamActivitiesForm.action = url;
 		     document.aimTeamActivitiesForm.submit();

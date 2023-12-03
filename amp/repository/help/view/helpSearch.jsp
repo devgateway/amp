@@ -13,7 +13,7 @@
 
 <script language="JavaScript">
 
-<digi:context name="helpActionUrl" property="context/module/moduleinstance/helpActions.do" />
+<digi:context name="helpActionUrl" property="context/ampModule/moduleinstance/helpActions.do" />
 
 
 

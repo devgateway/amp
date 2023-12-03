@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-21483</jira>
+	<keyword>Mondrian cache-related exception on Gambia demo</keyword>
+	<author>apicca</author>
+	<description>need to change the config in qrtz_job_details after we've changed the RefreshMondrianCacheJob's package.</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">		
+				update qrtz_job_details set job_class_name = 'org.digijava.kernel.job.cachedtables.RefreshMondrianCacheJob' 
+				where job_class_name = 'org.digijava.ampModule.mondrian.job.RefreshMondrianCacheJob'
+			</lang>
+		</script>
+	</apply>
+</tns:patch>
+

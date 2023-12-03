@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>xmlpatcher</name>
 	
 	<security>
@@ -8,7 +8,7 @@
 	</security>		
 	
 	<hibernate-classes required="true">
-	<hibernate-class>org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog</hibernate-class>		
-	<hibernate-class>org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch</hibernate-class>
+	<hibernate-class>org.digijava.ampModule.xmlpatcher.dbentity.AmpXmlPatchLog</hibernate-class>
+	<hibernate-class>org.digijava.ampModule.xmlpatcher.dbentity.AmpXmlPatch</hibernate-class>
 	</hibernate-classes>
-</module-config>
+</ampModule-config>

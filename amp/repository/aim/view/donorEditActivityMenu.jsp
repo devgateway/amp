@@ -23,7 +23,7 @@
 function previewClicked() {
 	document.aimEditActivityForm.step.value = "9";
 	document.aimEditActivityForm.pageId.value = "1";
-	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
+	<digi:context name="preview" property="context/ampModule/moduleinstance/previewActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -49,7 +49,7 @@ function saveAsDraftClicked() {
 function save() {
 	document.aimEditActivityForm.saveButton.disabled = true;
     document.aimEditActivityForm.saveAsDraftButton.disabled = true;
-	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
+	<digi:context name="save" property="context/ampModule/moduleinstance/saveActivity.do" />
 	document.aimEditActivityForm.action = "<%= save %>";
 	document.aimEditActivityForm.target = "_self";
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
@@ -87,7 +87,7 @@ function gotoStep(value) {
   }
   if (flag == true) {
     document.aimEditActivityForm.step.value = value;
-    <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+    <digi:context name="step" property="context/ampModule/moduleinstance/addActivity.do?edit=true" />
     document.aimEditActivityForm.action = "<%= step %>";
     document.aimEditActivityForm.target = "_self";
     document.aimEditActivityForm.submit();
@@ -97,7 +97,7 @@ function gotoStep(value) {
 
 
 function fnGetSurvey() {
-	<digi:context name="step" property="context/module/moduleinstance/editSurveyList.do?edit=true" />
+	<digi:context name="step" property="context/ampModule/moduleinstance/editSurveyList.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= step %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -124,7 +124,7 @@ function fnGetSurvey() {
 
 <table width="209" cellspacing="0" cellpadding="0" vAlign="top" align="left" border="0">
 
-<tr><td width="209" height="10" background="module/aim/images/top.gif">
+<tr><td width="209" height="10" background="ampModule/aim/images/top.gif">
 
 </td></tr>
 
@@ -170,7 +170,7 @@ bgcolor="#006699">
 
 				<tr>
 
-					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					<td width="10" height="19" background="ampModule/aim/images/left-arc.gif">
 
 					</td>
 
@@ -188,7 +188,7 @@ bgcolor="#006699">
 
 					</td>
 
-					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					<td width="10" height="19"  background="ampModule/aim/images/right-arc.gif">
 
 					</td>
 
@@ -204,7 +204,7 @@ bgcolor="#006699">
 
 	<tr>
 
-        <feature:display  name="Paris Indicator" module="Add & Edit Activity">
+        <feature:display  name="Paris Indicator" ampModule="Add & Edit Activity">
 		<c:if test="${aimEditActivityForm.step != '17'}">
 
 		<td>
@@ -230,7 +230,7 @@ bgcolor="#006699">
 
 				<tr>
 
-					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					<td width="10" height="19" background="ampModule/aim/images/left-arc.gif">
 
 					</td>
 
@@ -246,7 +246,7 @@ bgcolor="#006699">
 
 					</td>
 
-					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					<td width="10" height="19"  background="ampModule/aim/images/right-arc.gif">
 
 					</td>
 
@@ -298,7 +298,7 @@ bgcolor="#006699">
 
 </td></tr>
 
-<tr><td width="209" height="10" background="module/aim/images/bottom.gif">
+<tr><td width="209" height="10" background="ampModule/aim/images/bottom.gif">
 
 </td></tr>
 

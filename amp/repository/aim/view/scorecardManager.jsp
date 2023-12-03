@@ -7,11 +7,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 
-<script language="javascript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/external/jquery/jquery.js"/>"></script>
-<script language="javascript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"></script>
-<script language="javascript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.fancytree.js"/>"></script>
+<script language="javascript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/jquery-ui-1.11.0/external/jquery/jquery.js"/>"></script>
+<script language="javascript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"></script>
+<script language="javascript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/jquery.fancytree.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/ui.fancytree.css"/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src="ampModule/aim/css/ui.fancytree.css"/>">
 
 <style>
 .scorecard-container {
@@ -221,7 +221,7 @@
 
 
 <script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scorecard.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/scorecard.js"/>"></script>
 
 <script type="text/javascript">
 	cleanupValidationTime();

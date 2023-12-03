@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 
-<%@ page import = "org.digijava.module.aim.helper.ChartGenerator" %>
+<%@ page import = "org.digijava.ampModule.aim.helper.ChartGenerator" %>
 
 <%@ page import = "java.io.PrintWriter, java.util.*" %>
 
@@ -20,8 +20,8 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <div id="myContent" style="display: none;">
 	<div id="myContentContent" class="content" style="overflow: scroll; height: 500px;">
@@ -34,7 +34,7 @@
 
 	function showPrinterFriendly(actId,chartType) {
 
-		<digi:context name="ptUrl" property="context/module/moduleinstance/printableActivityChart.do" />
+		<digi:context name="ptUrl" property="context/ampModule/moduleinstance/printableActivityChart.do" />
 
 		var url = "<%=ptUrl%>?ampActivityId="+actId+"&cType="+chartType;
 
@@ -46,7 +46,7 @@
 
 	function actPerfWithoutBaseline(actId,chartType) {
 
-		<digi:context name="ptUrl" property="context/module/moduleinstance/viewActWithoutBase.do" />
+		<digi:context name="ptUrl" property="context/ampModule/moduleinstance/viewActWithoutBase.do" />
 
 		var url = "<%=ptUrl%>?ampActivityId="+actId+"&cType="+chartType;
 
@@ -60,7 +60,7 @@ function projectFiche(id)
 
 {
 
-	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	<digi:context name="ficheUrl" property="context/ampModule/moduleinstance/projectFicheExport.do" />
 
 	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
 
@@ -72,7 +72,7 @@ function projectFiche(id)
 
 {
 
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	<digi:context name="addUrl" property="context/ampModule/moduleinstance/editActivity.do" />
 
    document.aimActivityForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id+"~step=10";
 
@@ -160,7 +160,7 @@ function projectFiche(id)
 		showPanelLoading();
 		var postString="&activityId=" + id+"&isPreview=2&previewPopin=true";
 		//alert(postString);
-		<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreviewPopin.do" />
+		<digi:context name="addUrl" property="context/ampModule/moduleinstance/viewActivityPreviewPopin.do" />
 		var url = "<%=addUrl %>?"+postString;
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 		
@@ -181,7 +181,7 @@ function projectFiche(id)
 
 	function viewChanges(id){
 		openNewWindow(650,200);
-		<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
+		<digi:context name="showLog" property="context/ampModule/moduleinstance/showActivityLog.do" />
 		popupPointer.document.location.href = "<%= showLog %>?activityId=" + id;
 	}
 
@@ -262,7 +262,7 @@ function projectFiche(id)
 
 %>
 
-<digi:form action="/viewActivityDashboard.do" name="aimActivityForm" type="org.digijava.module.aim.form.aimActivityForm"
+<digi:form action="/viewActivityDashboard.do" name="aimActivityForm" type="org.digijava.ampModule.aim.form.aimActivityForm"
 
 method="post">
 

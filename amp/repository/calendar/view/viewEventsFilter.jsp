@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 function addEvent () {	
-	<digi:context name="refreshUrl" property="context/module/moduleinstance/showCalendarEvent.do~selectedCalendarTypeId=0~method=new" />
+	<digi:context name="refreshUrl" property="context/ampModule/moduleinstance/showCalendarEvent.do~selectedCalendarTypeId=0~method=new" />
     document.calendarViewForm.action= "<%= refreshUrl %>";
     document.calendarViewForm.submit();
 }
@@ -137,7 +137,7 @@ function changeEventTypesState(){
 <html:hidden name="calendarViewForm" property="resetEventTypes" value="${calendarViewForm.resetEventTypes}"/>
 <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
-<feature:display name="Filter" module="Calendar">
+<feature:display name="Filter" ampModule="Calendar">
 	<field:display name="Event Type Filter" feature="Filter">
 		<div class="right_menu">
 			<div class="right_menu_header_big">

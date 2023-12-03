@@ -8,12 +8,12 @@
 	<page page="showVerticalNavigation" name="editor_showVerticalNavigation" title=" - Editor show page" />	
 </secondary-pages>
 
-<module>
+<ampModule>
 	<page name="edit">edit.jsp</page>
 	<page name="vieweng">vieweng.jsp</page>
 	<teaser name="vieweng" action="renderViewEng.do"/>
 	<teaser name="showNavigation" action="showNavigation.do">showNavigation.jsp</teaser>
 	<teaser name="showVerticalNavigation" action="showVerticalNavigation.do">showVerticalNavigation.jsp</teaser>			
-</module>
+</ampModule>
 
 </config>

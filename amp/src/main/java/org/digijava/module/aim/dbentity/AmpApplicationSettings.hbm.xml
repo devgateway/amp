@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpApplicationSettings"
+		table="AMP_APPLICATION_SETTINGS">
+		<cache usage="read-write" />
+		<id name="ampAppSettingsId" column="amp_app_settings_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_application_settings_seq</param>
+			</generator>
+		</id>
+		<property name="defaultRecordsPerPage" column="def_rec_per_page" type="java.lang.Integer" />
+		<property name="numberOfPagesToDisplay" column="num_pages_to_display" type="java.lang.Integer" />
+		<property name="defaultReportsPerPage" column="def_rep_per_page" type="java.lang.Integer" />
+		<property name="reportStartYear" column="report_start_year" type="java.lang.Integer" />
+		<property name="reportEndYear" column="report_end_year" type="java.lang.Integer" />
+		<property name="language" column="language" type="java.lang.String" />
+		<property name="validation" column="validation" type="java.lang.String" />
+        <property name="showAllCountries" column="show_all_countries" type="java.lang.Boolean"/>
+		
+		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpReports" cascade="none" />
+		<many-to-one name="team" column="team_id" class="org.digijava.ampModule.aim.dbentity.AmpTeam"
+			cascade="none" />
+		<many-to-one name="currency" column="currency_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+		<many-to-one name="fiscalCalendar" column="fis_cal_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpFiscalCalendar" cascade="none" />
+
+		<property name="allowAddTeamRes" column="allow_add_team_res" type="java.lang.Integer" />
+		<property name="allowShareTeamRes" column="allow_share_res_globally" type="java.lang.Integer" />
+		<property name="allowPublishingResources" column="allow_publishing_resources" type="java.lang.Integer" />
+
+	</class>
+</hibernate-mapping>

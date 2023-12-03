@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-20045</jira>
+    <keyword>Hide Add New Document / Add New WebLink / Add document from repository if section is disabled</keyword>
+    <author>vlimansky</author>
+    <description>Clean up old visibility items</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New WebLink Link%');
+                delete from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New WebLink Link%';
+
+                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New Document Link%');
+                delete from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New Document Link%';
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

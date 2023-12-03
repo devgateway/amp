@@ -9,19 +9,19 @@
 
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
 function makeInactive(code) {
-	<digi:context name="changeStatus" property="context/module/moduleinstance/changeCurrencyStatus.do" />
+	<digi:context name="changeStatus" property="context/ampModule/moduleinstance/changeCurrencyStatus.do" />
 	document.aimCurrencyForm.action = "<%= changeStatus %>~currCode="+code+"~status=0";
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
 }
 
 function makeActive(code) {
-	<digi:context name="changeStatus" property="context/module/moduleinstance/changeCurrencyStatus.do" />
+	<digi:context name="changeStatus" property="context/ampModule/moduleinstance/changeCurrencyStatus.do" />
 	document.aimCurrencyForm.action = "<%= changeStatus %>~currCode="+code+"~status=1";
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
@@ -29,7 +29,7 @@ function makeActive(code) {
 
 function addNewCurrency() {
 	openNewWindow(450, 230);
-	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
+	<digi:context name="add" property="context/ampModule/moduleinstance/updateCurrency.do" />
 	document.aimCurrencyForm.action = "<%= add %>~doAction=new~closeFlag=false";
 	document.aimCurrencyForm.target = popupPointer.name;
 	document.aimCurrencyForm.submit();
@@ -37,7 +37,7 @@ function addNewCurrency() {
 
 function editCurrency(code) {
 	openNewWindow(450, 230);
-	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
+	<digi:context name="add" property="context/ampModule/moduleinstance/updateCurrency.do" />
 	document.aimCurrencyForm.action = "<%= add %>~closeFlag=false~doAction=show~currencyCode="+code;
 	document.aimCurrencyForm.target = popupPointer.name;
 	document.aimCurrencyForm.submit();
@@ -47,7 +47,7 @@ function deleteCurrency(code) {
 		  var flag = validate();
 		  if(flag)
 		  {
-			<digi:context name="deleteCurrency" property="context/module/moduleinstance/deleteCurrency.do" />
+			<digi:context name="deleteCurrency" property="context/ampModule/moduleinstance/deleteCurrency.do" />
 			document.aimCurrencyForm.action = "<%= deleteCurrency %>~id="+code;
 
 			document.aimCurrencyForm.target = "_self";
@@ -63,7 +63,7 @@ function validate(){
 function applyFilter() {
 	
 	if(document.getElementsByName('numRecords')[0].value>0)
-	{   <digi:context name="manager" property="context/module/moduleinstance/currencyManager.do" />
+	{   <digi:context name="manager" property="context/ampModule/moduleinstance/currencyManager.do" />
     document.aimCurrencyForm.action = "${manager}";
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
@@ -87,14 +87,14 @@ function sortSubmit(val){
 	
 	document.aimCurrencyForm.sort.value=val;
 	
-	<digi:context name="sorting" property="context/module/moduleinstance/currencyManager.do" />
+	<digi:context name="sorting" property="context/ampModule/moduleinstance/currencyManager.do" />
 	document.aimCurrencyForm.action = "<%= sorting %>";
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
 }
 function submitPages(){
 	if(document.getElementsByName('numRecords')[0].value>0){
-	    <digi:context name="manager" property="context/module/moduleinstance/currencyManager.do" />
+	    <digi:context name="manager" property="context/ampModule/moduleinstance/currencyManager.do" />
 	    document.aimCurrencyForm.action = "${manager}";
 		document.aimCurrencyForm.target = "_self";
 		document.aimCurrencyForm.submit();
@@ -108,7 +108,7 @@ function submitPages(){
 var enterBinder	= new EnterHitBinder('currencyFilterBtn');
 
 function exportXSL(){
-    <digi:context name="exportUrl" property="context/module/moduleinstance/exportCurrencyManager2XSL.do"/>;
+    <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportCurrencyManager2XSL.do"/>;
     document.aimCurrencyForm.action="${exportUrl}";
     document.aimCurrencyForm.target="_blank";
     document.aimCurrencyForm.submit();
@@ -172,7 +172,7 @@ function exportXSL(){
 																	key="aim:otherLinks">Other
 																		links</digi:trn></b>
 															</td>
-															<td background="module/aim/images/corner-r.gif"
+															<td background="ampModule/aim/images/corner-r.gif"
 																height="17" width=17></td>
 														</tr>
 													</table></td>
@@ -183,7 +183,7 @@ function exportXSL(){
 														class="inside">
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <c:set var="translation">
 																	<digi:trn>Click here to go back to admin home page</digi:trn>
 																</c:set> <digi:link href="/admin.do" title="${translation}">
@@ -193,7 +193,7 @@ function exportXSL(){
 														</tr>
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <c:set var="translation">
 																	<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>
 																</c:set> <digi:link
@@ -205,7 +205,7 @@ function exportXSL(){
 														</tr>
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <c:set var="translation">
 																	<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
 																</c:set> <digi:link href="/selectFilteredRates.do"
@@ -375,7 +375,7 @@ function exportXSL(){
 																					<digi:trn>Click here to make the currency inactive</digi:trn>
 																				</c:set>
 																				<a	href="javascript:makeInactive('${curr.currencyCode}')" title="${translation}">
-																					<digi:img src="module/aim/images/bullet_green.gif" border="0" />
+																					<digi:img src="ampModule/aim/images/bullet_green.gif" border="0" />
 																				</a>
 																				<span class="invisible-item"><digi:trn>Active currencies</digi:trn>
 																				</span>
@@ -385,7 +385,7 @@ function exportXSL(){
 																					<digi:trn>Click here to make the currency Active</digi:trn>
 																				</c:set>
 																				<a href="javascript:makeActive('${curr.currencyCode}')" title="${translation}">
-																					<digi:img src="module/aim/images/bullet_grey.gif" border="0" />
+																					<digi:img src="ampModule/aim/images/bullet_grey.gif" border="0" />
 																				</a>
 																				<span class="invisible-item"><digi:trn>Inactive currencies</digi:trn></span>
 																			</c:if>
@@ -424,7 +424,7 @@ function exportXSL(){
 																	align="left">
 																	<tr>
 																		<td align="left" bgcolor="#ffffff" width="3"><digi:img
-																				src="module/aim/images/bullet_green.gif" />
+																				src="ampModule/aim/images/bullet_green.gif" />
 																		</td>
 																		<td align="left" bgcolor="#ffffff"
 																			style="font-size: 12px;"><digi:trn
@@ -436,7 +436,7 @@ function exportXSL(){
 																				align="left">
 																				<tr>
 																					<td align="left" bgcolor="#ffffff" width="3"><digi:img
-																							src="module/aim/images/bullet_grey.gif" />
+																							src="ampModule/aim/images/bullet_grey.gif" />
 																					</td>
 																					<td align="left" bgcolor="#ffffff"
 																						style="font-size: 12px;"><digi:trn

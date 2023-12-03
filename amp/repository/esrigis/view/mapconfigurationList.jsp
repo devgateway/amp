@@ -186,14 +186,14 @@ $(document).ready(function(){
                     <tr>
                       <td bgColor=#c9c9c7 class=box-title><b style="font-size:12px; padding-left:5px;"><digi:trn key="aim:otherLinks">Other links</digi:trn></b>
                       </td>
-                      <td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+                      <td background="ampModule/aim/images/corner-r.gif" height="17" width=17></td>
                     </tr>
                   </table></td>
               </tr>
               <tr>
                 <td bgColor=#ffffff class=box-border><table cellPadding=5 cellspacing="1" width="100%" class="inside">
                 	<tr>
-                      <td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+                      <td class="inside"><digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
                       </td>
                       <td class="inside" width=100%>
                       	<c:set var="translation">
@@ -205,7 +205,7 @@ $(document).ready(function(){
                       </td>
                     </tr>
                     <tr>
-                      <td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+                      <td class="inside"><digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
                       </td>
                       <td class="inside" width=100%>
                       	<digi:link href="/MapsConfiguration.do?action=add&reset=true">

@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 
 <jsp:include page="/aim/viewNewAdvancedReport.do" >
 	<jsp:param value="${param.ampReportId}" name="ampReportId"/>

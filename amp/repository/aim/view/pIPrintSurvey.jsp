@@ -45,7 +45,7 @@ function load()
                           	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
 															<digi:trn key="aim:aidEffectIndicators">Aid Effectiveness Indicators</digi:trn>
 							  							</TD>
-	                          							<TD background="module/aim/images/corner-r.gif" height=17 width=17>
+	                          							<TD background="ampModule/aim/images/corner-r.gif" height=17 width=17>
                                                         	&nbsp;
 														</TD>
 													</TR>

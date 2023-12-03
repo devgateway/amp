@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>gpi</name>
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/gpi/gpi" />
 	</security>
-</module-config>
+</ampModule-config>

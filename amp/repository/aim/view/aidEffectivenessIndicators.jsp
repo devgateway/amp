@@ -7,14 +7,14 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<%@ page import="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" %>
+<%@ page import="org.digijava.ampModule.aim.dbentity.AmpAidEffectivenessIndicator" %>
 
-<link rel="stylesheet" href="<digi:file src="module/admin/css/admin.css"/>">
+<link rel="stylesheet" href="<digi:file src="ampModule/admin/css/admin.css"/>">
 
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
+<script type="text/javascript" src='<digi:file src="ampModule/aim/scripts/table_utils.js"/>'>.</script>
 
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager</digi:trn></h1>
 <digi:errors/>
@@ -96,7 +96,7 @@
             </tr>
         </thead>
 
-        <logic:iterate name="searchResult" id="indicator" type="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator">
+        <logic:iterate name="searchResult" id="indicator" type="org.digijava.ampModule.aim.dbentity.AmpAidEffectivenessIndicator">
             <tr>
                 <td width="25%">
                     <bean:write name='indicator' property='ampIndicatorName' />
@@ -173,7 +173,7 @@
                                 </digi:trn>
                             </b>
                         </td>
-                        <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+                        <td background="ampModule/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 
                         </td>
                     </tr>
@@ -185,7 +185,7 @@
                 <table cellPadding=5 cellspacing="1" width="100%">
                     <tr>
                         <td class="inside">
-                            <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                            <digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
                             <c:set var="translation">
                                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                             </c:set>

@@ -16,7 +16,7 @@
 	function addingCompIndicators()
 	{
 		openNewWindow(500, 300);
-		<digi:context name="addCompIndicator" property="context/module/moduleinstance/addCompIndicator.do?event=add" />
+		<digi:context name="addCompIndicator" property="context/ampModule/moduleinstance/addCompIndicator.do?event=add" />
 		document.aimComponentsForm.action = "<%= addCompIndicator %>";
 		document.aimComponentsForm.target = popupPointer.name;
 		document.aimComponentsForm.submit();
@@ -25,14 +25,14 @@
 	
 	function editIndicator(id){
 		openNewWindow(500, 300);
-		<digi:context name="editCompIndicator" property="context/module/moduleinstance/addCompIndicator.do?event=edit" />
+		<digi:context name="editCompIndicator" property="context/ampModule/moduleinstance/addCompIndicator.do?event=edit" />
 		document.aimComponentsForm.action = "<%= editCompIndicator %>&id="+id;
 		document.aimComponentsForm.target = popupPointer.name;
 		document.aimComponentsForm.submit();
 	}
 	
 	function deleteIndicator(id){
-		<digi:context name="delCompIndicator" property="context/module/moduleinstance/addCompIndicator.do?event=delete" />
+		<digi:context name="delCompIndicator" property="context/ampModule/moduleinstance/addCompIndicator.do?event=delete" />
 		document.aimComponentsForm.action = "<%= delCompIndicator %>&id="+id;
 		document.aimComponentsForm.target = "_self";
 		document.aimComponentsForm.submit();
@@ -90,7 +90,7 @@
 											<logic:notEmpty name="aimComponentsForm" property="compIndicators">
 												<tr><td>
 													<table width="100%" cellspacing="1" cellpadding=3 bgcolor="#d7eafd">
-														<logic:iterate name="aimComponentsForm" property="compIndicators" id="indicators" type="org.digijava.module.aim.dbentity.AmpComponentsIndicators">
+														<logic:iterate name="aimComponentsForm" property="compIndicators" id="indicators" type="org.digijava.ampModule.aim.dbentity.AmpComponentsIndicators">
 															<tr bgcolor="#ffffff">
 																<td width="9">
 																	<img src= "../ampTemplate/images/arrow_right.gif" border="0">	

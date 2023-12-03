@@ -1,40 +1,40 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="/Activity Form/Program" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Program" parentModule="/Activity Form">
     <fieldset>
         <legend>
             <span class="legend_label" style="cursor: pointer;"><digi:trn>Program</digi:trn></span>
         </legend>
         <div class="toggleDiv">
-            <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
+            <ampModule:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
                 <c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" scope="request" />
                 <c:set var="programs_name" scope="request"><digi:trn>National Plan Objective</digi:trn></c:set>
                 <jsp:include page="programs.jsp"/>
-            </module:display>
-            <module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
+            </ampModule:display>
+            <ampModule:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
                 <c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" scope="request" />
                 <c:set var="programs_name" scope="request"><digi:trn>Primary Programs</digi:trn></c:set>
                 <jsp:include page="programs.jsp"/>
-            </module:display>
-            <module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+            </ampModule:display>
+            <ampModule:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
                 <c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" scope="request" />
                 <c:set var="programs_name" scope="request"><digi:trn>Secondary Programs</digi:trn></c:set>
                 <jsp:include page="programs.jsp"/>
-            </module:display>
-            <module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+            </ampModule:display>
+            <ampModule:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
                 <c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" scope="request" />
                 <c:set var="programs_name" scope="request"><digi:trn>Tertiary Programs</digi:trn></c:set>
                 <jsp:include page="programs.jsp"/>
-            </module:display>
+            </ampModule:display>
             <!-- program description -->
-            <module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+            <ampModule:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
                 <c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}" />
                 <c:if test="${not empty programDescription}">
                     <span class="word_break"><digi:trn>Program Description</digi:trn></span>
@@ -47,8 +47,8 @@
                     </table>
                     <hr>
                 </c:if>
-            </module:display>
+            </ampModule:display>
             <!-- end program description -->
         </div>
     </fieldset>
-</module:display>
+</ampModule:display>

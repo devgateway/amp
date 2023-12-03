@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-19830</jira>
+	<keyword>public view</keyword>
+	<author>jdeanquin</author>
+	<description>Move public report generator fm entry from Reporting to Public View</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				delete from amp_modules_templates where ampModule in ( select id from amp_modules_visibility where name like 'Public Report Generator' );
+				delete from amp_modules_visibility where name = 'Public Report Generator';			
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -84,7 +84,7 @@
 																		</digi:trn> :</b>&nbsp;
 																		<c:if test="${!empty aimChannelOverviewForm.modal}">
 																			<logic:iterate name="aimChannelOverviewForm" id="modal" property="modal"
-																				type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
+																				type="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue">
 																				<bean:write name="modal" property="value" />&nbsp;
 																			</logic:iterate>
 																		</c:if>
@@ -184,7 +184,7 @@
 																		<logic:notEmpty name="aimChannelOverviewForm" property="assistance">
 																		<logic:iterate name="aimChannelOverviewForm" id="assistance"
 																		property="assistance" 
-																		type="org.digijava.module.aim.helper.Assistance">
+																		type="org.digijava.ampModule.aim.helper.Assistance">
 																			<bean:write name="assistance" property="assistanceType" />&nbsp;
 																		</logic:iterate>
 																		</logic:notEmpty>
@@ -199,7 +199,7 @@
 	    													<digi:trn key="aim:sector">Sector</digi:trn>: </b>
 															<c:if test="${!empty aimChannelOverviewForm.sectors}">
 																<logic:iterate name="aimChannelOverviewForm" property="sectors" id="sector"
-																type="org.digijava.module.aim.dbentity.AmpSector">
+																type="org.digijava.ampModule.aim.dbentity.AmpSector">
 																	<bean:write name="sector" property="name"/><BR>
 																</logic:iterate>
 															</c:if>
@@ -208,7 +208,7 @@
 															<b><digi:trn key="aim:projectIds">Project IDs</digi:trn>:</b>
 															<c:if test="${!empty aimChannelOverviewForm.internalIds}">
 				       	 									<logic:iterate name="aimChannelOverviewForm" property="internalIds" id="internalId" 
-																type="org.digijava.module.aim.dbentity.AmpActivityInternalId">
+																type="org.digijava.ampModule.aim.dbentity.AmpActivityInternalId">
 																	<bean:write name="internalId" property="internalId"/><BR>
 																</logic:iterate>
 																</c:if>

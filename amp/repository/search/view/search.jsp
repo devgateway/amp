@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 
@@ -128,23 +128,23 @@
 					<digi:trn>Resources</digi:trn>
 				</html:option>
 
-				<module:display name="Pledges" parentModule="Project Management">
+				<ampModule:display name="Pledges" parentModule="Project Management">
 					<html:option value="7">
 						<digi:trn>Pledges</digi:trn>
 					</html:option>
-				</module:display>
+				</ampModule:display>
 				
-                <feature:display name="Responsible Organization" module="Organizations">
+                <feature:display name="Responsible Organization" ampModule="Organizations">
                 	<field:display name="Search Feature - Responsible Organization" feature="Search Feature">
                    	<html:option value="4"><digi:trn>Responsible Organization</digi:trn></html:option>
                    </field:display>
                </feature:display>
-               <feature:display name="Executing Agency" module="Organizations">
+               <feature:display name="Executing Agency" ampModule="Organizations">
                	<field:display name="Search Feature - Executing Agency" feature="Search Feature">
                    	<html:option value="5"><digi:trn>Executing Agency</digi:trn></html:option>
                    </field:display>
                </feature:display>
-               <feature:display name="Implementing Agency" module="Organizations">
+               <feature:display name="Implementing Agency" ampModule="Organizations">
                	<field:display name="Search Feature - Implementing Agency" feature="Search Feature">
                    	<html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
                    </field:display>
@@ -206,7 +206,7 @@
 										<c:forEach items="${resultActivities}" var="activity">
 											<li>
 											<c:set var="star" scope="page" value=""/> 
-											<digi:link module="aim"
+											<digi:link ampModule="aim"
 												href="/viewActivityPreview.do?activityId=${activity.ampActivityId}">
 											<c:choose>
 											<c:when test="${activity.draft == true}">
@@ -250,7 +250,7 @@
 								</div>
 							</c:if>
 							
-							<module:display name="Pledges" parentModule="Project Management">
+							<ampModule:display name="Pledges" parentModule="Project Management">
 								<c:if test="${searchform.queryType==-1||searchform.queryType==7}">
 									<div class="${search_results_block_class}">
 										<span class="button_green default_cursor">${fn:length(resultPledges)}</span> 
@@ -267,7 +267,7 @@
 									</ul>
 									</div>
 								</c:if>
-							</module:display>
+							</ampModule:display>
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 								<div class="${search_results_block_class}"><span
@@ -320,7 +320,7 @@
 					</c:choose></td>
 				</tr>
 			</tbody>
-			<feature:display name="Responsible Organization" module="Organizations">
+			<feature:display name="Responsible Organization" ampModule="Organizations">
 			  <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithRespOrgs}"/>
 			  <c:set var="relatedOrgIndex" scope="request" value="1"/>
 			  <c:set var="relatedOrgType" scope="request">
@@ -329,7 +329,7 @@
 			  <jsp:include page="relatedOrgs.jsp"/>
 			</feature:display>
 			      
-			<feature:display name="Executing Agency" module="Organizations">
+			<feature:display name="Executing Agency" ampModule="Organizations">
 			    <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithExeOrgs}"/>
 			    <c:set var="relatedOrgIndex" scope="request" value="2"/>
 			    <c:set var="relatedOrgType" scope="request">
@@ -338,7 +338,7 @@
 			    <jsp:include page="relatedOrgs.jsp"/>
 			</feature:display>
 			          
-			<feature:display name="Implementing Agency" module="Organizations">
+			<feature:display name="Implementing Agency" ampModule="Organizations">
 			    <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithImpOrgs}"/>
 			    <c:set var="relatedOrgIndex" scope="request" value="3"/>
 			    <c:set var="relatedOrgType" scope="request">

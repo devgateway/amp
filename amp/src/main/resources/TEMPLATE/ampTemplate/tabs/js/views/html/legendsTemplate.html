@@ -1,0 +1,19 @@
+<span><%= currencyValue %></span> (<span><%= units %></span>)
+-
+<span id='show-legends-link-<%= id%>' data-i18n="tabs.common:showLegends" class='pointer'>Show legend</span>
+<div style="display: none">
+	<div id="show_legend_pop_box" class="show-legend-pop-box content-direction">
+		<b class="red">*</b><b class="red" data-i18n="tabs.common:red">red</b> - <span data-i18n="tabs.common:newDraft">New Draft. These are new activities that have been saved as drafts.</span>
+		<hr>
+		<b class="green">*</b><b class="green" data-i18n="tabs.common:green">green text</b> - 
+		<span data-i18n="tabs.common:newUnvalidated">New Unvalidated. These are new activities that have never been approved by the workspace manager.</span>
+		<hr>
+		<b class="blue" data-i18n="tabs.common:blue">blue text</b> - <span data-i18n="tabs.common:validated">Validated activities</span>.
+		<hr>
+		<b class="red" data-i18n="tabs.common:red">red</b> - 
+		<span data-i18n="tabs.common:existingDraft">Existing Drafts. These are activities that have been saved once and	edited and saved as drafts.</span>
+		<hr>
+		<b class="green" data-i18n="tabs.common:green">green text</b> - <span
+			data-i18n="tabs.common:existingUnvalidated">Existing Un-validated. These are activities that have been approved at least once by the workspace manager. These are edited activities that are not approved.</span>
+	</div>
+</div>

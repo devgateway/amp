@@ -1,0 +1,4 @@
+commitment/disbursement/expenditure,actual/planned,amount,currency,day,month,year
+commitment,actual,10000000000,EUR,3,1,2009
+disbursement,planned,233440,EUR,3,1,2009
+expenditure,actual,3334440,EUR,3,1,2009

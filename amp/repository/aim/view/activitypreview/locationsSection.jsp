@@ -1,22 +1,22 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="/Activity Form/Location" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Location" parentModule="/Activity Form">
     <fieldset>
         <legend>
 		<span class=legend_label id="locationlink" style="cursor: pointer;">
 			<digi:trn>Location</digi:trn></span>
         </legend>
         <div id="locationdiv" class="toggleDiv">
-            <module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
+            <ampModule:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
                 <c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
                     <c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
                         <table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
@@ -37,7 +37,7 @@
                         </table>
                         <hr/>
                     </c:forEach>
-                    <module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
+                    <ampModule:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
                         <table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
                             <tr> <td colspan="2">
                                 <script type="text/javascript">
@@ -49,10 +49,10 @@
                             </td> </tr>
                         </table>
                         <hr/>
-                    </module:display>
+                    </ampModule:display>
                 </c:if>
-            </module:display>
-            <module:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
+            </ampModule:display>
+            <ampModule:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
                 <table>
                     <tr>
                         <td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
@@ -66,8 +66,8 @@
                     </tr>
                 </table>
                 <hr/>
-            </module:display>
-            <module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
+            </ampModule:display>
+            <ampModule:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
                 <table style="font-size:11px;">
                     <tr>
                         <td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
@@ -83,7 +83,7 @@
                     </tr>
                 </table>
                 <hr/>
-            </module:display>
+            </ampModule:display>
         </div>
     </fieldset>
-</module:display>
+</ampModule:display>

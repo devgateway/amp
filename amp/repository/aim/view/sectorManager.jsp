@@ -103,7 +103,7 @@
 																		</td>
 																	</tr>
 																	<logic:iterate name="aimSectorsForm" property="sectors" id="sectors" 
-																	type="org.digijava.module.aim.helper.Sector">
+																	type="org.digijava.ampModule.aim.helper.Sector">
 																	<tr>
 																		<td width="40%">
 																			<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
@@ -183,7 +183,7 @@
 													Other links
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" 	height="17" width="17">&nbsp;
+												<td background="ampModule/aim/images/corner-r.gif" 	height="17" width="17">&nbsp;
 												
 												</td>
 											</tr>
@@ -195,7 +195,7 @@
 										<table cellPadding=5 cellspacing="1" width="100%">
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif"	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif"	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToSearchSector">Click here to Search Sector</digi:trn>
 													</c:set>
@@ -206,7 +206,7 @@
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif"	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif"	width="15" height="10"/>
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<logic:empty name="aimSectorsForm" property="parentSector">
 														<c:set target="${urlParams}" property="parSecId" value="0" />
@@ -233,7 +233,7 @@
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif"	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif"	width="15" height="10"/>
 													<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams3}" property="sectorId">
 														<bean:write name="aimSectorsForm" property="prevViewedSectorId" />
@@ -248,7 +248,7 @@
 											</tr>											
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 													</c:set>

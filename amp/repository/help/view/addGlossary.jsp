@@ -23,7 +23,7 @@
          return valid;
      }
      function cancelTopicCreation(){
-     <digi:context name="cancel" property="context/module/moduleinstance/glossary.do" />
+     <digi:context name="cancel" property="context/ampModule/moduleinstance/glossary.do" />
              document.glossaryForm.action = "${cancel}";
              document.glossaryForm.target = "_self";
              document.glossaryForm.submit();

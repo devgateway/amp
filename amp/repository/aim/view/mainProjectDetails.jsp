@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <jsp:include page="previewLogframeUtil.jsp" flush="true" />
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
@@ -130,7 +130,7 @@ function preview(id)
 	showPanelLoading();
 	var postString="&activityId=" + id+"&isPreview=2&previewPopin=true";
 	//alert(postString);
-	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreviewPopin.do" />
+	<digi:context name="addUrl" property="context/ampModule/moduleinstance/viewActivityPreviewPopin.do" />
 	var url = "<%=addUrl %>?"+postString;
 	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	
@@ -153,7 +153,7 @@ function viewChanges(id){
 	var windowname = "popup"+new Date().getTime();
 	
 	openNewWindowWithName(650,200, windowname);
-	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
+	<digi:context name="showLog" property="context/ampModule/moduleinstance/showActivityLog.do" />
 	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
 		var referLink = document.createElement('a');
 		referLink.href = "<%= showLog %>?activityId=" + id;;
@@ -194,7 +194,7 @@ function toggleGroup(group_id){
 
 function projectFiche(id)
 {
-	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	<digi:context name="ficheUrl" property="context/ampModule/moduleinstance/projectFicheExport.do" />
 	var url ="<%=ficheUrl%>~ampActivityId=" + id;
 	openURLinWindow(url,650,500);
 }
@@ -202,7 +202,7 @@ function projectFiche(id)
 function fnEditProject(id)
 {
 	
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	<digi:context name="addUrl" property="context/ampModule/moduleinstance/editActivity.do" />
 	document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~resetMessages=true~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
@@ -216,7 +216,7 @@ function fnEditProject(id)
 
 	function viewProjectDetails(type,key) {
 		openNewWindow(600, 400);
-		<digi:context name="viewProjDetails" property="context/module/moduleinstance/viewProjectDetails.do"/>
+		<digi:context name="viewProjDetails" property="context/ampModule/moduleinstance/viewProjectDetails.do"/>
 		document.aimMainProjectDetailsForm.action = "<%= viewProjDetails %>";
 		document.aimMainProjectDetailsForm.type.value = type;
 		document.aimMainProjectDetailsForm.projectComments.value = key;
@@ -414,23 +414,23 @@ ${aimMainProjectDetailsForm.activityExists}
 	<tr><td>&nbsp;</td></tr>
 	<tr>
 		<td class="td_top"><strong>&nbsp;
-			<module:display name="Previews"
+			<ampModule:display name="Previews"
 				parentModule="PROJECT MANAGEMENT">
-				<feature:display name="Preview Activity" module="Previews">
+				<feature:display name="Preview Activity" ampModule="Previews">
 					<field:display feature="Preview Activity" name="Preview Button">
 						<a href="javascript:preview(document.getElementById('tempActivity').value);" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
 							<img src="/repository/aim/images/tangopack_preview.png" border="0"></a>
 					</field:display>
 				</feature:display>
-			</module:display>
+			</ampModule:display>
 
 			<c:set var="activityEditURL">
 				<field:display name="Add SSC Button" feature="Edit Activity">/wicket/onepager/ssc/<%=request.getParameter("ampActivityId")%></field:display>
 				<field:display name="Add Activity Button" feature="Edit Activity">/wicket/onepager/activity/<%=request.getParameter("ampActivityId")%></field:display>
 			</c:set>
 
-			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-				<feature:display name="Edit Activity" module="Previews">
+			<ampModule:display name="Previews" parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Edit Activity" ampModule="Previews">
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
 	                		<a href="${activityEditURL}" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>">
@@ -440,10 +440,10 @@ ${aimMainProjectDetailsForm.activityExists}
 						</logic:equal>
 					</field:display>
 				</feature:display>
-			</module:display>
-			<module:display name="Previews"
+			</ampModule:display>
+			<ampModule:display name="Previews"
 				parentModule="PROJECT MANAGEMENT">
-				<feature:display name="Edit Activity" module="Previews">
+				<feature:display name="Edit Activity" ampModule="Previews">
 					<field:display feature="Edit Activity" name="Validate Activity Button">
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="validate">
 							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
@@ -453,20 +453,20 @@ ${aimMainProjectDetailsForm.activityExists}
 						</logic:equal>
 					</field:display>
 				</feature:display>
-			</module:display>
+			</ampModule:display>
 			<a style="cursor:pointer" target="_blank" onclick="javascript:previewHistory(document.getElementById('tempActivity').value); return false;" title="<digi:trn>View History</digi:trn>">
 				<img src="/repository/aim/images/activity_history.png" border="0"></a>&nbsp;
-			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-				<feature:display name="Logframe" module="Previews">
+			<ampModule:display name="Previews" parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Logframe" ampModule="Previews">
 					<field:display name="Logframe Preview Button" feature="Logframe">
 						<div id="gen" title='<digi:trn jsFriendly="true" key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>'>
 						<a href="#" onclick="javascript:previewLogframe(document.getElementById('tempActivity').value); return false;">
 						<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn></a></div>&nbsp;
 					</field:display>
 				</feature:display>
-			</module:display>
-			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-				<feature:display name="Project Fiche" module="Previews">
+			</ampModule:display>
+			<ampModule:display name="Previews" parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Project Fiche" ampModule="Previews">
 					<field:display name="Project Fiche Button" feature="Project Fiche">
 						&nbsp;|
 						<div id="gen" title='<digi:trn jsFriendly="true" key="aim:projectFiche">Project Fiche</digi:trn>'>
@@ -474,7 +474,7 @@ ${aimMainProjectDetailsForm.activityExists}
 						<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a></div>
 					</field:display>
 				</feature:display>
-			</module:display>
+			</ampModule:display>
             <logic:present name="returnSearch" scope="session">
             &nbsp;|
             <a href="/search/search.do"><digi:trn key="search:backtosearch">Return to search results</digi:trn></a>
@@ -493,7 +493,7 @@ ${aimMainProjectDetailsForm.activityExists}
 					<TD>
 						<TABLE cellpadding="0" cellspacing="0" valign="top" align=left width="100%"> 
 							<TR>
-							<feature:display module="Project ID and Planning" name="Identification">
+							<feature:display ampModule="Project ID and Planning" name="Identification">
 							<field:display  feature="Identification" name="Project Title">
 								<TD valign="center"><span class="subtitle-blue-1">
 									&nbsp;<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
@@ -537,7 +537,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								</LI>
 							</logic:notEqual>
 						</field:display>
-						<module:display name="References" parentModule="PROJECT MANAGEMENT">
+						<ampModule:display name="References" parentModule="PROJECT MANAGEMENT">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
 							   <LI>
                                		<a name="node">
@@ -559,9 +559,9 @@ ${aimMainProjectDetailsForm.activityExists}
                                 </span>
 								</LI>
 							</logic:notEqual>
-						</module:display>
+						</ampModule:display>
 						
-						<feature:display name="Financial Progress Tab" module="Funding">
+						<feature:display name="Financial Progress Tab" ampModule="Funding">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 							   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
 							   <LI>
@@ -588,7 +588,7 @@ ${aimMainProjectDetailsForm.activityExists}
 							</logic:notEqual>
 						</feature:display >
 						
-							<feature:display name="Funding Information" module="Funding"></feature:display>
+							<feature:display name="Funding Information" ampModule="Funding"></feature:display>
 								<field:display name="Funding Organizations Tab" feature="Funding Information">
 									<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
 									   <LI>
@@ -613,8 +613,8 @@ ${aimMainProjectDetailsForm.activityExists}
 									</logic:notEqual>
 								</field:display>
 							
-						<module:display name="Document" parentModule="PROJECT MANAGEMENT">
-						<feature:display name="Documents Tab" module="Document">
+						<ampModule:display name="Document" parentModule="PROJECT MANAGEMENT">
+						<feature:display name="Documents Tab" ampModule="Document">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 							   <LI>
                                		<a name="node">
@@ -637,8 +637,8 @@ ${aimMainProjectDetailsForm.activityExists}
 										</LI>
 							</logic:notEqual>
 							</feature:display>
-							</module:display>
-							<feature:display name="Regional Funding" module="Funding"></feature:display>
+							</ampModule:display>
+							<feature:display name="Regional Funding" ampModule="Funding"></feature:display>
 							 <field:display name="Regional Funding Tab" feature="Regional Funding">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 								   <LI>
@@ -663,7 +663,7 @@ ${aimMainProjectDetailsForm.activityExists}
 									</LI>
 								</logic:notEqual>
 							 </field:display>
-						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
+						<feature:display name="Paris Indicators" ampModule="Paris Indicators"></feature:display>
 						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 								   <LI>						
@@ -691,7 +691,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								</LI>
 							</logic:notEqual>
 						</field:display>
-						<feature:display name="Activity Dashboard" module="M & E">
+						<feature:display name="Activity Dashboard" ampModule="M & E">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
 									<LI>
                                		<a name="node">
@@ -715,7 +715,7 @@ ${aimMainProjectDetailsForm.activityExists}
 							</logic:notEqual>
 						</feature:display>						
 						
-						<feature:display name="Contracting" module="Contracting">
+						<feature:display name="Contracting" ampModule="Contracting">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="9">
 							   <LI>
                                		<a name="node">
@@ -739,8 +739,8 @@ ${aimMainProjectDetailsForm.activityExists}
 							</logic:notEqual>
 						</feature:display>
 						
-						<module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT">
-							<feature:display name="Regional Observations" module="Regional Observations">
+						<ampModule:display name="Regional Observations" parentModule="PROJECT MANAGEMENT">
+							<feature:display name="Regional Observations" ampModule="Regional Observations">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="10">
 									<LI>
 		                               	<a name="node">
@@ -763,7 +763,7 @@ ${aimMainProjectDetailsForm.activityExists}
 										</LI>
 								</logic:notEqual>
 							</feature:display>
-						</module:display>
+						</ampModule:display>
 					</UL>		
 				</DIV>	
             	</DIV>

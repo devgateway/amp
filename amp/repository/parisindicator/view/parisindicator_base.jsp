@@ -12,16 +12,16 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <%@ page import="java.util.*"%>
-<%@ page import="org.digijava.module.aim.dbentity.*"%>
-<%@ page import="org.digijava.module.aim.helper.*"%>
-<%@ page import="org.digijava.module.categorymanager.util.*"%>
-<%@ page import="org.digijava.module.categorymanager.dbentity.*"%>
-<%@ page import="org.digijava.module.parisindicator.util.*"%>
+<%@ page import="org.digijava.ampModule.aim.dbentity.*"%>
+<%@ page import="org.digijava.ampModule.aim.helper.*"%>
+<%@ page import="org.digijava.ampModule.categorymanager.util.*"%>
+<%@ page import="org.digijava.ampModule.categorymanager.dbentity.*"%>
+<%@ page import="org.digijava.ampModule.parisindicator.util.*"%>
 
 <!-- BREADCRUMP START -->
 <div class="breadcrump">
@@ -41,14 +41,14 @@
 			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
-			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/parisindicator/script/pi_scripts.js"/>"></script>
+			<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+			<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/parisindicator/script/pi_scripts.js"/>"></script>
 			
 			<digi:errors />
 		
 			
 			<%String reportId = request.getParameter("reportId");%>
-			<digi:form action="/parisindicator.do" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
+			<digi:form action="/parisindicator.do" type="org.digijava.ampModule.parisindicator.form.PIForm" name="parisIndicatorForm">
 				<c:choose>
 			    <c:when test="${not empty parisIndicatorForm.piReport}">  
 			     <jsp:include page="viewParisIndicatorPopupScripts.jsp" />
@@ -83,7 +83,7 @@
 												<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
 													<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;
 													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer;" title="<digi:trn>Export to PDF</digi:trn>">
-												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
+												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/ampModule/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
 												    	<digi:trn>Export to PDF</digi:trn>
 													</a>|&nbsp;
 												    <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
@@ -129,7 +129,7 @@
 						                                                </c:if>
 						                                                <c:if test="${parisIndicatorForm.selectedDonors != null}">
 						                                                	<logic:iterate id="idDonors" property="selectedDonors" name="parisIndicatorForm">
-						                                                    	<%=org.digijava.module.aim.util.DbUtil.getOrganisation(new Long(idDonors.toString()))%>
+						                                                    	<%=org.digijava.ampModule.aim.util.DbUtil.getOrganisation(new Long(idDonors.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>
 						                                                </li><li><digi:trn key="rep:pop:DonorGroups">Donor Groups</digi:trn>:
@@ -138,7 +138,7 @@
 						                                                </c:if>
 						                                                <c:if test="${parisIndicatorForm.selectedDonorGroups != null}">
 						                                                	<logic:iterate id="idDonorsGrp" property="selectedDonorGroups" name="parisIndicatorForm">
-						                                                    	<%=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(new Long(idDonorsGrp.toString()))%>
+						                                                    	<%=org.digijava.ampModule.aim.util.DbUtil.getAmpOrgGroup(new Long(idDonorsGrp.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>
 						                                                </li><li><digi:trn>Status</digi:trn>:
@@ -147,7 +147,7 @@
 						                                                </c:if>
 						                                                <c:if test="${parisIndicatorForm.selectedStatuses != null}">
 						                                                	<logic:iterate id="idStatus" property="selectedStatuses" name="parisIndicatorForm">
-						                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idStatus.toString()))%>
+						                                                    	<%=org.digijava.ampModule.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idStatus.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>
 						                                                </li><li><digi:trn>Financing Instrument</digi:trn>:
@@ -156,7 +156,7 @@
 						                                                </c:if>
 						                                                <c:if test="${parisIndicatorForm.selectedFinancingIstruments != null}">
 						                                                	<logic:iterate id="idFunding" property="selectedFinancingIstruments" name="parisIndicatorForm">
-						                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>
+						                                                    	<%=org.digijava.ampModule.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>                                              
 						                                                </li><li><digi:trn>Sectors</digi:trn>:
@@ -165,7 +165,7 @@
 						                                                </c:if>
 						                                                <c:if test="${parisIndicatorForm.selectedSectors != null}">
 						                                                	<logic:iterate id="idSector" property="selectedSectors" name="parisIndicatorForm">
-						                                                    	<%=org.digijava.module.aim.util.SectorUtil.getAmpSector(new Long(idSector.toString()))%>
+						                                                    	<%=org.digijava.ampModule.aim.util.SectorUtil.getAmpSector(new Long(idSector.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>  </li></ul>  
                                                                          <div style="clear:both;"></div>                                         

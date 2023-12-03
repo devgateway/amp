@@ -2,7 +2,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
 <%--
 	renders a single input field guarded by Feature. Parameters:
 	-> ct_nr: contact_nr (1 or 2)

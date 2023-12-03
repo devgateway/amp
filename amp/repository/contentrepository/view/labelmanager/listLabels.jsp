@@ -9,13 +9,13 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <logic:notEmpty scope="request" name="labelCollection">
 	<ul>
-		<logic:iterate scope="request" name="labelCollection" id="label" type="org.digijava.module.contentrepository.jcrentity.Label">
+		<logic:iterate scope="request" name="labelCollection" id="label" type="org.digijava.ampModule.contentrepository.jcrentity.Label">
 			
 			<bean:define id="liClassString" toScope="page" value=""/>
 			<logic:empty name="label" property="children">

@@ -90,7 +90,7 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+											<td background="ampModule/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 												
 											</td>
 										</tr>
@@ -102,7 +102,7 @@
 									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/workspaceManager.do" title="Click here to view Workspace Manager" >
 												<digi:trn key="aim:workspaceManager">
 												Workspace Manager
@@ -112,7 +112,7 @@
 										</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/updateWorkspace.do" title="Click here to Add Teams" >
 												<digi:trn key="aim:addTeams">
 												Add Teams
@@ -123,7 +123,7 @@
 										
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/admin.do" title="Click here to goto Admin Home" >
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home

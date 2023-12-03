@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
 <div class="container-fluid" id="pledge_form_documents_change">
 <%--<div class="row">
 		<div class="col-xs-5 text-right"><label class="h5" for="document_title"><digi:trn>Document Title</digi:trn></label></div>

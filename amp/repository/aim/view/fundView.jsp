@@ -18,7 +18,7 @@
 				</logic:equal>
 				</logic:equal>
 		
-				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.ampModule.aim.helper.AmpFund">
 					<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 						<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
 						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">

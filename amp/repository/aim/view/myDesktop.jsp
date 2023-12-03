@@ -20,7 +20,7 @@
 %>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <digi:context name="digiContext" property="context" />
 
@@ -32,7 +32,7 @@
 
 	function newWin(val) {
 
-		<digi:context name="selectLoc" property="context/module/moduleinstance/viewOrganisation.do" />
+		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/viewOrganisation.do" />
 
 		var url = "<%= selectLoc %>?ampOrgId=" + val;
 
@@ -50,7 +50,7 @@
 
     function perviewPrint(val) {
 
-        <digi:context name="printLoc" property="context/module/moduleinstance/previewPrintMyDesktop.do" />
+        <digi:context name="printLoc" property="context/ampModule/moduleinstance/previewPrintMyDesktop.do" />
 
         openNewWindowWithMenubar(screen.width,screen.height);
 
@@ -66,7 +66,7 @@
 
 	function searchActivity() {
 
-		<digi:context name="url" property="context/module/moduleinstance/searchDesktopActivities.do" />
+		<digi:context name="url" property="context/ampModule/moduleinstance/searchDesktopActivities.do" />
 
 		document.aimDesktopForm.action = "<%= url %>";
 
@@ -120,7 +120,7 @@
 
 						</TD>
 
-                 	<TD background="module/aim/images/corner-r.gif"
+                 	<TD background="ampModule/aim/images/corner-r.gif"
 
 						height=17 width=17></TD>
 

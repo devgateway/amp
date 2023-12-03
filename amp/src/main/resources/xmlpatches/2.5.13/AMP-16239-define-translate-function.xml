@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-16239</jira>
+	<keyword>multilingual - add support for multilingual columns</keyword>
+	<author>cdolghier</author>
+	<description></description>
+	<apply>
+		<script>
+			<lang delimiter="@" type="postgres">
+				CREATE OR REPLACE FUNCTION translate_field(_object_class character varying, _field_name character varying, _obj_id bigint, _table_name character varying, _table_column character varying, _table_id character varying, _locale character)
+  RETURNS character varying AS
+$BODY$                                                                                                                                                                                                                                
+declare                                                                                                                                                                                                                                    
+	declare ret varchar;
+begin                                                                                                                                                                                                                                     
+	SELECT translation INTO ret FROM amp_content_translation WHERE (object_class =_object_class) AND (field_name=_field_name) AND (locale=_locale) AND (object_id=_obj_id) LIMIT 1;
+	IF FOUND THEN return ret;END IF;	
+
+	SELECT translation INTO ret FROM amp_content_translation WHERE (object_class =_object_class) AND (field_name=_field_name) AND (locale='en') AND (object_id=_obj_id) LIMIT 1;
+	IF FOUND THEN return ret;END IF;
+
+	EXECUTE format('SELECT %I FROM %I WHERE %I = %L', _table_column, _table_name, _table_id, _obj_id) INTO ret;
+	return ret;
+END;                                                                                                                                                                                                                                       
+$BODY$
+LANGUAGE plpgsql STABLE
+COST 10;
+@			</lang>
+		</script>
+	</apply>
+</tns:patch>

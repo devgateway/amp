@@ -6,8 +6,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
 
 <%
 	if (org.dgfoundation.amp.ar.WorkspaceFilter.isActivityWithinWorkspace((Long) request.getAttribute("actId")))
@@ -44,8 +44,8 @@
     			<input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/> 
 			</c:if>
     		
-   			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-				<feature:display name="Edit Activity" module="Previews">
+   			<ampModule:display name="Previews" parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Edit Activity" ampModule="Previews">
 					<field:display feature="Edit Activity" name="Edit Activity Button">
 						<logic:equal name="aimEditActivityForm" property="buttonText" value="edit">
 							<c:set var="trn"><digi:trn>Edit</digi:trn></c:set>
@@ -57,7 +57,7 @@
 						</logic:equal>
 					</field:display>
 				</feature:display>
-			</module:display>   	
+			</ampModule:display>
 		</logic:present>
 	</td>
   </tr>

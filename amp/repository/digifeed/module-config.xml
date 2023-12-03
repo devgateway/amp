@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>digifeed</name>
 	
 		<security login-required="false" />
 	
 	<hibernate-classes required="true">
 	</hibernate-classes>
-</module-config>
+</ampModule-config>

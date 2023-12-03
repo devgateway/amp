@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ page import="org.digijava.module.aim.helper.*" %>
-<%@ page import = "org.digijava.module.aim.helper.ChartGenerator" %>
+<%@ page import="org.digijava.ampModule.aim.helper.*" %>
+<%@ page import = "org.digijava.ampModule.aim.helper.ChartGenerator" %>
 <%@ page import = "java.io.PrintWriter, java.util.*" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
@@ -86,7 +86,7 @@ body {background:none;}
                       <tr>
                         <td width="100%">
 								<table width="98%" cellspacing="1" cellPadding="2">
-								<module:display name="/Activity Form/Identification/Project Title" parentModule="/Activity Form/Identification">
+								<ampModule:display name="/Activity Form/Identification/Project Title" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="head2-name" width="100%" align="center" bgcolor="#ffffff">
                                 			<c:if test="${not empty aimEditActivityForm.identification.title}">
@@ -94,7 +94,7 @@ body {background:none;}
                                 			</c:if>
 										</td>
 									</tr>	
-								</module:display>
+								</ampModule:display>
 						</table>							
                         </td>
                       </tr>
@@ -114,7 +114,7 @@ body {background:none;}
 											<b><digi:trn key="aim:activityDetail">Activity Details</digi:trn></b>
 										</td>
 									</tr>
-								<feature:display name="Identification" module="Project ID and Planning">   
+								<feature:display name="Identification" ampModule="Project ID and Planning">
 									<field:display name="AMP ID" feature="Identification">
 									<tr>
 										<td class="field_name">
@@ -132,7 +132,7 @@ body {background:none;}
                                     </feature:display>
                                  
 										
-                                    <module:display name="/Activity Form/Identification/Activity Status" parentModule="/Activity Form/Identification">
+                                    <ampModule:display name="/Activity Form/Identification/Activity Status" parentModule="/Activity Form/Identification">
                                         <tr>
                                               <td class="field_name">
                                                   <b><digi:trn key="aim:status">Status</digi:trn></b>
@@ -143,8 +143,8 @@ body {background:none;}
                                                   </span>
                                               </td>
                                         </tr>
-                                    </module:display>
-									<module:display name="/Activity Form/Identification/Status Other Info"
+                                    </ampModule:display>
+									<ampModule:display name="/Activity Form/Identification/Status Other Info"
 													parentModule="/Activity Form/Identification">
 										<c:if test="${not empty aimEditActivityForm.identification.statusOtherInfo}">
 										<tr>
@@ -160,9 +160,9 @@ body {background:none;}
 											</td>
 										</tr>
 										</c:if>
-									</module:display>
+									</ampModule:display>
 
-                                    <module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
+                                    <ampModule:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
                                         <tr>
                                               <td class="field_name" >
                                                   <b><digi:trn key="aim:statusReason">Status Reason</digi:trn></b>
@@ -174,9 +174,9 @@ body {background:none;}
 												</span>
                                               </td>
                                         </tr>
-                                    </module:display>
+                                    </ampModule:display>
 
-								<module:display name="/Activity Form/Funding/Overview Section/Type of Cooperation" parentModule="/Activity Form/Funding/Overview Section">
+								<ampModule:display name="/Activity Form/Funding/Overview Section/Type of Cooperation" parentModule="/Activity Form/Funding/Overview Section">
                                     <tr>
                                         <td class="field_name">
                                             <b>
@@ -188,9 +188,9 @@ body {background:none;}
                                         </span>
                                         </td>
                                     </tr>
-								</module:display>
+								</ampModule:display>
 
-								<module:display name="/Activity Form/Funding/Overview Section/Type of Implementation" parentModule="/Activity Form/Funding/Overview Section">
+								<ampModule:display name="/Activity Form/Funding/Overview Section/Type of Implementation" parentModule="/Activity Form/Funding/Overview Section">
 									<tr>
 									<td class="field_name">
 										<b><digi:trn>Type of Implementation</digi:trn></b>
@@ -200,14 +200,14 @@ body {background:none;}
 										<c:out value="${aimEditActivityForm.identification.ssc_typeOfImplementation}"/>
 										</span>
 									</tr>
-								</module:display>
+								</ampModule:display>
 
 								<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities"/>
 								<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
 									<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities"/>
 								</c:if>
 
-								<module:display name="${modalitiesPath}" parentModule="/Activity Form/Funding/Overview Section">
+								<ampModule:display name="${modalitiesPath}" parentModule="/Activity Form/Funding/Overview Section">
 								<tr>
 									<td class="field_name">
 									<b><digi:trn>Modalities</digi:trn></b>
@@ -225,13 +225,13 @@ body {background:none;}
 										</c:if>
 									</td>
 								</tr>
-								</module:display>
+								</ampModule:display>
 
 									<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities Other Info"/>
 									<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
 										<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities Other Info"/>
 									</c:if>
-									<module:display name="${modalitiesPath}"
+									<ampModule:display name="${modalitiesPath}"
 													parentModule="/Activity Form/Funding/Overview Section">
 										<c:if test="${not empty aimEditActivityForm.identification.modalitiesOtherInfo}">
 											<tr>
@@ -247,9 +247,9 @@ body {background:none;}
 												</td>
 											</tr>
 										</c:if>
-									</module:display>
+									</ampModule:display>
 
-                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
+                                 <ampModule:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -266,8 +266,8 @@ body {background:none;}
                                          </c:if>
                                          </td>
 									</tr> 
-									</module:display>
-									   	<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
+									</ampModule:display>
+									   	<ampModule:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
 											<logic:present name="currentMember" scope="session">
 											<tr>
 												<td class="field_name" >
@@ -277,7 +277,7 @@ body {background:none;}
 												 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 												 	<logic:equal name="comments" property="key" value="Objective Assumption">
 														<logic:iterate name="comments" id="comment" property="value"
-															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 															<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
 															<span class="word_break">
 																<bean:write name="comment" property="comment"/><br/>
@@ -286,7 +286,7 @@ body {background:none;}
 		                                        	</logic:equal>
 		                                        	<logic:equal name="comments" property="key" value="Objective Verification">
 														<logic:iterate name="comments" id="comment" property="value"
-															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 															<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</b>
 															<span class="word_break">
 																<bean:write name="comment" property="comment"/>
@@ -296,7 +296,7 @@ body {background:none;}
 		                                        	</logic:equal>
 		                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
 														<logic:iterate name="comments" id="comment" property="value"
-															type="org.digijava.module.aim.dbentity.AmpComments"><b>
+															type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 															<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:</b>
 															<span class="word_break">
 																<bean:write name="comment" property="comment"/>
@@ -308,8 +308,8 @@ body {background:none;}
 												</td>
 											</tr>
 											</logic:present>
-										</module:display>
-									<module:display name="/Activity Form/Identification/Description" parentModule="/Activity Form/Identification">
+										</ampModule:display>
+									<ampModule:display name="/Activity Form/Identification/Description" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name" >
 											<span class="bold">
@@ -323,9 +323,9 @@ body {background:none;}
 	                                        </c:if>
 										</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 
-								<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">    	
+								<ampModule:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -340,8 +340,8 @@ body {background:none;}
 	                                         </c:if>
                                          </td>
 									</tr>
-									</module:display>
-									<module:display name="/Activity Form/Identification/Lessons Learned" parentModule="/Activity Form/Identification">
+									</ampModule:display>
+									<ampModule:display name="/Activity Form/Identification/Lessons Learned" parentModule="/Activity Form/Identification">
                                     <tr>
 										<td class="field_name">
 											<b><digi:trn>Lessons Learned</digi:trn></b>
@@ -357,9 +357,9 @@ body {background:none;}
 												</c:if>
 											</td>
 										</tr>
-									</module:display>
+									</ampModule:display>
 									
-									<module:display name="/Activity Form/Identification/Project Impact" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Project Impact" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -375,8 +375,8 @@ body {background:none;}
                                         </c:if>
                                         </td>
 									</tr>
-									</module:display>
-									<module:display name="/Activity Form/Identification/Activity Summary" parentModule="/Activity Form/Identification">
+									</ampModule:display>
+									<ampModule:display name="/Activity Form/Identification/Activity Summary" parentModule="/Activity Form/Identification">
 										<tr>
 											<td class="field_name" >
 												<b>
@@ -392,8 +392,8 @@ body {background:none;}
 	                                        </c:if>
 	                                        </td>
 										</tr>
-									</module:display>
-									<module:display name="/Activity Form/Identification/Conditionalities" parentModule="/Activity Form/Identification">
+									</ampModule:display>
+									<ampModule:display name="/Activity Form/Identification/Conditionalities" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -409,9 +409,9 @@ body {background:none;}
                                         </c:if>
                                         </td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Project Management" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Project Management" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -427,9 +427,9 @@ body {background:none;}
                                         </c:if>
                                         </td>
 									</tr>
-									</module:display>									 
-                                       <feature:display name="Identification" module="Project ID and Planning">   
-									<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
+									</ampModule:display>
+                                       <feature:display name="Identification" ampModule="Project ID and Planning">
+									<ampModule:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -445,10 +445,10 @@ body {background:none;}
                                          </c:if>
                                          </td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 									
 									
-									<module:display name="/Activity Form/Identification/Purpose Comments" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Purpose Comments" parentModule="/Activity Form/Identification">
 									<logic:present name="aimEditActivityForm" property="comments.allComments">
 									<tr>
 										<td class="field_name" >
@@ -458,7 +458,7 @@ body {background:none;}
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</b>
 													<span class="word_break">
 													<bean:write name="comment" property="comment"/><br/>
@@ -467,7 +467,7 @@ body {background:none;}
                                         	</logic:equal>
                                         	<logic:equal name="comments" property="key" value="Purpose Verification">
 												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</b>
 													<span class="word_break">
 													<bean:write name="comment" property="comment"/>
@@ -477,7 +477,7 @@ body {background:none;}
                                         	</logic:equal>
                                         	<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
 												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:purposeObjectivelyVerifiableIndicators">Purpose Objectively Verifiable Indicators</digi:trn>:</b>
 													<span class="word_break">
 														<bean:write name="comment" property="comment"/>
@@ -489,9 +489,9 @@ body {background:none;}
 										</td>
 									</tr>
 									</logic:present>
-									</module:display>
+									</ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Results" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Results" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name">
 											<span class="bold"><digi:trn key="aim:results">Results</digi:trn></span>
@@ -505,10 +505,10 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 									
 									<logic:present name="aimEditActivityForm" property="comments.allComments">
-									<module:display name="/Activity Form/Identification/Results Comments" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Results Comments" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name">
 										<b><digi:trn key="aim:resultsComments">Results Comments</digi:trn></b>
@@ -517,7 +517,7 @@ body {background:none;}
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</b>
 													<span class="word_break">
 														<bean:write name="comment" property="comment"/><br/>
@@ -526,7 +526,7 @@ body {background:none;}
                                         	</logic:equal>
                                         	<logic:equal name="comments" property="key" value="Results Verification">
 												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</b>
 													<span class="word_break">
 														<bean:write name="comment" property="comment"/>
@@ -536,7 +536,7 @@ body {background:none;}
                                         	</logic:equal>
                                         	<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
 												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													type="org.digijava.ampModule.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:resultsObjectivelyVerifiableIndicators">Results Objectively Verifiable Indicators</digi:trn>:</b>
 													<span class="word_break">
 													<bean:write name="comment" property="comment"/>
@@ -546,10 +546,10 @@ body {background:none;}
 										</logic:iterate>
 										</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 									</logic:present>
 									
-									<module:display name="/Activity Form/Identification/Accession Instrument" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Accession Instrument" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
 									<tr>
 										<td class="field_name" >
@@ -562,8 +562,8 @@ body {background:none;}
 											&nbsp;</td>
 									</tr>
 									</c:if>
-									</module:display>
-									<module:display name="/Activity Form/Identification/Project Implementing Unit" parentModule="/Activity Form/Identification">
+									</ampModule:display>
+									<ampModule:display name="/Activity Form/Identification/Project Implementing Unit" parentModule="/Activity Form/Identification">
 										<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
 										<tr>
 											<td class="field_name" >
@@ -577,9 +577,9 @@ body {background:none;}
 											</td>
 										</tr>
 										</c:if>
-									</module:display>
+									</ampModule:display>
 
-									<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 									<tr>
 										<td class="field_name" >
@@ -593,9 +593,9 @@ body {background:none;}
 											</c:if>&nbsp;</td>
 									</tr>
 									</c:if>
-									</module:display>
+									</ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name" >
 											<b><digi:trn key="aim:crisNumber">Cris Number</digi:trn></b>
@@ -603,9 +603,9 @@ body {background:none;}
 										<td bgcolor="#ffffff">
 										<c:out value="${aimEditActivityForm.identification.crisNumber}"/>&nbsp;</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 
-								    <module:display name="/Activity Form/Identification/IATI Identifier" parentModule="/Activity Form/Identification">
+								    <ampModule:display name="/Activity Form/Identification/IATI Identifier" parentModule="/Activity Form/Identification">
 									    <tr>
 										   <td class="field_name" >
 											   <b><digi:trn key="aim:iatiIdentifier">IATI Identifier</digi:trn></b>
@@ -613,9 +613,9 @@ body {background:none;}
 										   <td bgcolor="#ffffff">
 											   <c:out value="${aimEditActivityForm.identification.iatiIdentifier}"/>&nbsp;</td>
 									    </tr>
-								    </module:display>
+								    </ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 									<tr>
 										<td class="field_name" ><b><digi:trn key="aim:ProcurementSystem">Procurement System</digi:trn></b></td>
@@ -624,8 +624,8 @@ body {background:none;}
 											&nbsp;</td>
 									</tr>
 									</c:if>
-									</module:display>
-										<module:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
+									</ampModule:display>
+										<ampModule:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
 										<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
 									<tr>
 										<td class="field_name" ><b><digi:trn key="aim:ReportingSystem">Reporting System</digi:trn></b></td>
@@ -636,9 +636,9 @@ body {background:none;}
 											&nbsp;</td>
 									</tr>
 									</c:if>
-									</module:display>
+									</ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
 									<tr>
 										<td class="field_name" ><b><digi:trn key="aim:AuditSystem">Audit System</digi:trn></b></td>
@@ -649,9 +649,9 @@ body {background:none;}
 											&nbsp;</td>
 									</tr>
 									</c:if>
-									</module:display>
+									</ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.institutions > 0}">
 									<tr>
 										<td class="field_name" ><b><digi:trn key="aim:Institutions">Institutions</digi:trn></b></td>
@@ -662,9 +662,9 @@ body {background:none;}
 											&nbsp;</td>
 									</tr>
 									</c:if>
-									</module:display>
+									</ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Project Category" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Project Category" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
 									<tr>
 										<td class="field_name" >
@@ -678,10 +678,10 @@ body {background:none;}
 										</td>
 									</tr>
 									</c:if>
-									</module:display>
+									</ampModule:display>
 
 
-										   <module:display name="/Activity Form/Identification/Project Category Other Info"
+										   <ampModule:display name="/Activity Form/Identification/Project Category Other Info"
 														   parentModule="/Activity Form/Identification">
 											   <c:if test="${not empty aimEditActivityForm.identification.projectCategoryOtherInfo}">
 												   <tr>
@@ -697,9 +697,9 @@ body {background:none;}
 													   </td>
 												   </tr>
 											   </c:if>
-										   </module:display>
+										   </ampModule:display>
 
-									<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
+									<ampModule:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
 									<c:if test="${not empty aimEditActivityForm.identification.govAgreementNumber}">
 									<tr>
 										<td class="field_name" ><b>
@@ -711,12 +711,12 @@ body {background:none;}
 										</td>
 									</tr>
 									</c:if>
-									</module:display>
+									</ampModule:display>
 <!-- end identification in the same order as previewActivity -->
 
 
 										   <!-- PROJECT INTERNAL IDS SECTION -->
-										   <module:display name="/Activity Form/Activity Internal IDs" parentModule="/Activity Form">
+										   <ampModule:display name="/Activity Form/Activity Internal IDs" parentModule="/Activity Form">
 											   <tr>
 												   <td class="field_name" >
 													   <b>
@@ -733,9 +733,9 @@ body {background:none;}
 																			</span>
 																	   </td>
 																	   <td align="right">
-																		   <module:display name="/Activity Form/Activity Internal IDs/Internal IDs/internalId" parentModule="/Activity Form">
+																		   <ampModule:display name="/Activity Form/Activity Internal IDs/Internal IDs/internalId" parentModule="/Activity Form">
 																				<c:out value="${internalObj.internalId}"/>
-																		   </module:display>
+																		   </ampModule:display>
 																	   </td>
 																   </tr>
 															   </c:forEach>
@@ -743,11 +743,11 @@ body {background:none;}
 													   </c:if>
 												   </td>
 											   </tr>
-										   </module:display>
+										   </ampModule:display>
 										   <!-- END PROJECT INTERNAL IDS SECTION -->
 
 
-									<feature:display name="Budget" module="Project ID and Planning">
+									<feature:display name="Budget" ampModule="Project ID and Planning">
 									<tr>
 										<td class="field_name" >
 										<b>
@@ -777,55 +777,55 @@ body {background:none;}
 										</field:display>
 
 										<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
-											<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
+											<ampModule:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>FY</digi:trn>:&nbsp;
 												<span class="word_break bold">
 													<bean:write name="aimEditActivityForm" property="identification.FY"/>
 												</span>
 												<br />
-											</module:display>
-											<module:display name="/Activity Form/Identification/Budget Extras/Ministry Code"  parentModule="/Activity Form/Identification/Budget Extras">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Identification/Budget Extras/Ministry Code"  parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>Ministry Code</digi:trn>:&nbsp;
 												<span class="word_break bold">
 													<bean:write name="aimEditActivityForm" property="identification.ministryCode"/>
 												</span>
 												<br />
-											</module:display>
-											<module:display name="/Activity Form/Identification/Budget Extras/Project Code"  parentModule="/Activity Form/Identification/Budget Extras">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Identification/Budget Extras/Project Code"  parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>Project Code</digi:trn>:&nbsp;
 												<span class="word_break bold">
 													<bean:write name="aimEditActivityForm" property="identification.projectCode"/>
 												</span>
 												<br />
-											</module:display>
-											<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program"  parentModule="/Activity Form/Identification/Budget Extras">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Identification/Budget Extras/Sub-Program"  parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>Sub-Program</digi:trn>:&nbsp;
 												<span class="word_break bold">
 													<bean:write name="aimEditActivityForm" property="identification.subProgram"/>
 												</span>
 												<br />
-											</module:display>
-											<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>Sub-Vote </digi:trn>:&nbsp;
 												<span class="word_break bold">
 													<bean:write name="aimEditActivityForm" property="identification.subVote"/>
 												</span>
 												<br />
-											</module:display>
-											<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>Vote</digi:trn>:&nbsp;
 												<span class="word_break bold">
 													<bean:write name="aimEditActivityForm" property="identification.vote"/>
 												</span>
 												<br />
-											</module:display>
+											</ampModule:display>
 										</c:if>
 										</td>
 									</tr>
 									</feature:display>
 
 		</feature:display>
-		<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
+		<ampModule:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
 								<tr>
 									<td class="field_name" >
 										<b><digi:trn key="aim:humanitarianaid">Humanitarian Aid</digi:trn></b>
@@ -840,7 +840,7 @@ body {background:none;}
 										&nbsp;
 									</td>
 								</tr>
-		</module:display>
+		</ampModule:display>
 
 									<field:display feature="Identification" name="Organizations and Project ID">
 										<tr>
@@ -868,14 +868,14 @@ body {background:none;}
 										  </tr>
 										</field:display>
 
-                                        <feature:display module="Project ID and Planning" name="Planning">
+                                        <feature:display ampModule="Project ID and Planning" name="Planning">
 									<tr>
 										<td class="field_name">
 											<b> <digi:trn key="aim:planning">Planning</digi:trn> </b>
 											</td>
 											<td bgcolor="#ffffff">
 												<table width="100%" cellSpacing="2" cellPadding="1">
-												<module:display name="/Activity Form/Planning/Line Ministry Rank" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Line Ministry Rank" parentModule="/Activity Form/Planning">
 												<field:display feature="Planning" name="Line Ministry Rank">
 												<tr>
 													<td width="32%"><digi:trn key="aim:lineMinRank">
@@ -888,8 +888,8 @@ body {background:none;}
 													</td>
 												</tr>
 												</field:display>
-												</module:display>
-												<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
+												</ampModule:display>
+												<ampModule:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
 														<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
@@ -899,9 +899,9 @@ body {background:none;}
 														${aimEditActivityForm.planning.originalAppDate}
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:actualapprovaldate">Actual Approval Date</digi:trn></td>
 													<td width="1">:</td>
@@ -909,9 +909,9 @@ body {background:none;}
 														${aimEditActivityForm.planning.revisedAppDate}
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
 														<digi:trn>Proposed Start Date</digi:trn>
@@ -921,9 +921,9 @@ body {background:none;}
 														${aimEditActivityForm.planning.originalStartDate}
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%"><digi:trn>Actual Start Date</digi:trn></td>
 													<td width="1">:</td>
@@ -931,9 +931,9 @@ body {background:none;}
 														${aimEditActivityForm.planning.revisedStartDate}
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%"><digi:trn>Original Completion Date</digi:trn></td>
 													<td width="1">:</td>
@@ -941,9 +941,9 @@ body {background:none;}
 														${aimEditActivityForm.planning.originalCompDate}
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
 												<tr>
 													<td width="32%"><digi:trn key="aim:proposedCompletionDate">
@@ -954,8 +954,8 @@ body {background:none;}
 													</td>
 												</tr>
 												</c:if>
-												</module:display>
-												<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
+												</ampModule:display>
+												<ampModule:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
 													<digi:trn>Actual Completion Date</digi:trn></td>
@@ -964,9 +964,9 @@ body {background:none;}
 														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 												
-												<module:display name="/Activity Form/Planning/Project Implementation Delay" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Project Implementation Delay" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
 													<digi:trn>Project Implementation Delay</digi:trn></td>
@@ -975,17 +975,17 @@ body {background:none;}
 														<c:out value="${aimEditActivityForm.planning.projectImplementationDelay}"/>
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
-													<feature:display name="Planning" module="Project ID and Planning">
+												<ampModule:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+													<feature:display name="Planning" ampModule="Project ID and Planning">
 														<field:display name="Current Completion Date Comments" feature="Planning">
 															<tr> <td>
 																<digi:trn>Current Completion Date comments</digi:trn>:&nbsp;
 																<ul>
 																	<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 																			<logic:equal name="comments" property="key" value="current completion date">
-																				<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+																				<logic:iterate name="comments" id="comment" property="value" type="org.digijava.ampModule.aim.dbentity.AmpComments">
 																					<li>
 																					<span class="word_break bold">
 																						<b><bean:write name="comment" property="comment" />
@@ -999,9 +999,9 @@ body {background:none;}
 															</td> </tr>
 														</field:display>
 													</feature:display>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
 													<digi:trn key="aim:ContractingDateofProject1">Final Date for Contracting</digi:trn></td>
@@ -1010,9 +1010,9 @@ body {background:none;}
 														<c:out value="${aimEditActivityForm.planning.contractingDate}"/>
 													</td>
 												</tr>
-												</module:display>
+												</ampModule:display>
 
-												<module:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
+												<ampModule:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:DisbursementsDateofProject1">Final Date for Disbursements</digi:trn></td>
 													<td width="1">:</td>
@@ -1020,9 +1020,9 @@ body {background:none;}
 														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>
 													</td>
 												</tr>
-												</module:display>
-												<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
-													<feature:display name="Planning" module="Project ID and Planning">
+												</ampModule:display>
+												<ampModule:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+													<feature:display name="Planning" ampModule="Project ID and Planning">
 														<field:display name="Final Date for Disbursements Comments" feature="Planning">
 															<tr>
 																<td>
@@ -1030,7 +1030,7 @@ body {background:none;}
 																	<ul>
 																		<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 																				<logic:equal name="comments" property="key" value="Final Date for Disbursements">
-																					<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+																					<logic:iterate name="comments" id="comment" property="value" type="org.digijava.ampModule.aim.dbentity.AmpComments">
 																						<li>
 																							<span class="word_break bold">
 																								<bean:write name="comment" property="comment" />
@@ -1045,7 +1045,7 @@ body {background:none;}
 															</tr>
 														</field:display>
 													</feature:display>
-												</module:display>
+												</ampModule:display>
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
 												<tr>
@@ -1070,7 +1070,7 @@ body {background:none;}
 												</tr>
 												</c:if>
 
-													<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+													<ampModule:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
 														<tr>
 															<td width="32%"><digi:trn>Proposed Project Life</digi:trn></td>
 															<td width="1">:</td>
@@ -1078,7 +1078,7 @@ body {background:none;}
 																	${aimEditActivityForm.planning.proposedProjectLife}
 															</td>
 														</tr>
-													</module:display>
+													</ampModule:display>
 
 												<field:display name="Duration of Project" feature="Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
@@ -1099,7 +1099,7 @@ body {background:none;}
 										</td>
 									</tr>
 									</feature:display>
-                                        <module:display name="References" parentModule="PROJECT MANAGEMENT">
+                                        <ampModule:display name="References" parentModule="PROJECT MANAGEMENT">
 									<tr>
 									<td class="field_name">
 									<b>
@@ -1120,11 +1120,11 @@ body {background:none;}
 									</c:forEach>
 									</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 
 
-                                 <module:display name="/Activity Form/Location" parentModule="/Activity Form">
-                               		<module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
+                                 <ampModule:display name="/Activity Form/Location" parentModule="/Activity Form">
+                               		<ampModule:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -1166,8 +1166,8 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</module:display>
-                                    <module:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
+									</ampModule:display>
+                                    <ampModule:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
 									<tr>
 										<td class="field_name">
 											<b>
@@ -1182,8 +1182,8 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</module:display>
-								  <module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
+									</ampModule:display>
+								  <ampModule:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 									<tr>
 										<td class="field_name">
 											<b>
@@ -1198,12 +1198,12 @@ body {background:none;}
 												</span>
 											</c:if>										</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 
-                            </module:display>
-                            <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+                            </ampModule:display>
+                            <ampModule:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 
-                                	<feature:display name="NPD Programs" module="National Planning Dashboard">
+                                	<feature:display name="NPD Programs" ampModule="National Planning Dashboard">
 									<field:display name="National Planning Objectives" feature="NPD Programs">
 									<TR>
 										<td class="field_name">
@@ -1221,10 +1221,10 @@ body {background:none;}
 									      </TR>
                                         </field:display>
 									  </feature:display>
-                                     </module:display>
+                                     </ampModule:display>
                                     
                                     <!-- PROGRAMS SECTION -->
-                                    <module:display name="/Activity Form/Program" parentModule="/Activity Form">
+                                    <ampModule:display name="/Activity Form/Program" parentModule="/Activity Form">
                                         <tr>
                                             <td class="field_name" class="t-name">
                                                 <b>
@@ -1233,7 +1233,7 @@ body {background:none;}
                                             </td>
                                             <td bgcolor="#ffffff">
                                             <table width="100%" cellSpacing="2" cellPadding="1">
-					                         <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
+					                         <ampModule:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 					                                <c:if test="${not empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 					                                    <tr>
 					                                        <td>
@@ -1253,8 +1253,8 @@ body {background:none;}
 					                                        </td>
 					                                    </tr>
 					                                </c:if>
-				                             </module:display>
-				                             <module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
+				                             </ampModule:display>
+				                             <ampModule:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
                                                     <c:if test="${not empty aimEditActivityForm.programs.primaryPrograms}">
                                                         <tr>
                                                             <td>
@@ -1274,8 +1274,8 @@ body {background:none;}
                                                             </td>
                                                         </tr>
                                                     </c:if>
-                                             </module:display>
-                                             <module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+                                             </ampModule:display>
+                                             <ampModule:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
                                                     <c:if test="${not empty aimEditActivityForm.programs.secondaryPrograms}">
                                                         <tr>
                                                             <td>
@@ -1295,8 +1295,8 @@ body {background:none;}
                                                             </td>
                                                         </tr>
                                                     </c:if>
-                                             </module:display>
-		                                     <module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+                                             </ampModule:display>
+		                                     <ampModule:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
                                                     <c:if test="${not empty aimEditActivityForm.programs.tertiaryPrograms}">
                                                         <tr>
                                                             <td>
@@ -1316,8 +1316,8 @@ body {background:none;}
                                                             </td>
                                                         </tr>
                                                     </c:if>
-                                             </module:display>
-                                             <module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+                                             </ampModule:display>
+                                             <ampModule:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
                                                     <c:if test="${not empty aimEditActivityForm.programs.programDescription}">
                                                         <tr>
                                                             <td>
@@ -1328,14 +1328,14 @@ body {background:none;}
                                                             </td>
                                                         </tr>
                                                     </c:if>
-                                             </module:display>
+                                             </ampModule:display>
 											</table>
 										  </td>
 										</tr>
-									</module:display>
+									</ampModule:display>
 
                                     <!-- SECTORS SECTION -->
-                                    <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
+                                    <ampModule:display name="/Activity Form/Sectors" parentModule="/Activity Form">
                                         <tr>
                                             <td class="field_name" class="t-name">
                                                 <b>
@@ -1346,7 +1346,7 @@ body {background:none;}
                                                 <c:forEach var="config"
                                                            items="${aimEditActivityForm.sectors.classificationConfigs}"
                                                            varStatus="ind">
-                                                    <module:display name="/Activity Form/Sectors/${config.name} Sectors"
+                                                    <ampModule:display name="/Activity Form/Sectors/${config.name} Sectors"
                                                                     parentModule="/Activity Form/Sectors">
                                                         <c:set var="hasSectors">false</c:set>
                                                         <c:forEach var="actSect"
@@ -1368,7 +1368,7 @@ body {background:none;}
                                                                 <c:forEach var="sectors"
                                                                            items="${aimEditActivityForm.sectors.activitySectors}">
                                                                     <c:if test="${sectors.configId==config.id}">
-                                                                        <module:display name="/Activity Form/Sectors"
+                                                                        <ampModule:display name="/Activity Form/Sectors"
                                                                                         parentModule="/Activity Form">
                                                                             <tr>
                                                                                 <td width="85%">
@@ -1399,16 +1399,16 @@ body {background:none;}
                                                                                     </c:if>
                                                                                 </td>
                                                                             </tr>
-                                                                        </module:display>
+                                                                        </ampModule:display>
                                                                     </c:if>
                                                                 </c:forEach>
                                                             </table>
                                                         </c:if>
-                                                    </module:display>
+                                                    </ampModule:display>
                                                 </c:forEach>
                                             </td>
                                         </tr>
-                                    </module:display>
+                                    </ampModule:display>
                                     <!-- END SECTORS SECTION -->
 
                                   <c:if test="${not empty aimEditActivityForm.components.activityComponentes}">
@@ -1435,7 +1435,7 @@ body {background:none;}
 									</tr>
 								  </c:if>
                                   <logic:present name="currentMember" scope="session">
-									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
+									<ampModule:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="field_name" >
 											<b><digi:trn key="aim:funding"> Funding</digi:trn></b>
@@ -1446,9 +1446,9 @@ body {background:none;}
                                                 <td>
                                                   <table cellSpacing=8 cellpadding="0" border="0" width="100%" class="box-border-nopadding">
                                                     <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
-                                                      <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+                                                      <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.ampModule.aim.helper.FundingOrganization">
                                                         <logic:notEmpty name="fundingOrganization" property="fundings">
-                                                          <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
+                                                          <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.ampModule.aim.helper.Funding">
                                                             <tr>
                                                               <td>
                                                                 <table cellspacing="1" cellpadding="0" border="0" width="100%" class="box-border-nopadding">
@@ -1694,7 +1694,7 @@ body {background:none;}
 																				</logic:notEmpty>
 																			</field:display>
 
-																			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
+																			<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
 																					parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																				<logic:notEmpty name="funding" property="title">
                                                                               		<tr>
@@ -1720,7 +1720,7 @@ body {background:none;}
                                                                                   		</td>
                                                                               		</tr>
 																				</logic:notEmpty>
-																			</module:display>
+																			</ampModule:display>
 																			
 				                                                            </table>
                                                                            </td>
@@ -1732,25 +1732,25 @@ body {background:none;}
                                                                     <table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
                                                                         <bean:define id="funding" name="funding" scope="page"
                                                                             toScope="request"
-                                                                            type="org.digijava.module.aim.helper.Funding"></bean:define>
+                                                                            type="org.digijava.ampModule.aim.helper.Funding"></bean:define>
                                                                         <jsp:include page="activitypreview/previewActivityFundingCommitments.jsp" />
 
-                                                                        <feature:display module="Funding" name="Disbursement">
+                                                                        <feature:display ampModule="Funding" name="Disbursement">
                                                                         	<jsp:include page="activitypreview/previewActivityFundingDisbursement.jsp" />
                                                                         </feature:display>
 
-                                                                        <feature:display module="Funding" name="Expenditures">
+                                                                        <feature:display ampModule="Funding" name="Expenditures">
                                                                         	<jsp:include page="activitypreview/previewActivityFundingExpenditures.jsp" />
                                                                         </feature:display>
 
 																		<jsp:include page="activitypreview/previewMtefProjections.jsp" />
 
-																		<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
+																		<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
 																		parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                                        		<jsp:include page="activitypreview/previewActivityFundingArrears.jsp" />
-                                                                        </module:display>
+                                                                        </ampModule:display>
 
-                                                                        <feature:display module="Funding" name="Undisbursed Balance">
+                                                                        <feature:display ampModule="Funding" name="Undisbursed Balance">
                                                                         	<jsp:include page="activitypreview/previewActivityFundingUndisbursedBalance.jsp" />
                                                                         </feature:display>
                                                                     </table>
@@ -1776,7 +1776,7 @@ body {background:none;}
 
 
                         <table cellspacing="1" cellpadding="0" border="0" bordercolor="#FF0000" width="100%">
-                        <feature:display name="Planned Commitments" module="Measures">
+                        <feature:display name="Planned Commitments" ampModule="Measures">
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedCommitments">
 	                        	<tr>
 	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
@@ -1828,7 +1828,7 @@ body {background:none;}
 	                        	</tr>
 	                        </logic:notEmpty>
 						</c:if>
-                        <feature:display module="Funding" name="Disbursement">
+                        <feature:display ampModule="Funding" name="Disbursement">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedDisbursements">
                        			<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key='aim:totalplanneddisbursement'>TOTAL PLANNED DISBURSEMENT</digi:trn>:</td>
@@ -1850,7 +1850,7 @@ body {background:none;}
                         		</tr>
                         	</logic:notEmpty>
                         </feature:display>
-                        <feature:display module="Funding" name="Expenditures">
+                        <feature:display ampModule="Funding" name="Expenditures">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedExpenditures">
                         		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalActualExpenditures">TOTAL PLANNED EXPENDITURES</digi:trn>:</td>
@@ -1872,7 +1872,7 @@ body {background:none;}
                         		</tr>
                         	</logic:notEmpty>
                         </feature:display>
-                        <feature:display module="Funding" name="Disbursement Orders">
+                        <feature:display ampModule="Funding" name="Disbursement Orders">
                         <tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000; text-transform: uppercase;">
@@ -1892,7 +1892,7 @@ body {background:none;}
 	                       </td>
                       	</tr>
                         </feature:display>
-                        <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
+                        <ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedArrears">
                         		<tr>
@@ -1918,9 +1918,9 @@ body {background:none;}
 		                    		</td>
                         		</tr>
                         	</logic:notEmpty>
-                        </module:display>
+                        </ampModule:display>
                         
-                        <feature:display module="Funding" name="Undisbursed Balance">
+                        <feature:display ampModule="Funding" name="Undisbursed Balance">
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.unDisbursementsBalance">
                       			<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance">UNDISBURSED BALANCE</digi:trn>:</td>
@@ -1951,28 +1951,28 @@ body {background:none;}
 										  </table>
 									  </td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 								  </logic:present>
 
-                                    <module:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
+                                    <ampModule:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
                                         <logic:notEmpty name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
                                             <tr>
                                                 <td vAlign="top"><b><digi:trn>Aid Effectivenes</digi:trn></b></td>
                                                 <td>
                                                     <logic:iterate id="option" name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
-                                                        <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
+                                                        <ampModule:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
                                                             parentModule="/Activity Form/Aid Effectivenes">
                                                             <span class="word_break bold">${fn:escapeXml(option.indicator.ampIndicatorName)}</span> -
                                                             <span class="word_break">${fn:escapeXml(option.ampIndicatorOptionName)}</span>
                                                             <br/>
-                                                        </module:display>
+                                                        </ampModule:display>
                                                     </logic:iterate>
                                                 </td>
                                             </tr>
                                         </logic:notEmpty>
-                                    </module:display>
+                                    </ampModule:display>
 
-                                    <module:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
+                                    <ampModule:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -2093,10 +2093,10 @@ body {background:none;}
 												</table>
 											</c:if>										</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
-                                    <module:display name="/Activity Form/Components" parentModule="/Activity Form">
+                                    <ampModule:display name="/Activity Form/Components" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -2127,7 +2127,7 @@ body {background:none;}
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>
-															<module:display
+															<ampModule:display
 																	name="/Activity Form/Components/Component/Components Commitments"
 																	parentModule="/Activity Form/Components/Component">
 																<c:if test="${!empty comp.commitments}">
@@ -2150,7 +2150,7 @@ body {background:none;}
 																							<c:forEach var="fd"
 																									   items="${comp.commitments}">
 																								<tr>
-																									<module:display
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Commitments"
 																											parentModule="/Activity Form/Components/Component">
 																										<td width="50"
@@ -2160,8 +2160,8 @@ body {background:none;}
 																												<c:out value="${fd.adjustmentTypeName.value}"/>
 																											</digi:trn>
 																										</td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount"
 																											parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																										<td
@@ -2169,24 +2169,24 @@ body {background:none;}
 																											bgcolor="#ffffff">
 																											<c:out value="${fd.transactionAmount}"/>
 																										</td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency"
 																											parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																										<td bgcolor="#ffffff">
 																											<c:out value="${fd.currencyCode}"/>
 																										</td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
 																											parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																										<td bgcolor="#ffffff"
 																											width="70">
 																											<c:out value="${fd.transactionDate}"/>
 																										</td>
-																									</module:display>
+																									</ampModule:display>
 																								</tr>
-																								<module:display
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
 																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																									<tr bgcolor="#ffffff">
@@ -2203,8 +2203,8 @@ body {background:none;}
 																											</logic:notEmpty>
 																										</td>
 																									</tr>
-																								</module:display>
-																								<module:display
+																								</ampModule:display>
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																									<tr bgcolor="#ffffff">
@@ -2221,8 +2221,8 @@ body {background:none;}
 																											</logic:notEmpty>
 																										</td>
 																									</tr>
-																								</module:display>
-																								<module:display
+																								</ampModule:display>
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
 																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																									<tr>
@@ -2237,7 +2237,7 @@ body {background:none;}
 																								</span>
 																										</td>
 																									</tr>
-																								</module:display>
+																								</ampModule:display>
 																							</c:forEach>
 																						</table>
 																					</td>
@@ -2246,8 +2246,8 @@ body {background:none;}
 																		</td>
 																	</tr>
 																</c:if>
-															</module:display>
-															<module:display
+															</ampModule:display>
+															<ampModule:display
 																	name="/Activity Form/Components/Component/Components Disbursements"
 																	parentModule="/Activity Form/Components/Component">
 																<c:if test="${!empty comp.disbursements}">
@@ -2270,7 +2270,7 @@ body {background:none;}
 																							<c:forEach var="fd"
 																									   items="${comp.disbursements}">
 																								<tr>
-																									<module:display
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Disbursements"
 																											parentModule="/Activity Form/Components/Component">
 																										<td width="50"
@@ -2280,30 +2280,30 @@ body {background:none;}
 																												<c:out value="${fd.adjustmentTypeName.value}"/>
 																											</digi:trn>
 																										</td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount"
 																											parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																										<td
 																											width="100"
 																											bgcolor="#ffffff">
 																											<c:out value="${fd.transactionAmount}"/></td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency"
 																											parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																										<td bgcolor="#ffffff">
 																											<c:out value="${fd.currencyCode}"/></td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"
 																											parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																										<td bgcolor="#ffffff"
 																											width="70">
 																											<c:out value="${fd.transactionDate}"/></td>
-																									</module:display>
+																									</ampModule:display>
 																								</tr>
-																								<module:display
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization"
 																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																									<tr bgcolor="#ffffff">
@@ -2320,8 +2320,8 @@ body {background:none;}
 																											</logic:notEmpty>
 																										</td>
 																									</tr>
-																								</module:display>
-																								<module:display
+																								</ampModule:display>
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																									<tr bgcolor="#ffffff">
@@ -2338,8 +2338,8 @@ body {background:none;}
 																											</logic:notEmpty>
 																										</td>
 																									</tr>
-																								</module:display>
-																								<module:display
+																								</ampModule:display>
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
 																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																									<tr>
@@ -2354,7 +2354,7 @@ body {background:none;}
 																								</span>
 																										</td>
 																									</tr>
-																								</module:display>
+																								</ampModule:display>
 																							</c:forEach>
 																						</table>
 																					</td>
@@ -2363,8 +2363,8 @@ body {background:none;}
 																		</td>
 																	</tr>
 																</c:if>
-															</module:display>
-															<module:display
+															</ampModule:display>
+															<ampModule:display
 																	name="/Activity Form/Components/Component/Components Expenditures"
 																	parentModule="/Activity Form/Components/Component">
 																<c:if test="${!empty comp.expenditures}">
@@ -2388,7 +2388,7 @@ body {background:none;}
 																							<c:forEach var="fd"
 																									   items="${comp.expenditures}">
 																								<tr bgcolor="#ffffff">
-																									<module:display
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Expeditures"
 																											parentModule="/Activity Form/Components/Component">
 																										<td width="50">
@@ -2396,28 +2396,28 @@ body {background:none;}
 																													key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
 																												<c:out value="${fd.adjustmentTypeName.value}"/>
 																											</digi:trn></td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
 																											parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																										<td>
 
 																											<c:out value="${fd.transactionAmount}"/></td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency"
 																											parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																										<td>
 																											<c:out value="${fd.currencyCode}"/></td>
-																									</module:display>
-																									<module:display
+																									</ampModule:display>
+																									<ampModule:display
 																											name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"
 																											parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																										<td width="70">
 																											<c:out value="${fd.transactionDate}"/></td>
-																									</module:display>
+																									</ampModule:display>
 																								</tr>
-																								<module:display
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization"
 																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																									<tr bgcolor="#ffffff">
@@ -2434,8 +2434,8 @@ body {background:none;}
 																											</logic:notEmpty>
 																										</td>
 																									</tr>
-																								</module:display>
-																								<module:display
+																								</ampModule:display>
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																									<tr bgcolor="#ffffff">
@@ -2452,8 +2452,8 @@ body {background:none;}
 																											</logic:notEmpty>
 																										</td>
 																									</tr>
-																								</module:display>
-																								<module:display
+																								</ampModule:display>
+																								<ampModule:display
 																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
 																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																									<tr>
@@ -2468,7 +2468,7 @@ body {background:none;}
 																								</span>
 																										</td>
 																									</tr>
-																								</module:display>
+																								</ampModule:display>
 																							</c:forEach>
 																						</table>
 																					</td>
@@ -2477,7 +2477,7 @@ body {background:none;}
 																		</td>
 																	</tr>
 																</c:if>
-															</module:display>
+															</ampModule:display>
 															<tr><td bgcolor="#ffffff">&nbsp;</td>
 															</tr>
 														</table>
@@ -2487,11 +2487,11 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-								  </module:display>
+								  </ampModule:display>
 								  </logic:equal>
 
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="true">
-									<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT">
+									<ampModule:display name="Components Resume" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -2592,10 +2592,10 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</module:display>
+									</ampModule:display>
                                     </logic:equal>
-								<module:display name="/Activity Form/Issues Section" parentModule="/Activity Form">
-								<module:display name="/Activity Form/Issues Section/Issue" parentModule="/Activity Form/Issues Section">
+								<ampModule:display name="/Activity Form/Issues Section" parentModule="/Activity Form">
+								<ampModule:display name="/Activity Form/Issues Section/Issue" parentModule="/Activity Form/Issues Section">
 									<tr>
 										<td class="field_name">
 											<b>
@@ -2610,25 +2610,25 @@ body {background:none;}
 														<li class="level1">
 														<span class="word_break bold">
 															<c:out value="${issue.name}"/> 
-															<module:display name="/Activity Form/Issues Section/Issue/Date" parentModule="/Activity Form/Issues Section/Issue">
+															<ampModule:display name="/Activity Form/Issues Section/Issue/Date" parentModule="/Activity Form/Issues Section/Issue">
 																<c:out value="${issue.issueDate}"/> 
-															</module:display>
+															</ampModule:display>
 														</span>
 													</li>
 													</td></tr>
-														<module:display name="/Activity Form/Issues Section/Issue/Measure" parentModule="/Activity Form/Issues Section/Issue">
+														<ampModule:display name="/Activity Form/Issues Section/Issue/Measure" parentModule="/Activity Form/Issues Section/Issue">
 														<c:if test="${!empty issue.measures}">
 															<c:forEach var="measure" items="${issue.measures}">
 																<tr><td></td><td colspan="2">
 																	<li class="level2">
 																	<span class="word_break italic">
 																		<c:out value="${measure.name}"/>
-																		<module:display name="/Activity Form/Issues Section/Issue/Measure/Date" parentModule="/Activity Form/Issues Section/Issue/Measure">
+																		<ampModule:display name="/Activity Form/Issues Section/Issue/Measure/Date" parentModule="/Activity Form/Issues Section/Issue/Measure">
 									  										<c:out value="${measure.measureDate}"/>
-									  									</module:display></span>
+									  									</ampModule:display></span>
 									  								</li>
 																</td></tr>
-																	<module:display name="/Activity Form/Issues Section/Issue/Measure/Actor" parentModule="/Activity Form/Issues Section/Issue/Measure">
+																	<ampModule:display name="/Activity Form/Issues Section/Issue/Measure/Actor" parentModule="/Activity Form/Issues Section/Issue/Measure">
 																	<c:if test="${!empty measure.actors}">
 																		<c:forEach var="actor" items="${measure.actors}">
 																			<tr>
@@ -2638,18 +2638,18 @@ body {background:none;}
 																			</td></tr>
 																		</c:forEach>
 																	</c:if>
-																	</module:display>
+																	</ampModule:display>
 															</c:forEach>
 														</c:if>
-														</module:display>
+														</ampModule:display>
 												</c:forEach>
 												</table>
 											</c:if>
 										</td>
 									</tr>
-									</module:display>
-									</module:display>
-                             <module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
+									</ampModule:display>
+									</ampModule:display>
+                             <ampModule:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name">
 											<b>
@@ -2659,7 +2659,7 @@ body {background:none;}
 <td bgcolor="#ffffff">						<c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"
-													id="docs" type="org.digijava.module.aim.helper.Documents">
+													id="docs" type="org.digijava.ampModule.aim.helper.Documents">
 													<c:if test="${docs.isFile == true}">
 													<tr><td>
 													 <table width="100%" class="box-border-nopadding">
@@ -2734,9 +2734,9 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-                                 </module:display>
+                                 </ampModule:display>
 
-								<module:display name="/Activity Form/Regional Observations" parentModule="/Activity Form">
+								<ampModule:display name="/Activity Form/Regional Observations" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name">
 											<b><digi:trn>Regional Observations</digi:trn></b>
@@ -2745,7 +2745,7 @@ body {background:none;}
 											<c:if test="${not empty aimEditActivityForm.regionalObservations.issues}">
 												<logic:iterate name="aimEditActivityForm" id="regionalObs" property="regionalObservations.issues">
 													<table style="width: 98%;">
-														<module:display name="/Activity Form/Regional Observations/Observation" parentModule="/Activity Form/Regional Observations">
+														<ampModule:display name="/Activity Form/Regional Observations/Observation" parentModule="/Activity Form/Regional Observations">
 															<tr >
 																<td width="27%;">
 																	<b><digi:trn>Observation</digi:trn>:</b>
@@ -2756,8 +2756,8 @@ body {background:none;}
 															</span>
 																</td>
 															</tr>
-														</module:display>
-														<module:display name="/Activity Form/Regional Observations/Observation/Date" parentModule="/Activity Form/Regional Observations/Observation">
+														</ampModule:display>
+														<ampModule:display name="/Activity Form/Regional Observations/Observation/Date" parentModule="/Activity Form/Regional Observations/Observation">
 															<tr >
 																<td>
 																	<digi:trn>Observation Date</digi:trn>:
@@ -2766,7 +2766,7 @@ body {background:none;}
 																	<c:out value="${regionalObs.issueDate}"/>
 																</td>
 															</tr>
-														</module:display>
+														</ampModule:display>
 														<logic:iterate name="regionalObs" id="measure" property="measures">
 															<tr>
 																<td>
@@ -2804,9 +2804,9 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-								</module:display>
+								</ampModule:display>
 
-                                 <module:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
+                                 <ampModule:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
                                  	<tr>
 										<td class="field_name">
 											<b><digi:trn>Line Ministry Observations</digi:trn></b>
@@ -2815,7 +2815,7 @@ body {background:none;}
 											<c:if test="${not empty aimEditActivityForm.lineMinistryObservations.issues}">
 												<logic:iterate name="aimEditActivityForm" id="lineMinistryObs" property="lineMinistryObservations.issues">
 													<table style="width: 98%;">
-														<module:display name="/Activity Form/Line Ministry Observations/Observation" parentModule="/Activity Form/Line Ministry Observations">
+														<ampModule:display name="/Activity Form/Line Ministry Observations/Observation" parentModule="/Activity Form/Line Ministry Observations">
 															<tr >
 																<td width="27%;">
 																	<b><digi:trn>Observation</digi:trn>:</b>
@@ -2826,8 +2826,8 @@ body {background:none;}
 																</span>
 																</td>
 															</tr>
-														</module:display>
-														<module:display name="/Activity Form/Line Ministry Observations/Observation/Date" parentModule="/Activity Form/Line Ministry Observations/Observation">
+														</ampModule:display>
+														<ampModule:display name="/Activity Form/Line Ministry Observations/Observation/Date" parentModule="/Activity Form/Line Ministry Observations/Observation">
 															<tr >
 																<td>
 																	<digi:trn>Observation Date</digi:trn>:
@@ -2836,7 +2836,7 @@ body {background:none;}
 																	<c:out value="${lineMinistryObs.issueDate}"/>
 																</td>
 															</tr>
-														</module:display>
+														</ampModule:display>
 														<logic:iterate name="lineMinistryObs" id="measure" property="measures">
 															<tr>
 																<td>
@@ -2874,9 +2874,9 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-								</module:display>
+								</ampModule:display>
 
-								<module:display name="/Activity Form/Organizations" parentModule="/Activity Form">
+								<ampModule:display name="/Activity Form/Organizations" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -2884,7 +2884,7 @@ body {background:none;}
 											</td>
 
 										<td bgcolor="#ffffff">
-										<module:display name="/Activity Form/Organizations/Donor Organization" parentModule="/Activity Form/Organizations">
+										<ampModule:display name="/Activity Form/Organizations/Donor Organization" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:donororganisation">Donor Organization</digi:trn></b>
 											<br/>
 											<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
@@ -2892,7 +2892,7 @@ body {background:none;}
 													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding" >
 														<tr>
 															<td>
-																<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+																<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.ampModule.aim.helper.FundingOrganization">
 																<ul>
 																	<li>
 																		<span class="word_break">
@@ -2906,13 +2906,13 @@ body {background:none;}
 													</table>
 												</div>
 											</logic:notEmpty>
-										</module:display>
-										<module:display name="/Activity Form/Organizations/Responsible Organization" parentModule="/Activity Form/Organizations">
+										</ampModule:display>
+										<ampModule:display name="/Activity Form/Organizations/Responsible Organization" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"	id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"	id="respOrg" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 															<table width="100%">
 																<tr>
 																	<td width="85%">
@@ -2927,11 +2927,11 @@ body {background:none;}
 																		</li></ul>
 																	</td>
 																	<td width="15%">
-																		<module:display name="/Activity Form/Organizations/Responsible Organization/percentage" parentModule="/Activity Form/Organizations/Responsible Organization">
+																		<ampModule:display name="/Activity Form/Organizations/Responsible Organization/percentage" parentModule="/Activity Form/Organizations/Responsible Organization">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.respOrgPercentage[tempOrgId]}" /> %
 																			</logic:notEmpty>
-																		</module:display>
+																		</ampModule:display>
 																	</td>
 																</tr>
 															</table>
@@ -2941,14 +2941,14 @@ body {background:none;}
 												</table>
 											</logic:notEmpty>
 											<br/>
-											</module:display>
+											</ampModule:display>
 
-                                           <module:display name="/Activity Form/Organizations/Executing Agency" parentModule="/Activity Form/Organizations">
+                                           <ampModule:display name="/Activity Form/Organizations/Executing Agency" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies" id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies" id="execAgencies" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 														<table width="100%">
 																<tr>
 																	<td width="85%">
@@ -2963,11 +2963,11 @@ body {background:none;}
 																		</li></ul>
 																	</td>
 																	<td width="15%">
-																	<module:display name="/Activity Form/Organizations/Executing Agency/percentage" parentModule="/Activity Form/Organizations/Executing Agency">
+																	<ampModule:display name="/Activity Form/Organizations/Executing Agency/percentage" parentModule="/Activity Form/Organizations/Executing Agency">
 																		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
 																		  <c:out value="${aimEditActivityForm.agencies.executingOrgPercentage[tempOrgId]}" /> %
 																		</logic:notEmpty>
-																	</module:display>
+																	</ampModule:display>
 																	</td>
 																</tr>
 															</table>
@@ -2976,15 +2976,15 @@ body {background:none;}
 												</table>
 											</logic:notEmpty>
 											<br/>
-											</module:display>
+											</ampModule:display>
 
-											<module:display name="/Activity Form/Organizations/Implementing Agency" parentModule="/Activity Form/Organizations">
+											<ampModule:display name="/Activity Form/Organizations/Implementing Agency" parentModule="/Activity Form/Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
-													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+													id="impAgencies" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 														<table width="100%">
 																<tr>
 																	<td width="85%">
@@ -2999,11 +2999,11 @@ body {background:none;}
 																		</li></ul>
 																	</td>
 																	<td width="15%">
-																		<module:display name="/Activity Form/Organizations/Implementing Agency/percentage" parentModule="/Activity Form/Organizations/Implementing Agency">
+																		<ampModule:display name="/Activity Form/Organizations/Implementing Agency/percentage" parentModule="/Activity Form/Organizations/Implementing Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
 																			</logic:notEmpty>
-																		</module:display>
+																		</ampModule:display>
 																	</td>
 																</tr>
 															</table>
@@ -3012,16 +3012,16 @@ body {background:none;}
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
-											</module:display>
+											</ampModule:display>
 
-											<module:display name="/Activity Form/Organizations/Beneficiary Agency" parentModule="/Activity Form/Organizations">
+											<ampModule:display name="/Activity Form/Organizations/Beneficiary Agency" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
 
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.benAgencies"
-														id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+														id="benAgency" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 															<table width="100%">
 																<tr>
 																	<td width="85%">
@@ -3036,11 +3036,11 @@ body {background:none;}
 																			</li></ul>
 																	</td>
 																	<td width="15%">
-																		<module:display name="/Activity Form/Organizations/Beneficiary Agency/percentage" parentModule="/Activity Form/Organizations/Beneficiary Agency">
+																		<ampModule:display name="/Activity Form/Organizations/Beneficiary Agency/percentage" parentModule="/Activity Form/Organizations/Beneficiary Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.benOrgPercentage[tempOrgId]}" /> %
 																			</logic:notEmpty>
-																		</module:display>
+																		</ampModule:display>
 																	</td>
 																</tr>
 															</table>
@@ -3048,15 +3048,15 @@ body {background:none;}
 														</td></tr>
 													</table>
 												</logic:notEmpty><br/>
-											</module:display>
+											</ampModule:display>
 
-											<module:display name="/Activity Form/Organizations/Contracting Agency" parentModule="/Activity Form/Organizations">
+											<ampModule:display name="/Activity Form/Organizations/Contracting Agency" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
-													id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+													id="conAgencies" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 														<table width="100%">
 																<tr>
 																	<td width="85%">
@@ -3071,11 +3071,11 @@ body {background:none;}
 																		</li></ul>
 																	</td>
 																	<td width="15%">
-																		<module:display name="/Activity Form/Organizations/Contracting Agency/percentage" parentModule="/Activity Form/Organizations/Contracting Agency">
+																		<ampModule:display name="/Activity Form/Organizations/Contracting Agency/percentage" parentModule="/Activity Form/Organizations/Contracting Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
 																			</logic:notEmpty>
-																		</module:display>
+																		</ampModule:display>
 																	</td>
 																</tr>
 															</table>
@@ -3084,14 +3084,14 @@ body {background:none;}
 												</table>
 
 											</logic:notEmpty><br/>
-											</module:display>
-											<module:display name="/Activity Form/Organizations/Sector Group" parentModule="/Activity Form/Organizations">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Organizations/Sector Group" parentModule="/Activity Form/Organizations">
 												<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 													<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
 														<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 																<tr><td>
 																<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
-																id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																id="sectGroup" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 																	<table width="100%">
 																		<tr>
 																			<td width="85%">
@@ -3108,11 +3108,11 @@ body {background:none;}
 																				</li></ul>
 																			</td>
 																			<td width="15%">
-																				<module:display name="/Activity Form/Organizations/Sector Group/percentage" parentModule="/Activity Form/Organizations/Sector Group">
+																				<ampModule:display name="/Activity Form/Organizations/Sector Group/percentage" parentModule="/Activity Form/Organizations/Sector Group">
 																					<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
 																					  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
 																					</logic:notEmpty>
-																				</module:display>
+																				</ampModule:display>
 																			</td>
 																		</tr>
 																	</table>
@@ -3121,15 +3121,15 @@ body {background:none;}
 															</table>
 													<br/>
 												</logic:notEmpty>
-											</module:display>
+											</ampModule:display>
 
-											<module:display name="/Activity Form/Organizations/Regional Group" parentModule="/Activity Form/Organizations">
+											<ampModule:display name="/Activity Form/Organizations/Regional Group" parentModule="/Activity Form/Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
 											<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
-													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+													id="regGroup" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 														<table width="100%">
 																<tr>
 																	<td width="85%">
@@ -3144,11 +3144,11 @@ body {background:none;}
 																		</li></ul>
 																	</td>
 																	<td width="15%">
-																		<module:display name="/Activity Form/Organizations/Regional Group/percentage" parentModule="/Activity Form/Organizations/Regional Group">
+																		<ampModule:display name="/Activity Form/Organizations/Regional Group/percentage" parentModule="/Activity Form/Organizations/Regional Group">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
 																			</logic:notEmpty>
-																		</module:display>
+																		</ampModule:display>
 																	</td>
 																</tr>
 															</table>
@@ -3156,13 +3156,13 @@ body {background:none;}
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
-											</module:display>
+											</ampModule:display>
                                            </td>
 									</tr>
-									</module:display>
+									</ampModule:display>
 
-                                    <module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
-									<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
+                                    <ampModule:display name="/Activity Form/Contacts" parentModule="/Activity Form">
+									<ampModule:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Donor funding contact information</digi:trn>
@@ -3172,8 +3172,8 @@ body {background:none;}
 													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
-											</module:display>
-											<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>MOFED contact information</digi:trn>
@@ -3183,8 +3183,8 @@ body {background:none;}
 													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
-											</module:display>
-											<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" valign="top" nowrap="nowrap"class="t-name">
 													<digi:trn>Project Coordinator Contact Information</digi:trn>
@@ -3194,8 +3194,8 @@ body {background:none;}
 													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
-											</module:display>
-											<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
+											</ampModule:display>
+											<ampModule:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Sector Ministry Contact Information</digi:trn>
@@ -3205,8 +3205,8 @@ body {background:none;}
 													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
-										</module:display>
-										<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information" parentModule="/Activity Form/Contacts">
+										</ampModule:display>
+										<ampModule:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
@@ -3216,10 +3216,10 @@ body {background:none;}
 													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
-										</module:display>
-									</module:display>
+										</ampModule:display>
+									</ampModule:display>
 									<!-- M & E  SECTION -->
-									<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
+									<ampModule:display name="M & E" parentModule="MONITORING AND EVALUATING">
 										<tr>
 											<td class="field_name" >
 												<b><digi:trn>M&E</digi:trn></b>
@@ -3229,7 +3229,7 @@ body {background:none;}
                                                 <jsp:include page="previewIndicatosList.jsp"/>
 											</td>
 										</tr>
-									</module:display>
+									</ampModule:display>
 									<!-- END M & E  SECTION -->
 							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
@@ -3275,7 +3275,7 @@ body {background:none;}
 
 
 
-                              <module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section">
+                              <ampModule:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section">
 									<tr>
 										<td class="field_name">
 											<b>
@@ -3306,7 +3306,7 @@ body {background:none;}
                                                          </c:if>
                                                          </td>
                                                        </tr>
-                                                       <module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section/Proposed Project Cost">
+                                                       <ampModule:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section/Proposed Project Cost">
 	                                                       	<c:if
 																test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null
 																&& aimEditActivityForm.funding.proposedAnnualBudgets.size()>0}">
@@ -3330,13 +3330,13 @@ body {background:none;}
 													      </td>
                                                        </tr>
                                                     	</c:if>
-                                                    	</module:display>
+                                                    	</ampModule:display>
                                               		</table>
                             				</c:if>
                             			</td>
 									</tr>
-								  </module:display>
-								  <module:display name="/Activity Form/Funding/Overview Section/Total Number of Funding Sources"
+								  </ampModule:display>
+								  <ampModule:display name="/Activity Form/Funding/Overview Section/Total Number of Funding Sources"
 												  parentModule="/Activity Form/Funding/Overview Section">
 									<tr bgcolor="#ffffff">
 										<td>
@@ -3348,8 +3348,8 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-								  </module:display>
-								  <module:display name="/Activity Form/Funding/Overview Section/Revised Project Cost" parentModule="/Activity Form/Funding/Overview Section">
+								  </ampModule:display>
+								  <ampModule:display name="/Activity Form/Funding/Overview Section/Revised Project Cost" parentModule="/Activity Form/Funding/Overview Section">
 								  	<tr>
 										<td class="field_name">
 											<b><digi:trn key="aim:revisedPrjectCost">Revised Project Cost</digi:trn></b>
@@ -3378,9 +3378,9 @@ body {background:none;}
                                                     </tr>
 												</table>
 											</c:if>
-								  </module:display>
+								  </ampModule:display>
 
-								  <module:display name="/Activity Form/Budget Structure/Budget Structure" parentModule="/Activity Form/Budget Structure">
+								  <ampModule:display name="/Activity Form/Budget Structure/Budget Structure" parentModule="/Activity Form/Budget Structure">
 
 									<tr>
 										<td class="field_name">
@@ -3412,10 +3412,10 @@ body {background:none;}
                                               		</table>
                             				</c:if>										</td>
 									</tr>
-								  </module:display>
+								  </ampModule:display>
 
 									<!-- GPI -->
-									<module:display name="/Activity Form/GPI" parentModule="/Activity Form">
+									<ampModule:display name="/Activity Form/GPI" parentModule="/Activity Form">
 										<bean:define id="gpiSurvey" name="gpiSurveys" scope="request" toScope="page"
 													 type="java.util.Collection"/>
 										<c:if test="${not empty gpiSurvey}">
@@ -3428,7 +3428,7 @@ body {background:none;}
 													<logic:iterate name="gpiSurveys" id="gpiSurvey"
 																   type="java.util.Collection" indexId="gpiId">
 														<logic:iterate name="gpiSurvey" id="gpiresponse"
-																	   type="org.digijava.module.aim.dbentity.AmpGPISurveyResponse">
+																	   type="org.digijava.ampModule.aim.dbentity.AmpGPISurveyResponse">
 															<table width="100%" cellSpacing="2" cellPadding="1"
 																   style="font-size:11px;" border="0">
 																<c:if test="${!currentIndicatorName.equals(gpiresponse.ampQuestionId.ampIndicatorId.name)}">
@@ -3471,7 +3471,7 @@ body {background:none;}
 												</td>
 											</tr>
 										</c:if>
-									</module:display>
+									</ampModule:display>
 									<!-- END GPI -->
 
 
@@ -3502,7 +3502,7 @@ body {background:none;}
 											</logic:notEmpty>
 										</field:display>
 
-										<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
+										<ampModule:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 												<tr>
 													<td class="field_name" >
@@ -3516,9 +3516,9 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</module:display>
+										</ampModule:display>
 
-										<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
+										<ampModule:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 												<tr>
 													<td class="field_name" >
@@ -3531,7 +3531,7 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</module:display>
+										</ampModule:display>
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -3609,31 +3609,31 @@ body {background:none;}
 					</td>
 				</tr>
 				
-				<module:display
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Type"
 					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
 						<td align="left"><span class="word_break bold"> ${structure.type.name} </span]></td>
 					</tr>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Title"
 					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td><digi:trn key="trn:title">Title</digi:trn></td>
 						<td align="left"> <span class="word_break bold">${structure.title} </span></td>
 					</tr>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Description"
 					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td><digi:trn key="trn:description">Description</digi:trn></td>
 						<td align="left"><span class="word_break bold">${structure.description} </span></td>
 					</tr>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Latitude"
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.latitude}">
@@ -3642,8 +3642,8 @@ body {background:none;}
 							<td align="left"> <b> ${structure.latitude} </b></td>
 						</tr>
 					</c:if>
-				</module:display>
-				<module:display
+				</ampModule:display>
+				<ampModule:display
 					name="/Activity Form/Structures/Structure Longitude"
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.longitude}">
@@ -3652,14 +3652,14 @@ body {background:none;}
 							<td align="left"><b> ${structure.longitude} </b></td>
 						</tr>
 					</c:if>
-				</module:display>
+				</ampModule:display>
 				<c:if test="${not empty structure.coordinates}">
 					<tr>
 						<td bgcolor="#f0f0f0" valign="top"><digi:trn>Coordinates</digi:trn></td>
 						<td bgcolor="#f0f0f0">
 							<table>
 								<logic:iterate id="coordinate" name="structure" property="coordinates"
-											   type="org.digijava.module.aim.dbentity.AmpStructureCoordinate">
+											   type="org.digijava.ampModule.aim.dbentity.AmpStructureCoordinate">
 									<tr>
 										<td><b> ${coordinate.latitude}</b></td>
 										<td><b> ${coordinate.longitude}</b></td>

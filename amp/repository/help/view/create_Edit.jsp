@@ -10,10 +10,10 @@
 <digi:instance property="helpForm"/>
 <c:set var="request" scope="session"><%= RequestUtils.getRealModuleInstance(request).getInstanceName() %></c:set>
 
-<digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
-<digi:context name="createTopic" property="context/module/moduleinstance/helpActions.do~actionType=createHelpTopic"/>
-<digi:context name="removeTopic" property="context/module/moduleinstance/helpActions.do~actionType=deleteHelpTopics"/>
-<digi:context name="tree" property="context/module/moduleinstance/helpActions.do~actionType=saved"/>
+<digi:context name="editTopic" property="context/ampModule/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
+<digi:context name="createTopic" property="context/ampModule/moduleinstance/helpActions.do~actionType=createHelpTopic"/>
+<digi:context name="removeTopic" property="context/ampModule/moduleinstance/helpActions.do~actionType=deleteHelpTopics"/>
+<digi:context name="tree" property="context/ampModule/moduleinstance/helpActions.do~actionType=saved"/>
 
 <script type="text/javascript">
 <!--

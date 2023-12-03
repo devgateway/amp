@@ -39,7 +39,7 @@ function unload() {}
 <digi:context name="digiContext" property="context" />
 <digi:instance property="aimUpdateRoleForm" />
 
-<digi:form action="/updateRole.do" method="post" name="aimUpdateRoleForm" type="org.digijava.module.aim.form.UpdateRoleForm" onsubmit="return validateAimUpdateRoleForm(this);">
+<digi:form action="/updateRole.do" method="post" name="aimUpdateRoleForm" type="org.digijava.ampModule.aim.form.UpdateRoleForm" onsubmit="return validateAimUpdateRoleForm(this);">
 
   <html:hidden property="roleId" />
   <html:hidden property="action" />
@@ -121,7 +121,7 @@ function unload() {}
                                     Roles
                                     </digi:trn>
                                   </td>
-                                  <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+                                  <td background="ampModule/aim/images/corner-r.gif" height="17" width=17>&nbsp;
                                   
                                   </td>
                                 </tr>
@@ -431,7 +431,7 @@ function unload() {}
               Other links
               </digi:trn>
             </td>
-            <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+            <td background="ampModule/aim/images/corner-r.gif" height="17" width=17>&nbsp;
             
             </td>
           </tr>
@@ -443,7 +443,7 @@ function unload() {}
         <table cellPadding=5 cellSpacing=1 width="100%">
           <tr>
             <td class="inside">
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+              <digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewTeams">Click here to view Teams</digi:trn>
               </c:set>
@@ -456,7 +456,7 @@ function unload() {}
           </tr>
           <tr>
             <td class="inside">
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+              <digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="translation">
                 <digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
               </c:set>
@@ -470,7 +470,7 @@ function unload() {}
           
           <tr>
             <td class="inside">
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+              <digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="trnViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>

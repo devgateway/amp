@@ -19,7 +19,7 @@
 		<bean:define id="donorTypes" property="selectedDonorTypes" name="manageGPIForm" type="java.util.Collection<String>"/>
 		<h2><digi:trn>Default Organization Types</digi:trn></h2>
 		<table bgColor=#ffffff cellpadding="0" cellspacing="0" class="box-border-nopadding" style="width: 90%;">
-			<logic:iterate id="donorType" name="manageGPIForm" property="availableDonorTypes" type="org.digijava.module.aim.dbentity.AmpOrgType">
+			<logic:iterate id="donorType" name="manageGPIForm" property="availableDonorTypes" type="org.digijava.ampModule.aim.dbentity.AmpOrgType">
 				<tr>
 					<td style="width: 1%;">
 						<%
@@ -39,7 +39,7 @@
 		<hr>
 		<h2><digi:trn>Indicator Descriptions</digi:trn></h2>
 		<table bgColor=#ffffff cellpadding="0" cellspacing="0" class="box-border-nopadding" style="width: 90%;">
-			<logic:iterate id="indicator" name="manageGPIForm" property="indicators" type="org.digijava.module.aim.dbentity.AmpGPISurveyIndicator">
+			<logic:iterate id="indicator" name="manageGPIForm" property="indicators" type="org.digijava.ampModule.aim.dbentity.AmpGPISurveyIndicator">
 				<logic:equal value="true" property="showAsIndicator" name="indicator">
 					<tr>
 						<td style="width: 30px;">

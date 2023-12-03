@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpInflationSource" table="AMP_INFLATION_SOURCE" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="amp_inflation_source_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_INFLATION_SOURCE_seq</param>
+			</generator>
+		</id>
+
+		<property name="name" column="name" type="java.lang.String" not-null="true"/>
+		<property name="description" column="description" type="text" />
+		<property name="selected" type="java.lang.Boolean" >
+			<column name="selected" default="false" not-null="true" />
+		</property>
+		<property name="frequency" column="frequency" insert="false" update="false" length="1">
+    		<type name="org.hibernate.type.EnumType">
+    			<param name="enumClass">org.dgfoundation.amp.currency.IRFrequency</param>
+    			<param name="useNamed">true</param>
+    		</type>
+    	</property>
+    	<many-to-one name="currency" column="currency_id" class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" not-null="true"/>
+    	
+    	<property name="apiToken" column="api_token" type="java.lang.String" />
+    	
+	</class>
+</hibernate-mapping>

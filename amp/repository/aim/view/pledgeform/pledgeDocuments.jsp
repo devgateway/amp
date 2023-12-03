@@ -4,7 +4,7 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />
 <div id='pledge_form_documents_data'>

@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -8,9 +8,9 @@
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="/Activity Form/Components" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Components" parentModule="/Activity Form">
     <fieldset>
         <legend>
 		<span class=legend_label id="componentlink" style="cursor: pointer;">
@@ -45,7 +45,7 @@
                                         <span class="word_break bold"><digi:trn>Component Fundings</digi:trn></span>
                                     </td>
                                 </tr>
-                                <module:display name="/Activity Form/Components/Component/Components Commitments"
+                                <ampModule:display name="/Activity Form/Components/Component/Components Commitments"
                                                 parentModule="/Activity Form/Components/Component">
                                     <c:if test="${!empty comp.commitments}">
                                         <tr>
@@ -59,34 +59,34 @@
                                                             <c:forEach var="fd" items="${comp.commitments}">
                                                                 <table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
                                                                     <tr>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Commitments"
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Commitments"
                                                                                         parentModule="/Activity Form/Components/Component">
                                                                             <td width="100">
                                                                                 <digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
                                                                                     <b><c:out value="${fd.adjustmentTypeName}" /></b>
                                                                                 </digi:trn>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount"
                                                                                         parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                             <td align="right" width="100">
                                                                                 <b><c:out value="${fd.transactionAmount}"/></b>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency"
                                                                                         parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                             <td class="prv_right">
                                                                                 <b><c:out value="${fd.currencyCode}"/></b>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
                                                                                         parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                             <td width="80">
                                                                                 <b><c:out value="${fd.transactionDate}"/></b>
                                                                             </td>
-                                                                        </module:display>
+                                                                        </ampModule:display>
                                                                     </tr>
-                                                                    <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
                                                                                     parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -99,8 +99,8 @@
                                                                                 </logic:notEmpty>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
-                                                                    <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Second Responsible Organization"
+                                                                    </ampModule:display>
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Second Responsible Organization"
                                                                                     parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -113,8 +113,8 @@
                                                                                 </logic:notEmpty>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
-                                                                    <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
+                                                                    </ampModule:display>
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
                                                                                     parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -124,7 +124,7 @@
                                                                                 <b><c:out value="${fd.componentTransactionDescription}" /></b>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
+                                                                    </ampModule:display>
                                                                 </table>
                                                                 <hr />
                                                             </c:forEach>
@@ -134,8 +134,8 @@
                                             </td>
                                         </tr>
                                     </c:if>
-                                </module:display>
-                                <module:display name="/Activity Form/Components/Component/Components Disbursements"
+                                </ampModule:display>
+                                <ampModule:display name="/Activity Form/Components/Component/Components Disbursements"
                                                 parentModule="/Activity Form/Components/Component">
                                     <c:if test="${!empty comp.disbursements}">
                                         <tr>
@@ -151,35 +151,35 @@
                                                                        bgcolor="#eeeeee"
                                                                        class="component-funding-table">
                                                                     <tr>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Disbursements"
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Disbursements"
                                                                                         parentModule="/Activity Form/Components/Component">
                                                                             <td width="50">
                                                                                 <digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
                                                                                     <b><c:out value="${fd.adjustmentTypeName}" /></b>
                                                                                 </digi:trn>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount"
                                                                                         parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
                                                                             <td align="right" width="100">
                                                                                 <b><c:out value="${fd.transactionAmount}"/></b>
                                                                             </td>
-                                                                        </module:display>
+                                                                        </ampModule:display>
 
-                                                                        <module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency"
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency"
                                                                                         parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
                                                                             <td class="prv_right">
                                                                                 <b><c:out value="${fd.currencyCode}"/></b>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"
                                                                                         parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
                                                                             <td width="70">
                                                                                 <b><c:out value="${fd.transactionDate}"/></b>
                                                                             </td>
-                                                                        </module:display>
+                                                                        </ampModule:display>
                                                                     </tr>
-                                                                    <module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization"
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization"
                                                                                     parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -192,8 +192,8 @@
                                                                                 </logic:notEmpty>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
-                                                                    <module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Second Responsible Organization"
+                                                                    </ampModule:display>
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Second Responsible Organization"
                                                                                     parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -206,9 +206,9 @@
                                                                                 </logic:notEmpty>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
+                                                                    </ampModule:display>
 
-                                                                    <module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
                                                                                     parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -218,7 +218,7 @@
                                                                                 <b><c:out value="${fd.componentTransactionDescription}" /></b>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
+                                                                    </ampModule:display>
                                                                 </table>
                                                                 <hr />
                                                             </c:forEach>
@@ -229,9 +229,9 @@
                                             </td>
                                         </tr>
                                     </c:if>
-                                </module:display>
+                                </ampModule:display>
 
-                                <module:display name="/Activity Form/Components/Component/Components Expenditures"
+                                <ampModule:display name="/Activity Form/Components/Component/Components Expenditures"
                                                 parentModule="/Activity Form/Components/Component">
                                     <c:if test="${!empty comp.expenditures}">
                                         <tr>
@@ -245,34 +245,34 @@
                                                             <c:forEach var="fd" items="${comp.expenditures}">
                                                                 <table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
                                                                     <tr>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Expeditures"
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Expeditures"
                                                                                         parentModule="/Activity Form/Components/Component">
                                                                             <td width="50">
                                                                                 <digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
                                                                                     <b><c:out value="${fd.adjustmentTypeName}" /></b>
                                                                                 </digi:trn>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
                                                                                         parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
                                                                             <td align="right" width="100">
                                                                                 <b><c:out value="${fd.transactionAmount}"/></b>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency"
                                                                                         parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
                                                                             <td class="prv_right">
                                                                                 <b><c:out value="${fd.currencyCode}"/></b>
                                                                             </td>
-                                                                        </module:display>
-                                                                        <module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"
+                                                                        </ampModule:display>
+                                                                        <ampModule:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"
                                                                                         parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
                                                                             <td width="70">
                                                                                 <b><c:out value="${fd.transactionDate}"/></b>
                                                                             </td>
-                                                                        </module:display>
+                                                                        </ampModule:display>
                                                                     </tr>
-                                                                    <module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization"
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization"
                                                                                     parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -285,8 +285,8 @@
                                                                                 </logic:notEmpty>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
-                                                                    <module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Second Responsible Organization"
+                                                                    </ampModule:display>
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Second Responsible Organization"
                                                                                     parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -299,9 +299,9 @@
                                                                                 </logic:notEmpty>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
+                                                                    </ampModule:display>
 
-                                                                    <module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
+                                                                    <ampModule:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
                                                                                     parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
                                                                         <tr>
                                                                             <td width="100">
@@ -311,7 +311,7 @@
                                                                                 <b><c:out value="${fd.componentTransactionDescription}" /></b>
                                                                             </td>
                                                                         </tr>
-                                                                    </module:display>
+                                                                    </ampModule:display>
                                                                 </table>
                                                                 <hr />
                                                             </c:forEach>
@@ -322,7 +322,7 @@
                                             </td>
                                         </tr>
                                     </c:if>
-                                </module:display>
+                                </ampModule:display>
                                 <tr>
                                     <td class="prv_right">
                                         <FONT color='blue'>
@@ -421,4 +421,4 @@
             </logic:equal>
         </div>
     </fieldset>
-</module:display>
+</ampModule:display>

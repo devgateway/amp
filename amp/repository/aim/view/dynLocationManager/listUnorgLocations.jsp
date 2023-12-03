@@ -9,13 +9,13 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <ul>
-	<logic:iterate scope="request" name="unorgLocCollection" id="loc" type="org.digijava.module.aim.dbentity.AmpCategoryValueLocations">
-		<bean:define id="locCV" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" name="loc" property="parentCategoryValue" />
+	<logic:iterate scope="request" name="unorgLocCollection" id="loc" type="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations">
+		<bean:define id="locCV" type="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" name="loc" property="parentCategoryValue" />
 	
 		<li id="lid-${loc.id}" class="dhtmlgoodies_sheet.gif" >
 			<a  class="atree" id="aid-${loc.id}"><c:out value="${loc.name}"/></a> 

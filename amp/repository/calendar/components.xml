@@ -24,7 +24,7 @@
     <page page="printPreviewPopupLayout" name="printPreviewPopupLayout" title=" - Print Preview" />
 </secondary-pages>
 
-<module>
+<ampModule>
 	<teaser-file>teaser.jsp</teaser-file>
 	<page name="addEvent">addEvent.jsp</page>
 	<page name="editEvent">editEvent.jsp</page>
@@ -47,6 +47,6 @@
     <page name="printPreviewPopupLayout">showPrintPreview.jsp</page>
     
     
-</module>
+</ampModule>
 
 </config>

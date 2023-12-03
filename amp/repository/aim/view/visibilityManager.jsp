@@ -15,7 +15,7 @@
 <script language="JavaScript">
 
 	function toggleFeature(id) {
-		<digi:context name="urlVal" property="context/module/moduleinstance/featureManager.do" />			  
+		<digi:context name="urlVal" property="context/ampModule/moduleinstance/featureManager.do" />
 		document.aimFeatureManagerForm.action = "<%= urlVal %>?toggle=true&fId="+id;
 		document.aimFeatureManagerForm.submit();		
 	}
@@ -91,7 +91,7 @@
 													Other links
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
+												<td background="ampModule/aim/images/corner-r.gif" height="17" width="17"></td>
 											</tr>
 										</table>
 									</td>
@@ -102,7 +102,7 @@
 										
 											<tr>
 												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="trnViewAdmin">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 													</c:set> <digi:link href="/admin.do" title="${trnViewAdmin}">
@@ -114,7 +114,7 @@
 										
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:clickToManageTemplates">Click here to Manage the Templates </digi:trn>
 														</c:set>
@@ -126,7 +126,7 @@
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:addNewTemplate">Click here to Add a New Template </digi:trn>
 														</c:set>
@@ -138,7 +138,7 @@
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToManageFieldsFeaturesModule">Click here to Field, Features and Modules </digi:trn>
 													</c:set>
@@ -153,7 +153,7 @@
 									
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:setTemplateInUse">Click here to Set the Template in use</digi:trn>
 													</c:set>

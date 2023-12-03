@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -18,7 +18,7 @@
 		var check = checkSectorEmpty();
 		if(check)
 		{
-		<digi:context name="selSector" property="context/module/moduleinstance/sectorSelectedForind.do?edit=true"/>
+		<digi:context name="selSector" property="context/ampModule/moduleinstance/sectorSelectedForind.do?edit=true"/>
 	    document.aimNewIndicatorForm.action = "<%= selSector %>";
 		 document.aimNewIndicatorForm.target = window.opener.name;
 	    document.aimNewIndicatorForm.submit();
@@ -39,7 +39,7 @@
 			document.aimNewIndicatorForm.subsectorLevel2.value = -1;
 		}
 	*/
-		<digi:context name="selSector" property="context/module/moduleinstance/selectSectorForind.do?edit=true"/>
+		<digi:context name="selSector" property="context/ampModule/moduleinstance/selectSectorForind.do?edit=true"/>
 	    document.aimNewIndicatorForm.action = "<%= selSector %>";
   		document.aimNewIndicatorForm.submit();									
 	}	
@@ -124,7 +124,7 @@ function checkNumeric(objName,comma,period,hyphen)
 			var flg=checkEmpty();
 			if(flg)
 			{
-			 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectorsforind.do?edit=true"/>
+			 <digi:context name="searchSctr" property="context/ampModule/moduleinstance/searchSectorsforind.do?edit=true"/>
 			 document.aimNewIndicatorForm.action = "<%= searchSctr %>";
 			 document.aimNewIndicatorForm.submit();
 			 return true;

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 25, 2009 11:00:06 PM by Hibernate Tools 3.2.5.Beta -->
+<hibernate-mapping>
+    <class name="org.digijava.ampModule.xmlpatcher.dbentity.AmpXmlPatchLog" table="AMP_XML_PATCH_LOG">
+    <cache usage="read-write" />
+        <id name="id" type="java.lang.Long" unsaved-value="null" column="id">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            	<param name="sequence_name">AMP_XML_PATCH_LOG_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="patch" class="org.digijava.ampModule.xmlpatcher.dbentity.AmpXmlPatch">
+            <column name="patch_id" />
+        </many-to-one>
+        <property name="log" type="text"/>
+        <property name="date" type="java.util.Date">
+            <column name="date" />
+        </property>
+        <property name="error" type="java.lang.Boolean">
+            <column name="error" />
+        </property>
+        <property name="fileChecksum" type="java.lang.String">
+            <column name="file_checksum" />
+        </property>
+		<property name="elapsed" type="java.lang.Long">
+            <column name="elapsed" />
+        </property>
+        <property name="idx" type="java.lang.Integer" column="idx" not-null="true" />
+
+    </class>
+</hibernate-mapping>

@@ -3,58 +3,58 @@
 
 <struts-config>
 	<form-beans>
-		<form-bean name="beBudgetExportForm" type="org.digijava.module.budgetexport.form.BudgetExportForm" />
-		<form-bean name="beReportsWrapperForm" type="org.digijava.module.budgetexport.form.ReportsWrapperForm" />
-		<form-bean name="beMapRuleForm" type="org.digijava.module.budgetexport.form.BEMapRuleForm" />
-		<form-bean name="beMapingForm" type="org.digijava.module.budgetexport.form.BEMappingForm" />
-		<form-bean name="beProjectForm" type="org.digijava.module.budgetexport.form.BEProjectForm" />
-		<form-bean name="beMapActionsForm" type="org.digijava.module.budgetexport.form.BEMapActionsForm" />
+		<form-bean name="beBudgetExportForm" type="org.digijava.ampModule.budgetexport.form.BudgetExportForm" />
+		<form-bean name="beReportsWrapperForm" type="org.digijava.ampModule.budgetexport.form.ReportsWrapperForm" />
+		<form-bean name="beMapRuleForm" type="org.digijava.ampModule.budgetexport.form.BEMapRuleForm" />
+		<form-bean name="beMapingForm" type="org.digijava.ampModule.budgetexport.form.BEMappingForm" />
+		<form-bean name="beProjectForm" type="org.digijava.ampModule.budgetexport.form.BEProjectForm" />
+		<form-bean name="beMapActionsForm" type="org.digijava.ampModule.budgetexport.form.BEMapActionsForm" />
 	</form-beans>
 	<action-mappings>
 		<action name="beBudgetExportForm" path="/budgetexport/budgetExport" scope="request" 
-						type="org.digijava.module.budgetexport.action.BudgetExportAction" validate="false">
+						type="org.digijava.ampModule.budgetexport.action.BudgetExportAction" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=viewBudgetExportManager" />
 		</action>
 		<action name="beReportsWrapperForm" path="/budgetexport/showBudgetReport" scope="request" 
-						type="org.digijava.module.budgetexport.action.ReportsWrapperAction" validate="false">
+						type="org.digijava.ampModule.budgetexport.action.ReportsWrapperAction" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=reportWrapper" />
 		</action>
 
 		<action forward="/budgetexport/showProjectList.do" path="/budgetexport/index" />
 
 		<action  name="beBudgetExportForm" path="/budgetexport/showProjectList" 
-				scope="request" type="org.digijava.module.budgetexport.action.ShowProjectList" validate="false">
+				scope="request" type="org.digijava.ampModule.budgetexport.action.ShowProjectList" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=viewBudgetExportManager"/>
 		</action>
 
 		<action  name="beProjectForm" path="/budgetexport/addEditDeleteProject" 
-				scope="request" type="org.digijava.module.budgetexport.action.AddEditDeleteProject" validate="false" parameter="action">
+				scope="request" type="org.digijava.ampModule.budgetexport.action.AddEditDeleteProject" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=addEditBudgetExpProject" />
 			<forward name="projectList" path="/budgetexport/showProjectList.do" redirect="true"/>
 		</action>
 		
 		<action  name="beMapingForm" path="/budgetexport/showMapingRuleList" scope="request" 
-				type="org.digijava.module.budgetexport.action.ShowMapingRuleList" validate="false" parameter="action">
+				type="org.digijava.ampModule.budgetexport.action.ShowMapingRuleList" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=viewMappingRuleList" />
 		</action>
 
 		<action  name="beMapRuleForm" path="/budgetexport/addEditDeleteMapRule" 
-				scope="request" type="org.digijava.module.budgetexport.action.AddEditDeleteMapRule" validate="false" parameter="action">
+				scope="request" type="org.digijava.ampModule.budgetexport.action.AddEditDeleteMapRule" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=addEditMapRule" />
 			<forward name="ruleList" path="budgetexport/showMapingRuleList.do"/>
 		</action>
 		<action  name="beBudgetExportForm" path="/budgetexport/budgetExportService" 
-				scope="request" type="org.digijava.module.budgetexport.action.BudgetExportService" validate="false"/>
+				scope="request" type="org.digijava.ampModule.budgetexport.action.BudgetExportService" validate="false"/>
 
 
 		<action  name="beMapActionsForm" path="/budgetexport/mapActions" 
-				scope="request" type="org.digijava.module.budgetexport.action.MapActions" validate="false" parameter="action">
+				scope="request" type="org.digijava.ampModule.budgetexport.action.MapActions" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=budgetExportMapActions" />
 			<forward name="projectRules" path="budgetexport/showMapingRuleList.do"/>
 		</action>
 
 		<action  name="beBudgetExportForm" path="/budgetexport/exportMapping" 
-				scope="request" type="org.digijava.module.budgetexport.action.ExportMapping" validate="false"/>
+				scope="request" type="org.digijava.ampModule.budgetexport.action.ExportMapping" validate="false"/>
 
 		
 

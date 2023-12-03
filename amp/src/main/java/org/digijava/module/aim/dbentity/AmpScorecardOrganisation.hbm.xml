@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpScorecardOrganisation" table="amp_scorecard_organisation">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_scorecard_organisation_seq</param>
+			</generator>
+		</id>
+
+		<property name="modifyDate" column="modify_date" type="java.util.Date" />
+		<property name="ampDonorId" column="amp_donor_id" type="java.lang.Long" />
+		<property name="toExclude" column="to_exclude" type="boolean" />
+	</class>
+</hibernate-mapping>

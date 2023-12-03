@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpReports" table="AMP_REPORTS" lazy="false">
+		<cache usage="read-write" />
+		<id name="ampReportId" column="amp_report_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_REPORTS_seq</param>
+			</generator>
+
+		</id>
+
+		<property name="name" column="name" type="java.lang.String" />
+		<!-- <property name="description" column="description" type="java.lang.String"/> -->
+
+		<property name="options" column="options" type="java.lang.String" />
+		<property name="reportDescription" column="report_description" type="text" />
+		<property name="type" column="type" type="java.lang.Long" />
+		<property name="hideActivities" column="hide_activities" type="java.lang.Boolean" />
+		<property name="drilldownTab" column="drilldown_tab" type="java.lang.Boolean" />
+		<property name="publicReport" column="publicReport" type="java.lang.Boolean" />
+		<property name="workspaceLinked" column="workspaceLinked" type="java.lang.Boolean" />
+		<property name="budgetExporter" column="budget_exporter" type="java.lang.Boolean" />
+		<property name="allowEmptyFundingColumns" column="allow_empty_fund_cols" type="java.lang.Boolean" />
+		<property name="alsoShowPledges" column="also_show_pledges" type="java.lang.Boolean" />
+		<property name="showOriginalCurrency" type="java.lang.Boolean">
+		    <column name="show_original_currency" default="false" />
+		</property>
+		<property name="splitByFunding" type="java.lang.Boolean" not-null="true">
+			<column name="split_by_funding" default="false" not-null="true" />
+		</property>
+
+		<many-to-one name="ownerId" column="ownerId"
+			class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" />
+		<many-to-one name="activityLevel" column="cv_activity_level"
+			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" />
+		<many-to-one name="reportCategory" column="report_category"
+			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" />
+		<property name="updatedDate" column="updated_date" type="java.util.Date" />
+		<property name="publishedDate" column="published_date" type="java.util.Date" />
+
+		<!--  <many-to-one name="ampPage" column="ampPageId"
+			class="org.digijava.ampModule.aim.dbentity.AmpPages" /> -->
+
+		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.ampModule.aim.dbentity.AmpReportsOptions" not-null="true"/>
+		-->
+		<set name="members" table="AMP_MEMBER_REPORTS" lazy="true" cascade="save-update">
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpTeamMember"
+				column="amp_member_id" />
+		</set>
+		<set name="logs" table="AMP_REPORT_LOG" lazy="true" cascade="all-delete-orphan">
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpReportLog" />
+		</set>
+
+		<set name="columns" table="AMP_REPORT_COLUMN" lazy="false">
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<composite-element class="org.digijava.ampModule.aim.dbentity.AmpReportColumn">
+				<many-to-one name="column" class="org.digijava.ampModule.aim.dbentity.AmpColumns"
+					column="columnId" />
+				<many-to-one name="level" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue"
+					column="cv_level_id" />
+				<property name="orderId" column="order_id" type="java.lang.Long" />
+			</composite-element>
+		</set>
+
+		<set name="hierarchies" table="AMP_REPORT_HIERARCHY" lazy="false">
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<composite-element class="org.digijava.ampModule.aim.dbentity.AmpReportHierarchy">
+				<many-to-one name="column" class="org.digijava.ampModule.aim.dbentity.AmpColumns"
+					column="columnId" />
+				<many-to-one name="level" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue"
+					column="cv_level_id" />
+				 <property name="levelId" column="levelId" type="java.lang.Long" />
+			</composite-element>
+		</set>
+
+		<set name="measures" table="AMP_REPORT_MEASURES" lazy="false">
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<composite-element class="org.digijava.ampModule.aim.dbentity.AmpReportMeasures">
+				<many-to-one name="measure" class="org.digijava.ampModule.aim.dbentity.AmpMeasures"
+					column="measureId" />
+				<property name="orderId" column="order_id" type="java.lang.Long" />
+				
+				
+		
+			</composite-element>
+		</set>
+
+		<set name="reportMeasures" table="AMP_REPORT_XLEVEL_MEASURES" lazy="false">
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<composite-element class="org.digijava.ampModule.aim.dbentity.AmpReportMeasures">
+				<many-to-one name="measure" class="org.digijava.ampModule.aim.dbentity.AmpMeasures"
+					column="measureId" />
+				<many-to-one name="level" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue"
+					column="cv_level_id" />
+				 <property name="orderId" column="order_id" type="java.lang.Long" />
+			</composite-element>
+		</set>
+
+		<set name="desktopTabSelections" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_report_id" />
+			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpDesktopTabSelection" />
+		</set>
+		<set name="filterDataSet" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_report_id" />
+			<one-to-many class="org.dgfoundation.amp.ar.dbentity.AmpFilterData" />
+		</set>
+		<!--  <many-to-one name="defaultFilter" column="default_filter_id" class="org.dgfoundation.amp.ar.AmpARFilter" not-null="false"/>-->
+
+	</class>
+</hibernate-mapping>

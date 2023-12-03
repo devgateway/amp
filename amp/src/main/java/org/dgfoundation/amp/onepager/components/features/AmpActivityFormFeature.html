@@ -1,0 +1,231 @@
+<style>
+td.rightMenu{float: right; position: absolute; display:none; margin:0px 0px 0px 15px;}
+div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
+</style>
+<wicket:extend>
+<div style="margin:0 auto;width:1000px;">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+		<tbody>
+			<tr>
+				<td width="768">
+				<div id="stepHead" class="step_head">
+				<div class="step_head_cont">
+					<wicket:trn key="aim:EditActivityForm">Edit Activity Form</wicket:trn>&nbsp;<span wicket:id="activityName" class="word_break"></span>
+				</div>
+
+				</div>
+				</td>
+				<td width="232"></td>
+			</tr>
+			<tr valign="top">
+				<td class="main_side">
+				<form wicket:id="activityForm">
+				<div id="mainContent" class="main_side_cont">
+				<div style="float: right;"></div>
+					<span name="section" wicket:id="featureList">
+						<span wicket:id="featureItem"></span>
+					</span>
+					<div wicket:id="feedbackPanel"></div>
+					 </div>
+				<br />
+					<div id="rightMenu" class="rightMenu" style="position: fixed;">
+							<div id="quickfloat" class="right_menu" style="margin:0px;">
+								<div onclick="$(this).siblings('div:first').slideToggle('normal', function () { if ($(this).is(':hidden')) {$('#qListLabel').html('+' + $('#qListLabel').html().substring(1));} else {$('#qListLabel').html('-' + $('#qListLabel').html().substring(1));}});" class="right_menu_header">
+								<div id="qListLabel" class="right_menu_header_cont">- <wicket:trn>Quick Links</wicket:trn></div>
+								</div>
+								<div id="qListItems" class="right_menu_box" >
+					            	<ul style="padding: 0px; margin: 0px;">
+										<li class="tri" wicket:id="quickList">
+											<b><a class="hoverUnderline" wicket:id="quickName" href="#">
+                                                Identification</a></b>
+										</li>
+					                </ul>
+								</div>
+							</div>
+							<div class="right_menu" style="padding-top: 5px;">
+								<div class="right_menu_header">
+								<div class="right_menu_header_cont"><wicket:trn>Actions</wicket:trn></div>
+									<div style="display: none;">
+										<div id="imgOnepagerModeTitle"><wicket:trn jsFriendly="true">Press here to switch to one page view</wicket:trn></div>
+										<div id="imgGroupModeTitle"><wicket:trn jsFriendly="true">Press here to switch to multiple pages view</wicket:trn></div>
+									</div>
+									<img id="imgOnepagerMode" alt="" src="/repository/admin/view/images/tree/icons/layout.gif"
+										title=""
+										class="onepager-pic-icon"
+										onclick="switchOnepagerMode(); return true;"/>
+									<img id="imgGroupMode" alt="" src="/repository/admin/view/images/tree/icons/group.gif"
+										title=""
+										class="onepager-pic-icon"
+										onclick="switchOnepagerMode(); return true;"/>
+								</div>
+								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
+									<div class="padding-two-pixels" wicket:id="saveAndSubmit"></div>
+									<div class="padding-two-pixels" wicket:id="saveAsDraft"></div>
+									<div class="padding-two-pixels" wicket:id="saveReject"></div>
+									 
+									<div class="padding-two-pixels" wicket:id="preview"></div>
+									<div wicket:id="autoSaveDiv"></div>
+								</div>
+							</div>
+					</div>
+                    <div id="saveAsDraftPanel" style="display:none">
+                        <div class="hd" style="text-align: left">
+                            <wicket:trn>Save as Draft</wicket:trn>
+                        </div>
+
+
+                        <div class="bd" style="text-indent: 20px;">
+                            <p>
+                                <wicket:trn>Where would you like to navigate after save action?</wicket:trn>
+                            </p>
+                            <div wicket:id="draftRedirectedGroup">
+                                <div>
+                                    <input type="radio" wicket:id="draftRedirectedDesktop">
+                                        <wicket:trn>Go to the desktop</wicket:trn>
+                                    </input>
+                                </div>
+                                <div>
+                                    <input type="radio" wicket:id="draftStayOnPage">
+                                        <wicket:trn>Stay on the activity page</wicket:trn>
+                                    </input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="saveAsDraftPanelButton"  wicket:id="saveAsDraftAction"></span></div>
+                        <div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="saveAsDraftCanceld"></span></div>
+
+
+
+
+                        <div class="ft"></div>
+                    </div>
+<!-- reject button -->
+                    <div id="rejectActivityPanel" style="display:none">
+                        <div class="hd" style="text-align: left">
+                            <wicket:trn>Reject Activity</wicket:trn>
+                        </div>
+
+
+                        <div class="bd" style="text-align: center">
+                            <p>
+                                <wicket:trn>Would you like to add a message?</wicket:trn>
+                            </p>
+						<!--  Here it will go the textare to add a message-->
+						<span wicket:id="rejectMessage"></span>
+						</div>
+                        <br />
+                        <div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="rejectActivityPanelButton"  wicket:id="rejectActivityAction" /></div>
+                        <div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="cancelRejectActivity" /></div>
+
+
+
+
+                        <div class="ft"></div>
+                    </div>                    
+				</form>
+				</td>
+				<td>
+				    &nbsp;
+				    <div id="wicketRightMenu"/>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+    <div id="warnSavePanel" style="display:none;">
+        <div class="hd" style="text-align: left">
+            <wicket:trn>Are you sure you want to save?</wicket:trn>
+        </div>
+        <div class="bd" style="text-align: left;">
+            <b>
+                <wicket:trn>Warnings:</wicket:trn>
+            </b>
+            <p>
+                <span wicket:id="saveWarningsWrapper">
+                    <table wicket:id="saveWarningsList">
+                        <tr>
+                            <td colspan="2">
+                                <b>
+                                    <span wicket:id="warnName"/>
+                                </b>
+                            </td>
+                        </tr>
+                        <tr style="background-color: #dfdfdf">
+                            <td>
+                                <i>
+                                    <wicket:trn>Item identifier</wicket:trn>
+                                </i>
+                            </td>
+                            <td>
+                                <i>
+                                    <wicket:trn>Sum comparison</wicket:trn>
+                                </i>
+                            </td>
+                        </tr>
+                        <tr wicket:id="warnList">
+                            <td>
+                                <span wicket:id="org"/>
+                            </td>
+                            <td>
+                                <span wicket:id="value"/>
+                            </td>
+                        </tr>
+                    </table>
+                </span>
+            </p>
+        </div>
+        <br />
+        <div style="text-align: center;">
+            <input type="button" wicket:id="warnPanelSave" value="Button" class="button_green_btm" />  <input type="button" wicket:id="warnPanelCancel" value="Button" class="button_green_btm" />
+        </div>
+        <div class="ft"></div>
+    </div>
+	<div id="myPLogframe" class="invisible-item">
+		<div id="myPLogframeContent" class="content">
+			===== ERROR =====
+		</div>
+	</div>
+    <div id="quarterInformationPanel" class="invisible-item quarterPanel">
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b><wicket:trn>Quarter Information</wicket:trn></b><br/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 1:
+                </td>
+                <td id="quarterInformationPanel-Q1">
+                    1 Jan - 31 Mar
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 2:
+                </td>
+                <td id="quarterInformationPanel-Q2">
+                    1 Apr - 30 Jun
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 3:
+                </td>
+                <td id="quarterInformationPanel-Q3">
+                    1 Jul - 31 Sept
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 4:
+                </td>
+                <td id="quarterInformationPanel-Q4">
+                    1 Oct - 31 Dec
+                </td>
+            </tr>
+        </table>
+    </div>
+    </div>
+</wicket:extend>

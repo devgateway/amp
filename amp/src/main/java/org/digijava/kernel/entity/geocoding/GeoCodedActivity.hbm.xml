@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.entity.geocoding.GeoCodedActivity" table="AMP_GEO_CODED_ACTIVITY" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" type="long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GEO_CODED_ACTIVITY_SEQ</param>
+			</generator>
+		</id>
+		<many-to-one name="geoCodingProcess" column="GEO_CODING_ID"
+					 class="org.digijava.kernel.entity.geocoding.GeoCodingProcess" cascade="none" lazy="false"
+					 not-null="true" />
+		<property name="queueId" column="QUEUE_ID" type="long" not-null="true" />
+		<many-to-one name="activity" class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none"
+					 not-null="true" unique="true" />
+		<property name="status" not-null="true">
+			<type name="org.digijava.ampModule.aim.dbentity.NamedEnumType">
+				<param name="enumClass">org.digijava.kernel.entity.geocoding.GeoCodedActivity$Status</param>
+				<param name="valueProperty">name</param>
+			</type>
+		</property>
+		<list name="locations" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="GEO_CODED_ACTIVITY_ID" />
+			<list-index column="INDEX" />
+			<one-to-many class="org.digijava.kernel.entity.geocoding.GeoCodedLocation" />
+		</list>
+	</class>
+</hibernate-mapping>

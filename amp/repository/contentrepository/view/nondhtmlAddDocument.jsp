@@ -8,13 +8,13 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <%-- Looks like a dead file, not sure whether actually used anywhere --%>
 
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <c:set var="translation_validation_title_chars">
 			<digi:trn key="contentrepository:plsTitleChars">Please only use letters, digits, '_' and space !</digi:trn>
@@ -254,7 +254,7 @@ div.fakefile2 input{
 }
 -->
 </style>
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
 
 <digi:instance property="crDocumentManagerForm" />
 <digi:form action="/addTemporaryDocument.do" method="post" enctype="multipart/form-data" onsubmit="return false;">
@@ -417,7 +417,7 @@ div.fakefile2 input{
 													<digi:trn key="aim:addActivityDocTypeFirstLine">Please select from below</digi:trn>
 												</c:set>
 												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
-													<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType" categoryName="<%=org.digijava.module.categorymanager.util.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
+													<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType" categoryName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
 												</a>
 											</td>
 										</tr>
@@ -436,7 +436,7 @@ div.fakefile2 input{
 													<digi:trn key="aim:addActivityDocTypeFirstLine">Please select from below</digi:trn>
 												</c:set>
 												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
-													<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType" categoryName="<%=org.digijava.module.categorymanager.util.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
+													<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType" categoryName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
 												</a>
 											</td>
 										</tr>
@@ -456,7 +456,7 @@ div.fakefile2 input{
 													<digi:trn key="aim:addActivityDocLanguageFirstLine">Please select from below</digi:trn>
 											</c:set>
 											<a title="<digi:trn key="aim:languageOfTheDocumentDescription">Select document language</digi:trn>">
-											<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docLang" keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.DOCUMENT_LANGUAGE_KEY %>" styleClass="inp-text"/>
+											<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docLang" keyName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.DOCUMENT_LANGUAGE_KEY %>" styleClass="inp-text"/>
 											</a>
 										</td>
 									</tr>

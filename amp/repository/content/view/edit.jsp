@@ -9,11 +9,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="java.util.List"%>
-<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
+<%@ page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
@@ -161,7 +161,7 @@ div.fakefile2 input {
             <c:set	var="translation">
               <digi:trn>Click here to goto Admin Home</digi:trn>
             </c:set>
-            <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}">
+            <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}">
               <digi:trn> Admin Home </digi:trn>
             </digi:link>
             &nbsp;&gt;&nbsp;
@@ -462,7 +462,7 @@ $(document).ready( function() {
 	catch(e) {}
 });
 </script>
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
 <script language="javascript">
 
 function edit(key) {

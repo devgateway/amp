@@ -1,0 +1,753 @@
+<?xml version="1.0"?>
+<!DOCTYPE page [
+<!ENTITY ampVersion "${project.version}">
+<!ENTITY releaseDate "14.10.2022">
+<!ENTITY buildDate "${buildDate}">
+<!ENTITY buildSource "${buildSource}">
+]>
+<site-config>
+	<site-layout>
+
+		<layout name="newParisIndicatorLayout" extends="default" file="noLayout.jsp">
+		  <put name="title">Paris Indicator Reports</put>
+		  <put-item name="body" file="parisindicator_N.jsp"/>
+		</layout>
+
+		<layout name="newGPILayout" extends="default" file="noLayout.jsp">
+		  <put name="title">Global Partnership Indicators</put>
+		  <put-item name="body" file="gpi_N.jsp"/>
+		</layout>
+
+		<layout name="helpLayout" extends="default">
+			<put name="title">Help</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerNoAdminLayout"/>
+			<put-item name="body" layout="helpBodyLayout"/>
+		</layout>
+
+		<layout name="helpAdminLayout" extends="default">
+			<put-item name="body" layout="helpBodyLayout"/>
+			<put-item name="footer" layout="footerLayout"/>
+		</layout>
+
+		<layout name="helpBodyLayout" file="helpBodyLayout.jsp">
+			<put-item name="helpTopics" ampModule="help" instance="default" teaser="helpTopics"/>
+            <put-item name="adminHelpTopics" ampModule="help" instance="admin" teaser="helpTopics"/>
+            <put-item name="helpBody" ampModule="help" page="helpBody"/>
+			<put-item name="rightColumn" layout="helpRightColumnLayout"/>
+		</layout>
+		<layout name="helpRightColumnLayout" file="helpRightColumnLayout.jsp">
+			<put-item name="create_Edit" ampModule="help" page="create_Edit"/>
+			<put-item name="search" ampModule="help" page="helpSearch"/>
+		</layout>
+		<layout name="createHelpTopicLayout" extends="helpLayout">
+			<put-item name="body" ampModule="help" page="helpWizardBody"/>
+		</layout>
+		<layout name="editHelpTopicLayout" extends="helpLayout">
+			<put-item name="body" ampModule="help" page="helpWizardBody"/>
+		</layout>
+		<layout name="seachResultsLayout" extends="helpLayout">
+			<put-item name="body" ampModule="help" page="searchResults"/>
+		</layout>
+
+		<layout name="helpAdminTopicLayout" extends="helpAdminLayout">
+			<put-item name="body" ampModule="help" page="helpAdmin"/>
+		</layout>
+
+
+		<layout name="ampMessageLayout" file="ampMessagesLayout.jsp">
+			<put name="title"> - MESSAGES</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="body"  ampModule="message" page="addMessages"/>
+		</layout>
+
+
+		<layout name="allMessagesLayoutMainFrame" file="ampMessagesLayoutMainFrame.jsp">
+			<put-item name="body" layout="allMessagesLayoutContent"/>
+		</layout>
+
+		<layout name="allMessagesLayoutContent" file="ampMessagesLayoutContent.jsp">
+			<put-item name="body" ampModule="message" page="allMessages"/>
+		</layout>
+
+
+		<layout name="allMessagesLayout" extends="ampMessageLayout">
+			<put-item name="body" layout="allMessagesLayoutMainFrame"/>
+		</layout>
+
+		<layout name="forwardMessagesLayout" extends="ampMessageLayout">
+			<put-item name="body" ampModule="message" page="forwardMessage"/>
+		</layout>
+
+		<layout name="viewSelectedMessage" file="viewSelectedMessageLayout.jsp">
+			<put-item name="body" ampModule="message" page="viewSelectedMessage"/>
+		</layout>
+
+
+
+		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
+			<put name="version">&ampVersion;</put>
+			<put name="build_version">&releaseDate;</put>
+
+			<!-- The build_info parameter is not used in the jsp. But we need to reference the entities in order to read the values.
+				 For the entities declared but non-referenced, the java xml parser will set "null".
+			-->
+			<put name="build_info">&buildSource;&buildDate;</put>
+
+	  		<put-item name="adminLink" ampModule="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+
+		<layout name="footerLayout" file="footerLayout.jsp">
+			<put-item name="adminLink" ampModule="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+
+		<layout name="footerLayoutPledges" file="footerLayoutPledges.jsp">
+			<put-item name="adminLink" ampModule="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+
+		<layout name="footerNoAdminLayout" file="footerNoAdminLayout.jsp">
+			<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+
+
+		<layout name="default">
+			<put name="title">AMP</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="body"/>
+		</layout>
+		<layout name="pledgesLayout">
+		<put name="title"> - Add Pledge </put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayoutPledges"/>
+			<put-item name="body" file="/repository/aim/view/addPledge.jsp"/>
+		</layout>
+		<layout name="logoutLayout" file="logoutLayout.jsp">
+			<put-item name="logout" ampModule="aim" instance="default" teaser="logout"/>
+			<put name="title">AMP - Logout</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+		<layout name="bodyHeaderLayout" file="bodyHeader.jsp">
+		</layout>
+		<layout name="admin" file="adminLayout.jsp">
+			<put name="title">Default Admin Page</put>
+			<put-item name="header" ampModule="admin" page="header"/>
+			<put-item name="left" ampModule="admin" page="left"/>
+			<put-item name="body" ampModule="admin" page="body"/>
+		</layout>
+		<layout name="editor">
+			<put name="title">AMP Editor</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="body" ampModule="aim" instance="default"/>
+		</layout>
+		<layout name="reportsLayout" file="aimReportsLayout.jsp">
+			<put name="title">Popup</put>
+		</layout>
+		<layout name="single" file="popupLayout.jsp">
+			<put name="title">Popup</put>
+		</layout>
+		<layout name="popup" file="aimPopupLayout.jsp">
+			<put name="title">Popup</put>
+		</layout>
+		<layout name="popupActivityPreview" extends="popup">
+			<put-item name="body" ampModule="aim" page="previewActivity"/>
+		</layout>
+		<layout name="noLayout" file="noLayout.jsp">
+			<put name="title">none</put>
+		</layout>
+		<!-- login page Layout -->
+		<layout name="login">
+			<put name="title">- Home</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+			<put-item name="footer" layout="footerLayout"/>
+ 			<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="body" ampModule="content" instance="default" teaser="contentView"/>
+		</layout>
+		<layout name="headerTopLayout" file="headerTop.jsp">
+ 	 	    <put-item name="loginWidget" file="loginWidget3.jsp"/>
+ 	 	</layout>
+		<layout name="loginBody" file="loginLayout.jsp">
+			<put name="title">Please log in</put>
+			<put-item name="header" layout="headerLayout"/>
+			<put-item name="footer"/>
+			<put-item name="body" ampModule="um" instance="user"/>
+		</layout>
+		<layout name="publicPortalLoginLayout" file="publicPortalLogin.jsp">
+			<put-item name="footer" layout="footerLayout"/>
+		</layout>
+
+		<!-- AIM TAB LAYOUT -->
+
+		<layout name="tabLayout" file="tabLayout.jsp">
+			<put name="title">AMP Tab Layout</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+			<put-item name="tabHeader" ampModule="aim" instance="default" teaser="mainProjectDetails"/>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="blankTeaser"/>
+	 		<put-item name="footer" layout="footerLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+		</layout>
+		<layout name="layoutSurveyList" extends="tabLayout">
+			<put name="title">Activity - Aid Harmonization Survey Overview </put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="surveyList"/>
+	 	</layout>
+	 	<layout name="layoutSurvey" extends="tabLayout">
+			<put name="title">Activity - Aid Harmonization Survey Overview </put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="surveyIndicators"/>
+	 	</layout>
+		<layout name="layoutFinancingBreakdown" extends="tabLayout">
+			<put name="title">Activity - Financial Progress Overview </put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="financingBreakdown"/>
+	 	</layout>
+
+        <layout name="layoutViewIPAContracting" extends="tabLayout">
+			<put name="title">Activity - IPA Contracting </put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="contractingBreakdown"/>
+	 	</layout>
+
+ 		<layout name="layoutRegionalFundingBreakdown" extends="tabLayout">
+			<put name="title">Activity - Regional Funding </put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="regionalFundingBreakdown"/>
+	 	</layout>
+  		<layout name="layoutRegionalFundingDetails" extends="tabLayout">
+			<put name="title">Activity - Regional Funding Details</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="regionalFundingDetails"/>
+		</layout>
+
+		<layout name="layoutFinancingBreakdownFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress Overview </put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="financingBreakdownFilter"/>
+		</layout>
+		<layout name="layoutFinancialOverview" extends="tabLayout">
+			<put name="title">Activity - Financial Progress </put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="financialOverview"/>
+		</layout>
+		<layout name="layoutYearlyInfo" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Yearly</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyInfo"/>
+		</layout>
+		<layout name="layoutYearlyInfoFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Yearly</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyInfoFilter"/>
+		</layout>
+		<layout name="layoutQuarterlyInfo" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Quarterly</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyInfo"/>
+		</layout>
+		<layout name="layoutQuarterlyGrouping" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Quarterly</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyGrouping"/>
+		</layout>
+		<layout name="layoutQuarterlyInfoFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Quarterly</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyInfoFilter"/>
+		</layout>
+		<layout name="layoutYearlyComparisons" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - All(Yearly)</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyComparisons"/>
+		</layout>
+		<layout name="layoutYearlyComparisonsFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - All(Yearly)</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyComparisonsFilter"/>
+		</layout>
+		<layout name="layoutQuarterlyComparisons" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - All(Quarterly)</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyComparisons"/>
+		</layout>
+		<layout name="layoutQuarterlyComparisonsFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - All(Quarterly)</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyComparisonsFilter"/>
+		</layout>
+		<layout name="layoutQuarterlyDiscrepancy" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyDiscrepancy"/>
+		</layout>
+		<layout name="layoutQuarterlyDiscrepancyFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyDiscrepancyFilter"/>
+		</layout>
+		<layout name="layoutYearlyDiscrepancy" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyDiscrepancy"/>
+		</layout>
+		<layout name="layoutYearlyDiscrepancyFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyDiscrepancyFilter"/>
+		</layout>
+		<layout name="layoutQuarterlyDiscrepancyAll" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy All</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyDiscrepancyAll"/>
+		</layout>
+		<layout name="layoutQuarterlyDiscrepancyAllFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy All</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="quarterlyDiscrepancyAllFilter"/>
+		</layout>
+		<layout name="layoutYearlyDiscrepancyAll" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy All</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyDiscrepancyAll"/>
+		</layout>
+		<layout name="layoutYearlyDiscrepancyAllFilter" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Discrepancy All</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="yearlyDiscrepancyAllFilter"/>
+		</layout>
+
+                 <layout name="layoutMonthlyInfo" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Monthly</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="monthlyInfo"/>
+		</layout>
+
+                <layout name="layoutMonthlyComparisons" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - All(Monthly)</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="monthlyComparisons"/>
+		</layout>
+
+		<layout name="layoutActivityDashboard" extends="tabLayout">
+			<put name="title">Activity - Dashboard</put>
+			<put-item name="tabBody" ampModule="aim" instance="default" teaser="activityDashboard"/>
+		</layout>
+
+
+		<layout name="layoutChannelOverview" extends="tabLayout">
+        <put name="title">Activity - Channel Overview </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="channelOverview"/>
+       </layout>
+
+	   <layout name="layoutReferences" extends="tabLayout">
+        <put name="title">Activity - References</put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="reference"/>
+       </layout>
+
+	   <layout name="layoutChannelOverviewObjective" extends="tabLayout">
+        <put name="title">Activity - Channel Overview Objective </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="channelOverviewObjective"/>
+       </layout>
+
+		<layout name="layoutRegionalObservations" extends="tabLayout">
+        	<put name="title">Activity - Regional Observations </put>
+        	<put-item name="tabBody" ampModule="aim" instance="default" teaser="regionalObservations"/>
+       	</layout>
+
+	   <layout name="layoutPhysicalProgress" extends="tabLayout">
+        <put name="title">Activity - Physical Progress </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="physicalProgress"/>
+       </layout>
+
+	   <layout name="layoutPhysicalProgressDetails" extends="tabLayout">
+        <put name="title">Activity - Physical Progress </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="physicalProgressDetails"/>
+       </layout>
+
+	   <layout name="layoutPhysicalProgressDescription" extends="tabLayout">
+        <put name="title">Activity - Physical Progress Description </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="physicalProgressDescription"/>
+       </layout>
+
+       <layout name="layoutComponentDescription" extends="tabLayout">
+        <put name="title">Activity - Component Description </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="componentDescription"/>
+       </layout>
+
+	   <layout name="layoutKnowledge" extends="tabLayout">
+        <put name="title">Activity - Documents </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="knowledge"/>
+       </layout>
+
+	   <layout name="layoutKnowledgeNotes" extends="tabLayout">
+        <put name="title">Activity - Knowledge Notes </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="knowledgeNotes"/>
+       </layout>
+
+	   <layout name="layoutKnowledgeDocument" extends="tabLayout">
+        <put name="title">Activity - Knowledge Document </put>
+        <put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="knowledgeDocument"/>
+		 </layout>
+
+	   <layout name="layoutIndicatorValues" extends="popup">
+	        <put name="title">Activity - Indicator Values</put>
+		<put-item name="body" ampModule="aim" instance="default" teaser="meIndicatorValues"/>
+		<!--
+        	<put-item name="tabBody" ampModule="aim" instance="default"
+			teaser="meIndicatorValues"/>
+		-->
+	   </layout>
+
+
+
+		<!-- END AIM LAYOUT -->
+
+		<!-- AIM DESKTOP LAYOUT -->
+
+		<layout name="userHomeLayout" file="userHomeLayout.jsp">
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+			<put-item name="myDesktop" ampModule="aim" instance="default" teaser="myDesktop"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="myReports" ampModule="aim" instance="default" teaser="myReports"/>
+			<put-item name="myLinks" ampModule="aim" instance="default" teaser="myLinks"/>
+			<put-item name="myTeamMembers" ampModule="aim" instance="default" teaser="myTeamMembers"/>
+			<put-item name="myTasks" ampModule="aim" instance="default" teaser="myTasks"/>
+			<put-item name="myMessages" ampModule="message" instance="default" teaser="myMessages"/>
+			<put-item name="myLastVersions" ampModule="aim" instance="default" teaser="myLastVersions"/>
+	 		<put-item name="footer" layout="footerLayout"/>
+ 		</layout>
+
+		<layout name="publicReportsViewLayout" file="userHomeLayout.jsp">
+			<put name="title">- Public View</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="body" ampModule="aim" page="reportsPublicView"/>
+	 		<put-item name="footer" layout="footerLayout"/>
+ 		</layout>
+
+
+		<layout name="desktopLayout" extends="userHomeLayout">
+			<put name="title">- My Desktop</put>
+			<put-item name="body" ampModule="aim" instance="default" teaser="myTabs"/>
+<!-- 			<put-item name="body" ampModule="aim" instance="default" teaser="myDesktop"/> -->
+		</layout>
+
+		<layout name="portfolioDashboardLayout"  extends="default">
+			<put name="title">- Dashboard</put>
+			<put-item name="body" ampModule="aim" instance="default" teaser="portfolioDashboard"/>
+		</layout>
+
+                <!--page-group masterLayout="desktopLayout" tile="body"-->
+                <!--page-group masterLayout="single" tile="body">
+                        <ampModule name="aim">
+                           <page>amp_viewNationalPlaningDashboard</page>
+                        </ampModule>
+                </page-group-->
+
+
+		<!-- START ADD/EDIT LAYOUT	-->
+		<layout name="addEditLayout" file="addEditLayout.jsp">
+			<put name="title">AMP</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+			<put-item name="addEditNavigator" ampModule="aim" instance="default" teaser="addEditNavigator"/>
+			<put-item name="addEditBody" ampModule="aim" instance="default" teaser="blankTeaser"/>
+	 		<put-item name="footer" layout="footerLayout"/>
+		</layout>
+		<layout name="addActivity" extends="addEditLayout">
+			<put name="title">Add Activity</put>
+			<put-item name="addEditBody" ampModule="aim" instance="default" teaser="dummy"/>
+		</layout>
+		 <!-- END ADD/EDIT LAYOUT -->
+
+		<layout name="noLayout" file="noLayout.jsp">
+			<put name="title">none</put>
+			<put-item name="body" ampModule="aim" instance="default"/>
+		</layout>
+
+		<!-- TRANSLATE LAYOUT -->
+		<layout name="TranslatorPortlet" extends="single">
+			<put name="title"> </put>
+			<put-item name="body" ampModule="translate" instance="default" teaser="translate"/>
+		</layout>
+		<layout name="translation" extends="single">
+			<put name="title">Translation</put>
+			<put-item name="body" ampModule="translate" instance="complete" teaser="completeTranslation"/>
+		</layout>
+		<layout name="globaltranslation" extends="single">
+			<put name="title">Translation</put>
+			<put-item name="body" ampModule="translate" instance="global" teaser="globalTranslation"/>
+		</layout>
+		<layout name="clearLayout" file="popupLayout.jsp">
+			<put name="title">AIM</put>
+			<put-item name="body" ampModule="aim" instance="default"/>
+		</layout>
+
+		<layout name="wicketFooterLayout" extends="noLayout" file="wicketFooterLayout.jsp">
+		    <put-item name="footer" layout="footerLayout"/>
+		</layout>
+
+
+		<layout name="wicketHeaderLayout" extends="noLayout" file="wicketHeaderLayout.jsp">
+	 		<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	    	<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+			<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="dropdownLangSwitch" ampModule="translation" instance="default" teaser="dropdownLangSwitch"/>
+
+		</layout>
+
+		<layout name="wicketAdminHeaderLayout" extends="noLayout" file="wicketAdminHeaderLayout.jsp">
+	 		<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	    	<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+			<put-item name="loginWidget" file="loginWidget.jsp"/>
+		</layout>
+
+		<page-group masterLayout="wicketHeaderLayout">
+			<ampModule name="aim">
+				<page>wicketHeader</page>
+			</ampModule>
+		</page-group>
+
+		<page-group masterLayout="wicketAdminHeaderLayout">
+			<ampModule name="aim">
+				<page>wicketAdminHeader</page>
+			</ampModule>
+		</page-group>
+
+
+		<page-group masterLayout="wicketFooterLayout">
+			<ampModule name="aim">
+				<page>wicketFooter</page>
+			</ampModule>
+		</page-group>
+
+		<!-- TRANSLATE LAYOUT -->
+		<page-group masterLayout="default" tile="body"/>
+		<page-group masterLayout="editor" tile="body">
+			<ampModule name="editor">
+			  <page>editor_editText</page>
+			</ampModule>
+		</page-group>
+
+		<page-group masterLayout="admin" tile="body">
+			<ampModule name="admin"/>
+		</page-group>
+		<page-group masterLayout="single" tile="body">
+			<ampModule name="aim">
+				<page>aim_myTabs</page>
+				<page>aim_reportsPublicView</page>
+
+			</ampModule>
+			<ampModule name="admin">
+				<page>admin_usersPopupLayout</page>
+				<page>admin_instPopupLayout</page>
+				<page>admin_pickupGroupPopupLayout</page>
+			</ampModule>
+			<ampModule name="um">
+				<page>um_popupLayout</page>
+			</ampModule>
+			<ampModule name="translate"/>
+			<ampModule name="cms">
+			  <page>cms_selectCategory</page>
+  			  <page>cms_selectFile</page>
+			  <page>cms_categoryDetails</page>
+			</ampModule>
+		</page-group>
+		<page-group masterLayout="popup" tile="body">
+			<ampModule name="aim">
+				<page>amp_viewNPDgrid</page>
+			</ampModule>
+		</page-group>
+		<page-group masterLayout="popup" tile="body">
+			<ampModule name="calendar">
+				<page>calendarOrgPopupLayout</page>
+				<page>recurringEventPopupLayout</page>
+            </ampModule>
+		<!--
+            <ampModule name="message">
+            	<page>viewSelectedMessage</page>
+            </ampModule>
+		-->
+            <ampModule name="widget">
+            	<page>popup_addWidgetColumn</page>
+            	<page>preview_tableWidget</page>
+                <page>showSectorDonorReport</page>
+                <page>widget_showParisIndicatorTableWidget</page>
+            </ampModule>
+			<ampModule name="aim">
+				<page>aim_showDocumentsInPopup</page>
+				<page>viewStatusDescription</page>
+				<page>addSectorToIndicator</page>
+				<page>PI_Filter</page>
+				<page>aim_orgPopupLayout</page>
+				<page>aim_assignFieldPermissions</page>
+				<!-- New Org Selector -->
+				<page>aim_orgSelectorSearchForm</page>
+				<page>aim_saveErrors</page>
+
+				<page>previewLogframe</page>
+				<page>aim_fundingImportPopupLayout</page>
+				<page>aim_fundingPopupLayout</page>
+				<page>aim_locPopupLayout</page>
+				<page>aim_locPopinLayout</page>
+				<page>aim_selectCreateIndicatorForStep9</page>
+				<page>selectCreateIndicators</page>
+				<page>aim_selSectorPopupLayout</page>
+				<page>aim_selectSectorForind</page>
+				<page>aim_selectSectorForindEdit</page>
+				<page>aim_addActivityProgram</page>
+				<page>aim_addPhyProgPopupLayout</page>
+	  			<page>aim_selectDocument</page>
+				<page>aim_addlocPopupLayout</page>
+				<page>aim_addCompPopupLayout</page>
+				<page>aim_addComponents</page>
+				<page>aim_editComponents</page>
+				<page>aim_addComponentType</page>
+				<page>aim_orgComponentPopUp</page>
+
+				<page>aim_addComponentIndicator</page>
+				<page>aim_reviseCloseDate</page>
+				<page>aim_addIssue</page>
+				<page>aim_addMeasure</page>
+				<page>aim_addActor</page>
+
+				<page>aim_addObservation</page>
+				<page>aim_addRegionalObservationMeasure</page>
+				<page>aim_addRegionalObservationActor</page>
+
+				<page>aim_addChildWorkspaces</page>
+
+				<page>aim_viewOrgDetailPopupLayout</page>
+				<page>aim_viewCommentPopupLayout</page>
+				<page>aim_viewCommentOverviewPopupLayout</page>
+				<page>aim_viewUserProfile</page>
+				<page>aim_searchlocPopupLayout</page>
+				<page>aim_addExchangeRate</page>
+				<page>aim_updateCurrency</page>
+				<page>addNewTheme</page>
+				<page>aim_searchSectorPopupLayout</page>
+				<page>aim_printerFriendlyPreview</page>
+				<page>aim_viewActivityDetails</page>
+				<page>aim_projectDetails</page>
+				<page>aim_addRegionalFunding</page>
+				<page>aim_addMEIndicator</page>
+				<page>aim_deleteIndicator</page>
+				<page>aim_addProgram</page>
+				<!-- <page>aim_addPrgIndicator</page> -->
+				<page>aim_editAllIndicator</page>
+				<page>aim_assignThemeIndicator</page>
+				<page>aim_printActPerf</page>
+				<page>aim_printActRisk</page>
+				<page>aim_printPortPerf</page>
+				<page>aim_printPortRisk</page>
+				<page>	projectByDonor_NoLayout				</page>
+				<page>	htmlCommitmentbyModality			</page>
+				<page>	htmlMultilateralbyDonor				</page>
+				<page>	htmlQuarterlyMulitlateralbyDonor	</page>
+				<page>	htmlProjectbyDonor					</page>
+				<page>	htmlQuarterlyReportByProject		</page>
+				<page>	htmlSectorbyProject					</page>
+				<page>	htmlQuarterlyReportBySector			</page>
+				<page>	htmlViewProjects					</page>
+				<page>	htmlViewPlannedProjects				</page>
+				<page>	htmlPhysicalComponentReport			</page>
+				<page>	htmlAdvancedReport			        </page>
+				<page>viewNewAdvancedReport</page>
+				<page>aim_editQuestions</page>
+				<page>aim_addQuestion</page>
+				<page>aim_addIndicator</page>
+				<page>aim_pIPrintSurvey</page>
+				<page>aim_pIPrintReports</page>
+				<page>aim_pIPrintReports2</page>
+		        <page>aim_contactComponentPopIn</page>
+                <page>addProposedProjFunding</page>
+                <page>addQuickLink</page>
+                <page>editQuickLink</page>
+                <page>printMyDesktop</page>
+                <page>addProgramPopup</page>
+				<page>aim_actPerfWithoutBase</page>
+				<page>aim_portPerfWithoutBase</page>
+				<page>aim_npdOptions</page>
+				<page>addNewIndicator</page>
+			    <page>selectProgramForIndicator</page>
+                <page>selectOrganisationForAhsurvey</page>
+				<page>selectLocationForIndicatorValue</page>
+                <page>selectActivityForIndicator</page>
+				<page>viewEditIndicator</page>
+				<page>addEditData</page>
+				<page>assignNewIndicator</page>
+				<page>showActivityLog</page>
+				<page>aim_addDisbOrderToDisbPopupLayout</page>
+                <page>aim_addDisbOrderToContractPopupLayout</page>
+                <page>editbudgetsector</page>
+                <page>setbudgetprogram</page>
+                <page>editdepartment</page>
+                <page>contactsPrintPreview</page>
+                <page>viewActivityHistory</page>
+                <page>myLastVersions</page>
+                <page>aim_assignActivitiesJSON</page>
+				<page>aim_updateTeamMembersJSON</page>
+				<page>aim_filterPicker2</page>
+            </ampModule>
+			<ampModule name="contentrepository">
+				<page>amp_selectDocumentDM</page>
+				<page>nondhtmlAddDocument</page>
+				<page>tempFieldPreDefinedValues</page>
+				<page>docFromTemplate</page>
+			</ampModule>
+			<ampModule name="budgetintegration">
+				<page>de_showLog</page>
+			</ampModule>
+			<ampModule name="help">
+				<page>printPreview</page>
+				<page>allHelpPrintPreview</page>
+			</ampModule>
+		</page-group>
+		<page-group masterLayout="noLayout" tile="body">
+			<ampModule name="contentrepository">
+				<page>amp_getDocumentList</page>
+				<page>amp_getDocumentVersionList</page>
+				<page>amp_deleteDocumentResponse</page>
+				<page>cr_docToOrg</page>
+			</ampModule>
+			<ampModule name="aim">
+				<page>aim_saveMessage</page>
+				<page>aim_showSelectedFilters</page>
+				<page>tabManagerData</page>
+				<page>selectPledgeLocation</page>
+				<page>selectPledgeProgram</page>
+				<page>viewPledgeData</page>
+				<page>previewActivityPopin</page>
+                <page>aim_addOrgGrpPopupLayout</page>
+			</ampModule>
+            <ampModule name="orgProfile">
+                <page>orgSummary</page>
+				<page>largestProjects</page>
+                <page>showOrgProfileTables</page>
+             	<page>parisIndicators</page>
+                <page>largestProjectsPrinterFriendly</page>
+                <page>exportOptions</page>
+			</ampModule>
+			<ampModule name="budgetintegration">
+				<page>de_showSourceDetails</page>
+				<page>de_showLogItemDetails</page>
+            </ampModule>
+            <ampModule name="calendar">
+                <page>printPreviewPopupLayout</page>
+                 <page>printViewPopupLayout</page>
+            </ampModule>
+            <ampModule name="budgetexport">
+            	<page>reportWrapper</page>
+            </ampModule>
+			<ampModule name="esrigis">
+				<page>mainmapPopup</page>
+			</ampModule>
+        </page-group>
+	</site-layout>
+</site-config>

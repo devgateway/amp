@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script langauage="JavaScript">
@@ -35,7 +35,7 @@
 		var temp = validate();
 		if (temp == true)
 		{
-				<digi:context name="updateComponent" property="context/module/moduleinstance/updateComponents.do?event=saveEditComp" />
+				<digi:context name="updateComponent" property="context/ampModule/moduleinstance/updateComponents.do?event=saveEditComp" />
 				document.aimUpdateComponentsForm.action = "<%= updateComponent%>&componentId="+id;
 				document.aimUpdateComponentsForm.target = "_self";
 				document.aimUpdateComponentsForm.submit();
@@ -44,7 +44,7 @@
 	}
 	function onload(){
 		if(document.aimUpdateComponentsForm.check.value=="save"){
-			<digi:context name="refreshComp" property="context/module/moduleinstance/getComponents.do" />
+			<digi:context name="refreshComp" property="context/ampModule/moduleinstance/getComponents.do" />
 			document.aimUpdateComponentsForm.action = "<%= refreshComp %>";
 			document.aimUpdateComponentsForm.target = window.opener.name;
 			document.aimUpdateComponentsForm.submit();

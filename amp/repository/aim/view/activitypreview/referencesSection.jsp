@@ -1,14 +1,14 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="References" parentModule="PROJECT MANAGEMENT">
+<ampModule:display name="References" parentModule="PROJECT MANAGEMENT">
     <fieldset>
         <legend>
 		<span class=legend_label id="referenceslink" style="cursor: pointer;">
@@ -29,4 +29,4 @@
             </ul>
         </div>
     </fieldset>
-</module:display>
+</ampModule:display>

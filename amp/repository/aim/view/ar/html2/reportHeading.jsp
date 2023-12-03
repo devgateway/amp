@@ -16,7 +16,7 @@
 %>
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports" toScope="page"/>
 <bean:define id="filterBean" name="reportCD" type="org.dgfoundation.amp.ar.AmpARFilter" property="filter" />
 
 <c:set var="categoryYear"><%=ArConstants.YEAR%></c:set>
@@ -40,7 +40,7 @@
   <%boolean first=true;
   	if (curDepth == 0) {
   %>
-  	<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" 
+  	<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.ampModule.aim.dbentity.AmpReportHierarchy"
   						indexId="hIdx" id="repHierarchy" scope="page">
   		<c:set var="hSortOrder">descending</c:set>
   		<c:set var="sortIconPath"></c:set>

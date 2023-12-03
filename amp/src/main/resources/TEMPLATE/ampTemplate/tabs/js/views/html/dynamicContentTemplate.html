@@ -1,0 +1,46 @@
+<table class="dynamic-content-table full-width">
+	<tr>
+		<td style="width: 285px;">
+			<div class="filters-area-button">
+				<button id="filters-button" class="buttonify">
+					<span data-i18n="tabs.common:filterButton">Filters</span>
+				</button>
+				<button id="save-button" class="buttonify">
+					<span data-i18n="tabs.common:saveButton">Save</span>
+				</button>
+				<button id="settings-button" class="buttonify">
+					<span data-i18n="tabs.common:settingsButton">Settings</span>
+				</button>
+			</div>
+		</td>
+		<td>
+			<div id="filters-collapsible-area">
+				<h3 class="blue_widget"><span data-i18n="tabs.common:appliedFiltersButton">Applied filters</span></h3>
+				<div id="dynamic-filters-region">
+					<img src="/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif" />
+				</div>
+			</div>
+		</td>
+	<tr>
+		<td colspan="2">
+			<div id="dynamic-legends-region">
+				<img src="/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif" />
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<div id="dynamic-results-region" class="full-width">
+				<img src="/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif" />
+			</div>
+		</td>
+	</tr>
+</table>
+
+<!-- TODO: Evaluate if having these templates here is the best approach or we should move it to another file. -->
+<script type="text/template" id="filters-dialog-template">	
+</script>
+<script type="text/template" id="grid-template">
+	<table id="tab_grid"></table>
+	<div id="tab_grid_pager"></div>
+</script>

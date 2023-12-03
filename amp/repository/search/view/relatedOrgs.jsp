@@ -40,7 +40,7 @@
                     <c:forEach var="item" items="${requestScope.resultActivitiesWithOrgs}">
                         <tr>
                             <td>
-                       	<digi:link module="aim"
+                       	<digi:link ampModule="aim"
 											href="/viewActivityPreview.do?activityId=${item.ampActivityId}"><bean:write name="item" property="objectName" /></digi:link><br />
                         </td>
                         </tr>

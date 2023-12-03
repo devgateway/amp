@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <div class="admin-content">
 <script langauage="JavaScript">
@@ -20,7 +20,7 @@
 	}
 	function updateScheme(id) {
 		
-			<digi:context name="addScheme" property="context/module/moduleinstance/updateSectorSchemes.do?event=updateScheme" />
+			<digi:context name="addScheme" property="context/ampModule/moduleinstance/updateSectorSchemes.do?event=updateScheme" />
 			
 			document.aimAddSectorForm.action = "<%= addScheme%>&editSchemeId="+id;
 			document.aimAddSectorForm.target = "_self";
@@ -160,7 +160,7 @@
 																				<logic:iterate name="aimAddSectorForm"
 																					property="formFirstLevelSectors"
 																					id="sectorSchemeLevelOne"
-																					type="org.digijava.module.aim.dbentity.AmpSector	">
+																					type="org.digijava.ampModule.aim.dbentity.AmpSector	">
 																					<tr>
 																						<td bgcolor="#ffffff" width="73%"><jsp:useBean
 																								id="urlParams2" type="java.util.Map"
@@ -251,7 +251,7 @@
 														class="inside">
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
+																	src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
 																	height="10" /> <c:set var="clickToViewAdmin">
 																	<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 																</c:set> <digi:link href="/admin.do" title="${clickToViewAdmin}">
@@ -271,7 +271,7 @@
 																			property="secSchemeId" />
 																	</c:set> <c:set target="${urlParams5}" property="parent"
 																		value="scheme" /> <digi:img
-																		src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
+																		src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
 																		height="10" /> <c:set var="clickToAddSector">
 																		<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 																	</c:set> <digi:link href="/addSector.do" name="urlParams5"
@@ -286,7 +286,7 @@
 														<field:display name="View Schemes Link" feature="Sectors">
 															<tr>
 																<td class="inside"><digi:img
-																		src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
+																		src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
 																		height="10" /> <c:set var="clickToViewSchemes">
 																		<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 																	</c:set> <digi:link href="/getSectorSchemes.do"

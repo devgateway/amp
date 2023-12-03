@@ -5,10 +5,10 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ page import="org.digijava.module.um.form.UserResetForm" %>
+<%@ page import="org.digijava.ampModule.um.form.UserResetForm" %>
 
 <digi:instance id="page_userResetForm" property="userResetForm" />
-<digi:context name="userResetAction" property="context/module/moduleinstance/userResetPassword.do?action=Reset" />
+<digi:context name="userResetAction" property="context/ampModule/moduleinstance/userResetPassword.do?action=Reset" />
 <digi:errors/>
       <TABLE width="100%">
 

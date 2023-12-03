@@ -34,14 +34,14 @@
 
 <table id="team_table" bgcolor="white" width="100%">						
 						<tbody>						
-						<logic:iterate name="documentDataCollection" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
+						<logic:iterate name="documentDataCollection" id="documentData"	type="org.digijava.ampModule.contentrepository.helper.DocumentData" indexId="counter">
 							<%--
 					int index2;
 					String documentName = documentData.getName();
 					String iconPath = "";
 					index2 = ((String) documentName).lastIndexOf(".");
 					if (index2 >= 0) {
-						iconPath = "module/cms/images/extensions/"
+						iconPath = "ampModule/cms/images/extensions/"
 								+ ((String) documentName).substring(index2 + 1,
 										((String) documentName).length())
 								+ ".gif";
@@ -255,7 +255,7 @@
 										<c:if test="${ (!documentData.isPublic) || (!documentData.lastVersionIsPublic) }">
 											<br />
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
-											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true,'${tabTypeLocal}');"
+											onClick="setAttributeOnNode('<%= org.digijava.ampModule.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true,'${tabTypeLocal}');"
 											title="<digi:trn>Click here to make this document public</digi:trn>">
 												<digi:trn>Make Public</digi:trn>
 											</a>
@@ -267,7 +267,7 @@
 										<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 											<br />
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
-											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>',null,'${tabTypeLocal}');"
+											onClick="setAttributeOnNode('<%= org.digijava.ampModule.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>',null,'${tabTypeLocal}');"
 											title="<digi:trn>Click here to unpublish this document</digi:trn>">
 												<digi:trn>Unpublish</digi:trn>
 											</a>

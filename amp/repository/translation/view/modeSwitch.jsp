@@ -8,7 +8,7 @@
 <digi:secure actions="ADMIN, TRANSLATE">
 
 	<script>function switchTranslation(mode) {
-	      <digi:context name="switchUrl" property="context/module/moduleinstance/switchMode.do" />
+	      <digi:context name="switchUrl" property="context/ampModule/moduleinstance/switchMode.do" />
 	      document.modeSwitchForm.action = "<%= switchUrl %>?translationMode="+mode;
 	      document.modeSwitchForm.submit();
 	  }

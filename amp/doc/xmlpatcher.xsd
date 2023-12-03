@@ -28,7 +28,7 @@
 				<annotation>
 					<documentation>
 						Specify a keyword that relates with this patch.
-						This can either be a module name, or keywords
+						This can either be a ampModule name, or keywords
 						related to what this patch is addressing
 					</documentation>
 				</annotation>

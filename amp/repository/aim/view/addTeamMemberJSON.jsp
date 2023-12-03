@@ -335,7 +335,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		if(validate()==true){
 			//submit form
 			var addFromWhere=document.getElementById("addFromWhere").value;
-			<digi:context name="commentUrl" property="context/module/moduleinstance/assignUsersToWorkspace.do"/>;
+			<digi:context name="commentUrl" property="context/ampModule/moduleinstance/assignUsersToWorkspace.do"/>;
 			document.aimTeamMemberForm.action="${commentUrl}?added=true&addedFrom="+addFromWhere;
 		    document.aimTeamMemberForm.target="_self";
 		    document.aimTeamMemberForm.submit();

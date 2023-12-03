@@ -4,12 +4,12 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ page import = "org.digijava.module.aim.helper.TreeItem" %>
-<%@ page import = "org.digijava.module.aim.util.ProgramUtil" %>
+<%@ page import = "org.digijava.ampModule.aim.helper.TreeItem" %>
+<%@ page import = "org.digijava.ampModule.aim.util.ProgramUtil" %>
 <%@ page import = "java.util.Collection" %>
 <%@page import="java.util.Iterator"%>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
@@ -42,9 +42,9 @@
 			var temp = validate();
 			if (temp == true)
 			{
-				<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
+				<digi:context name="addThm" property="context/ampModule/moduleinstance/addTheme.do"/>
 				document.aimThemeForm.action = "<%=addThm%>";
-				document.aimThemeForm.target = "context/module/moduleinstance/addNewTheme.do";
+				document.aimThemeForm.target = "context/ampModule/moduleinstance/addNewTheme.do";
 				document.aimThemeForm.submit();
 			}
 			return true;
@@ -56,7 +56,7 @@
 				return false;
 			fire = true;
 			openNewWindow(600,500);
-			<digi:context name="addNewTh" property="context/module/moduleinstance/addTheme.do?event=add"/>
+			<digi:context name="addNewTh" property="context/ampModule/moduleinstance/addTheme.do?event=add"/>
 			document.aimThemeForm.action = "<%=addNewTh%>";
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
@@ -71,7 +71,7 @@
 				return false;
 			fire = true;
 			openNewWindow(600,500);
-			<digi:context name="subProgram" property="context/module/moduleinstance/addTheme.do?event=addSubProgram"/>
+			<digi:context name="subProgram" property="context/ampModule/moduleinstance/addTheme.do?event=addSubProgram"/>
 			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
@@ -86,7 +86,7 @@
 				return false;
 			fire = true;
 			openNewWindow(600,500);
-			<digi:context name="editTh" property="context/module/moduleinstance/addTheme.do?event=edit"/>
+			<digi:context name="editTh" property="context/ampModule/moduleinstance/addTheme.do?event=edit"/>
 			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
@@ -96,7 +96,7 @@
 		function assignIndicators(id)
 		{
 
-			<digi:context name="indAssign" property="context/module/moduleinstance/addThemeIndicator.do"/>
+			<digi:context name="indAssign" property="context/ampModule/moduleinstance/addThemeIndicator.do"/>
 			document.aimThemeForm.action = "<%= indAssign %>?resetIndicatorId=true&themeId=" + id;
 			document.aimThemeForm.target = "_self";
 			document.aimThemeForm.submit();
@@ -118,10 +118,10 @@
 		}
 
         function setOverImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-righthover1.gif"
         }
         function setOutImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif"
         }
  
         function expandProgram(progId){

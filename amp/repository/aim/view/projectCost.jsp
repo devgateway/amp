@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 
 <digi:instance property="aimEditActivityForm" />
 
-<module:display name="/Activity Form/Funding/Overview Section/${costName}" parentModule="/Activity Form/Funding/Overview Section">
+<ampModule:display name="/Activity Form/Funding/Overview Section/${costName}" parentModule="/Activity Form/Funding/Overview Section">
 <fieldset>
 	<legend>
 		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
@@ -45,7 +45,7 @@
 
 	
 	<c:if test = '${costName.equals("Proposed Project Cost")}' >
-		<module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost" 
+		<ampModule:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost"
 		parentModule="/Activity Form/Funding/Overview Section/Proposed Project Cost">
 		
 		<c:if test="${not empty yearBudget}">
@@ -67,8 +67,8 @@
 				</c:forEach>
 			</table>
 		</c:if>
-		</module:display>
+		</ampModule:display>
 	</c:if>
 		</div>
 	</fieldset>
-</module:display>
+</ampModule:display>

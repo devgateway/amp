@@ -9,13 +9,13 @@
 
 <digi:instance property="EditDepartmentForm" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
 function saveDep() {
-    <digi:context name="back" property="context/module/moduleinstance/editdepartment.do" />
+    <digi:context name="back" property="context/ampModule/moduleinstance/editdepartment.do" />
     document.EditDepartmentForm.action = "<%= back %>~edit=true";
     document.EditDepartmentForm.target = window.opener.name;
     document.EditDepartmentForm.submit();

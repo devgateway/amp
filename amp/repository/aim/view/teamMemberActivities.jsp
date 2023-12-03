@@ -54,7 +54,7 @@
 
 	function sortMe(val) {
 		var id = document.aimMemberActivitiesForm.memberId.value;
-		<digi:context name="sel" property="context/module/moduleinstance/teamMemberActivities.do" />
+		<digi:context name="sel" property="context/ampModule/moduleinstance/teamMemberActivities.do" />
 			url = "<%= sel %>?id="+id ;
 			
 			var sval = document.aimMemberActivitiesForm.sort.value;
@@ -203,7 +203,7 @@
 															Activity List Manager
 															</digi:trn>
 														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
+														<td background="ampModule/aim/images/corner-r.gif" height="17" width=17>
 														</td>
 													</tr>
 												</table>
@@ -321,7 +321,7 @@
 													<%--
 													<logic:notEmpty name="aimMemberActivitiesForm" property="activities">
 													<logic:iterate name="aimMemberActivitiesForm" property="activities" id="activities" 
-													type="org.digijava.module.aim.dbentity.AmpActivityVersion">
+													type="org.digijava.ampModule.aim.dbentity.AmpActivityVersion">
 													<tr>
 														<td>
 															<html:multibox property="selActivities" >

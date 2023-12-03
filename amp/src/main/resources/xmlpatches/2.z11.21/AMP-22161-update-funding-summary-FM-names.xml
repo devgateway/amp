@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22161</jira>
+	<keyword>Update FM names</keyword>
+	<author>vchihai</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments/Planned Commitments' 														
+			   	WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments/PlannedCommitments';
+
+				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements/Planned Disbursements' 														
+				WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements/PlannedDisbursements';
+
+				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures/Planned Expenditures' 														
+				WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures/PlannedExpenditures';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

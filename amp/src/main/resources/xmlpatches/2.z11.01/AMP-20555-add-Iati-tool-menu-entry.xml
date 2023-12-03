@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-20555</jira>
+	<keyword>menu</keyword>
+	<author>jdeanquin</author>
+	<description>Add menu entry for IATI Importer</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				insert into amp_menu_entry (id,parent_id,name,title,url,position,flags) values
+				(nextval('amp_menu_entry_seq'),(select id from amp_menu_entry where name='Tools'),'IATI Importer','IATI Importer','/importer',4,'TAB');
+				INSERT INTO amp_menu_entry_view(menu_id, view_type) 
+				VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'IATI Importer'), 2);
+				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
+				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'IATI Importer') AND view_type=2;
+				
+				
+				INSERT INTO amp_features_visibility (id,name,haslevel,parent)
+				SELECT (select nextval('amp_modules_visibility_seq')),'IATI Importer',true,
+				(SELECT id FROM amp_modules_visibility WHERE name = 'Tools')
+				WHERE 
+				NOT EXISTS (SELECT id from amp_features_visibility  WHERE name  = 'IATI Importer');
+				
+				
+				INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'), 
+				(SELECT id FROM amp_features_visibility WHERE name = 'IATI Importer' 
+				AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')));
+				
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

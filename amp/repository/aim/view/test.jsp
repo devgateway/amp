@@ -1,6 +1,6 @@
 /*
 function loadPage(){
-  <digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
+  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/editOrgGroup.do" />
   var id = document.aimAddOrgForm.ampOrgId.value;
   url = "<%= selectLoc %>?action=createGroup&ampOrgId=" + id;
   openOrgWindow(610, 190);

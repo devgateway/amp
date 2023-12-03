@@ -10,9 +10,9 @@
 
 
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+	src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+	src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -20,8 +20,8 @@
 
 <digi:instance property="aimEditActivityForm" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -54,7 +54,7 @@
 								<td valign="top" width="100%">
 									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 										<tr>
-											<td valign="top" width="13" height="20" background="module/aim/images/left-side.gif">
+											<td valign="top" width="13" height="20" background="ampModule/aim/images/left-side.gif">
 											</td>
 											<td valign="top" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 												<digi:trn key="aim:logframePlanningMatrix">
@@ -67,7 +67,7 @@
 											session.setAttribute("logframepr","false");
 												java.text.DateFormat df =  java.text.DateFormat.getDateInstance();%>
 											      <%= df.format(now)%></td>
-											<td valign="top" width="13" height="20" background="module/aim/images/right-side.gif">
+											<td valign="top" width="13" height="20" background="ampModule/aim/images/right-side.gif">
 												
 											</td>
 										</tr>
@@ -161,7 +161,7 @@
 											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
 													<logic:iterate name="comments" id="comment" property="value" 
-														type="org.digijava.module.aim.dbentity.AmpComments">
+														type="org.digijava.ampModule.aim.dbentity.AmpComments">
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
 	                                        	</logic:equal>
@@ -172,7 +172,7 @@
 											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Objective Verification">
 													<logic:iterate name="comments" id="comment" property="value" 
-														type="org.digijava.module.aim.dbentity.AmpComments">
+														type="org.digijava.ampModule.aim.dbentity.AmpComments">
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
 	                                        	</logic:equal>
@@ -210,7 +210,7 @@
 											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
 													<logic:iterate name="comments" id="comment" property="value" 
-														type="org.digijava.module.aim.dbentity.AmpComments">
+														type="org.digijava.ampModule.aim.dbentity.AmpComments">
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
 	                                        	</logic:equal>
@@ -220,7 +220,7 @@
 											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
 													<logic:iterate name="comments" id="comment" property="value" 
-														type="org.digijava.module.aim.dbentity.AmpComments">
+														type="org.digijava.ampModule.aim.dbentity.AmpComments">
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
 	                                        	</logic:equal>
@@ -230,7 +230,7 @@
 										<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 												<logic:iterate name="comments" id="comment" property="value" 
-													type="org.digijava.module.aim.dbentity.AmpComments">
+													type="org.digijava.ampModule.aim.dbentity.AmpComments">
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
@@ -266,7 +266,7 @@
 											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
 													<logic:iterate name="comments" id="comment" property="value" 
-														type="org.digijava.module.aim.dbentity.AmpComments">
+														type="org.digijava.ampModule.aim.dbentity.AmpComments">
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
 	                                        	</logic:equal>
@@ -276,7 +276,7 @@
 											 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 												<logic:equal name="comments" property="key" value="Results Verification">
 													<logic:iterate name="comments" id="comment" property="value" 
-														type="org.digijava.module.aim.dbentity.AmpComments">
+														type="org.digijava.ampModule.aim.dbentity.AmpComments">
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
 	                                        	</logic:equal>
@@ -286,7 +286,7 @@
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
 												<logic:iterate name="comments" id="comment" property="value" 
-													type="org.digijava.module.aim.dbentity.AmpComments">
+													type="org.digijava.ampModule.aim.dbentity.AmpComments">
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>

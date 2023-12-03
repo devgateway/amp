@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" import="org.digijava.module.aim.dbentity.AmpOrganisation, java.util.* "%>
+<%@ page pageEncoding="UTF-8" import="org.digijava.ampModule.aim.dbentity.AmpOrganisation, java.util.* "%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -96,7 +96,7 @@
 		if (flag == false)
 			return false;
 
-		<digi:context name="selOrg" property="context/module/moduleinstance/organisationSelected.do?edit=true"/>
+		<digi:context name="selOrg" property="context/ampModule/moduleinstance/organisationSelected.do?edit=true"/>
 	   document.aimEditActivityForm.action = "<%= selOrg %>";
 		document.aimEditActivityForm.target = window.opener.name;
 		document.aimEditActivityForm.selectedOrganisationFromPages.value=-1;
@@ -112,7 +112,7 @@
 	}
 
 	function selectOrganizationPages(page) {
-	   <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganization.do?edit=true&orgSelReset=false&page=" />
+	   <digi:context name="searchOrg" property="context/ampModule/moduleinstance/selectOrganization.do?edit=true&orgSelReset=false&page=" />
 	   var val = "<%=searchOrg%>";
 	   val = val + page;
 	   document.aimEditActivityForm.action = val;
@@ -129,7 +129,7 @@
 				  document.aimEditActivityForm.tempNumResults.focus();
 				  return false;
 			} else {
-				 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do?edit=true"/>
+				 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/searchOrganisation.do?edit=true"/>
 			    document.aimEditActivityForm.action = "<%= searchOrg %>";
 			    document.aimEditActivityForm.submit();
 				  return true;
@@ -144,7 +144,7 @@
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/searchOrganisation.do"/>
 			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true";
 		     document.aimEditActivityForm.action = url;
 		     document.aimEditActivityForm.submit();
@@ -158,7 +158,7 @@
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
+			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/searchOrganisation.do"/>
 			// url = "<%= searchOrg %>?alpha=viewAll&orgSelReset=false&edit=true";
 		    // document.aimEditActivityForm.action = url;
 		    document.aimEditActivityForm.action = "<%= searchOrg %>";
@@ -275,7 +275,7 @@
 							<td align=left valign="top">
 							<table width="100%" cellPadding=3>
 								<logic:iterate name="aimEditActivityForm" id="organisations" property="pagedCol"
-									type="org.digijava.module.aim.dbentity.AmpOrganisation">
+									type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
 										<tr>
 											<td bgcolor=#ECF3FD width="10%">
 												&nbsp;&nbsp;

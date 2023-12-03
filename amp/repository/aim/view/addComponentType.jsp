@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <script language="JavaScript">
 
 function onDelete() {
@@ -15,7 +15,7 @@ function onDelete() {
 }
 
 function onCancel() {
-  <digi:context name="cancelComponents" property="context/module/moduleinstance/updateComponentType..do?event=cancel" />
+  <digi:context name="cancelComponents" property="context/ampModule/moduleinstance/updateComponentType..do?event=cancel" />
   document.aimComponentsTypeForm.action = "<%= cancelComponents%>";
   document.aimComponentsTypeForm.target = "_self";
   document.aimComponentsTypeForm.submit();
@@ -46,7 +46,7 @@ function updateComponentsType()
   {
     document.aimComponentsTypeForm.addBtn.disabled = true;
 	
-    <digi:context name="update" property="context/module/moduleinstance/updateComponentType.do?event=save" />
+    <digi:context name="update" property="context/ampModule/moduleinstance/updateComponentType.do?event=save" />
     
 	document.aimComponentsTypeForm.action = "<%=update%>";
     
@@ -61,7 +61,7 @@ function updateComponentsType()
 
 function myOnload(){
   if(document.aimComponentsTypeForm.check.value=="save"){
-    <digi:context name="refresh" property="context/module/moduleinstance/updateComponentType.do" />
+    <digi:context name="refresh" property="context/ampModule/moduleinstance/updateComponentType.do" />
     document.aimComponentsTypeForm.action = "<%= refresh %>";
     document.aimComponentsTypeForm.target = window.opener.name;
     document.aimComponentsTypeForm.submit();

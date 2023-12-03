@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 
 <bean:define id="elements" toScope="page" scope="request" name="reqElements" />
 <bean:define id="propertyObj" toScope="page" scope="request" name="reqPropertyObj" />

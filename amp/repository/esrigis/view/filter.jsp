@@ -9,10 +9,10 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
 <script type="text/javascript">
@@ -45,7 +45,7 @@ function initializeTranslations(){
 }
 </script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script> 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>
@@ -174,12 +174,12 @@ function initializeTranslations(){
 													<digi:trn>Commitments</digi:trn> <digi:trn>and</digi:trn> <digi:trn>Disbursements</digi:trn>
 												</html:radio>
 												<br />
-												<module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
+												<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
                                                             	parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 													<html:radio property="filter.transactionType" styleId="transaction_type_3" value="3">
 														<digi:trn>MTEF Projections</digi:trn>
 													</html:radio>
-												</module:display>
+												</ampModule:display>
 												<hr />
 											</div>
 										</div>

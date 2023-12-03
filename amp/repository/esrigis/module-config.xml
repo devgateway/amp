@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<module-config>
+<ampModule-config>
 	<name>esrigis</name>
 	<security>
 		<action login-required="true" pattern="/structureTypeManager">ADMIN</action>
@@ -9,7 +9,7 @@
 	</security>
 	
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.module.esrigis.dbentity.AmpMapConfig</hibernate-class>
-		<hibernate-class>org.digijava.module.esrigis.dbentity.AmpApiState</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.esrigis.dbentity.AmpMapConfig</hibernate-class>
+		<hibernate-class>org.digijava.ampModule.esrigis.dbentity.AmpApiState</hibernate-class>
 	</hibernate-classes>
-</module-config>
+</ampModule-config>

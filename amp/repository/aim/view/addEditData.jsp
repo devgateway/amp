@@ -10,11 +10,11 @@ body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
 .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
 </style>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addFunding.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
@@ -39,7 +39,7 @@ function chkNumeric(frmContrl){
 $(document).ready(function(){
       $("#addDataBtn").click(function () {
           $(this).attr('disabled', 'disabled');
-           <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
+           <digi:context name="addEditIndicator" property="context/ampModule/moduleinstance/addEditData.do?event=addIndValue" />
            aimThemeForm.action = "<%=addEditIndicator%>";
        	   aimThemeForm.submit();
       });
@@ -49,7 +49,7 @@ $(document).ready(function(){
 function deleteData(ind){
   var flag = confirm("Delete this data?");
   if(flag == true){
-  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=delIndValue" />
+  <digi:context name="addEditIndicator" property="context/ampModule/moduleinstance/addEditData.do?event=delIndValue" />
   document.forms[0].action = "<%=addEditIndicator%>&index="+ind;
   document.forms[0].submit();
   }
@@ -59,7 +59,7 @@ function saveIndicator(id){
 	if (!validation()){
         return false;
 	}
-  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" /> 
+  <digi:context name="addEditIndicator" property="context/ampModule/moduleinstance/addEditData.do?event=save" />
   aimThemeForm.action = "<%=addEditIndicator%>";
   aimThemeForm.target=window.opener.name;
   aimThemeForm.submit();
@@ -68,10 +68,10 @@ function saveIndicator(id){
 }
 
 function selectLocation(index){
-    <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" />
+    <digi:context name="justSubmit" property="context/ampModule/moduleinstance/addEditData.do?action=justSubmit" />
   	document.aimThemeForm.action = "<%=justSubmit%>&index="+index;
   	document.aimThemeForm.submit();
-  <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>  
+  <digi:context name="selLoc" property="context/ampModule/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>
   openURLinWindow("<%=selLoc%>&index="+index,700,500);
 
 

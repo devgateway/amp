@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
   
 <script language="JavaScript">
 	<!--
@@ -16,7 +16,7 @@
 
 	function deleteMEIndicator(id)
 	{
-		<digi:context name="delInd" property="context/module/moduleinstance/deleteIndicator.do"/>
+		<digi:context name="delInd" property="context/ampModule/moduleinstance/deleteIndicator.do"/>
 		document.aimIndicatorForm.action = "<%= delInd %>?id="+id;
 		document.aimIndicatorForm.target = window.opener.name;
 		document.aimIndicatorForm.submit();
@@ -73,7 +73,7 @@
 								</td>																	
 							</tr>
 							<% int count=1; %>
-							<logic:iterate name="aimIndicatorForm" property="meIndActList" id="meIndActList" type="org.digijava.module.aim.dbentity.AmpActivity">
+							<logic:iterate name="aimIndicatorForm" property="meIndActList" id="meIndActList" type="org.digijava.ampModule.aim.dbentity.AmpActivity">
 							<tr bgColor=#ffffff>
 								<td width="9">
 									<%	out.print(count++);	%>.

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpIndicatorRiskRatings"
+		table="AMP_INDICATOR_RISK_RATINGS" lazy="false">
+		<cache usage="read-write" />
+		<id name="ampIndRiskRatingsId" column="amp_ind_risk_ratings_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_INDICATOR_RISK_RATINGS_seq</param>
+			</generator>
+		</id>
+
+		<property name="ratingName" column="rating_name" type="java.lang.String" />
+		<property name="ratingValue" column="rating_value" type="java.lang.Integer" />
+	</class>
+</hibernate-mapping>

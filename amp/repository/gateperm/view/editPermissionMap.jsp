@@ -25,7 +25,7 @@ function submitForm(mode) {
 				<a href="/aim/admin.do" class="l_sm" title="${translation}"><digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 					<c:set var="translation"><digi:trn key="aim:clickToGlobalPerm">Click here to goto Global Permission Manager</digi:trn></c:set>
 				</a>
-				<span class="breadcrump_sep"><b>»</b></span>
+				<span class="breadcrump_sep"><b>ï¿½</b></span>
 				<span class="bread_sel"><digi:trn key="aim:globalperms">Global Permission Manager</digi:trn></span>
 			</div>
 		</div>
@@ -82,8 +82,8 @@ function submitForm(mode) {
 		    				<td valign="top" width="220">
 								<b><digi:trn>Key</digi:trn></b>:
 								<div class="perm_legend"><hr />
-									<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
-									<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
+									<digi:context name="exportperm" property="context/ampModule/moduleinstance/exchangePermission.do?export" />
+									<digi:context name="importperm" property="context/ampModule/moduleinstance/exchangePermission.do?import" />
 									<input type="button" name="export" class="buttonx" value='<digi:trn jsFriendly="true" key="aim:translationmanagerexportbutton">Export</digi:trn>' onclick="javascript:window.location.href='<%=exportperm%>'" /> 
 									<input type="button" name="import" class="buttonx" value='<digi:trn jsFriendly="true" key="aim:translationmanagerimportbutton">Import</digi:trn>' onclick="javascript:window.location.href='<%=importperm%>'" />
 									<hr />

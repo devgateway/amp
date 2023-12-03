@@ -11,7 +11,7 @@
 	<logic:present name="translationForm" property="languages">
 	<html:select property="referUrl" onChange="SwithLanguage(this)">
 	<bean:define id="lid" name="translationForm" property="languages" type="java.util.List"/>
-	<logic:iterate id="languages" name="translationForm" property="languages" type="org.digijava.module.translation.form.TranslationForm.TranslationInfo">
+	<logic:iterate id="languages" name="translationForm" property="languages" type="org.digijava.ampModule.translation.form.TranslationForm.TranslationInfo">
 	<bean:define id="referUrl" name="languages" property="referUrl" type="java.lang.String"/>
 	<bean:define id="langCode" name="languages" property="langCode" type="java.lang.String"/>
 	<bean:define id="langKey" name="languages" property="key" type="java.lang.String"/>

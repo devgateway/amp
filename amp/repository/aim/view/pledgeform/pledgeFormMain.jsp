@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
     <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
@@ -85,7 +85,7 @@
 			</aim:renderFormSubsection>
 		</field:display>
 	
-		<feature:display name="Pledge Funding" module="Pledges">
+		<feature:display name="Pledge Funding" ampModule="Pledges">
 			<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
 				<jsp:include page="pledgeFunding.jsp"></jsp:include>
 				<div class="text-center"><button type="button" onclick="fundingsController.addNewItem(this);" class="btn btn-success btn-sm" id="pledge_form_funding_data_add"><digi:trn>Add Pledge Funding</digi:trn></button></div>

@@ -10,9 +10,9 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <digi:instance property="aimEditActivityForm" />
-<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds" 
+<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 <c:set var="transaction" value="Release of Funds/Release of Funds Table" scope="page"/>
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
@@ -29,7 +29,7 @@
 	<!-- Start Planned Disbursements -->
 	<c:if test="${!empty funding.plannedRoFDetails}">	
 	<logic:iterate name="funding" property="plannedRoFDetails"
-		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
 		<%@include file="previewActivityFundingDetail.jspf" %>
 	</logic:iterate>
 	</c:if>
@@ -64,7 +64,7 @@
 
 	<!-- Start Actual Release of Funds -->
 	<c:if test="${!empty funding.actualRoFDetails}">	
-	<logic:iterate name="funding" property="actualRoFDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="actualRoFDetails" id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
 		<%@include file="previewActivityFundingDetail.jspf" %>
 	</logic:iterate>
 	</c:if>
@@ -96,7 +96,7 @@
 
 	<!-- Start Pipeline Release of Funds -->
 	<c:if test="${!empty funding.pipelineRoFDetails}">	
-	<logic:iterate name="funding" property="pipelineRoFDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="pipelineRoFDetails" id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
 		<%@include file="previewActivityFundingDetail.jspf" %>
 	</logic:iterate>
 	</c:if>
@@ -116,7 +116,7 @@
 </c:if>
 </c:if>
 
-</module:display>
+</ampModule:display>
 
 
 

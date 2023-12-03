@@ -78,7 +78,7 @@ div.fakefile2 input{
 			<c:set var="translation">
 				<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 			</c:set>
-		    <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+		    <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
 				<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 			</digi:link>&nbsp;&gt;&nbsp;													
 			<c:set var="gotoTemplateAlertsPage">
@@ -126,7 +126,7 @@ div.fakefile2 input{
 	</tr>
 </table>
 
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 </script>

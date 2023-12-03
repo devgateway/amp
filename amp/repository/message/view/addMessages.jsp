@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <digi:instance property="messageForm" />
 <html:hidden name="messageForm" property="tabIndex"/>
@@ -22,7 +22,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/filters/searchManager.js'/>" ></script>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <style>
@@ -753,7 +753,7 @@ span.extContactDropdownEmail {
 <br/><br/>
 <digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">																				
 
-<module:display name="Messages" parentModule="Messaging System"></module:display>
+<ampModule:display name="Messages" parentModule="Messaging System"></ampModule:display>
 
 <div class="ins_box_left" style="width:100%;border: 1px solid silver; background-color:#F5F5F5;">
 	<digi:errors/>
@@ -885,7 +885,7 @@ span.extContactDropdownEmail {
 							<c:if test="${not empty messageForm.sdmDocument.id}">
 								<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
 							</c:if>																					
-							<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
+							<digi:link ampModule="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
 								<img src="/repository/message/view/images/attachment.png" border="0" />
 								${attachedDoc.contentTitle}
 							</digi:link>
@@ -1099,7 +1099,7 @@ span.extContactDropdownEmail {
 	});	
 </script>
 
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 	

@@ -23,7 +23,7 @@
 	<digi:form action="/visibilityManager.do" method="post" >
 	<logic:notEmpty name="aimVisibilityManagerForm" property="featuresModule">
 	<logic:iterate name="aimVisibilityManagerForm" property="featuresModule" id="visibility"
-		type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">	
+		type="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility">
 		<logic:equal name="visibility" property="visible" value="true">
 		<tr bgcolor="#ffffff">
 			<td width="9">
@@ -42,7 +42,7 @@
 	</logic:notEmpty>
 	<logic:notEmpty name="aimVisibilityManagerForm" property="featuresModule">
 	<logic:iterate name="aimVisibilityManagerForm" property="featuresModule" id="visibility"
-		type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">	
+		type="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility">
 		<logic:equal name="visibility" property="visible" value="false">
 		<tr bgcolor="#ffffff">
 			<td width="9">

@@ -1,15 +1,15 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
 
-<module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
+<ampModule:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
     <fieldset>
         <legend>
 		<span class=legend_label id="documentslink" style="cursor: pointer;">
@@ -20,7 +20,7 @@
             <c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
                 <table width="100%" cellSpacing="1" cellPadding="5" cellSpacing="0" cellPadding="0">
                     <logic:notEmpty name="aimEditActivityForm" property="documents.documents" >
-                        <logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.module.aim.helper.Documents">
+                        <logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.ampModule.aim.helper.Documents">
                             <c:if test="${docs.isFile == true}">
                                 <tr>
                                     <td>
@@ -97,7 +97,7 @@
 					<table width="100%" class="box-border-nopadding">
 						<tr>
 							<td width="2">
-								<digi:img src="module/aim/images/web-page.gif"/>							</td>
+								<digi:img src="ampModule/aim/images/web-page.gif"/>							</td>
 							<td align="left" vAlign="center">&nbsp; <b>
 								<c:out value="${links.title}"/></b> - &nbsp;&nbsp;&nbsp;
 								<i> <a href="<c:out value="${links.url}"/>">
@@ -114,4 +114,4 @@
 	</c:if> --%>
         </div>
     </fieldset>
-</module:display>
+</ampModule:display>

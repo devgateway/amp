@@ -8,8 +8,8 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -48,7 +48,7 @@
 
 		if(check)
 		{
-			<digi:context name="selLoc" property="context/module/moduleinstance/locationSelected.do?edit=true"/>
+			<digi:context name="selLoc" property="context/ampModule/moduleinstance/locationSelected.do?edit=true"/>
 	    	document.aimEditActivityForm.action = "<%= selLoc %>";
 		 	document.aimEditActivityForm.target = window.opener.name;
 	    	document.aimEditActivityForm.submit();
@@ -62,7 +62,7 @@
 
 	function countryChanged() {
 		document.getElementById('fill').value = "region";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
 		  document.aimEditActivityForm.submit();
@@ -70,7 +70,7 @@
 
 	function regionChanged() {
 		document.getElementById('fill').value = "zone";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
 		  document.aimEditActivityForm.submit();
@@ -78,7 +78,7 @@
 
 	function zoneChanged() {
 		document.getElementById('fill').value = "woreda";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
 		  document.aimEditActivityForm.submit();
@@ -171,7 +171,7 @@ function checkNumeric(objName,comma,period,hyphen)
 		{
 			if(checkEmpty())
 			{
-			 <digi:context name="searchLoc" property="context/module/moduleinstance/searchLocation.do"/>
+			 <digi:context name="searchLoc" property="context/ampModule/moduleinstance/searchLocation.do"/>
 			 document.aimEditActivityForm.action = "<%= searchLoc %>";
 			 document.aimEditActivityForm.submit();
 			 return true;
@@ -182,7 +182,7 @@ function checkNumeric(objName,comma,period,hyphen)
 
 	function selectLoc2() {
 		openNewWindow(600, 450);
-		<digi:context name="selectLoc" property="context/module/moduleinstance/searchLocation.do" />
+		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/searchLocation.do" />
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
@@ -220,7 +220,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="1">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 											</td>
 											<td><b>
 												<c:out value="${aimEditActivityForm.location.country}"/></b>
@@ -230,7 +230,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="2">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
 											</td>
 											<td>
 												<c:if test="${aimEditActivityForm.location.impLevelValue != 2}">
@@ -257,7 +257,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="3">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
 											</td>
 											<td>
 												<c:if test="${aimEditActivityForm.location.impLevelValue != 3}">
@@ -284,7 +284,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="4">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 											</td>
 											<td>
 												<html:select property="location.impMultiWoreda"  styleId="impMultiWoreda" styleClass="inp-text" size="5" multiple="true">

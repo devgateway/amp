@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
 
 <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${urlParams}" property="tId" value="-1"/>
@@ -127,7 +127,7 @@ function putLoading(){
 					</c:if>
 					
 					
-					<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS">
+					<ampModule:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS">
 						<c:if test="${selectedTab == '6'}">
 							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 								<a class="tab_link" >
@@ -142,7 +142,7 @@ function putLoading(){
 								</digi:link>
 							</li>
 						</c:if>
-					</module:display>
+					</ampModule:display>
 					
 					<c:if test="${selectedTab  == '7'}">
 						<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">

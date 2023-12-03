@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/calendar.js"/>"></script>
 
 <digi:instance property="aimNewIndicatorForm" />
 <script language="javascript">
@@ -40,7 +40,7 @@ function removeActivity(id) {
 	}
 	else
 	 {
-		<digi:context name="update" property="context/module/moduleinstance/selectActivityForIndicator.do?action=remove" />
+		<digi:context name="update" property="context/ampModule/moduleinstance/selectActivityForIndicator.do?action=remove" />
 		document.aimNewIndicatorForm.action = "<%=update%>&forward=edit&aId="+id;
 	    document.aimNewIndicatorForm.target = "_self"
 	    document.aimNewIndicatorForm.submit();
@@ -97,7 +97,7 @@ function saveIndicator(){
 		} 
 
   
-  <digi:context name="addInd" property="context/module/moduleinstance/viewEditIndicator.do?action=save" />
+  <digi:context name="addInd" property="context/ampModule/moduleinstance/viewEditIndicator.do?action=save" />
   
   //document.forms[0].action="<%=addInd%>";
   //document.forms[0].submit();
@@ -111,13 +111,13 @@ function saveIndicator(){
 }
 
 function selectProgram(){
-  <digi:context name="selPrg" property="context/module/moduleinstance/selectProgramForIndicator.do?action=edit" />
+  <digi:context name="selPrg" property="context/ampModule/moduleinstance/selectProgramForIndicator.do?action=edit" />
   openURLinWindow("<%= selPrg %>",700, 500);
 }
 
 function selectActivity(){
 
-  <digi:context name="selAct" property="context/module/moduleinstance/selectActivityForIndicator.do?action=edit" />
+  <digi:context name="selAct" property="context/ampModule/moduleinstance/selectActivityForIndicator.do?action=edit" />
   openURLinWindow("<%= selAct %>",700, 500);
 }
  <%-- 
@@ -176,7 +176,7 @@ function validate(field) {
 function removeSelSectors() {
 		  var flag = validate(2);
 		  if (flag == false) return false;
-          <digi:context name="remSec" property="context/module/moduleinstance/removeIndicatorEditSectors.do?edit=true" />
+          <digi:context name="remSec" property="context/ampModule/moduleinstance/removeIndicatorEditSectors.do?edit=true" />
           document.aimNewIndicatorForm.action = "<%= remSec %>";
           document.aimNewIndicatorForm.target = "_self"
           document.aimNewIndicatorForm.submit();
@@ -185,7 +185,7 @@ function removeSelSectors() {
 
 function addSectors() {
 		openNewWindow(600, 450);
-		<digi:context name="addSector" property="context/module/moduleinstance/editSectorForind.do?edit=true" />
+		<digi:context name="addSector" property="context/ampModule/moduleinstance/editSectorForind.do?edit=true" />
 	  	document.aimNewIndicatorForm.action = "<%= addSector %>";
 		document.aimNewIndicatorForm.target = popupPointer.name;
 		document.aimNewIndicatorForm.submit();

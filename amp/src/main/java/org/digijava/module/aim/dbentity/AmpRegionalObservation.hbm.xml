@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.ampModule.aim.dbentity.AmpRegionalObservation" table="AMP_REGIONAL_OBSERVATION">
+		<cache usage="read-write" />
+		<id name="ampRegionalObservationId" column="amp_regional_observation_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_REGIONAL_OBSERVATION_seq</param>
+			</generator>
+		</id>
+		<property column="name" name="name" type="text" />
+		<property column="observationDate" name="observationDate" type="java.util.Date" />
+		<many-to-one name="activity" column="amp_activity_id"
+			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" />
+		<set name="regionalObservationMeasures" cascade="all" inverse="true" order-by="amp_reg_obs_measure_id asc">
+			<cache usage="read-write" />
+			<key column="amp_regional_observation_id" />
+			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpRegionalObservationMeasure" />
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<site-config>
+	<site-layout>
+		<layout name="default">
+			<put name="title">DemoSite GE page title</put>
+			<put-item name="header" layout="headerLayout"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="left" layout="leftLayout"/>
+			<put-item name="body" layout="initialBody"/>
+		</layout>
+		<layout name="leftLayout" file="left.jsp">
+			<put name="title">DemoSite Left Menu</put>
+			<put-item name="newsAll" ampModule="news" instance="default"/>
+			<put-item name="calendarItem" ampModule="calendar" instance="default"/>
+			<put-item name="umUser" ampModule="um" instance="user"/>
+			<put-item name="calendarItem" ampModule="calendar" instance="default"/>
+			<put-item name="highlightsItem" ampModule="highlights" instance="default"/>
+			<put-item teaser="showVerticalNavigation" name="showVerticalNavigation" ampModule="editor" instance="default"/>
+		</layout>
+		<layout name="headerLayout" file="header.jsp">
+			<put-item name="sdm" ampModule="sdm" instance="default"/>
+			<put-item teaser="showNavigation" name="showNavigation" ampModule="editor" instance="default"/>
+		</layout>
+		<layout name="footerLayout" file="footerLayout.jsp">
+			<put-item name="adminLink" ampModule="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+		<layout name="initialBody" file="initialBody.jsp">
+			<put-item name="highlightItem" ampModule="highlights" instance="default"/>
+			<put-item name="forum" ampModule="forum" instance="default"/>
+			<put-item name="cms" ampModule="cms" instance="default"/>
+		</layout>
+		<layout name="admin" file="adminLayout.jsp">
+			<put name="title">Blank Site Admin page</put>
+			<put-item name="header" ampModule="admin" page="header"/>
+			<put-item name="left" ampModule="admin" page="left"/>
+			<put-item name="body" ampModule="admin" page="body"/>
+		</layout>
+		<layout name="single" file="popupLayout.jsp">
+			<put name="title">Single Tile</put>
+		</layout>
+		<!-- login page Layout -->
+		<layout name="login" file="loginLayout.jsp">
+			<put name="title">Please log in</put>
+			<put-item name="header" layout="headerLayout"/>
+			<put-item name="footer"/>
+			<put-item name="body" ampModule="um" instance="user"/>
+		</layout>
+		<!-- UM LAYOUT -->
+		<layout name="userAccount" extends="default">
+			<put name="title">Default Template page title with user update account body</put>
+			<put-item name="body" ampModule="um" instance="user" teaser="userAccount"/>
+		</layout>
+		<layout name="updateUserProfile" extends="default">
+			<put name="title">Default template page title with user update Profile body</put>
+			<put-item name="body" ampModule="um" instance="user" teaser="updateUserProfile"/>
+		</layout>
+		<layout name="userRegister" extends="default">
+			<put name="title">Default template page title with user register body</put>
+			<put-item name="body" ampModule="um" instance="user" teaser="userRegister"/>
+		</layout>
+		<layout name="userRegisterSuccess" extends="default">
+			<put name="title">Default template page title with user register success body</put>
+			<put-item name="body" ampModule="um" instance="user" teaser="userRegisterSuccess"/>
+		</layout>
+		<layout name="successResetPassword" extends="default">
+			<put name="title">Default template page title with user reset success</put>
+			<put-item name="body" ampModule="um" page="successResetPassword"/>
+		</layout>
+		<layout name="errorResetPassword" extends="default">
+			<put name="title">Default template page title with user reset error</put>
+			<put-item name="body" ampModule="um" page="errorResetPassword"/>
+		</layout>
+		<!-- END UM LAYOUT -->
+
+
+		<layout name="exceptionLayout" extends="single">
+			<put name="title">Default template page title with exception</put>
+			<put-item name="body" ampModule="exception" page="exceptionPage"/>
+		</layout>
+
+		<layout name="http500layout" extends="single">
+			<put name="title">Default template page title with http status code 500</put>
+			<put-item name="body" ampModule="exception" page="500"/>
+		</layout>
+
+		<layout name="http400layout" extends="single">
+			<put name="title">Default template page title with http status code 400</put>
+			<put-item name="body" ampModule="exception" page="400"/>
+		</layout>
+
+		<layout name="http404layout" extends="single">
+			<put name="title">Default template page title with http status code 404</put>
+			<put-item name="body" ampModule="exception" page="404"/>
+		</layout>
+
+
+		<!-- TRANSLATE LAYOUT -->
+		<layout name="TranslatorPortlet" extends="single">
+			<put name="title"> </put>
+			<put-item name="body" ampModule="translate" instance="default" teaser="translate"/>
+		</layout>
+		<layout name="translation" extends="single">
+			<put name="title">Translation</put>
+			<put-item name="body" ampModule="translate" instance="complete" teaser="completeTranslation"/>
+		</layout>
+		<layout name="globaltranslation" extends="single">
+			<put name="title">Translation</put>
+			<put-item name="body" ampModule="translate" instance="global" teaser="globalTranslation"/>
+		</layout>
+		<layout name="advTranslationLayout" extends="single">
+			<put name="title">Default template page title with advanced translation</put>
+			<put-item name="body" ampModule="translation" page="advancedTrans"/>
+		</layout>
+		<layout name="translationAdminLayout" extends="single">
+			<put name="title">Default template page title with translation administration</put>
+			<put-item name="body" ampModule="translation" page="adminTranslation"/>
+		</layout>
+		<layout name="translationPermLayout" extends="translationAdminLayout">
+			<put name="title">Default template page title with translation permission administration</put>
+			<put-item name="body" ampModule="translation" page="adminPerms"/>
+		</layout>
+		<layout name="translationUserLayout" extends="translationAdminLayout">
+			<put name="title">Default template page title with user translations administration</put>
+			<put-item name="body" ampModule="translation" page="adminUser"/>
+		</layout>
+		<!-- TRANSLATE LAYOUT -->
+		<page-group masterLayout="default" tile="body"/>
+		<page-group masterLayout="admin" tile="body">
+			<ampModule name="admin"/>
+		</page-group>
+		<page-group masterLayout="single" tile="body">
+			<ampModule name="admin">
+				<page>admin_usersPopupLayout</page>
+				<page>admin_instPopupLayout</page>
+				<page>admin_pickupGroupPopupLayout</page>
+			</ampModule>
+			<ampModule name="highlights">
+				<page>viewHighlight</page>
+			</ampModule>
+			<ampModule name="translate"/>
+			<ampModule name="forum">
+				<page>forum_showFindUser</page>
+				<page>forum_alertUserNewPm</page>
+			</ampModule>
+			<ampModule name="cms">
+				<page>cms_selectCategory</page>
+				<page>cms_selectFile</page>
+				<page>cms_showSendEmail</page>
+				<page>cms_sendEmailSuccess</page>
+				<page>cms_sendEmailError</page>
+			</ampModule>
+		</page-group>
+	</site-layout>
+</site-config>

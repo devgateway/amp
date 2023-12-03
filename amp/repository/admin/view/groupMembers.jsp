@@ -10,21 +10,21 @@
 
 <script>
   function fnOnRemoveUser(id) {
-      <digi:context name="removeUrl" property="context/module/moduleinstance/removeMemberUser.do" />
+      <digi:context name="removeUrl" property="context/ampModule/moduleinstance/removeMemberUser.do" />
       document.groupMembersForm.action = "<%= removeUrl %>?userId=" + id;
       document.groupMembersForm.submit();
   }
 
   function refreshUserList() {
       alert();
-      <digi:context name="refreshUrl" property="context/module/moduleinstance/showGroupMembers.do" />
+      <digi:context name="refreshUrl" property="context/ampModule/moduleinstance/showGroupMembers.do" />
       document.groupMembersForm.action= "<%= refreshUrl %>";
       document.groupMembersForm.submit();
   }
 
   function selectUsers(users) {
       document.groupMembersForm.usersToAdd.value = users;
-      <digi:context name="refreshUrl" property="context/module/moduleinstance/addUsersToGroup.do" />
+      <digi:context name="refreshUrl" property="context/ampModule/moduleinstance/addUsersToGroup.do" />
       document.groupMembersForm.action= "<%= refreshUrl %>";
       document.groupMembersForm.submit();
   }
@@ -70,8 +70,8 @@
 <HR>
 <table>
 <tr><td>
-<digi:context name="selectUsers" property="context/module/moduleinstance/showSelectUsers.do" />
-<digi:context name="addUsersToGroup" property="context/module/moduleinstance/addUsersToGroup.do" />
+<digi:context name="selectUsers" property="context/ampModule/moduleinstance/showSelectUsers.do" />
+<digi:context name="addUsersToGroup" property="context/ampModule/moduleinstance/addUsersToGroup.do" />
 <a href="<%= selectUsers %>?targetAction=<%= addUsersToGroup %>" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;" target="user" paramId="id" paramName="index"><digi:trn key="admin:addUsers">Add Users</digi:trn></a>
 </td></tr>
 </table>

@@ -142,7 +142,7 @@
 												
 
 															<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" 
-															type="org.digijava.module.aim.helper.Documents">
+															type="org.digijava.ampModule.aim.helper.Documents">
 															<c:if test="${relatedLink.isFile == true}">
 															<tr>
 																<td bgColor=#f4f4f2>	
@@ -172,7 +172,7 @@
 																		String extension = "";
 																		index2 = ((String)fileName).lastIndexOf(".");	
 																		if( index2 >= 0 ) {
-																		   extension = "module/cms/images/extensions/" + 
+																		   extension = "ampModule/cms/images/extensions/" +
 																			((String)fileName).substring(
 																						index2 + 1,((String)fileName).length()) + ".gif";
 																		}
@@ -275,7 +275,7 @@
 
 															<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" 
 
-															type="org.digijava.module.aim.helper.Documents">
+															type="org.digijava.ampModule.aim.helper.Documents">
 
 															<c:if test="${relatedLink.isFile == false}">
 
@@ -315,7 +315,7 @@
 
 																<td bgColor=#f4f4f2>	
 
-																	<digi:img src="module/aim/images/web-page.gif"/>
+																	<digi:img src="ampModule/aim/images/web-page.gif"/>
 
 																	<a target="_blank" href="<bean:write name="relatedLink" property="url" />">
 

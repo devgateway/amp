@@ -17,12 +17,12 @@
 </script>
 
 <digi:form method="post" action="/showMasterInstances.do">
-<html:hidden property="module" />
+<html:hidden property="ampModule" />
 <html:hidden property="index" />
 <table width="100%">
 <tr><td colspan="2" align="center" class="pageTitle" noWrap><digi:trn key="admin:setMasterInstance">Set Master Instance</digi:trn></td></tr>
 <tr><td noWrap >&nbsp;</td></tr>
-<tr><td noWrap align="left" class=text><digi:trn key="admin:module">Module</digi:trn></td><td align="left" noWrap class="text"><c:out value="${referencedInstForm.module}" /></td></tr>
+<tr><td noWrap align="left" class=text><digi:trn key="admin:ampModule">Module</digi:trn></td><td align="left" noWrap class="text"><c:out value="${referencedInstForm.ampModule}" /></td></tr>
 <tr><td noWrap align="left" class=text><digi:trn key="admin:instance">Instance</digi:trn></td><td align="left" noWrap class="text">
 <script>
    document.write(opener.document.all("instances[<%= request.getParameter("id")%>].instanceName").value);

@@ -18,7 +18,10 @@ const App: React.FC<AppProps> = (props) => {
 
   return (
       <Provider store={store}>
+          <>
+              {/* @ts-ignore */}
               <RouterProvider router={router} />
+          </>
       </Provider>
 
   );

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { SettingsType } from '../types';
 import { Value } from 'react-date-picker/dist/cjs/shared/types';
 import 'react-date-picker/dist/DatePicker.css';
-import 'react-calendar/dist/Calendar.css';
+import './css/React-Calendar.css';
 import './css/DateInput.css';
 
 export interface DateInputProps {

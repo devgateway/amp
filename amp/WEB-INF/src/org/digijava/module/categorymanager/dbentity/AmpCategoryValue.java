@@ -201,7 +201,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
             return false;
         }
         AmpCategoryValue a = (AmpCategoryValue) o;
-        return this.getId().equals(a.getId());
+        return Objects.equals(this.getId(),a.getId());
     }
 
     @Override

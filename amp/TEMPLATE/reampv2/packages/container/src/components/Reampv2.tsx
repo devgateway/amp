@@ -10,6 +10,7 @@ const Reampv2 = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+
     // Listen to navigation events dispatched inside reampv2 mfe.
     useEffect(() => {
         const reampv2NavigationEventHandler = (event: Event) => {
@@ -20,10 +21,7 @@ const Reampv2 = () => {
                 return;
             }
             // localStorage.setItem("searchParams", location.search);
-            navigate({
-                pathname: newPathname,
-                search: location.search,
-            });
+            navigate(newPathname);
         };
         window.addEventListener("[reampv2] navigated", reampv2NavigationEventHandler);
 
@@ -40,7 +38,10 @@ const Reampv2 = () => {
         if (location.pathname.startsWith(reampv2Basename)) {
             localStorage.setItem('currentPath', location.pathname);
             const containerEvent = new CustomEvent("[container] navigated", {
-                detail: location.pathname.replace(reampv2Basename, ""),
+                detail: {
+                    pathname: location.pathname.replace(reampv2Basename, ''),
+                    search: location.search,
+                }
             });
             localStorage.setItem("searchParams", location.search);
             window.dispatchEvent(containerEvent);

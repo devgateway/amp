@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line no-unused-vars
-import styles from '@devgateway/amp-settings/dist/amp-settings.css';
 import { ReportGeneratorContext } from './StartUp';
 import {
   URL_SETTINGS_REPORTS, REPORTS
@@ -14,13 +12,13 @@ import { updateAppliedSettings } from '../actions/stateUIActions';
 import { translate } from '../utils/Utils';
 
 const SettingsWidget = require('@devgateway/amp-settings/dist/amp-settings');
+import '@devgateway/amp-settings/dist/amp-settings.css';
 
 let widget = null;
 
 class Settings extends Component {
   constructor(props) {
     super(props);
-    this.settingsPopup = React.createRef();
     this.state = {
       show: false, changed: false
     };
@@ -38,7 +36,7 @@ class Settings extends Component {
     });
 
     // eslint-disable-next-line react/no-string-refs
-    widget.setElement(this.settingsPopup);
+    widget.setElement(this.refs.settingsPopup);
     widget.on('applySettings', this.applySettings);
     widget.on('close', this.hideSettings);
     _fetchGlobalSettings(settingsURL).then((action) => {
@@ -83,30 +81,30 @@ class Settings extends Component {
       translations, profile, appliedSectionOpen, appliedSectionChange
     } = this.props;
     return (
-      <>
         <>
-          <div className="filter-title" onClick={this.toggleSettings}>
-            {translate('settings', profile, translations)}
-          </div>
-          {changed ? (
-            <div
-              className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
-              onClick={() => { appliedSectionChange(); }}>
-              {appliedSectionOpen
-                ? translate('hideAppliedSettings', profile, translations)
-                : translate('showAppliedSettings', profile, translations)}
+          <>
+            <div className="filter-title" onClick={this.toggleSettings}>
+              {translate('settings', profile, translations)}
             </div>
-          ) : null}
-          <div
-            id="settings-popup"
-            ref={this.settingsPopup}
-            style={{
-              display: (!show ? 'none' : 'block'),
-              padding: '0px',
-              borderColor: '#337ab7'
-            }} />
+            {changed ? (
+                <div
+                    className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
+                    onClick={() => { appliedSectionChange(); }}>
+                  {appliedSectionOpen
+                      ? translate('hideAppliedSettings', profile, translations)
+                      : translate('showAppliedSettings', profile, translations)}
+                </div>
+            ) : null}
+            <div
+                id="settings-popup"
+                ref="settingsPopup"
+                style={{
+                  display: (!show ? 'none' : 'block'),
+                  padding: '0px',
+                  borderColor: '#337ab7'
+                }} />
+          </>
         </>
-      </>
     );
   }
 }

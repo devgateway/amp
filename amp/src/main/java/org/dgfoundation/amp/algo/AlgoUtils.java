@@ -25,9 +25,8 @@ public class AlgoUtils {
         Set<K> result = new HashSet<K>();
         if (inIds == null)
             return result;
-        Set<K> currentWave = new HashSet<K>();
-        currentWave.addAll(inIds);
-        while (currentWave.size() > 0)
+        Set<K> currentWave = new HashSet<K>(inIds);
+        while (!currentWave.isEmpty())
         {
             result.addAll(currentWave);
             currentWave = waver.wave(currentWave);
@@ -56,8 +55,9 @@ public class AlgoUtils {
      */
     public static<K extends Identifiable> List<K> sortByIds(Collection<K> objs){
         List<K> res = new ArrayList<>(objs);
-        Collections.sort(res, new Comparator<Identifiable>(){
-            @Override public int compare(Identifiable arg0, Identifiable arg1) {
+        res.sort(new Comparator<Identifiable>() {
+            @Override
+            public int compare(Identifiable arg0, Identifiable arg1) {
                 Long id0 = (Long) arg0.getIdentifier();
                 Long id1 = (Long) arg1.getIdentifier();
                 return id0.compareTo(id1);
@@ -120,15 +120,14 @@ public class AlgoUtils {
         MessageDigest messageDigest = digester == null ? getMD5Digester() : digester;
         byte[] hash = messageDigest.digest(str.getBytes());
         // Convert to hex string
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < hash.length; i++) {
-            sb.append(Integer.toHexString(0xff & hash[i]));
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hash) {
+            sb.append(Integer.toHexString(0xff & b));
         }
-        String md5 = sb.toString();
-        return md5;
+        return sb.toString();
     }
     
-    private static double[] POWER_OF_TEN = computePowerOfTen();
+    private static final double[] POWER_OF_TEN = computePowerOfTen();
     private static double[] computePowerOfTen() {
         double[] res = new double[15];
         res[0] = 1;

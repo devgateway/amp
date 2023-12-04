@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-ampModule-junit4</artifactId>
+            <artifactId>powermock-module-junit4</artifactId>
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
@@ -1106,7 +1106,7 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-ampModule-junit4</artifactId>
+            <artifactId>powermock-module-junit4</artifactId>
             <version>1.6.6</version>
             <scope>compile</scope>
         </dependency>
@@ -1150,6 +1150,10 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>TEMPLATE/reamp/node_modules/.bin/"loose-envify"</include>
+                </includes>
             </resource>
         </resources>
 
@@ -1344,53 +1348,53 @@
                 </executions>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-antrun-plugin</artifactId>-->
-<!--                <version>1.6</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>generate-resources</phase>-->
-<!--                        <configuration>-->
-<!--                            <target>-->
-<!--                                <property name="compile_classpath" refid="maven.compile.classpath" />-->
-<!--                                <property name="runtime_classpath" refid="maven.runtime.classpath" />-->
-<!--                                <property name="test_classpath" refid="maven.test.classpath" />-->
-<!--                                <property name="plugin_classpath" refid="maven.plugin.classpath" />-->
-<!--                                <property name="jdbc.db" value="amp_drc" />-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <property name="compile_classpath" refid="maven.compile.classpath" />
+                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                                <property name="test_classpath" refid="maven.test.classpath" />
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+                                <property name="jdbc.db" value="amp_drc" />
 
-<!--                                <ant antfile="${basedir}/build.xml">-->
-<!--                                    <target name="deployForServer" />-->
-<!--                                    <target name="jaxb" />-->
-<!--                                </ant>-->
-<!--                            </target>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>run</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
+                                <ant antfile="${basedir}/build.xml">
+                                    <target name="deployForServer" />
+                                    <target name="jaxb" />
+                                </ant>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
 
-<!--                    <execution>-->
-<!--                        <id>clean</id>-->
-<!--                        <phase>clean</phase>-->
-<!--                        <configuration>-->
-<!--                            <target>-->
-<!--                                <property name="compile_classpath" refid="maven.compile.classpath" />-->
-<!--                                <property name="runtime_classpath" refid="maven.runtime.classpath" />-->
-<!--                                <property name="test_classpath" refid="maven.test.classpath" />-->
-<!--                                <property name="plugin_classpath" refid="maven.plugin.classpath" />-->
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <target>
+                                <property name="compile_classpath" refid="maven.compile.classpath" />
+                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                                <property name="test_classpath" refid="maven.test.classpath" />
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-<!--                                <ant antfile="${basedir}/build.xml">-->
-<!--                                    <target name="clean" />-->
-<!--                                </ant>-->
-<!--                            </target>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>run</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+                                <ant antfile="${basedir}/build.xml">
+                                    <target name="clean" />
+                                </ant>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- Integrate node.js with Maven -->
             <plugin>

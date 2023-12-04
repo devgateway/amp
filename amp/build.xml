@@ -13,18 +13,18 @@
     <property name="project.title" value="DiGiJava "/>
     <property name="project.distname" value="amp"/>
     <property name="project.version" value="2.0.0"/>
-    <property name="lib" location="./WEB-INF/lib" />
-    <property name="webinf" location="./WEB-INF" />
+    <property name="lib" location="./src/main/webapp/WEB-INF/lib" />
+    <property name="webinf" location="./src/main/webapp/WEB-INF" />
 	<property name="metainf" location="./META-INF" />
-    <property name="classes" location="./WEB-INF/classes" />
-    <property name="src" location="./WEB-INF/src" />
-    <property name="test" location="./WEB-INF/test" />
+    <property name="classes" location="./src/main/webapp/WEB-INF/classes" />
+    <property name="src" location="./src" />
+    <property name="test" location="./test" />
     <property name="etc" location="./etc" />
     <property name="deployConfigs" location="deployConfigs"/>
 	<property name="repository" location="./repository"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
-    <property name="ampTest" location="./WEB-INF/amp-test" />
-	<property name="ampSelenium" location="./WEB-INF/amp-selenium-test" />
+    <property name="ampTest" location="./src/main/webapp/WEB-INF/amp-test" />
+	<property name="ampSelenium" location="./src/main/webapp/WEB-INF/amp-selenium-test" />
 	<!-- <property name="jdbc"gen-.driverClassName" value="org.postgresql.Driver"/> -->
 	<property name="dbName" value="postgresql"/>
 

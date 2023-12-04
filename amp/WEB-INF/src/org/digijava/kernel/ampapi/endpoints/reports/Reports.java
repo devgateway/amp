@@ -56,21 +56,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBElement;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.util.*;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
-import com.google.gson.Gson;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 import static org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil.getCachedReportData;
-import static org.digijava.module.message.jobs.AmpDonorFundingJob.combineObjects;
-import static org.digijava.module.message.jobs.AmpDonorFundingJob.sendReportsToServer;
 
 @Path("data")
 @Api("data")

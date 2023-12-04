@@ -94,6 +94,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             }
         }
 
+        // The ampDashboardFunding data contains objects for commitments and disbursment differently in
+        // separate objects. We need to combine them in same object combining commitment and disbursment values.
         List<Map<String, Object>> combinedData = combineObjects(ampDashboardFunding);
         // Specify the server's endpoint URL
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);

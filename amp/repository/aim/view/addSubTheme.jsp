@@ -6,8 +6,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
@@ -36,7 +36,7 @@
 		function addSubProgram(rutId,id,level,name)
 		{
 			openNewWindow(400, 300);
-			<digi:context name="subProgram" property="context/ampModule/moduleinstance/addSubPrgInd.do?event=addSubProgram"/>
+			<digi:context name="subProgram" property="context/module/moduleinstance/addSubPrgInd.do?event=addSubProgram"/>
 			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
@@ -44,7 +44,7 @@
 		function editProgram(id,rutId)
 		{
 			openNewWindow(400,300);
-			<digi:context name="editTh" property="context/ampModule/moduleinstance/editTheme.do?event=editSub"/>
+			<digi:context name="editTh" property="context/module/moduleinstance/editTheme.do?event=editSub"/>
 			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id + "&rootId=" +rutId;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
@@ -56,7 +56,7 @@
 			var temp = validate();
 			if (temp == true)
 			{
-				<digi:context name="addSubThm" property="context/ampModule/moduleinstance/addSubPrgInd.do?event=save" />
+				<digi:context name="addSubThm" property="context/module/moduleinstance/addSubPrgInd.do?event=save" />
 				document.aimThemeForm.action = "<%= addSubThm %>&themeId=" + id;
 				document.aimThemeForm.target = "_self";
 				document.aimThemeForm.submit();
@@ -66,7 +66,7 @@
 		function assignIndicators(id)
 		{
 			openNewWindow(650, 500);
-			<digi:context name="indAssign" property="context/ampModule/moduleinstance/addThemeIndicator.do"/>
+			<digi:context name="indAssign" property="context/module/moduleinstance/addThemeIndicator.do"/>
 			document.aimThemeForm.action = "<%= indAssign %>?resetIndicatorId=true&themeId=" + id;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
@@ -158,12 +158,12 @@
 														<field:display name="Sub Program Level 8" feature="NPD Dashboard"> </field:display>
 														<%
 								                          ServletContext x=session.getServletContext();
-								                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=org.digijava.ampModule.aim.util.FeaturesUtil.getAmpTreeVisibility(x, session);
+								                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=org.digijava.module.aim.util.FeaturesUtil.getAmpTreeVisibility(x, session);
 								                          	
 								                          	int i;
 								                          	for(i=1;i<=8;i++)
 								                          	{
-								                          		org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility field=(org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility)atv.getFieldByNameFromRoot("Sub Program Level "+i);
+								                          		org.digijava.module.aim.dbentity.AmpFieldsVisibility field=(org.digijava.module.aim.dbentity.AmpFieldsVisibility)atv.getFieldByNameFromRoot("Sub Program Level "+i);
 								                          		if(field==null) break;
 								                          		else
 										                        	if(!field.isFieldActive(atv)) break;
@@ -173,7 +173,7 @@
 															<bean:define id="visibilityLevel"><%=visible%></bean:define>
 															<tr bgColor=#ffffff><td>
 																<table width="100%" bgColor="#d7eafd" cellPadding=3 cellspacing="1">
-																	<logic:iterate name="aimThemeForm" property="subPrograms" id="subPrograms" type="org.digijava.ampModule.aim.dbentity.AmpTheme">
+																	<logic:iterate name="aimThemeForm" property="subPrograms" id="subPrograms" type="org.digijava.module.aim.dbentity.AmpTheme">
 																		<%------- level 1 starts ------------%>
 																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="1">

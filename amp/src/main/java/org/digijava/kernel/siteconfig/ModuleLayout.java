@@ -45,8 +45,8 @@ public class ModuleLayout
 
     public void setName(String name) {}
 
-    public void addModule(AmpModule ampModule) {
-        this.module.put(ampModule.getName(), ampModule);
+    public void addModule(AmpModule module) {
+        this.module.put(module.getName(), module);
     }
 
     public HashMap getModule() {

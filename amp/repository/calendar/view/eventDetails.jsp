@@ -8,17 +8,17 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script>function fnOnReject() {
-      <digi:context name="confirmRejectEvent" property="context/ampModule/moduleinstance/confirmCalendarItems.do" />
+      <digi:context name="confirmRejectEvent" property="context/module/moduleinstance/confirmCalendarItems.do" />
       document.calendarItemForm.action = "<%= confirmRejectEvent%>";
       document.calendarItemForm.submit();
   }
  function fnOnAdmin() {
-      <digi:context name="administerEvents" property="context/ampModule/moduleinstance/showCalendarItems.do?status=pe" />
+      <digi:context name="administerEvents" property="context/module/moduleinstance/showCalendarItems.do?status=pe" />
       document.calendarItemForm.action = "<%= administerEvents%>";
       document.calendarItemForm.submit();
   }
  function fnOnSettings() {
-      <digi:context name="showEventsSettings" property="context/ampModule/moduleinstance/showCalendarItemsSettings.do" />
+      <digi:context name="showEventsSettings" property="context/module/moduleinstance/showCalendarItemsSettings.do" />
       document.calendarItemForm.action = "<%= showEventsSettings%>";
       document.calendarItemForm.submit();
   }

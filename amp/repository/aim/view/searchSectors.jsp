@@ -19,8 +19,8 @@
 
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 <!--
@@ -117,7 +117,7 @@
 			var flg=checkEmpty();
 			if(flg)
 			{
-			 <digi:context name="searchSctr" property="context/ampModule/moduleinstance/searchSectors.do?edit=true"/>
+			 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectors.do?edit=true"/>
 			 document.aimSelectSectorForm.action = "<%= searchSctr %>";
 			 document.aimSelectSectorForm.submit();
 			 return true;
@@ -127,7 +127,7 @@
 	}
 
 	function selectSector() {
-		<digi:context name="selectSec" property="context/ampModule/moduleinstance/selectSectors.do?edit=true" />
+		<digi:context name="selectSec" property="context/module/moduleinstance/selectSectors.do?edit=true" />
 		document.aimSelectSectorForm.action = "<%= selectSec %>";
 		document.aimSelectSectorForm.submit();
 	}
@@ -240,7 +240,7 @@
 							<td rowspan="1" align=left valign="top">
 							<table width="100%" cellPadding=3 cellspacing="0" border="0" >
 							<logic:iterate name="aimSelectSectorForm" id="searchedSectors" property="pagedCol"
-									type="org.digijava.ampModule.aim.helper.ActivitySector">
+									type="org.digijava.module.aim.helper.ActivitySector">
 										<tr>
 											<td bgcolor=#ECF3FD colspan="5" >
 												&nbsp;&nbsp;

@@ -66,7 +66,7 @@
 
                 DELETE FROM amp_features_visibility WHERE name IN ('Contribution Report', 'Costing');
 
-                DELETE FROM amp_modules_templates WHERE ampModule IN (
+                DELETE FROM amp_modules_templates WHERE module IN (
                     SELECT id FROM amp_modules_visibility
                     WHERE name = 'Activity Costing');
 

@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
@@ -37,7 +37,7 @@ function onDelete() {
 			alert('Please fill all mandatory data');
 			return false;
 		} else {
-		<digi:context name="saveIndi" property="context/ampModule/moduleinstance/addCompIndicator.do?event=save" />
+		<digi:context name="saveIndi" property="context/module/moduleinstance/addCompIndicator.do?event=save" />
 		document.aimComponentsForm.action = "<%= saveIndi %>&id="+id;
 		document.aimComponentsForm.target = "_self";
 		document.aimComponentsForm.submit();	
@@ -47,7 +47,7 @@ function onDelete() {
 	
 	function onload(){
 	if(document.aimComponentsForm.duplicate.value=="save"){
-	<digi:context name="refreshIndi" property="context/ampModule/moduleinstance/componentIndicatorManager.do" />
+	<digi:context name="refreshIndi" property="context/module/moduleinstance/componentIndicatorManager.do" />
 		document.aimComponentsForm.action = "<%= refreshIndi %>";
 		document.aimComponentsForm.target = window.opener.name;
 		document.aimComponentsForm.submit();

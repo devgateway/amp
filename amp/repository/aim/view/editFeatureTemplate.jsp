@@ -22,15 +22,15 @@
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" >
 	<logic:notEmpty name="aimVisibilityManagerForm" property="templateModules">
-	<logic:iterate name="aimVisibilityManagerForm" property="templateModules" id="ampModule"
-		type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility">
+	<logic:iterate name="aimVisibilityManagerForm" property="templateModules" id="module"
+		type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 		<tr bgcolor="#ffffff">
 			<td width="9">
 					<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 			</td>																	
-			<td width="100%"> <bean:write name="ampModule" property="moduleName"/> </td>
+			<td width="100%"> <bean:write name="module" property="moduleName"/> </td>
 			<td>
-			<select name='<%="ampModule:"+ampModule.getModuleNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#0000ff; ">
+			<select name='<%="module:"+module.getModuleNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#0000ff; ">
 				<option value="disable" >-- Disable --</option>
 				<option value="enable" selected>-- Enabled --</option>											
 			</select>
@@ -39,15 +39,15 @@
 	</logic:iterate>
 	</logic:notEmpty>
 	<logic:notEmpty name="aimVisibilityManagerForm" property="templateModulesNotActive">
-	<logic:iterate name="aimVisibilityManagerForm" property="templateModulesNotActive" id="ampModule"
-		type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility">
+	<logic:iterate name="aimVisibilityManagerForm" property="templateModulesNotActive" id="module"
+		type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 		<tr bgcolor="#ffffff">
 			<td width="9">
 					<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 			</td>																	
-			<td width="100%"> <bean:write name="ampModule" property="name"/> </td>
+			<td width="100%"> <bean:write name="module" property="name"/> </td>
 			<td>
-			<select name='<%="ampModule:"+ampModule.getModuleNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#ff0000;">
+			<select name='<%="module:"+module.getModuleNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#ff0000;">
 				<option value="disable" selected>-- Disabled --</option>
 				<option value="enable" >-- Enable --</option>
 			</select>

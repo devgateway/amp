@@ -3,8 +3,8 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <digi:instance property="contentForm" />
 
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <script language="javascript" type="text/javascript">
     function downloadFile(index, pageCode) {

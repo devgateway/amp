@@ -12,7 +12,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/connection/connection-min.js'/>" > .</script>
 <link rel="stylesheet" type="text/css" href="<digi:file src='js_2/yui/tabview/assets/tabview.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='js_2/yui/tabview/assets/border_tabs.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='ampModule/aim/css/reportWizard/reportWizard.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='/repository/aim/view/css/filters/filters2.css'/>">
 
 	<link rel="stylesheet" type="text/css" href="<digi:file src='css_2/amp.css '/>">

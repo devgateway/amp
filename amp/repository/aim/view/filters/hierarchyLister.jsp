@@ -1,6 +1,6 @@
 
 <%@ page pageEncoding="UTF-8"%>
-<%@page import="org.digijava.ampModule.aim.util.HierarchyListable"%>
+<%@page import="org.digijava.module.aim.util.HierarchyListable"%>
 <%@page import="java.lang.*" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <bean:define id="entityList" toScope="page" scope="request" name="reqEntityList" />
 <bean:define id="selectedEntityIds" toScope="page" scope="request" name="reqSelectedEntityIds" />

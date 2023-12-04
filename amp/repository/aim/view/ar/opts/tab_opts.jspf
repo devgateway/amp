@@ -23,7 +23,7 @@
 				if (arf.isPublicView() == false) {
 			%>
 			<feature:display name="Save Report/Tab with Filters"
-				ampModule="Report and Tab Options">
+				module="Report and Tab Options">
 			                &nbsp;|&nbsp;
 			          	 	<a style="cursor: pointer; text-decoration: underline;"
 					class="l_sm" <%-- <%=ReportContextData.getCurrentReportContextId(request, true)%>  --%>

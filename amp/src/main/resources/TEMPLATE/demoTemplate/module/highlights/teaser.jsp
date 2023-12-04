@@ -57,10 +57,10 @@
 														<TD align="center" valign="center">
 														    <c:if test="${activeHighlight.haveImageSizes}">
 															<html:hidden property="activeHighlightId"/>
-															<digi:context name="showImg" property="context/ampModule/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />' height="<c:out value='${activeHighlight.imageHeight}' />" width="<c:out value='${activeHighlight.imageWidth}' />"/></c:if>
+															<digi:context name="showImg" property="context/module/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />' height="<c:out value='${activeHighlight.imageHeight}' />" width="<c:out value='${activeHighlight.imageWidth}' />"/></c:if>
 														    <c:if test="${!activeHighlight.haveImageSizes}">
 															<html:hidden property="activeHighlightId"/>
-															<digi:context name="showImg" property="context/ampModule/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />'/></c:if>
+															<digi:context name="showImg" property="context/module/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />'/></c:if>
 														</TD>
 													</TR>
 												</TBODY>
@@ -119,10 +119,10 @@
 										<TD>
 										    <c:if test="${activeHighlight.haveImageSizes}">
 											<html:hidden property="activeHighlightId"/>
-											<digi:context name="showImg" property="context/ampModule/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />' height="<c:out value='${activeHighlight.imageHeight}' />" width="<c:out value='${activeHighlight.imageWidth}' />"/></c:if>
+											<digi:context name="showImg" property="context/module/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />' height="<c:out value='${activeHighlight.imageHeight}' />" width="<c:out value='${activeHighlight.imageWidth}' />"/></c:if>
 											<c:if test="${! activeHighlight.haveImageSizes}">											
 											<html:hidden property="activeHighlightId"/>
-											<digi:context name="showImg" property="context/ampModule/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />'/></c:if>
+											<digi:context name="showImg" property="context/module/moduleinstance/showImage.do"/><img src='<%= showImg%>?activeHighlightId=<c:out value="${highlightForm.activeHighlightId}" />'/></c:if>
 										</TD>
 									</TR>
 								</TBODY>

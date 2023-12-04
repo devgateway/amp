@@ -22,7 +22,7 @@
 	</tag>
 	<tag>
 		<name>trn</name>
-		<tagclass>org.digijava.ampModule.translation.taglib.TrnTag</tagclass>
+		<tagclass>org.digijava.module.translation.taglib.TrnTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<attribute>
 			<name>key</name>
@@ -107,7 +107,7 @@
 	</tag>
 	<tag>
 		<name>msg</name>
-		<tagclass>org.digijava.ampModule.translation.taglib.MsgTag</tagclass>
+		<tagclass>org.digijava.module.translation.taglib.MsgTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<attribute>
 			<name>default</name>
@@ -409,7 +409,7 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -604,7 +604,7 @@
 		<tagclass>org.digijava.kernel.taglib.html.FormTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1334,7 +1334,7 @@
 	</tag>
 	<tag>
 		<name>edit</name>
-		<tagclass>org.digijava.ampModule.editor.taglib.EditTag</tagclass>
+		<tagclass>org.digijava.module.editor.taglib.EditTag</tagclass>
 		<attribute>
 			<name>key</name>
 			<required>true</required>
@@ -1458,7 +1458,7 @@
 	</tag>
 	<tag>
 		<name>colNameTrn</name>
-		<tagclass>org.digijava.ampModule.translation.taglib.ColNameTrnTag</tagclass>
+		<tagclass>org.digijava.module.translation.taglib.ColNameTrnTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<info>Special tag that treats report columns in a special way to allow parameterized columns like MTEFs.</info>
 	</tag>

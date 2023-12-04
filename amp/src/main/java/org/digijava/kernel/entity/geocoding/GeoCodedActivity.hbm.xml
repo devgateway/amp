@@ -12,10 +12,10 @@
 					 class="org.digijava.kernel.entity.geocoding.GeoCodingProcess" cascade="none" lazy="false"
 					 not-null="true" />
 		<property name="queueId" column="QUEUE_ID" type="long" not-null="true" />
-		<many-to-one name="activity" class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none"
+		<many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"
 					 not-null="true" unique="true" />
 		<property name="status" not-null="true">
-			<type name="org.digijava.ampModule.aim.dbentity.NamedEnumType">
+			<type name="org.digijava.module.aim.dbentity.NamedEnumType">
 				<param name="enumClass">org.digijava.kernel.entity.geocoding.GeoCodedActivity$Status</param>
 				<param name="valueProperty">name</param>
 			</type>

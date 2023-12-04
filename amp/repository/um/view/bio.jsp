@@ -43,7 +43,7 @@
 		<digi:trn key="um:fileName">Filename:</digi:trn><br>
 		<html:file property="photoFile" size="30"/>
 		<br><small><digi:trn key="um:useBrowseToLocatePic">
-		Use the 'Browse...' button to locate your file, then click 'Update'.</digi:trn></small><br><digi:img src="ampModule/common/images/arrow.gif" border="0" />
+		Use the 'Browse...' button to locate your file, then click 'Update'.</digi:trn></small><br><digi:img src="module/common/images/arrow.gif" border="0" />
 		<digi:link href="/userBio.do?clear=image" styleClass="text"><digi:trn key="um:clickYoErase">Click here if you want to erase it.</digi:trn></digi:link>
 	</td>
 	<td rowspan=3 align="center">

@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ page import="org.digijava.kernel.config.DigiConfig" %>
 <%@ page import="org.digijava.kernel.util.DigiConfigManager" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -122,7 +122,7 @@
                     <c:set var="trn1">
                       <digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have forgot your password</digi:trn>
                     </c:set>
-                    <digi:link href="/showEmailForm.do" ampModule="aim" title="${trn1}">
+                    <digi:link href="/showEmailForm.do" module="aim" title="${trn1}">
                       <digi:trn key="aim:forgotPassword">
                       Forgot Password
                       </digi:trn>
@@ -131,7 +131,7 @@
                     <c:set var="trn2">
                       <digi:trn key="aim:clickToChangeYourPassword">Click here if you want to change your password</digi:trn>
                     </c:set>
-                    <digi:link href="/showChangePassword.do" ampModule="aim" title="${trn2}">
+                    <digi:link href="/showChangePassword.do" module="aim" title="${trn2}">
                       <digi:trn key="aim:changePassword">
                       Change Password
                       </digi:trn>

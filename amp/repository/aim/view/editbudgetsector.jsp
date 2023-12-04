@@ -9,14 +9,14 @@
 
 <digi:instance property="EditBudgetSectorForm" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
 function saveSector() {
 	if(validatesector()){
-            <digi:context name="back" property="context/ampModule/moduleinstance/editbudgetsector.do" />
+            <digi:context name="back" property="context/module/moduleinstance/editbudgetsector.do" />
 	    document.EditBudgetSectorForm.action = "<%= back %>~edit=true";
             document.EditBudgetSectorForm.target = window.opener.name;
 	    document.EditBudgetSectorForm.submit();

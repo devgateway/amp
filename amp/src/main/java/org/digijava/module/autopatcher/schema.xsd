@@ -6,9 +6,9 @@
 <!--             version 0.1 - 30-Jul-2007              -->
 <!--                      (DRAFT)                       -->
 <!-- ************************************************** -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://digijava.org/ampModule/autopatcher/schema.xml"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://digijava.org/module/autopatcher/schema.xml"
            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-           targetNamespace="http://digijava.org/ampModule/autopatcher/schema.xml" elementFormDefault="qualified"
+           targetNamespace="http://digijava.org/module/autopatcher/schema.xml" elementFormDefault="qualified"
            id="autopatcher" jaxb:version="1.0">
 	<xs:element name="patch" type="patchType"/>
 	<xs:complexType name="patchType">

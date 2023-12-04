@@ -94,7 +94,7 @@
 
 	YAHOO.reportsheet.jsReports	= new Array();
 	var i;
-	<logic:iterate name="aimUpdateAppSettingsForm" property="reports" id="report" type="org.digijava.ampModule.aim.dbentity.AmpReports">
+	<logic:iterate name="aimUpdateAppSettingsForm" property="reports" id="report" type="org.digijava.module.aim.dbentity.AmpReports">
 		<%
 			String descr	= report.getReportDescription();
                         String repName=report.getName();

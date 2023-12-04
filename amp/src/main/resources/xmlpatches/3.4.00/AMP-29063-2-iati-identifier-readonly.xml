@@ -24,19 +24,19 @@
                     true,
                     (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Identification'));
 
-                INSERT INTO amp_modules_templates (template, ampModule)
+                INSERT INTO amp_modules_templates (template, module)
                     SELECT
                         (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
-                        (SELECT id AS ampModule FROM amp_modules_visibility WHERE name = '/Activity Form/Identification/IATI Identifier');
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Identification/IATI Identifier');
 
-                INSERT INTO amp_modules_templates (template, ampModule)
+                INSERT INTO amp_modules_templates (template, module)
                     SELECT
                         (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
-                        (SELECT id AS ampModule FROM amp_modules_visibility WHERE name = '/Activity Form/Identification/IATI Identifier Read Only')
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Identification/IATI Identifier Read Only')
                     WHERE NOT EXISTS (
                         SELECT template FROM amp_modules_templates
                         WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
-                        AND ampModule = (SELECT id FROM amp_modules_visibility WHERE name = (
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = (
                                 SELECT CASE settingsvalue
                                     WHEN 'cris_number' THEN '/Activity Form/Identification/Cris Number'
                                     ELSE '/Activity Form/Identification/Budget Extras/Project Code'

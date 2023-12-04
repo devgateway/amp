@@ -3,7 +3,7 @@
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMP-17904</jira>
-	<keyword>Admin ampModule for managing boundary data</keyword>
+	<keyword>Admin module for managing boundary data</keyword>
 	<author>Jdeanquin</author>
 	<description>re - Enable PostGIS in the database. </description>
 	 <trigger type="all">

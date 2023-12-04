@@ -13,7 +13,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				INSERT INTO amp_quartz_job_class (jc_id,jc_name, jc_class_fullname) VALUES(nextval('amp_quartz_job_class_seq'),'Send Reminder Emails', 'org.digijava.ampModule.message.jobs.SendReminderEmailJob');
+				INSERT INTO amp_quartz_job_class (jc_id,jc_name, jc_class_fullname) VALUES(nextval('amp_quartz_job_class_seq'),'Send Reminder Emails', 'org.digijava.module.message.jobs.SendReminderEmailJob');
 			</lang>
 		</script>
 	</apply>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpGPISurveyResponse"
+	<class name="org.digijava.module.aim.dbentity.AmpGPISurveyResponse"
 		table="AMP_GPI_SURVEY_RESPONSE">
 		<id name="ampReponseId" column="amp_response_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -10,10 +10,10 @@
 		</id>
 
 		<many-to-one name="ampGPISurveyId" column="amp_gpisurvey_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpGPISurvey" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPISurvey" cascade="none" not-null="true" />
 
 		<many-to-one name="ampQuestionId" column="amp_question_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpGPISurveyQuestion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPISurveyQuestion" cascade="none" not-null="true" />
 
 		<property name="response" column="response" type="java.lang.String" />
         <property name="references" column="references_col" type="java.lang.String" not-null="false" />

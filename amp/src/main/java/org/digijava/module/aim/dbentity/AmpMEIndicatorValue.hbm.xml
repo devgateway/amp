@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpMEIndicatorValue"
+	<class name="org.digijava.module.aim.dbentity.AmpMEIndicatorValue"
 		table="AMP_ME_INDICATOR_VALUE">
 		<cache usage="read-write" />
 		<id name="ampMeIndValId" column="amp_me_indicator_val_id" type="java.lang.Long">
@@ -28,21 +28,21 @@
 			type="java.lang.String" />
 
 		<many-to-one name="indicatorsCategory" column="indicators_category"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<property name="comments" column="Comments" type="java.lang.String" />
 
 		<many-to-one name="activityId" column="activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="delete" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 		<!-- 
 			<many-to-one name="meIndicatorId" column="me_indicator_id" 
-			class="org.digijava.ampModule.aim.dbentity.AmpMEIndicators" cascade="none"/>
+			class="org.digijava.module.aim.dbentity.AmpMEIndicators" cascade="none"/>
 		-->
 		<many-to-one name="indicator" column="indicator_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpIndicator" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" />
 
 		<many-to-one name="risk" column="risk"
-			class="org.digijava.ampModule.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />
 
 	</class>
 </hibernate-mapping>

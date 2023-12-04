@@ -8,7 +8,7 @@
 <script langauage="JavaScript">
 	function onCancel()
 	{
-			  	<digi:context name="cancelProgramType" property="context/ampModule/moduleinstance/programTypeManager.do" />
+			  	<digi:context name="cancelProgramType" property="context/module/moduleinstance/programTypeManager.do" />
 			document.aimProgramTypeForm.action = "<%= cancelProgramType%>";
 			document.aimProgramTypeForm.target = "_self";
 			document.aimProgramTypeForm.submit();
@@ -25,7 +25,7 @@
 			  }
 			 else
 			 {
-			<digi:context name="addProgramType" property="context/ampModule/moduleinstance/programTypeManager.do?event=saveNewPrgType" />
+			<digi:context name="addProgramType" property="context/module/moduleinstance/programTypeManager.do?event=saveNewPrgType" />
 			document.aimProgramTypeForm.action = "<%= addProgramType%>";
 			document.aimProgramTypeForm.target = "_self";
 			document.aimProgramTypeForm.submit();

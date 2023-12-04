@@ -3,90 +3,90 @@
 
 <struts-config>
   <form-beans>
-    <form-bean name="crDocumentManagerForm" type="org.digijava.ampModule.contentrepository.form.DocumentManagerForm" />
-    <form-bean name="crSelectDocumentForm" type="org.digijava.ampModule.contentrepository.form.SelectDocumentForm" />
-    <form-bean name="crSetAttributesForm" type="org.digijava.ampModule.contentrepository.form.SetAttributesForm" />
-    <form-bean name="crDocToOrgForm" type="org.digijava.ampModule.contentrepository.form.DocToOrgForm" />
-    <form-bean name="tempDocManagerForm" type="org.digijava.ampModule.contentrepository.form.TemplateDocManagerForm" />
-    <form-bean name="crLabelManagerForm" type="org.digijava.ampModule.contentrepository.form.LabelManagerForm" />
-    <form-bean name="manageFieldForm" type="org.digijava.ampModule.contentrepository.form.ManageTemplDocFieldForm" />
-    <form-bean name="docFromTemplateForm" type="org.digijava.ampModule.contentrepository.form.CreateDocFromTemplateForm" />
-    <form-bean name="crLabelForm" type="org.digijava.ampModule.contentrepository.form.LabelForm" />
-    <form-bean name="crDocTabManagerForm" type="org.digijava.ampModule.contentrepository.form.DocTabManagerForm" />
+    <form-bean name="crDocumentManagerForm" type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
+    <form-bean name="crSelectDocumentForm" type="org.digijava.module.contentrepository.form.SelectDocumentForm" />
+    <form-bean name="crSetAttributesForm" type="org.digijava.module.contentrepository.form.SetAttributesForm" />
+    <form-bean name="crDocToOrgForm" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
+    <form-bean name="tempDocManagerForm" type="org.digijava.module.contentrepository.form.TemplateDocManagerForm" />
+    <form-bean name="crLabelManagerForm" type="org.digijava.module.contentrepository.form.LabelManagerForm" />
+    <form-bean name="manageFieldForm" type="org.digijava.module.contentrepository.form.ManageTemplDocFieldForm" />
+    <form-bean name="docFromTemplateForm" type="org.digijava.module.contentrepository.form.CreateDocFromTemplateForm" />
+    <form-bean name="crLabelForm" type="org.digijava.module.contentrepository.form.LabelForm" />
+    <form-bean name="crDocTabManagerForm" type="org.digijava.module.contentrepository.form.DocTabManagerForm" />
   </form-beans>
   <action-mappings>
-  	<action path="/contentrepository/selectDocumentDM" name="crSelectDocumentForm" type="org.digijava.ampModule.contentrepository.action.SelectDocumentDM" scope="session">
+  	<action path="/contentrepository/selectDocumentDM" name="crSelectDocumentForm" type="org.digijava.module.contentrepository.action.SelectDocumentDM" scope="session">
       <forward name="forwardDM" path="/showLayout.do?layout=amp_selectDocumentDM" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-	<action name="crDocumentManagerForm" scope="request" path="/contentrepository/getVersionsForDocumentManager" type="org.digijava.ampModule.contentrepository.action.GetVersionsForDocumentManager" validate="false">
+	<action name="crDocumentManagerForm" scope="request" path="/contentrepository/getVersionsForDocumentManager" type="org.digijava.module.contentrepository.action.GetVersionsForDocumentManager" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=amp_getDocumentVersionList" />
 	</action>
-    <action name="crDocumentManagerForm" path="/contentrepository/deleteForDocumentManager" type="org.digijava.ampModule.contentrepository.action.DeleteForDocumentManager" validate="false">
+    <action name="crDocumentManagerForm" path="/contentrepository/deleteForDocumentManager" type="org.digijava.module.contentrepository.action.DeleteForDocumentManager" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=amp_deleteDocumentResponse" />
     </action>
-    <action path="/contentrepository/getResourcesInfo" type="org.digijava.ampModule.contentrepository.action.GetResourcesInfo" validate="false"/>
+    <action path="/contentrepository/getResourcesInfo" type="org.digijava.module.contentrepository.action.GetResourcesInfo" validate="false"/>
     
-    <action name="crDocumentManagerForm" path="/contentrepository/shareDoc" type="org.digijava.ampModule.contentrepository.action.ShareDocument" validate="false">
+    <action name="crDocumentManagerForm" path="/contentrepository/shareDoc" type="org.digijava.module.contentrepository.action.ShareDocument" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>
-    <action name="crDocumentManagerForm" path="/contentrepository/unshareDoc" type="org.digijava.ampModule.contentrepository.action.UnshareDocument" validate="false">
+    <action name="crDocumentManagerForm" path="/contentrepository/unshareDoc" type="org.digijava.module.contentrepository.action.UnshareDocument" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>    
-    <action path="/contentrepository/rejectDoc" type="org.digijava.ampModule.contentrepository.action.RejectResource" validate="false" parameter="actType">
+    <action path="/contentrepository/rejectDoc" type="org.digijava.module.contentrepository.action.RejectResource" validate="false" parameter="actType">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>
     
-    <action name="crDocumentManagerForm" scope="request" path="/contentrepository/approveVersion" type="org.digijava.ampModule.contentrepository.action.ApproveVersion" validate="false">
+    <action name="crDocumentManagerForm" scope="request" path="/contentrepository/approveVersion" type="org.digijava.module.contentrepository.action.ApproveVersion" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>
     
-    <action name="crDocumentManagerForm" scope="request" path="/contentrepository/rejectVersion" type="org.digijava.ampModule.contentrepository.action.RejectVersion" validate="false">
+    <action name="crDocumentManagerForm" scope="request" path="/contentrepository/rejectVersion" type="org.digijava.module.contentrepository.action.RejectVersion" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>
     
-    <action path="/contentrepository/downloadFile" type="org.digijava.ampModule.contentrepository.action.DownloadFile" validate="false" />
-    <!-- <action path="/contentrepository/getDocumentList" type="org.digijava.ampModule.contentrepository.action.GetDocumentList" validate="false" name="aimDocumentManagerListForm">
+    <action path="/contentrepository/downloadFile" type="org.digijava.module.contentrepository.action.DownloadFile" validate="false" />
+    <!-- <action path="/contentrepository/getDocumentList" type="org.digijava.module.contentrepository.action.GetDocumentList" validate="false" name="aimDocumentManagerListForm">
     	<forward name="forward" path="/showLayout.do?layout=amp_getDocumentList" />
     </action>  -->
-    <action path="/contentrepository/addTemporaryDocument" scope="request" type="org.digijava.ampModule.contentrepository.action.AddTemporaryDocument" validate="false" name="crDocumentManagerForm">
+    <action path="/contentrepository/addTemporaryDocument" scope="request" type="org.digijava.module.contentrepository.action.AddTemporaryDocument" validate="false" name="crDocumentManagerForm">
     	<forward name="forward" path="/showLayout.do?layout=nondhtmlAddDocument" />
     </action>
-    <action name="crDocumentManagerForm" path="/contentrepository/documentManager" scope="request" type="org.digijava.ampModule.contentrepository.action.DocumentManager" validate="false">
+    <action name="crDocumentManagerForm" path="/contentrepository/documentManager" scope="request" type="org.digijava.module.contentrepository.action.DocumentManager" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=viewDocumentManager" />
     	<forward name="publicView" path="/showLayout.do?layout=viewPublicDocuments" />
     	<forward name="ajaxDocumentList" path="/showLayout.do?layout=amp_getDocumentList" />
     </action>
-    <action path="/contentrepository/setAttributes" type="org.digijava.ampModule.contentrepository.action.SetAttributes" name="crSetAttributesForm" validate="false" />
+    <action path="/contentrepository/setAttributes" type="org.digijava.module.contentrepository.action.SetAttributes" name="crSetAttributesForm" validate="false" />
     
-    <action path="/contentrepository/docToOrg" scope="session" type="org.digijava.ampModule.contentrepository.action.DocToOrgAction" validate="false" name="crDocToOrgForm">
+    <action path="/contentrepository/docToOrg" scope="session" type="org.digijava.module.contentrepository.action.DocToOrgAction" validate="false" name="crDocToOrgForm">
     	<forward name="list" path="/showLayout.do?layout=cr_docToOrg" />
     </action>
     
-     <action path="/contentrepository/tempDocManager" scope="session" type="org.digijava.ampModule.contentrepository.action.TemplateDocActions" validate="false" name="tempDocManagerForm" parameter="actType">
+     <action path="/contentrepository/tempDocManager" scope="session" type="org.digijava.module.contentrepository.action.TemplateDocActions" validate="false" name="tempDocManagerForm" parameter="actType">
     	<forward name="list" path="/showLayout.do?layout=templateDocsManager" />
     	<forward name="createEdit" path="/showLayout.do?layout=addEditTempDoc" />
     	<forward name="manageField" path="/showLayout.do?layout=tempFieldPreDefinedValues" />
     </action>
     
-    <action path="/contentrepository/manageField" scope="session" type="org.digijava.ampModule.contentrepository.action.ManageFieldAction" validate="false" name="manageFieldForm" parameter="actType">
+    <action path="/contentrepository/manageField" scope="session" type="org.digijava.module.contentrepository.action.ManageFieldAction" validate="false" name="manageFieldForm" parameter="actType">
     	<forward name="manageField" path="/showLayout.do?layout=tempFieldPreDefinedValues" />
     	<forward name="fill" path="/contentrepository/tempDocManager.do?actType=fillFormsPendingFieldsFromMap" />
     </action>
     
-    <action path="/contentrepository/docFromTemplate" scope="session" type="org.digijava.ampModule.contentrepository.action.DocumentFromTemplateActions" validate="false" name="docFromTemplateForm" parameter="actType">
+    <action path="/contentrepository/docFromTemplate" scope="session" type="org.digijava.module.contentrepository.action.DocumentFromTemplateActions" validate="false" name="docFromTemplateForm" parameter="actType">
     	<forward name="forward" path="/showLayout.do?layout=docFromTemplate" />
     	<forward name="showResources" path="/contentrepository/documentManager.do" redirect="true"/>
     </action>
     
-    <action path="/contentrepository/labelManager" scope="session" type="org.digijava.ampModule.contentrepository.action.LabelManagerAction" validate="false" name="crLabelManagerForm">
+    <action path="/contentrepository/labelManager" scope="session" type="org.digijava.module.contentrepository.action.LabelManagerAction" validate="false" name="crLabelManagerForm">
     	<forward name="showHTML" path="/showLayout.do?layout=cr_labelManager" />
     </action>
-    <action path="/contentrepository/publicDocTabManager" scope="session" type="org.digijava.ampModule.contentrepository.action.DocTabManagerAction" validate="false" name="crDocTabManagerForm">
+    <action path="/contentrepository/publicDocTabManager" scope="session" type="org.digijava.module.contentrepository.action.DocTabManagerAction" validate="false" name="crDocTabManagerForm">
     	<forward name="forward" path="/showLayout.do?layout=cr_docTabManager" />
     	<forward name="publicResources" path="/showLayout.do?layout=cr_publicResources" />
     </action>
-    <action path="/contentrepository/label" scope="request" type="org.digijava.ampModule.contentrepository.action.LabelAction" validate="false" name="crLabelForm">
+    <action path="/contentrepository/label" scope="request" type="org.digijava.module.contentrepository.action.LabelAction" validate="false" name="crLabelForm">
     </action>
    </action-mappings>
 </struts-config>

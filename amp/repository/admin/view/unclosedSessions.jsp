@@ -12,7 +12,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:unclosedSessions">Unclosed Sessions</digi:trn>
@@ -54,7 +54,7 @@
 	   <td align="center" width="80%"><b><digi:trn key="admin:sessionTrace">Session Stack Trace</digi:trn></b></td>
 	   <td align="center" width="10%">&nbsp;</td>   
 	 </tr> 
-	  <logic:iterate indexId="index" id="unclosedSessions" name="unclosedSessionsForm" property="unclosedSeesions" type="org.digijava.ampModule.admin.form.UnclosedSessionsForm.UnclosedSessionInfo">
+	  <logic:iterate indexId="index" id="unclosedSessions" name="unclosedSessionsForm" property="unclosedSeesions" type="org.digijava.module.admin.form.UnclosedSessionsForm.UnclosedSessionInfo">
 	    <c:set var="isEven" value="${index % 2}"/>
 	    <tr 
 	    <c:if test="${isEven == 0}">bgcolor="#EBEBEB"</c:if>

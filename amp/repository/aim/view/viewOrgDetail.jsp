@@ -40,7 +40,7 @@
 								<tr>
 									<td width="100%">	
 										<table width="590" border="0"	 bgColor=#f4f4f2 height="363">
-											<logic:iterate name="aimViewOrgForm" property="org"  id="org" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
+											<logic:iterate name="aimViewOrgForm" property="org"  id="org" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																	<tr>
 																		<td width="169" align="right" height="30">
 																			<digi:trn key="aim:organizationName">Organization Name</digi:trn>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" table="AMP_CATEGORY_VALUE_LOCATION" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" table="AMP_CATEGORY_VALUE_LOCATION" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -12,9 +12,9 @@
 		<property name="name" column="location_name" type="java.lang.String" />
 
 		<many-to-one name="parentCategoryValue" column="parent_category_value"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
 		<many-to-one name="parentLocation" column="parent_location"
-			class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false" />
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false" />
 		<property name="description" column="description" type="text" />
 		<property name="gsLat" column="gs_lat" type="java.lang.String" />
 		<property name="gsLong" column="gs_long" type="java.lang.String" />
@@ -27,12 +27,12 @@
 		<set name="childLocations" inverse="true" lazy="true" cascade="all" order-by="location_name">
 			<cache usage="read-write" />
 			<key column="parent_location"/>
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
 		</set>
-		<many-to-one name="template" column="template_id" class="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" cascade="none" />
+		<many-to-one name="template" column="template_id" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" cascade="none" />
 
 		<many-to-one name="group" column="amp_category_value_group_id"
-					 class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false"/>
+					 class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false"/>
 
 	</class>
 </hibernate-mapping>

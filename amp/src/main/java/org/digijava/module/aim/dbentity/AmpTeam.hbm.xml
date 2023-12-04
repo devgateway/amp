@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpTeam" table="AMP_TEAM" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpTeam" table="AMP_TEAM" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampTeamId" column="amp_team_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -21,30 +21,30 @@
 		<property name="crossteamvalidation" column="cross_team_validation" type="java.lang.Boolean" />
 
 		<many-to-one name="teamLead" column="team_lead_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
 
 		<many-to-one name="parentTeamId" column="parent_team_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTeam" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 
 		<many-to-one name="relatedTeamId" column="related_team_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTeam" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 
 		<set name="activityList" table="AMP_TEAM_ACTIVITIES" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_team_id" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion"
 				column="amp_activity_id" />
 		</set>
 
         <set name="organizations" table="AMP_TEAM_ORGS" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_team_id" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisation"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"
 				column="amp_org_id" />
 		</set>
 
-		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" lazy="proxy" cascade="none" />
+		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" lazy="proxy" cascade="none" />
 		<property name="permissionStrategy" column="permission_strategy" type="java.lang.String" />
 		
 		<set name="filterDataSet" lazy="false" inverse="true" cascade="all-delete-orphan">
@@ -54,10 +54,10 @@
 		</set>
 
         <many-to-one name="fmTemplate" column="fm_template"
-                     class="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" cascade="none" lazy="proxy" />
+                     class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" cascade="none" lazy="proxy" />
 
         <many-to-one name="workspacePrefix" column="workspace_prefix_categoryvalue_id"
-                     class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="proxy" />
+                     class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="proxy" />
 
     </class>
 </hibernate-mapping>

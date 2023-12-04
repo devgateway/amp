@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.help.dbentity.HelpTopic" table="HELP_HELP_TOPICS">
+	<class name="org.digijava.module.help.dbentity.HelpTopic" table="HELP_HELP_TOPICS">
 		<id name="helpTopicId" column="helpTopicId" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
 				<param name="sequence_name">HELP_HELP_TOPICS_seq</param>
@@ -16,7 +16,7 @@
 		<property name="moduleInstance" column="moduleInstance" type="java.lang.String"
 			not-null="true" />
 		<many-to-one name="parent" column="parent_Id"
-			class="org.digijava.ampModule.help.dbentity.HelpTopic" not-null="false">
+			class="org.digijava.module.help.dbentity.HelpTopic" not-null="false">
 		</many-to-one>
 	
 	</class>

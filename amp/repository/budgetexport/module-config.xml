@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ampModule-config>
+<module-config>
 	<name>budgetexport</name>
 
 	<security login-required="true" default="READ">
@@ -8,9 +8,9 @@
 	</security>
 
 	<hibernate-classes required="true">
-		<hibernate-class>org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportProject</hibernate-class>
-		<hibernate-class>org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportMapItem</hibernate-class>
-		<hibernate-class>org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportMapRule</hibernate-class>
-		<hibernate-class>org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportCSVItem</hibernate-class>
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject</hibernate-class>
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem</hibernate-class>
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule</hibernate-class>
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem</hibernate-class>
 	</hibernate-classes>
-</ampModule-config>
+</module-config>

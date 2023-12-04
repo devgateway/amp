@@ -10,7 +10,7 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <digi:instance property="aimEditActivityForm" />
 <c:set var="transaction" value="MTEF Projections/MTEF Projections Table" scope="page"/>
@@ -26,7 +26,7 @@
 		</td>        
     </tr>
 	
-	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="3">
 		    <logic:equal name="fundingDetail" property="projectionTypeName.value" value="pipeline">
                 <c:set var="showFiscalYear" value="true" />
@@ -50,7 +50,7 @@
 
 
 
-	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.ampModule.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="3">
 		    <logic:equal name="fundingDetail" property="projectionTypeName.value" value="projection">
                 <c:set var="showFiscalYear" value="true" />

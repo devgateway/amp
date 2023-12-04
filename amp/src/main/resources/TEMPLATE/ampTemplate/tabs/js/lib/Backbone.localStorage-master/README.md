@@ -46,7 +46,7 @@ require.config({
 });
 ```
 
-Define your collection as a ampModule:
+Define your collection as a module:
 ```javascript
 define("SomeCollection", ["localstorage"], function() {
     var SomeCollection = Backbone.Collection.extend({
@@ -68,7 +68,7 @@ require(["SomeCollection"], function(SomeCollection) {
 
 If you're using [browserify](https://github.com/substack/node-browserify).
 
-Install using `npm install backbone.localstorage`, and require the ampModule.
+Install using `npm install backbone.localstorage`, and require the module.
 
 ```javascript
 Backbone.LocalStorage = require("backbone.localstorage");

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpOrgRoleBudget" table="AMP_ORG_ROLE_BUDGET">
+	<class name="org.digijava.module.aim.dbentity.AmpOrgRoleBudget" table="AMP_ORG_ROLE_BUDGET">
 		<cache usage="read-write" />
 		<id name="ampOrgRoleBudgetId" column="amp_orgrole_budget_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -10,6 +10,6 @@
 		</id>
 		<property column="budget_code" name="budgetCode" type="java.lang.String" />
 		<many-to-one name="ampOrgRole" column="amp_org_role_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrgRole" />
+			class="org.digijava.module.aim.dbentity.AmpOrgRole" />
 	</class>
 </hibernate-mapping>

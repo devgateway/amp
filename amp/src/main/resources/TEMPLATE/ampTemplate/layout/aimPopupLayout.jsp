@@ -6,29 +6,29 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
-<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
 <html>
 <digi:base />
 <%-- <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script> --%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/aim/scripts/EnterHitBinder.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <head>
 
 		<%@include file="title.jsp"%>
 			
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/util.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 		<script type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/arFunctions.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/ajax.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
 		
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 	
 		<!-- Stylesheet of AMP -->
 		<!--[if IE 6]><link href='/TEMPLATE/ampTemplate/css_2/amp_ie_hacks_6.css' rel='stylesheet' type='text/css'><![endif]-->

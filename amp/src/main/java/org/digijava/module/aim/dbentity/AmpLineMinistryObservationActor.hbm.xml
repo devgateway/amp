@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpLineMinistryObservationActor" table="AMP_LINE_MINISTRY_OBS_ACTOR">
+	<class name="org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor" table="AMP_LINE_MINISTRY_OBS_ACTOR">
 		<cache usage="read-write" />
 		<id name="ampLineMinistryObservationActorId" column="amp_line_ministry_obs_actor_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -10,6 +10,6 @@
 		</id>
 		<property column="name" name="name" type="text" />
 		<many-to-one name="measure" column="amp_line_ministry_obs_measure_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpLineMinistryObservationMeasure" cascade="all" />
+			class="org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure" cascade="all" />
 	</class>
 </hibernate-mapping>

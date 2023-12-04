@@ -11,10 +11,10 @@
 	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
 %>
 
-<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 <bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
 
-<digi:form action="/viewNewAdvancedReport.do" ampModule="aim">
+<digi:form action="/viewNewAdvancedReport.do" module="aim">
 	<table width="400px" style="font-size: 11px;" cellpadding="2" cellspacing="2" align="center">
 		<tr>
 			<td align="right">

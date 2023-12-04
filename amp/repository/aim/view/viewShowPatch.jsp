@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
-<%@ page import="org.digijava.ampModule.aim.form.ListAppliedPatchesForm" %>
+<%@ page import="org.digijava.module.aim.form.ListAppliedPatchesForm" %>
 
 <digi:instance property="aimListAppliedPatchesForm" />
 

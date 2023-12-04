@@ -28,9 +28,9 @@
 	<page page="unclosedSessions" name="admin_unclosedSessions" title="Unclosed Sessions List :: Blank admin site page" />
 </secondary-pages>
 
-<ampModule>
+<module>
 	<teaser name="adminLink" action="blankForward.do">adminLink.jsp</teaser>
 	<teaser name="mailStatus" action="showMailStatus.do">mailStatus.jsp</teaser>
-</ampModule>
+</module>
 
 </config>

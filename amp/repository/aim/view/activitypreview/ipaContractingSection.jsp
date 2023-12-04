@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
@@ -11,9 +11,9 @@
 <%@page import="java.math.BigDecimal"%>
 
 <digi:instance property="aimEditActivityForm" />
-<%--@elvariable id="aimEditActivityForm" type="org.digijava.ampModule.aim.form.EditActivityForm"--%>
+<%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
 
-<feature:display name="Contracting" ampModule="Contracting">
+<feature:display name="Contracting" module="Contracting">
     <fieldset>
         <legend>
 		<span class=legend_label id="ipalink" style="cursor: pointer;">
@@ -30,22 +30,22 @@
                                     <tr>
                                         <td bgColor=#f4f4f2 align="center" vAlign="top">
                                             <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Name" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Name" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:name" >Contract name:</digi:trn>
                                                         </td>
                                                         <td><span class="word_break bold">${contract.contractName}</span></td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Description" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">										<tr>
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Description" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">										<tr>
                                                     <td align="left">
                                                         <digi:trn key="aim:IPA:popup:description">Description:</digi:trn>
                                                     </td>
                                                     <td><span class="word_break bold">${contract.description}</span></td>
                                                 </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Info/Activity Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">										<tr>
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Info/Activity Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">										<tr>
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn>
@@ -56,8 +56,8 @@
                                                             </c:if>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:type">Type</digi:trn>:
@@ -68,24 +68,24 @@
                                                             </c:if>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Details/Start of Tendering" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Start of Tendering" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn>
                                                         </td>
                                                         <td><span class="word_break bold">${contract.formattedStartOfTendering}</span></td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Details/Signature" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Signature" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn>
                                                         </td>
                                                         <td><span class="word_break bold">${contract.formattedSignatureOfContract}</span></td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Organizations" parentModule="/Activity Form/Contracts/Contract Item">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Organizations" parentModule="/Activity Form/Contracts/Contract Item">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn>
@@ -96,24 +96,24 @@
                                                             </c:if>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Details/Contractor Name" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Contractor Name" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:
                                                         </td>
                                                         <td><span class="word_break bold">${contract.contractingOrganizationText}</span></td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Details/Completion" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Completion" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn>
                                                         </td>
                                                         <td><span class="word_break bold">${contract.formattedContractCompletion}</span></td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Details/Status" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Status" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:status">Status:</digi:trn>
@@ -124,8 +124,8 @@
                                                             </c:if>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Value" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Value" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:totalAmount">Total Amount</digi:trn>:
@@ -137,15 +137,15 @@
                                                             </b>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Contract Total Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Contract Total Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
                                                     <tr>
                                                         <td align="left" colspan="2">
                                                             <digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:
@@ -157,8 +157,8 @@
                                                             </b>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/INV Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/INV Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:INV">INV:</digi:trn>
@@ -170,13 +170,13 @@
                                                             </b>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
+                                                </module:display>
                                                 <tr>
                                                     <td align="left" colspan="2">
                                                         <digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn>
                                                     </td>
                                                 </tr>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Central Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Central Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:Central">Central</digi:trn>:
@@ -188,8 +188,8 @@
                                                             </b>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Regional Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Regional Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:
@@ -201,8 +201,8 @@
                                                             </b>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IFI Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IFI Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:
@@ -214,13 +214,13 @@
                                                             </b>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
+                                                </module:display>
                                                 <tr>
                                                     <td align="left" colspan="2">
                                                         <digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn>
                                                     </td>
                                                 </tr>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:IB">IB:</digi:trn>
@@ -232,8 +232,8 @@
                                                             </b>
                                                         </td>
                                                     </tr>
-                                                </ampModule:display>
-                                                <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements" parentModule="/Activity Form/Contracts/Contract Item">
+                                                </module:display>
+                                                <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements" parentModule="/Activity Form/Contracts/Contract Item">
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:
@@ -288,7 +288,7 @@
                                                                 <table>
                                                                     <c:forEach items="${contract.disbursements}" var="disbursement">
                                                                         <tr>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                 <td align="left" valign="top">
                                                                                     <b><digi:trn>${disbursement.adjustmentType.value}</digi:trn></b>
                                                                                         <%-- 															<c:if test="${disbursement.adjustmentType==0}"> --%>
@@ -298,22 +298,22 @@
                                                                                         <%-- 																<b><digi:trn key="aim:planned">Planned</digi:trn></b> --%>
                                                                                         <%-- 															</c:if>														 --%>
                                                                                 </td>
-                                                                            </ampModule:display>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            </module:display>
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                 <td align="left" valign="top">
                                                                                     <b>${disbursement.amount}</b>
                                                                                 </td>
-                                                                            </ampModule:display>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            </module:display>
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                 <td align="left" valign="top">
                                                                                     <b>${disbursement.currency.currencyCode}</b>
                                                                                 </td>
-                                                                            </ampModule:display>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            </module:display>
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                 <td align="left" valign="top">
                                                                                     <b>${disbursement.disbDate}</b>
                                                                                 </td>
-                                                                            </ampModule:display>
+                                                                            </module:display>
                                                                         </tr>
                                                                     </c:forEach>
                                                                 </table>
@@ -332,24 +332,24 @@
                                                                 <table width="100%">
                                                                     <tr>
                                                                         <td>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                 <digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn>
-                                                                            </ampModule:display>
+                                                                            </module:display>
                                                                         </td>
                                                                         <td>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                 <digi:trn key="aim:amountDisbursement">Amount Disbursement</digi:trn>
-                                                                            </ampModule:display>
+                                                                            </module:display>
                                                                         </td>
                                                                         <td>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                 <digi:trn key="aim:currencyDisbursement">Currency Disbursement</digi:trn>
-                                                                            </ampModule:display>
+                                                                            </module:display>
                                                                         </td>
                                                                         <td>
-                                                                            <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                            <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                             <digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn>
-                                                                            </ampModule:display>
+                                                                            </module:display>
                                                                     </tr>
                                                                     <c:forEach items="${aimEditActivityForm.funding.fundingDetails}" var="fundingDetail">
                                                                         <logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
@@ -366,20 +366,20 @@
                                                                                             <%-- 																	</c:if>																 --%>
                                                                                     </td>
                                                                                     <td align="center" valign="top">
-                                                                                        <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                                        <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                             <b>${fundingDetail.transactionAmount}</b>
-                                                                                        </ampModule:display>
+                                                                                        </module:display>
                                                                                     </td>
 
                                                                                     <td align="center" valign="top">
-                                                                                        <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                                        <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                             <b>${fundingDetail.currencyCode}</b>
-                                                                                        </ampModule:display>
+                                                                                        </module:display>
                                                                                     </td>
                                                                                     <td align="center" valign="top">
-                                                                                        <ampModule:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
+                                                                                        <module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
                                                                                             <b>${fundingDetail.transactionDate}</b>
-                                                                                        </ampModule:display>
+                                                                                        </module:display>
                                                                                     </td>
                                                                                 </tr>
                                                                             </c:if>
@@ -388,9 +388,9 @@
                                                                 </table>
                                                             </logic:notEmpty></td>
                                                     </tr>
-                                                </ampModule:display>
+                                                </module:display>
                                                 <field:display name="Contracting Amendments" feature="Contracting">
-                                                    <bean:define id="ct" name="contract" type="org.digijava.ampModule.aim.dbentity.IPAContract"/>
+                                                    <bean:define id="ct" name="contract" type="org.digijava.module.aim.dbentity.IPAContract"/>
                                                     <tr>
                                                         <td align="left">
                                                             <digi:trn>Contracts financed by the lessor</digi:trn>:
@@ -444,7 +444,7 @@
                                                                            var="amendment"
                                                                 >
                                                                     <bean:define id="am" name="amendment"
-                                                                                 type="org.digijava.ampModule.aim.dbentity.IPAContractAmendment"
+                                                                                 type="org.digijava.module.aim.dbentity.IPAContractAmendment"
                                                                     />
                                                                     <tr>
                                                                         <td align="center" valign="top">

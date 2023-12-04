@@ -9,7 +9,7 @@
       <lang delimiter=";" type="postgres">
 		DELETE FROM amp_features_templates WHERE feature in(SELECT id FROM amp_features_visibility where parent = (select id from amp_modules_visibility where name ='Multi-dimensional Reports'));
 		DELETE FROM amp_features_visibility where parent = (select id from amp_modules_visibility where name ='Multi-dimensional Reports');
-        DELETE from amp_modules_templates where ampModule = (select id FROM amp_modules_visibility where name ='Multi-dimensional Reports');
+        DELETE from amp_modules_templates where module = (select id FROM amp_modules_visibility where name ='Multi-dimensional Reports');
 		DELETE FROM amp_modules_visibility where name ='Multi-dimensional Reports';
 
 		DELETE FROM off_line_reports;

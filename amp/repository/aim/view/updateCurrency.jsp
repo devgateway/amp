@@ -9,8 +9,8 @@
 
 <digi:instance property="aimCurrencyForm" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -41,7 +41,7 @@ function validate() {
 function saveCurrency() {
   var valid = validate();
   if (valid != false) {
-    <digi:context name="back" property="context/ampModule/moduleinstance/saveCurrency.do" />
+    <digi:context name="back" property="context/module/moduleinstance/saveCurrency.do" />
     document.aimCurrencyForm.action = "<%= back %>";
     document.aimCurrencyForm.submit();
   }
@@ -76,7 +76,7 @@ function checkCode(input){
 }
 
 function closePopup() {
-  <digi:context name="back" property="context/ampModule/moduleinstance/currencyManager.do" />
+  <digi:context name="back" property="context/module/moduleinstance/currencyManager.do" />
   document.aimCurrencyForm.action = "<%= back %>";
   document.aimCurrencyForm.target = window.opener.name;
   document.aimCurrencyForm.submit();

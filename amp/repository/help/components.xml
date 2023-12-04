@@ -7,9 +7,9 @@
     <page page="allhelpTopicsPrintPreview" name="allHelpPrintPreview" title="Printer Friendly Preview" />
 </secondary-pages>
 	
- 	<ampModule>
+ 	<module>
  		<teaser name="helpTopics" action="viewHelpTopics.do">
 			helpTopics.jsp
 		</teaser>
-	</ampModule>
+	</module>
 </config>

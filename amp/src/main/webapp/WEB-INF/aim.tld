@@ -13,7 +13,7 @@
 		</description>
 		<name>formatDate</name>
 		<tag-class>
-			org.digijava.ampModule.aim.helper.FormatDateHelperTag
+			org.digijava.module.aim.helper.FormatDateHelperTag
 		</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
@@ -29,7 +29,7 @@
 		</description>
 		<name>formatNumber</name>
 		<tag-class>
-			org.digijava.ampModule.aim.helper.FormatHelperTag
+			org.digijava.module.aim.helper.FormatHelperTag
 		</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
@@ -88,7 +88,7 @@
 	<tag>
 		<name>addOrganizationButton</name>
 		<tagclass>
-			org.digijava.ampModule.aim.uicomponents.AddOrganizationButton
+			org.digijava.module.aim.uicomponents.AddOrganizationButton
 		</tagclass>
 		<info>Organization Selector tag</info>
 		<attribute>
@@ -202,7 +202,7 @@
 	<tag>
 		<name>addContactButton</name>
 		<tagclass>
-			org.digijava.ampModule.aim.uicomponents.AddContact
+			org.digijava.module.aim.uicomponents.AddContact
 		</tagclass>
 		<info>Add Contact  tag</info>
 		<attribute>
@@ -250,7 +250,7 @@
 	<tag>
 		<name>renderFormSubsection</name>
 		<tagclass>
-			org.digijava.ampModule.aim.uicomponents.RenderFormSubsectionTag
+			org.digijava.module.aim.uicomponents.RenderFormSubsectionTag
 		</tagclass>
 		<info>renders a collapsible form subsection</info>
 		<attribute>
@@ -279,7 +279,7 @@
 	<tag>
             <name>editContactLink</name>
             <tagclass>
-			org.digijava.ampModule.aim.uicomponents.EditContactLink
+			org.digijava.module.aim.uicomponents.EditContactLink
             </tagclass>
             <info>Edit Contact  tag</info>
             <attribute>

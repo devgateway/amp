@@ -95,7 +95,7 @@
 
 		var labelTD1 = document.createElement('TD');
 		labelTD1.className="inside";
-		labelTD1.innerHTML='<feature:display name="Proposed Project Cost" ampModule="Funding"><b>'+strProposed+' </b></feature:display> ';
+		labelTD1.innerHTML='<feature:display name="Proposed Project Cost" module="Funding"><b>'+strProposed+' </b></feature:display> ';
 		labelsTR1.appendChild(labelTD1);
 
 		
@@ -151,7 +151,7 @@
 				//amount
 				var actTDproposedAmount = document.createElement('TD');
 				actTDproposedAmount.className="inside";
-				actTDproposedAmount.innerHTML = '<feature:display name="Proposed Project Cost" ampModule="Funding">'+actList[i].getAttribute('proposedAmount')+'</feature:display>';
+				actTDproposedAmount.innerHTML = '<feature:display name="Proposed Project Cost" module="Funding">'+actList[i].getAttribute('proposedAmount')+'</feature:display>';
 				if(actTDproposedAmount.innerHTML == "N/A"){
 				   actTDproposedAmount.innerHTML = "--"
 				}
@@ -199,7 +199,7 @@
 
 		var propSumTD = document.createElement('TD');
 		propSumTD.className="inside_inner_title";
-		propSumTD.innerHTML= '<feature:display name="Proposed Project Cost" ampModule="Funding">'+root.getAttribute('proposedSum')+'</feature:display>';
+		propSumTD.innerHTML= '<feature:display name="Proposed Project Cost" module="Funding">'+root.getAttribute('proposedSum')+'</feature:display>';
 		lastTR.appendChild(propSumTD);
 
 		
@@ -220,13 +220,13 @@
 
 		//tousands label
 		if (strThousands==null || strThousands==''){
-<gs:test name="<%=org.digijava.ampModule.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="2" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="2" onTrueEvalBody="true">
 			strThousands='All amounts are in millions (000 000)';
 </gs:test>			
-<gs:test name="<%=org.digijava.ampModule.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="1" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="1" onTrueEvalBody="true">
 			strThousands='All amounts are in thousands (000)';
 </gs:test>
-<gs:test name="<%=org.digijava.ampModule.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="0" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="0" onTrueEvalBody="true">
 			strThousands='';
 </gs:test>
 		}

@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 
 <bean:define id="org" name="breakdown"
-	type="org.digijava.ampModule.aim.helper.FinancingBreakdown" scope="request" toScope="page" />
+	type="org.digijava.module.aim.helper.FinancingBreakdown" scope="request" toScope="page" />
 
 <div style='position:relative;display:none;' id='org-<bean:write name="org" property="organisation.ampOrgId"/>'>
 <ul>

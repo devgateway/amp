@@ -19,7 +19,7 @@ String auxReportId = request.getParameter("reportId");
 request.getParameter("print");
 %>
 
-<digi:form action="/gpi.do" type="org.digijava.ampModule.gpi.form.GPIForm" name="gpiForm">
+<digi:form action="/gpi.do" type="org.digijava.module.gpi.form.GPIForm" name="gpiForm">
 	<table border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 	    <tr>
 	        <td width="1000" align="left" valign="top" border="1" style="padding-left: 5px;">

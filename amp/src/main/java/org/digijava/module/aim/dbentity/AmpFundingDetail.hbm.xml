@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.aim.dbentity.AmpFundingDetail" table="AMP_FUNDING_DETAIL" >
+	<class name="org.digijava.module.aim.dbentity.AmpFundingDetail" table="AMP_FUNDING_DETAIL" >
 		<cache usage="read-write" />
 		<id name="ampFundDetailId" column="amp_fund_detail_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -31,21 +31,21 @@
 		<property name="disbursementId" column="disbursement_id" type="java.lang.String" />
 
 		<many-to-one name="reportingOrgId" column="reporting_org_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 
-		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.ampModule.fundingpledges.dbentity.FundingPledges" cascade="none" not-null="false" index="idx_amp_funding_detail_pledge_id" fetch="join" />
-		<many-to-one name="ampCurrencyId" column="amp_currency_id" class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
-		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.ampModule.aim.dbentity.AmpFunding" index="idx_amp_funding_detail_funding_id" />
-		<many-to-one name="contract" column="ipa_contract_id" class="org.digijava.ampModule.aim.dbentity.IPAContract" cascade="none" lazy="false" />
-		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" index="amp_funding_detail_adjustment_type" />
-		<many-to-one name="expenditureClass" column="expenditure_class" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" index="amp_funding_detail_expenditure_class" />
+		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges" cascade="none" not-null="false" index="idx_amp_funding_detail_pledge_id" fetch="join" />
+		<many-to-one name="ampCurrencyId" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding" index="idx_amp_funding_detail_funding_id" />
+		<many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" lazy="false" />
+		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" index="amp_funding_detail_adjustment_type" />
+		<many-to-one name="expenditureClass" column="expenditure_class" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" index="amp_funding_detail_expenditure_class" />
 
 		<many-to-one name="recipientOrg" column="recipient_org_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 			
 		<many-to-one name="recipientRole" column="recipient_role_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpRole" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />
 	
-	<many-to-one name="fixedRateBaseCurrency" column="fixed_base_currency_id" class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" not-found="ignore" not-null="false"  />
+	<many-to-one name="fixedRateBaseCurrency" column="fixed_base_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" not-found="ignore" not-null="false"  />
 	</class>
 </hibernate-mapping>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpDataFreezeExclusion" table="AMP_DATA_FREEZE_EXCLUSION">
+	<class name="org.digijava.module.aim.dbentity.AmpDataFreezeExclusion" table="AMP_DATA_FREEZE_EXCLUSION">
 		<cache usage="read-write" />
 		<id name="ampDataFreezeExclusionId" column="amp_data_freeze_exclusion_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -10,11 +10,11 @@
 		</id>
 		
 		<many-to-one name="activity" column="activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"
 			not-null="true" index = "amp_data_freeze_exclusion_activity_id"/>
 			
 	  <many-to-one name="dataFreezeEvent" column="data_freeze_event_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpDataFreezeSettings" cascade="none"
+			class="org.digijava.module.aim.dbentity.AmpDataFreezeSettings" cascade="none"
 			not-null="true" index = "amp_data_freeze_exclusion_data_freeze_event_id"/>
 
 	</class>

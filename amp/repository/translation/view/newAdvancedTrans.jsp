@@ -296,12 +296,12 @@ th {
 
 <script type="text/javascript">
 
-	<digi:context name="undoAction" property="context/ampModule/moduleinstance/AdvTranUndoChanges.do" />
-	<digi:context name="addAction" property="context/ampModule/moduleinstance/newAdvTranAdd.do" />
-	<digi:context name="delAction" property="context/ampModule/moduleinstance/newAdvTranDelete.do" />
-	<digi:context name="getChanges" property="context/ampModule/moduleinstance/AdvTranGetChanges.do" />
-	<digi:context name="saveChanges" property="context/ampModule/moduleinstance/AdvTranSaveChanges.do" />
-	<digi:context name="updateChanges" property="context/ampModule/moduleinstance/AdvTranUpdate.do" />
+	<digi:context name="undoAction" property="context/module/moduleinstance/AdvTranUndoChanges.do" />
+	<digi:context name="addAction" property="context/module/moduleinstance/newAdvTranAdd.do" />
+	<digi:context name="delAction" property="context/module/moduleinstance/newAdvTranDelete.do" />
+	<digi:context name="getChanges" property="context/module/moduleinstance/AdvTranGetChanges.do" />
+	<digi:context name="saveChanges" property="context/module/moduleinstance/AdvTranSaveChanges.do" />
+	<digi:context name="updateChanges" property="context/module/moduleinstance/AdvTranUpdate.do" />
 	
 	var imgPlus 		= '<digi:file src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>';
 	var imgMinus 		= '<digi:file src="/TEMPLATE/ampTemplate/img_2/ico_minus.gif"/>';

@@ -195,7 +195,7 @@
                                                     <table cellPadding=5 cellspacing="1" width="100%" class="inside">
                                                         <tr>
                                                             <td class="inside">
-                                                                <digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+                                                                <digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
                                                                 </c:set>
@@ -208,7 +208,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="inside">
-                                                                <digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+                                                                <digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                                                                 </c:set>

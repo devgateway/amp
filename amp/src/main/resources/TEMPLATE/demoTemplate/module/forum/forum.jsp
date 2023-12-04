@@ -4,8 +4,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<%@ page import="org.digijava.ampModule.forum.dbentity.ForumThread" %>
-<%@ page import="org.digijava.ampModule.forum.util.ForumManager" %>
+<%@ page import="org.digijava.module.forum.dbentity.ForumThread" %>
+<%@ page import="org.digijava.module.forum.util.ForumManager" %>
 <digi:instance property="forumForm"/>
 
 <digi:ref href="css/demoUI.css" rel="stylesheet" type="text/css" />

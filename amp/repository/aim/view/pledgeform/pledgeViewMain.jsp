@@ -49,7 +49,7 @@
 				<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
 			</aim:renderFormSubsection>
 		</field:display>
-		<feature:display name="Pledge Funding" ampModule="Pledges">
+		<feature:display name="Pledge Funding" module="Pledges">
 			<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
 				<jsp:include page="pledgeFundingView.jsp"></jsp:include>
 			</aim:renderFormSubsection>

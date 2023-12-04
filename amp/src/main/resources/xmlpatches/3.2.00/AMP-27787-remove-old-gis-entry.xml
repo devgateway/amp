@@ -5,13 +5,13 @@
 	<jira>AMP-27787</jira>
 	<keyword>gis</keyword>
 	<author>vchihai</author>
-	<description>Remove old gis ampModule and translations</description>
+	<description>Remove old gis module and translations</description>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
 				
 				DELETE FROM amp_modules_templates 
-				    WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Result Matrix Settings');
+				    WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Result Matrix Settings');
 				    
 				DELETE FROM amp_modules_visibility WHERE name = 'Result Matrix Settings'; 
 				

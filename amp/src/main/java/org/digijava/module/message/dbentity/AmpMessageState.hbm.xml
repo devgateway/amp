@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.message.dbentity.AmpMessageState" table="AMP_MESSAGE_STATE">
+	<class name="org.digijava.module.message.dbentity.AmpMessageState" table="AMP_MESSAGE_STATE">
 		<cache usage="read-write" />
 		<id name="id" column="message_state_Id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -14,8 +14,8 @@
 		<property name="read" column="is_read" type="java.lang.Boolean" />
 		<property name="messageHidden" column="is_message_hidden" type="java.lang.Boolean" />
 
-		<many-to-one name="message" column="message_id"	class="org.digijava.ampModule.message.dbentity.AmpMessage" cascade="none" />
-		<many-to-one name="receiver" column="receiver_id"	class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" cascade="none" />
+		<many-to-one name="message" column="message_id"	class="org.digijava.module.message.dbentity.AmpMessage" cascade="none" />
+		<many-to-one name="receiver" column="receiver_id"	class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
 	</class>
 </hibernate-mapping>

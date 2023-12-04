@@ -43,7 +43,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 
 
 <digi:instance property="aimThemeForm" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
@@ -126,7 +126,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 			var temp = validate();
 			if (temp == true) 
 			{
-			<digi:context name="addThm" property="context/ampModule/moduleinstance/addTheme.do"/>
+			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
 			document.aimThemeForm.action = "<%=addThm%>";
 			document.aimThemeForm.submit();
 			window.opener.location.reload();
@@ -136,7 +136,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 	
 		function closeProgram()
 		{
-			<digi:context name="addThm" property="context/ampModule/moduleinstance/addTheme.do"/>
+			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
 			document.aimThemeForm.action = "<%=addThm%>";
 			document.aimThemeForm.target = window.opener.name;
 			window.opener.location.reload();
@@ -267,7 +267,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 						<digi:trn key="aim:program:programTypeFirstLine">Please select from below</digi:trn>
 					</c:set>
 					<category:showoptions firstLine="${translation}" name="aimThemeForm" property="programTypeCategValId" 
-						keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.PROGRAM_TYPE_KEY %>" styleClass="inp-text" />						</td>
+						keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PROGRAM_TYPE_KEY %>" styleClass="inp-text" />						</td>
 				</tr>
 				<tr bgColor="#ffffff">
 					<td width="30%" height="20" align="right" valign="middle"><digi:trn key="aim:programTargetGroups">Target Groups

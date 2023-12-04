@@ -4,7 +4,7 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
 <logic:notEmpty name="currentMember" scope="session">
-	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.ampModule.aim.helper.TeamMember" />
+	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
 </logic:notEmpty>
 <logic:empty name="currentMember" scope="session">
 	<logic:notEmpty name="currentUser" scope="session">

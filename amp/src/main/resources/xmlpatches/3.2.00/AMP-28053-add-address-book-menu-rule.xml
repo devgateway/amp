@@ -43,7 +43,7 @@
 				INSERT INTO amp_features_templates (template, feature)
 				SELECT
 				(SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
-				(SELECT id AS ampModule FROM amp_features_visibility WHERE name = 'Address Book')
+				(SELECT id AS module FROM amp_features_visibility WHERE name = 'Address Book')
 				WHERE NOT EXISTS (
 				SELECT template FROM amp_features_templates
 				WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')

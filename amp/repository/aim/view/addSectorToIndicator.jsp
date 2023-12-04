@@ -7,15 +7,15 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
 	<!--
 
 	function selectSector() {
-		<digi:context name="selSector" property="context/ampModule/moduleinstance/sectorActions.do?actionType=addsectorToindicator"/>
+		<digi:context name="selSector" property="context/module/moduleinstance/sectorActions.do?actionType=addsectorToindicator"/>
 	    document.aimIndicatorForm.action = "<%= selSector %>";
 		 //document.aimIndicatorForm.target = window.opener.name;
 	    document.aimIndicatorForm.submit();
@@ -29,7 +29,7 @@
 		if (value == 1) {
 			document.aimIndicatorForm.sector.value = -1;
 		}	
-		<digi:context name="selSector" property="context/ampModule/moduleinstance/sectorActions.do?actionType=loadSectors"/>
+		<digi:context name="selSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors"/>
 	    document.aimIndicatorForm.action = "<%= selSector %>";
   		document.aimIndicatorForm.submit();									
 	}	

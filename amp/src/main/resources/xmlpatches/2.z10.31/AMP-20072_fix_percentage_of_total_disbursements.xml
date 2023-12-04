@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="bsh">
-				new org.digijava.ampModule.aim.startup.FixPercentageOfTotalDisbursements().work();
+				new org.digijava.module.aim.startup.FixPercentageOfTotalDisbursements().work();
 			</lang>
 		</script>
 	</apply>

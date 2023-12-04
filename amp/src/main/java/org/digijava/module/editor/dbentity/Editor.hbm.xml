@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.editor.dbentity.Editor" table="DG_EDITOR">
+	<class name="org.digijava.module.editor.dbentity.Editor" table="DG_EDITOR">
 		<composite-id>
 			<key-property name="siteId" type="java.lang.String" column="SITE_ID" length="100" />
 			<key-property name="editorKey" type="java.lang.String" column="EDITOR_KEY" />

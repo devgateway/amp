@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpTeamMember" table="AMP_TEAM_MEMBER" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpTeamMember" table="AMP_TEAM_MEMBER" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampTeamMemId" column="amp_team_mem_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -13,46 +13,46 @@
 
 		<many-to-one name="user" column="user_" class="org.digijava.kernel.user.User" cascade="none" />
 		<many-to-one name="ampTeam" column="amp_team_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTeam" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 		<many-to-one name="ampMemberRole" column="amp_member_role_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTeamMemberRoles" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMemberRoles" cascade="none" />
 
 		<set name="activities" table="AMP_MEMBER_ACTIVITIES" lazy="true" cascade="delete">
 			<cache usage="read-write" />
 			<key column="amp_member_id" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion"
 				column="amp_activity_id" />
 		</set>
 
 		<set name="reports" table="AMP_MEMBER_REPORTS" lazy="true" cascade="save-update">
 			<cache usage="read-write" />
 			<key column="amp_member_id" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpReports"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpReports"
 				column="amp_report_id" />
 		</set>
 		<set name="logs" table="AMP_REPORT_LOG" lazy="true" cascade="save-update">
 			<cache usage="read-write" />
 			<key column="amp_member_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpReportLog" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpReportLog" />
 		</set>
 
 		<set name="editableFundingOrgs" table="AMP_EDIT_DONOR_ORG" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_team_mem_id" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisation"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"
 				column="amp_org_id" />
 		</set>
 
 		<set name="desktopTabSelections" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="index">
 			<cache usage="read-write" />
 			<key column="owner_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpDesktopTabSelection" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpDesktopTabSelection" />
 		</set>
 		
 		<set name="messages" inverse="true" cascade="delete">
 			<cache usage="read-write" />
 			<key column="receiver_id" />
-			<one-to-many class="org.digijava.ampModule.message.dbentity.AmpMessageState" />
+			<one-to-many class="org.digijava.module.message.dbentity.AmpMessageState" />
 		</set>
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 	</class>

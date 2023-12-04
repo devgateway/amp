@@ -158,7 +158,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
             if(ampTreeVisibility!=null)
            if(isModuleActive(ampTreeVisibility)){
                                Map scope=PermissionUtil.getScope(pageContext.getSession());
-                               AmpModulesVisibility ampModulesFromTree=ampTreeVisibility.getModuleByNameFromRoot(getName());
+                               AmpModulesVisibility modulesFromTree=ampTreeVisibility.getModuleByNameFromRoot(getName());
                                TeamMember teamMember    = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
                                String isAdmin = (String) session.getAttribute("ampAdmin");
 
@@ -166,9 +166,9 @@ public class ModuleVisibilityTag extends BodyTagSupport {
                     PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
                     ServletRequest request = pageContext.getRequest();
                     String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
-                    if(ampModulesFromTree!=null && ampModulesFromTree.getPermission(false)!=null &&
+                    if(modulesFromTree!=null && modulesFromTree.getPermission(false)!=null &&
                         PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
-                        !ampModulesFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
+                        !modulesFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
                                 actionMode:GatePermConst.Actions.VIEW,scope)){
                         return SKIP_BODY;
                     }

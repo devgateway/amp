@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.gateperm.core.PermissionMap" table="PERM_MAP" lazy="false">
+	<class name="org.digijava.module.gateperm.core.PermissionMap" table="PERM_MAP" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -17,7 +17,7 @@
 		</properties>
 
 		<many-to-one name="permission" column="permission_id"
-			class="org.digijava.ampModule.gateperm.core.Permission" cascade="save-update" />
+			class="org.digijava.module.gateperm.core.Permission" cascade="save-update" />
 
 	</class>
 </hibernate-mapping>

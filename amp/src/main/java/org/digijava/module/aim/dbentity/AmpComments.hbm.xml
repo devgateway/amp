@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpComments" table="AMP_COMMENTS">
+	<class name="org.digijava.module.aim.dbentity.AmpComments" table="AMP_COMMENTS">
 		<cache usage="read-write" />
 		<id name="ampCommentId" column="amp_comment_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -13,10 +13,10 @@
 		<property name="commentDate" column="comment_date" type="java.util.Date" />
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="delete" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 		<many-to-one name="ampFieldId" column="amp_field_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpField" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpField" cascade="none" />
 		<many-to-one name="memberId" column="member_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 	</class>
 </hibernate-mapping>

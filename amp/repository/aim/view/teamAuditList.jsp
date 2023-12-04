@@ -10,7 +10,7 @@
 <script language="javascript">
 function showUser(email){
 	if (email != ""){
-		<digi:context name="information" property="context/ampModule/moduleinstance/userProfile.do" />
+		<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
         var param = "~edit=true~email="+email;
 		previewWorkspaceframe("${information}",param);
 	}
@@ -218,7 +218,7 @@ function showUser(email){
 								</tr>
 								
 								
-								<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.ampModule.aim.dbentity.AmpAuditLogger">
+								<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 									<tr>
 										<td width="280" class="inside" title="${log.objectName}">
 											<c:choose>

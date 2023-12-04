@@ -30,7 +30,7 @@
 			 }	
 			 else
 			 {
-				<digi:context name="addSector" property="context/ampModule/moduleinstance/addSector.do?event=addSector" />
+				<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
 				document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent="+levelType;
 				document.aimAddSectorForm.target = "_self";
 				document.aimAddSectorForm.submit();
@@ -39,7 +39,7 @@
 	}
 	
 	function cancel(id,levelType){
-			<digi:context name="cancel" property="context/ampModule/moduleinstance/viewSectorDetails.do~level=two~event=edit" />
+			<digi:context name="cancel" property="context/module/moduleinstance/viewSectorDetails.do~level=two~event=edit" />
 			document.aimAddSectorForm.action = "<%= cancel%>~ampSectorId="+id;
 			
 

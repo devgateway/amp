@@ -1,11 +1,11 @@
-<%@page import="org.digijava.ampModule.aim.util.TeamUtil"%>
-<%@page import="org.digijava.ampModule.aim.dbentity.AmpTeam"%>
+<%@page import="org.digijava.module.aim.util.TeamUtil"%>
+<%@page import="org.digijava.module.aim.dbentity.AmpTeam"%>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.MetaTextCell"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
-<%@ page import="org.digijava.ampModule.aim.util.ActivityUtil" %>
-<%@ page import="org.digijava.ampModule.aim.helper.TeamMember" %>
+<%@ page import="org.digijava.module.aim.util.ActivityUtil" %>
+<%@ page import="org.digijava.module.aim.helper.TeamMember" %>
 
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -16,7 +16,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 <%
@@ -24,7 +24,7 @@
 %>
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 <bean:define id="bckColor" value="true" toScope="page"/>
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

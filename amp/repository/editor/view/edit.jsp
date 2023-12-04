@@ -37,7 +37,7 @@ function validate(){
 }
 
 function cancelText(){
-	<digi:context name="url" property="context/ampModule/moduleinstance/cancelText.do" />
+	<digi:context name="url" property="context/module/moduleinstance/cancelText.do" />
 	editorForm.action="${url}";
 	editorForm.target = "_self";
 	editorForm.submit();
@@ -106,7 +106,7 @@ function cancelText(){
 	<bean:define id="showLanguageSwitch">true</bean:define>
 	<c:set var="showLanguageSwitch">
 		<feature:display name="Editor language switch"
-			ampModule="Project ID and Planning">true</feature:display>
+			module="Project ID and Planning">true</feature:display>
 	</c:set>
 
 	<c:if test="${showLanguageSwitch==''}">
@@ -141,7 +141,7 @@ function cancelText(){
 <script>
 	function ChangeLanguage (obj) {
 	var lang = obj.value;
-	<digi:context name="showText" property="context/ampModule/moduleinstance/showEditText.do" />
+	<digi:context name="showText" property="context/module/moduleinstance/showEditText.do" />
 
   	var szQuery = "<%=showText%>?langCode=" + lang;
 		ret = window.confirm("Switching language will refresh \n page with content on that language.");
@@ -187,7 +187,7 @@ function cancelText(){
 			</td>
 		</tr>
 		<logic:iterate id="editorList" name="editorForm" property="editorList"
-			type="org.digijava.ampModule.editor.form.EditorForm.TextInfo">
+			type="org.digijava.module.editor.form.EditorForm.TextInfo">
 			<tr align="left">
 				<td><small> <bean:write name="editorList"
 							property="langName" /></small> 

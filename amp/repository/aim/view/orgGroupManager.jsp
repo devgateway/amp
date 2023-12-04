@@ -25,7 +25,7 @@
 			  return false;
 		} else {
 			
-			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/orgGroupManager.do"/>
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/orgGroupManager.do"/>
 		     url = "<%= searchOrg %>?orgSelReset=false";
 		     document.aimOrgGroupManagerForm.action = url;
 		     document.aimOrgGroupManagerForm.submit();
@@ -35,7 +35,7 @@
 
 	
 	function resetSearch(){
-		<digi:context name="searchOrg" property="context/ampModule/moduleinstance/orgGroupManager.do"/>
+		<digi:context name="searchOrg" property="context/module/moduleinstance/orgGroupManager.do"/>
 		url = "<%= searchOrg %>?orgSelReset=true";
 	    document.aimOrgGroupManagerForm.action = url;
 	    document.aimOrgGroupManagerForm.submit();
@@ -319,21 +319,21 @@
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
-													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	styleClass="list-item-image" width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	styleClass="list-item-image" width="15" height="10"/>
 														<digi:link href="/editOrgGroup.do?action=create" >
 															<digi:trn key="aim:addNewOrgGroup">Add Group</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	styleClass="list-item-image" width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	styleClass="list-item-image" width="15" height="10"/>
 														<digi:link href="/organisationManager.do" >
 															<digi:trn key="aim:organizationManager">Organization Manager</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" 	width="15" height="10"/>
 													<digi:link href="/admin.do">
 													<digi:trn key="aim:AmpAdminHome">
 													Admin Home

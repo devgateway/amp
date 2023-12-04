@@ -14,8 +14,8 @@
 	background-color: #f4f4f2;
 }
 </style>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script type="text/javascript">
 BASE_YEAR	= <globalsettings:value name="Year Range Start" />;
 var helpBody=' <digi:trn jsFriendly="true"> to open all reports on one page, please enter the digit "0"</digi:trn>';
@@ -108,7 +108,7 @@ function checkYear( year, base, range ) {
 }
 
 function loadShareRules(){
-	<digi:context name="sel" property="context/ampModule/moduleinstance/defaultSettings.do?shareResAction=getOptions" />;
+	<digi:context name="sel" property="context/module/moduleinstance/defaultSettings.do?shareResAction=getOptions" />;
 	url = "<%= sel %>" ;
 	document.aimUpdateAppSettingsForm.action = url;
 	document.aimUpdateAppSettingsForm.submit();	

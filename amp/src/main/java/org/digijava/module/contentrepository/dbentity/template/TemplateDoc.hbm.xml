@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.digijava.ampModule.contentrepository.dbentity.template.TemplateDoc" table="amp_template_doc">
+    <class name="org.digijava.module.contentrepository.dbentity.template.TemplateDoc" table="amp_template_doc">
         <id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
 				<param name="sequence_name">amp_template_doc_seq</param>
@@ -12,7 +12,7 @@
         
         <set name="fields" lazy="false" inverse="false" cascade="delete">
 			<key column="template_doc_Id" />
-			<one-to-many class="org.digijava.ampModule.contentrepository.dbentity.template.TemplateField" />
+			<one-to-many class="org.digijava.module.contentrepository.dbentity.template.TemplateField" />
 	   	</set>
             
     </class>

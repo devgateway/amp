@@ -4,7 +4,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -97,15 +97,15 @@ var loginFailed = function(data, status) {
 						<digi:trn>Click here to change your password</digi:trn>
 					</c:set>
 				<a href="/aim/showChangePassword.do" id="changePasswTord" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></a>
-				<digi:link href="/showEmailForm.do" ampModule="aim" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
+				<digi:link href="/showEmailForm.do" module="aim" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
 				</div>
 				<feature:display name="Enable New User Registration"
-							ampModule="Login - User Management">
+							module="Login - User Management">
 				<div class="addnew">
 				<c:set var="trn3">
 						<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
 					</c:set>
-				<digi:link ampModule="aim" href="/showRegisterUser.do?init=true" styleId="new" title="${trn3}"><digi:trn key="aim:newUserRegistration"> New user registration</digi:trn></digi:link></div>
+				<digi:link module="aim" href="/showRegisterUser.do?init=true" styleId="new" title="${trn3}"><digi:trn key="aim:newUserRegistration"> New user registration</digi:trn></digi:link></div>
 				</feature:display>
 				</form>
           <form action="/aim/index.do" id="selectWorkspaceForm" method="post">

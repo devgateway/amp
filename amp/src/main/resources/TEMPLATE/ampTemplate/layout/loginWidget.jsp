@@ -14,7 +14,7 @@
         <c:set var="msg">
         ${fn:replace(message,quote,escapedQuote)}
         </c:set>
-            <digi:link styleClass="loginWidget" href="/j_spring_logout" ampModule="aim">
+            <digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
                 <digi:trn key="aim:logout">Logout</digi:trn>
             </digi:link>
         </div>

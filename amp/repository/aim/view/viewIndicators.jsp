@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 
@@ -47,23 +47,23 @@ a.itr:hover {
 }
 </style>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="javascript">
 
 
 
 
    function setOverImg(index){
-	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-righthover1.gif"
+	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
 	}
 	
    function setOutImg(index){
-	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif"
+	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
 	}
 	
 	function sortByVal(value){
 	  if(value!=null){
-	    <digi:context name="viewIndicators" property="context/ampModule/moduleinstance/viewIndicators.do" />
+	    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do" />
 	    document.getElementById("sortBy").value=value;
 	    document.aimViewIndicatorsForm.target = "_self";
 	    document.aimViewIndicatorsForm.submit();
@@ -71,12 +71,12 @@ a.itr:hover {
 	}
 	
 	function addIndicator(){
-	  <digi:context name="addIndicator" property="context/ampModule/moduleinstance/addNewIndicator.do?indicator=new" />
+	  <digi:context name="addIndicator" property="context/module/moduleinstance/addNewIndicator.do?indicator=new" />
 	  openURLinWindow("<%= addIndicator %>",500, 300);
 	}
 	
 	function editIndicator(id){
-	  <digi:context name="viewEditIndicator" property="context/ampModule/moduleinstance/viewEditIndicator.do" />
+	  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
 	  openURLinWindow("<%= viewEditIndicator %>?id="+id,500, 300);
 	}
 	
@@ -90,20 +90,20 @@ a.itr:hover {
 	
 	//if yu remove or rename this function please look in addNewIndicator.jsp
 	function viewall(){
-	    <digi:context name="viewIndicators" property="context/ampModule/moduleinstance/viewIndicators.do?sector=viewall" />
+	    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do?sector=viewall" />
 	    document.aimViewIndicatorsForm.action = "<%= viewIndicators %>";
 	    document.aimViewIndicatorsForm.target = "_self";
 	    document.aimViewIndicatorsForm.submit();
 	  
 	}
 	function filterIndicators(){
-		  <digi:context name="viewIndicators" property="context/ampModule/moduleinstance/viewIndicators.do" />
+		  <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do" />
 		 document.aimViewIndicatorsForm.action = "<%= viewIndicators %>";
 		 document.aimViewIndicatorsForm.target = "_self";
 		 document.aimViewIndicatorsForm.submit();
 	}
 	function exportXSL(){
-        <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportIndicatorManager2XSL.do"/>;
+        <digi:context name="exportUrl" property="context/module/moduleinstance/exportIndicatorManager2XSL.do"/>;
     document.aimViewIndicatorsForm.action="${exportUrl}";
     document.aimViewIndicatorsForm.target="_blank";
     document.aimViewIndicatorsForm.submit();

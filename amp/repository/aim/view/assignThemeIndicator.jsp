@@ -11,7 +11,7 @@
 
 	function assignIndTo(id)
 	{
-		<digi:context name="indAssign" property="context/ampModule/moduleinstance/assignThemeIndicator.do"/>
+		<digi:context name="indAssign" property="context/module/moduleinstance/assignThemeIndicator.do"/>
 		document.aimThemeForm.action = "<%= indAssign %>?indicatorId=" +id;
 		document.aimThemeForm.target = window.opener.name;
 		document.aimThemeForm.submit();

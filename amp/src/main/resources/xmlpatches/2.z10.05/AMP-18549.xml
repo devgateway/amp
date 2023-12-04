@@ -11,7 +11,7 @@
 			<lang delimiter=";" type="postgres">
 				ALTER TABLE amp_structure
 				ALTER COLUMN type DROP NOT NULL;
-				delete from amp_modules_templates where ampModule in(
+				delete from amp_modules_templates where module in(
 				select id from amp_modules_visibility where name like '/Activity Form/Structures/Structure Type');
 				delete from amp_modules_visibility where name like '/Activity Form/Structures/Structure Type';
 				

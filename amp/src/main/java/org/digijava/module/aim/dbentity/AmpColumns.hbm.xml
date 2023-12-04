@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpColumns" table="AMP_COLUMNS" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpColumns" table="AMP_COLUMNS" lazy="false">
 		<cache usage="read-write" />
 		<id name="columnId" column="columnId" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -22,7 +22,7 @@
 		
 		<set name="filters" cascade="all-delete-orphan" lazy="false">
 			<key column="column_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpColumnsFilters" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpColumnsFilters" />
 		</set>
 
 	</class>

@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="/repository/aim/view/strongPassword.jsp"  />
 
@@ -186,7 +186,7 @@ function validateUserInfo(){
 						<c:set var="translation">
 				            <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 				          </c:set>
-				          <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+				          <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
 				            <digi:trn key="aim:AmpAdminHome">
 				            Admin Home
 				            </digi:trn>
@@ -501,7 +501,7 @@ function validateUserInfo(){
 																             </html:select>
 																		</td>
 																	</tr>
-																	<ampModule:display name="Pledges" parentModule="PROJECT MANAGEMENT">
+																	<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
@@ -540,7 +540,7 @@ function validateUserInfo(){
 																				</c:if>
 																			</td>
 																		</tr>
-																	</ampModule:display>
+																	</module:display>
 																		<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
                                                                      		 <digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn>

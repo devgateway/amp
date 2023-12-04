@@ -6,9 +6,9 @@
 <!--  http://docs.google.com/Doc?id=djf3gch_56gs9dqtjc  -->
 <!-- ************************************************** -->
 <xs:schema
-        targetNamespace="http://digijava.org/ampModule/gateperm/feed/schema.xml"
-        xmlns="http://digijava.org/ampModule/gateperm/feed/schema.xml"
-        xmlns:gateperm="http://digijava.org/ampModule/gateperm/feed/schema.xml"
+        targetNamespace="http://digijava.org/modele/gateperm/feed/schema.xml"
+        xmlns="http://digijava.org/module/gateperm/feed/schema.xml"
+        xmlns:gateperm="http://digijava.org/module/gateperm/feed/schema.xml"
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
         xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"

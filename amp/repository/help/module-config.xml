@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ampModule-config>
+<module-config>
 	<name>help</name>
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/helpActions" /> 
@@ -11,6 +11,6 @@
 		<action login-required="true" pattern="/searchGlossary" /> 
 	</security>
 		<hibernate-classes required="false">
-			<hibernate-class>org.digijava.ampModule.help.dbentity.HelpTopic</hibernate-class>
+			<hibernate-class>org.digijava.module.help.dbentity.HelpTopic</hibernate-class>
 		</hibernate-classes>
-</ampModule-config>
+</module-config>

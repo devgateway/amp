@@ -135,7 +135,7 @@ function editEvent(){
 			                 </tr>
 			                 <tr>
 								<td style="background-color: #CCDBFF;height: 18px;">
-				               	 	<feature:display name="Event Approve" ampModule="Calendar">
+				               	 	<feature:display name="Event Approve" module="Calendar">
                                                         <c:if test="${calendarEventForm.approve==0||calendarEventForm.approve==2}"><digi:trn>Awaiting Validation</digi:trn></c:if>
                                                         <c:if test="${calendarEventForm.approve==-1}"><digi:trn>Event not Approved</digi:trn></c:if>
 	 	 	 	 				    </feature:display>
@@ -194,7 +194,7 @@ function editEvent(){
 				              </td>
 				             </tr>
 				             <tr height="3px"><td colspan="2"></td></tr>
-				            <feature:display name="Event Type" ampModule="Calendar">
+				            <feature:display name="Event Type" module="Calendar">
 				            	<tr>
 					              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 					                <digi:trn key="calendar:eventsType">Event type</digi:trn>:
@@ -206,7 +206,7 @@ function editEvent(){
 					            </tr>
 					            <tr height="3px"><td colspan="2"></td></tr>
 				            </feature:display>			            
-				            <feature:display name="Donors" ampModule="Calendar">
+				            <feature:display name="Donors" module="Calendar">
 				            	<tr>
 					              <td style="text-align: right;font-family: Arial;font-size: 12px; font-weight:bold;"nowrap="nowrap">
 					                <digi:trn key="cal:organizations">Organizations</digi:trn>:
@@ -353,7 +353,7 @@ function editEvent(){
 					              	<td>
 					              	</td>
 									<td>
-					               		<feature:display name="Event Approve" ampModule="Calendar">
+					               		<feature:display name="Event Approve" module="Calendar">
 		 	 	 	 						<input type="button" value="<digi:trn>Approved</digi:trn>" class="buttonx" style="width: 110px;" onclick="valid(true);" />
 		 	 	 	 						&nbsp;
 											<input type="button" value="<digi:trn>Not Approved</digi:trn>" class="buttonx" style="width: 110px;" onclick="valid(false);" />

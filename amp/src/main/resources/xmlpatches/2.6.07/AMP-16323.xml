@@ -9,28 +9,28 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Beneficiary Agency');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Beneficiary Agency');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Beneficiary Agency';
 				
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Contracting Agency');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Contracting Agency');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Contracting Agency';
 				
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Executing Agency');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Executing Agency');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Executing Agency';
 				
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Implementing Agency');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Implementing Agency');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Implementing Agency';
 				
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Regional Group');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Regional Group');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Regional Group';
 				
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Responsible Organization');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Responsible Organization');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Responsible Organization';
 				
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Beneficiary Agency');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Beneficiary Agency');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Beneficiary Agency';
 				
-				delete from amp_modules_templates where ampModule in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Sector Group');
+				delete from amp_modules_templates where module in (select id FROM amp_modules_visibility WHERE name like '/Activity Form/Related Organizations/Sector Group');
 				delete from amp_modules_visibility where name like '/Activity Form/Related Organizations/Sector Group';
 			</lang>
 		</script>

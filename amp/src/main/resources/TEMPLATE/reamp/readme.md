@@ -16,7 +16,7 @@ and [polyfills](http://mts.io/2015/04/08/webpack-shims-polyfills/)
 ## Usage
 Get Node.js
 
-Install ampModule's dependencies
+Install module's dependencies
 
     npm install
 
@@ -51,21 +51,21 @@ Run
 
 ### Organizing files
 #### Module oriented
-The goal is to group your files according to the component/ampModule they belong to. If a ampModule is trivial it can be just
-one single file. If a ampModule has submodules or assets, make it a folder. For this reason, do not specify the file
-  extension when importing. To give an example, say you have a _components/my-ampModule.es6_ file, and you require it like this:
+The goal is to group your files according to the component/module they belong to. If a module is trivial it can be just
+one single file. If a module has submodules or assets, make it a folder. For this reason, do not specify the file
+  extension when importing. To give an example, say you have a _components/my-module.es6_ file, and you require it like this:
 ```js
-var MyModule = require('components/my-ampModule.es6');
+var MyModule = require('components/my-module.es6');
 ```
 
 or
 ```js
-import MyModule from 'components/my-ampModule.es6';
+import MyModule from 'components/my-module.es6';
 ```
 
-Now suppose your ampModule grew big enough it now deserves its own folder, but doing
+Now suppose your module grew big enough it now deserves its own folder, but doing
 
-    mkdir components/my-ampModule && mv components/my-ampModule.es6 components/my-ampModule/index.es6
+    mkdir components/my-module && mv components/my-module.es6 components/my-module/index.es6
 
 will make all of your imports break. That could've been avoided if you simply did not specify the file extension
  in the require/import statement.
@@ -92,13 +92,13 @@ require("./styles/header.less")
 require("./styles/theme.less")
 ```
 #### Handling assets
-If your ampModule needs to read a config JSON, or load translations from a \*.po file, or any other type of asset,
- place the asset inside the ampModule's folder, install the necessary WebPack loader, ex.
+If your module needs to read a config JSON, or load translations from a \*.po file, or any other type of asset,
+ place the asset inside the module's folder, install the necessary WebPack loader, ex.
 
     npm install json-loader --save-dev
 
 Modify _webpack.dev.config.js_ so that it uses the right loader for the extension. Then just require the asset from
- within your ampModule:
+ within your module:
 ```js
 import config from "./config.json"
 if(config.userUrl){
@@ -109,4 +109,4 @@ if(config.userUrl){
 ```
 #### Tests
 Put your test cases inside a *\__tests__*(two underscores before the word _test_ and two after) folder within
- your ampModule's folder.
+ your module's folder.

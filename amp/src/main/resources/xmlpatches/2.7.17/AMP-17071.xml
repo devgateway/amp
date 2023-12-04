@@ -9,8 +9,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.ampModule.currencyrates.WSCurrencyClientImp','WebserviceX.net');
-				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.ampModule.currencyrates.FxtopWSCurrencyClientImpl','FXTop (preferred)');
+				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.module.currencyrates.WSCurrencyClientImp','WebserviceX.net');
+				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.module.currencyrates.FxtopWSCurrencyClientImpl','FXTop (preferred)');
 				CREATE OR REPLACE VIEW v_g_settings_ws_currency_impl AS 
  					SELECT util_global_settings_possible_.value_id AS id, 
     				util_global_settings_possible_.value_shown AS value
@@ -19,7 +19,7 @@
   				
 				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice username','VHAUKP',null,'Username for webservice exchangerate subscription','general');
 				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice password','DEVGATE',null,'password for webservice exchangerate subscription','general');
-				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice implementation','org.digijava.ampModule.currencyrates.FxtopWSCurrencyClientImpl','v_g_settings_ws_currency_impl','Username for webservice exchangerate subscription','general');
+				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice implementation','org.digijava.module.currencyrates.FxtopWSCurrencyClientImpl','v_g_settings_ws_currency_impl','Username for webservice exchangerate subscription','general');
         	</lang>
 		</script>
 	</apply>

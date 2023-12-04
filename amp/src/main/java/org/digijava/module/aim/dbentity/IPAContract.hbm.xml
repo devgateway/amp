@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.IPAContract" table="IPA_CONTRACT">
+	<class name="org.digijava.module.aim.dbentity.IPAContract" table="IPA_CONTRACT">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -14,22 +14,22 @@
 			type="java.lang.String" />
 
 		<many-to-one name="activityCategory" column="activity_category_id"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="status" column="status"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="type" column="type"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="contractType" column="contractType"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="organization" column="contracting_org"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 
 		<many-to-one name="activity" column="activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 
 		<property name="startOfTendering" column="start_of_tendering" type="java.util.Date" />
 
@@ -42,9 +42,9 @@
 		<property access="field" name="contractTotalValue" column="contract_total_value"
 			type="java.lang.Double" />
 		<many-to-one name="totalAmountCurrency" column="total_amount_currency"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="dibusrsementsGlobalCurrency" column="disbursements_global_currency"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 
 		<property name="totalPrivateContribAmountDate" column="TOT_PRIVATE_CONTR_DATE"
 			type="java.util.Date" />
@@ -75,28 +75,28 @@
 		<set name="organizations" cascade="none" table="AMP_IPA_CONTRACTING_ORGANIZATI" lazy="false">
 			<cache usage="read-write" />
 			<key column="ipa_contract_id" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisation"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"
 				column="organization" lazy="false"/>
 		</set>
 
 		<set name="disbursements" cascade="all-delete-orphan" inverse="false">
 			<cache usage="read-write" />
 			<key column="ipa_contract_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.IPAContractDisbursement" />
+			<one-to-many class="org.digijava.module.aim.dbentity.IPAContractDisbursement" />
 		</set>
 
 		<!-- -->
 		<property name="donorContractFundinAmount" column="donor_contract_funding" type="java.lang.Double" />
 		<many-to-one name="donorContractFundingCurrency" column="donor_contract_funding_currency"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 				
 		<property name="totAmountDonorContractFunding" column="tot_amount_donor_contract_funding" type="java.lang.Double" />
 		<many-to-one name="totalAmountCurrencyDonor" column="total_amount_currency_donor"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		
 		<property name="totAmountCountryContractFunding" column="tot_amount_country_contract_funding" type="java.lang.Double" />
 		<many-to-one name="totalAmountCurrencyCountry" column="total_amount_currency_country"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 
 	</class>
 </hibernate-mapping>

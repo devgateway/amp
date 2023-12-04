@@ -81,29 +81,29 @@
 			</div>
 		</div>
 		<div id="logincontainer">
-      <feature:display name="Enable New User Registration" ampModule="Login - User Management">
+      <feature:display name="Enable New User Registration" module="Login - User Management">
         <c:set var="trn3">
           <digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
         </c:set>
-        <digi:link href="/showRegisterUser.do?init=true" ampModule="aim" title="${trn3}">
+        <digi:link href="/showRegisterUser.do?init=true" module="aim" title="${trn3}">
           <digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
         </digi:link>
         <br/>
       </feature:display>
-      <feature:display name="Change Password" ampModule="Login - User Management">
+      <feature:display name="Change Password" module="Login - User Management">
         <c:set var="title">
           <digi:trn>Click here to change your password</digi:trn>
         </c:set>
-        <digi:link style="text-align: center;" href="/showChangePassword.do" title="${title}" ampModule="aim">
+        <digi:link style="text-align: center;" href="/showChangePassword.do" title="${title}" module="aim">
           <digi:trn> Change Password</digi:trn>
         </digi:link>
         <br/>
       </feature:display>
-      <feature:display name="Trouble signing in" ampModule="Login - User Management">
+      <feature:display name="Trouble signing in" module="Login - User Management">
         <c:set var="trn1">
           <digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have problem with login in</digi:trn>
         </c:set>
-        <digi:link href="/showEmailForm.do" ampModule="aim" title="${trn1}">
+        <digi:link href="/showEmailForm.do" module="aim" title="${trn1}">
           <digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn>
         </digi:link>
       </feature:display>

@@ -8,7 +8,7 @@
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp"  />
 
 <digi:instance property="calendarViewForm"/>
-<script type="text/javascript" src="<digi:file src="ampModule/calendar/js/main.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script type="text/javascript">
 function selectCalendarType(view, type) {
     var form = document.getElementById('filterForm');

@@ -10,7 +10,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				INSERT INTO amp_quartz_job_class (jc_id,jc_name, jc_class_fullname) VALUES
-				(nextval('amp_quartz_job_class_seq'),'Automatic Activity Validation', 'org.digijava.ampModule.message.jobs.ActivityAutomaticValidationJob');
+				(nextval('amp_quartz_job_class_seq'),'Automatic Activity Validation', 'org.digijava.module.message.jobs.ActivityAutomaticValidationJob');
 			</lang>
 		</script>
 	</apply>

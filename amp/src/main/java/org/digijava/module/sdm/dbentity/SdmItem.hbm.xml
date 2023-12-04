@@ -2,9 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.sdm.dbentity.SdmItem" table="DG_SDM_ITEM" lazy="false">
+	<class name="org.digijava.module.sdm.dbentity.SdmItem" table="DG_SDM_ITEM" lazy="false">
 		<composite-id>
-			<key-many-to-one name="document" class="org.digijava.ampModule.sdm.dbentity.Sdm" column="SDM_ID" />
+			<key-many-to-one name="document" class="org.digijava.module.sdm.dbentity.Sdm" column="SDM_ID" />
 			<key-property name="paragraphOrder" column="PARAGRAPH_ORDER" type="java.lang.Long" />
 		</composite-id>
 

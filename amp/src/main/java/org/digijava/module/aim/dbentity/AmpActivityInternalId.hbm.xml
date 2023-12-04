@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityInternalId"
+	<class name="org.digijava.module.aim.dbentity.AmpActivityInternalId"
 		table="AMP_ACTIVITY_INTERNAL_ID">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -12,10 +12,10 @@
 		</id>
 
 		<many-to-one name="ampActivity" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 
 		<many-to-one name="organisation" column="amp_org_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="merge" not-null="true" lazy="false"/>
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="merge" not-null="true" lazy="false"/>
 
 		<property name="internalId" column="internal_id" type="java.lang.String" />
 

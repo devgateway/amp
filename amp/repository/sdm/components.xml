@@ -14,7 +14,7 @@
 	<page page="error" name="sdm_error" title="ERROR" />
 </secondary-pages>
 
-<ampModule>
+<module>
 	<teaser-file>teaser.jsp</teaser-file>
 	<page name="sdmCreateDoc">sdmCreateDoc.jsp</page>
 	<page name="sdmEditDoc">sdmEditDoc.jsp</page>
@@ -26,6 +26,6 @@
 	<page name="sdmDocList">sdmDocList.jsp</page>
 	<page name="preview">preview.jsp</page>
 	<page name="error">error.jsp</page>
-</ampModule>
+</module>
 
 </config>	

@@ -9,14 +9,14 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<%@ page import="org.digijava.ampModule.aim.uicomponents.form.selectOrganizationComponentForm" %>
+<%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
 <!-- Source File -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
         
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/calendar/js/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/calendar/js/main.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 
 <!-- Individual YUI CSS files -->
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
@@ -346,7 +346,7 @@ function submitForm() {
 
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp"  />
 <jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
-<link rel="stylesheet" href="<digi:file src="ampModule/calendar/css/main.css"/>">
+<link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
 
 <script language="JavaScript" type="text/javascript">
 
@@ -654,7 +654,7 @@ function addOrganisation(orgId, orgName){
   }
 
   function reccuringEvent(){
-	   	<digi:context name="rev" property="context/ampModule/moduleinstance/recurringEvent.do" />
+	   	<digi:context name="rev" property="context/module/moduleinstance/recurringEvent.do" />
 		openURLinWindow("<%=rev%>",832,624);
   }
 
@@ -669,7 +669,7 @@ function addOrganisation(orgId, orgName){
 
 		if (validateText() && validateDates()){ 
 			document.getElementById('hdnMethod').value = 'save';
-			<digi:context name="sendEvent" property="context/ampModule/moduleinstance/showCalendarEvent.do?method=save"/>
+			<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
 	//		document.calendarEventForm.action = "<%=sendEvent %>";
 	//		document.calendarEventForm.target = "_self";
 	//		document.calendarEventForm.submit();
@@ -735,7 +735,7 @@ function validateText(){
   }
 
 function recurEvent(){
- 	<digi:context name="rev" property="context/ampModule/moduleinstance/recurringEvent.do" />
+ 	<digi:context name="rev" property="context/module/moduleinstance/recurringEvent.do" />
 	openURLinWindow("<%=rev%>",832,624);
 }
 
@@ -1008,7 +1008,7 @@ function removeGuest(obj) {
 			                                                        <c:set var="i" value="0${i}"/>
 			                                                      </c:if>
 			                                                      <option class="inp-text" value="${i}"/>
-			                                                      <%=org.digijava.ampModule.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
+			                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
 			                                                      </option>
 			                                                    </c:forEach>
 			                                                  </select>
@@ -1124,7 +1124,7 @@ function removeGuest(obj) {
 			                                                      <bean:define id="type" value="${calendarEventForm.selectedCalendarTypeId}"/>
 			                                                      <c:if test="${i < 10}"><c:set var="i" value="0${i}"/></c:if>
 			                                                      <option class="inp-text" value="${i}"/>
-			                                                      <%=org.digijava.ampModule.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
+			                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
 			                                                      </option>
 			                                                    </c:forEach>
 			                                                  </select>
@@ -1180,7 +1180,7 @@ function removeGuest(obj) {
 				                                          </c:if>                                          
 			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>											</td>
 			                    		<td width="2%">&nbsp;</td>
-			                    		<feature:display name="Donors" ampModule="Calendar">
+			                    		<feature:display name="Donors" module="Calendar">
 			                    			<td colspan="4" valign="top" width=48%>
                                                                 <digi:trn key="cal:organizations"><b><digi:trn>Organizations</digi:trn></b></digi:trn>	
 											<br />
@@ -1190,7 +1190,7 @@ function removeGuest(obj) {
 														<td>
 															<html:select multiple="multiple" property="selOrganizations" size="4" style="width: 300px;">
 							                	<logic:notEmpty name="calendarEventForm" property="organizations">
-																	<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
+																	<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																		<html:option value="${organization.ampOrgId}" style="font-family: Arial;font-size:11px;">${organization.name}</html:option>
 																	</logic:iterate>
 																</logic:notEmpty>
@@ -1358,13 +1358,13 @@ function removeGuest(obj) {
 			                    	<tr>
 			                          <td colspan="8" style="text-align:center;">
 									  <hr />
-			                          	<feature:display name="Preview Event button" ampModule="Calendar">
+			                          	<feature:display name="Preview Event button" module="Calendar">
 			                          		<input type="submit" class="buttonx" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
 &nbsp;			                          	</feature:display>                           
-			                            <feature:display name="Save and Send button" ampModule="Calendar">
+			                            <feature:display name="Save and Send button" module="Calendar">
 			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 &nbsp;			                            </feature:display>
-			                            <feature:display name="Recurring Event Button" ampModule="Calendar">
+			                            <feature:display name="Recurring Event Button" module="Calendar">
 			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>
 &nbsp;			                          	</feature:display>
 			                            <input type="button" class="buttonx" style="min-width: 110px" onclick="cancel();" value="<digi:trn>Cancel</digi:trn>"/>

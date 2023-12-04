@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.Map"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -199,7 +199,7 @@ div.fakefile2 input{
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
-						<digi:link href="/admin.do" title="${translation}" ampModule="aim">
+						<digi:link href="/admin.do" title="${translation}" module="aim">
 						<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<span style="color:#000000"><digi:trn key="aim:translationManager">Translation Manager</digi:trn></span>
@@ -218,7 +218,7 @@ div.fakefile2 input{
 													</digi:trn>
 												</b>
 												</td>
-												<td background="ampModule/aim/images/corner-r.gif"	height="17" width=17></td>
+												<td background="module/aim/images/corner-r.gif"	height="17" width=17></td>
 											</tr>
 										</table>
 									</td>
@@ -228,9 +228,9 @@ div.fakefile2 input{
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<!--<td>
-													<digi:img src="ampModule/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
 												<td class="inside">
-													<digi:link href="/admin.do" ampModule="aim">
+													<digi:link href="/admin.do" module="aim">
 													<digi:trn key="aim:AmpAdminHome">
 													Admin Home
 													</digi:trn>
@@ -453,7 +453,7 @@ div.fakefile2 input{
 				</tr>
 			</table>
 
-<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 </script>

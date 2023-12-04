@@ -10,7 +10,7 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
 
 <c:if test="${not empty funding.undisbursementbalance}">

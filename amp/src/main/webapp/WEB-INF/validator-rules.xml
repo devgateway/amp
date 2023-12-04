@@ -414,7 +414,7 @@
                    jsFunction="org.apache.commons.validator.javascript.validateUtilities"/>
 
 		<validator name="identical"
-			       classname="org.digijava.ampModule.um.util.StrutsValidator"
+			       classname="org.digijava.module.um.util.StrutsValidator"
 			       method="validateIdentical"
 			       methodParams="java.lang.Object,
 			                      org.apache.commons.validator.ValidatorAction,

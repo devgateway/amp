@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
   
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -36,7 +36,7 @@
 
 	function load() {
 		if (document.aimFlagUploaderForm.winFlag.value == "close") {
-			<digi:context name="flagUploader" property="context/ampModule/moduleinstance/flagUploader.do"/>
+			<digi:context name="flagUploader" property="context/module/moduleinstance/flagUploader.do"/>
 		   document.aimFlagUploaderForm.action = "<%= flagUploader %>";
 			document.aimFlagUploaderForm.target = window.opener.name;
 		   document.aimFlagUploaderForm.submit();

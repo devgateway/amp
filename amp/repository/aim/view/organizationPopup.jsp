@@ -5,13 +5,13 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@page import="org.digijava.ampModule.contentrepository.util.DocumentManagerUtil" %>
+<%@page import="org.digijava.module.contentrepository.util.DocumentManagerUtil" %>
 
 <c:if test="${empty firstOrganisationPopupInclusion}">
 	<c:set var="firstOrganisationPopupInclusion" value="true" scope="request"/>
 	<script type="text/javascript">
 	function showDocuments(objId) {
-			var sessionName	= "<%= org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>";
+			var sessionName	= "<%= org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>";
 			var url			= "/aim/insertDocumentsInSession.do?objId="+objId+"&sessionName="+sessionName;
 			var popupName	= 'my_popup';
 			window.open(url, popupName, 'width=900, height=300');
@@ -24,7 +24,7 @@
 
 <logic:notEmpty name="currentOrg" scope="request">
 <bean:define id="org" name="currentOrg"
-	type="org.digijava.ampModule.aim.helper.RelOrganization" scope="request"
+	type="org.digijava.module.aim.helper.RelOrganization" scope="request"
 	toScope="page" />
 <div style='position:relative;display:none;' id='org-<c:out value="${org.orgCode}"/>'> 
 <ul>

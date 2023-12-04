@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility"
+	<class name="org.digijava.module.aim.dbentity.AmpModulesVisibility"
 		table="AMP_MODULES_VISIBILITY" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -18,24 +18,24 @@
 		<set name="items" table="AMP_FEATURES_VISIBILITY" inverse="true" cascade="all" lazy="false">
 			<cache usage="read-write" />
 			<key column="parent" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />
 		</set>
 
 		<many-to-one name="parent" column="parent"
-			class="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility" />
+			class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
 
 
 		<set name="submodules" cascade="all" inverse="true" lazy="false">
 			<cache usage="read-write" />
 			<key column="parent" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
 		</set>
 
 		<set name="templates" table="amp_modules_templates" inverse="true" lazy="false">
 			<cache usage="read-write" />
-			<key column="ampModule" />
+			<key column="module" />
 			<many-to-many column="template"
-				class="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" />
+				class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
 		</set>
 
 	</class>

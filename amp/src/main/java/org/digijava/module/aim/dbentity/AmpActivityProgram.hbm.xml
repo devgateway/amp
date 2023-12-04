@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityProgram"
+	<class name="org.digijava.module.aim.dbentity.AmpActivityProgram"
 		table="AMP_ACTIVITY_PROGRAM">
 		<cache usage="read-write" />
 		<id name="ampActivityProgramId" column="amp_activity_program_id" type="java.lang.Long">
@@ -12,21 +12,21 @@
 		</id>
 
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none"  not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"  not-null="true" />
 
 		<many-to-one name="program" column="amp_program_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false"/>
+			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false"/>
 
 		<property name="programPercentage" column="program_percentage" type="java.lang.Float" />
 
 		<many-to-one name="programSetting" column="program_setting"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityProgramSettings" cascade="none"
+			class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" cascade="none"
 			not-null="true" />
 
 		<set name="indirectPrograms" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_activity_program_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpActivityIndirectProgram" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityIndirectProgram" />
 		</set>
 
 	</class>

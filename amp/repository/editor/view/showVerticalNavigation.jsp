@@ -3,7 +3,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ page import="org.digijava.ampModule.editor.dbentity.Editor" %>
+<%@ page import="org.digijava.module.editor.dbentity.Editor" %>
 
 
 

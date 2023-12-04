@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ampModule-config>
+<module-config>
 	<name>um</name>
 	<default-instance>user</default-instance>
 	<security>
@@ -33,8 +33,8 @@
 	</security>
 
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.ampModule.um.dbentity.ResetPassword</hibernate-class>
-		<hibernate-class>org.digijava.ampModule.um.dbentity.SuspendLogin</hibernate-class>
+		<hibernate-class>org.digijava.module.um.dbentity.ResetPassword</hibernate-class>
+		<hibernate-class>org.digijava.module.um.dbentity.SuspendLogin</hibernate-class>
 	</hibernate-classes>
 
-</ampModule-config>
+</module-config>

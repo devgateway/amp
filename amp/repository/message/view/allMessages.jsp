@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 
 <script langauage="JavaScript">
@@ -80,7 +80,7 @@
 		<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 		
 		
-		<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/asynchronous.js"/>"></script>
+		<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 		
 		<script language="javascript" type="text/javascript">
 			//setting timer to check for new messages after specified time	

@@ -9,11 +9,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="java.util.List"%>
-<%@ page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <style>
@@ -108,7 +108,7 @@ div.fakefile2 input {
             <c:set	var="translation">
               <digi:trn>Click here to goto Admin Home</digi:trn>
             </c:set>
-            <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}">
+            <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}">
               <digi:trn> Admin Home </digi:trn>
             </digi:link>
             &nbsp;&gt;&nbsp;

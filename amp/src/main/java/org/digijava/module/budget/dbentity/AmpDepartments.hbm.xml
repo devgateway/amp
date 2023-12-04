@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.budget.dbentity.AmpDepartments"
+	<class name="org.digijava.module.budget.dbentity.AmpDepartments"
 		table="AMP_DEPARTMENTS">
 		<cache usage="read-write" />
 		<id name="id" column="id_department" type="java.lang.Long">
@@ -12,7 +12,7 @@
 		</id>
 		<set name="organisations" table="AMP_ORGANISATION_DEPARTMENTS" lazy="true">
 			<key column="ID" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" column="amp_org_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id" />
 		</set>
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="code" column="code" type="java.lang.String"/>

@@ -29,14 +29,14 @@
 				WHERE NOT EXISTS (SELECT id FROM amp_features_visibility  WHERE name  = 'Show Editable Export Formats');
             
             	
-				INSERT INTO amp_modules_templates (template, ampModule)
+				INSERT INTO amp_modules_templates (template, module)
 				SELECT 
 					(SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
-					(SELECT id AS ampModule FROM amp_modules_visibility WHERE name = 'Activity Preview')
+					(SELECT id AS module FROM amp_modules_visibility WHERE name = 'Activity Preview')
 				WHERE NOT EXISTS (
 						SELECT template FROM amp_modules_templates 
 						WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
-						AND ampModule = (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Preview')
+						AND module = (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Preview')
 				);
 				
 				INSERT INTO amp_features_templates (template, feature) 

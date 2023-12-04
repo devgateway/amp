@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpInflationRate" table="AMP_INFLATION_RATES" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpInflationRate" table="AMP_INFLATION_RATES" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="amp_inflation_rate_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -11,7 +11,7 @@
 
 		<property name="periodStart" column="period_start" type="java.util.Date" unique-key='periodCurrencyInflation' />
 		<property name="inflationRate" column="inflation_rate" type="java.lang.Double" />
-		<many-to-one name="currency" column="currency_id" class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" not-null="true" unique-key='periodCurrencyInflation' />
+		<many-to-one name="currency" column="currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" not-null="true" unique-key='periodCurrencyInflation' />
 
 	</class>
 </hibernate-mapping>

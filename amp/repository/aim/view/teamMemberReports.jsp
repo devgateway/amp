@@ -182,7 +182,7 @@
 															Report List Manager
 															</digi:trn>
 														</td>
-														<td background="ampModule/aim/images/corner-r.gif" height="17" width=17>
+														<td background="module/aim/images/corner-r.gif" height="17" width=17>
 														</td>
 													</tr>
 												</table>
@@ -235,7 +235,7 @@
 															<table width="100%" cellspacing="1" cellPadding=2 vAlign="top" align="left"
 															bgcolor="#dddddd">
 															<logic:iterate name="aimMemberReportsForm" property="reports" id="reports" 
-															type="org.digijava.ampModule.aim.dbentity.AmpReports">
+															type="org.digijava.module.aim.dbentity.AmpReports">
 																<tr><td width=3 bgcolor="#f4f4f2">
 																<html:multibox property="selReports">
 																	<bean:write name="reports" property="ampReportId" />

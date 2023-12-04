@@ -6,8 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addFunding.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
@@ -42,7 +42,7 @@
 			var temp = validate();
 			if (temp == true) 
 			{
-				<digi:context name="addThmInd" property="context/ampModule/moduleinstance/addThemeIndicator.do?event=save"/>
+				<digi:context name="addThmInd" property="context/module/moduleinstance/addThemeIndicator.do?event=save"/>
 				document.aimThemeForm.action = "<%=addThmInd%>&themeId=" +id;
 				document.aimThemeForm.target = "_self";
 				document.aimThemeForm.submit();
@@ -52,7 +52,7 @@
 	
 	function addIndVal(id)
 	{
-			<digi:context name="addIndVal" property="context/ampModule/moduleinstance/addThemeIndicator.do?event=indValue"/>
+			<digi:context name="addIndVal" property="context/module/moduleinstance/addThemeIndicator.do?event=indValue"/>
 			document.aimThemeForm.action = "<%=addIndVal%>&themeId=" +id;
 			document.aimThemeForm.target = "_self";
 			document.aimThemeForm.submit();
@@ -65,7 +65,7 @@
 
 	function closeWindow() 
 	{
-			<digi:context name="closeInd" property="context/ampModule/moduleinstance/closeThemeIndicator.do"/>
+			<digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
 			document.aimThemeForm.action = "<%=closeInd%>";
 			document.aimThemeForm.submit();
 			window.close();

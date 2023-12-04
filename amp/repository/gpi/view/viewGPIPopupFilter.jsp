@@ -200,7 +200,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 <bean:define id="ey" name="gpiForm" property="endYears"
 	type="int[]"></bean:define>
 <bean:define id="form" name="gpiForm"
-	type="org.digijava.ampModule.gpi.form.GPIForm"></bean:define>
+	type="org.digijava.module.gpi.form.GPIForm"></bean:define>
 <bean:define id="reqBeanSetterObject" toScope="request"
 	name="gpiForm" />
 <div id="filterContainer" style="display: none;" class="yui-skin-sam">

@@ -3,12 +3,12 @@
 <struts-config>
 	<form-beans>
 		<form-bean name="searchform"
-			type="org.digijava.ampModule.search.form.SearchForm" />
+			type="org.digijava.module.search.form.SearchForm" />
 	</form-beans>
 
 	<action-mappings>
 		<action name="searchform" path="/search/search" scope="session"
-			type="org.digijava.ampModule.search.action.Search">
+			type="org.digijava.module.search.action.Search">
 			<forward name="forward" path="/showLayout.do?layout=search" />
 			<forward name="redirectTab" path="/aim/viewMyDesktop.do" />
 			<forward name="redirectReport" path="/aim/viewNewAdvancedReport.do" />

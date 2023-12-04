@@ -1471,7 +1471,7 @@
             <description/>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1774,7 +1774,7 @@
             <description/>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description/>
@@ -1905,7 +1905,7 @@
             <description/>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description/>

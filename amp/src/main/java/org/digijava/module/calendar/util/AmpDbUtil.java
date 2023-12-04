@@ -483,7 +483,7 @@ public class AmpDbUtil {
       public static long getComponentFMIdfromName(String name){
           Session session = null;
             Query qry = null;
-            AmpModulesVisibility ampModule = null;
+            AmpModulesVisibility module = null;
 
             try {
                 session = PersistenceManager.getSession();
@@ -493,19 +493,19 @@ public class AmpDbUtil {
                 qry.setParameter("name", name, StringType.INSTANCE);
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
-                    ampModule = (AmpModulesVisibility) itr.next();
+                    module = (AmpModulesVisibility) itr.next();
                 }
             } catch (Exception e) {
                 logger.error("Unable to get currency");
                 logger.debug("Exceptiion " + e);
             }
-            return ampModule!= null ? ampModule.getId() : 0l;
+            return module!= null ? module.getId() : 0l;
       }
       
       public static AmpModulesVisibility getComponentFMfromName(String name){
           Session session = null;
             Query qry = null;
-            AmpModulesVisibility ampModule = null;
+            AmpModulesVisibility module = null;
 
             try {
                 session = PersistenceManager.getSession();
@@ -515,13 +515,13 @@ public class AmpDbUtil {
                 qry.setParameter("name", name, StringType.INSTANCE);
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
-                    ampModule = (AmpModulesVisibility) itr.next();
+                    module = (AmpModulesVisibility) itr.next();
                 }
             } catch (Exception e) {
                 logger.error("Unable to get currency");
                 logger.debug("Exceptiion " + e);
             }
-            return ampModule;
+            return module;
       }
       
       public static List getComponentsId(List<String> components){

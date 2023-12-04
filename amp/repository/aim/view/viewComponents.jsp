@@ -16,7 +16,7 @@ function onDelete() {
 function addComponent()
 {
   openNewWindow(600, 400);
-  <digi:context name="addCompIndicator" property="context/ampModule/moduleinstance/updateComponents.do?event=add" />
+  <digi:context name="addCompIndicator" property="context/module/moduleinstance/updateComponents.do?event=add" />
   document.aimUpdateComponentsForm.action = "<%= addCompIndicator %>";
   document.aimUpdateComponentsForm.target = popupPointer.name;
   document.aimUpdateComponentsForm.submit();
@@ -25,14 +25,14 @@ function addComponent()
 
 function editComponent(id){
   openNewWindow(600, 400);
-  <digi:context name="editComponent" property="context/ampModule/moduleinstance/updateComponents.do?event=edit" />
+  <digi:context name="editComponent" property="context/module/moduleinstance/updateComponents.do?event=edit" />
   document.aimUpdateComponentsForm.action = "<%= editComponent %>&componentId="+id;
   document.aimUpdateComponentsForm.target = popupPointer.name;
   document.aimUpdateComponentsForm.submit();
 }
 
 function deleteComponent(id){
-  <digi:context name="delComponent" property="context/ampModule/moduleinstance/updateComponents.do?event=delete" />
+  <digi:context name="delComponent" property="context/module/moduleinstance/updateComponents.do?event=delete" />
   document.aimUpdateComponentsForm.action = "<%= delComponent %>&componentId="+id;
   document.aimUpdateComponentsForm.target = "_self";
   document.aimUpdateComponentsForm.submit();
@@ -112,7 +112,7 @@ function deleteComponent(id){
                           </logic:empty>
                           <logic:notEmpty name="aimComponentsForm" property="components">
                             <logic:iterate name="aimComponentsForm" property="components" id="componentlist"
-                            type="org.digijava.ampModule.aim.dbentity.AmpComponent">
+                            type="org.digijava.module.aim.dbentity.AmpComponent">
                             <tr>
                               <td bgcolor="#ffffff">
                                 <jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
@@ -191,7 +191,7 @@ function deleteComponent(id){
               Other links
               </digi:trn>
             </td>
-            <td background="ampModule/aim/images/corner-r.gif" height="17" width="17">&nbsp;
+            <td background="module/aim/images/corner-r.gif" height="17" width="17">&nbsp;
             
             </td>
           </tr>
@@ -204,7 +204,7 @@ function deleteComponent(id){
 <!--        the following comments will be removed further-->
 <!--          <tr>-->
 <!--            <td nowrap>-->
-<!--              <digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>-->
+<!--              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>-->
 <!--              <c:set var="toCompIndicatorManager">-->
 <!--                <digi:trn key="aim:clickforCompIndManager">Click here to goto Component Indicator Manager</digi:trn>-->
 <!--              </c:set>-->
@@ -217,7 +217,7 @@ function deleteComponent(id){
 <!--          </tr>-->
           <tr>
             <td class="inside">
-              <digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>

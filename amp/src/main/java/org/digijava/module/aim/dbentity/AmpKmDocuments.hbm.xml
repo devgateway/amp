@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpKmDocuments" table="AMP_KM_DOCUMENTS">
+	<class name="org.digijava.module.aim.dbentity.AmpKmDocuments" table="AMP_KM_DOCUMENTS">
 		<cache usage="read-write" />
 		<id name="ampKmId" column="amp_km_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -14,13 +14,13 @@
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />
 		<many-to-one name="documentType" column="document_type"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<!--
 			<set name="activities" table="amp_activity_km_documents" lazy="true" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_km_id"/>
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" column="amp_activity_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion" column="amp_activity_id"/>
 			</set>-->
 	</class>
 </hibernate-mapping>

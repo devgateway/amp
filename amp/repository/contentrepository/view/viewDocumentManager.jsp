@@ -7,14 +7,14 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="java.util.List"%>
-<%@ page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
-<%@page import="org.digijava.ampModule.contentrepository.util.DocumentManagerRights"%>
+<%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%>
 <%@include file="documentManagerDivHelper.jsp" %>
 
 <DIV id="TipLayer"
@@ -24,7 +24,7 @@
 
 <digi:instance property="crDocumentManagerForm" />
 <bean:define id="myForm" name="crDocumentManagerForm" toScope="page"
-	type="org.digijava.ampModule.contentrepository.form.DocumentManagerForm" />
+	type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
 
 <bean:define id="isTeamLeader" name="myForm" property="teamLeader" />
 <bean:define id="meTeamMember" name="myForm" property="teamMember" />
@@ -152,7 +152,7 @@ border-right: 1px solid rgb(208, 208, 208);
 }
 
 </style>
-<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
 <script language="javascript">
  var uploadDoc="<digi:trn jsFriendly='true'>Upload Doc</digi:trn>";
  var addWebLink="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>";
@@ -595,7 +595,7 @@ border-right: 1px solid rgb(208, 208, 208);
 			<div style="width:1100px;" class="yui-skin-sam" id="content"> 
 				<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
-						<feature:display name="My Resources" ampModule="Content Repository">
+						<feature:display name="My Resources" module="Content Repository">
 				        	<c:if  test="${selectedType=='private' || selectedType=='version'}">
 				        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn>My Resources</digi:trn></div></a></li>
 				        	</c:if>
@@ -606,7 +606,7 @@ border-right: 1px solid rgb(208, 208, 208);
 
 			        
 			        
-			        <feature:display name="Team Resources" ampModule="Content Repository">
+			        <feature:display name="Team Resources" module="Content Repository">
 			        	<c:if  test="${selectedType=='team'}">
 			        		<li id="tab2" class="selected"><a href="#team_res"><div class="tab_link"><digi:trn>Team Resources</digi:trn></div></a></li>
 			        	</c:if>
@@ -616,7 +616,7 @@ border-right: 1px solid rgb(208, 208, 208);
 					</feature:display>
 					
 					<c:if test="${not empty myForm.sharedDocsTabVisible && myForm.sharedDocsTabVisible}">
-						<feature:display name="Shared Resources" ampModule="Content Repository">
+						<feature:display name="Shared Resources" module="Content Repository">
 							<c:if  test="${selectedType=='shared'}">
 				        		<li id="tab3" class="selected"><a href="#shared_res"><div class="tab_link"><digi:trn>Shared Resources</digi:trn></div></a></li>
 				        	</c:if>
@@ -627,7 +627,7 @@ border-right: 1px solid rgb(208, 208, 208);
 					</c:if>			
 					
 					<c:if test="${not empty myForm.publicDocsTabVisible && myForm.publicDocsTabVisible}">					
-						<feature:display name="Public Resources" ampModule="Content Repository">
+						<feature:display name="Public Resources" module="Content Repository">
 							<c:set var="selectedClass">
 								<c:if test="${selectedType!='private' && selectedType!='version' && selectedType!='team' && selectedType!='shared'}">selected</c:if>
 							</c:set>
@@ -637,7 +637,7 @@ border-right: 1px solid rgb(208, 208, 208);
 			    </ul> 
 			     
 			    <div class="yui-content" style="border-color: #d0d0d0">
-		    		<feature:display name="My Resources" ampModule="Content Repository">
+		    		<feature:display name="My Resources" module="Content Repository">
 			      		<div id="my_res" class="resource_popin" style="border: none;">
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
@@ -694,7 +694,7 @@ border-right: 1px solid rgb(208, 208, 208);
 					</feature:display>			    	
 					
 					
-					<feature:display name="Team Resources" ampModule="Content Repository">
+					<feature:display name="Team Resources" module="Content Repository">
 						<div id="team_res" class="resource_popin"  style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
@@ -754,7 +754,7 @@ border-right: 1px solid rgb(208, 208, 208);
 					</feature:display>					
 					
 					<!-- Shared Resources Start  -->
-					<feature:display name="Shared Resources" ampModule="Content Repository">
+					<feature:display name="Shared Resources" module="Content Repository">
 						<c:if test="${not empty myForm.sharedDocsTabVisible && myForm.sharedDocsTabVisible}">
 							<div id="shared_res"  class="resource_popin" style="border: none;">				        	       
 								<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
@@ -804,7 +804,7 @@ border-right: 1px solid rgb(208, 208, 208);
 					<!-- Shared Resources end  -->
 					
 					<!-- Public resources -->
-					<feature:display name="Public Resources" ampModule="Content Repository">
+					<feature:display name="Public Resources" module="Content Repository">
 						<c:if test="${not empty myForm.publicDocsTabVisible && myForm.publicDocsTabVisible}">
 							<div id="public_res"  class="resource_popin" style="border: none;">				        	       
 								<table border="0" cellpadding="1" cellspacing="0" width="100%" style="position: relative; left: 0px" >

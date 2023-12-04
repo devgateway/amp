@@ -82,7 +82,7 @@ $(document).ready(function() {showValidationmsg();});
                 <c:set var="translation">
                   <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                 </c:set>
-                <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
                 <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >

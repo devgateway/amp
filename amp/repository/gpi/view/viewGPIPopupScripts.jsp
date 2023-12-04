@@ -6,44 +6,44 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"%>
-<link rel="stylesheet" href="<digi:file src="ampModule/aim/css/newamp.css"/>" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 	
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
-<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/reportWizard/reportManager.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/reportWizard/fundingGroups.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/reportWizard/saving.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/reportWizard/prefilters.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/filters/filters.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='ampModule/aim/scripts/filters/searchManager.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
 
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
 	style="visibility: hidden; position: absolute; z-index: 1000; top: -100;"></DIV>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <!-- script for tree-like view (drilldown reports) -->
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- dynamic drive ajax tabs -->
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
 
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/ajax.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 
 <!-- dynamic tooltip -->
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css" />
-<%-- <link rel="stylesheet" type="text/css" href="<digi:file src='ampModule/aim/css/filters.css'/>"> --%>
+<%-- <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>"> --%>
 
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
@@ -87,7 +87,7 @@
 
 <!-- virtual pagination -->
 <script type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/virtualpaginate.js"/>">
+	src="<digi:file src="module/aim/scripts/virtualpaginate.js"/>">
 	/***********************************************
 	 * Virtual Pagination script- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
 	 * This notice MUST stay intact for legal use
@@ -153,8 +153,8 @@
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/aim/scripts/filters/filters.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/aim/scripts/saveReports.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>"></script>
 
 <!-- END - For DHTML Tab View of Filters -->
 

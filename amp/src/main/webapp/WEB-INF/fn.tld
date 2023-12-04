@@ -210,7 +210,7 @@
     </description>
     <name>getReportUrl</name>
     <function-class>org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil</function-class>
-    <function-signature>java.lang.String getUrl(org.digijava.ampModule.aim.dbentity.AmpReports)</function-signature>
+    <function-signature>java.lang.String getUrl(org.digijava.module.aim.dbentity.AmpReports)</function-signature>
   </function>
 
 </taglib>

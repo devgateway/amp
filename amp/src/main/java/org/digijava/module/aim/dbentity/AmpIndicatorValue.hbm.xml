@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpIndicatorValue" table="AMP_INDICATOR_VALUES">
+	<class name="org.digijava.module.aim.dbentity.AmpIndicatorValue" table="AMP_INDICATOR_VALUES">
 		<cache usage="read-write" />
 		<id name="indValId" column="ind_val_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -18,17 +18,17 @@
 		<property name="valueType" column="value_type" type="int" />
 
 		<many-to-one name="indicatorConnection" column="ind_connect_id"
-			class="org.digijava.ampModule.aim.dbentity.IndicatorConnection" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.IndicatorConnection" cascade="none" not-null="true" />
 		<property name="defaultInd" column="default_ind" type="java.lang.Boolean" />
 		<many-to-one name="location" column="location_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpLocation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpLocation" cascade="none" />
 
 		<many-to-one name="subgroup" column="subgroup"
-			class="org.digijava.ampModule.aim.dbentity.AmpIndicatorSubgroup" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpIndicatorSubgroup" cascade="none" />
 
 
 		<many-to-one name="indicatorSource" column="indicator_source"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 
 

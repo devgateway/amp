@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.aim.dbentity.AmpFundingMTEFProjection"
+	<class name="org.digijava.module.aim.dbentity.AmpFundingMTEFProjection"
 		table="AMP_FUNDING_MTEF_PROJECTION">
 		<cache usage="read-write" />
 		<id name="ampFundingMTEFProjectionId" column="amp_fund_mtef_projection_id"
@@ -18,16 +18,16 @@
 		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 
 		<many-to-one name="ampCurrency" column="amp_currency_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="ampFunding" column="amp_funding_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpFunding" />
+			class="org.digijava.module.aim.dbentity.AmpFunding" />
 		<many-to-one name="projection" column="amp_projected_categoryvalue_id"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 
 		<many-to-one name="recipientOrg" column="recipient_org_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 			
 		<many-to-one name="recipientRole" column="recipient_role_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpRole" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />
 	</class>
 </hibernate-mapping>

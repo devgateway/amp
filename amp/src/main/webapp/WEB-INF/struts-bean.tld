@@ -389,12 +389,12 @@
     <ul>
     <li><em>forward</em> - Use the value of this attribute as the name
         of a global <code>ActionForward</code> to be looked up, and
-        use the ampModule-relative or context-relative URI found there.</li>
+        use the module-relative or context-relative URI found there.</li>
     <li><em>href</em> - Use the value of this attribute unchanged (since
         this might link to a resource external to the application, the
         session identifier is <strong>not</strong> included.</li>
     <li><em>page</em> - Use the value of this attribute as an
-        ampModule-relative URI to the desired resource.</li>
+        module-relative URI to the desired resource.</li>
     </ul>
     ]]>
         </description>

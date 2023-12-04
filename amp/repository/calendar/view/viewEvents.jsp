@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <digi:instance  property="calendarViewForm"/>
 <c:if test="${!calendarViewForm.print}">			
@@ -57,7 +57,7 @@
 	                    		<jsp:include page="viewEventsFilter.jsp" flush="true"/>
 	                    	</td>
 	                	</tr>
-	                	<feature:display name="Filter" ampModule="Calendar">
+	                	<feature:display name="Filter" module="Calendar">
 	                	<tr valign="top" align="center">
 	                    	<td valign="top" width="50%" align="right" style="padding:10px;">
 								<field:display name="Run Filter Button" feature="Filter">

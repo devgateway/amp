@@ -13,10 +13,10 @@
 				(SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW')
 				WHERE NOT EXISTS (SELECT id FROM amp_modules_visibility  WHERE name  = 'Show Editable Export Formats');
 				
-				INSERT INTO amp_modules_templates (template, ampModule)
+				INSERT INTO amp_modules_templates (template, module)
 				SELECT 
 					(SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
-					(SELECT id AS ampModule FROM amp_modules_visibility WHERE name = 'Show Editable Export Formats')
+					(SELECT id AS module FROM amp_modules_visibility WHERE name = 'Show Editable Export Formats')
 				WHERE NOT EXISTS (
 						SELECT template FROM amp_features_templates 
 						WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')

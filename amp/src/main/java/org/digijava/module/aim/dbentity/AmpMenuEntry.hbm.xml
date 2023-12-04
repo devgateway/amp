@@ -19,14 +19,14 @@
 	>
 ]>
 <hibernate-mapping>
-    <class name="org.digijava.ampModule.aim.dbentity.AmpMenuEntry" table="AMP_MENU_ENTRY" lazy="false">
+    <class name="org.digijava.module.aim.dbentity.AmpMenuEntry" table="AMP_MENU_ENTRY" lazy="false">
     	<cache usage="read-write" />
     	<id name="id" column="id" type="java.lang.Long">
             <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
                 <param name="sequence_name">AMP_MENU_ENTRY_seq</param>
             </generator>
         </id>
-        <many-to-one name="parent" column="PARENT_ID" class="org.digijava.ampModule.aim.dbentity.AmpMenuEntry" />
+        <many-to-one name="parent" column="PARENT_ID" class="org.digijava.module.aim.dbentity.AmpMenuEntry" />
     	&menuFields;
     	
     	<map name="viewVisibilityMap" cascade="all" table="AMP_MENU_ENTRY_VIEW">
@@ -46,18 +46,18 @@
         <set name="items" cascade="all" inverse="true" lazy="true">
 			<cache usage="read-write" />
 			<key column="PARENT_ID" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpMenuEntry" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpMenuEntry" />
 		</set>
 		
     </class>
     
-    <class name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInView" table="v_menu_entry" abstract="true" polymorphism="explicit" discriminator-value="null">
+    <class name="org.digijava.module.aim.dbentity.AmpMenuEntryInView" table="v_menu_entry" abstract="true" polymorphism="explicit" discriminator-value="null">
     	<cache usage="read-write" />
     	
     	<id name="menuViewId" type="java.lang.Long" column="menu_view_id"/>
     	<discriminator column="VIEW_TYPE" type="int" force="true" insert="false"/>
     	
-    	<many-to-one name="parent" column="PARENT_ID" class="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInView" />
+    	<many-to-one name="parent" column="PARENT_ID" class="org.digijava.module.aim.dbentity.AmpMenuEntryInView" />
     	&menuFields;
     	
     	<property name="viewType" column="VIEW_TYPE" insert="false" update="false">
@@ -67,17 +67,17 @@
     		</type>
     	</property>
     	
-    	<many-to-one name="rule" column="RULE_ID" class="org.digijava.ampModule.aim.dbentity.AmpVisibilityRule" />
+    	<many-to-one name="rule" column="RULE_ID" class="org.digijava.module.aim.dbentity.AmpVisibilityRule" />
     	
     	<set name="items" cascade="all" inverse="true" lazy="true">
 			<cache usage="read-write" />
 			<key column="PARENT_ID" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInView" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpMenuEntryInView" />
 		</set>
 		
-		<subclass name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInPublicView" discriminator-value="0" />
-		<subclass name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInAdminView" discriminator-value="1" />
-		<subclass name="org.digijava.ampModule.aim.dbentity.AmpMenuEntryInTeamView" discriminator-value="2" />
+		<subclass name="org.digijava.module.aim.dbentity.AmpMenuEntryInPublicView" discriminator-value="0" />
+		<subclass name="org.digijava.module.aim.dbentity.AmpMenuEntryInAdminView" discriminator-value="1" />
+		<subclass name="org.digijava.module.aim.dbentity.AmpMenuEntryInTeamView" discriminator-value="2" />
 		
     </class>
 </hibernate-mapping>

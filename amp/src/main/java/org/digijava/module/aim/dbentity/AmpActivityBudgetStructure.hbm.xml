@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityBudgetStructure"
+	<class name="org.digijava.module.aim.dbentity.AmpActivityBudgetStructure"
 		table="AMP_ACTIVITY_BUDGET_STRUCTURE">
 		<cache usage="read-write" />
 		<id name="ampActivityBudgetStructureId" column="amp_activity_budget_structure_id" type="java.lang.Long">
@@ -12,7 +12,7 @@
 		</id>
 
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="delete" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" not-null="true" />
 
 		<property name="budgetStructureName" column="budget_structure_name" type="java.lang.String" />
 

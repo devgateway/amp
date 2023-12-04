@@ -8,11 +8,11 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 
 <script language="javascript" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/jquery-ui-1.11.0/external/jquery/jquery.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/external/jquery/jquery.js"/>"></script>
 <script language="javascript" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"></script>
 <script language="javascript" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/jquery.fancytree.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/jquery.fancytree.js"/>"></script>
 
 
 

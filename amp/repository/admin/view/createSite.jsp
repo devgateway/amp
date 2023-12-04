@@ -11,12 +11,12 @@
 
 <script>
   function fnOnAddDomain() {
-      <digi:context name="addUrl" property="context/ampModule/moduleinstance/addDomain.do" />
+      <digi:context name="addUrl" property="context/module/moduleinstance/addDomain.do" />
       document.siteForm.action = "<%= addUrl %>";
       document.siteForm.submit();
   }
   function fnOnDeleteDomain( index, param ) {
-      <digi:context name="deleteUrl" property="context/ampModule/moduleinstance/deleteDomain.do" />
+      <digi:context name="deleteUrl" property="context/module/moduleinstance/deleteDomain.do" />
       document.siteForm.action = "<%= deleteUrl %>?id=" + index;
       document.siteForm.submit();
   }
@@ -26,7 +26,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle"><digi:trn key="admin:createSite">Create Site</digi:trn></font>
 		</td>
@@ -98,7 +98,7 @@
 			 <td>&nbsp;<digi:trn key="admin:path">Path</digi:trn></td>
 			 <td>&nbsp;<digi:trn key="admin:enableSecurity">Security</digi:trn></td>
              </tr>
-    	     <logic:iterate indexId="index" name="siteForm" id="siteDomain" property="siteDomains" type="org.digijava.ampModule.admin.form.SiteForm.SiteDomainInfo">
+    	     <logic:iterate indexId="index" name="siteForm" id="siteDomain" property="siteDomains" type="org.digijava.module.admin.form.SiteForm.SiteDomainInfo">
              <tr><td>
 	             <html:radio name="siteForm" property="defDomain" value='index' idName="siteDomain" />
              </td><td>

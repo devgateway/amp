@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.categorymanager.dbentity.AmpLinkedCategoriesState" table="AMP_CATEGORIES_STATE" lazy="false">
+	<class name="org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState" table="AMP_CATEGORIES_STATE" lazy="false">
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
 				<param name="sequence_name">AMP_CATEGORIES_STATE_seq</param>
 			</generator>
 		</id>		
 		
-		<many-to-one name="mainCategory" column="category_id" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
-		<many-to-one name="linkedCategory" column="used_category_id" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
+		<many-to-one name="mainCategory" column="category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
+		<many-to-one name="linkedCategory" column="used_category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
 		
 		<property name="singleChoice" column="single_select" type="java.lang.Boolean" />	
 	</class>

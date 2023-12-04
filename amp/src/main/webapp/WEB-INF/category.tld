@@ -9,7 +9,7 @@
 	<uri>http://digijava.org/CategoryManager</uri>
 	<tag>
 		<name>showoptions</name>
-		<tagclass>org.digijava.ampModule.categorymanager.tags.CategoryTagClass</tagclass>
+		<tagclass>org.digijava.module.categorymanager.tags.CategoryTagClass</tagclass>
 		<bodycontent>EMPTY</bodycontent>
 		<attribute>
 			<name>name</name> 
@@ -86,7 +86,7 @@
 	</tag>
 	<tag>
 		<name>getoptionvalue</name>
-		<tagclass>org.digijava.ampModule.categorymanager.tags.CategoryValueTagClass</tagclass>
+		<tagclass>org.digijava.module.categorymanager.tags.CategoryValueTagClass</tagclass>
 		<bodycontent>EMPTY</bodycontent>
 		<attribute>
 			<name>categoryValueId</name>

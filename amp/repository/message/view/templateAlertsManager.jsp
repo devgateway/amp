@@ -90,13 +90,13 @@
 						<c:set var="translation">
 							<digi:trn>Click here to goto Admin Home</digi:trn>
 						</c:set>
-                         <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+                         <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
 							<digi:trn>Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<c:set var="trn">
 							<digi:trn>Click here to goto Message Manager</digi:trn>
 						</c:set>
-                         <digi:link ampModule="message" href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
+                         <digi:link module="message" href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
 							<digi:trn>Message Manager</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="message:templatesManager">Templates Manager</digi:trn>
@@ -193,7 +193,7 @@
 															<b style="padding-left:5px;">
 																<digi:trn key="aim:otherLinks">Other links</digi:trn></b>
 														</td>
-														<td background="ampModule/aim/images/corner-r.gif" height="17" width="17"></td>
+														<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 													</tr>
 												</table>
 											</td>
@@ -203,7 +203,7 @@
 												<table cellPadding="5" cellSpacing="1" width="100%" class="inside">
 													<tr>
 														<td class="inside">
-															<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+															<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToAddTemplate">Click here to Add New Template</digi:trn>
 															</c:set>
@@ -216,7 +216,7 @@
 													</tr>
 													<tr>
 														<td class="inside">
-															<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+															<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 															<c:set var="translation">
 																<digi:trn key="message:clickToGoToExportImport">Click here to goto Templates Export/Import Manager</digi:trn>
 															</c:set>
@@ -227,11 +227,11 @@
 													</tr>
 													<tr>
 														<td class="inside">
-															<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+															<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 															</c:set>
-															<digi:link href="/admin.do" title="${translation}" ampModule="aim">
+															<digi:link href="/admin.do" title="${translation}" module="aim">
 																<digi:trn key="aim:AmpAdminHome">
 																	Admin Home
 																</digi:trn>

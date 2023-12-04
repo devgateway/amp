@@ -36,7 +36,7 @@ Like _console.warn_, will log a warning
 ### err(a, b, c...)
 Like _console.error_, willl log an error(wich stack trace)
 ### onDebug(cb)
-Takes a function that will be called if the current ampModule is being debugged, and not otherwise. Usefull when you wanna log big data or do some computations in order to produce the debug, and it doesn't make sense to do that unless during debug. For example:
+Takes a function that will be called if the current module is being debugged, and not otherwise. Usefull when you wanna log big data or do some computations in order to produce the debug, and it doesn't make sense to do that unless during debug. For example:
 
     var chartDebugger = require('path/to/amp/debug')('amp:dashboard:chart');
     try{
@@ -49,7 +49,7 @@ Takes a function that will be called if the current ampModule is being debugged,
     }
     
 ## Working on amp log
-Go to `TEMPLATE\ampTemplate\ampModule\amp-log`. Install dependencies:
+Go to `TEMPLATE\ampTemplate\module\amp-log`. Install dependencies:
 
     npm install
 Run webpack:

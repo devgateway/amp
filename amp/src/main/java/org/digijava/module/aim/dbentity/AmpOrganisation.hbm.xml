@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpOrganisation" table="AMP_ORGANISATION" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpOrganisation" table="AMP_ORGANISATION" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampOrgId" column="amp_org_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -27,102 +27,102 @@
 		<set name="sectors" table="AMP_ORGANISATION_SECTOR" cascade="none" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_org_id" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpSector" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" />
 		</set>
 
 		
 		<!-- 
 			<many-to-one name="orgTypeId" column="org_type_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrgType" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrgType" cascade="none" />
 			
 			<many-to-one name="regionId" column="region_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpRegion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpRegion" cascade="none" />
 		 -->		
 
 		<many-to-one name="orgGrpId" column="org_grp_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrgGroup" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrgGroup" cascade="none" />
 			
 		<many-to-one name="implemLocationLevel" column="imp_level_id"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		
 
 		<many-to-one name="countryId" column="country_id"
 			class="org.digijava.kernel.dbentity.Country" cascade="none" />
 
 		<many-to-one name="ampFiscalCalId" column="amp_fiscal_cal_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpFiscalCalendar" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none" />
 		<many-to-one name="ampSecSchemeId" column="amp_sec_scheme_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpSectorScheme" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpSectorScheme" cascade="none" />
 		<property name="orgTypeCode" column="org_type_code" type="java.lang.String" />
 
 		<set name="survey" table="AMP_AHSURVEY" inverse="true" lazy="true" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_org_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpAhsurvey" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey" />
 		</set>
 		
 		<set name="surveyByPointOfDeliveryDonor" table="AMP_AHSURVEY" inverse="true" lazy="true" cascade="none">
 			<cache usage="read-write" />
 			<key column="point_of_delivery_donor" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpAhsurvey" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey" />
 		</set>
 
 		<set name="calendar" table="AMP_CALENDAR_EVENT_ORGANISATIO" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_org_id"/>
-			<many-to-many class="org.digijava.ampModule.calendar.dbentity.AmpCalendar"
+			<many-to-many class="org.digijava.module.calendar.dbentity.AmpCalendar"
 				column="CALENDAR_ID" />
 		</set>
 		<set name="documents" cascade="all-delete-orphan" inverse="true" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_org_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationDocument" />
 		</set>
 		
 				<set name="locations" cascade="all-delete-orphan" inverse="true" >
 					<cache usage="read-write" />
                     <key column="amp_org_id" />
-                    <one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrgLocation" />
+                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgLocation" />
                 </set>
 
                 <set name="staffInfos" cascade="all-delete-orphan" inverse="true">
                 	<cache usage="read-write" />
                     <key column="amp_org_id" />
-                    <one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrgStaffInformation" />
+                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgStaffInformation" />
                 </set>
 
                 <set name="organizationBudgetInfos" cascade="all-delete-orphan" inverse="true">
                 	<cache usage="read-write" />
                     <key column="amp_org_id" />
-                    <one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganizationBudgetInformation" />
+                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation" />
                 </set>
-                <many-to-one name="country" column="amp_country_id" class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+                <many-to-one name="country" column="amp_country_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 
                 <set name="recipients" cascade="all-delete-orphan" inverse="true">
                 	<cache usage="read-write" />
                     <key column="parent_org_id"/>
-                    <one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrgRecipient" />
+                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRecipient" />
                 </set>
 				
 				<set name="budgetsectors" table="AMP_ORGANISATION_BUDGETSECTOR" lazy="true">
 					<cache usage="read-write" />
 					<key column="amp_org_id"/>
-					<many-to-many class="org.digijava.ampModule.budget.dbentity.AmpBudgetSector" column="idsector" />
+					<many-to-many class="org.digijava.module.budget.dbentity.AmpBudgetSector" column="idsector" />
 				</set>
 				
 				<set name="departments" table="AMP_ORGANISATION_DEPARTMENTS" lazy="true">
 					<cache usage="read-write" />
 					<key column="amp_org_id"/>
-					<many-to-many class="org.digijava.ampModule.budget.dbentity.AmpDepartments" column="id" />
+					<many-to-many class="org.digijava.module.budget.dbentity.AmpDepartments" column="id" />
 				</set>
 				
-				<many-to-one name="parentsector" column="budget_sector_id" class="org.digijava.ampModule.budget.dbentity.AmpBudgetSector" cascade="none" />
+				<many-to-one name="parentsector" column="budget_sector_id" class="org.digijava.module.budget.dbentity.AmpBudgetSector" cascade="none" />
 				
 
 		<set name="organizationContacts" inverse="true" cascade="delete" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_org_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisationContact" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
 		</set>
 
 
@@ -137,7 +137,7 @@
                 <property name="lineMinRegDate" column="org_line_ministry_reg_date" type="java.util.Date" />
                 <property name="operFuncApprDate" column="org_oper_func_approval_date" type="java.util.Date" />
                 <property name="receiptLegPersonalityAct" column="org_rec_leg_per_act" type="java.lang.String" />
-                <many-to-one name="region" column="cat_val_loc_region_id" class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+                <many-to-one name="region" column="cat_val_loc_region_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
                 <property name="orgBackground" column="org_background" type="java.lang.String" />
                 <property name="orgDescription" column="org_description" type="java.lang.String" />
                 <property name="orgKeyAreas" column="org_key_areas" type="java.lang.String" />

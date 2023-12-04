@@ -21,7 +21,7 @@
 	}
 
 	function move() {
-		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/fiscalCalendarManager.do" />
+		<digi:context name="selectLoc" property="context/module/moduleinstance/fiscalCalendarManager.do" />
 		url = "<%= selectLoc %>";
 		document.location.href = url;
 	}

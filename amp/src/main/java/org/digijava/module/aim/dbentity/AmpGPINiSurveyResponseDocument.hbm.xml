@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpGPINiSurveyResponseDocument"
+	<class name="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument"
 		table="AMP_GPI_NI_SURVEY_RESPONSE_DOCUMENT">
 		<cache usage="read-write" />
 		<id name="id" column="amp_gpi_ni_survey_response_document_id" type="java.lang.Long">
@@ -11,6 +11,6 @@
 		</id>
 		<property name="uuid" column="uuid" type="java.lang.String" />
 		<many-to-one name="surveyResponse" column="amp_gpi_ni_survey_response_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpGPINiSurveyResponse" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse" cascade="none" not-null="true" />
 	</class>
 </hibernate-mapping>

@@ -14,7 +14,7 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <script language="JavaScript">
 	function deleteWS(id){
@@ -177,7 +177,7 @@
 													<html:select property="role" styleId="team_member_roles_drop_down">
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
 													
-													<logic:iterate name="umViewEditUserForm" property="ampRoles" id="ampRole" type="org.digijava.ampModule.aim.dbentity.AmpTeamMemberRoles">
+													<logic:iterate name="umViewEditUserForm" property="ampRoles" id="ampRole" type="org.digijava.module.aim.dbentity.AmpTeamMemberRoles">
 														<html:option value="${ampRole.ampTeamMemRoleId}" styleId="role_approver_${ampRole.approver}">
 															<digi:trn key="<%=ampRole.getAmpTeamMemberKey() %>">
 																<bean:write name="ampRole" property="role" />

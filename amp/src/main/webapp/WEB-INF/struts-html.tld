@@ -2155,12 +2155,12 @@
             <ul>
             <li><em>forward</em> - Use the value of this attribute as the
                 name of a global <code>ActionForward</code> to be looked
-                up, and use the ampModule-relative or context-relative
+                up, and use the module-relative or context-relative
                 URI found there.</li>
             <li><em>href</em> - Use the value of this attribute unchanged.
                 </li>
             <li><em>page</em> - Use the value of this attribute as a
-                ampModule-relative URI, and generate a server-relative
+                module-relative URI, and generate a server-relative
                 URI by including the context path and application
                 prefix.</li>
             <li><em>action</em> - Use the value of this attribute as the
@@ -2262,14 +2262,14 @@
                <code>href</code> attribute,
                or the <code>page</code> attribute.</p>
                
-               <p>Additionally, you can specify a <code>ampModule</code> prefix
+               <p>Additionally, you can specify a <code>module</code> prefix
                for linking to other modules.</p>
                            
            ]]>
             </description>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description>
@@ -2280,7 +2280,7 @@
                You <strong>must</strong> specify an <code>action</code> 
                attribute for this to have an effect.</p>
         
-               <p><strong>Note: </strong>Use "" to map to the default ampModule.</p>
+               <p><strong>Note: </strong>Use "" to map to the default module.</p>
           ]]>
             </description>
         </attribute>
@@ -2422,7 +2422,7 @@
             <rtexprvalue>true</rtexprvalue>
             <description>
                 <![CDATA[
-                <p>The ampModule-relative path (beginning with a "/"
+                <p>The module-relative path (beginning with a "/"
                 character) to which this hyperlink will transfer control
                  if activated.  This hyperlink may be dynamically modified
                  by the inclusion of query parameters, as described in the
@@ -3161,7 +3161,7 @@
             </description>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description>
@@ -3323,7 +3323,7 @@
             <rtexprvalue>true</rtexprvalue>
             <description>
                 <![CDATA[
-                <p>The ampModule-relative path of the image for this
+                <p>The module-relative path of the image for this
                 input tag.</p>
                 ]]>
             </description>
@@ -3335,7 +3335,7 @@
             <description>
                 <![CDATA[
                 <p>The key of the message resources string specifying the
-                ampModule-relative path of the image for this input tag.</p>
+                module-relative path of the image for this input tag.</p>
                 ]]>
             </description>
         </attribute>
@@ -3839,7 +3839,7 @@
             <rtexprvalue>true</rtexprvalue>
             <description>
                 <![CDATA[
-                  <p>The ampModule-relative path, starting with a slash, of
+                  <p>The module-relative path, starting with a slash, of
                   the image to be displayed by this tag.  The rendered
                   URL for this image will automatically prepend the context
                   path of this web application (in the same manner as the
@@ -3858,7 +3858,7 @@
                 <![CDATA[
                   <p>The message key, in the message resources bundle named by
                   the <code>bundle</code> attribute, of the String to be
-                  used as the ampModule-relative path for this image.</p>
+                  used as the module-relative path for this image.</p>
                   ]]>
             </description>
         </attribute>
@@ -3878,14 +3878,14 @@
               <code>page</code>
                   attribute or the <code>src</code> attribute.</p>
                
-               <p>Additionally, you can specify a <code>ampModule</code> prefix
+               <p>Additionally, you can specify a <code>module</code> prefix
                for linking to other modules.</p>
                            
                ]]>
             </description>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description>
@@ -3896,7 +3896,7 @@
                    You <strong>must</strong> specify an <code>action</code> 
                    attribute for this to have an effect.</p>
             
-                   <p><strong>Note: </strong>Use "" to map to the default ampModule.</p>
+                   <p><strong>Note: </strong>Use "" to map to the default module.</p>
               ]]>
             </description>
         </attribute>
@@ -4303,18 +4303,18 @@
                 <ul>
                 <li><em>forward</em> - Use the value of this attribute as the
                     name of a global <code>ActionForward</code> to be looked
-                    up, and use the ampModule-relative or context-relative
-                    URI found there. If the forward is ampModule-relative then
+                    up, and use the module-relative or context-relative
+                    URI found there. If the forward is module-relative then
                     it must point to an action and NOT to a page.</li>
                 <li><em>action</em> - Use the value of this attribute as the
                     name of a <code>Action</code> to be looked
-                    up, and use the ampModule-relative or context-relative
+                    up, and use the module-relative or context-relative
                     URI found there.</li>
                  <li><em>href</em> - Use the value of this attribute unchanged.
                      </li>
                  <li><em>page</em> - Use the value of this attribute as a
-                    ampModule-relative URI, and generate a server-relative
-                    URI by including the context path and ampModule
+                    module-relative URI, and generate a server-relative
+                    URI by including the context path and module
                     prefix.</li>
                 </ul>
 
@@ -4417,14 +4417,14 @@
                   <code>href</code> attribute, the <code>linkName</code>
                   attribute, or the <code>page</code> attribute.</p>
                
-               <p>Additionally, you can specify a <code>ampModule</code> prefix
+               <p>Additionally, you can specify a <code>module</code> prefix
                for linking to other modules.</p>
                            
                ]]>
             </description>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description>
@@ -4435,7 +4435,7 @@
                    You <strong>must</strong> specify an <code>action</code> 
                    attribute for this to have an effect.</p>
             
-                   <p><strong>Note: </strong>Use "" to map to the default ampModule.</p>
+                   <p><strong>Note: </strong>Use "" to map to the default module.</p>
               ]]>
             </description>
         </attribute>
@@ -4716,7 +4716,7 @@
             <rtexprvalue>true</rtexprvalue>
             <description>
                 <![CDATA[
-                  <p>The ampModule-relative path (beginning with a "/"
+                  <p>The module-relative path (beginning with a "/"
                   character) to which this hyperlink will transfer control
                    if activated.  This hyperlink may be dynamically modified
                    by the inclusion of query parameters, as described in the
@@ -7281,7 +7281,7 @@
                   <code>href</code> attribute, or the <code>page</code>
                   attribute.</p>
                
-               <p>Additionally, you can specify a <code>ampModule</code> prefix
+               <p>Additionally, you can specify a <code>module</code> prefix
                for linking to other modules.</p>
                            
                
@@ -7291,7 +7291,7 @@
             </description>
         </attribute>
         <attribute>
-            <name>ampModule</name>
+            <name>module</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description>
@@ -7302,7 +7302,7 @@
                    You <strong>must</strong> specify an <code>action</code> 
                    attribute for this to have an effect.</p>
             
-                   <p><strong>Note: </strong>Use "" to map to the default ampModule.</p>
+                   <p><strong>Note: </strong>Use "" to map to the default module.</p>
               ]]>
             </description>
         </attribute>
@@ -7373,7 +7373,7 @@
             <rtexprvalue>true</rtexprvalue>
             <description>
                 <![CDATA[
-                  <p>The ampModule-relative path (beginning with a "/"
+                  <p>The module-relative path (beginning with a "/"
                   character) to which this hyperlink will transfer control
                    if activated.  This hyperlink may be dynamically modified
                    by the inclusion of query parameters, as described in the

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpDesktopTabSelection"
+	<class name="org.digijava.module.aim.dbentity.AmpDesktopTabSelection"
 		table="AMP_DESKTOP_TAB_SELECTION">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -12,9 +12,9 @@
 
 		<property name="index" column="array_index" type="int" not-null="true" />
 		<many-to-one name="owner" column="owner_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 		<many-to-one name="report" column="amp_report_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpReports" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
 
 	</class>
 

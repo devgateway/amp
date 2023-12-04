@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility"
+	<class name="org.digijava.module.aim.dbentity.AmpFieldsVisibility"
 		table="AMP_FIELDS_VISIBILITY">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -14,13 +14,13 @@
 		<property name="hasLevel" column="hasLevel" type="java.lang.Boolean" />
 
 		<many-to-one name="parent" column="parent"
-			class="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility" />
+			class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />
 
 		<set name="templates" table="amp_fields_templates" inverse="true">
 			<cache usage="read-write" />
 			<key column="field" />
 			<many-to-many column="template"
-				class="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" />
+				class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
 		</set>
 
 	</class>

@@ -13,19 +13,19 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 .inp-text {width:500px;}
 a {color:#376091;}
 </style>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="javascript">
 function setOverImg(index){
-  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-righthover1.gif"
+  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
 }
 
 function setOutImg(index){
-  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif"
+  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
 }
 
 function sortByVal(value){
   if(value!=null){
-    <digi:context name="viewIndicators" property="context/ampModule/moduleinstance/viewIndicators.do" />
+    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do" />
     document.getElementById("sortBy").value=value;
     document.forms[0].submit();
   }
@@ -65,7 +65,7 @@ function selectIndicators() {
 		if (flag == false)
 			return false;
 
-		<digi:context name="selInd" property="context/ampModule/moduleinstance/addThemeIndicator.do"/>
+		<digi:context name="selInd" property="context/module/moduleinstance/addThemeIndicator.do"/>
 	   	document.aimThemeForm.action = "<%= selInd %>"+"?event=assignIndicators";
 		document.aimThemeForm.target = window.opener.name;
 	   	document.aimThemeForm.submit();
@@ -75,7 +75,7 @@ function selectIndicators() {
 
 
 function editIndicator(id,type){
-  <digi:context name="viewEditIndicator" property="context/ampModule/moduleinstance/viewEditIndicator.do" />
+  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
   openURLinWindow("<%= viewEditIndicator %>?id="+id+"&type="+type,500, 300);
 }
 
@@ -134,7 +134,7 @@ function editIndicator(id,type){
 function selectIndicatorsPages(page) {
 		
 	   document.aimThemeForm.selectedindicatorFromPages.value=page;
-           <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchindicators.do?edit=true"/>
+           <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?edit=true"/>
            document.aimThemeForm.action = "<%= searchInd %>";
 	   document.aimThemeForm.submit();
 	   
@@ -148,7 +148,7 @@ function selectIndicatorsPages(page) {
 				  document.aimThemeForm.tempNumResults.focus();
 				  return false;
 			} else {
-				 <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchindicators.do?action=search"/>
+				 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=search"/>
                             document.aimThemeForm.selectedindicatorFromPages.value=1;
                             document.aimThemeForm.alpha.value="";
 			    document.aimThemeForm.action = "<%= searchInd %>";
@@ -166,7 +166,7 @@ function searchAlpha(val) {
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchindicators.do?"/>
+			 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?"/>
 			 url = "<%= searchInd %>" ;
                          document.aimThemeForm.alpha.value=val;
                      document.aimThemeForm.selectedindicatorFromPages.value=1;
@@ -182,7 +182,7 @@ function searchAlpha(val) {
 			  document.aimThemeForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchindicators.do"/>
+			 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do"/>
 			  document.aimThemeForm.action = "<%= searchInd %>";
 		      var aux= document.aimThemeForm.tempNumResults.value;
 		      document.aimThemeForm.tempNumResults.value=1000000;
@@ -193,13 +193,13 @@ function searchAlpha(val) {
 	}
 	
 	function clearform(){
-	 <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchindicators.do?action=clear"/>
+	 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=clear"/>
 	  document.aimThemeForm.action = "<%= searchInd %>";
 	  document.aimThemeForm.submit();
 	}
 
 	 function viewall(){
-	  <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchindicators.do?action=viewall"/>
+	  <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=viewall"/>
           document.aimThemeForm.selectedindicatorFromPages.value=1;
           document.aimThemeForm.alpha.value="";
 	  document.aimThemeForm.action = "<%= searchInd %>";
@@ -328,7 +328,7 @@ enterBinder.map(["keyWordTextField"], "searchIndBtn");
                                     </tr>
                               <logic:notEmpty name="aimThemeForm" property="pagedCol">  
                                     <logic:iterate name="aimThemeForm" id="indicators" property="pagedCol"
-									type="org.digijava.ampModule.aim.dbentity.AmpIndicator">
+									type="org.digijava.module.aim.dbentity.AmpIndicator">
 										<tr>
 											<td bgcolor=#f2f2f2 width=10>
 												<html:multibox property="indid" value="${indicators.indicatorId}"/>

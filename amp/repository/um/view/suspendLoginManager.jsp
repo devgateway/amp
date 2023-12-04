@@ -135,7 +135,7 @@
 									key="aim:otherLinks">
 									<b style="font-weight: bold; font-size: 12px; padding-left:5px; color:#000000;"><digi:trn>Other links</digi:trn></b>
 								</digi:trn></td>
-							<td background="ampModule/aim/images/corner-r.gif"
+							<td background="module/aim/images/corner-r.gif"
 								height="17" width=17>&nbsp;</td>
 						</tr>
 					</table></td>
@@ -145,8 +145,8 @@
 					<table cellPadding=0 cellspacing="0" width="100%" class="inside">
 						<tr>
 							<td class="inside"><digi:img
-									src="ampModule/aim/images/arrow-014E86.gif" width="15"
-									height="10" /> <digi:link ampModule="aim" href="/admin.do">
+									src="module/aim/images/arrow-014E86.gif" width="15"
+									height="10" /> <digi:link module="aim" href="/admin.do">
 									<digi:trn key="aim:AmpAdminHome">
 								Admin Home
 								</digi:trn>
@@ -154,8 +154,8 @@
 						</tr>
 						<tr>
 							<td class="inside"><digi:img
-									src="ampModule/aim/images/arrow-014E86.gif" width="15"
-									height="10" /> <digi:link ampModule="aim"
+									src="module/aim/images/arrow-014E86.gif" width="15"
+									height="10" /> <digi:link module="aim"
 									href="/workspaceManager.do~page=1">
 									<digi:trn key="aim:WorkspaceManager">
 								Workspace Manager
@@ -164,8 +164,8 @@
 						</tr>
 						<tr>
 							<td class="inside"><digi:img
-									src="ampModule/aim/images/arrow-014E86.gif" width="15"
-									height="10" /> <digi:link ampModule="aim"
+									src="module/aim/images/arrow-014E86.gif" width="15"
+									height="10" /> <digi:link module="aim"
 									href="/../um/viewAllUsers.do~reset=true">
 									<digi:trn>
 										User Manager

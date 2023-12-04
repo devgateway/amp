@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpStructureImg"
+	<class name="org.digijava.module.aim.dbentity.AmpStructureImg"
 		table="AMP_STRUCTURE_IMG">
 		<cache usage="read-write"/>
 
@@ -14,7 +14,7 @@
 		<property name="contentType" column="content_type" type="java.lang.String"/>
 		<property name="imgFile" column="img_file" type="binary"/>
 		<property name="creationTime" column="creation_time" type="java.lang.Long"/>
-		<many-to-one name="structure" column="amp_structure_id" class="org.digijava.ampModule.aim.dbentity.AmpStructure"
+		<many-to-one name="structure" column="amp_structure_id" class="org.digijava.module.aim.dbentity.AmpStructure"
 		cascade="none" not-null="true"/>
 	</class>
 </hibernate-mapping>

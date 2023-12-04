@@ -21,10 +21,10 @@
 				(SELECT id FROM amp_modules_visibility WHERE name = 'Saiku'
 				AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'REPORTING')));
 
-				INSERT INTO amp_modules_templates (template, ampModule)
+				INSERT INTO amp_modules_templates (template, module)
 				SELECT
 				(SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
-				(SELECT id AS ampModule FROM amp_modules_visibility WHERE name = 'Saiku')
+				(SELECT id AS module FROM amp_modules_visibility WHERE name = 'Saiku')
 				WHERE NOT EXISTS (
 				SELECT template FROM amp_features_templates
 				WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')

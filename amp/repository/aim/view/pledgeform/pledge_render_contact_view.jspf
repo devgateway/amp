@@ -6,10 +6,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />
-<feature:display name="Pledge Contact ${ct_nr}" ampModule="Pledges">
+<feature:display name="Pledge Contact ${ct_nr}" module="Pledges">
 	<aim:renderFormSubsection title="${sectiontitle}" styleId="pledge_form_contact_${ct_nr}">
 		<div id="pledge_contact_${ct_nr}">
 			<div class="container-fluid">

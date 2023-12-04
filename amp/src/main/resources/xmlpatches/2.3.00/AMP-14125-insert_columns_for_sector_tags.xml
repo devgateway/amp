@@ -14,13 +14,13 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				INSERT INTO amp_columns(columnId, columnName, aliasName, cellType, extractorView, relatedcontentpersisterclass, filterretrievable)  
-				 VALUES(nextval('amp_columns_seq'), 'Sector Tag', 'sector_tag', 'org.dgfoundation.amp.ar.cell.MetaTextCell', 'v_tag_sectors', 'org.digijava.ampModule.aim.dbentity.AmpSector', true);
+				 VALUES(nextval('amp_columns_seq'), 'Sector Tag', 'sector_tag', 'org.dgfoundation.amp.ar.cell.MetaTextCell', 'v_tag_sectors', 'org.digijava.module.aim.dbentity.AmpSector', true);
 				 
 				INSERT INTO amp_columns(columnId, columnName, aliasName, cellType, extractorView, relatedcontentpersisterclass, filterretrievable)  
-				 VALUES(nextval('amp_columns_seq'), 'Sector Tag Sub-Sector', 'sector_tag_sub_sector', 'org.dgfoundation.amp.ar.cell.MetaTextCell', 'v_tag_sub_sectors', 'org.digijava.ampModule.aim.dbentity.AmpSector', true);
+				 VALUES(nextval('amp_columns_seq'), 'Sector Tag Sub-Sector', 'sector_tag_sub_sector', 'org.dgfoundation.amp.ar.cell.MetaTextCell', 'v_tag_sub_sectors', 'org.digijava.module.aim.dbentity.AmpSector', true);
 				 
 				INSERT INTO amp_columns(columnId, columnName, aliasName, cellType, extractorView, relatedcontentpersisterclass, filterretrievable)  
-				 VALUES(nextval('amp_columns_seq'), 'Sector Tag Sub-Sub-Sector', 'sector_tag_sub_sub_sector', 'org.dgfoundation.amp.ar.cell.MetaTextCell', 'v_tag_sub_sub_sectors', 'org.digijava.ampModule.aim.dbentity.AmpSector', true);
+				 VALUES(nextval('amp_columns_seq'), 'Sector Tag Sub-Sub-Sector', 'sector_tag_sub_sub_sector', 'org.dgfoundation.amp.ar.cell.MetaTextCell', 'v_tag_sub_sub_sectors', 'org.digijava.module.aim.dbentity.AmpSector', true);
 				 
         	</lang>
 		</script>

@@ -82,8 +82,8 @@ function submitForm(mode) {
 		    				<td valign="top" width="220">
 								<b><digi:trn>Key</digi:trn></b>:
 								<div class="perm_legend"><hr />
-									<digi:context name="exportperm" property="context/ampModule/moduleinstance/exchangePermission.do?export" />
-									<digi:context name="importperm" property="context/ampModule/moduleinstance/exchangePermission.do?import" />
+									<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
+									<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
 									<input type="button" name="export" class="buttonx" value='<digi:trn jsFriendly="true" key="aim:translationmanagerexportbutton">Export</digi:trn>' onclick="javascript:window.location.href='<%=exportperm%>'" /> 
 									<input type="button" name="import" class="buttonx" value='<digi:trn jsFriendly="true" key="aim:translationmanagerimportbutton">Import</digi:trn>' onclick="javascript:window.location.href='<%=importperm%>'" />
 									<hr />

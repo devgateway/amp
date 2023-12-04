@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
@@ -14,22 +14,22 @@
             <c:forEach var="indicator" items="${aimEditActivityForm.indicators}">
                 <tr bgcolor="#f0f0f0">
                     <td width="40%">
-                        <ampModule:display name="/Activity Form/M&E/Name"
+                        <module:display name="/Activity Form/M&E/Name"
                                         parentModule="/Activity Form/M&E">
                             <digi:trn key="me:name">Name</digi:trn>
-                        </ampModule:display>
+                        </module:display>
                     </td>
                     <td width="10%">
-                        <ampModule:display name="/Activity Form/M&E/Code"
+                        <module:display name="/Activity Form/M&E/Code"
                                         parentModule="/Activity Form/M&E">
                             <digi:trn key="me:code">Code</digi:trn>
-                        </ampModule:display>
+                        </module:display>
                     </td>
                     <td width="10%">
-                        <ampModule:display name="/Activity Form/M&E/ME Item/Logframe Category"
+                        <module:display name="/Activity Form/M&E/ME Item/Logframe Category"
                                         parentModule="/Activity Form/M&E/ME Item">
                             <digi:trn key="me:logFrame">LogFrame</digi:trn>
-                        </ampModule:display>
+                        </module:display>
                     </td>
                     <td width="40%">
                         <digi:trn key="me:sectors">Sectors</digi:trn>
@@ -37,24 +37,24 @@
                 </tr>
                 <tr>
                     <td width="40%" valign="top">
-                        <ampModule:display name="/Activity Form/M&E/Name"
+                        <module:display name="/Activity Form/M&E/Name"
                                         parentModule="/Activity Form/M&E">
                             <span class="word_break bold">${indicator.indicator.name}</span>
-                        </ampModule:display>
+                        </module:display>
                     </td>
                     <td width="10%" valign="top">
-                        <ampModule:display name="/Activity Form/M&E/Code"
+                        <module:display name="/Activity Form/M&E/Code"
                                         parentModule="/Activity Form/M&E">
                             <span class="word_break bold">${indicator.indicator.code}</span>
-                        </ampModule:display>
+                        </module:display>
                     </td>
                     <td width="10%" valign="top">
-                        <ampModule:display name="/Activity Form/M&E/ME Item/Logframe Category"
+                        <module:display name="/Activity Form/M&E/ME Item/Logframe Category"
                                         parentModule="/Activity Form/M&E/ME Item">
                             <c:if test="${not empty indicator.values}">
                                 <span class="word_break bold">${indicator.logFrame}</span>
                             </c:if>
-                        </ampModule:display>
+                        </module:display>
                     </td>
                     <td width="40%" valign="top">
                         <c:forEach var="sector" items="${indicator.indicator.sectors}">
@@ -107,22 +107,22 @@
 												<digi:trn key="me:${fieldNameLabel}">${fieldNameLabel}</digi:trn>
 												</span></td>
                                     <td width="10%">
-                                        <ampModule:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Value"
+                                        <module:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Value"
                                                         parentModule="/Activity Form/M&E/ME Item/${fieldName} Value">
                                             <span class="word_break"><aim:formatNumber value="${value.value}"/></span>
-                                        </ampModule:display>
+                                        </module:display>
                                     </td>
                                     <td width="50%">
-                                        <ampModule:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Comments"
+                                        <module:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Comments"
                                                         parentModule="/Activity Form/M&E/ME Item/${fieldName} Value">
                                             <span class="word_break">${fn:escapeXml(value.comment)}</span>
-                                        </ampModule:display>
+                                        </module:display>
                                     </td>
                                     <td width="20%">
-                                        <ampModule:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Date"
+                                        <module:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Date"
                                                         parentModule="/Activity Form/M&E/ME Item/${fieldName} Value">
                                             <span class="word_break"><aim:formatDate value="${value.valueDate}"> </aim:formatDate></span>
-                                        </ampModule:display>
+                                        </module:display>
                                     </td>
                                 </tr>
                                 <tr>

@@ -3,9 +3,9 @@
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMP-26777</jira>
-	<keyword>remove ampModule visibility</keyword>
+	<keyword>remove module visibility</keyword>
 	<author>apicca</author>
-	<description>Remove ampModule visibility for Second Reporting Organisation</description>
+	<description>Remove module visibility for Second Reporting Organisation</description>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.message.dbentity.AmpEmailReceiver" table="AMP_EMAIL_RECEIVER">
+	<class name="org.digijava.module.message.dbentity.AmpEmailReceiver" table="AMP_EMAIL_RECEIVER">
 
 		<id name="id" column="receiver_Id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -12,7 +12,7 @@
 		<property name="address" column="address" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
 
-		<many-to-one name="email" column="email_id"	class="org.digijava.ampModule.message.dbentity.AmpEmail" cascade="none" />
+		<many-to-one name="email" column="email_id"	class="org.digijava.module.message.dbentity.AmpEmail" cascade="none" />
 
 	</class>
 </hibernate-mapping>

@@ -21,7 +21,7 @@
         if (val1 != orgType) {
           document.aimUserRegisterForm.orgType.value = val1;
           document.aimUserRegisterForm.actionFlag.value = "typeSelected";
-          <digi:context name="selectType" property="context/ampModule/moduleinstance/showRegisterUser.do" />
+          <digi:context name="selectType" property="context/module/moduleinstance/showRegisterUser.do" />
           document.aimUserRegisterForm.action = "<%= selectType %>";
           document.aimUserRegisterForm.target = "_self";
           document.aimUserRegisterForm.submit();
@@ -39,7 +39,7 @@
         if (val2 != orgGrp) {
           document.aimUserRegisterForm.orgGrp.value = val2;
           document.aimUserRegisterForm.actionFlag.value = "groupSelected";
-          <digi:context name="selectGrp" property="context/ampModule/moduleinstance/showRegisterUser.do" />
+          <digi:context name="selectGrp" property="context/module/moduleinstance/showRegisterUser.do" />
           document.aimUserRegisterForm.action = "<%= selectGrp %>";
           document.aimUserRegisterForm.target = "_self";
           document.aimUserRegisterForm.submit();

@@ -10,7 +10,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">		
 				update qrtz_job_details set job_class_name = 'org.digijava.kernel.job.cachedtables.RefreshMondrianCacheJob' 
-				where job_class_name = 'org.digijava.ampModule.mondrian.job.RefreshMondrianCacheJob'
+				where job_class_name = 'org.digijava.module.mondrian.job.RefreshMondrianCacheJob'
 			</lang>
 		</script>
 	</apply>

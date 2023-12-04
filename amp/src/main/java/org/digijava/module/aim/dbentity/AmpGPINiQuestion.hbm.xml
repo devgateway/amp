@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpGPINiQuestion"
+	<class name="org.digijava.module.aim.dbentity.AmpGPINiQuestion"
 		table="AMP_GPI_NI_QUESTION">
 		<cache usage="read-write" />
 		<id name="ampGPINiQuestionId" column="amp_gpi_ni_question_id" type="java.lang.Long">
@@ -14,7 +14,7 @@
 		<property name="description" column="description" type="text" />
 		<property name="type" column="type">
 			<type name="org.hibernate.type.EnumType">
-				<param name="enumClass">org.digijava.ampModule.aim.dbentity.AmpGPINiQuestion$GPINiQuestionType</param>
+				<param name="enumClass">org.digijava.module.aim.dbentity.AmpGPINiQuestion$GPINiQuestionType</param>
 				<param name="useNamed">true</param>
 			</type>
 		</property>
@@ -23,12 +23,12 @@
 		<property name="requiresDataEntry" column="requires_data_entry" type="java.lang.Boolean" />
 		
 		<many-to-one name="ampGPINiIndicator" column="amp_gpi_ni_indicator_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpGPINiIndicator" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPINiIndicator" cascade="none" not-null="true" />
 			
 		<set name="options" table="AMP_GPI_NI_QUESTION_OPTION" inverse="true" lazy="false" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_gpi_ni_question_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpGPINiQuestionOption" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiQuestionOption" />
 		</set>
 
 	</class>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpLocation" table="AMP_LOCATION" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpLocation" table="AMP_LOCATION" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampLocationId" column="amp_location_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -17,8 +17,8 @@
 		<property name="geoCode" column="geo_code" type="java.lang.String" />
 
 		<many-to-one name="location" column="location_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 		<many-to-one name="regionLocation" column="region_location_id" 
-			class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 	</class>
 </hibernate-mapping>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpOrgType" table="AMP_ORG_TYPE" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpOrgType" table="AMP_ORG_TYPE" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampOrgTypeId" column="amp_org_type_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -17,14 +17,14 @@
 			<key>
 				<column name="org_type" not-null="true" />
 			</key>
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrgGroup" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgGroup" />
 		</set>
 
 		<!--
 			<set name="organizations" cascade="delete" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_org_type_id"/>
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisation"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"/>
 			</set>	
 		-->
 	</class>

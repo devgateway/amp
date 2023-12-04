@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.sdm.dbentity.Sdm" table="DG_SDM" lazy="false">
+	<class name="org.digijava.module.sdm.dbentity.Sdm" table="DG_SDM" lazy="false">
 		<!--	<cache usage="read-write"/> -->
 		<id column="ID" name="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -16,7 +16,7 @@
 		<set name="items" cascade="delete" inverse="true" order-by="paragraph_order asc" lazy="false">
 			<!--		<cache usage="read-write"/> -->
 			<key column="SDM_ID" />
-			<one-to-many class="org.digijava.ampModule.sdm.dbentity.SdmItem" />
+			<one-to-many class="org.digijava.module.sdm.dbentity.SdmItem" />
 		</set>
 	</class>
 

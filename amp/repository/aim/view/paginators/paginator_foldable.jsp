@@ -11,7 +11,7 @@
 %>
 
 <bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
-<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 
 <div class="paging">
 	<c:if test="${(generatedReport.visibleRows / recordsPerPage > 1) && (recordsPerPage ne max_value)}">

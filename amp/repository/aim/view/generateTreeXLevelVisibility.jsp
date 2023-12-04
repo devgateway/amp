@@ -10,9 +10,9 @@
 
 <digi:instance property="aimVisibilityManagerForm" />
 
-<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" scope="request" toScope="page"/>
+<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="request" toScope="page"/>
 <bean:define id="moduleAux" name="moduleAux" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="request" toScope="page"/>
-<bean:define id="moduleAux2" name="moduleAux" property="root" type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility" scope="page"/>
+<bean:define id="moduleAux2" name="moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
                     <c:if test="${currentLevel == 1}">
 						<div id="divmodule<bean:write name="moduleAux" property="root.id"/>">
                     </c:if>
@@ -46,18 +46,18 @@
                         />
                         </logic:equal>
                         <c:if test="${currentLevel == 1}">
-                        <a id="ampModule:<bean:write name="moduleAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
+                        <a id="module:<bean:write name="moduleAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
                             <digi:trn key='<%="fm:"+moduleAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="moduleAux" property="root.properName"/></digi:trn>
                         </a>
                         </c:if>
                         <c:if test="${currentLevel != 1}">
-                        <a href="#" id="ampModule:<bean:write name="moduleAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
+                        <a href="#" id="module:<bean:write name="moduleAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
                             <digi:trn key='<%="fm:"+moduleAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="moduleAux" property="root.properName"/></digi:trn>
                         </a>
                         </c:if>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-[<a
 											style="font-size: 12px; cursor: pointer; color: #006699; text-decoration: none"
-											title="Click to edit ampModule description"
+											title="Click to edit module description"
 											onClick='showDescriptionToolbox("textarea_${moduleAux.root.id}_module")'"><digi:trn>edit description</digi:trn></a>]
 																				
 							<textarea rows="2" cols="20" style="display:none;z-index: 10" id="textarea_${moduleAux.root.id}_module" onblur="return enterKeyIsPressed(this)" onkeypress="return enterKeyIsPressed(this,event)"  >${moduleAux.root.description}</textarea>
@@ -73,18 +73,18 @@
 							<bean:define id="size" name="moduleAux2" property="submodules"/>
 							<logic:notEmpty name="size">
 							<logic:iterate name="moduleAux" property="sorteditems" id="moduleAuxIt" type="java.util.Map.Entry" >
-								<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="request"/>
+								<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="request"/>
 								<bean:define id="moduleAux" name="moduleAuxIt" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
 								<jsp:include page="generateTreeXLevelVisibility.jsp" />								
 
 							</logic:iterate>
 							</logic:notEmpty>
 							<logic:empty name="size">
-								<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="page"/>
+								<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="page"/>
 								<logic:iterate name="moduleAux" property="sorteditems" id="feature" type="java.util.Map.Entry" >
 								
 									<bean:define id="featureAux" name="feature" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
-									<bean:define id="featureAux2" name="featureAux" property="root" type="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility" scope="page"/>
+									<bean:define id="featureAux2" name="featureAux" property="root" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" scope="page"/>
 
 									<c:set var="featureDescription">
 										<digi:trn key='<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>'><bean:write name="featureAux" property="root.description"/></digi:trn>
@@ -129,7 +129,7 @@
 										<ul>
 										<logic:iterate name="featureAux" property="sorteditems" id="field" type="java.util.Map.Entry" >
 											<bean:define id="fieldAux" name="field" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
-											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility" scope="page"/>
+											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
 											
 											<c:set var="fieldDescription">
 												<digi:trn key='<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>'><bean:write name="fieldAux" property="root.description"/></digi:trn>

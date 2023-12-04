@@ -9,7 +9,7 @@
 <digi:instance property="messageForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/message/scripts/templateScripts.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/templateScripts.js"/>"></script>
 <script langauage="JavaScript">
 
 var submmited = false;
@@ -52,7 +52,7 @@ var submmited = false;
   
   */
   function refreshReceiversOnDynamicity() {
-		if(document.getElementById('triggerSelect').value == "org.digijava.ampModule.message.triggers.UserAddedToFirstWorkspaceTrigger" ){
+		if(document.getElementById('triggerSelect').value == "org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger" ){
 			document.getElementById('receiver_area').style.visibility="hidden";
 		} else {
 			document.getElementById('receiver_area').style.visibility="visible";
@@ -171,7 +171,7 @@ var submmited = false;
 													<c:set var="translation">
 														<digi:trn>Click here to goto Admin Home</digi:trn>
 													</c:set>
-							                        <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+							                        <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
 														<digi:trn>Admin Home</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;													
 													<c:set var="gotoTemplateAlertsPage">

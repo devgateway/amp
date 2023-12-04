@@ -7,28 +7,28 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project has been approved by IMAC%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project has been approved by IMAC%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Project has been approved by IMAC%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Government is meber of project steering committee%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Government is meber of project steering committee%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Government is meber of project steering committee%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project is on budget%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project is on budget%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Project is on budget%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project is on parliament%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project is on parliament%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Project is on parliament%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project disburses directly into the Goverment%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project disburses directly into the Goverment%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Project disburses directly into the Goverment%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national financial management%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national financial management%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national financial management%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national procurement systems%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national procurement systems%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national procurement systems%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national audit systems%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national audit systems%');
                 delete from amp_modules_visibility where name like '%Aid Effectivenes/Project uses national audit systems%';
             </lang>
         </script>

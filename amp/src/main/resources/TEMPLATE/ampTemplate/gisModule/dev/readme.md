@@ -122,7 +122,7 @@ Code conventions
 
 ### General style
 
-Javascript coding style is somewhat enforced by jshint. The GIS ampModule config can be found in [.jshintrc](.jshintrc), for which you may want to consult the [jshint config option docs](www.jshint.com/docs/options/).
+Javascript coding style is somewhat enforced by jshint. The GIS module config can be found in [.jshintrc](.jshintrc), for which you may want to consult the [jshint config option docs](www.jshint.com/docs/options/).
 
 
 ### Backbone views
@@ -212,7 +212,7 @@ Troubleshooting
 
 **EADDRINUSE**: Probably have Node already running and port is already in use.
 
-**Error: Cannot find ampModule './app/js/main.js' from ...**: make sure you run gulp commands from the project root.
+**Error: Cannot find module './app/js/main.js' from ...**: make sure you run gulp commands from the project root.
 
 **JS Files not updating**: Try calling 'gulp clean' or make sure 'gulp dev' hasn't stopped.
 

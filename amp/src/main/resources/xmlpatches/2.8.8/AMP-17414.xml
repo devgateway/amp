@@ -5,7 +5,7 @@
     <jira>AMP-17414</jira>
     <keyword>Admin - data import/export </keyword>
     <author>eperez</author>
-    <description>Update dataExchange's ampModule instance </description>
+    <description>Update dataExchange's module instance </description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">

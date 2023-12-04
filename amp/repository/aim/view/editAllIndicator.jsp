@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
@@ -34,7 +34,7 @@
 		var temp = validateProj();
 		if (temp == true) 
 		{
-			<digi:context name="editThmInd" property="context/ampModule/moduleinstance/editAllIndicator.do?indicator=saveProj"/>
+			<digi:context name="editThmInd" property="context/module/moduleinstance/editAllIndicator.do?indicator=saveProj"/>
 			document.aimThemeForm.action = "<%=editThmInd%>&indicatorId=" +id;
 			document.aimThemeForm.target = window.opener.name;
 			document.aimThemeForm.submit();

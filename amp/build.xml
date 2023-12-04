@@ -119,15 +119,15 @@
   <target name="jaxb" description="Generate JAXB Java source files">
     <echo message="Compiling the schema..." />
     <mkdir dir="${gen-src}" />
-   	<xjc destdir="${gen-src}" schema="./doc/translation.xsd" package="org.digijava.ampModule.translation.jaxb">
-   		<produces dir="${gen-src}" includes="org/digijava/ampModule/translation/jaxb/*.java"/>
+   	<xjc destdir="${gen-src}" schema="./doc/translation.xsd" package="org.digijava.module.translation.jaxb">
+   		<produces dir="${gen-src}" includes="org/digijava/module/translation/jaxb/*.java"/>
     </xjc>
-    <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.ampModule.help.jaxbi" >
-    	<produces dir="${gen-src}" includes="org/digijava/ampModule/help/jaxbi/*.java"/>
+    <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi" >
+    	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>
     </xjc>
 
-    <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.ampModule.xmlpatcher.jaxb">
-         <produces dir="${gen-src}" includes="org/digijava/ampModule/xmlpatcher/jaxb/*.java"/>
+    <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">
+         <produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>
     </xjc>
 
 	<xjc destdir="${gen-src}" schema="./src/main/resources/schemas/report.xsd" package="org.dgfoundation.amp.reports.xml">
@@ -208,7 +208,7 @@
     <target name="modDatabase" depends="compile">
       <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">
         <arg value="-m"/>
- 	    <arg value="${ampModule.name}"/>
+ 	    <arg value="${module.name}"/>
   	    <classpath refid="run.classpath"/>
       </java>
     </target>
@@ -226,7 +226,7 @@
       <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">
         <arg value="-names"/>
         <arg value="-m"/>
- 	    <arg value="${ampModule.name}"/>
+ 	    <arg value="${module.name}"/>
   	    <classpath refid="run.classpath"/>
       </java>
     </target>

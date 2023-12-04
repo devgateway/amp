@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportProject" table="amp_budget_export_project">
+	<class name="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" table="amp_budget_export_project">
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
 				<param name="sequence_name">amp_budget_export_project_seq</param>
@@ -20,7 +20,7 @@
 
         <bag lazy="true" name="rules" cascade="all" inverse="true">
             <key column="project"/>
-            <one-to-many class="org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportMapRule" />
+            <one-to-many class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule" />
         </bag>
 
 	</class>

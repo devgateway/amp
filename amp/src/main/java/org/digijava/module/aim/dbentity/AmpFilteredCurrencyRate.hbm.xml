@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpFilteredCurrencyRate" table="AMP_FILTERED_CURRENCY_RATE">
+	<class name="org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate" table="AMP_FILTERED_CURRENCY_RATE">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -10,9 +10,9 @@
 		</id>
 		
 		<many-to-one name="fromCurrency" column="from_currency_id"  lazy="false"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none"  />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"  />
 		<many-to-one name="toCurrency" column="to_currency_id"  lazy="false"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		
 	</class>
 </hibernate-mapping>

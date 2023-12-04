@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.contentrepository.dbentity.TeamNodeState" table="CR_TEAM_NODE_STATE" discriminator-value="s">
+	<class name="org.digijava.module.contentrepository.dbentity.TeamNodeState" table="CR_TEAM_NODE_STATE" discriminator-value="s">
 
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -14,9 +14,9 @@
 		<property name="nodeUUID" column="node_UUID" type="java.lang.String" />
 		<property name="versionID" column="node_version_uuid" type="java.lang.String" />
 
-		<subclass name="org.digijava.ampModule.contentrepository.dbentity.NodeLastApprovedVersion" discriminator-value="lav" />
+		<subclass name="org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion" discriminator-value="lav" />
 
-		<subclass name="org.digijava.ampModule.contentrepository.dbentity.TeamNodePendingVersion" discriminator-value="pv" />
+		<subclass name="org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion" discriminator-value="pv" />
 		
 	</class>
 </hibernate-mapping>

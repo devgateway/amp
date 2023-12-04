@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityGroup"
+	<class name="org.digijava.module.aim.dbentity.AmpActivityGroup"
 		table="AMP_ACTIVITY_GROUP" lazy="false">
 		<id name="ampActivityGroupId" column="amp_activity_group_id" type="java.lang.Long">
 
@@ -18,13 +18,13 @@
 		
 		<property column="autoClosedOnExpiration" name="autoClosedOnExpiration" type="java.lang.Boolean" />
 		
-		<many-to-one name="ampActivityLastVersion" column="amp_activity_last_version_id" class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion"
+		<many-to-one name="ampActivityLastVersion" column="amp_activity_last_version_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion"
 		cascade="delete" index="idx_amp_activity_group_last_activity_id" not-null="false" />
 
 		<set name="activities" inverse="true" lazy="false" cascade="delete" >
 			<cache usage="read-write" />
 			<key column="amp_activity_group_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 		</set>
 
 

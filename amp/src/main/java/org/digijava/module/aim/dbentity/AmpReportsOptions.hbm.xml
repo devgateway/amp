@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpReportsOptions" table="AMP_REPORTS_OPTIONS">
+	<class name="org.digijava.module.aim.dbentity.AmpReportsOptions" table="AMP_REPORTS_OPTIONS">
 		<cache usage="read-write" />
 
 		<id name="ampOptionId" column="amp_option_id" type="java.lang.Long">

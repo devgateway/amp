@@ -21,7 +21,7 @@
 
 	function toggleFeature(id) {
 
-		<digi:context name="urlVal" property="context/ampModule/moduleinstance/featureManager.do" />
+		<digi:context name="urlVal" property="context/module/moduleinstance/featureManager.do" />
 
 		document.aimFeatureManagerForm.action = "<%= urlVal %>?toggle=true&fId="+id;
 

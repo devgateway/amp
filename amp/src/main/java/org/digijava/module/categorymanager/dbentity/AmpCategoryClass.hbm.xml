@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass" table="AMP_CATEGORY_CLASS" lazy="false">
+	<class name="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" table="AMP_CATEGORY_CLASS" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -20,19 +20,19 @@
 			<cache usage="read-write" />
 			<key column="amp_category_class_id" />
 			<index column="index_column" />
-			<one-to-many class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" />
+			<one-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		</list>
 		
 		<list name="usedCategories" table="AMP_CATEGORIES_USED" lazy="true">
 			<cache usage="read-write" />
 			<key column="category_id"/>
 			<list-index column="categories_index"/>
-			<many-to-many column="used_category_id" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass" />
+			<many-to-many column="used_category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
 		</list>
 		<set name="usedByCategories" table="AMP_CATEGORIES_USED" inverse="true" lazy="true">
 			<cache usage="read-write" />
 			<key column="used_category_id"/>
-			<many-to-many column="category_id" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass" />
+			<many-to-many column="category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
 		</set>
 		
 	</class>

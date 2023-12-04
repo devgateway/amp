@@ -31,7 +31,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 	</td>
 
 	<td height="18px" class="preview-align" nowrap>
-	    <ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response"
+	    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response"
 			parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
 
 			<logic:present name="fundingDetail" property="disasterResponse">
@@ -41,7 +41,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 				    </span>
 				</c:if>
 			</logic:present>
-		</ampModule:display>
+		</module:display>
 
         <c:choose>
             <c:when test="${showFiscalYear}">
@@ -84,7 +84,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 <logic:present name="fundingDetail" property="recipientOrganisation">
 <logic:present name="fundingDetail" property="recipientOrganisationRole">
 
-<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Funding Flows OrgRole Selector"
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Funding Flows OrgRole Selector"
 													parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
 	<tr>
 		<td colspan="1">&nbsp;</td>
@@ -92,7 +92,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 			<digi:trn>Recipient</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><digi:trn>&nbsp;as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;			
 		</td>
 	</tr>
-	</ampModule:display>
+	</module:display>
 </logic:present>
 </logic:present>
 <logic:present name="fundingDetail" property="classification">
@@ -112,7 +112,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 	</tr>
 </logic:present>
 
-<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disbursement Id"
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disbursement Id"
 				parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
 	<logic:present name="fundingDetail" property="disbursementId">
 		<tr>
@@ -122,5 +122,5 @@ other rows (if any): capital spending percent / classification / attached pledge
 			</td>
 		</tr>
 	</logic:present>
-</ampModule:display>
+</module:display>
 

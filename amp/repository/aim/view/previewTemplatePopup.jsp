@@ -9,7 +9,7 @@
 	type="java.util.Collection" scope="request" toScope="page" />
 
 <logic:iterate name="aimFeatureManagerForm" property="templates" id="template"
-		type="org.digijava.ampModule.aim.dbentity.FeatureTemplates">
+		type="org.digijava.module.aim.dbentity.FeatureTemplates">
 	
 <div style='position:relative;display:none;' id='org-<bean:write name="org" property="organisation.ampOrgId"/>'> 
 <ul>

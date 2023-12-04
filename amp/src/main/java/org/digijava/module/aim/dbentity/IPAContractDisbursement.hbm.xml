@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.IPAContractDisbursement"
+	<class name="org.digijava.module.aim.dbentity.IPAContractDisbursement"
 		table="IPA_CONTRACT_DISBURSEMENT">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -9,12 +9,12 @@
 				<param name="sequence_name">IPA_CONTRACT_DISBURSEMENT_seq</param>
 			</generator>
 		</id>
-		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 		<many-to-one name="currency" column="currency"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="contract" column="ipa_contract_id"
-			class="org.digijava.ampModule.aim.dbentity.IPAContract" cascade="none" />
+			class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" />
 		<property name="date" column="date_" type="java.util.Date" />
 	</class>
 </hibernate-mapping>

@@ -24,7 +24,7 @@
 						</tr>
 						<tr>
 							<td align="right">
-								<digi:link site="dglogin" contextPath="/ampModule/moduleinstance" href="/logoutAction.do" styleClass="text" >Log&nbsp;out</digi:link>
+								<digi:link site="dglogin" contextPath="/module/moduleinstance" href="/logoutAction.do" styleClass="text" >Log&nbsp;out</digi:link>
 							</td>
 						</tr>
 					</table>
@@ -61,7 +61,7 @@
 		
 		<digi:javascript formName="logonForm" />
 		<div align="center">
-		<digi:form site="dglogin" contextPath="/ampModule/moduleinstance" action="/logonAction.do" onsubmit="return validateLogonForm(this);">
+		<digi:form site="dglogin" contextPath="/module/moduleinstance" action="/logonAction.do" onsubmit="return validateLogonForm(this);">
 		<table border="0" class="border" cellpadding="0" cellspacing="0">
 		<tr><td>
 		<digi:errors />

@@ -96,24 +96,24 @@ public class VisibilityManagerExportHelper {
     
     /**
      * Build the module elements <field> 
-     * @param AmpModulesVisibility ampModule
+     * @param AmpModulesVisibility module
      * @param ObjectFactory objFactory
      * @param AmpTemplatesVisibility ampTemplate
      */
-    private ModuleType buildModuleNode(AmpModulesVisibility ampModule, ObjectFactory objFactory, AmpTemplatesVisibility ampTemplate) throws JAXBException {
+    private ModuleType buildModuleNode(AmpModulesVisibility module, ObjectFactory objFactory, AmpTemplatesVisibility ampTemplate) throws JAXBException {
         
         ModuleType moduleNode = objFactory.createModuleType();
-        moduleNode.setName(ampModule.getName());
-        moduleNode.setVisible(ampModule.isVisibleTemplateObj(ampTemplate));
+        moduleNode.setName(module.getName());
+        moduleNode.setVisible(module.isVisibleTemplateObj(ampTemplate));
         
         //Recursively import all the submodules 
-        for (AmpModulesVisibility ampSubModule : ampModule.getSubmodules()) {
+        for (AmpModulesVisibility ampSubModule : module.getSubmodules()) {
             ModuleType subModuleNode = buildModuleNode(ampSubModule, objFactory, ampTemplate);
             
             moduleNode.getModule().add(subModuleNode);
         }
         
-        addFeaturesToModuleNode(moduleNode, ampModule, objFactory, ampTemplate);
+        addFeaturesToModuleNode(moduleNode, module, objFactory, ampTemplate);
         
         return moduleNode;
     }
@@ -121,13 +121,13 @@ public class VisibilityManagerExportHelper {
     /**
      * Add the feature elements into the module node <field> 
      * @param ModuleType moduleNode
-     * @param AmpModulesVisibility ampModule
+     * @param AmpModulesVisibility module
      * @param ObjectFactory objFactory
      * @param AmpTemplatesVisibility ampTemplate
      */
-    private void addFeaturesToModuleNode(ModuleType moduleNode, AmpModulesVisibility ampModule, ObjectFactory objFactory, AmpTemplatesVisibility ampTemplate) throws JAXBException {
+    private void addFeaturesToModuleNode(ModuleType moduleNode, AmpModulesVisibility module, ObjectFactory objFactory, AmpTemplatesVisibility ampTemplate) throws JAXBException {
         
-        for (AmpObjectVisibility ampFeature : ampModule.getItems()) {
+        for (AmpObjectVisibility ampFeature : module.getItems()) {
             FeatureType featureNode = objFactory.createFeatureType();
             featureNode.setName(ampFeature.getName());
             featureNode.setVisible(ampFeature.isVisibleTemplateObj(ampTemplate));
@@ -179,11 +179,11 @@ public class VisibilityManagerExportHelper {
                 visibilityTemplate.setFields(new TreeSet<AmpFieldsVisibility>());
 
                 for (AmpTreeVisibility ampVisibilityTree : ampTreeVisibility.getItems().values()) {
-                    AmpModulesVisibility ampModule = (AmpModulesVisibility) ampVisibilityTree.getRoot();
+                    AmpModulesVisibility module = (AmpModulesVisibility) ampVisibilityTree.getRoot();
 
                     for (ModuleType moduleType : (Iterable<ModuleType>) xmlTemplate.getModule()) {
                         ModuleType xmlModule = moduleType;
-                        importXmlModule(visibilityTemplate, ampModule, xmlModule);
+                        importXmlModule(visibilityTemplate, module, xmlModule);
                     }
                 }
 
@@ -198,30 +198,30 @@ public class VisibilityManagerExportHelper {
     /**
      * Import the module into the template based on the xml element <module> 
      * @param AmpTemplatesVisibility template
-     * @param AmpModulesVisibility ampModule
+     * @param AmpModulesVisibility module
      * @param ModuleType xmlModule
      */
-    private void importXmlModule(AmpTemplatesVisibility template, AmpModulesVisibility ampModule, ModuleType xmlModule) {
+    private void importXmlModule(AmpTemplatesVisibility template, AmpModulesVisibility module, ModuleType xmlModule) {
         
-        if (ampModule.getName().equalsIgnoreCase(xmlModule.getName())) {
+        if (module.getName().equalsIgnoreCase(xmlModule.getName())) {
             if (xmlModule.isVisible()) {
-                template.getItems().add(ampModule);
+                template.getItems().add(module);
             }
             
-            importXmlSubModules(template, ampModule, xmlModule);
-            importXmlFeatures(template, ampModule, xmlModule);
+            importXmlSubModules(template, module, xmlModule);
+            importXmlFeatures(template, module, xmlModule);
         }
     }
     
     /**
      * Import the modules elements into the template based on the subelements <module> 
      * @param AmpTemplatesVisibility template
-     * @param AmpModulesVisibility ampModule
+     * @param AmpModulesVisibility module
      * @param ModuleType xmlModule
      */
-    private void importXmlSubModules(AmpTemplatesVisibility template, AmpModulesVisibility ampModule, ModuleType xmlModule) {
+    private void importXmlSubModules(AmpTemplatesVisibility template, AmpModulesVisibility module, ModuleType xmlModule) {
         
-        for (AmpModulesVisibility ampSubModule : ampModule.getSubmodules()) {
+        for (AmpModulesVisibility ampSubModule : module.getSubmodules()) {
             Iterator<ModuleType> xmlSubmoduleIt = xmlModule.getModule().iterator(); 
             while (xmlSubmoduleIt.hasNext()) {
                 ModuleType xmlSubModule = xmlSubmoduleIt.next();
@@ -233,12 +233,12 @@ public class VisibilityManagerExportHelper {
     /**
      * Import the features elements into the template based on the element <feature> 
      * @param AmpTemplatesVisibility template
-     * @param AmpModulesVisibility ampModule
+     * @param AmpModulesVisibility module
      * @param ModuleType xmlModule
      */
-    private void importXmlFeatures(AmpTemplatesVisibility template, AmpModulesVisibility ampModule, ModuleType xmlModule) {
+    private void importXmlFeatures(AmpTemplatesVisibility template, AmpModulesVisibility module, ModuleType xmlModule) {
         
-        Iterator<AmpObjectVisibility> ampFeatureIt = ampModule.getItems().iterator();
+        Iterator<AmpObjectVisibility> ampFeatureIt = module.getItems().iterator();
         while (ampFeatureIt.hasNext()) {
             AmpFeaturesVisibility ampFeature = (AmpFeaturesVisibility) ampFeatureIt.next();
 

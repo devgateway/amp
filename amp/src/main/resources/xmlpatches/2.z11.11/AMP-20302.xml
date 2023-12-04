@@ -9,7 +9,7 @@
         <apply>
                 <script>
                         <lang delimiter=";" type="postgres">
-                            delete from amp_content_translation where object_class = 'org.digijava.ampModule.aim.dbentity.AmpReports' and field_name = 'name' and translation = '';
+                            delete from amp_content_translation where object_class = 'org.digijava.module.aim.dbentity.AmpReports' and field_name = 'name' and translation = '';
                         </lang>
                 </script>
         </apply>

@@ -7,9 +7,9 @@
 <!--                      (DRAFT)                       -->
 <!-- ************************************************** -->
 
-<xs:schema targetNamespace="http://digijava.org/ampModule/digifeed/feeds/fb/freebalance.xml"
-           xmlns="http://digijava.org/ampModule/digifeed/feeds/fb/freebalance.xml"
-           xmlns:fb="http://digijava.org/ampModule/digifeed/feeds/fb/freebalance.xml"
+<xs:schema targetNamespace="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
+           xmlns="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
+           xmlns:fb="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
            xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
            id="fb"
@@ -21,8 +21,8 @@
 		<xsd:appinfo>
 			<jaxb:globalBindings>
 				<jaxb:javaType name="java.util.Date" xmlType="xs:date"
-					printMethod="org.digijava.ampModule.digifeed.utils.PublisherDateFormatter.print"
-					parseMethod="org.digijava.ampModule.digifeed.utils.PublisherDateFormatter.parse" />
+					printMethod="org.digijava.module.digifeed.utils.PublisherDateFormatter.print"
+					parseMethod="org.digijava.module.digifeed.utils.PublisherDateFormatter.parse" />
 			</jaxb:globalBindings>
 		</xsd:appinfo>
 	</xsd:annotation>

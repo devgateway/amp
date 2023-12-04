@@ -14,7 +14,7 @@
 				WHERE parent IN (SELECT id from amp_modules_visibility WHERE name = '/Activity Form/Donor Funding');
 				
 				DELETE FROM amp_modules_templates 
-				WHERE ampModule IN (SELECT id from amp_modules_visibility WHERE name = '/Activity Form/Donor Funding');
+				WHERE module IN (SELECT id from amp_modules_visibility WHERE name = '/Activity Form/Donor Funding');
 				
 				DELETE FROM amp_modules_visibility WHERE name = '/Activity Form/Donor Funding';
 

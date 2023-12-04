@@ -37,13 +37,13 @@ function banUser(txt) {
 			 return true;		
 	}
   function exportXSL(){
-      <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportUserManager.do"/>;
+      <digi:context name="exportUrl" property="context/module/moduleinstance/exportUserManager.do"/>;
       document.umViewAllUsersForm.action="${exportUrl}";
       document.umViewAllUsersForm.target="_blank";
       document.umViewAllUsersForm.submit();
 }
  function showUsers(){
-      <digi:context name="showUsr" property="context/ampModule/moduleinstance/viewAllUsers.do"/>;
+      <digi:context name="showUsr" property="context/module/moduleinstance/viewAllUsers.do"/>;
       document.umViewAllUsersForm.action="${showUsr}";
       document.umViewAllUsersForm.target="_self";
       document.umViewAllUsersForm.submit();
@@ -83,7 +83,7 @@ function banUser(txt) {
                 <c:set var="translation">
                   <digi:trn key="um:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                 </c:set>
-                <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="um:AmpAdminHome">
                   Admin Home
                   </digi:trn>
@@ -560,7 +560,7 @@ function banUser(txt) {
 																	key="aim:otherLinks">
 																	<b style="font-weight: bold; font-size: 12px; padding-left:5px; color:#000000;"><digi:trn>Other links</digi:trn></b>
 																</digi:trn></td>
-															<td background="ampModule/aim/images/corner-r.gif"
+															<td background="module/aim/images/corner-r.gif"
 																height="17" width=17>&nbsp;</td>
 														</tr>
 													</table></td>
@@ -570,8 +570,8 @@ function banUser(txt) {
 													<table cellPadding=0 cellspacing="0" width="100%" class="inside">
 														<tr>
 															<td class="inside"><digi:img
-																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link ampModule="aim" href="/admin.do">
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim" href="/admin.do">
 																	<digi:trn key="aim:AmpAdminHome">
 																Admin Home
 																</digi:trn>
@@ -579,16 +579,16 @@ function banUser(txt) {
 														</tr>
 														<tr>
 															<td class="inside"><digi:img
-																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link ampModule="aim" href="/../um/addUser.do">
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim" href="/../um/addUser.do">
 																	<digi:trn key="aim:addNewUser">
 																Add new user																</digi:trn>
 																</digi:link></td>
 														</tr>
 														<tr>
 															<td class="inside"><digi:img
-																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link ampModule="aim"
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim"
 																	href="/workspaceManager.do~page=1">
 																	<digi:trn key="aim:WorkspaceManager">
 																Workspace Manager
@@ -599,8 +599,8 @@ function banUser(txt) {
 															<c:when test="${umViewAllUsersForm.showBanned}">
 																<tr>
 																	<td class="inside"><digi:img
-																			src="ampModule/aim/images/arrow-014E86.gif" width="15"
-																			height="10" /> <digi:link ampModule="aim"
+																			src="module/aim/images/arrow-014E86.gif" width="15"
+																			height="10" /> <digi:link module="aim"
 																			href="/../um/viewAllUsers.do~showBanned=false">
 																			<digi:trn key="aim:ViewActiveUsers">
 																	View Active Users
@@ -611,8 +611,8 @@ function banUser(txt) {
 															<c:otherwise>
 																<tr>
 																	<td class="inside"><digi:img
-																			src="ampModule/aim/images/arrow-014E86.gif" width="15"
-																			height="10" /> <digi:link ampModule="aim"
+																			src="module/aim/images/arrow-014E86.gif" width="15"
+																			height="10" /> <digi:link module="aim"
 																			href="/../um/viewAllUsers.do~showBanned=true">
 																			<digi:trn key="aim:ViewBannedUsers">
 																	View Banned Users
@@ -623,8 +623,8 @@ function banUser(txt) {
 														</c:choose>
 														<tr>
 															<td class="inside"><digi:img
-																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link ampModule="aim"
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim"
 																	href="/../um/suspendLoginManager.do">
 																	<digi:trn>
 																		Account Suspend Manager

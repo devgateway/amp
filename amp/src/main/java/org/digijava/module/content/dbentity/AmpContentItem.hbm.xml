@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.content.dbentity.AmpContentItem" table="AMP_CONTENT_ITEM">
+	<class name="org.digijava.module.content.dbentity.AmpContentItem" table="AMP_CONTENT_ITEM">
 		<id column="AMP_CONTENT_ITEM_ID" name="ampContentItemId" type="java.lang.Long" unsaved-value="null">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
 				<param name="sequence_name">amp_content_item_seq</param>
@@ -17,7 +17,7 @@
 		<set name="contentThumbnails" cascade="all" inverse="true" order-by="PLACEHOLDER asc">
 			<cache usage="read-write" />
 			<key column="AMP_CONTENT_ITEM_ID" />
-			<one-to-many class="org.digijava.ampModule.content.dbentity.AmpContentItemThumbnail" />
+			<one-to-many class="org.digijava.module.content.dbentity.AmpContentItemThumbnail" />
 		</set>
 	</class>
 </hibernate-mapping>

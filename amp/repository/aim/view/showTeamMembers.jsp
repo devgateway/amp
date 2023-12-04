@@ -13,7 +13,7 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language=javascript>
 function showUserProfile(id){
 	var param = "~edit=true~id="+id;
@@ -86,7 +86,7 @@ function showUserProfile(id){
 													</logic:empty>
 													<logic:notEmpty name="aimTeamMemberForm" property="teamMembers">
 														<logic:iterate name="aimTeamMemberForm" property="teamMembers" id="teamMembers"
-														type="org.digijava.ampModule.aim.helper.TeamMember">
+														type="org.digijava.module.aim.helper.TeamMember">
 														<tr bgcolor=#ffffff>
 															<td>
 																<logic:equal name="teamMembers" property="teamHead" value="true">*
@@ -153,7 +153,7 @@ function showUserProfile(id){
 												<b style="padding-left:5px; font-size:12px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="ampModule/aim/images/corner-r.gif" height="17" width="17"></td>
+											<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 										</tr>
 									</table>
 								</td>
@@ -163,7 +163,7 @@ function showUserProfile(id){
 									<table cellPadding=5 cellspacing="1" width="100%" class=inside>
 										<tr>
 											<td class=inside>
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams1}" property="teamId">
 													<bean:write name="aimTeamMemberForm" property="teamId" />
@@ -180,7 +180,7 @@ function showUserProfile(id){
 										
 										<tr>
 											<td class=inside>
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="clickToViewAdmin">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 													</c:set>

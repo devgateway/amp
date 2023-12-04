@@ -12,7 +12,7 @@
 				List featureNames = new ArrayList();
 				featureNames.add("");
 				featureNames.add("Planed Commitments"); // apparently bsh does not support varargs
-				new org.digijava.ampModule.aim.startup.DeleteMeasuresFromFM(featureNames).work();
+				new org.digijava.module.aim.startup.DeleteMeasuresFromFM(featureNames).work();
 			</lang>
 		</script>
 	</apply>

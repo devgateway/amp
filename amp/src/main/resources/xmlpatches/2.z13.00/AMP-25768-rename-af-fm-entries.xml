@@ -13,7 +13,7 @@
 				-- '/PROJECT MANAGEMENT/Project ID and Planning/Identification/Activity Updated On' -> '/Activity Form/Identification/Activity Updated On'
 				-------------------------------------------------------------------------------------
 
-				-- create new FM ampModule
+				-- create new FM module
 				INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent) VALUES (
 				  nextval('amp_modules_visibility_seq'),
 				  '/Activity Form/Identification/Activity Updated On',
@@ -38,7 +38,7 @@
 				-- '/PROJECT MANAGEMENT/Project ID and Planning/Identification/Activity Last Updated by' -> '/Activity Form/Identification/Activity Last Updated by'
 				-------------------------------------------------------------------------------------
 
-				-- create new FM ampModule
+				-- create new FM module
 				INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent) VALUES (
 				  nextval('amp_modules_visibility_seq'),
 				  '/Activity Form/Identification/Activity Last Updated by',

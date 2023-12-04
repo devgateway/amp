@@ -12,22 +12,22 @@
 
                 DELETE FROM dg_module_instance WHERE module_name = 'dataExchange';
                 
-                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Export Manager');
+                DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Export Manager');
                 DELETE FROM amp_modules_visibility WHERE name = 'Activity Export Manager';
                 
                 DELETE FROM amp_features_templates WHERE feature IN (SELECT id FROM amp_features_visibility WHERE name = 'Synergy Client');
                 DELETE FROM amp_features_visibility WHERE name = 'Synergy Client';
                 
-                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Import Manager');
+                DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Import Manager');
                 DELETE FROM amp_modules_visibility WHERE name = 'Activity Import Manager';
                 
-                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Code Chapitre Importer');
+                DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Code Chapitre Importer');
                 DELETE FROM amp_modules_visibility WHERE name = 'Code Chapitre Importer';
                 
-                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Budget Codes Exporter');
+                DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Budget Codes Exporter');
                 DELETE FROM amp_modules_visibility WHERE name = 'Budget Codes Exporter';
                 
-                DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Partial Import Manager');
+                DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Activity Partial Import Manager');
                 DELETE FROM amp_modules_visibility WHERE name = 'Activity Partial Import Manager';
                 
                 DROP TABLE IF EXISTS amp_de_mapping_fields CASCADE;

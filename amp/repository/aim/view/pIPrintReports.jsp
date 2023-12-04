@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 <!--

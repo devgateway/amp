@@ -7,15 +7,15 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 	<digi:base/>
 	<digi:context name="digiContext" property="context"/>
 	<digi:instance property="messageForm"/>
 		
-	<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/message/scripts/messages.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
 	<br><br>
 	
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
@@ -27,7 +27,7 @@
 						</span>
 						
 						<span class="breadcrump_sep">|</span>
-						<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm" ampModule="aim">
+						<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm" module="aim">
 							<digi:trn>Portfolio</digi:trn>
 						</digi:link>
 						<span class="breadcrump_sep"><b>�</b></span>
@@ -39,7 +39,7 @@
 			<td width=768  valign="top">
 				<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 					<ul style="height:29px;" class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-						<feature:display name="Message tab" ampModule="Messages">
+						<feature:display name="Message tab" module="Messages">
 							<c:if test="${messageForm.tabIndex  == 1}">
 								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 									<a href="#tabs-1" class="tab_link"><digi:trn>Messages</digi:trn></a>
@@ -52,7 +52,7 @@
 							</c:if>
 						</feature:display>
 						
-						<feature:display name="Alert tab" ampModule="Messages">
+						<feature:display name="Alert tab" module="Messages">
 							<c:if test="${messageForm.tabIndex  == '2'}">
 								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-2" class="tab_link">
 									<digi:trn>Alerts</digi:trn></a>
@@ -65,7 +65,7 @@
 							</c:if>
 						</feature:display>
 						
-						<feature:display name="Approval Tab" ampModule="Messages">
+						<feature:display name="Approval Tab" module="Messages">
 							<c:if test="${messageForm.tabIndex  == '3'}">
 								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 									<a href="#tabs-3" class="tab_link"><digi:trn>Approvals</digi:trn></a>
@@ -78,7 +78,7 @@
 							</c:if>
 						</feature:display>
 						
-						<feature:display name="Event Tab" ampModule="Messages">
+						<feature:display name="Event Tab" module="Messages">
 							<c:if test="${messageForm.tabIndex  == '4'}">
 								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 									<a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a>

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.common.dbentity.ItemStatus" table="DG_ITEM_STATUS">
+	<class name="org.digijava.module.common.dbentity.ItemStatus" table="DG_ITEM_STATUS">
 		<id column="code" name="code" type="java.lang.String">
 			<generator class="assigned" />
 		</id>

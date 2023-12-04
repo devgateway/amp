@@ -25,7 +25,7 @@
 				<digi:trn key="calendar:releaseDate1">Release Date</digi:trn></strong>
 			</td>
 		</tr>
-		<logic:iterate id="eventsList" name="calendarItemForm" property="eventsList" type="org.digijava.ampModule.calendar.form.CalendarItemForm.EventInfo">
+		<logic:iterate id="eventsList" name="calendarItemForm" property="eventsList" type="org.digijava.module.calendar.form.CalendarItemForm.EventInfo">
 		<logic:equal name="eventsList" property="selected" value="true">
 		<tr valign="top" bgcolor="#F0F3F7">
 			<td nowrap width="140">

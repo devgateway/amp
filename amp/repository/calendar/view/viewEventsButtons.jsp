@@ -8,14 +8,14 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="ampModule/aim/css/amptabs.css"/>"/>
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 
 
 
 <digi:instance property="calendarViewForm"/>
     <DIV id="tabs">
     	<UL>
-    		<feature:display name="Yearly View" ampModule="Calendar">
+    		<feature:display name="Yearly View" module="Calendar">
         			<c:if test="${calendarViewForm.view == 'yearly'}">
                       <LI>
                       	<a name="node">
@@ -37,7 +37,7 @@
                          </LI>
 					</c:if>
 				</feature:display>
-				<feature:display name="Monthly View" ampModule="Calendar">
+				<feature:display name="Monthly View" module="Calendar">
                     <c:if test="${calendarViewForm.view == 'monthly'}">
                     	<LI>
                         	<a name="node">
@@ -59,7 +59,7 @@
                         </LI>
 					</c:if>
 				</feature:display>
-				<feature:display name="Weekly View" ampModule="Calendar">
+				<feature:display name="Weekly View" module="Calendar">
 					<c:if test="${calendarViewForm.view == 'weekly'}">
                     	<LI>
                         	<a name="node">
@@ -81,7 +81,7 @@
                        </LI>
 					</c:if>
 				</feature:display>
-				<feature:display name="Daily View" ampModule="Calendar">
+				<feature:display name="Daily View" module="Calendar">
                    <c:if test="${calendarViewForm.view == 'daily'}">
                     	<LI>
                         	<a name="node">

@@ -79,7 +79,7 @@
 													</tr>
 														<logic:notEmpty name="aimTeamPagesForm" property="pages">
 															<logic:iterate name="aimTeamPagesForm" id="pages" property="pages"
-															type="org.digijava.ampModule.aim.dbentity.AmpPages">
+															type="org.digijava.module.aim.dbentity.AmpPages">
 															<tr bgColor=#f4f4f2><td height="20">
 																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams}" property="pageId">

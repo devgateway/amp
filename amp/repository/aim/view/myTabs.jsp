@@ -14,7 +14,7 @@
 			ReportContextData.getFromRequest(true); // instantiate a RCD instance - will crash if no ampReportId exists in the context (this is ok), will create a new RCD if not existing (That is ok too - we might render this tab without having gone through viewNewAdvancedReport)
 		}
 		
-		org.digijava.ampModule.aim.dbentity.AmpReports report = (org.digijava.ampModule.aim.dbentity.AmpReports) session.getAttribute(org.digijava.ampModule.aim.helper.Constants.CURRENT_TAB_REPORT);
+		org.digijava.module.aim.dbentity.AmpReports report = (org.digijava.module.aim.dbentity.AmpReports) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_TAB_REPORT);
 		//Long currentTabAmpReportId = (report != null) ? report.getAmpReportId() : null;
 		if (report != null)
 			{
@@ -336,7 +336,7 @@ function toggleSettings(){
 <ul id="MyTabs" class="yui-nav"">
 <c:set var="counter" value="0"/> 
 <logic:present name="myTabs" scope="session">
-		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.ampModule.aim.dbentity.AmpReports">
+		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
 					<logic:equal name="report" property="drilldownTab" value="true">
 	                    <c:set var="counter" value="${counter+1}" />
 	                    <%-- <c:set var="reportNameTrn">
@@ -395,9 +395,9 @@ DIV.panelList {
 	<logic:present name="myActiveTabs" scope="session">
     	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
         <c:set var="showMoreTab" value="false"/>
-		<logic:iterate name="myActiveTabs" id="report" scope="session" type="org.digijava.ampModule.aim.dbentity.AmpReports">
+		<logic:iterate name="myActiveTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
           	<c:set var="showTab" value="true"/>
-			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.ampModule.aim.dbentity.AmpReports">
+			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
             	<c:if test="${tab.id == report.id}">
                 	<c:set var="showTab" value="false"/>
                 </c:if>

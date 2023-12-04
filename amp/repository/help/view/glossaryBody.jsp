@@ -102,9 +102,9 @@
 
 <script type="text/javascript">
 
-	<digi:context name="topicBodyAction" property="context/ampModule/moduleinstance/topicBody.do" />
+	<digi:context name="topicBodyAction" property="context/module/moduleinstance/topicBody.do" />
 	<digi:context name="topicEditAction" property="context/editor/moduleinstance/showEditText.do" />
-	<digi:context name="topicDeleteAction" property="context/ampModule/moduleinstance/deleteTopic.do" />
+	<digi:context name="topicDeleteAction" property="context/module/moduleinstance/deleteTopic.do" />
 	var getBodyURL = '<%=topicBodyAction%>';
 	var editorLink = '<%=topicEditAction%>';
 	var deleteLink = '<%=topicDeleteAction%>';

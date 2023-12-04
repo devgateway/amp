@@ -14,8 +14,8 @@
                 <!-- 1.      CLEANUP duplicate 'Dashboard Generator' FM -->
                 <!-- change everything to be linked to the latest 'Dashboard Generator' id -->
                 UPDATE amp_modules_templates
-                    SET ampModule = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Dashboard Generator')
-                    WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Dashboard Generator');
+                    SET module = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Dashboard Generator')
+                    WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Dashboard Generator');
                 UPDATE amp_features_visibility 
                     SET parent = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Dashboard Generator')
                     WHERE parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Dashboard Generator');

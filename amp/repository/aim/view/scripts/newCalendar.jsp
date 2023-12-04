@@ -8,11 +8,11 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-calendar.js"/>"></script>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/calendar/assets/skins/sam/calendar.css">
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/calendar/calendar-min.js"></script> 
@@ -136,7 +136,7 @@
 	YUI_DAY_NAMES_MEDIUM = ["<digi:trn>Sun</digi:trn>", "<digi:trn>Mon</digi:trn>", "<digi:trn>Tue</digi:trn>", "<digi:trn>Wed</digi:trn>", 
                                "<digi:trn>Thu</digi:trn>", "<digi:trn>Fri</digi:trn>", "<digi:trn>Sat</digi:trn>"];
 
-	var dateFormat = '<%=org.digijava.ampModule.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.ampModule.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
+	var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
 	if (dateFormat == 'null')
 		dateFormat = 'dd/mm/yyyy';
 	

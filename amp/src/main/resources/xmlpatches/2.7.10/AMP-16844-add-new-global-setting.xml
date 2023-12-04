@@ -15,7 +15,7 @@
 
 				INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
 					((select max(id) + 1 FROM amp_global_settings), 'GIS region highlights colour scheme', 0, 'v_g_settings_esri_regions_color_scheme', 
-					'Select the colour scheme used for highlighting regions/zones in the ESRI GIS ampModule', 'general');
+					'Select the colour scheme used for highlighting regions/zones in the ESRI GIS module', 'general');
 			</lang>
 		</script>
 	</apply>

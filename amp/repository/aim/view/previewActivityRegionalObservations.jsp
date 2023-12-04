@@ -3,10 +3,10 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 
-<ampModule:display name="/Activity Form/Regional Observations" parentModule="/Activity Form">
+<module:display name="/Activity Form/Regional Observations" parentModule="/Activity Form">
 	<fieldset>
 	<legend>
 		<span class=legend_label id="regionalObsLink" style="cursor: pointer;">
@@ -18,7 +18,7 @@
 		<c:if test="${not empty aimEditActivityForm.regionalObservations.issues}">
 		<logic:iterate name="aimEditActivityForm" id="regionalObs" property="regionalObservations.issues">
 			<table style="width: 100%;">
-			<ampModule:display name="/Activity Form/Regional Observations/Observation" parentModule="/Activity Form/Regional Observations">
+			<module:display name="/Activity Form/Regional Observations/Observation" parentModule="/Activity Form/Regional Observations">
 				<tr bgcolor="#F0F0F0">
 				<td width="20%;">
 					<b><digi:trn>Observation</digi:trn>:</b>
@@ -27,8 +27,8 @@
 					<span class="word_break bold"><c:out value="${regionalObs.name}"/></span>
 				</td>	
 				</tr>	
-			</ampModule:display>
-			<ampModule:display name="/Activity Form/Regional Observations/Observation/Date" parentModule="/Activity Form/Regional Observations/Observation">
+			</module:display>
+			<module:display name="/Activity Form/Regional Observations/Observation/Date" parentModule="/Activity Form/Regional Observations/Observation">
 				<tr bgcolor="#F0F0F0">
 				<td>
 					<digi:trn>Observation Date</digi:trn>:
@@ -38,7 +38,7 @@
 					<c:out value="${regionalObs.issueDate}"/>
 				</td>
 				</tr>
-			</ampModule:display>
+			</module:display>
 			<logic:iterate name="regionalObs" id="measure" property="measures">
 			<tr bgcolor="#F0F0F0">
 			<td>
@@ -73,4 +73,4 @@
 		</c:if>
 	</div>
 	</fieldset>
-</ampModule:display>
+</module:display>

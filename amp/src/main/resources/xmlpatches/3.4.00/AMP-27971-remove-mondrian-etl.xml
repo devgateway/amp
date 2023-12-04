@@ -40,7 +40,7 @@
         <script>
             <lang type="bsh"><![CDATA[
                 import org.digijava.kernel.xmlpatches.SqlExec;
-                import org.digijava.ampModule.aim.util.QuartzJobUtils;
+                import org.digijava.module.aim.util.QuartzJobUtils;
                 import org.quartz.Scheduler;
 
                 SqlExec.viewMap("mondrian_organizations____no_pledges", "DROP VIEW {0}");

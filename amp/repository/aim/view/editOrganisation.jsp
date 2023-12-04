@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
@@ -18,8 +18,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
-<%@page import="org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument"%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <div class="admin-content">
 <script language="JavaScript" type="text/javascript">
@@ -62,7 +62,7 @@
     addLoadEvent(initScripts);
 
     function refreshPage(){
-        <digi:context name="reload" property="context/ampModule/moduleinstance/editOrganisation.do" />
+        <digi:context name="reload" property="context/module/moduleinstance/editOrganisation.do" />
         document.aimAddOrgForm.action = "${reload}";
         document.aimAddOrgForm.actionFlag.value='reload';
         document.aimAddOrgForm.submit();
@@ -79,7 +79,7 @@
   
     function orgTypeChanged()
 	{
-    	<digi:context name="typeChanged" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    	<digi:context name="typeChanged" property="context/module/moduleinstance/editOrganisation.do" />
         document.aimAddOrgForm.actionFlag.value="typeChanged";
         document.aimAddOrgForm.action = "${typeChanged}";
         document.aimAddOrgForm.target = "_self";
@@ -121,7 +121,7 @@
                 return false;
             }
 
-    <digi:context name="addStaff" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    <digi:context name="addStaff" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addStaffInfo";
             document.aimAddOrgForm.action = "${addStaff}";
             document.aimAddOrgForm.target = "_self";
@@ -145,7 +145,7 @@
                 	document.aimAddOrgForm.selectedStaffId.value=null;
                 }
             }
-    		<digi:context name="deleteStaff" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    		<digi:context name="deleteStaff" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="deleteStaffInfo";
             document.aimAddOrgForm.action = "${deleteStaff}";
             document.aimAddOrgForm.target = "_self";
@@ -183,7 +183,7 @@
                 return false;
             }
 
-    <digi:context name="addOrgInfo" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    <digi:context name="addOrgInfo" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addOrgInfo";
             document.aimAddOrgForm.action = "${addOrgInfo}";
             document.aimAddOrgForm.target = "_self";
@@ -207,7 +207,7 @@
                 	 document.aimAddOrgForm.selectedOrgInfoId.value=null;
                  }
             }
-    <digi:context name="deleteOrgInfo" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    <digi:context name="deleteOrgInfo" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="deleteOrgInfo";
             document.aimAddOrgForm.action = "${deleteOrgInfo}";
             document.aimAddOrgForm.target = "_self";
@@ -245,7 +245,7 @@
             	alert('<digi:trn jsFriendly="true">Please choose at least one sector to remove</digi:trn>');
             	return false;
         	}else{
-        		<digi:context name="removeSectors" property="context/ampModule/moduleinstance/editOrganisation.do" />
+        		<digi:context name="removeSectors" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.actionFlag.value="removeSector";
                 document.aimAddOrgForm.action = "${removeSectors}";
                 document.aimAddOrgForm.target = "_self";
@@ -254,7 +254,7 @@
         }
         
         function addSector() {
-    		<digi:context name="addSectors" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    		<digi:context name="addSectors" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addSector";
             document.aimAddOrgForm.action = "${addSectors}";
             document.aimAddOrgForm.target = "_self";
@@ -263,7 +263,7 @@
         function removeOrgs() {
         	var checkboxes=$("#recipientTbl").find("input.selRecipientsClass:checked");
     		if(checkboxes!=null && checkboxes.length>0){
-    			<digi:context name="remOrgs" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    			<digi:context name="remOrgs" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${remOrgs}";
                 document.aimAddOrgForm.actionFlag.value="removeRecipient";
                 document.aimAddOrgForm.target = "_self"
@@ -277,7 +277,7 @@
         function deleteBudgetOrg(){
         	var checkboxes=$("#budgOrgs").find("input.selBudgOrg:checked");
     		if(checkboxes!=null && checkboxes.length>0){
-    			<digi:context name="remOrgs" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    			<digi:context name="remOrgs" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${remOrgs}";
                 document.aimAddOrgForm.actionFlag.value="removeBudgetOrg";
                 document.aimAddOrgForm.target = "_self"
@@ -288,14 +288,14 @@
     		}            
         }
         function editOrgInfo(index){
-                <digi:context name="updateBudgetInfo" property="context/ampModule/moduleinstance/editOrganisation.do" />
+                <digi:context name="updateBudgetInfo" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${updateBudgetInfo}?orgInfoIndex="+index;
                 document.aimAddOrgForm.target = "_self"
                 document.aimAddOrgForm.actionFlag.value="editOrgInfo";
                 document.aimAddOrgForm.submit();
             }
             function editStaffInfo(index){
-                <digi:context name="editStaffInfo" property="context/ampModule/moduleinstance/editOrganisation.do" />
+                <digi:context name="editStaffInfo" property="context/module/moduleinstance/editOrganisation.do" />
                     document.aimAddOrgForm.action = "${editStaffInfo}?staffInfoIndex="+index;
                     document.aimAddOrgForm.target = "_self"
                     document.aimAddOrgForm.actionFlag.value="editStaffInfo";
@@ -313,7 +313,7 @@
             	alert('<digi:trn jsFriendly="true">Please choose at least one location to remove</digi:trn>');
             	return false;
         	}else{
-    		<digi:context name="remLocs" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    		<digi:context name="remLocs" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.action = "${remLocs}";
             document.aimAddOrgForm.target = "_self"
             document.aimAddOrgForm.actionFlag.value="deleteLocation";
@@ -373,7 +373,7 @@
     
         function msg() {
             if (confirm('<digi:trn  jsFriendly="true">Are you sure about deleting this organization?</digi:trn>')) {
-    <digi:context name="delete" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    <digi:context name="delete" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${delete}";
                 document.aimAddOrgForm.actionFlag.value = "delete";
                 document.aimAddOrgForm.submit();
@@ -383,7 +383,7 @@
         }
 
         function cancel() {
-    		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/organisationManager.do" />
+    		<digi:context name="selectLoc" property="context/module/moduleinstance/organisationManager.do" />
             url = "<%= selectLoc %>?orgSelReset=true";
             document.location.href = url;
         }
@@ -525,7 +525,7 @@
           	   
         function addDocumentsDM(documentsType, showTheFollowingDocuments) {
         	//submit organization parameters first
-           	<digi:context name="getInf" property="context/ampModule/moduleinstance/editOrganisation.do?skipReset=true" />
+           	<digi:context name="getInf" property="context/module/moduleinstance/editOrganisation.do?skipReset=true" />
            	var url="${getInf}";
            	var params=getResourceParams();
 
@@ -611,7 +611,7 @@
                 	document.getElementById('budgSects').value=true;
                 }
                
-    			<digi:context name="save" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${save}";
                 document.aimAddOrgForm.actionFlag.value = "save";
                 document.aimAddOrgForm.submit();
@@ -620,7 +620,7 @@
 
         function addGroup() {
             openNewWindow(600, 230);
-    <digi:context name="selectLoc" property="context/ampModule/moduleinstance/editOrgGroup.do" />
+    <digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
             var id = document.aimAddOrgForm.ampOrgId.value;
             url = "<%= selectLoc %>?action=create";
             document.aimAddOrgForm.action = url;
@@ -793,7 +793,7 @@
               }
 
         function removeContact(selContactId){
-    		<digi:context name="remLocs" property="context/ampModule/moduleinstance/editOrganisation.do" />
+    		<digi:context name="remLocs" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.action = "${remLocs}";
             document.aimAddOrgForm.target = "_self"
             document.aimAddOrgForm.actionFlag.value="deleteContact";
@@ -818,7 +818,7 @@
              }
         	}
         	if (atLeastOneIsChecked) {
-            	<digi:context name="remConts" property="context/ampModule/moduleinstance/editOrganisation.do" />
+            	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${remConts}";
                 document.aimAddOrgForm.target = "_self"
                 document.aimAddOrgForm.actionFlag.value="deleteContact";
@@ -914,7 +914,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	<html:hidden styleId="departments" value="${aimAddOrgForm.resetDepartments}" name="aimAddOrgForm" property="resetDepartments"/>
 	<html:hidden styleId="budgSects" value="${aimAddOrgForm.resetBudgetSectors}" name="aimAddOrgForm" property="resetBudgetSectors"/>
 
-	<feature:display name="NGO Form" ampModule="Organization Manager"></feature:display>
+	<feature:display name="NGO Form" module="Organization Manager"></feature:display>
 	
     <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=1000 align=center>
         <tr>
@@ -956,14 +956,14 @@ border-right: 1px solid rgb(208, 208, 208);
                     <tr>
                         <td>
                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;" title="Printer Friendly">
-                                <digi:img width="17" height="20" hspace="2" vspace="2" src="ampModule/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+                                <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
                             </digi:link>
                             <c:if test="${aimAddOrgForm.type=='NGO'}">
                             	<digi:link href="#" onclick="javascript:exportWholeNGOInfo(); return false;" title="Export to Excel">
-	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="ampModule/aim/images/excel.gif" border="0" alt="Export to Excel" />
+	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
 	                            </digi:link>
 	                            <digi:link href="#" onclick="javascript:exportNGOToPDF(); return false;" title="Export to PDF">
-	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="ampModule/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 	                            </digi:link>
                             </c:if>                           
 
@@ -1352,7 +1352,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                    	</td>
                                                                     <td>
                                                                         <c:if test="${empty aimAddOrgForm.recipients}">
-                                                                    <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.ampModule.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                    <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                 </c:if>
                                                                 <c:if test="${not empty aimAddOrgForm.recipients}">
                                                                     <table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding" id="recipientTbl">
@@ -1376,7 +1376,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                         <tr>
                                                                             <td colspan="3">
 																			<input type="button" style="margin-right:10px;" class="buttonx_sm" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
-                                                                         <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.ampModule.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                         <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                         
                                                                         </td>
                                                                         </tr>
@@ -1398,7 +1398,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                             <c:set var="translation">
                                                                 <digi:trn>Please select from below</digi:trn>
                                                             </c:set>
-                                                    <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddOrgForm" property="implemLocationLevel"  keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="selectStyle" />
+                                                    <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddOrgForm" property="implemLocationLevel"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="selectStyle" />
                                                     <script language="Javascript">
                                                         var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
                                                         if(implemLocationLevelSelect!=null){
@@ -1516,7 +1516,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                         <c:set var="translation">
                                             <digi:trn>Please select a status from below</digi:trn>
                                         </c:set>
-                                <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="typeOfStaff"  keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.ORGANIZATION_STAFF_INFO_KEY%>" styleClass="selectStyle" />
+                                <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="typeOfStaff"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ORGANIZATION_STAFF_INFO_KEY%>" styleClass="selectStyle" />
                                 </td>
                                 <td style="text-align:center"><html:text name="aimAddOrgForm" property="numberOfStaff"  onkeyup="fnChk(this,true)" styleClass="inp-text"/></td>
                                 <c:set var="staffButtonTxt">
@@ -1628,7 +1628,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                             <c:set var="translation">
                                             <digi:trn>Select Type</digi:trn>
                                         </c:set>
-                                    <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="orgInfoType"  keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.ORGANIZATION_BUDGET_INFO_KEY%>" styleClass="selectStyle" />
+                                    <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="orgInfoType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ORGANIZATION_BUDGET_INFO_KEY%>" styleClass="selectStyle" />
                                     </td>
                                     <td style="text-align:left">
                                         <table  width="100%" cellspacing="0" cellpadding="0" class="box-border-nopadding" id="budgOrgs">
@@ -1745,7 +1745,7 @@ border-right: 1px solid rgb(208, 208, 208);
                 </tr>
                 <tr>
                     <td class="tdBoldClass"><digi:trn>Organization Code</digi:trn>
-                    <feature:display name="Organization Form" ampModule="Organization Manager"></feature:display>
+                    <feature:display name="Organization Form" module="Organization Manager"></feature:display>
                      <field:display name="Mandatory Organization Code" feature="Organization Form">
                     	<span id="mandatoryOrganizationCode"><font size="2" color="#FF0000">*</font></span>
                      </field:display>
@@ -2074,14 +2074,14 @@ border-right: 1px solid rgb(208, 208, 208);
         </td>
     </tr>
     
-	<ampModule:display name="Document" parentModule="PROJECT MANAGEMENT">
+	<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 		<tr>
             <td colspan="2" align=center class="yui-skin-sam">
 				<table width="95%" cellspacing="0" cellpadding="0" border="0">
 					<tr>									
 						<td bgcolor=#f4f4f2 align=center>
 							<bean:define toScope="request" id="showRemoveButton" value="true" />
-							<bean:define toScope="request" id="documentsType" value="<%=org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
+							<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
 							<bean:define toScope="request" id="versioningRights" value="false" />
 							<bean:define toScope="request" id="viewAllRights" value="true" />
 							<bean:define toScope="request" id="makePublicRights" value="false" />
@@ -2097,11 +2097,11 @@ border-right: 1px solid rgb(208, 208, 208);
 			</td>
 			<td></td>
 		</tr>
-	</ampModule:display>
+	</module:display>
     <tr>
         <td colspan="2" align="center">
         	<c:set var="showTheFollowingDocuments" value="PUBLIC" /> 
-        	<c:set var="documentsType"><%=org.digijava.ampModule.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
+        	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
             <html:button styleClass="buttonx_sm" property="submitButton" onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
                 <digi:trn>Add Documents From Repository</digi:trn>
             </html:button> <br />

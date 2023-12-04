@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpAhsurveyQuestion"
+	<class name="org.digijava.module.aim.dbentity.AmpAhsurveyQuestion"
 		table="AMP_AHSURVEY_QUESTION">
 		<cache usage="read-write" />
 		<id name="ampQuestionId" column="amp_question_id" type="java.lang.Long">
@@ -14,15 +14,15 @@
 		<property name="questionText" column="question_text" type="java.lang.String" />
 
 		<many-to-one name="ampIndicatorId" column="amp_indicator_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpAhsurveyIndicator" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator" cascade="none" not-null="true" />
 			
 		<many-to-one name="parentQuestion" column="parent_question_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpAhsurveyQuestion" cascade="none" not-null="false" />
+			class="org.digijava.module.aim.dbentity.AmpAhsurveyQuestion" cascade="none" not-null="false" />
 
 		<property name="questionNumber" column="question_number" type="java.lang.Integer" />
 
 		<many-to-one name="ampTypeId" column="amp_type_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpAhsurveyQuestionType" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType" cascade="none" not-null="true" />
 
 		<property name="status" column="status" type="java.lang.String" />
 		
@@ -30,7 +30,7 @@
 			cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_question_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpAhsurveyQuestion" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurveyQuestion" />
 		</set>
 
 	</class>

@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ page import="org.digijava.ampModule.aim.form.ReportsForm"%>
+<%@ page import="org.digijava.module.aim.form.ReportsForm"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
@@ -9,11 +9,11 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
-<%@ page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
-<%@ page language="java" import="org.digijava.ampModule.aim.helper.TeamMember" %>
+<%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 
 <%
 ReportsForm aimTeamReportsForm = (ReportsForm) pageContext.getAttribute("aimTeamReportsForm");

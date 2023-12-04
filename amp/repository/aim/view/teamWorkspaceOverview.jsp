@@ -13,14 +13,14 @@
 	background-color: #f4f4f2;
 }
 </style>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
 
 function addChildWorkspaces() {
 		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
 			openNewWindow(650, 380);
-			<digi:context name="addChild" property="context/ampModule/moduleinstance/addChildWorkspaces.do" />
+			<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
 			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=teamLead";
 			document.aimUpdateWorkspaceForm.target = popupPointer.name;
 			document.aimUpdateWorkspaceForm.submit();
@@ -32,7 +32,7 @@ function addChildWorkspaces() {
 }
 
 function removeChildWorkspace(id) {
-	<digi:context name="update" property="context/ampModule/moduleinstance/removeChildWorkspace.do" />
+	<digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
 	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&tId="+id;
 	document.aimUpdateWorkspaceForm.target = "_self";
 	document.aimUpdateWorkspaceForm.submit();
@@ -41,7 +41,7 @@ function removeChildWorkspace(id) {
 function update(action) {
 	if(validateMandatoryFields ()){
 		var id = document.aimUpdateWorkspaceForm.teamId.value;
-		<digi:context name="update" property="context/ampModule/moduleinstance/updateWorkspaceForTeam.do" />
+		<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
 		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
 		document.aimUpdateWorkspaceForm.target = "_self";
 		document.aimUpdateWorkspaceForm.submit();	
@@ -52,7 +52,7 @@ function update(action) {
 function updateChild(action) {
 
 		var id = document.aimUpdateWorkspaceForm.teamId.value;
-		<digi:context name="update" property="context/ampModule/moduleinstance/updateWorkspaceForTeam.do" />
+		<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
 		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id + "&subtab=2";
 		document.aimUpdateWorkspaceForm.target = "_self";
 		document.aimUpdateWorkspaceForm.submit();
@@ -198,10 +198,10 @@ function trim(stringToTrim) {
 																	<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceGroup" /></b>
 																</logic:equal>
 																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
-																	<category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
+																	<category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
 																</logic:equal>
 																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
-																	<category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
+																	<category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
 																</logic:equal></div>
 															</td>
 														</tr>

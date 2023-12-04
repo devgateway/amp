@@ -45,21 +45,21 @@
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.Message</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
-		<hibernate-class>org.digijava.ampModule.common.dbentity.ItemStatus</hibernate-class>
-		<hibernate-class>org.digijava.ampModule.common.dbentity.ModuleTeaser</hibernate-class>
+		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
+		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
         <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
     </hibernate-classes>
 
 	
 <!-- 
-	 <service id="digiFeedService" class="org.digijava.ampModule.digifeed.core.DigifeedService">
+	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
             <description>Digi's feed publishing service</description>
      </service>
 
 	 -->
 
 
-	 <service id="XmlPatcherService" class="org.digijava.ampModule.xmlpatcher.core.XmlPatcherService">
+	 <service id="XmlPatcherService" class="org.digijava.module.xmlpatcher.core.XmlPatcherService">
             <description>XML Patcher Module</description>
             <property name="schedulerName">NaturalLocationOrderXmlPatcherScheduler</property>
             <!--
@@ -89,11 +89,11 @@
         <property name="ignoredAgents">agent.indexOf("googlebot") != -1</property>
     </service>
 
-	<service id="digiCurrencyRatesService" class="org.digijava.ampModule.currencyrates.CurrencyRatesService">
+	<service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
             <description>Daily Currency Rates Service</description>
     </service>
   
-	<service id="digiAuditClenaerService" class="org.digijava.ampModule.aim.services.auditcleaner.AuditCleanerService">
+	<service id="digiAuditClenaerService" class="org.digijava.module.aim.services.auditcleaner.AuditCleanerService">
             <description>This service will delete the audit log</description>
     </service>
 

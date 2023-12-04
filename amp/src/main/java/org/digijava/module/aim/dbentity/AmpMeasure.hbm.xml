@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpMeasure" table="AMP_MEASURE">
+	<class name="org.digijava.module.aim.dbentity.AmpMeasure" table="AMP_MEASURE">
 		<cache usage="read-write" />
 		<id name="ampMeasureId" column="amp_measure_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -11,12 +11,12 @@
 		<property column="name" name="name" type="text" />
 		<property column="measureDate" name="measureDate" type="java.util.Date" />
 		<many-to-one name="issue" column="amp_issue_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpIssues" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpIssues" cascade="none" />
 
 		<set name="actors" cascade="all" inverse="true" order-by="amp_actor_id asc">
 			<cache usage="read-write" />
 			<key column="amp_measure_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpActor" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActor" />
 		</set>
 
 	</class>

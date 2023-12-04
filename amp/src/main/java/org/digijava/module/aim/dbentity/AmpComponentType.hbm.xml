@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpComponentType" table="AMP_COMPONENT_TYPE">
+	<class name="org.digijava.module.aim.dbentity.AmpComponentType" table="AMP_COMPONENT_TYPE">
 		<cache usage="read-write" />
 		<id name="type_id" column="type_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -14,7 +14,7 @@
 		<property name="selectable" column="selectable" type="java.lang.Boolean" />
 		<set name="components" table="AMP_COMPONENTS">
 			<key column="type" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpComponent" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent" />
 		</set>
 	</class>
 </hibernate-mapping>

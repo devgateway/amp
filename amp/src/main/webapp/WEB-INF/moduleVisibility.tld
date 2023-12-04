@@ -3,7 +3,7 @@
 <taglib>
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.1</jspversion>
-	<shortname>ampModule</shortname>
+	<shortname>module</shortname>
 	<uri>http://digijava.org</uri>
 	<tag>
 		<name>display</name>

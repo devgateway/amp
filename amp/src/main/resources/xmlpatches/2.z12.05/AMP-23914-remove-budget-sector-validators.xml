@@ -7,7 +7,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-            	DELETE FROM amp_modules_templates WHERE ampModule IN (
+            	DELETE FROM amp_modules_templates WHERE module IN (
 						SELECT id from amp_modules_visibility 
 						WHERE name SIMILAR TO '/Activity Form/Budget Structure/Budget Structure/(uniqueProgramsValidator|minSizeProgramValidator|programPercentageTotal)');
 

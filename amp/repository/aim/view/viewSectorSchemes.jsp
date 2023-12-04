@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script langauage="JavaScript">
@@ -19,7 +19,7 @@
 		return flag;
 	}
 	 function exportXSL(){
-     <digi:context name="exportUrl" property="context/ampModule/moduleinstance/exportSectorManager2XSL.do"/>;
+     <digi:context name="exportUrl" property="context/module/moduleinstance/exportSectorManager2XSL.do"/>;
      document.aimAddSectorForm.action="${exportUrl}";
      document.aimAddSectorForm.target="_blank";
      document.aimAddSectorForm.submit();
@@ -70,7 +70,7 @@
 														<!--  to export table we are adding class "yui-dt-data" to its tbody-->
 											<tbody class="yui-dt-data">
 													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
-																	type="org.digijava.ampModule.aim.dbentity.AmpSectorScheme	">
+																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 													<tr>
 														<td width="72%" bgcolor="#ffffff" class="inside">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
@@ -174,7 +174,7 @@
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 								<tr>
 									<td class="inside"><digi:img
-											src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
+											src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
 											height="10" /> <c:set var="trnViewAdmin">
 											<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 										</c:set> <digi:link href="/admin.do" title="${trnViewAdmin}">
@@ -186,7 +186,7 @@
 								<field:display name="Add Scheme Link" feature="Sectors">
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
 												<c:set var="trnAddScheme">
 													<digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
 												</c:set>
@@ -201,7 +201,7 @@
                                                                              	<field:display name="Multi Sector Configuration" feature="Sectors">
                                                                                      <tr>
                                                                                          <td class="inside">
-                                                                                             <digi:img src="ampModule/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+                                                                                             <digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                                                              <c:set var="trnViewConfigurations">
                                                                                                  <digi:trn key="aim:ClickToConfigureClassifications">Click here to see the Configuration of Classifications</digi:trn>
                                                                                              </c:set>

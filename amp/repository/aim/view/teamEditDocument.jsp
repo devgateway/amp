@@ -23,7 +23,7 @@
 	<!--
 
 	function editDocument() {
-		<digi:context name="editDoc" property="context/ampModule/moduleinstance/updateDocumentDetails.do" />
+		<digi:context name="editDoc" property="context/module/moduleinstance/updateDocumentDetails.do" />
 		document.aimRelatedLinksForm.action = "<%= editDoc %>";
 	 	document.aimRelatedLinksForm.target = "_self";
    	document.aimRelatedLinksForm.submit();

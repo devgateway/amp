@@ -3,7 +3,7 @@
     xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>AMP-27945</jira>
-    <keyword>remove obsolete ampModule instances</keyword>
+    <keyword>remove obsolete module instances</keyword>
     <author>vchihai</author>
     <apply>
         <script>

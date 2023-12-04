@@ -1198,8 +1198,8 @@ public class FeaturesUtil {
                     AmpTemplatesVisibility.class, templateId);
             ampTemplate.setName(templateName);
             for (Iterator it = modules.iterator(); it.hasNext(); ) {
-                AmpModulesVisibility ampModule = (AmpModulesVisibility) it.next();
-                ampTemplate.getItems().add(ampModule);
+                AmpModulesVisibility module = (AmpModulesVisibility) it.next();
+                ampTemplate.getItems().add(module);
             }
             session.saveOrUpdate(ampTemplate);
             //tx.commit();
@@ -1499,11 +1499,11 @@ public class FeaturesUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            AmpModulesVisibility ampModule;
-            ampModule = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,
+            AmpModulesVisibility module;
+            module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,
                     templateId);
             boolean found = false;
-            for (Iterator it = ampModule.getItems().iterator(); it.hasNext(); ) {
+            for (Iterator it = module.getItems().iterator(); it.hasNext(); ) {
                 AmpFeaturesVisibility fDb = (AmpFeaturesVisibility) it.next();
                 found = false;
                 for (Iterator jt = modules.iterator(); jt.hasNext(); ) {
@@ -1514,7 +1514,7 @@ public class FeaturesUtil {
                     }
                 }
             }
-            session.saveOrUpdate(ampModule);
+            session.saveOrUpdate(module);
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);

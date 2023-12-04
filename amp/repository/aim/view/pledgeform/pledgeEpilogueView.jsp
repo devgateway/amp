@@ -6,15 +6,15 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ page import="org.digijava.ampModule.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />
-<feature:display name="Pledge Attached Files" ampModule="Pledges">
+<feature:display name="Pledge Attached Files" module="Pledges">
 	<aim:renderFormSubsection title="Pledge Documents">
 		<jsp:include page="pledgeDocumentsView.jsp"></jsp:include>
 	</aim:renderFormSubsection>
 </feature:display>
-<feature:display name="Pledge Additional Information" ampModule="Pledges">
+<feature:display name="Pledge Additional Information" module="Pledges">
 <c:if test="${not empty pledgeForm.additionalInformation}">
 		<aim:renderFormSubsection title="Additional Information">
 			<div class="view-textarea" style="width: 80%; margin-left: 7%">

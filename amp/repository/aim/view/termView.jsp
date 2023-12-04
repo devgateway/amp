@@ -17,7 +17,7 @@
 		<td align="left" height="21" width="89" >
 		<bean:write name="termsType"/>
 		</td>
-		<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.ampModule.aim.helper.AmpFund">
+		<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
 		
 				<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 								

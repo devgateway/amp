@@ -11,7 +11,7 @@
 			<lang delimiter=";" type="postgres">
 			INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'Import processor endpoint URL', 'http://localhost/integration/import', null, 'URL of import processor', 'general', null);
 
-			INSERT INTO amp_quartz_job_class (jc_id,jc_name, jc_class_fullname) VALUES(nextval('amp_quartz_job_class_seq'),'Import process trigger', 'org.digijava.ampModule.dataExchange.jobs.ImportProcessorCallJob');
+			INSERT INTO amp_quartz_job_class (jc_id,jc_name, jc_class_fullname) VALUES(nextval('amp_quartz_job_class_seq'),'Import process trigger', 'org.digijava.module.dataExchange.jobs.ImportProcessorCallJob');
 			</lang>
 		</script>
 	</apply>

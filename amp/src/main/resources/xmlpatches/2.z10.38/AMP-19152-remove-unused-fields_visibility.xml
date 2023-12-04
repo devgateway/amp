@@ -9,13 +9,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Modalities');
+				DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Modalities');
 				DELETE FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Modalities';
 				
-				DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Type of Cooperation');
+				DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Type of Cooperation');
 				DELETE FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Type of Cooperation';
 				
-				DELETE FROM amp_modules_templates WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Type of Implementation');
+				DELETE FROM amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Type of Implementation');
 				DELETE FROM amp_modules_visibility WHERE name = '/Activity Form/Funding/Type of Implementation';
 				
 				DELETE FROM amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name = 'Type of Cooperation');

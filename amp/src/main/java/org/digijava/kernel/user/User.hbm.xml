@@ -31,7 +31,7 @@
 		<many-to-one name="country" column="COUNTRY_ISO"
 			class="org.digijava.kernel.dbentity.Country" cascade="none" />
 		<many-to-one name="region" column="region_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 		<many-to-one name="photo" column="image_id" class="org.digijava.kernel.entity.Image"
 			cascade="all" />
 		<many-to-one name="organizationType" column="ORGANIZATION_TYPE_ID"
@@ -41,7 +41,7 @@
 			class="org.digijava.kernel.entity.Locale" cascade="none" />
 		<property name="globalAdmin" column="GLOBAL_ADMIN" type="boolean" />
 
-		<many-to-one name="userExtension" column="user_ext_id" class="org.digijava.ampModule.aim.dbentity.AmpUserExtension" cascade="none" />
+		<many-to-one name="userExtension" column="user_ext_id" class="org.digijava.module.aim.dbentity.AmpUserExtension" cascade="none" />
 
 		<set name="interests" cascade="all" lazy="true">
 			<cache usage="read-write" />
@@ -65,7 +65,7 @@
 		<set name="assignedOrgs" table="DG_USER_ORGS" lazy="true" cascade="none">
 		 	<cache usage="read-write" />
  	 	 	<key column="USER_ID" />
- 	        <many-to-many class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" column="ORG_ID"/>
+ 	        <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="ORG_ID"/>
  	 	</set>
 		<property name="pledger" column="PLEDGER" type="boolean" />
 		<property name="pledgeSuperUser"  type="boolean" >

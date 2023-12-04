@@ -7,7 +7,7 @@
 <digi:instance property="translationForm" />
 <logic:present name="translationForm" property="languages">
 <html:select property="referUrl"  onchange="SwithLanguage(this)">
-  <logic:iterate id="languages" name="translationForm" property="languages"  type="org.digijava.ampModule.translation.form.TranslationForm.TranslationInfo">
+  <logic:iterate id="languages" name="translationForm" property="languages"  type="org.digijava.module.translation.form.TranslationForm.TranslationInfo">
     <bean:define id="langReferUrl" name="languages" property="referUrl" type="java.lang.String" />
     <html:option style="background-color: #DCE8ED;" value='<%= langReferUrl %>'><bean:write name="languages" property="langName" /></html:option>
   </logic:iterate>

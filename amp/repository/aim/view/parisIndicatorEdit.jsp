@@ -14,7 +14,7 @@
 
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -32,7 +32,7 @@
 
 			openNewWindow(500, 300);
 
-			<digi:context name="editQuestion" property="context/ampModule/moduleinstance/parisIndicatorManager.do?create=edit" />
+			<digi:context name="editQuestion" property="context/module/moduleinstance/parisIndicatorManager.do?create=edit" />
 
 			document.aimParisIndicatorManagerForm.currUrl.value = "<%= editQuestion %>";
 
@@ -52,7 +52,7 @@
 
 			{
 
-				<digi:context name="deleteQuestion" property="context/ampModule/moduleinstance/parisIndicatorManager.do?create=delete" />
+				<digi:context name="deleteQuestion" property="context/module/moduleinstance/parisIndicatorManager.do?create=delete" />
 
 				document.aimParisIndicatorManagerForm.currUrl.value = "<%= deleteQuestion %>";
 
@@ -72,7 +72,7 @@
 
 			openNewWindow(500, 300);
 
-			<digi:context name="addQuestion" property="context/ampModule/moduleinstance/parisIndicatorManager.do?create=new" />
+			<digi:context name="addQuestion" property="context/module/moduleinstance/parisIndicatorManager.do?create=new" />
 
 			document.aimParisIndicatorManagerForm.currUrl.value = "<%= addQuestion %>";
 
@@ -90,7 +90,7 @@
 
 			
 
-			<digi:context name="editPIInd" property="context/ampModule/moduleinstance/parisIndicatorAdd.do?create=indi" />
+			<digi:context name="editPIInd" property="context/module/moduleinstance/parisIndicatorAdd.do?create=indi" />
 
 			document.aimParisIndicatorManagerForm.currUrl.value = "<%= editPIInd%>";
 
@@ -334,13 +334,13 @@
 
 															class="box-border-nopadding">
 
-																<logic:iterate name="aimParisIndicatorManagerForm" property="formQuestion" id="quest" type="org.digijava.ampModule.aim.dbentity.AmpAhsurveyQuestion">
+																<logic:iterate name="aimParisIndicatorManagerForm" property="formQuestion" id="quest" type="org.digijava.module.aim.dbentity.AmpAhsurveyQuestion">
 
 																		<tr>
 
 																		<td align="left" noWrap>
 
-																			<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>
+																			<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 
 																			<%--<bean:write name="quest" property="questionNumber"/>--%>
 
@@ -424,7 +424,7 @@
 
 											</td>
 
-											<td background="ampModule/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 
 												
 
@@ -450,7 +450,7 @@
 
 											<td>
 
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<digi:link href="/updateRole.do">
 
@@ -470,7 +470,7 @@
 
 											<td class="inside">
 
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<digi:link href="/admin.do">
 

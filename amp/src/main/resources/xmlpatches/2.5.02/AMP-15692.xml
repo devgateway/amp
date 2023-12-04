@@ -5,7 +5,7 @@
     <jira>AMP-15692</jira>
     <keyword>ModuleInstance</keyword>
     <author>vlymanskyi</author>
-    <description>Insert a new record to dg_module_instance for ampModule um:user</description>
+    <description>Insert a new record to dg_module_instance for module um:user</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">

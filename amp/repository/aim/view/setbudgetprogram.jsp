@@ -9,8 +9,8 @@
 
 <digi:instance property="SetBudgetProgramForm" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/calendar.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -22,14 +22,14 @@ function Save() {
         alert("<digi:trn jsFriendly='true'>Please Select Program</digi:trn>!");
         return false;
     }
-    <digi:context name="back" property="context/ampModule/moduleinstance/setbudgetprogram.do" />
+    <digi:context name="back" property="context/module/moduleinstance/setbudgetprogram.do" />
     document.SetBudgetProgramForm.action = "<%= back %>~save=true";
     document.SetBudgetProgramForm.submit();
     closePopup()
 }
 
 function closePopup() {
-  <digi:context name="back" property="context/ampModule/moduleinstance/BudgetManager.do" />
+  <digi:context name="back" property="context/module/moduleinstance/BudgetManager.do" />
   document.SetBudgetProgramForm.action = "<%= back %>";
   document.SetBudgetProgramForm.target = window.opener.name;
   document.SetBudgetProgramForm.submit();

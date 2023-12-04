@@ -12,16 +12,16 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <%@ page import="java.util.*"%>
-<%@ page import="org.digijava.ampModule.aim.dbentity.*"%>
-<%@ page import="org.digijava.ampModule.aim.helper.*"%>
-<%@ page import="org.digijava.ampModule.categorymanager.util.*"%>
-<%@ page import="org.digijava.ampModule.categorymanager.dbentity.*"%>
-<%@ page import="org.digijava.ampModule.gpi.util.*"%>
+<%@ page import="org.digijava.module.aim.dbentity.*"%>
+<%@ page import="org.digijava.module.aim.helper.*"%>
+<%@ page import="org.digijava.module.categorymanager.util.*"%>
+<%@ page import="org.digijava.module.categorymanager.dbentity.*"%>
+<%@ page import="org.digijava.module.gpi.util.*"%>
 
 <!-- BREADCRUMP START -->
 <div class="breadcrump">
@@ -41,14 +41,14 @@
 			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
-			<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
-			<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/gpi/script/gpi_scripts.js"/>"></script>
+			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/gpi/script/gpi_scripts.js"/>"></script>
 			
 			<digi:errors />
 		
 			
 			<c:set var="reportId" value="${ gpiForm.gpiReport.indicatorCode}" />
-			<digi:form action="/gpi.do" type="org.digijava.ampModule.gpi.form.GPIForm" name="gpiForm">
+			<digi:form action="/gpi.do" type="org.digijava.module.gpi.form.GPIForm" name="gpiForm">
 			 
 				<c:choose>
 			    <c:when test="${not empty gpiForm.gpiReport}">  
@@ -85,7 +85,7 @@
 													<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
 														<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;
 														<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer;" title="<digi:trn>Export to PDF</digi:trn>">
-													    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/ampModule/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
+													    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
 													    	<digi:trn>Export to PDF</digi:trn>
 														</a>|&nbsp;
 													    <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
@@ -132,7 +132,7 @@
 							                                                </c:if>
 							                                                <c:if test="${gpiForm.selectedDonorTypes != null}">
 							                                                	<logic:iterate id="idDonorTypes" property="selectedDonorTypes" name="gpiForm">
-							                                                    	<%=org.digijava.ampModule.aim.util.DbUtil.getAmpOrgType(new Long(idDonorTypes.toString()))%>
+							                                                    	<%=org.digijava.module.aim.util.DbUtil.getAmpOrgType(new Long(idDonorTypes.toString()))%>
 							                                                    </logic:iterate>
 							                                                </c:if>
 							                                                
@@ -142,7 +142,7 @@
 							                                                </c:if>
 							                                                <c:if test="${gpiForm.selectedDonors != null}">
 							                                                	<logic:iterate id="idDonors" property="selectedDonors" name="gpiForm">
-							                                                    	<%=org.digijava.ampModule.aim.util.DbUtil.getOrganisation(new Long(idDonors.toString()))%>
+							                                                    	<%=org.digijava.module.aim.util.DbUtil.getOrganisation(new Long(idDonors.toString()))%>
 							                                                    </logic:iterate>
 							                                                </c:if>
 							                                                </li><li><digi:trn key="rep:pop:DonorGroups">Donor Groups</digi:trn>:
@@ -151,7 +151,7 @@
 							                                                </c:if>
 							                                                <c:if test="${gpiForm.selectedDonorGroups != null}">
 							                                                	<logic:iterate id="idDonorsGrp" property="selectedDonorGroups" name="gpiForm">
-							                                                    	<%=org.digijava.ampModule.aim.util.DbUtil.getAmpOrgGroup(new Long(idDonorsGrp.toString()))%>
+							                                                    	<%=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(new Long(idDonorsGrp.toString()))%>
 							                                                    </logic:iterate>
 							                                                </c:if>
 							                                                </li><li><digi:trn>Status</digi:trn>:
@@ -160,7 +160,7 @@
 							                                                </c:if>
 							                                                <c:if test="${gpiForm.selectedStatuses != null}">
 							                                                	<logic:iterate id="idStatus" property="selectedStatuses" name="gpiForm">
-							                                                    	<%=org.digijava.ampModule.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idStatus.toString()))%>
+							                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idStatus.toString()))%>
 							                                                    </logic:iterate>
 							                                                </c:if>
 							                                                </li><li><digi:trn>Financing Instrument</digi:trn>:
@@ -169,7 +169,7 @@
 							                                                </c:if>
 							                                                <c:if test="${gpiForm.selectedFinancingIstruments != null}">
 							                                                	<logic:iterate id="idFunding" property="selectedFinancingIstruments" name="gpiForm">
-							                                                    	<%=org.digijava.ampModule.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>
+							                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>
 							                                                    </logic:iterate>
 							                                                </c:if>                                              
 							                                                </li><li><digi:trn>Sectors</digi:trn>:
@@ -178,7 +178,7 @@
 							                                                </c:if>
 							                                                <c:if test="${gpiForm.selectedSectors != null}">
 							                                                	<logic:iterate id="idSector" property="selectedSectors" name="gpiForm">
-							                                                    	<%=org.digijava.ampModule.aim.util.SectorUtil.getAmpSector(new Long(idSector.toString()))%>
+							                                                    	<%=org.digijava.module.aim.util.SectorUtil.getAmpSector(new Long(idSector.toString()))%>
 							                                                    </logic:iterate>
 							                                                </c:if>  </li></ul>  
 	                                                                         <div style="clear:both;"></div>                                         
@@ -200,7 +200,7 @@
 					                            <logic:notEmpty name="gpiForm" property="availableGPIReports">
 				                                	<ul class="yui-nav" id="MyTabs">
 				                                    	<logic:iterate id="element" name="gpiForm" property="availableGPIReports" indexId="index">
-				                                    	<feature:display name="GPI 2014 - Indicator ${element.indicatorCode}" ampModule="GPI 2014">
+				                                    	<feature:display name="GPI 2014 - Indicator ${element.indicatorCode}" module="GPI 2014">
 				                                    	<%String selected = ""; 
 															String style = "background: none; background-color: #E0E0E0;";
 															String aStyle = "color: #376091;";%>
@@ -238,22 +238,22 @@
 										                  	</table>
 										        
 									                       	<div id="reportContent" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">                                                            
-                                                             <feature:display name="GPI 2014 - Indicator 1" ampModule="GPI 2014">
+                                                             <feature:display name="GPI 2014 - Indicator 1" module="GPI 2014">
 										                    	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="1">
 																	<jsp:include page="gpi_1.jsp"></jsp:include>
 										                       	</logic:equal>
 										                       	</feature:display>
-										                       	<feature:display name="GPI 2014 - Indicator 5a" ampModule="GPI 2014">
+										                       	<feature:display name="GPI 2014 - Indicator 5a" module="GPI 2014">
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5a">
 									                            	<jsp:include page="gpi_5a.jsp"></jsp:include>
 									                           	</logic:equal>
 									                           	</feature:display>
-									                           	<feature:display name="GPI 2014 - Indicator 6" ampModule="GPI 2014">
+									                           	<feature:display name="GPI 2014 - Indicator 6" module="GPI 2014">
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="6">
 									                            	<jsp:include page="gpi_6.jsp"></jsp:include>
 									                           	</logic:equal>
 									                           	</feature:display>
-									                           	<feature:display name="GPI 2014 - Indicator 9b" ampModule="GPI 2014">
+									                           	<feature:display name="GPI 2014 - Indicator 9b" module="GPI 2014">
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9b">
 									                               	<jsp:include page="gpi_9b.jsp"></jsp:include>
 									                           	</logic:equal>

@@ -42,7 +42,7 @@
   </style>
 
 <bean:define id="org" name="selectedOrgForPopup"
-	type="org.digijava.ampModule.aim.helper.OrgProjectId" scope="request" toScope="page" />
+	type="org.digijava.module.aim.helper.OrgProjectId" scope="request" toScope="page" />
 
 <c:if test="${!empty org.organisation.ampOrgId}">
 <div style='position:relative;display:none;' id='org-<bean:write name="org" property="organisation.ampOrgId"/>'> 

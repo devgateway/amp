@@ -46,7 +46,7 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
 
-FROM node as compile-gis-ampModule
+FROM node as compile-gis-module
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/gisModule
 COPY --from=compile-amp-state /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state ../node_modules/amp-state
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../node_modules/amp-translate
@@ -110,7 +110,7 @@ COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/a
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/dist TEMPLATE/ampTemplate/node_modules/amp-filter/dist
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings/dist TEMPLATE/ampTemplate/node_modules/amp-settings/dist
 COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist
-COPY --from=compile-gis-ampModule /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
+COPY --from=compile-gis-module /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
 COPY --from=compile-dashboard /tmp/amp/TEMPLATE/ampTemplate/dashboard/build TEMPLATE/ampTemplate/dashboard/build
 COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
 COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/build

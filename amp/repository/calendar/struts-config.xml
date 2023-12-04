@@ -3,103 +3,103 @@
 
 <struts-config>
   <form-beans>
-    <form-bean name="calendarForm" type="org.digijava.ampModule.calendar.form.CalendarForm" />
-    <form-bean name="calendarItemForm" type="org.digijava.ampModule.calendar.form.CalendarItemForm" />
-    <form-bean name="calendarAdminForm" type="org.digijava.ampModule.calendar.form.CalendarAdminForm" />
-    <form-bean name="calendarViewForm" type="org.digijava.ampModule.calendar.form.CalendarViewForm" />
-    <form-bean name="calendarEventForm" type="org.digijava.ampModule.calendar.form.CalendarEventForm" />
-    <form-bean name="calendarEditActivityForm" type="org.digijava.ampModule.calendar.form.EditActivityForm" />
-    <form-bean name="calendarColorPaleteForm" type="org.digijava.ampModule.calendar.form.ColorPaleteForm" />
+    <form-bean name="calendarForm" type="org.digijava.module.calendar.form.CalendarForm" />
+    <form-bean name="calendarItemForm" type="org.digijava.module.calendar.form.CalendarItemForm" />
+    <form-bean name="calendarAdminForm" type="org.digijava.module.calendar.form.CalendarAdminForm" />
+    <form-bean name="calendarViewForm" type="org.digijava.module.calendar.form.CalendarViewForm" />
+    <form-bean name="calendarEventForm" type="org.digijava.module.calendar.form.CalendarEventForm" />
+    <form-bean name="calendarEditActivityForm" type="org.digijava.module.calendar.form.EditActivityForm" />
+    <form-bean name="calendarColorPaleteForm" type="org.digijava.module.calendar.form.ColorPaleteForm" />
     
   </form-beans>
   <action-mappings>
     <action forward="/calendar/viewEvents.do" path="/calendar/index" />
-    <action name="calendarForm" path="/calendar/renderTeaser" scope="request" type="org.digijava.ampModule.calendar.action.RenderTeaser" />
-    <action name="calendarItemForm" path="/calendar/showCreateCalendarItem" scope="request" type="org.digijava.ampModule.calendar.action.ShowCreateCalendarItem" validate="false">
+    <action name="calendarForm" path="/calendar/renderTeaser" scope="request" type="org.digijava.module.calendar.action.RenderTeaser" />
+    <action name="calendarItemForm" path="/calendar/showCreateCalendarItem" scope="request" type="org.digijava.module.calendar.action.ShowCreateCalendarItem" validate="false">
       <forward name="forward" path="/showLayout.do?layout=createCalendarItem" />
     </action>
-    <action input="/showLayout.do?layout=createCalendarItem" name="calendarItemForm" path="/calendar/createCalendarItem" scope="request" type="org.digijava.ampModule.calendar.action.CreateCalendarItem" validate="true">
+    <action input="/showLayout.do?layout=createCalendarItem" name="calendarItemForm" path="/calendar/createCalendarItem" scope="request" type="org.digijava.module.calendar.action.CreateCalendarItem" validate="true">
       <forward name="forward" path="/" redirect="true" />
     </action>
-    <action name="calendarItemForm" path="/calendar/viewEvents" scope="session" type="org.digijava.ampModule.calendar.action.ViewEvents" validate="false">
+    <action name="calendarItemForm" path="/calendar/viewEvents" scope="session" type="org.digijava.module.calendar.action.ViewEvents" validate="false">
       <forward name="forwardList" path="/calendar/viewListEvents.do" redirect="true" />
       <forward name="forwardMonth" path="/calendar/viewMonthEvents.do" redirect="true" />
       <forward name="forwardYear" path="/calendar/viewYearEvents.do" redirect="true" />
     </action>
-    <action name="calendarEventForm"  path="/calendar/recurringEvent" scope="session" type="org.digijava.ampModule.calendar.action.RecurringEvent" validate="false">
+    <action name="calendarEventForm"  path="/calendar/recurringEvent" scope="session" type="org.digijava.module.calendar.action.RecurringEvent" validate="false">
       <forward name="forward" path="/showLayout.do?layout=recurringEventPopupLayout" />
     </action>
-    <action name="calendarItemForm" path="/calendar/viewListEvents" scope="session" type="org.digijava.ampModule.calendar.action.ViewListEvents" validate="false">
+    <action name="calendarItemForm" path="/calendar/viewListEvents" scope="session" type="org.digijava.module.calendar.action.ViewListEvents" validate="false">
       <forward name="forward" path="/showLayout.do?layout=allEvents_ListView" />
     </action>
-    <action name="calendarItemForm" path="/calendar/viewMonthEvents" scope="session" type="org.digijava.ampModule.calendar.action.ViewMonthEvents" validate="false">
+    <action name="calendarItemForm" path="/calendar/viewMonthEvents" scope="session" type="org.digijava.module.calendar.action.ViewMonthEvents" validate="false">
       <forward name="forward" path="/showLayout.do?layout=allEvents_MonthView" />
     </action>
-    <action name="calendarItemForm" path="/calendar/viewYearEvents" scope="session" type="org.digijava.ampModule.calendar.action.ViewYearEvents" validate="false">
+    <action name="calendarItemForm" path="/calendar/viewYearEvents" scope="session" type="org.digijava.module.calendar.action.ViewYearEvents" validate="false">
       <forward name="forward" path="/showLayout.do?layout=allEvents_YearView" />
     </action>
-    <action name="calendarItemForm" path="/calendar/previewCalendarItem" scope="session" type="org.digijava.ampModule.calendar.action.PreviewCalendarItem" validate="false">
+    <action name="calendarItemForm" path="/calendar/previewCalendarItem" scope="session" type="org.digijava.module.calendar.action.PreviewCalendarItem" validate="false">
       <forward name="forwardCreate" path="/showLayout.do?layout=previewCalendarItem" />
       <forward name="forwardEdit" path="/showLayout.do?layout=previewEditCalendarItem" />
     </action>
-    <action name="calendarItemForm" path="/calendar/showCalendarItemDetails" scope="session" type="org.digijava.ampModule.calendar.action.ShowCalendarItemDetails" validate="false">
+    <action name="calendarItemForm" path="/calendar/showCalendarItemDetails" scope="session" type="org.digijava.module.calendar.action.ShowCalendarItemDetails" validate="false">
       <forward name="forward" path="/showLayout.do?layout=calendarItemDetails" />
     </action>
-    <action input="/showLayout.do?layout=editCalendarItem" name="calendarItemForm" path="/calendar/editCalendarItem" scope="request" type="org.digijava.ampModule.calendar.action.EditCalendarItem" validate="true" />
-    <action name="calendarItemForm" path="/calendar/showEditCalendarItem" scope="session" type="org.digijava.ampModule.calendar.action.ShowEditCalendarItem" validate="false">
+    <action input="/showLayout.do?layout=editCalendarItem" name="calendarItemForm" path="/calendar/editCalendarItem" scope="request" type="org.digijava.module.calendar.action.EditCalendarItem" validate="true" />
+    <action name="calendarItemForm" path="/calendar/showEditCalendarItem" scope="session" type="org.digijava.module.calendar.action.ShowEditCalendarItem" validate="false">
       <forward name="forward" path="/showLayout.do?layout=editCalendarItem" />
     </action>
-    <action name="calendarItemForm" path="/calendar/confirmCalendarItems" scope="session" type="org.digijava.ampModule.calendar.action.ConfirmCalendarItems" validate="false">
+    <action name="calendarItemForm" path="/calendar/confirmCalendarItems" scope="session" type="org.digijava.module.calendar.action.ConfirmCalendarItems" validate="false">
       <forward name="forward" path="/showLayout.do?layout=confirmCalendarItems" />
       <forward name="error" path="/showLayout.do?layout=calendarAdmin" />
     </action>
-    <action name="calendarItemForm" path="/calendar/showCalendarItems" scope="session" type="org.digijava.ampModule.calendar.action.ShowCalendarItems" validate="false">
+    <action name="calendarItemForm" path="/calendar/showCalendarItems" scope="session" type="org.digijava.module.calendar.action.ShowCalendarItems" validate="false">
       <forward name="forward" path="/showLayout.do?layout=calendarAdmin" />
     </action>
-    <action name="calendarItemForm" path="/calendar/updateConfirmCalendarItems" scope="session" type="org.digijava.ampModule.calendar.action.UpdateConfirmCalendarItems" validate="false" />
-    <action name="calendarAdminForm" path="/calendar/showCalendarItemsSettings" scope="session" type="org.digijava.ampModule.calendar.action.ShowCalendarItemsSettings" validate="false">
+    <action name="calendarItemForm" path="/calendar/updateConfirmCalendarItems" scope="session" type="org.digijava.module.calendar.action.UpdateConfirmCalendarItems" validate="false" />
+    <action name="calendarAdminForm" path="/calendar/showCalendarItemsSettings" scope="session" type="org.digijava.module.calendar.action.ShowCalendarItemsSettings" validate="false">
       <forward name="forward" path="/showLayout.do?layout=calendarItemsSettings" />
     </action>
-    <action name="calendarAdminForm" path="/calendar/updateCalendarItemsSettings" scope="session" type="org.digijava.ampModule.calendar.action.UpdateCalendarItemsSettings" validate="false">
+    <action name="calendarAdminForm" path="/calendar/updateCalendarItemsSettings" scope="session" type="org.digijava.module.calendar.action.UpdateCalendarItemsSettings" validate="false">
       <forward name="forward" path="/calendar/viewEvents.do" redirect="true" />
     </action>
-    <action name="calendarViewForm" path="/calendar/showCalendarView" scope="session" type="org.digijava.ampModule.calendar.action.ShowCalendarView" validate="false">
+    <action name="calendarViewForm" path="/calendar/showCalendarView" scope="session" type="org.digijava.module.calendar.action.ShowCalendarView" validate="false">
       <forward name="success" path="/showLayout.do?layout=viewEvents" />
       <forward name="forward" path="/showLayout.do?layout=noEvents" />
        <forward name="print" path="/showLayout.do?layout=printViewPopupLayout" />
     </action>
-    <action name="calendarEventForm" parameter="method" path="/calendar/showCalendarEvent" scope="session" type="org.digijava.ampModule.calendar.action.ShowCalendarEvent" validate="false">
+    <action name="calendarEventForm" parameter="method" path="/calendar/showCalendarEvent" scope="session" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
       <forward name="success" path="/showLayout.do?layout=showAmpEvent" />
       <forward name="preview" path="/showLayout.do?layout=previewAmpEvent" />
       <forward name="forward" path="/calendar/showCalendarView.do" redirect="true"/>
       <forward name="print" path="/showLayout.do?layout=printPreviewPopupLayout" />
     </action>
 	
-    <action input="/calendar/showCalendarEvent.do" name="calendarEventForm" path="/calendar/previewCalendarEvent" scope="session" type="org.digijava.ampModule.calendar.action.PreviewCalendarEvent" validate="true">
+    <action input="/calendar/showCalendarEvent.do" name="calendarEventForm" path="/calendar/previewCalendarEvent" scope="session" type="org.digijava.module.calendar.action.PreviewCalendarEvent" validate="true">
       <forward name="success" path="/showLayout.do?layout=previewAmpEvent" />
       <forward name="failure" path="/calendar/showCalendarEvent.do" />
     </action>
-    <action name="calendarEventForm" parameter="method" path="/calendar/previewCalendarEventDone" scope="session" type="org.digijava.ampModule.calendar.action.PreviewCalendarEventDone" validate="false">
+    <action name="calendarEventForm" parameter="method" path="/calendar/previewCalendarEventDone" scope="session" type="org.digijava.module.calendar.action.PreviewCalendarEventDone" validate="false">
       <forward name="edit" path="/calendar/showCalendarEvent.do" />
       <forward name="save" path="/calendar/showCalendarView.do" redirect="true" />
       <forward name="failure" path="/calendar/showCalendarView.do" />
     </action>
-    <action name="calendarEventForm" path="/calendar/DeleteEvent" scope="session" type="org.digijava.ampModule.calendar.action.DeleteEvent" validate="false">
+    <action name="calendarEventForm" path="/calendar/DeleteEvent" scope="session" type="org.digijava.module.calendar.action.DeleteEvent" validate="false">
       <forward name="success" path="/calendar/showCalendarView.do" redirect="true" />
     </action>   
-    <action name="calendarEventForm" path="/calendar/selectOrganization" scope="session" type="org.digijava.ampModule.calendar.action.SelectOrganization">
+    <action name="calendarEventForm" path="/calendar/selectOrganization" scope="session" type="org.digijava.module.calendar.action.SelectOrganization">
       <forward name="forward" path="/showLayout.do?layout=calendarOrgPopupLayout" />
     </action>
-    <action name="calendarEditActivityForm" path="/calendar/searchOrganisation" scope="session" type="org.digijava.ampModule.calendar.action.SearchOrganisation">
+    <action name="calendarEditActivityForm" path="/calendar/searchOrganisation" scope="session" type="org.digijava.module.calendar.action.SearchOrganisation">
       <forward name="forward" path="/showLayout.do?layout=calendarOrgPopupLayout" />
     </action>
-    <action name="calendarEditActivityForm" path="/calendar/organisationSelected" scope="session" type="org.digijava.ampModule.calendar.action.OrganisationSelected" />
+    <action name="calendarEditActivityForm" path="/calendar/organisationSelected" scope="session" type="org.digijava.module.calendar.action.OrganisationSelected" />
     
-    <action name="calendarColorPaleteForm" path="/calendar/showColorPalete" scope="session" type="org.digijava.ampModule.calendar.action.ShowColorPalete">
+    <action name="calendarColorPaleteForm" path="/calendar/showColorPalete" scope="session" type="org.digijava.module.calendar.action.ShowColorPalete">
       <forward name="forward" path="/showLayout.do?layout=colorPicker" />
     </action>
     
-    <action name="calendarViewForm" path="/calendar/showEvents" scope="request" type="org.digijava.ampModule.calendar.action.ShowEvents" validate="false"/>
+    <action name="calendarViewForm" path="/calendar/showEvents" scope="request" type="org.digijava.module.calendar.action.ShowEvents" validate="false"/>
  
      
   </action-mappings>

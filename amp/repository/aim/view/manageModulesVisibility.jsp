@@ -19,7 +19,7 @@
 	
 	function editTemplate(id) {
     	// if(!onDelete) return false;
-        <digi:context name="url" property="context/ampModule/moduleinstance/visibilityManager.do?edit=true" />
+        <digi:context name="url" property="context/module/moduleinstance/visibilityManager.do?edit=true" />
         document.aimFlagUploaderForm.action = "<%=url%>&templateId="+id;
         document.aimFlagUploaderForm.submit();
 	}
@@ -51,16 +51,16 @@
 	<jsp:useBean id="urlParams10" type="java.util.Map" class="java.util.HashMap"/>
 	<jsp:useBean id="urlParams11" type="java.util.Map" class="java.util.HashMap"/>
 	
-	<logic:iterate name="aimVisibilityManagerForm" property="modules" id="ampModule"
-		type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility">
+	<logic:iterate name="aimVisibilityManagerForm" property="modules" id="module"
+		type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 		<tr bgcolor="#ffffff">
 		<c:set target="${urlParams10}" property="action" value="editModule"/>
-		<c:set target="${urlParams10}" property="moduleId" value="<%=ampModule.getId() %>"/>
+		<c:set target="${urlParams10}" property="moduleId" value="<%=module.getId() %>"/>
 			<c:set var="translation">
 				<digi:trn key="aim:clickToEditModule">Click here to Edit Module</digi:trn>
 			</c:set>	
 			<td width="70%"> <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="${translation}" ><bean:write name="ampModule" property="name"/></digi:link> &nbsp;&nbsp;&nbsp;
+				title="${translation}" ><bean:write name="module" property="name"/></digi:link> &nbsp;&nbsp;&nbsp;
 			</td>
 
 			<td width="30%" align="center">

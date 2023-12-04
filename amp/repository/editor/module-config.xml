@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ampModule-config>
+<module-config>
 	<name>editor</name>
 	<security>
 		<action pattern="/showInEnglish">ADMIN</action>
@@ -15,7 +15,7 @@
 	</security>
 	<!-- editor classes Begin-->
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.ampModule.editor.dbentity.Editor</hibernate-class>
+		<hibernate-class>org.digijava.module.editor.dbentity.Editor</hibernate-class>
 	</hibernate-classes>
 	<!-- editor classes End-->
-</ampModule-config>
+</module-config>

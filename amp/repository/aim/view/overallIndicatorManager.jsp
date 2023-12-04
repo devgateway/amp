@@ -7,14 +7,14 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript">
 	<!--
 		function editPrgIndicator(id)
 		{
 			openNewWindow(650, 500);
-			<digi:context name="indAssign" property="context/ampModule/moduleinstance/addThemeIndicator.do?event=overall"/>
+			<digi:context name="indAssign" property="context/module/moduleinstance/addThemeIndicator.do?event=overall"/>
 			document.aimAllIndicatorForm.action = "<%= indAssign %>&themeId=" + id;
 			document.aimAllIndicatorForm.target = popupPointer.name;
 			document.aimAllIndicatorForm.submit();
@@ -23,7 +23,7 @@
 		function editProjIndicator(projId)
 		{
 			openNewWindow(500, 300);
-			<digi:context name="editIndicator" property="context/ampModule/moduleinstance/editAllIndicator.do?indicator=project"/>
+			<digi:context name="editIndicator" property="context/module/moduleinstance/editAllIndicator.do?indicator=project"/>
 			document.aimAllIndicatorForm.action = "<%= editIndicator %>&indicatorId=" +projId;
 			document.aimAllIndicatorForm.target = popupPointer.name;
 			document.aimAllIndicatorForm.submit();
@@ -31,7 +31,7 @@
 		function assignIndicatorTo(indId)
 		{
 			openNewWindow(850, 150);
-			<digi:context name="assignIndicator" property="context/ampModule/moduleinstance/editAllIndicator.do?indicator=assign"/>
+			<digi:context name="assignIndicator" property="context/module/moduleinstance/editAllIndicator.do?indicator=assign"/>
 			document.aimAllIndicatorForm.action = "<%= assignIndicator %>&indicatorId=" +indId;
 			document.aimAllIndicatorForm.target = popupPointer.name;
 			document.aimAllIndicatorForm.submit();
@@ -54,22 +54,22 @@
 		function unload(){}
 		
 		function showIndicators(prgId){
-			<digi:context name="showIndicator" property="context/ampModule/moduleinstance/overallIndicatorManager.do?indicatorFlag=true"/>
+			<digi:context name="showIndicator" property="context/module/moduleinstance/overallIndicatorManager.do?indicatorFlag=true"/>
 			document.aimAllIndicatorForm.action = "<%= showIndicator%>&flagShow=true"+"&prgId="+prgId;
 			document.aimAllIndicatorForm.submit();
 		}
 		
 		function hideIndicators(){
-			<digi:context name="hideIndicator" property="context/ampModule/moduleinstance/overallIndicatorManager.do?indicatorFlag=false"/>
+			<digi:context name="hideIndicator" property="context/module/moduleinstance/overallIndicatorManager.do?indicatorFlag=false"/>
 			document.aimAllIndicatorForm.action = "<%= hideIndicator%>";
 			document.aimAllIndicatorForm.submit();
 		}
 		
         function setOverImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-righthover1.gif"
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
         }
         function setOutImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif"
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
         }
 	-->
 </script>
@@ -142,10 +142,10 @@
 																		</td>
 																		<td>
 																			<img id="img1" alt=""
-																				src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-right1.gif"
+																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif"
 																				width="20" height="19" />
 																		</td>
-																		<feature:display name="NPD Dashboard" ampModule="National Planning Dashboard">
+																		<feature:display name="NPD Dashboard" module="National Planning Dashboard">
 																		<td noWrap height=17>
 																		<c:set var="ProgramIndicators">
 																				<digi:trn key="aim:viewMultiProgramIndicators">Click here to view Multi Program Indicators</digi:trn>
@@ -164,7 +164,7 @@
 																		</feature:display>
 																		<td>
 																			<img id="img2" alt=""
-																				src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif"
+																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
 																				width="20" height="19" />
 																		</td>
 																		<td noWrap height=17>
@@ -186,7 +186,7 @@
 																		</td>
 																		<td>
 																			<img id="img3" alt=""
-																				src="/TEMPLATE/ampTemplate/ampModule/aim/images/tab-rightselected1.gif"
+																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
 																				width="20" height="19" />
 																		</td>
 																	</tr>
@@ -225,7 +225,7 @@
 															</td>
 														</tr>
 														<logic:notEmpty name="aimAllIndicatorForm" property="prgIndicators">
-															<logic:iterate name="aimAllIndicatorForm"	property="prgIndicators" id="prgIndicators"	type="org.digijava.ampModule.aim.helper.AllThemes">
+															<logic:iterate name="aimAllIndicatorForm"	property="prgIndicators" id="prgIndicators"	type="org.digijava.module.aim.helper.AllThemes">
 														<tr>
 															<td align="left">
 																		<table width="100%" align="right" cellspacing="1" cellpadding="0" bgcolor="#d7eafd" border="0" >
@@ -255,7 +255,7 @@
 																			<tr>
 																				<td colspan=3>
 																						<table align="right" width="99%" cellspacing="1" cellpadding="0" bgcolor="#00FFFF" border="0">
-																							<logic:iterate name="prgIndicators"	property="allPrgIndicators" id="ampPrgIndicator" type="org.digijava.ampModule.aim.helper.AllPrgIndicators">
+																							<logic:iterate name="prgIndicators"	property="allPrgIndicators" id="ampPrgIndicator" type="org.digijava.module.aim.helper.AllPrgIndicators">
 																							<tr bgcolor="#ffffff">
 																								<td width="9">
 																									<img src="../ampTemplate/images/link_out_bot.gif" border="0">
@@ -1021,7 +1021,7 @@
 															property="projIndicators">
 															<logic:iterate name="aimAllIndicatorForm"
 																property="projIndicators" id="projIndicators"
-																type="org.digijava.ampModule.aim.helper.AllActivities">
+																type="org.digijava.module.aim.helper.AllActivities">
 																<tr>
 																	<td align="left">
 																		<img src="../ampTemplate/images/arrow-014E86.gif"
@@ -1039,7 +1039,7 @@
 																				bgcolor="#d7eafd" border="0">
 																				<logic:iterate name="projIndicators"
 																					property="allMEIndicators" id="allMEIndicators"
-																					type="org.digijava.ampModule.aim.helper.AllMEIndicators">
+																					type="org.digijava.module.aim.helper.AllMEIndicators">
 																					<tr bgcolor="#ffffff">
 																						<td width="9">
 																							<c:if

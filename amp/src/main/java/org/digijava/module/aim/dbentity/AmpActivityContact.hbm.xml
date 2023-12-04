@@ -3,7 +3,7 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityContact" table="AMP_ACTIVITY_CONTACT">
+	<class name="org.digijava.module.aim.dbentity.AmpActivityContact" table="AMP_ACTIVITY_CONTACT">
 	<cache usage="read-write" />
   	<id name="id" column="activity_contact_id" type="java.lang.Long">
 		<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -15,9 +15,9 @@
 	<property name="primaryContact" column="is_primary_contact" type="java.lang.Boolean" />
 	
 		
-	<many-to-one name="activity" column="activity_id"	class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" lazy="false"/>
+	<many-to-one name="activity" column="activity_id"	class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" lazy="false"/>
 	
-	<many-to-one name="contact"  column="contact_id"	class="org.digijava.ampModule.aim.dbentity.AmpContact" cascade="none" lazy="false"/>
+	<many-to-one name="contact"  column="contact_id"	class="org.digijava.module.aim.dbentity.AmpContact" cascade="none" lazy="false"/>
 
   </class>
 </hibernate-mapping>

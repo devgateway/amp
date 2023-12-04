@@ -45,7 +45,7 @@
 						</td>
 					</tr>
 					<logic:iterate name="aimSearchSectorForm" property="results" id="results" 
-					type="org.digijava.ampModule.aim.dbentity.AmpSector">
+					type="org.digijava.module.aim.dbentity.AmpSector">
 						<tr>
 							<td>
 								<bean:write name="results" property="sectorCode" />

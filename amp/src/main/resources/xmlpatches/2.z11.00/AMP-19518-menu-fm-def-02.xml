@@ -15,7 +15,7 @@
 				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Home Page');
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), 
 					(SELECT id FROM amp_modules_visibility WHERE name = 'Home Page Menu Entry' 
-					AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW'))); <!-- so far we don't have multiple ampModule with the same name, but checking just in case -->
+					AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW'))); <!-- so far we don't have multiple module with the same name, but checking just in case -->
 				
 				<!-- Public Site -->
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
@@ -56,8 +56,8 @@
 				    <!-- 1.      CLEANUP duplicate 'Donor Profile Report' FM (AMP-22997) -->
                     <!-- change everything to be linked to the latest 'Donor Profile Report' id -->
                 UPDATE amp_modules_templates
-                    SET ampModule = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Donor Profile Report')
-                    WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Donor Profile Report');
+                    SET module = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Donor Profile Report')
+                    WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Donor Profile Report');
                     <!-- delete older entries -->
                 DELETE FROM amp_modules_visibility 
                     WHERE name = 'Donor Profile Report' 
@@ -195,7 +195,7 @@
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Advanced GIS') AND view_type=0;
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), 
-					(SELECT id FROM amp_modules_visibility WHERE name = 'Map Module')); <!-- normally any feature should be considered enabled only if it's ampModule is enabled, however I understand in AMP a feature can be considered enabled even if its ampModule is disabled.....  -->
+					(SELECT id FROM amp_modules_visibility WHERE name = 'Map Module')); <!-- normally any feature should be considered enabled only if it's module is enabled, however I understand in AMP a feature can be considered enabled even if its module is disabled.....  -->
 				INSERT INTO amp_visibility_rule_amp_features_visibility(SELECT currval('amp_visibility_rule_seq'), 
 					(SELECT id FROM amp_features_visibility WHERE name = 'Show map in public view'
 					AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Map Module')));
@@ -210,7 +210,7 @@
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'New GIS') AND view_type=0;
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), 
-					(SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW')); <!-- normally any child ampModule should be considered enabled only if it's parent ampModule is enabled, however I understand in AMP a child ampModule can be considered enabled even if its parent ampModule is disabled.....  -->
+					(SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW')); <!-- normally any child module should be considered enabled only if it's parent module is enabled, however I understand in AMP a child module can be considered enabled even if its parent module is disabled.....  -->
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), 
 					(SELECT id FROM amp_modules_visibility WHERE name = 'Public GIS'
 					AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW')));
@@ -244,8 +244,8 @@
 					   <!-- 1.      CLEANUP duplicate 'Dashboard Generator' FM (AMP-22999)-->
                        <!-- change everything to be linked to the latest 'Dashboard Generator' id -->
                 UPDATE amp_modules_templates
-                    SET ampModule = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Dashboard Generator')
-                    WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Dashboard Generator');
+                    SET module = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Dashboard Generator')
+                    WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Dashboard Generator');
                 UPDATE amp_features_visibility 
                     SET parent = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Dashboard Generator')
                     WHERE parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Dashboard Generator');

@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-<digi:form action="/parisindicator" type="org.digijava.ampModule.parisindicator.form.PIForm" name="parisIndicatorForm">
+<digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
     <table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
         <tr align="center">
@@ -74,7 +74,7 @@
            <%int counter = 0; %>
            <bean:define id="color" value="" type="String"/>
            <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index" 
-            type="org.digijava.ampModule.parisindicator.helper.row.PIReport5aRow">
+            type="org.digijava.module.parisindicator.helper.row.PIReport5aRow">
                <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
                    <%/*counter++;*/counter=1;%>
                </logic:equal>
@@ -137,7 +137,7 @@
 			            </td>
 			        </tr>
 			        <bean:define id="years" value="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}"/>
-			        <bean:define id="miForm" name="parisIndicatorForm" type="org.digijava.ampModule.parisindicator.form.PIForm"/>
+			        <bean:define id="miForm" name="parisIndicatorForm" type="org.digijava.module.parisindicator.form.PIForm"/>
 			        <tr>
 			        <%for(int jj = 0; jj < Integer.valueOf(years).intValue(); jj++) {%>
 			            <td class="inside" style="font-size: 11px; color: #484846;"><strong><%=miForm.getSelectedStartYear()+jj%></strong></td>

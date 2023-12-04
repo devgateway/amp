@@ -342,11 +342,11 @@ public class VisibilityManager extends MultiAction {
         Collection newTemplateModulesList=new ArrayList<>();
         for (Object allAmpModule : allAmpModules) {
 
-            AmpModulesVisibility ampModule = (AmpModulesVisibility) allAmpModule;
-            String existentModule = ampModule.getName().replaceAll(" ", "");
+            AmpModulesVisibility module = (AmpModulesVisibility) allAmpModule;
+            String existentModule = module.getName().replaceAll(" ", "");
             if (request.getParameter("moduleVis:" + existentModule) != null)
                 if (request.getParameter("moduleVis:" + existentModule).compareTo("enable") == 0) {
-                    newTemplateModulesList.add(ampModule);
+                    newTemplateModulesList.add(module);
                 }
         }
         FeaturesUtil.updateModulesTemplate(newTemplateModulesList, templateId, vForm.getTemplateName());

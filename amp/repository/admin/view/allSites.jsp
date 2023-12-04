@@ -13,7 +13,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:allSites">All sites</digi:trn>
@@ -82,16 +82,16 @@
 </div>
 <c:if test="${! allSitesForm.children}">
  <c:if test="${allSitesForm.addSite}">
-  <digi:context name="showSiteLink" property="/ampModule/showAllSites.do"/>
-  <digi:context name="createSite" property="context/ampModule/moduleinstance/showCreateSite.do" />
+  <digi:context name="showSiteLink" property="/module/showAllSites.do"/>
+  <digi:context name="createSite" property="context/module/moduleinstance/showCreateSite.do" />
   <a href="<%= createSite %>?targetAction=<%= showSiteLink %>"><digi:trn key="admin:addSite">Add Site</digi:trn></a>
  </c:if>
 </c:if>
 <c:if test="${allSitesForm.children}">
 <table>
 <tr>
- <digi:context name="showChildLink" property="/ampModule/showAllSites.do"/>
- <digi:context name="createChild" property="context/ampModule/moduleinstance/showCreateSite.do" />
+ <digi:context name="showChildLink" property="/module/showAllSites.do"/>
+ <digi:context name="createChild" property="context/module/moduleinstance/showCreateSite.do" />
  <c:set var="siteId" value="${allSitesForm.selectedSiteId}" scope="page" />
    <td align="left" noWrap class="text"><a href='<%= createChild %>?parentId=<c:out value="${pageScope.siteId}" />&targetAction=<%= showChildLink %>?selectedSiteId=<c:out value="${pageScope.siteId}" />'><digi:trn key="admin:addSite">Add Site</digi:trn></a></td>
 </tr>

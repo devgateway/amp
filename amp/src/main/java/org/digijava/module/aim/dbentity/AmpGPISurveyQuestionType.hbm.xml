@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpGPISurveyQuestionType"
+	<class name="org.digijava.module.aim.dbentity.AmpGPISurveyQuestionType"
 		table="AMP_GPI_SURVEY_QUESTION_TYPE">
 		<cache usage="read-write" />
 		<id name="ampTypeId" column="amp_type_id" type="java.lang.Long">

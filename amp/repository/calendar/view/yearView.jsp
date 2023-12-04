@@ -107,11 +107,11 @@
 											<tr>
 												<td align="center">
 													<digi:link href="/viewYearEvents.do" paramName="calendarItemForm"  paramId="navYear" paramProperty="prevYear">
-													<digi:img border="0" src="ampModule/calendar/images/yarrowl.gif"/></digi:link>
+													<digi:img border="0" src="module/calendar/images/yarrowl.gif"/></digi:link>
 													<span class="bold">
 													<bean:write name="calendarItemForm" property="currentYear"/></span>
 													<digi:link href="/viewYearEvents.do" paramName="calendarItemForm" paramId="navYear" paramProperty="nextYear">
-													<digi:img border="0" src="ampModule/calendar/images/yarrowr.gif"/></digi:link>
+													<digi:img border="0" src="module/calendar/images/yarrowr.gif"/></digi:link>
 												</td>
 											</tr>
 										</table>
@@ -122,7 +122,7 @@
 										<table>
 											<logic:iterate id="monthsList" name="calendarItemForm" property="monthsList" type="java.util.List">
 											<tr>
-												<logic:iterate id="rowMonths" name="monthsList" type="org.digijava.ampModule.um.util.Calendar">
+												<logic:iterate id="rowMonths" name="monthsList" type="org.digijava.module.um.util.Calendar">
 												<td align="left">
 													<logic:equal name="rowMonths" property="today" value="true">
 													<span class="bold">
@@ -160,7 +160,7 @@
 						<td width="70%" valihn="top">
 							<logic:present name="calendarItemForm" property="eventsList">
 							<table border="0" cellpadding="0" cellspacing="0" width="100%">
-								<logic:iterate id="eventsList" name="calendarItemForm" property="eventsList" type="org.digijava.ampModule.calendar.form.CalendarItemForm.Events">
+								<logic:iterate id="eventsList" name="calendarItemForm" property="eventsList" type="org.digijava.module.calendar.form.CalendarItemForm.Events">
 								<tr>
 									<td width="100%">
 										<span class="bold">
@@ -168,7 +168,7 @@
 										<HR>
 									</td>
 								</tr>
-								<logic:iterate id="events" name="eventsList" property="events" type="org.digijava.ampModule.calendar.form.CalendarItemForm.EventInfo">
+								<logic:iterate id="events" name="eventsList" property="events" type="org.digijava.module.calendar.form.CalendarItemForm.EventInfo">
 								<tr>
 									<td width="100%" bgcolor="whitesmoke">
 									<table width="100%">

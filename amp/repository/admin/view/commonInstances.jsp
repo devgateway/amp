@@ -10,12 +10,12 @@
 
 <script>
   function fnOnAdd() {
-      <digi:context name="addCommonInstance" property="context/ampModule/moduleinstance/addCommonInstance.do" />
+      <digi:context name="addCommonInstance" property="context/module/moduleinstance/addCommonInstance.do" />
       document.commonInstancesForm.action = "<%= addCommonInstance%>";
       document.commonInstancesForm.submit();
   }
   function fnOnDelete( index) {
-      <digi:context name="deleteCommonInstance" property="context/ampModule/moduleinstance/deleteCommonInstance.do" />
+      <digi:context name="deleteCommonInstance" property="context/module/moduleinstance/deleteCommonInstance.do" />
       document.commonInstancesForm.action = "<%= deleteCommonInstance%>?index=" + index;
       document.commonInstancesForm.submit();
   }
@@ -23,7 +23,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:commonInstances">COMMON INSTANCES</digi:trn>
@@ -38,16 +38,16 @@
 <digi:instance property="commonInstancesForm" />
 <table border="1" cellspacing="0" cellpadding="3" bordercolor="#E3DDC1" style="border-collapse: collapse;">
 <tr>
-	<td noWrap class="text"><digi:trn key="admin:ampModule">Module</digi:trn></td>
+	<td noWrap class="text"><digi:trn key="admin:module">Module</digi:trn></td>
 	<td noWrap class="text"><digi:trn key="admin:instance">Instance</digi:trn></td>
 	<td noWrap class="text"><digi:trn key="admin:numOfItemsInTeaser">Number of items in teaser</digi:trn></td>
 	<td colspan="3">&nbsp;</td>
 </tr>
-<logic:iterate indexId="index" name="commonInstancesForm" id="commonInstance" property="commonInstances" type="org.digijava.ampModule.admin.form.CommonInstancesForm.CommonInstanceInfo">
+<logic:iterate indexId="index" name="commonInstancesForm" id="commonInstance" property="commonInstances" type="org.digijava.module.admin.form.CommonInstancesForm.CommonInstanceInfo">
 <tr>
 <td>
 	<html:hidden name="commonInstance" property="id" indexed="true"/>
-	<html:select name="commonInstance" property="ampModule" indexed="true">
+	<html:select name="commonInstance" property="module" indexed="true">
 	   <html:options property="modules" />
 	</html:select>
 </td>

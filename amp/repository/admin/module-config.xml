@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ampModule-config>
+<module-config>
 	<name>admin</name>
 	<security login-required="true" default="ADMIN" />
-</ampModule-config>
+</module-config>

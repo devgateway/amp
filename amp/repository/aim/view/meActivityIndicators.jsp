@@ -19,7 +19,7 @@
 	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 
 
@@ -115,7 +115,7 @@ function addIndicators()
 
 var actId = document.aimUpdateIndicatorValuesForm.activityId.value;
 
-<digi:context name="selCreateInd" property="context/ampModule/moduleinstance/selectCreateIndicators.do" />
+<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
 
 document.aimUpdateIndicatorValuesForm.action = "<%=selCreateInd%>?activityId="+actId;
 
@@ -233,7 +233,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 											<tr>
 												<td class="inside">
 													<table border="1" class="inside" width="100%">
-														<logic:iterate name="aimUpdateIndicatorValuesForm" property="indicators" id="indicator" type="org.digijava.ampModule.aim.helper.ActivityIndicator">
+														<logic:iterate name="aimUpdateIndicatorValuesForm" property="indicators" id="indicator" type="org.digijava.module.aim.helper.ActivityIndicator">
 															<tr>
 																<td class="inside" width="9">
 																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

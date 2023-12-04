@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 
 	<digi:form action="/viewNewAdvancedReport.do">
@@ -114,7 +114,7 @@
 	<script language="JavaScript">
 	function submitFilter()
 	{
-		<digi:context name="clearVal" property="context/ampModule/moduleinstance/viewNewAdvancedReport.do" />
+		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
 		
 		url = "<%=clearVal %>?ampReportId=" + document.getElementsByName("aimAdvancedReportForm")[1].createdReportId.value;
 		document.getElementsByName("aimAdvancedReportForm")[1].action = url;
@@ -124,7 +124,7 @@
 
 	function clearFilter()
 	{
-		<digi:context name="clearVal" property="context/ampModule/moduleinstance/viewNewAdvancedReport.do" />
+		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
 		url = "<%=clearVal %>?view=reset&ampReportId=" + document.getElementsByName("aimAdvancedReportForm")[1].createdReportId.value;
 		document.getElementsByName("aimAdvancedReportForm")[1].action = url;
 		document.getElementsByName("aimAdvancedReportForm")[1].target = "_self";
@@ -133,17 +133,17 @@
 
 
 	function popup_pdf() {
-		<digi:context name="pdf" property="context/ampModule/moduleinstance/advancedReportPdf.do?docType=pdf" />
+		<digi:context name="pdf" property="context/module/moduleinstance/advancedReportPdf.do?docType=pdf" />
 		openResizableWindowWithURL(800, 600, "<%= pdf %>", document.getElementsByName('aimAdvancedReportForm')[1]);
 	}
 
 	function popup_xls() {
-		<digi:context name="xls" property="context/ampModule/moduleinstance/advancedReportPdf.do?docType=excel" />
+		<digi:context name="xls" property="context/module/moduleinstance/advancedReportPdf.do?docType=excel" />
 		openResizableWindowWithURL(800, 600, "<%= xls %>", document.getElementsByName('aimAdvancedReportForm')[1]);
 	}
 
 	function popup_csv() {
-		<digi:context name="csv" property="context/ampModule/moduleinstance/advancedReportPdf.do?docType=csv" />
+		<digi:context name="csv" property="context/module/moduleinstance/advancedReportPdf.do?docType=csv" />
 		openResizableWindowWithURL(800, 600, "<%= csv %>", document.getElementsByName('aimAdvancedReportForm')[1]);
 	}
 

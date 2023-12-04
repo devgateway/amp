@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpApplicationSettings"
+	<class name="org.digijava.module.aim.dbentity.AmpApplicationSettings"
 		table="AMP_APPLICATION_SETTINGS">
 		<cache usage="read-write" />
 		<id name="ampAppSettingsId" column="amp_app_settings_id" type="java.lang.Long">
@@ -19,13 +19,13 @@
         <property name="showAllCountries" column="show_all_countries" type="java.lang.Boolean"/>
 		
 		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpReports" cascade="none" />
-		<many-to-one name="team" column="team_id" class="org.digijava.ampModule.aim.dbentity.AmpTeam"
+			class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
+		<many-to-one name="team" column="team_id" class="org.digijava.module.aim.dbentity.AmpTeam"
 			cascade="none" />
 		<many-to-one name="currency" column="currency_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="fiscalCalendar" column="fis_cal_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpFiscalCalendar" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none" />
 
 		<property name="allowAddTeamRes" column="allow_add_team_res" type="java.lang.Integer" />
 		<property name="allowShareTeamRes" column="allow_share_res_globally" type="java.lang.Integer" />

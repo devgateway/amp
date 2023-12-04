@@ -14,7 +14,7 @@
 		function addingIndicators()
 		{
 			openNewWindow(500, 300);
-			<digi:context name="addIndicator" property="context/ampModule/moduleinstance/addIndicator.do" />
+			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do" />
 			document.aimIndicatorForm.action = "<%= addIndicator %>";
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
@@ -96,7 +96,7 @@
 																	</b>
 																</td></tr>
 																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators" 
-																type="org.digijava.ampModule.aim.dbentity.AmpMEIndicators">
+																type="org.digijava.module.aim.dbentity.AmpMEIndicators">
 																	<tr>
 																		<td height=1 colspan="5" bgcolor="#FFFFFF">
 																		</td>

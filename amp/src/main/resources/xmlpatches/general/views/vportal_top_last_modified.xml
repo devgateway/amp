@@ -21,14 +21,14 @@
 			<lang delimiter=";" type="postgres">
 			    DROP VIEW IF EXISTS vportal_top_last_modified;
 				CREATE OR REPLACE VIEW vportal_top_last_modified AS 
-		         SELECT a.amp_activity_id, translate_field('org.digijava.ampModule.aim.dbentity.AmpActivityVersion', 'name', a.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', 'ro') AS name, string_agg(translate_field('org.digijava.ampModule.aim.dbentity.AmpOrganisation', 'name', o.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', 'ro'), ',') AS org_names, to_char(a.modified_date, 'DD-MM-YYYY') AS date_label, 'ro' AS lang, a.modified_date
+		         SELECT a.amp_activity_id, translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', a.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', 'ro') AS name, string_agg(translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', o.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', 'ro'), ',') AS org_names, to_char(a.modified_date, 'DD-MM-YYYY') AS date_label, 'ro' AS lang, a.modified_date
 		           FROM amp_activity_version a
 					JOIN amp_funding f ON f.amp_activity_id = a.amp_activity_id
 					JOIN amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
 		          WHERE a.draft &lt;&gt; true AND (a.approval_status = ANY (ARRAY['started_approved', 'approved'])) AND a.modified_date IS NOT NULL 
 		          GROUP BY a.amp_activity_id, to_char(a.modified_date, 'DD-MM-YYYY'), a.modified_date
 				UNION 
-		         SELECT a.amp_activity_id, translate_field('org.digijava.ampModule.aim.dbentity.AmpActivityVersion', 'name', a.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', 'en') AS name, string_agg(translate_field('org.digijava.ampModule.aim.dbentity.AmpOrganisation', 'name', o.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', 'en'), ',') AS org_names, to_char(a.modified_date, 'DD-MM-YYYY') AS date_label, 'en' AS lang, a.modified_date
+		         SELECT a.amp_activity_id, translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', a.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', 'en') AS name, string_agg(translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', o.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', 'en'), ',') AS org_names, to_char(a.modified_date, 'DD-MM-YYYY') AS date_label, 'en' AS lang, a.modified_date
 		           FROM amp_activity_version a 
 		            JOIN amp_funding f ON f.amp_activity_id = a.amp_activity_id
 		            JOIN amp_organisation o ON f.amp_donor_org_id = o.amp_org_id

@@ -8,14 +8,14 @@
         <script>
             <lang delimiter=";" type="postgres">
             
-            	INSERT INTO amp_modules_templates (template, ampModule)
+            	INSERT INTO amp_modules_templates (template, module)
                 SELECT
 	                (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
-	                (SELECT id AS ampModule FROM amp_modules_visibility WHERE name = '/Activity Form')
+	                (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form')
 	            WHERE NOT EXISTS (
 	                SELECT template FROM amp_modules_templates
 	                WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
-	                AND ampModule = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form')
+	                AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form')
 	            );
 				
             </lang>

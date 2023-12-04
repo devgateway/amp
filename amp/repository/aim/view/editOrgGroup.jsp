@@ -24,7 +24,7 @@
 	}
 
 	function move() {
-		<digi:context name="selectLoc" property="context/ampModule/moduleinstance/orgGroupManager.do" />
+		<digi:context name="selectLoc" property="context/module/moduleinstance/orgGroupManager.do" />
 		url = "<%= selectLoc %>";
 		document.location.href = url;
 	}

@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
 
 <c:set var="transaction" value="Disbursment Orders/Disbursment Orders Table" scope="page"/>
@@ -29,7 +29,7 @@
 	<c:if test="${!empty funding.fundingDetails}">
 		<logic:iterate name="funding" property="fundingDetails"
 			id="fundingDetail"
-			type="org.digijava.ampModule.aim.helper.FundingDetail">
+			type="org.digijava.module.aim.helper.FundingDetail">
 			<logic:equal name="fundingDetail" property="transactionType"
 				value="4">
 				<logic:equal name="fundingDetail" property="adjustmentTypeName.value"

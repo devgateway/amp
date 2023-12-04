@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<ampModule-config>
+<module-config>
 	<name>search</name>
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/search" />
 	</security>
-</ampModule-config>
+</module-config>

@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp"  />
@@ -76,7 +76,7 @@ function addExchangeRate() {
 
 function loadExchangeRate() {
 	openNewWindow(500, 300);
-	<digi:context name="loadExchangeRate" property="context/ampModule/moduleinstance/loadCurrencyRates.do" />
+	<digi:context name="loadExchangeRate" property="context/module/moduleinstance/loadCurrencyRates.do" />
   	document.aimCurrencyRateForm.action = "<%= loadExchangeRate %>";
 	document.aimCurrencyRateForm.target = popupPointer.name;
 	document.aimCurrencyRateForm.submit();
@@ -86,7 +86,7 @@ function updateRates()
 {
 	if(confirm('<digi:trn jsFriendly="true" key="aim:updateCurrencyFromUploadedFile">Do you want to update the Currency rates from the uploaded file ?</digi:trn>'))
 	{
-		<digi:context name="updateRates" property="context/ampModule/moduleinstance/saveCurrencyRate.do~doAction=file"/>
+		<digi:context name="updateRates" property="context/module/moduleinstance/saveCurrencyRate.do~doAction=file"/>
 		document.aimCurrencyRateForm.action = "<%= updateRates %>";
 		document.aimCurrencyRateForm.target = "_self";
 		document.aimCurrencyRateForm.submit();
@@ -116,7 +116,7 @@ function deleteRates() {
 	var flag = validate();
 	if(flag){
 		document.aimCurrencyRateForm.doAction.value = "delete";
-		<digi:context name="showCurrRates" property="context/ampModule/moduleinstance/showCurrencyRates.do" />
+		<digi:context name="showCurrRates" property="context/module/moduleinstance/showCurrencyRates.do" />
 		document.aimCurrencyRateForm.action = "<%=showCurrRates %>";
 		document.aimCurrencyRateForm.target = "_self";
 		document.aimCurrencyRateForm.submit();
@@ -135,7 +135,7 @@ function selectFile() {
 }
 
 function fnSubmit() {
-	<digi:context name="showCurrRates" property="context/ampModule/moduleinstance/showCurrencyRates.do" />
+	<digi:context name="showCurrRates" property="context/module/moduleinstance/showCurrencyRates.do" />
 	document.aimCurrencyRateForm.action = "<%=showCurrRates %>";
 	document.aimCurrencyRateForm.target = "_self";
 	document.aimCurrencyRateForm.submit();
@@ -261,8 +261,8 @@ function fnSubmit() {
                                         <td vAlign="middle" align="center">
 										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file needs to be CSV type and should have 3 columns: the first column contains currency codes 
 										  (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).
-										  </digi:trn><digi:trn>Default Decimal Separator is:</digi:trn> <%=org.digijava.ampModule.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.ampModule.aim.helper.GlobalSettingsConstants.DECIMAL_SEPARATOR) %>
-										 &nbsp;&nbsp;<digi:trn>and Default Exchange Rate Separator is:</digi:trn> <%=org.digijava.ampModule.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.ampModule.aim.helper.GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR)%>"/></td>
+										  </digi:trn><digi:trn>Default Decimal Separator is:</digi:trn> <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.DECIMAL_SEPARATOR) %>
+										 &nbsp;&nbsp;<digi:trn>and Default Exchange Rate Separator is:</digi:trn> <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR)%>"/></td>
                                         
                                         <td vAlign="left" align="left">
                                         <!-- <html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/> -->
@@ -482,7 +482,7 @@ function fnSubmit() {
 															<td bgColor=#c9c9c7 class=box-title>
 															<b style="padding-left:5px;"><digi:trn
 																key="aim:otherLinks">Other links</digi:trn></b></td>
-															<td background="ampModule/aim/images/corner-r.gif" height="17" width=17></td>
+															<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 														</tr>
 													</table>
 													</td>
@@ -491,7 +491,7 @@ function fnSubmit() {
 													<td bgColor="#ffffff" class="box-border">
 													<table cellPadding=5 cellspacing="1" width="100%" style="font-size:12px;" class="inside">
 														<tr>
-															<td class="inside"><digi:img src="ampModule/aim/images/arrow-014E86.gif"
+															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -501,7 +501,7 @@ function fnSubmit() {
 														</tr>
 														<tr>
 															<td class="inside">
-																	<digi:img src="ampModule/aim/images/arrow-014E86.gif"
+																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to the Currency Manager</digi:trn>
@@ -513,7 +513,7 @@ function fnSubmit() {
 														</tr>
 														<tr>
 															<td class="inside">
-																	<digi:img src="ampModule/aim/images/arrow-014E86.gif"
+																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
@@ -540,7 +540,7 @@ function fnSubmit() {
 </table>
 </digi:form>
 
-<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
    	
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');

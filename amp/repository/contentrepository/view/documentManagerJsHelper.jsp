@@ -1,11 +1,11 @@
-<%@page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
-<%@page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/resourcesettings" prefix="rs" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <!-- Individual YUI CSS files -->
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
@@ -114,11 +114,11 @@ font-weight : bold;
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/contentrepository/scripts/ActionsMenu.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/contentrepository/scripts/documentPanelHelper.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/contentrepository/scripts/DynamicList.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ActionsMenu.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/documentPanelHelper.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
@@ -137,7 +137,7 @@ font-weight : bold;
 	var show_category = false;
 	var show_organisations = false;
 	
-	<feature:display name="Resource Columns" ampModule="Content Repository">
+	<feature:display name="Resource Columns" module="Content Repository">
 	
 	<field:display name="Resource Index" feature="Resource Columns">
 		show_index = true;
@@ -800,7 +800,7 @@ function WindowControllerObject(bodyContainerEl) {
 				this.lastPopulateObject	= obj;
 				var parameters	= "";
 				if ( obj.publicDocs != null ) {
-						var publicDocs	= "<%= org.digijava.ampModule.contentrepository.helper.CrConstants.GET_PUBLIC_DOCUMENTS %>";
+						var publicDocs	= "<%= org.digijava.module.contentrepository.helper.CrConstants.GET_PUBLIC_DOCUMENTS %>";
 						parameters	+= "&"+publicDocs+"="+obj.publicDocs;
 				}
 				if (obj.rights != null) {
@@ -983,7 +983,7 @@ function doSelectedDocuments(action,removeFrom) {
 	selectedDocs			= getAllSelectedDocuments();
 	}
 	
-	var updatedDocsAction	= '<%=org.digijava.ampModule.contentrepository.helper.CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION%>';
+	var updatedDocsAction	= '<%=org.digijava.module.contentrepository.helper.CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION%>';
 	if (selectedDocs.length == 0) {
 		alert("${translation_no_doc_selected}");
 		return;
@@ -1707,7 +1707,7 @@ function templateNameSelected(){
 	var templateId=document.getElementById('selTempName').value;
 	var myDiv=document.getElementById('tempLoadingDiv');
 	myDiv.style.display="block";
-	<digi:context name="loadTemp" property="context/ampModule/moduleinstance/docFromTemplate.do?actType=getTemplate"/>;
+	<digi:context name="loadTemp" property="context/module/moduleinstance/docFromTemplate.do?actType=getTemplate"/>;
     var url="${loadTemp}&templateId="+templateId; //+"&documentName="+docName
     YAHOOAmp.util.Connect.asyncRequest("POST", url, getCallbackForTemplates(templatesPanel));
 }

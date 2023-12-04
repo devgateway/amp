@@ -109,7 +109,7 @@
 							<!-- Documents -->
 							<c:if test="${subtabId == 0 }">
 								<logic:notEmpty name="aimRelatedLinksForm" property="relatedLinks">
-									<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" type="org.digijava.ampModule.aim.helper.Documents">
+									<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" type="org.digijava.module.aim.helper.Documents">
 										<c:if test="${relatedLink.isFile == true}">
 											<tr>	
 												<td class="inside">
@@ -187,7 +187,7 @@
 							
 							<c:if test="${subtabId == 1 }">
 								<logic:notEmpty name="aimRelatedLinksForm" property="relatedLinks">
-									<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" type="org.digijava.ampModule.aim.helper.Documents">
+									<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" type="org.digijava.module.aim.helper.Documents">
 										<c:if test="${relatedLink.isFile == false}">
 											<tr>
 						                      	<td class="inside">

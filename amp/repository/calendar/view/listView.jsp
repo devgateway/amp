@@ -94,14 +94,14 @@
 				<table border="0" cellpadding="0" cellspacing="0" width="28%" height="35">
 					<tr>
 						<td width="9%" height="35">
-							<digi:img src="ampModule/calendar/images/arrowl.gif"/>
+							<digi:img src="module/calendar/images/arrowl.gif"/>
 						</td>
 						<td width="83%" height="35" class="tlt">
 							<p align="center"><b><font size="4">
 							<bean:write name="calendarItemForm" property="infoText"/></font></b>
 						</td>
 						<td width="8%" height="35">
-							<digi:img src="ampModule/calendar/images/arrowr.gif"/>
+							<digi:img src="module/calendar/images/arrowr.gif"/>
 						</td>
 					</tr>
 				</table>
@@ -114,13 +114,13 @@
 						<td width="100%" height="150" valign="top">
 							<logic:present name="calendarItemForm" property="eventsList">
 							<table border="0" cellpadding="0" cellspacing="0" width="100%">
-								<logic:iterate id="eventsList" name="calendarItemForm" property="eventsList" type="org.digijava.ampModule.calendar.form.CalendarItemForm.Events">
+								<logic:iterate id="eventsList" name="calendarItemForm" property="eventsList" type="org.digijava.module.calendar.form.CalendarItemForm.Events">
 								<tr>
 									<td width="100%" bgcolor="#CACACA">
 										<bean:write name="eventsList" property="day"/>
 									</td>
 								</tr>
-								<logic:iterate id="events" name="eventsList" property="events" type="org.digijava.ampModule.calendar.form.CalendarItemForm.EventInfo">
+								<logic:iterate id="events" name="eventsList" property="events" type="org.digijava.module.calendar.form.CalendarItemForm.EventInfo">
 								<tr>
 									<td width="100%" bgcolor="whitesmoke" height="1">
 									 <table width="100%">

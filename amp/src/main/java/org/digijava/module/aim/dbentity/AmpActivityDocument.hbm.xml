@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityDocument"
+	<class name="org.digijava.module.aim.dbentity.AmpActivityDocument"
 		table="AMP_ACTIVITY_DOCUMENT">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -12,6 +12,6 @@
 		<property name="uuid" column="uuid" type="java.lang.String" />
 		<property name="documentType" column="document_type" type="java.lang.String" />
 		<many-to-one name="ampActivity" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 	</class>
 </hibernate-mapping>

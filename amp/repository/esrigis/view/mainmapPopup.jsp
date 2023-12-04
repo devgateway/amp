@@ -1,4 +1,4 @@
-<%@page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">

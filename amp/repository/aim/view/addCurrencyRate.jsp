@@ -7,17 +7,17 @@
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
-<%@page import="org.digijava.ampModule.aim.helper.FormatHelper"%>
-<%@page import="org.digijava.ampModule.aim.util.CurrencyUtil"%>
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.util.CurrencyUtil"%>
 
 
-<%@page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
-<%@page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%><script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/addActivity.js"/>"></script>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
@@ -197,7 +197,7 @@
 			};
 				
 			var postString		= generateFields(2);
-			<digi:context name="addExchangeRate" property="context/ampModule/moduleinstance/saveCurrencyRate.do" />
+			<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 			var url = "<%=addExchangeRate %>";
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
 		}
@@ -209,7 +209,7 @@
 		var postString		= "reset=true&"+generateFields(1);
 		//alert(postString);
 		ready=true;
-		<digi:context name="addExchangeRate" property="context/ampModule/moduleinstance/showAddExchangeRates.do" />
+		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
@@ -218,7 +218,7 @@
 		var postString="doAction=showRates&updateCRateCode="+code+"&updateCRateDate="+date+"&reset=false";
 		//alert(postString);
 		ready=true;
-		<digi:context name="addExchangeRate" property="context/ampModule/moduleinstance/showAddExchangeRates.do" />
+		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
@@ -285,7 +285,7 @@ function saveRate() {
 	if (valid == true) {
 		var postString		= generateFields(2,'validateRateExistance');
 		
-		<digi:context name="addExchangeRate" property="context/ampModule/moduleinstance/saveCurrencyRate.do" />
+		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
 	}

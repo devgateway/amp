@@ -5,11 +5,11 @@
   
   <action-mappings>
  	<action path="/xmlpatcher/xmlpatchesjson" scope="request"
-			type="org.digijava.ampModule.xmlpatcher.action.XmlPatchesJSON">
+			type="org.digijava.module.xmlpatcher.action.XmlPatchesJSON">
 	</action>
 	
 	 	<action path="/xmlpatcher/xmlpatches" scope="request"
-			type="org.digijava.ampModule.xmlpatcher.action.XmlPatchesAction">
+			type="org.digijava.module.xmlpatcher.action.XmlPatchesAction">
 			<forward name="listPatches" path="/showLayout.do?layout=xmlPatcherListPatches"/>
 			<forward name="listPatchLogs" path="/repository/xmlpatcher/view/listPatchLogs.jsp"/>
 			<forward name="patchContents" path="/repository/xmlpatcher/view/patchContents.jsp"/>

@@ -6,7 +6,7 @@
   <action-mappings>
   <action path="/digifeed/export"	
 			scope="request"
-			type="org.digijava.ampModule.digifeed.action.DigifeedExportAction">
+			type="org.digijava.module.digifeed.action.DigifeedExportAction">
 	</action>
 
   </action-mappings>

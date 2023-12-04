@@ -64,35 +64,35 @@ function selectLocation(){
 
 function admLevel0Changed() {
 		  document.aimThemeForm.fill.value = "admLevel1Location";
-		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 
 	function admLevel1Changed() {
 	     document.aimThemeForm.fill.value = "admLevel2Location";
-		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 
 	function admLevel2Changed() {
 		  document.aimThemeForm.fill.value = "admLevel3Location";
-		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 
 	function admLevel3Changed() {
 		  document.aimThemeForm.fill.value = "admLevel3Locationselected";
-		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 	
 	function levelChanged() {
 		 
-		  <digi:context name="selectLoc" property="context/ampModule/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 	 	  
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();

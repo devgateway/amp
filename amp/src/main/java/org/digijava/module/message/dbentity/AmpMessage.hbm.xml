@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.message.dbentity.AmpMessage" table="AMP_MESSAGE"
+	<class name="org.digijava.module.message.dbentity.AmpMessage" table="AMP_MESSAGE"
 		discriminator-value="m">
 
 		<id name="id" column="amp_message_Id" type="java.lang.Long">
@@ -22,15 +22,15 @@
 		<property name="emailable" column="is_emailable" type="java.lang.Boolean" />
 		<property name="draft" column="is_draft" type="java.lang.Boolean" />
 
-		<many-to-one name="forwardedMessage" column="forwarded_message_Id"	class="org.digijava.ampModule.message.dbentity.AmpMessage" cascade="none" />
+		<many-to-one name="forwardedMessage" column="forwarded_message_Id"	class="org.digijava.module.message.dbentity.AmpMessage" cascade="none" />
 		
-		<many-to-one name="repliedMessage" column="replied_message_Id"	class="org.digijava.ampModule.message.dbentity.AmpMessage" cascade="none" />
+		<many-to-one name="repliedMessage" column="replied_message_Id"	class="org.digijava.module.message.dbentity.AmpMessage" cascade="none" />
 			
-		<many-to-one name="attachedDocs" class="org.digijava.ampModule.sdm.dbentity.Sdm" cascade="delete" column="attached_doc_id" unique="true"/>
+		<many-to-one name="attachedDocs" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="attached_doc_id" unique="true"/>
 		
         <set name="messageReceivers" inverse="true" cascade="all-delete-orphan" lazy="false">
             <key column="message_id" />
-            <one-to-many class="org.digijava.ampModule.message.dbentity.AmpMessageReceiver" />
+            <one-to-many class="org.digijava.module.message.dbentity.AmpMessageReceiver" />
         </set>
 
 		<property name="externalReceivers" column="external_receivers" type="text" />
@@ -38,15 +38,15 @@
 		<property name="objectURL" column="object_URL" type="java.lang.String" />
 		<property name="relatedActivityId" column="related_act_id" type="java.lang.Long" />
 
-		<subclass name="org.digijava.ampModule.message.dbentity.AmpAlert" discriminator-value="a" />
+		<subclass name="org.digijava.module.message.dbentity.AmpAlert" discriminator-value="a" />
 
-		<subclass name="org.digijava.ampModule.message.dbentity.CalendarEvent" discriminator-value="c" />
+		<subclass name="org.digijava.module.message.dbentity.CalendarEvent" discriminator-value="c" />
 
-		<subclass name="org.digijava.ampModule.message.dbentity.Approval" discriminator-value="p" />
+		<subclass name="org.digijava.module.message.dbentity.Approval" discriminator-value="p" />
 
-		<subclass name="org.digijava.ampModule.message.dbentity.UserMessage" discriminator-value="u" />
+		<subclass name="org.digijava.module.message.dbentity.UserMessage" discriminator-value="u" />
 
-		<subclass name="org.digijava.ampModule.message.dbentity.TemplateAlert"	discriminator-value="t">
+		<subclass name="org.digijava.module.message.dbentity.TemplateAlert"	discriminator-value="t">
 			<property name="relatedTriggerName" column="related_trigger_name"
 				type="java.lang.String" />
 		</subclass>

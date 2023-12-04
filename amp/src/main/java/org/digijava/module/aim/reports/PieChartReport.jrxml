@@ -15,7 +15,7 @@
 		 topMargin="50"
 		 bottomMargin="50"
 		 whenNoDataType="NoPages"
-		 scriptletClass="org.digijava.ampModule.aim.helper.JFreeChartScriptlet"
+		 scriptletClass="org.digijava.module.aim.helper.JFreeChartScriptlet"
 		 isTitleNewPage="false"
 		 isSummaryNewPage="false">
 	<property name="ireport.scriptlethandling" value="2" />

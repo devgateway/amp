@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpFeature" table="AMP_FEATURE">
+	<class name="org.digijava.module.aim.dbentity.AmpFeature" table="AMP_FEATURE">
 		<cache usage="read-write" />
 		<id name="ampFeatureId" column="amp_feature_id" type="java.lang.Integer">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -17,7 +17,7 @@
 		<set name="templates" table="amp_template_features" inverse="true">
 			<key column="featureId" />
 			<many-to-many column="templateId"
-				class="org.digijava.ampModule.aim.dbentity.FeatureTemplates" />
+				class="org.digijava.module.aim.dbentity.FeatureTemplates" />
 		</set>
 	</class>
 </hibernate-mapping>

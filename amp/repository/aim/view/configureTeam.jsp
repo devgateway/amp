@@ -98,7 +98,7 @@
 
 														<logic:notEmpty name="aimTeamPagesForm" property="filters">
 															<logic:iterate name="aimTeamPagesForm" id="filters" property="filters"
-															type="org.digijava.ampModule.aim.dbentity.AmpFilters">
+															type="org.digijava.module.aim.dbentity.AmpFilters">
 															<tr bgColor=#f4f4f2>
 																<td width="3%">
 																	<html:multibox property="selFilters">

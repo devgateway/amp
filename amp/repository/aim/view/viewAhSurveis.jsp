@@ -126,7 +126,7 @@
 																	<digi:trn>Other links</digi:trn>
 																</b>
 															</td>
-															<td background="ampModule/aim/images/corner-r.gif"
+															<td background="module/aim/images/corner-r.gif"
 																height="17" width="17">&nbsp;</td>
 														</tr>
 													</table></td>
@@ -137,8 +137,8 @@
 														
 														<tr>
 															<td class="inside"><digi:img
-																	src="ampModule/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link ampModule="aim" href="/admin.do">
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim" href="/admin.do">
 																	<digi:trn key="aim:AmpAdminHome">
 																Admin Home
 																</digi:trn>

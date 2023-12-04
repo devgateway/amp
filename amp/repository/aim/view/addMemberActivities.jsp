@@ -52,7 +52,7 @@
 	}
 
 	function sortMe(val) {
-		<digi:context name="sel" property="context/ampModule/moduleinstance/updateMemberActivity.do" />
+		<digi:context name="sel" property="context/module/moduleinstance/updateMemberActivity.do" />
 			url = "<%= sel %>" ;
 			
 			var sval = document.aimMemberActivitiesForm.sort.value;
@@ -198,7 +198,7 @@
 															Activity List Manager
 															</digi:trn>
 														</td>
-														<td background="ampModule/aim/images/corner-r.gif" height="17" width=17>
+														<td background="module/aim/images/corner-r.gif" height="17" width=17>
 														</td>
 													</tr>
 												</table>

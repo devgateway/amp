@@ -9,7 +9,7 @@
 <script type="javascript">
 function login()
 {
-	<digi:context name="addUrl" property="context/ampModule/moduleinstance/login.do" />
+	<digi:context name="addUrl" property="context/module/moduleinstance/login.do" />
     document.aimKnowledgeForm.action = "<%=addUrl%>";
     document.aimKnowledgeForm.submit();
 }
@@ -19,7 +19,7 @@ function login()
 <digi:errors/>
 <digi:instance property="aimRelatedLinksForm" />
 <logic:equal name="aimRelatedLinksForm" property="validLogin" value="false">
-<digi:form action="/login.do" name="aimRelatedLinksForm" type="org.digijava.ampModule.aim.form.RelatedLinksForm"
+<digi:form action="/login.do" name="aimRelatedLinksForm" type="org.digijava.module.aim.form.RelatedLinksForm"
 method="post">
 <h3 align="center"> Invalid Login. Please Login Again. </h3><p align="center"><html:submit styleClass="dr-menu" value="Log In" onclick="login()" /></p>
 </digi:form>

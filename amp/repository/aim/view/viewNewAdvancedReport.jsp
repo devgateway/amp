@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ page import="org.dgfoundation.amp.ar.ReportContextData" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!-- Dependencies -->
 
@@ -22,7 +22,7 @@
 
 <bean:define id="generatedReport" name="reportCD" property="generatedReport"
              type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
-<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.ampModule.aim.dbentity.AmpReports"
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports"
              toScope="page"/>
 
 
@@ -115,9 +115,9 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript"
-        src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+        src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 <script type="text/javascript">
     /*---snippet rafy---*/
@@ -180,7 +180,7 @@
     }
 
 </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/util.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 
 <div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto; display: none;">
     <jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp"/>

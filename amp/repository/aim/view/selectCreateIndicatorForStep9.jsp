@@ -10,7 +10,7 @@
     <!--
     function searchIndicators()
     {	
-                        <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchIndicators.do" />
+                        <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do" />
                                 document.aimIndicatorForm.action = "<%=searchInd%>?isForStep9=true";
                                 document.aimIndicatorForm.target = "_self";
                                 document.aimIndicatorForm.submit();
@@ -18,7 +18,7 @@
                             }
         
                             function gotoCreateIndPage() {
-                <digi:context name="addIndPage" property="context/ampModule/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
+                <digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
                         document.aimIndicatorForm.action = "<%=addIndPage%>";		
                         document.aimIndicatorForm.submit();
                     }
@@ -32,7 +32,7 @@
                             emptychk = doesItHaveValue2()
                         if(emptychk == true)
                         {
-                        <digi:context name="addInd" property="context/ampModule/moduleinstance/addIndicatorsTL.do"/>
+                        <digi:context name="addInd" property="context/module/moduleinstance/addIndicatorsTL.do"/>
                                     document.aimIndicatorForm.action = "<%=addInd%>~forStep9=true";
                                     document.aimIndicatorForm.target = window.opener.name;
                                     document.aimIndicatorForm.submit();
@@ -46,7 +46,7 @@
                             {
                                 var valid = validateForm();
                                 if (valid == true) {
-                        <digi:context name="addNewInd" property="context/ampModule/moduleinstance/addNewIndicatorTL.do"/>
+                        <digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
                                     document.aimIndicatorForm.action = "<%=addNewInd%>";
                                     document.aimIndicatorForm.target = "_self";
                                     document.aimIndicatorForm.submit();				  
@@ -105,7 +105,7 @@
         
         
                             function clearform() {
-                <digi:context name="searchInd" property="context/ampModule/moduleinstance/searchIndicators.do?action=clear"/>
+                <digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?action=clear"/>
                         document.aimIndicatorForm.action = "<%= searchInd%>";
                         document.aimIndicatorForm.submit();
                     }

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.aim.dbentity.AmpFunding" table="AMP_FUNDING">
+	<class name="org.digijava.module.aim.dbentity.AmpFunding" table="AMP_FUNDING">
 		<cache usage="read-write" />
 		<id name="ampFundingId" column="amp_funding_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -58,48 +58,48 @@
 		<property name="projectProblems" column="project_problems" type="java.lang.String" />
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 			
 		<many-to-one name="sourceRole" column="source_role_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpRole" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />
 
-		<!--  <many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.ampModule.aim.dbentity.AmpModality" cascade="none"/>	 -->
+		<!--  <many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>	 -->
 
 		<set name="fundingDetails" cascade="all-delete-orphan" table="AMP_FUNDING_DETAIL" order-by="transactionDate asc">
 			<cache usage="read-write" />
 			<key column="amp_funding_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpFundingDetail" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingDetail" />
 		</set>
 
-		<many-to-one cascade="delete" name="ampActivityId" column="amp_activity_id" class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
+		<many-to-one cascade="delete" name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
 			
 		<many-to-one name="typeOfAssistance" column="type_of_assistance_category_va"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="financingInstrument" column="financing_instr_category_value"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="fundingStatus" column="funding_status_category_va"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="modeOfPayment" column="mode_of_payment_category_va"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="concessionalityLevel" column="concessionality_level_va"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="vulnerableGroup" column="vulnerable_group_va"
-					 class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<!--
 			<set name="survey" cascade="save-update" table="amp_ahsurvey" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_funding_id"/>
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpAhsurvey"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey"/>
 			</set>
 		-->
 		<set name="mtefProjections" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_funding_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpFundingMTEFProjection" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingMTEFProjection" />
 		</set>
 		
 		<many-to-one name="agreement" column="agreement"
-			class="org.digijava.ampModule.aim.dbentity.AmpAgreement" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpAgreement" cascade="none" />
 
 		<property name="effectiveFundingDate" column="effective_funding_date" type="java.util.Date" />
 		<property name="fundingClosingDate" column="funding_closing_date" type="java.util.Date" />

@@ -25,11 +25,11 @@
           	<c:if test="${posVal.dbId==null}">
           		<c:set var="textReadonly" value="false" />
           	</c:if>
-          	<c:if test="${manageFieldForm.selectedFieldType=='org.digijava.ampModule.contentrepository.dbentity.template.StaticTextField'}">
+          	<c:if test="${manageFieldForm.selectedFieldType=='org.digijava.module.contentrepository.dbentity.template.StaticTextField'}">
           		<c:set var="isTextArea">true</c:set>
           		<html:textarea name="posVal" property="preDefinedValue" styleId="val_${index}" readonly="${textReadonly}" rows="5" cols="45" />
           	</c:if>
-            <c:if test="${manageFieldForm.selectedFieldType!='org.digijava.ampModule.contentrepository.dbentity.template.StaticTextField'}">
+            <c:if test="${manageFieldForm.selectedFieldType!='org.digijava.module.contentrepository.dbentity.template.StaticTextField'}">
             	<c:set var="isTextArea">false</c:set>
           		<html:text name="posVal" property="preDefinedValue" styleId="val_${index}" readonly="${textReadonly}" size="45"/>
           	</c:if>            

@@ -26,10 +26,10 @@
 				DELETE FROM amp_visibility_rule_amp_modules_visibility
 					WHERE rule_id IN (SELECT rule_id from amp_menu_entry_view where menu_id in (SELECT id from amp_menu_entry where name = 'AutoGeocoder'));
 
-				DELETE FROM amp_modules_templates WHERE ampModule in (SELECT id FROM amp_modules_visibility WHERE name = 'AMP GeoCoder');
+				DELETE FROM amp_modules_templates WHERE module in (SELECT id FROM amp_modules_visibility WHERE name = 'AMP GeoCoder');
 				DELETE FROM amp_modules_visibility WHERE name = 'AMP GeoCoder';
 
-				DELETE FROM amp_modules_templates WHERE ampModule in (select id FROM amp_modules_visibility WHERE name = 'AutoGeocoder');
+				DELETE FROM amp_modules_templates WHERE module in (select id FROM amp_modules_visibility WHERE name = 'AutoGeocoder');
 				DELETE FROM amp_modules_visibility WHERE name = 'AutoGeocoder';
 
 			]]></lang>

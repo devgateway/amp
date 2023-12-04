@@ -8,7 +8,7 @@
 <script type="javascript">
 function login()
 {
-	<digi:context name="addUrl" property="context/ampModule/moduleinstance/login.do" />
+	<digi:context name="addUrl" property="context/module/moduleinstance/login.do" />
     document.aimPhysicalProgressForm.action = "<%=addUrl%>";
     document.aimPhysicalProgressForm.submit();
 }
@@ -16,7 +16,7 @@ function login()
 <digi:errors/>
 <digi:instance property="aimPhysicalProgressForm" />
 <logic:equal name="aimPhysicalProgressForm" property="validLogin" value="false">
-<digi:form action="/login.do" name="aimPhysicalProgressForm" type="org.digijava.ampModule.aim.form.PhysicalProgressForm"
+<digi:form action="/login.do" name="aimPhysicalProgressForm" type="org.digijava.module.aim.form.PhysicalProgressForm"
 method="post">
 <h3 align="center"> Invalid Login. Please Login Again. </h3><p align="center"><html:submit styleClass="dr-menu" value="Log In" onclick="login()" /></p>
 </digi:form>

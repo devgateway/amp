@@ -1,4 +1,4 @@
-<%@page import="org.digijava.ampModule.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -9,14 +9,14 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-<%@page import="org.digijava.ampModule.aim.util.FeaturesUtil"%>
-<%@page import="org.digijava.ampModule.aim.dbentity.AmpGlobalSettings"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
 <%@page import="java.util.Collections"%>
 
 <%-- <bean:define id="reportMeta" name="reportMeta"
-	type="org.digijava.ampModule.aim.dbentity.AmpReports" scope="session"
+	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
 --%>
 
@@ -62,7 +62,7 @@
                 <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
 		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
 		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
-		<feature:display name="Computed Year" ampModule="Filter Widget">
+		<feature:display name="Computed Year" module="Filter Widget">
 			<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
 		</feature:display>
 	</ul>
@@ -121,11 +121,11 @@
 						<html:option value="1" style="color:red">
 							*&nbsp;<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
-						<ampModule:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
+						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
 							<html:option value="2" style="color:green">
 								*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
 							</html:option>
-						</ampModule:display>
+						</module:display>
 						<html:option value="4" style="color:blue">
 							&nbsp;<digi:trn key="rep:filter:ValidatedActivities" >Validated Activities</digi:trn>
 						</html:option>
@@ -134,11 +134,11 @@
 							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
 						</html:option>
 						</logic:notEqual>
-						<ampModule:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
+						<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
 							<html:option value="0" style="color:green">
 								<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
 							</html:option>
-						</ampModule:display>
+						</module:display>
 					</html:select>
 					</td>
 					</logic:present>
@@ -284,7 +284,7 @@
 						outerstyle="width: 300px" styleClass="inp-text"
 						name="aimReportsFilterPickerForm"
 						property="selectedFinancingInstruments" multiselect="true"
-						keyName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
 					</td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
@@ -296,7 +296,7 @@
 						outerstyle="width: 300px" styleClass="inp-text"
 						name="aimReportsFilterPickerForm"
 						property="selectedTypeOfAssistance" multiselect="true"
-						keyName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
 					</td>
 				</tr>
 				<field:display name="Activity Budget" feature="Budget">
@@ -363,7 +363,7 @@
 						name="aimReportsFilterPickerForm"
 						multiselect="true"
 						property="selectedProjectCategory"
-						keyName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.PROJECT_CATEGORY_KEY %>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.PROJECT_CATEGORY_KEY %>" />
 					</td>
 				</tr>
 				</field:display>
@@ -591,7 +591,7 @@
 							</td>
 						</tr>
 						<tr><td colspan="5">&nbsp;</td></tr>
-						<feature:display name="Responsible Organization" ampModule="Organizations">
+						<feature:display name="Responsible Organization" module="Organizations">
 						<tr>
 							<td>
 								<digi:trn key="rep:filer:responsibleorganization">Responsible Organization</digi:trn>
@@ -606,7 +606,7 @@
 						</tr>
 					   </feature:display>
 					   <tr><td colspan="5">&nbsp; </td></tr>
-					   <feature:display name="Beneficiary Agency" ampModule="Organizations">
+					   <feature:display name="Beneficiary Agency" module="Organizations">
 						<tr bgcolor="#EEEEEE">
 				         	<td>
 										<digi:trn key="rep:filer:beneficiaryAgency">Beneficiary Agency</digi:trn>
@@ -652,7 +652,7 @@
 						</tr>
 						</feature:display>
 						<tr><td colspan="5">&nbsp; </td></tr>
-						<feature:display name="Executing Agency" ampModule="Organizations">
+						<feature:display name="Executing Agency" module="Organizations">
 							<tr bgcolor="#EEEEEE">
 								<td>
 									<digi:trn key="rep:filer:executingAgency">Executing Agency</digi:trn>
@@ -673,7 +673,7 @@
 						</feature:display>
 						
 						<tr><td colspan="5">&nbsp; </td></tr>
-						<feature:display name="Contracting Agency" ampModule="Organizations">
+						<feature:display name="Contracting Agency" module="Organizations">
 							<tr bgcolor="#EEEEEE">
 								<td>
 									<digi:trn key="rep:filer:contractingAgency">Contracting Agency</digi:trn>
@@ -694,7 +694,7 @@
 						</feature:display>
 						
 						<tr><td colspan="5">&nbsp; </td></tr>
-						<feature:display name="Implementing Agency" ampModule="Organizations">
+						<feature:display name="Implementing Agency" module="Organizations">
 						<tr>
 								<td>
 									<digi:trn key="rep:filer:implementingAgency">Implementing Agency</digi:trn>
@@ -763,7 +763,7 @@
 						outerstyle="width: 300px" styleClass="inp-text"
 						property="selectedStatuses" size="3"
 						name="aimReportsFilterPickerForm" multiselect="true"
-						keyName="<%=org.digijava.ampModule.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
 					</td>
 				</tr>
 				<tr><td>&nbsp;</td></tr>
@@ -851,7 +851,7 @@
 		</tr>
 		</table>
 		</div>
-		<feature:display name="Computed Year" ampModule="Filter Widget">
+		<feature:display name="Computed Year" module="Filter Widget">
 		<div id="CCSettings" >
 			<br>
 			<br>

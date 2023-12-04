@@ -24,7 +24,7 @@
 
 			openNewWindow(500, 300);
 
-			<digi:context name="addIndicator" property="context/ampModule/moduleinstance/parisIndicatorManager.do?parisIndicator=add" />
+			<digi:context name="addIndicator" property="context/module/moduleinstance/parisIndicatorManager.do?parisIndicator=add" />
 
 			document.aimParisIndicatorManagerForm.currUrl.value = "<%= addIndicator %>";
 
@@ -163,7 +163,7 @@
 
 								<logic:iterate name="aimParisIndicatorManagerForm" property="parisIndicatorName" id="parisIndicatorName"
 
-								type="org.digijava.ampModule.aim.dbentity.AmpAhsurveyIndicator	">
+								type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator	">
 
 								<tr>
 
@@ -171,7 +171,7 @@
 
 									<td class=f-names noWrap align="center" valign="center">
 
-															<%--<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>--%>
+															<%--<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>--%>
 
 															<c:set var="translation">
 
@@ -287,7 +287,7 @@
 
 											</td>
 
-											<td background="ampModule/aim/images/corner-r.gif" height="17" width="17">
+											<td background="module/aim/images/corner-r.gif" height="17" width="17">
 
 												&nbsp;
 
@@ -313,7 +313,7 @@
 
 											<td align=top valign="top">
 
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<c:set var="translation">
 
@@ -339,7 +339,7 @@
 
 											<td align=top valign="top">
 
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<c:set var="translation">
 

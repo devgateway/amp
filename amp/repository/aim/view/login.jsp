@@ -18,7 +18,7 @@
 
 <html:javascript formName="aimLoginForm"/>
 
-<digi:form action="/login.do" method="post" name="aimLoginForm" type="org.digijava.ampModule.aim.form.LoginForm" onsubmit="return validateAimLoginForm(this);">
+<digi:form action="/login.do" method="post" name="aimLoginForm" type="org.digijava.module.aim.form.LoginForm" onsubmit="return validateAimLoginForm(this);">
 
 <table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
@@ -41,7 +41,7 @@
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>
+						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 							<digi:trn key="aim:registeredUserLogIn">
 							Registered User Log In:
 							</digi:trn>
@@ -59,7 +59,7 @@
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>
+						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 						<digi:trn key="aim:password">
 						Password:
 						</digi:trn>

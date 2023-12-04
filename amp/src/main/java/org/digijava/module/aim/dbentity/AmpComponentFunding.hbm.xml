@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpComponentFunding"
+	<class name="org.digijava.module.aim.dbentity.AmpComponentFunding"
 		table="AMP_COMPONENT_FUNDING">
 		<cache usage="read-write" />
 		<id name="ampComponentFundingId" column="amp_component_funding_id" type="java.lang.Long">
@@ -19,14 +19,14 @@
 		<property name="description" column="description" type="text" />
 
 		<many-to-one name="reportingOrganization" column="rep_organization_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="componentSecondResponsibleOrganization" column="component_second_rep_org_id"
-					 class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+					 class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="currency" column="currency_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="component" column="amp_component_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpComponent" />
+			class="org.digijava.module.aim.dbentity.AmpComponent" />
 		<many-to-one name="adjustmentType" column="adjustment_type" 
-		    class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		    class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 	</class>
 </hibernate-mapping>

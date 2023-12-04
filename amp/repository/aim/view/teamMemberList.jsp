@@ -105,7 +105,7 @@ function checkSelMembers() {
 }	
 
 function addTeamMember(id) {
-	<digi:context name="add" property="context/ampModule/moduleinstance/showAddTeamMember.do" />
+	<digi:context name="add" property="context/module/moduleinstance/showAddTeamMember.do" />
 	document.aimTeamMemberForm.action = "<%= add %>~teamId="+id+"~fromPage=0";
 	document.aimTeamMemberForm.target = "_self";
 	document.aimTeamMemberForm.submit();
@@ -276,7 +276,7 @@ function addTeamMember(id) {
 																		<c:out value="${mem.email}"/>
 																	</td>
 																	<td  style="color:black;border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;border-left: 1px solid #D0D0D0;">
-																		<digi:trn key="<%=org.digijava.ampModule.aim.dbentity.AmpTeamMemberRoles.getAmpTeamMemberKey( myMemberRole )%>">
+																		<digi:trn key="<%=org.digijava.module.aim.dbentity.AmpTeamMemberRoles.getAmpTeamMemberKey( myMemberRole )%>">
 																			${mem.roleName}
 																		</digi:trn>
 																	</td>																	

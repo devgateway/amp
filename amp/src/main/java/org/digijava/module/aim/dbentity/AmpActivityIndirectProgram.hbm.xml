@@ -3,7 +3,7 @@
 
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivityIndirectProgram" table="AMP_ACTIVITY_INDIRECT_PROGRAM">
+	<class name="org.digijava.module.aim.dbentity.AmpActivityIndirectProgram" table="AMP_ACTIVITY_INDIRECT_PROGRAM">
 
 		<cache usage="read-write" />
 
@@ -14,10 +14,10 @@
 		</id>
 
 		<many-to-one name="activityProgram" column="amp_activity_program_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityProgram" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityProgram" cascade="none" not-null="true" />
 
 		<many-to-one name="program" column="amp_program_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false" />
+			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false" />
 
 		<property name="percentage" column="program_percentage" type="java.math.BigDecimal" precision="5" scale="2" />
 

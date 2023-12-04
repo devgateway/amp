@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.aim.dbentity.AmpPledge" table="AMP_PLEDGES">
+	<class name="org.digijava.module.aim.dbentity.AmpPledge" table="AMP_PLEDGES">
 		<cache usage="read-write" />
 		<id name="ampPledgeId" column="amp_pledge_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -13,8 +13,8 @@
 		<property name="date" column="date_" type="java.util.Date" />
 		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 		<many-to-one name="currency" column="currency"
-			class="org.digijava.ampModule.aim.dbentity.AmpCurrency" cascade="none" />
-		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 			
 		<property name="program" column="program" type="java.lang.String" />
 

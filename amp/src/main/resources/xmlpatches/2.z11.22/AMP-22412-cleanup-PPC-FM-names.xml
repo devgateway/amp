@@ -9,7 +9,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 
-				DELETE FROM amp_modules_templates WHERE ampModule IN (
+				DELETE FROM amp_modules_templates WHERE module IN (
 												SELECT id from amp_modules_visibility WHERE name like '/Activity Form/Funding/Proposed Project Cost%');
 
 				DELETE FROM amp_modules_visibility WHERE name LIKE '/Activity Form/Funding/Proposed Project Cost%';
@@ -28,7 +28,7 @@
 												SELECT id FROM amp_features_visibility WHERE name = 'Proposed Project Cost')
 												AND name SIMILAR TO '%Button%|%Currency|%Date|%Planned';
 				
-				DELETE FROM amp_modules_templates WHERE ampModule IN (
+				DELETE FROM amp_modules_templates WHERE module IN (
 												select id from amp_modules_visibility WHERE id IN ( 
 												SELECT MIN(am.id) FROM amp_modules_visibility am
 												LEFT JOIN amp_modules_visibility amv ON am.id = amv.id WHERE amv.name LIKE  '/Activity Form/Funding/Overview Section/Proposed Project Cost/Amount'

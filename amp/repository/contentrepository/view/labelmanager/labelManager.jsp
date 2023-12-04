@@ -9,13 +9,13 @@
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<%@page import="org.digijava.ampModule.contentrepository.jcrentity.Label"%>
-<%@page import="org.digijava.ampModule.contentrepository.helper.CrConstants"%><digi:instance property="crLabelManagerForm" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
+<%@page import="org.digijava.module.contentrepository.jcrentity.Label"%>
+<%@page import="org.digijava.module.contentrepository.helper.CrConstants"%><digi:instance property="crLabelManagerForm" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/slider/assets/skins/sam/slider.css"> 
@@ -26,8 +26,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/colorpicker-min.js"></script> 
 
 
-<link rel="stylesheet" href="<digi:file src="ampModule/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
-<link rel="stylesheet" href="<digi:file src="ampModule/aim/css/css_dhtmlsuite/context-menu.css" />" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
 
 <style type="text/css">
 	a.atree {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.esrigis.dbentity.AmpApiState"
+	<class name="org.digijava.module.esrigis.dbentity.AmpApiState"
 		table="AMP_API_STATE">
 		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -17,7 +17,7 @@
 
 		<property name="type" column="type">
 			<type name="org.hibernate.type.EnumType">
-				<param name="enumClass">org.digijava.ampModule.esrigis.dbentity.ApiStateType</param>
+				<param name="enumClass">org.digijava.module.esrigis.dbentity.ApiStateType</param>
 				<param name="useNamed">true</param>
 			</type>
 		</property>

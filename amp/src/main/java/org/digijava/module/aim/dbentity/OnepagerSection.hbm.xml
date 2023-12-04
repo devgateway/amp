@@ -5,7 +5,7 @@
 
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.digijava.ampModule.aim.dbentity.OnepagerSection" table="AMP_ONEPAGER_SECTION">
+    <class name="org.digijava.module.aim.dbentity.OnepagerSection" table="AMP_ONEPAGER_SECTION">
         <cache usage="read-write" />
         <id name="className" column="className" type="java.lang.String"/>
         <property name="folded" column="folded" type="java.lang.Boolean" />

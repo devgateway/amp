@@ -19,7 +19,7 @@ String auxReportId = request.getParameter("reportId");
 request.getParameter("print");
 %>
 
-<digi:form action="/parisindicator.do" type="org.digijava.ampModule.parisindicator.form.PIForm" name="parisIndicatorForm">
+<digi:form action="/parisindicator.do" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
 	<table border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 	    <tr>
 	        <td width="1000" align="left" valign="top" border="1" style="padding-left: 5px;">

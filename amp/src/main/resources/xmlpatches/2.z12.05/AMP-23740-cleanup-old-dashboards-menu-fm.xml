@@ -69,7 +69,7 @@
 				
 				DELETE FROM amp_features_visibility WHERE name = 'Show Names As Acronyms';
 				
-				DELETE FROM amp_modules_templates WHERE ampModule IN (
+				DELETE FROM amp_modules_templates WHERE module IN (
 					SELECT id FROM amp_modules_visibility 
 					WHERE parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Visualization Dashboards'));
 					
@@ -84,7 +84,7 @@
 
 				DELETE FROM amp_modules_visibility WHERE parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Visualization Dashboards');
 	    		
-				DELETE FROM amp_modules_templates WHERE ampModule IN (
+				DELETE FROM amp_modules_templates WHERE module IN (
 					SELECT id FROM amp_modules_visibility 
 					WHERE name = 'Visualization Dashboards');
 					

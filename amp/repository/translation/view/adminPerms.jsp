@@ -10,13 +10,13 @@
 
 <script language=JavaScript type=text/javascript>
   function fnOnAddPerm() {
-      <digi:context name="addPerm" property="context/ampModule/moduleinstance/addPermission.do" />
+      <digi:context name="addPerm" property="context/module/moduleinstance/addPermission.do" />
       document.translationPermissionsForm.action = "<%= addPerm%>";
       document.translationPermissionsForm.submit();
   }
 
   function fnOnDeletePerm(index) {
-      <digi:context name="deletePerm" property="context/ampModule/moduleinstance/deletePermission.do" />
+      <digi:context name="deletePerm" property="context/module/moduleinstance/deletePermission.do" />
       document.translationPermissionsForm.action = "<%= deletePerm%>?index=" + index;
       document.translationPermissionsForm.submit();
   }
@@ -49,7 +49,7 @@
 <br>
 
 <table width="50%" border="0" bgcolor="#FFFAF0">
-<logic:iterate name="translationPermissionsForm" property="permissions" id="permission" indexId="index" type="org.digijava.ampModule.translation.form.TranslationPermissionsForm.PermissionInfo">
+<logic:iterate name="translationPermissionsForm" property="permissions" id="permission" indexId="index" type="org.digijava.module.translation.form.TranslationPermissionsForm.PermissionInfo">
  <tr><td align="left">
   <html:hidden name="permission" property="id" indexed="true" /> 
   <html:select name="permission" property="siteId" indexed="true" style="text">

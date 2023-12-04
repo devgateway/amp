@@ -7,10 +7,10 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New WebLink Link%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New WebLink Link%');
                 delete from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New WebLink Link%';
 
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New Document Link%');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New Document Link%');
                 delete from amp_modules_visibility where name like '%/Activity Form/Related Documents/Add New Document Link%';
 
             </lang>

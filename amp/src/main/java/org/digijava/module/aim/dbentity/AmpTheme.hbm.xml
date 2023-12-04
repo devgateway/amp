@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpTheme" table="AMP_THEME">
+	<class name="org.digijava.module.aim.dbentity.AmpTheme" table="AMP_THEME">
 		<cache usage="read-write" />
 		<id name="ampThemeId" column="amp_theme_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
 				<param name="sequence_name">AMP_THEME_seq</param>
 			</generator>
 		</id>
-		<many-to-one name="parentThemeId" column="parent_theme_id" class="org.digijava.ampModule.aim.dbentity.AmpTheme" cascade="none" lazy="false" />
+		<many-to-one name="parentThemeId" column="parent_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" lazy="false" />
 		<property name="themeCode" column="theme_code" type="java.lang.String" />
 		<property name="budgetProgramCode" column="budget_program_code" type="java.lang.String" />
 		<property name="name" column="name" type="java.lang.String" />
@@ -35,23 +35,23 @@
 			type="java.lang.Double" />
 
 		<many-to-one name="typeCategoryValue" column="type_category_value_id"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
 
 		<!-- <many-to-one name="activityId" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" not-null="false" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="false" />
 			-->
 		<set name="indicators" lazy="false" cascade="delete-orphan" inverse="true">
 			<key column="theme_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.IndicatorTheme" />
+			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorTheme" />
 		</set>
 		<set name="programSettings" lazy="false">
 			<key column="default_hierarchy" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpActivityProgramSettings" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" />
 		</set>
 		<set name="siblings" table="AMP_THEME" lazy="true" inverse="true" cascade="none">
 			<cache usage="read-write" />
 			<key column="parent_theme_id"/>
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpTheme"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpTheme"/>
 		</set>
 		<property name="isbudgetprogram" column="is_budget_program" type="java.lang.Integer" />
         <property name="showInRMFilters" column="show_in_rm" type="java.lang.Boolean" />

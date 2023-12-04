@@ -114,7 +114,7 @@
 	//function viewProjectDetails(type,key) {
 		//alert('1');
 		//openNewWindow(600, 400);
-		//<digi:context name="viewProjDetails" property="context/ampModule/moduleinstance/viewProjectDetails.do"/>
+		//<digi:context name="viewProjDetails" property="context/module/moduleinstance/viewProjectDetails.do"/>
 		
 		//document.aimMainProjectDetailsForm.type.value = type;
 		//document.aimMainProjectDetailsForm.description.value = key;

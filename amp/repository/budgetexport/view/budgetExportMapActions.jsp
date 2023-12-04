@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<%@ page import="org.digijava.ampModule.budgetexport.dbentity.AmpBudgetExportMapItem" %>
+<%@ page import="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem" %>
 
 <digi:instance property="beMapActionsForm"/>
 <script type="text/javascript">

@@ -5,7 +5,7 @@
 <form-validation>
 	<global></global>
 	<formset>
-	      <!-- Admin ampModule -->
+	      <!-- Admin module -->
 		<form name="siteForm">
 			<field property="siteName" depends="required,maxlength">
 				<arg key="display.admin.siteName"/>
@@ -32,6 +32,6 @@
 				</var>
 			</field>
 		</form>
-		 <!-- End of admin ampModule -->
+		 <!-- End of admin module -->
 	</formset>
 </form-validation>

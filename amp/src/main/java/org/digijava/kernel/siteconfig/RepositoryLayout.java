@@ -27,26 +27,24 @@ import java.util.Iterator;
 
 public class RepositoryLayout {
     private HashMap secondaryPages;
-    private AmpModule ampModule;
+    private AmpModule module;
 
     public RepositoryLayout() {
-        secondaryPages = new HashMap();
+        secondaryPages = new HashMap<>();
     }
 
     public String toString() {
         String newLine = System.getProperty("line.separator");
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<config>").append(newLine);
 
         buf.append("<secondary-pages>").append(newLine);
-        Iterator iter = secondaryPages.values().iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : secondaryPages.values()) {
             buf.append(item).append(newLine);
         }
         buf.append("</secondary-pages>").append(newLine);
-        if (ampModule != null) {
-            buf.append(ampModule).append(newLine);
+        if (module != null) {
+            buf.append(module).append(newLine);
         }
         buf.append("</config");
 
@@ -54,11 +52,11 @@ public class RepositoryLayout {
     }
 
     public AmpModule getModule() {
-        return ampModule;
+        return module;
     }
 
-    public void setModule(AmpModule ampModule) {
-        this.ampModule = ampModule;
+    public void setModule(AmpModule module) {
+        this.module = module;
     }
 
     public HashMap getSecondaryPages() {

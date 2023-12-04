@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-tableWidget.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-tableWidget.js"/>"></script>
 
 <script type="text/javascript">
 <!--
@@ -65,10 +65,10 @@ ${fn:replace(message,quote,escapedQuote)}
  --%>
 <td>
 <digi:link href="/managePerm.do?edit" paramId="permissionId" paramName="perm" paramProperty="id" title="EDIT">
-<digi:img src="ampModule/gateperm/images/edit.gif" border="0" />
+<digi:img src="module/gateperm/images/edit.gif" border="0" />
 </digi:link>
 <digi:link href="/managePerm.do?delete" paramId="permissionId" onclick="return confirmDeletion('${msg}')" paramName="perm" paramProperty="id" title="DELETE">
-<digi:img src="ampModule/gateperm/images/delete.gif" border="0" />
+<digi:img src="module/gateperm/images/delete.gif" border="0" />
 </digi:link>
 </td>
 </tr>
@@ -76,7 +76,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </table>
 <div align="left">&nbsp;&nbsp;
 <digi:link href="/managePerm.do?new" title="NEW">
-<digi:img src="ampModule/gateperm/images/add.gif" border="0" /><digi:trn>Add New Permission</digi:trn>
+<digi:img src="module/gateperm/images/add.gif" border="0" /><digi:trn>Add New Permission</digi:trn>
 </digi:link>
 
 </div>

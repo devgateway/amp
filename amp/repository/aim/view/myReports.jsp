@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script type="text/javascript">
@@ -64,7 +64,7 @@ function popup(mylink, windowname)
 				</logic:empty>
 			</logic:notPresent>
 			<logic:notEmpty name="lastViewedReports" scope="session">
-			<logic:iterate name="lastViewedReports" id="report" scope="session" type="org.digijava.ampModule.aim.dbentity.AmpReports" length="5">
+			<logic:iterate name="lastViewedReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
 				<li class="tri tri-desktop">
 					<a title="${report.name}" href="${fn:getReportUrl(report)}" class="triText" onclick="return popup(this,'');">
 						<c:choose>

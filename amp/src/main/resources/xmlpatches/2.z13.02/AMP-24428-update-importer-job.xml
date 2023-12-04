@@ -11,12 +11,12 @@
             <lang delimiter=";" type="postgres">
 
                 UPDATE amp_quartz_job_class 
-                SET jc_class_fullname = 'org.digijava.ampModule.message.jobs.ImportProcessorCallJob'
-                WHERE jc_class_fullname = 'org.digijava.ampModule.dataExchange.jobs.ImportProcessorCallJob';
+                SET jc_class_fullname = 'org.digijava.module.message.jobs.ImportProcessorCallJob'
+                WHERE jc_class_fullname = 'org.digijava.module.dataExchange.jobs.ImportProcessorCallJob';
                 
                 UPDATE qrtz_job_details 
-                SET job_class_name = 'org.digijava.ampModule.message.jobs.ImportProcessorCallJob'
-                WHERE job_class_name = 'org.digijava.ampModule.dataExchange.jobs.ImportProcessorCallJob';
+                SET job_class_name = 'org.digijava.module.message.jobs.ImportProcessorCallJob'
+                WHERE job_class_name = 'org.digijava.module.dataExchange.jobs.ImportProcessorCallJob';
                 
             </lang>
         </script>

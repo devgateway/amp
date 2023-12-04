@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 
@@ -575,7 +575,7 @@
 													<c:set var="translation">
 											       		<digi:trn>Please select from below</digi:trn>
 											       	</c:set>
-											     	<category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="nputx insidex address-title" outerid="contactTitle"/>
+											     	<category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="nputx insidex address-title" outerid="contactTitle"/>
 											    </td>
 								    			<td valign="top" class="t_mid"><b style="padding-left:5px;"><digi:trn>Organization</digi:trn>: </b><br />
 													<c:set var="translationOrgName">
@@ -588,7 +588,7 @@
 													<td>
 													<html:select  multiple="multiple" property="selOrgs" size="4" style="width: 300px;">
 														<logic:notEmpty name="addressbookForm" property="organizations">
-															<logic:iterate name="addressbookForm" property="organizations" id="organization" type="org.digijava.ampModule.aim.dbentity.AmpOrganisation">
+															<logic:iterate name="addressbookForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																<html:option value="${organization.ampOrgId}" style="font-family: Arial;font-size:11px;">${organization.name}</html:option>
 															</logic:iterate>
 														</logic:notEmpty>
@@ -626,7 +626,7 @@
 																<c:set var="translationNone">
 																	<digi:trn>None</digi:trn>
 																</c:set> 
-																<category:showoptions multiselect="false" firstLine="${translationNone}" name="addressbookForm" property="phones[${ctr}].phoneTypeId" keyName="<%= org.digijava.ampModule.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="nputx insidex address-title" outerid="phoneType_${ctr}" />
+																<category:showoptions multiselect="false" firstLine="${translationNone}" name="addressbookForm" property="phones[${ctr}].phoneTypeId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="nputx insidex address-title" outerid="phoneType_${ctr}" />
 																<html:text name="addressbookForm" property="phones[${ctr}].value" styleId="phoneNum_${ctr}"  size="33" styleClass="inputx insidex" /> 
 																<a href="javascript:removeData('phone',${ctr})">
 																	<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" />

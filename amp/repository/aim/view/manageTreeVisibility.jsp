@@ -15,21 +15,21 @@
 	});
 
 	function changeLevel(id) {
-		<digi:context name="urlVal" property="context/ampModule/moduleinstance/visibilityManager.do" />
+		<digi:context name="urlVal" property="context/module/moduleinstance/visibilityManager.do" />
 		document.aimVisibilityManagerForm.action = "<%= urlVal %>?changeLevel=true&action=edit&templateId="+id;
 		document.aimVisibilityManagerForm.submit();		
 	}
 
 </script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <!-- dynamic tooltip -->
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-ajax.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-folder-tree-static.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-context-menu.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-folder-tree-static.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-context-menu.js"/>"></script>
 
-<link rel="stylesheet" href="<digi:file src="ampModule/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
-<link rel="stylesheet" href="<digi:file src="ampModule/aim/css/css_dhtmlsuite/context-menu.css" />" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
@@ -37,7 +37,7 @@
 
 <script type="text/javascript">
 function openFieldPermissionsPopup(fieldId) {
-			<digi:context name="assignFieldPermissionsURL" property="context/ampModule/moduleinstance/assignFieldPermissions.do?fieldId=" />
+			<digi:context name="assignFieldPermissionsURL" property="context/module/moduleinstance/assignFieldPermissions.do?fieldId=" />
 			openURLinWindow("<%=assignFieldPermissionsURL%>"+fieldId,280, 325);
 }
 
@@ -47,7 +47,7 @@ function enterKeyIsPressed(el, e){
         el.style.display = 'none';
     	var url = "/aim/saveFMDescription.do";
     	var id=el.id;
-    	var params=id.split("_");// id consists of textarea word, id of AmpObjectVisibility object and objectvisibility type(ampModule or feature or field)
+    	var params=id.split("_");// id consists of textarea word, id of AmpObjectVisibility object and objectvisibility type(module or feature or field)
     	var postString="objectVisibility="+params[2]+"&description="+el.value+"&id="+params[1];
     	var callBackFM={ 
     		      success: function (o) { 
@@ -121,7 +121,7 @@ function showDescriptionToolbox(id){
 
 	<bean:define name="aimVisibilityManagerForm" property="ampTreeVisibility" id="template" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 	<bean:define name="template" property="items" id="modules" type="java.util.Map"  toScope="page"/>
-	<bean:define name="template" property="root" id="currentTemplate" type="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="request"/>
+	<bean:define name="template" property="root" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="request"/>
 		
 	 <c:set var="translation">
          <digi:trn key="aim:addNoLevel">No Level</digi:trn>
@@ -544,21 +544,21 @@ function setSearchMessage(stringMessage){
     <c:set scope="session" var="firstSelected">false</c:set>
             <div id="demo" class="yui-navset" style="width:800px">
                 <ul class="yui-nav">
-                    <logic:iterate name="modules" id="ampModule" type="java.util.Map.Entry" indexId="counter">
+                    <logic:iterate name="modules" id="module" type="java.util.Map.Entry" indexId="counter">
                     	
                         <bean:define id="counter" name="counter" type="Integer" scope="page" toScope="request"/>
-                        <bean:define id="moduleAux" name="ampModule" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
-                        <bean:define id="_moduleAux" name="ampModule" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility"/>
-                        <bean:define id="_moduleAux2" name="_moduleAux" property="root" type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility" scope="page"/>
+                        <bean:define id="moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
+                        <bean:define id="_moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility"/>
+                        <bean:define id="_moduleAux2" name="_moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
                         <bean:define id="size" name="_moduleAux2" property="submodules"/>
                         <jsp:include page="generateTreeXLevelVisibilityTabs.jsp" />
                     </logic:iterate>
                 </ul>
                 <div class="yui-content"> 
-                    <logic:iterate name="modules" id="ampModule" type="java.util.Map.Entry" >
-                        <bean:define id="moduleAux" name="ampModule" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
-                        <bean:define id="_moduleAux" name="ampModule" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility"/>
-                        <bean:define id="_moduleAux2" name="_moduleAux" property="root" type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility" scope="page"/>
+                    <logic:iterate name="modules" id="module" type="java.util.Map.Entry" >
+                        <bean:define id="moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
+                        <bean:define id="_moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility"/>
+                        <bean:define id="_moduleAux2" name="_moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
                         <bean:define id="size" name="_moduleAux2" property="submodules"/>
                         <jsp:include page="generateTreeXLevelVisibility.jsp" />
                     </logic:iterate>

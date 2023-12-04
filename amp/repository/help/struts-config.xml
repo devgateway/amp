@@ -3,16 +3,16 @@
 
 <struts-config>
 	<form-beans>
-		<form-bean name="helpForm" type="org.digijava.ampModule.help.form.HelpForm" />
+		<form-bean name="helpForm" type="org.digijava.module.help.form.HelpForm" />
 		
-		<form-bean name="glossaryForm" type="org.digijava.ampModule.help.form.GlossaryForm" />
+		<form-bean name="glossaryForm" type="org.digijava.module.help.form.GlossaryForm" />
 	</form-beans>	
 	<global-forwards>
     	<forward name="help" path="/showLayout.do?layout=helpLayout"/>
    </global-forwards>
 
 	<action-mappings>
-		<action name="helpForm" path="/help/helpActions" parameter="actionType" scope="session" type="org.digijava.ampModule.help.action.HelpActions" validate="false">
+		<action name="helpForm" path="/help/helpActions" parameter="actionType" scope="session" type="org.digijava.module.help.action.HelpActions" validate="false">
 			<forward name="edit" path="/showLayout.do?layout=editHelpTopicLayout"/>
 			<forward name="create" path="/showLayout.do?layout=createHelpTopicLayout"/>
 			<forward name="search" path="/showLayout.do?layout=seachResultsLayout"/>
@@ -25,25 +25,25 @@
 			<forward name="allHelpPrintPreview" path="/showLayout.do?layout=allHelpPrintPreview"/>
 		</action>
 		<action forward="/showLayout.do?layout=helpLayout"  name="helpForm" path="/help/help"/>
-		<action name="helpForm" path="/help/viewHelpTopics" type="org.digijava.ampModule.help.action.ViewHelpTopics"/>
+		<action name="helpForm" path="/help/viewHelpTopics" type="org.digijava.module.help.action.ViewHelpTopics"/>
 		
-		<action name="glossaryForm" path="/help/glossary" scope="request" type="org.digijava.ampModule.help.action.ShowGlossary" validate="false">
+		<action name="glossaryForm" path="/help/glossary" scope="request" type="org.digijava.module.help.action.ShowGlossary" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=glossaryMain"/>
 		</action>
-		<action name="glossaryForm" path="/help/showAddGlossary" scope="request" type="org.digijava.ampModule.help.action.ShowAddNewGlossary" validate="false">
+		<action name="glossaryForm" path="/help/showAddGlossary" scope="request" type="org.digijava.module.help.action.ShowAddNewGlossary" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=glossaryAdd"/>
 		</action>
-		<action name="glossaryForm" path="/help/addGlossary" scope="request" type="org.digijava.ampModule.help.action.AddGlossaryTopic" validate="false">
+		<action name="glossaryForm" path="/help/addGlossary" scope="request" type="org.digijava.module.help.action.AddGlossaryTopic" validate="false">
 			<forward redirect="true" name="forward" path="/help/glossary.do"/>
 		</action>
-		<action name="helpForm" path="/help/topicBody" scope="request" type="org.digijava.ampModule.help.action.GetHelpBodyHtml" validate="false" />
-		<action name="helpForm" path="/help/deleteTopic" scope="request" type="org.digijava.ampModule.help.action.DeleteGlossaryTopic" validate="false" />
-		<action name="glossaryForm" path="/help/searchGlossary" scope="request" type="org.digijava.ampModule.help.action.SearchGlossary" validate="false" />
-		<action name="glossaryForm" path="/help/saveTopicTitle" scope="request" type="org.digijava.ampModule.help.action.SaveTopicTitle" validate="false" />
+		<action name="helpForm" path="/help/topicBody" scope="request" type="org.digijava.module.help.action.GetHelpBodyHtml" validate="false" />
+		<action name="helpForm" path="/help/deleteTopic" scope="request" type="org.digijava.module.help.action.DeleteGlossaryTopic" validate="false" />
+		<action name="glossaryForm" path="/help/searchGlossary" scope="request" type="org.digijava.module.help.action.SearchGlossary" validate="false" />
+		<action name="glossaryForm" path="/help/saveTopicTitle" scope="request" type="org.digijava.module.help.action.SaveTopicTitle" validate="false" />
 		
-		<action name="glossaryForm" path="/help/pdfExport" scope="request" type="org.digijava.ampModule.help.action.PdfExport" validate="false" />
-		<action name="glossaryForm" path="/help/wordExport" scope="request" type="org.digijava.ampModule.help.action.WordExport" validate="false" />
-		<action name="glossaryForm" path="/help/xlsExport" scope="request" type="org.digijava.ampModule.help.action.XlsExport" validate="false" />
+		<action name="glossaryForm" path="/help/pdfExport" scope="request" type="org.digijava.module.help.action.PdfExport" validate="false" />
+		<action name="glossaryForm" path="/help/wordExport" scope="request" type="org.digijava.module.help.action.WordExport" validate="false" />
+		<action name="glossaryForm" path="/help/xlsExport" scope="request" type="org.digijava.module.help.action.XlsExport" validate="false" />
 		
 	</action-mappings>
 </struts-config>

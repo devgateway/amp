@@ -8,39 +8,39 @@
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/scrollableTable.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/scrollableTableReports.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTableReports.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 	<!-- Jquery Base Library -->
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
 <script src="/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min.js" type="text/javascript"></script>
-<c:set var="maxFractionDigits"><%= org.digijava.ampModule.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %></c:set>
+<c:set var="maxFractionDigits"><%= org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %></c:set>
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <!-- script for tree-like view (drilldown reports) -->
 
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/arFunctions.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- dynamic drive ajax tabs -->
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
 
 
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
 
 <!-- dynamic tooltip -->
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 
@@ -83,7 +83,7 @@ function closeMessage()
 
 <!-- virtual pagination -->
 
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/virtualpaginate.js"/>">
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/virtualpaginate.js"/>">
 
 /***********************************************
 * Virtual Pagination script- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
@@ -152,9 +152,9 @@ background-color: yellow;css
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/aim/scripts/filters/searchManager.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/aim/scripts/saveReports.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>" ></script>
 
 <!-- END - For DHTML Tab View of Filters -->
 
@@ -905,7 +905,7 @@ function validateFormat(){
 		aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
 		aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
 		aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
-		aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.ampModule.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>;
+		aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>;
 		aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
 		aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true";
 		aimReportsFilterPickerForm3.customUseGrouping.checked = "true";

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpIndicatorColor" table="AMP_INDICATOR_COLOR">
+	<class name="org.digijava.module.aim.dbentity.AmpIndicatorColor" table="AMP_INDICATOR_COLOR">
 		<cache usage="read-write" />
 		<id name="indicatorColorId" column="amp_indicator_color_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -11,6 +11,6 @@
 		<property column="color" name="color" type="java.lang.String" />
 		<property column="payload" name="payload" type="java.lang.Long" />
 		<many-to-one name="indicatorLayer" column="amp_indicator_layer_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpIndicatorLayer" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpIndicatorLayer" cascade="none" />
 	</class>
 </hibernate-mapping>

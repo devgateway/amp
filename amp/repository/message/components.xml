@@ -11,9 +11,9 @@
 
 	
 </secondary-pages>
-<ampModule>
+<module>
 	<teaser name="myMessages" action="getMessages.do">
 		myMessages.jsp
 	</teaser>
-</ampModule>
+</module>
 </config>

@@ -54,13 +54,13 @@
 -->
 </style>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <script language="JavaScript">
 	function deleteWS(id){
 		document.umAddUserForm.teamMemberId.value=id;
 		document.umAddUserForm.actionFlag.value = "deleteWS";
-		<digi:context name="selectType" property="context/ampModule/moduleinstance/addWorkSpaceUser.do" />
+		<digi:context name="selectType" property="context/module/moduleinstance/addWorkSpaceUser.do" />
 		document.umAddUserForm.action = "<%= selectType %>";
 		document.umAddUserForm.target = "_self";
 		document.umAddUserForm.submit();
@@ -154,7 +154,7 @@
 						<c:set var="translation">
 				            <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 				          </c:set>
-				          <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+				          <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
 				            <digi:trn key="aim:AmpAdminHome">
 				            Admin Home
 				            </digi:trn>
@@ -304,7 +304,7 @@
 													<html:select property="role" styleId="team_member_roles_drop_down">
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
 													
-													<logic:iterate name="umAddUserForm" property="ampRoles" id="ampRole" type="org.digijava.ampModule.aim.dbentity.AmpTeamMemberRoles">
+													<logic:iterate name="umAddUserForm" property="ampRoles" id="ampRole" type="org.digijava.module.aim.dbentity.AmpTeamMemberRoles">
 														<html:option value="${ampRole.ampTeamMemRoleId}" styleId="role_approver_${ampRole.approver}">
 															<digi:trn key="<%=ampRole.getAmpTeamMemberKey() %>">
 																<bean:write name="ampRole" property="role" />

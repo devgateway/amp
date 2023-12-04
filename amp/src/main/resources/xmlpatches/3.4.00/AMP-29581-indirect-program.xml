@@ -13,7 +13,7 @@
 				WHERE settingsname='Recreate the views on the next server restart';
 
 				INSERT INTO amp_quartz_job_class (jc_id, jc_name, jc_class_fullname) VALUES
-				(nextval('amp_quartz_job_class_seq'), 'Update Activities Indirect Programs', 'org.digijava.ampModule.message.jobs.IndirectProgramUpdaterJob');
+				(nextval('amp_quartz_job_class_seq'), 'Update Activities Indirect Programs', 'org.digijava.module.message.jobs.IndirectProgramUpdaterJob');
 			</lang>
 		</script>
 	</apply>

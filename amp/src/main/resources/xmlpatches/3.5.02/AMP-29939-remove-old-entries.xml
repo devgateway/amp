@@ -11,7 +11,7 @@
             <lang delimiter=";" type="postgres">
                 DELETE
                 FROM amp_modules_templates
-                WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'NDD Mappings Manager');
+                WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'NDD Mappings Manager');
                 DELETE
                 FROM amp_modules_visibility
                 WHERE name = 'NDD Mappings Manager';

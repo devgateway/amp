@@ -16,7 +16,7 @@
 
 
 <logic:iterate name="aimAdvancedReportForm" property="titles"
-	id="titles" type="org.digijava.ampModule.aim.helper.Column">
+	id="titles" type="org.digijava.module.aim.helper.Column">
 
 	<logic:equal name="titles" property="columnName"
 		value="Type Of Assistance">

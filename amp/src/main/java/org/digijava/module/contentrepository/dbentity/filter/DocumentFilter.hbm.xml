@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.contentrepository.dbentity.filter.DocumentFilter" table="CR_DOCUMENT_FILTER">
+	<class name="org.digijava.module.contentrepository.dbentity.filter.DocumentFilter" table="CR_DOCUMENT_FILTER">
 
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -50,6 +50,6 @@
 			<element column="filter_owners" type="java.lang.String" />
 		</list>
 		<many-to-one name="user" column="user_" 
-			class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 	</class>
 </hibernate-mapping>

@@ -3,7 +3,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <HTML>
@@ -15,14 +15,14 @@
 
         <script type="text/javascript">
             function exportPDF() {
-            <digi:context name="url" property="context/ampModule/moduleinstance/pdfExport.do" />
+            <digi:context name="url" property="context/module/moduleinstance/pdfExport.do" />
                     document.orgProfOrgProfileFilterForm.action="${url}";
                     document.orgProfOrgProfileFilterForm.target="_blank";
                     document.orgProfOrgProfileFilterForm.submit();
 
                 }
                 function exportWord() {
-            <digi:context name="url" property="context/ampModule/moduleinstance/wordExport.do" />
+            <digi:context name="url" property="context/module/moduleinstance/wordExport.do" />
                     document.orgProfOrgProfileFilterForm.action="${url}";
                     document.orgProfOrgProfileFilterForm.target="_blank";
                     document.orgProfOrgProfileFilterForm.submit();
@@ -71,12 +71,12 @@
                 }
                 window.onload=showOrgProfileToolbar;
         </script>
-        <script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/asynchronous.js"/>"></script>
+        <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-        <script type="text/javascript" src='<digi:file src="ampModule/aim/scripts/panel/connection-min.js"/>' ></script>
-        <link rel="stylesheet" type="text/css" href="<digi:file src="ampModule/aim/css/amptabs.css"/>"/>
+        <script type="text/javascript" src='<digi:file src="module/aim/scripts/panel/connection-min.js"/>' ></script>
+        <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 
         <style type="text/css">
             .tableHeaderCls {
@@ -217,7 +217,7 @@
                                             <TBODY>
                                                 <TR>
                                                     <TD VALIGN="TOP" colspan="2">
-                                                        <feature:display name="orgprof_chart_place1" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place1" module="Org Profile">
                                                             <digi:insert attribute="chart1" flush="false">
                                                                 <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
                                                             </digi:insert>
@@ -226,14 +226,14 @@
                                                 </TR>
                                                 <TR>
                                                     <TD  VALIGN="TOP">
-                                                        <feature:display name="orgprof_chart_place2" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place2" module="Org Profile">
                                                             <digi:insert attribute="chart2" flush="false">
                                                                 <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
                                                             </digi:insert>
                                                         </feature:display>
                                                     </TD>
                                                     <TD  VALIGN="TOP">
-                                                        <feature:display name="orgprof_chart_place3" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place3" module="Org Profile">
                                                             <digi:insert attribute="chart3" flush="false">
                                                                 <digi:put name="widget-teaser-param">orgprof_chart_place3</digi:put>
                                                             </digi:insert>
@@ -242,14 +242,14 @@
                                                 </TR>
                                                 <TR>
                                                     <TD   VALIGN="TOP" style="width: 50%">
-                                                        <feature:display name="orgprof_chart_place4" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place4" module="Org Profile">
                                                             <digi:insert attribute="chart4" flush="false">
                                                                 <digi:put name="widget-teaser-param">orgprof_chart_place4</digi:put>
                                                             </digi:insert>
                                                         </feature:display>
                                                     </TD>
                                                     <TD  VALIGN="TOP">
-                                                        <feature:display name="orgprof_chart_place5" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place5" module="Org Profile">
                                                             <digi:insert attribute="chart5" flush="false">
                                                                 <digi:put name="widget-teaser-param">orgprof_chart_place5</digi:put>
                                                             </digi:insert>
@@ -258,14 +258,14 @@
                                                 </TR>
                                                 <TR>
                                                     <TD  VALIGN="TOP"  style="width: 50%" >
-                                                        <feature:display name="orgprof_chart_place6" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place6" module="Org Profile">
                                                             <digi:insert attribute="chart6" flush="false">
                                                                 <digi:put name="widget-teaser-param">orgprof_chart_place6</digi:put>
                                                             </digi:insert>
                                                         </feature:display>
                                                     </TD>
                                                     <TD  VALIGN="TOP">
-                                                        <feature:display name="orgprof_chart_place7" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place7" module="Org Profile">
                                                             <digi:insert attribute="chart7" flush="false">
                                                                 <digi:put name="widget-teaser-param">orgprof_chart_place7</digi:put>
                                                             </digi:insert>
@@ -274,7 +274,7 @@
                                                 </TR>
                                                 <TR>
                                                     <TD VALIGN="TOP" colspan="2"   >
-                                                        <feature:display name="orgprof_chart_place8" ampModule="Org Profile">
+                                                        <feature:display name="orgprof_chart_place8" module="Org Profile">
                                                             <digi:insert attribute="chart8" flush="false">
                                                                 <digi:put name="widget-teaser-param">orgprof_chart_place8</digi:put>
                                                             </digi:insert>

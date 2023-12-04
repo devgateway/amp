@@ -12,7 +12,7 @@ Bug Fixes
    * Fix in setSelection method to accept numbers
    * Fix IE header checkbox when multiselect is true
    * Fix for searching DOM elements with id containing special characters
-   * Fix a checkbox checking in form editing ampModule.
+   * Fix a checkbox checking in form editing module.
    * Fix getCol to use unformat function
    * Better looking buttons in form editing
    * Fix searchFilter in IE7 and IE6 not to return undefined value when more 
@@ -48,7 +48,7 @@ default format for the checkbox too
    * Fix in stripHtml function to parse numeric values
    * Fix in delGridRow to get "fresh" Data from delData object
    * Fix problems with width option if set as string.
-   * Fixing $jgrid.format function in base ampModule to accept undefined parameter.
+   * Fixing $jgrid.format function in base module to accept undefined parameter.
    * Fix for saveRow method in aftersave function. Also we pass the request and 
 not the responseText. Also both aftersave and  success functions have the 
 same type parameter - the response
@@ -103,7 +103,7 @@ before checking the values. Should return object of the posted data.
 filterToolbar method. Also the events are called immediatley after triggering the grid
    * To onCellSelect we replace the 4 parameter with the more natuaral event instead of e.target - 
 sorry if this will bring to some confusions.
-   * Added searchoptions value parameter in order to separate the editing ampModule and search ampModule.
+   * Added searchoptions value parameter in order to separate the editing module and search module.
 We first look for such option in searchoptions and if not found we use the
 editoptions value
    * Added fixed property in colModel which allow us not to change the  
@@ -123,7 +123,7 @@ New Properties and methods
 disabled in the grid data rows.
 
 - Added rowid as parameter to error function in saveRow method - inline 
-editing ampModule
+editing module
 
 - treeGrid to be initially work with datatype local 
 
@@ -149,7 +149,7 @@ object 'repeatitems' is set to true.
 walk throught the entry rowset to find the rowIndex of the given rowid.
 Now we use the build in javaScript method namedItems which do the same.
 
-- multiselect is enabled in inline edit ampModule.
+- multiselect is enabled in inline edit module.
 
 - To the  importComplete event in jqGridImport method we pass the response.
 
@@ -293,7 +293,7 @@ Fixes
 - fix in Bulgarian translations files.
 - fix in searchGrid method. Now we search by index (from colModel) and only if
 it is not available we search by name.
-- Fix for date parser in the base ampModule. Now we can sort locally on
+- Fix for date parser in the base module. Now we can sort locally on
 dates that contain month names
 - Fixed bug in searchGrid. The translation messages for the operations does not 
 apper when not set in colModel
@@ -306,7 +306,7 @@ after the first
 need the initialization only once and not every time. This cause a memory 
 leaks
 - Fixed bug in formatter where the data containing ' causes break in IE 
-- Fixed bug in base ampModule when adding data where the data contain a ' char.
+- Fixed bug in base module when adding data where the data contain a ' char.
 This breaks in IE browsers.
 - Fixed bug in checkboxes. We add the value setted in the editoptions. Also 
 converting to lower case make the option checkOnUpdate to be true every time. 
@@ -385,11 +385,11 @@ Note that this causes a some changes in the language file.
 Fixes
 =====
 
-- Removed imgpath from cell edit and inline edit modules and common ampModule.
+- Removed imgpath from cell edit and inline edit modules and common module.
 This parameter is no longer valid in 3.5
 - Replace $ with jQuery in grid.common.js which causes problems when used with
 other librariers like prototype.
-- removed a checking e.srcElement from base ampModule. jQuery allready fix this.
+- removed a checking e.srcElement from base module. jQuery allready fix this.
 - fixing the size option in select when using ajax to load selects.
 - Fixed bug in IE browsers, when clicked on href tag with child nodes,
 IE incorrect report in all cases that this is a href element. This couses
@@ -400,7 +400,7 @@ order get them from Language file.
 - Fix on sorting column. The initial sort check first for index and then for 
 column name. Before the checking for the index was missed.
 Sortorder converted to lower case in order to avoid some cofusions.
-- Fix in set columns ampModule. The modal does not appear correctly due to
+- Fix in set columns module. The modal does not appear correctly due to
 missed parameter 
 
 
@@ -700,7 +700,7 @@ true and enjoy the speed.
 addRowData now is 1-2 times faster because we are using the concept to insert
 the row at once
 
-Added jQuery function parse (removed from json2.js ampModule):
+Added jQuery function parse (removed from json2.js module):
 jQuery.parse(jsonstring)
 To prevent JavaScript hijacking attacks, web application authors are encouraged
 to use this function. This returns a JSON representation of the variable. 
@@ -755,7 +755,7 @@ different search methods.
 
 
 Added new object formoptions to define various settings in form editing. Also
-valid only in this ampModule.
+valid only in this module.
 
 formoptions : {
     elmprefix:value,
@@ -827,7 +827,7 @@ Should be described like this dataEvents: [
 The event(s) are called only once when the element is created
 -------------------------------------------------------------------------------
 defaultValue: 'value' or function This option is valid only in Form Editing
-ampModule when used with editGridRow method in add mode.If set this the input
+module when used with editGridRow method in add mode.If set this the input
 element is set with this value if only element is empty. If used in selects the
 text should be provided and not the key. Also when a function is used the
 function should return value.
@@ -1059,7 +1059,7 @@ the labels. Depending on the needs this value can be increased or decreased
 
 Custom method
 =============
-In the custom ampModule is added new method filterToolbar.
+In the custom module is added new method filterToolbar.
 
 This method is the same as filterGrid, except that the search input elements are
 placed in the grid just below the header elements. When the header elements are
@@ -1124,7 +1124,7 @@ var sgrid = $("#mygrid")[0] sgrid.triggerToolbar();
 will trigger the search of mygrid.
 
 
-Import ampModule
+Import module
 =============
 added option importComplete event which fires after constructing the grid.
 

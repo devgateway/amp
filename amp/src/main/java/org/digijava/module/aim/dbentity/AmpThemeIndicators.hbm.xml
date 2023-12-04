@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpThemeIndicators"
+	<class name="org.digijava.module.aim.dbentity.AmpThemeIndicators"
 		table="AMP_THEME_INDICATORS">
 		<cache usage="read-write" />
 		<id name="ampThemeIndId" column="amp_theme_ind_id" type="java.lang.Long">
@@ -20,18 +20,18 @@
 			<set name="themes" table="AMP_THEME_INDICATOR" lazy="true" inverse="true" cascade="none">
 			<cache usage="read-write"/>
 			<key column="amp_theme_ind_id"/>
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpTheme" column="amp_theme_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id"/>
 			</set>
 		-->
 		<set name="sectors" cascade="all" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_theme_ind_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpIndicatorSector" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorSector" />
 		</set>
 
 		<set name="indicatorValues" cascade="all-delete-orphan" inverse="true" lazy="true">
 			<key column="theme_indicator_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpThemeIndicatorValue" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpThemeIndicatorValue" />
 		</set>
 
 	</class>

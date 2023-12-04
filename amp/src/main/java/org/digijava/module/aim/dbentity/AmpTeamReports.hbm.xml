@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpTeamReports" table="AMP_TEAM_REPORTS">
+	<class name="org.digijava.module.aim.dbentity.AmpTeamReports" table="AMP_TEAM_REPORTS">
 		<cache usage="read-write" />
 		<id name="ampTeamReportsId" column="amp_team_reports_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -12,8 +12,8 @@
 		</id>
 		<property name="teamView" column="team_view" type="java.lang.Boolean" />
 
-		<many-to-one name="team" class="org.digijava.ampModule.aim.dbentity.AmpTeam" cascade="none" />
-		<many-to-one name="report" class="org.digijava.ampModule.aim.dbentity.AmpReports" cascade="all" />
+		<many-to-one name="team" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
+		<many-to-one name="report" class="org.digijava.module.aim.dbentity.AmpReports" cascade="all" />
 
 	</class>
 </hibernate-mapping>

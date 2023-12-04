@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Aug 25, 2009 11:00:06 PM by Hibernate Tools 3.2.5.Beta -->
 <hibernate-mapping>
-    <class name="org.digijava.ampModule.xmlpatcher.dbentity.AmpXmlPatch" table="AMP_XML_PATCH">
+    <class name="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch" table="AMP_XML_PATCH">
     <cache usage="read-write" />
         <id name="patchId" type="java.lang.String">
             <column name="patch_id" />
@@ -21,7 +21,7 @@
         	<cache usage="read-write"/>
             <key column="patch_id"/>
 <!--            <index column="idx"/>-->
-            <one-to-many class="org.digijava.ampModule.xmlpatcher.dbentity.AmpXmlPatchLog" />
+            <one-to-many class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog" />
         </set>
     </class>
 </hibernate-mapping>

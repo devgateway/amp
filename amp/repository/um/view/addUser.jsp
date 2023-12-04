@@ -13,7 +13,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="/repository/aim/view/strongPassword.jsp"  />
 
@@ -70,7 +70,7 @@
 				if (val1 != orgType) {
 					document.umAddUserForm.orgType.value = val1;
 					document.umAddUserForm.actionFlag.value = "typeSelected";
-					<digi:context name="selectType" property="context/ampModule/moduleinstance/addUser.do" />
+					<digi:context name="selectType" property="context/module/moduleinstance/addUser.do" />
 		   			document.umAddUserForm.action = "<%= selectType %>";
 					document.umAddUserForm.target = "_self";
 					document.umAddUserForm.submit();
@@ -88,7 +88,7 @@
 				if (val2 != orgGrp) {
 					document.umAddUserForm.orgGrp.value = val2;
 					document.umAddUserForm.actionFlag.value = "groupSelected";
-					<digi:context name="selectGrp" property="context/ampModule/moduleinstance/addUser.do" />
+					<digi:context name="selectGrp" property="context/module/moduleinstance/addUser.do" />
 		   			document.umAddUserForm.action = "<%= selectGrp %>";
 					document.umAddUserForm.target = "_self";
 					document.umAddUserForm.submit();
@@ -247,7 +247,7 @@
 						<c:set	var="translation">
 						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set> 
-						<digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}">
+						<digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}">
 							<digi:trn key="aim:AmpAdminHome">
 				            	Admin Home
 				        	</digi:trn>
@@ -478,7 +478,7 @@
 													</html:select></td>
 	
 											</tr>
- 											<ampModule:display name="Pledges" parentModule="PROJECT MANAGEMENT">
+ 											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
 												<td  width="3%">&nbsp;</td>
 												<td align="right" class="formCheckContainer"><digi:trn key="um:pledgesUser">Pledges User</digi:trn></td>
@@ -487,7 +487,7 @@
 														
 													</html:checkbox></td>
 											</tr>
-											</ampModule:display>
+											</module:display>
 											<tr>
 												<td  width="3%">&nbsp;</td>
 												<td align="right"  class="formCheckContainer"><digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn></td>

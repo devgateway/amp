@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.common.dbentity.ModuleTeaser"
+	<class name="org.digijava.module.common.dbentity.ModuleTeaser"
 		table="DG_MODULE_TEASER_SETTINGS">
 		<cache usage="read-write" />
 		<id column="module_instance_id" name="id" type="java.lang.Long">

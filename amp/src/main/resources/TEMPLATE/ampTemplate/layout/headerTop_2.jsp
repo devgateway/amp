@@ -5,20 +5,20 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
-<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/util.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/arFunctions.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/ajax.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
 
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 	<!-- Stylesheet of AMP -->
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
@@ -98,7 +98,7 @@ table tr td {font-size:11px;}
 </c:set>
 
  <logic:notEmpty name="currentMember" scope="session">
- 	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.ampModule.aim.helper.TeamMember" />
+ 	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
  </logic:notEmpty>
  <logic:empty name="currentMember" scope="session">
 	<logic:notEmpty name="currentUser" scope="session">

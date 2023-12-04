@@ -28,7 +28,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="green">
-		<td><digi:img src="ampModule/admin/images/greenLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="module/admin/images/greenLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%" align="center">
 			<font class="sectionTitle">
 				<digi:link styleClass="admin" href="/showLayout.do"><digi:trn key="admin:adminMenu">Admin Menu</digi:trn></digi:link>			
@@ -50,7 +50,7 @@
 				</tr>
 				<digi:secure globalAdmin="true">
 				<tr>
-			      	<digi:context name="createSite" property="context/ampModule/moduleinstance/showCreateSite.do" />
+			      	<digi:context name="createSite" property="context/module/moduleinstance/showCreateSite.do" />
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -62,7 +62,7 @@
 				</tr>
 				</digi:secure>
 				<tr>
-					<digi:context name="editSite" property="context/ampModule/moduleinstance/showEditSite.do"/>
+					<digi:context name="editSite" property="context/module/moduleinstance/showEditSite.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -73,7 +73,7 @@
 					</td>
 				</tr>				
 				<tr>
-					<digi:context name="searchSite" property="context/ampModule/moduleinstance/showSearchSite.do"/>
+					<digi:context name="searchSite" property="context/module/moduleinstance/showSearchSite.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -84,7 +84,7 @@
 					</td>
 				</tr>
 				<tr>
-					<digi:context name="showModuleInstances" property="context/ampModule/moduleinstance/showSiteInstances.do"/>
+					<digi:context name="showModuleInstances" property="context/module/moduleinstance/showSiteInstances.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -96,7 +96,7 @@
 				</tr>
 				<digi:secure globalAdmin="true">
 				<tr>
-					<digi:context name="showCommonInstances" property="context/ampModule/moduleinstance/showCommonInstances.do"/>
+					<digi:context name="showCommonInstances" property="context/module/moduleinstance/showCommonInstances.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -108,7 +108,7 @@
 				</tr>
 				</digi:secure>
 				<tr>
-					<digi:context name="showGroups" property="context/ampModule/moduleinstance/showGroups.do"/>
+					<digi:context name="showGroups" property="context/module/moduleinstance/showGroups.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -119,7 +119,7 @@
 					</td>
 				</tr>
 				<tr>
-					<digi:context name="searchUser" property="context/ampModule/moduleinstance/showSearchUser.do"/>
+					<digi:context name="searchUser" property="context/module/moduleinstance/showSearchUser.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -130,7 +130,7 @@
 					</td>
 				</tr>
 				<tr>
-					<digi:context name="allSites" property="context/ampModule/moduleinstance/showAllSites.do"/>
+					<digi:context name="allSites" property="context/module/moduleinstance/showAllSites.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -142,7 +142,7 @@
 				</tr>
 				<digi:secure globalAdmin="true">
 				 <tr>
-					<digi:context name="locales" property="context/ampModule/moduleinstance/showLocales.do"/>
+					<digi:context name="locales" property="context/module/moduleinstance/showLocales.do"/>
 				 	<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -153,7 +153,7 @@
 					</td>
 				</tr>
 				<tr>
-					<digi:context name="caches" property="context/ampModule/moduleinstance/showCaches.do"/>
+					<digi:context name="caches" property="context/module/moduleinstance/showCaches.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -164,7 +164,7 @@
 					</td>
 				</tr>
 				<tr>
-					<digi:context name="showUnclosedSessions" property="context/ampModule/moduleinstance/showUnclosedSessions.do"/>
+					<digi:context name="showUnclosedSessions" property="context/module/moduleinstance/showUnclosedSessions.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -176,7 +176,7 @@
 				</tr>
 				</digi:secure>
 				<tr>
-					<digi:context name="configuration" property="context/ampModule/moduleinstance/showConfiguration.do"/>
+					<digi:context name="configuration" property="context/module/moduleinstance/showConfiguration.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
@@ -187,7 +187,7 @@
 					</td>
 				</tr>				
 				<tr>
-					<digi:context name="emailTemplates" property="context/ampModule/moduleinstance/showEmailTemplates.do"/>
+					<digi:context name="emailTemplates" property="context/module/moduleinstance/showEmailTemplates.do"/>
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"

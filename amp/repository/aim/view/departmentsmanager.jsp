@@ -8,14 +8,14 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 
 <script language="JavaScript" type="text/javascript">
 <!--
 function addDepartment(){
-		<digi:context name="Url" property="context/ampModule/moduleinstance/departmentsmanager.do?new=true" />
+		<digi:context name="Url" property="context/module/moduleinstance/departmentsmanager.do?new=true" />
     	document.DepartmentsManagerForm.action = "<%=Url%>";
     	document.DepartmentsManagerForm.target = "_self";
     	document.DepartmentsManagerForm.submit();
@@ -41,7 +41,7 @@ function onDelete() {
 
 function Edit(id) {
 	openNewWindow(450, 200);
-	<digi:context name="edit" property="context/ampModule/moduleinstance/editdepartment.do" />
+	<digi:context name="edit" property="context/module/moduleinstance/editdepartment.do" />
 	document.DepartmentsManagerForm.action = "<%=edit%>~id="+id;
 	document.DepartmentsManagerForm.target = popupPointer.name;
 	document.DepartmentsManagerForm.submit();
@@ -127,7 +127,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 											</tr>
 										</logic:empty>
 										<logic:notEmpty name="DepartmentsManagerForm" property="departments">
-										<logic:iterate name="DepartmentsManagerForm" property="departments" id="department" type="org.digijava.ampModule.budget.dbentity.AmpDepartments">
+										<logic:iterate name="DepartmentsManagerForm" property="departments" id="department" type="org.digijava.module.budget.dbentity.AmpDepartments">
 											<tr> 
 												<td bgcolor="#ffffff" style="margin-left: 10px" class="inside">
 													<bean:write name="department" property="code"/> - <bean:write name="department" property="name"/>
@@ -180,7 +180,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 													</digi:trn>
 												</b>
 											</td>
-											<td background="ampModule/aim/images/corner-r.gif" height="17" width=17></td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 									</td>
@@ -190,7 +190,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
-													<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10" />
+													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" />
 													<c:set var="OrgLink">
 														<digi:trn>Click here to view Organization Manager</digi:trn>
 													</c:set>
@@ -203,7 +203,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 											</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10" />
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" />
 												<c:set var="trnViewAdmin">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set> 

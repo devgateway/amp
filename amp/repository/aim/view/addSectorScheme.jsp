@@ -13,7 +13,7 @@
 		return flag;
 	}
 	function saveScheme() {		
-			<digi:context name="addScheme" property="context/ampModule/moduleinstance/updateSectorSchemes.do?event=saveScheme" />
+			<digi:context name="addScheme" property="context/module/moduleinstance/updateSectorSchemes.do?event=saveScheme" />
 			document.aimAddSectorForm.action = "<%= addScheme%>";
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
@@ -135,7 +135,7 @@
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10" styleClass="list-item-image"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" styleClass="list-item-image"/>
 												<c:set var="translation">
 					                            	<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
 					                            </c:set>
@@ -146,7 +146,7 @@
 										</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10" styleClass="list-item-image"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" styleClass="list-item-image"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

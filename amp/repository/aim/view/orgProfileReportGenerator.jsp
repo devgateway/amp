@@ -8,18 +8,18 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 
 
 <script type="text/javascript"
-	src="<digi:file src='ampModule/aim/scripts/reportWizard/myDragAndDropObjects.js'/>"></script>
+	src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 <link rel="stylesheet" type="text/css"
-	href="<digi:file src='ampModule/aim/css/reportWizard/reportWizard.css'/>">
+	href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	<digi:instance property="aimOrgProfileReport" />
 <script type="text/javascript">
 	function initializeDragAndDrop() {

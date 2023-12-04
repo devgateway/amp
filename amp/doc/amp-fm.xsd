@@ -23,7 +23,7 @@
 
 	<xs:complexType name="templateType">
 		<xs:sequence>
-			<xs:element name="ampModule" type="fm:moduleType" minOccurs="1"
+			<xs:element name="module" type="fm:moduleType" minOccurs="1"
 				maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
@@ -31,7 +31,7 @@
 
 <xs:complexType name="moduleType">
 		<xs:sequence>
-			<xs:element name="ampModule" type="fm:moduleType" minOccurs="0"
+			<xs:element name="module" type="fm:moduleType" minOccurs="0"
 				maxOccurs="unbounded" />
 			<xs:element name="feature" type="fm:featureType" minOccurs="0"
 				maxOccurs="unbounded" />

@@ -234,7 +234,7 @@
 		<band height="123">
 			<subreport>
 				<reportElement x="2" y="8" width="529" height="106"/>
-				<dataSourceExpression><![CDATA[new org.digijava.ampModule.parisindicator.helper.export.PIJasperDataSource($P{PI_MINI_DATASOURCE})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new org.digijava.module.parisindicator.helper.export.PIJasperDataSource($P{PI_MINI_DATASOURCE})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{PI_SUBREPORT_DIR}]]></subreportExpression>
 			</subreport>
 		</band>

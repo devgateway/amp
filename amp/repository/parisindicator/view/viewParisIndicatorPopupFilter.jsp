@@ -200,7 +200,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 <bean:define id="ey" name="parisIndicatorForm" property="endYears"
 	type="int[]"></bean:define>
 <bean:define id="form" name="parisIndicatorForm"
-	type="org.digijava.ampModule.parisindicator.form.PIForm"></bean:define>
+	type="org.digijava.module.parisindicator.form.PIForm"></bean:define>
 <bean:define id="reqBeanSetterObject" toScope="request"
 	name="parisIndicatorForm" />
 <div id="filterContainer" style="display: none;" class="yui-skin-sam">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpThemeIndicatorValue"
+	<class name="org.digijava.module.aim.dbentity.AmpThemeIndicatorValue"
 		table="AMP_THEME_INDICATOR_VALUE">
 		<cache usage="read-write" />
 		<id name="ampThemeIndValId" column="amp_theme_ind_val_id" type="java.lang.Long">
@@ -13,10 +13,10 @@
 		<property access="field" name="valueAmount" column="value_amount" type="java.lang.Double" />
 		<property name="creationDate" column="creation_date" type="java.util.Date" />
 		<many-to-one name="themeIndicatorId" column="theme_indicator_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpThemeIndicators" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpThemeIndicators" cascade="none" />
 
 		<many-to-one name="indicatorId" column="indicator_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpIndicator" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" />
 
 	</class>
 </hibernate-mapping>

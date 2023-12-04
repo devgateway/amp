@@ -65,7 +65,7 @@
 													Other links
 													</digi:trn>
 												</b></td>
-									<td background="ampModule/aim/images/corner-r.gif" height="17"
+									<td background="module/aim/images/corner-r.gif" height="17"
 										width=17></td>
 								</tr>
 							</table>
@@ -80,7 +80,7 @@
 										</digi:link></td>
 								</tr>
 								<tr>
-									<td class="inside"><digi:link href="/admin.do" ampModule="aim">
+									<td class="inside"><digi:link href="/admin.do" module="aim">
 											<digi:trn key="aim:AmpAdminHome">
 													Admin Home
 													</digi:trn>

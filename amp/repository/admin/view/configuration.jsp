@@ -7,17 +7,17 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/admin/scripts/parser.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/admin/scripts/tree.js"/>"></script>
-<link rel="stylesheet" href="<digi:file src="ampModule/admin/css/tree.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/admin/scripts/propertyView.js"/>"></script>
-<link rel="stylesheet" href="<digi:file src="ampModule/admin/css/propertyView.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/admin/scripts/statusWnd.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/admin/scripts/parser.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/admin/scripts/tree.js"/>"></script>
+<link rel="stylesheet" href="<digi:file src="module/admin/css/tree.css"/>">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/admin/scripts/propertyView.js"/>"></script>
+<link rel="stylesheet" href="<digi:file src="module/admin/css/propertyView.css"/>">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/admin/scripts/statusWnd.js"/>"></script>
 
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="ampModule/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:configuration">Configuration</digi:trn>
@@ -38,10 +38,10 @@
 						<table border="0" cellpadding="0" cellspacing="0">
 							<tr class="configContainerHeader">
 								<td>
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="5" height="20">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5" height="20">
 								</td>							
 								<td>
-									<img src="<digi:file src="ampModule/admin/images/icons/bookIcon.gif"/>">
+									<img src="<digi:file src="module/admin/images/icons/bookIcon.gif"/>">
 								</td>
 								<td width="100%" align="left">
 									&nbsp;Teaser/layout configuration
@@ -55,7 +55,7 @@
 						<div id="treeContainer" class="container" style="width:100%; height:100%;">Processing XML data. Please wait ...</div>
 					</td>
 					<td width="5" class="configVerticalRow">
-						<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="5">
+						<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5">
 					</td>
 					<td height="400" width="50%">
 						<div id="propertyViewContainer" class="container" style="width:100%; height:100%;">
@@ -74,27 +74,27 @@
 						<table border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr class="configContainerHeader">
 								<td align="center" width="20">
-									<img src="<digi:file src="ampModule/admin/images/configToolStart.gif"/>">
+									<img src="<digi:file src="module/admin/images/configToolStart.gif"/>">
 								</td>
 								<td class="configToolsSeparator" width="2">
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="2">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="2">
 								</td>
 								<td>
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="5" height="20">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5" height="20">
 								</td>
 								<td align="center">
 									<digi:link href="/showConfiguration.do">
-										<img src="<digi:file src="ampModule/admin/images/icons/configReload.gif"/>" border="0">
+										<img src="<digi:file src="module/admin/images/icons/configReload.gif"/>" border="0">
 									</digi:link>
 								</td>
 								<td>
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="5">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5">
 								</td>								
 								<td class="configToolsSeparator" width="2">
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="2">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="2">
 								</td>
 								<td width="99%">
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>">
 								</td>								
 							</tr>
 						</table>
@@ -103,16 +103,16 @@
 						<table border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr class="configContainerHeader">
 								<td align="center" width="20">
-									<img src="<digi:file src="ampModule/admin/images/configToolStart.gif"/>">
+									<img src="<digi:file src="module/admin/images/configToolStart.gif"/>">
 								</td>
 								<td class="configToolsSeparator" width="2">
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="2">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="2">
 								</td>								
 								<td>
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" width="5" height="20">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>" width="5" height="20">
 								</td>
 								<td width="99%">
-									<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>">
+									<img src="<digi:file src="module/admin/images/spacer.gif"/>">
 								</td>								
 							</tr>
 						</table>
@@ -120,7 +120,7 @@
 				</tr>
 				<tr>
 					<td colspan="3" style="background-color:#D6B85D" class="configCell" height="5">
-						<img src="<digi:file src="ampModule/admin/images/spacer.gif"/>" height="5" width="5">
+						<img src="<digi:file src="module/admin/images/spacer.gif"/>" height="5" width="5">
 					</td>
 				</tr>
 			</table>	
@@ -143,9 +143,9 @@
 				
 				//Prepare parser rules
 				xmlDoc.docRules.addRule(new XMLParserRuleItem(1, "site-layout"));
-				xmlDoc.docRules.addRule(new XMLParserRuleItem(1, "ampModule-layout"));
+				xmlDoc.docRules.addRule(new XMLParserRuleItem(1, "module-layout"));
 				xmlDoc.docRules.addRule(new XMLParserRuleItem(2, "layout"));
-				xmlDoc.docRules.addRule(new XMLParserRuleItem(3, "ampModule"));
+				xmlDoc.docRules.addRule(new XMLParserRuleItem(3, "module"));
 				xmlDoc.docRules.addRule(new XMLParserRuleItem(4, "put"));
 				xmlDoc.docRules.addRule(new XMLParserRuleItem(5, "put-item"));
 				xmlDoc.docRules.addRule(new XMLParserRuleItem(6, "page"));
@@ -168,31 +168,31 @@
 			}
 			
 			function prepareView() {
-				setCollapseIconSrc ("<digi:file src="ampModule/admin/images/tree/collapse.gif"/>");
-				setExpandIconSrc ("<digi:file src="ampModule/admin/images/tree/expand.gif"/>");
-				setSpacerSrc ("<digi:file src="ampModule/admin/images/tree/spacer.gif"/>");
-				setRootIconSrc ("<digi:file src="ampModule/admin/images/tree/icons/rootIcon.gif"/>");
-				setCommentIconSrc ("<digi:file src="ampModule/admin/images/tree/icons/comment.gif"/>");
-				setDefaultIconSrc ("<digi:file src="ampModule/admin/images/tree/icons/default.gif"/>");
+				setCollapseIconSrc ("<digi:file src="module/admin/images/tree/collapse.gif"/>");
+				setExpandIconSrc ("<digi:file src="module/admin/images/tree/expand.gif"/>");
+				setSpacerSrc ("<digi:file src="module/admin/images/tree/spacer.gif"/>");
+				setRootIconSrc ("<digi:file src="module/admin/images/tree/icons/rootIcon.gif"/>");
+				setCommentIconSrc ("<digi:file src="module/admin/images/tree/icons/comment.gif"/>");
+				setDefaultIconSrc ("<digi:file src="module/admin/images/tree/icons/default.gif"/>");
 				
-				addType(new Type(1, "<digi:file src="ampModule/admin/images/tree/icons/group.gif"/>"));
+				addType(new Type(1, "<digi:file src="module/admin/images/tree/icons/group.gif"/>"));
 				
-				var layoutType = new Type(2, "<digi:file src="ampModule/admin/images/tree/icons/layout.gif"/>");
+				var layoutType = new Type(2, "<digi:file src="module/admin/images/tree/icons/layout.gif"/>");
 				layoutType.addNameExtra("name");
 				addType(layoutType);
 				
-				var moduleType = new Type(3, "<digi:file src="ampModule/admin/images/tree/icons/ampModule.gif"/>");
+				var moduleType = new Type(3, "<digi:file src="module/admin/images/tree/icons/module.gif"/>");
 				moduleType.addNameExtra("name");
 				addType(moduleType);
 				
-				addType(new Type(4, "<digi:file src="ampModule/admin/images/tree/icons/put.gif"/>"));
+				addType(new Type(4, "<digi:file src="module/admin/images/tree/icons/put.gif"/>"));
 
-				var putItemType = new Type(5, "<digi:file src="ampModule/admin/images/tree/icons/putItem.gif"/>");
+				var putItemType = new Type(5, "<digi:file src="module/admin/images/tree/icons/putItem.gif"/>");
 				putItemType.addNameExtra("name");
 				addType(putItemType);
 				
-				addType(new Type(6, "<digi:file src="ampModule/admin/images/tree/icons/page.gif"/>"));
-				addType(new Type(7, "<digi:file src="ampModule/admin/images/tree/icons/teaser.gif"/>"));
+				addType(new Type(6, "<digi:file src="module/admin/images/tree/icons/page.gif"/>"));
+				addType(new Type(7, "<digi:file src="module/admin/images/tree/icons/teaser.gif"/>"));
 				
 				srcXMLString = document.getElementsByName("xmlString")[0].value;
 				propertyViewContainer = document.getElementById ("propertyViewContainer");

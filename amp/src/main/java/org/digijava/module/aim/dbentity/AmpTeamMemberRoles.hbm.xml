@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpTeamMemberRoles"
+	<class name="org.digijava.module.aim.dbentity.AmpTeamMemberRoles"
 		table="AMP_TEAM_MEMBER_ROLES" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampTeamMemRoleId" column="amp_team_mem_role_id" type="java.lang.Long">

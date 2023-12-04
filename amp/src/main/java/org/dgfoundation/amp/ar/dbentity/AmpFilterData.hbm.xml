@@ -18,6 +18,6 @@
 		<property name="propertyClassName" column="property_class_name"  type="java.lang.String"/>
 		<property name="elementClassName" column="element_class_name"  type="java.lang.String"/>
 		<property name="value" column="value"  type="java.lang.String"/>
-		<many-to-one name="filterRelObj" column="amp_report_id" class="org.digijava.ampModule.aim.dbentity.AmpReports" not-null="true"/>
+		<many-to-one name="filterRelObj" column="amp_report_id" class="org.digijava.module.aim.dbentity.AmpReports" not-null="true"/>
 	</class>
 </hibernate-mapping>

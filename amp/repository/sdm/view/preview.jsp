@@ -46,7 +46,7 @@
 				<td width="88%" height="19">
 					<c:out value="${docId.contentTitle}" escapeXml="false" />				
 					<p align='<c:out value="${docId.alignment}" />'>
-					<digi:context name="showImage" property="context/ampModule/moduleinstance/showImage.do" />
+					<digi:context name="showImage" property="context/module/moduleinstance/showImage.do" />
 					   <img src='<%= showImage%>?activeParagraphOrder=<c:out value="${docId.paragraphOrder}" />&documentId=<c:out value="${docId.id}" />'/>
 				   </p>
 				</td>
@@ -55,7 +55,7 @@
 			<tr>
 				<td width="88%" height="19">
 					<p align='<c:out value="${docId.alignment}" />'>
-					<digi:context name="showFile" property="context/ampModule/moduleinstance/showFile.do"/>
+					<digi:context name="showFile" property="context/module/moduleinstance/showFile.do"/>
 					  <a href='<%= showFile%>?activeParagraphOrder=<c:out value="${docId.paragraphOrder}" />&documentId=<c:out value="${docId.id}" />'>
 					<c:out value="${docId.contentTitle}" escapeXml="false" /></a></p>
 				</td>

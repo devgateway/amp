@@ -6,9 +6,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <digi:context name="exportperm"
-	property="context/ampModule/moduleinstance/exchangePermission.do?export" />
+	property="context/module/moduleinstance/exchangePermission.do?export" />
 <digi:context name="importperm"
-	property="context/ampModule/moduleinstance/exchangePermission.do?import" />
+	property="context/module/moduleinstance/exchangePermission.do?import" />
 	
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>

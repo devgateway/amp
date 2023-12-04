@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpMeasures" table="AMP_MEASURES" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpMeasures" table="AMP_MEASURES" lazy="false">
 		<cache usage="read-write" />
 		<id name="measureId" column="measureId" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -17,7 +17,7 @@
 		<set name="reports" table="AMP_REPORT_MEASURES" lazy="true">
 			<cache usage="read-write" />
 			<key column="measureId" />
-			<many-to-many class="org.digijava.ampModule.aim.dbentity.AmpReports"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpReports"
 				column="amp_report_id" />
 		</set>
 

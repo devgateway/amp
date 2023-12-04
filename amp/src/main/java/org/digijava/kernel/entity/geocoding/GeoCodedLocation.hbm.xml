@@ -12,7 +12,7 @@
 					 class="org.digijava.kernel.entity.geocoding.GeoCodedActivity" cascade="none" lazy="false"
 					 not-null="true" />
 		<property name="accepted" type="boolean" />
-		<many-to-one name="location" class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none"
+		<many-to-one name="location" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none"
 					 not-null="true" />
 		<list name="fields" lazy="false" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />

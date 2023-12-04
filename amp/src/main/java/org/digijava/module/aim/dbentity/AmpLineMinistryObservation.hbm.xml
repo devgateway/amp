@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpLineMinistryObservation" table="AMP_LINE_MINISTRY_OBSERVATION">
+	<class name="org.digijava.module.aim.dbentity.AmpLineMinistryObservation" table="AMP_LINE_MINISTRY_OBSERVATION">
 		<cache usage="read-write" />
 		<id name="ampLineMinistryObservationId" column="amp_line_ministry_observation_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -11,11 +11,11 @@
 		<property column="name" name="name" type="text" />
 		<property column="observationDate" name="observationDate" type="java.util.Date" />
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 		<set name="lineMinistryObservationMeasures" cascade="all" inverse="true" order-by="amp_line_ministry_obs_measure_id asc">
 			<cache usage="read-write" />
 			<key column="amp_line_ministry_observation_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpLineMinistryObservationMeasure" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure" />
 		</set>
 	</class>
 </hibernate-mapping>

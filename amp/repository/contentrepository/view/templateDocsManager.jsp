@@ -29,7 +29,7 @@
 							<c:set var="translation">
 								<digi:trn>Click here to goto Admin Home</digi:trn>
 							</c:set>
-	                         <digi:link ampModule="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+	                         <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
 								<digi:trn>Admin Home</digi:trn>
 							</digi:link>&nbsp;&gt;&nbsp;						
 							<digi:trn>Template Docuements Manager</digi:trn>
@@ -128,7 +128,7 @@
 													</digi:trn>
 												</b>
 											</td>
-											<td background="ampModule/aim/images/corner-r.gif" height="17" width="17"></td>
+											<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 										</tr>
 									</table>
 								</td>
@@ -138,18 +138,18 @@
 									<table cellPadding="5" cellSpacing="1" width="100%" class="inside">
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn>Click here to goto Admin Home</digi:trn>
 												</c:set>
-												<digi:link href="/admin.do" title="${translation}" ampModule="aim">
+												<digi:link href="/admin.do" title="${translation}" module="aim">
 													<digi:trn>Admin Home</digi:trn>
 												</digi:link>
 											</td>
 										</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn>Click here to Add New Template</digi:trn>
 												</c:set>

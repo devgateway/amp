@@ -1,5 +1,5 @@
-<%@page import="org.digijava.ampModule.contentrepository.helper.FilterValues"%>
-<%@page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
+<%@page import="org.digijava.module.contentrepository.helper.FilterValues"%>
+<%@page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ page pageEncoding="UTF-8"%> 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <jsp:include page="/repository/aim/view/scripts/newCalendar.jsp"  />
 <%-- This file renders the Resource-Filtering popup table. Add one <tr></tr> per filter criterium --%>
 <style>

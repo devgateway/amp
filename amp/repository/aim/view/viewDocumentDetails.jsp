@@ -15,7 +15,7 @@
     function editDocument(uuid,actId) {
       document.aimRelatedLinksForm.activityId.value=actId;
       document.aimRelatedLinksForm.uuid.value=uuid;
-      <digi:context name="editDoc" property="context/ampModule/moduleinstance/updateDocumentDetails.do" />
+      <digi:context name="editDoc" property="context/module/moduleinstance/updateDocumentDetails.do" />
       document.aimRelatedLinksForm.action = "<%= editDoc %>";
       document.aimRelatedLinksForm.target = "_self";
       document.aimRelatedLinksForm.submit();
@@ -27,7 +27,7 @@
       }
       document.aimRelatedLinksForm.activityId.value=actId;
       document.aimRelatedLinksForm.uuid.value=uuid;
-      <digi:context name="deleteDoc" property="context/ampModule/moduleinstance/deleteDocument.do" />
+      <digi:context name="deleteDoc" property="context/module/moduleinstance/deleteDocument.do" />
       document.aimRelatedLinksForm.action = "<%= deleteDoc %>";
       document.aimRelatedLinksForm.target = "_self";
       document.aimRelatedLinksForm.submit();

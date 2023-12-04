@@ -8,11 +8,11 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="java.util.List"%>
-<%@ page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 <%@include file="addThumbnailPanel.jsp" %>
@@ -245,7 +245,7 @@ function deleteThumbnail(){
 		</td>
 	<tr>
 <table>
-<script  type="text/javascript" src="<digi:file src="ampModule/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
 <script type="text/javascript">
 initFileUploads();
 </script>

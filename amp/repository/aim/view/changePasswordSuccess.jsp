@@ -36,7 +36,7 @@
 						Successfully changed password
 						</digi:trn>
 						</b><br><br>
-												<digi:img src="ampModule/aim/images/i-C2160E.gif" width="13" height="9"/>
+												<digi:img src="module/aim/images/i-C2160E.gif" width="13" height="9"/>
 						<digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for        
         			    official business. You have been granted the right to access these        

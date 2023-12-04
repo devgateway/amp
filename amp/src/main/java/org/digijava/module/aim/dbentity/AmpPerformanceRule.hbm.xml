@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpPerformanceRule" table="AMP_PERFORMANCE_RULE">
+	<class name="org.digijava.module.aim.dbentity.AmpPerformanceRule" table="AMP_PERFORMANCE_RULE">
 		<cache usage="read-write" />
 		
 		<id name="id" column="rule_id" type="java.lang.Long">
@@ -18,12 +18,12 @@
 		</property>
 		
 		<many-to-one name="level" column="level_category" 
-		      class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
+		      class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
 		      
 		<set name="attributes" table="AMP_PERFORMANCE_RULE_ATTRIBUTE" inverse="true" cascade="all-delete-orphan" lazy="true">
             <cache usage="read-write" />
             <key column="rule_id" />
-            <one-to-many class="org.digijava.ampModule.aim.dbentity.AmpPerformanceRuleAttribute" />
+            <one-to-many class="org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute" />
         </set>
 		
 	</class>

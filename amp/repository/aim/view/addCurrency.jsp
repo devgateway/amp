@@ -134,7 +134,7 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="ampModule/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 												
 											</td>
 										</tr>
@@ -146,7 +146,7 @@
 									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewCurrencyManager">Click here to view Currency Manager</digi:trn>
 												</c:set>
@@ -159,7 +159,7 @@
 										</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="ampModule/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

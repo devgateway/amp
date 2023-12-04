@@ -89,19 +89,19 @@
 						<tr>
 							<td noWrap align="center" valign="middle">		
 								<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-									<digi:img hspace="2" vspace="2" src="ampModule/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+									<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
 								</a>
 							</td>
 					
 							<td noWrap align="center" valign="middle">
 								<a href="#" target="_blank" onclick="toggleActionForm('doc'); return false;">
-									<digi:img hspace="2" vspace="2" src="ampModule/aim/images/word_icon.gif" border="0" alt="Export to Word" />
+									<digi:img hspace="2" vspace="2" src="module/aim/images/word_icon.gif" border="0" alt="Export to Word" />
 								</a>
 							</td>
 					
 							<td noWrap align="center" valign="middle">
 								<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
-									<digi:img hspace="2" vspace="2" src="ampModule/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
+									<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
 								</a>
 							</td>
 						</tr>
@@ -227,12 +227,12 @@
 
 <script type="text/javascript">
 
-	<digi:context name="topicBodyAction" 		property="context/ampModule/moduleinstance/topicBody.do" />
+	<digi:context name="topicBodyAction" 		property="context/module/moduleinstance/topicBody.do" />
 	<digi:context name="topicEditAction" 		property="context/editor/moduleinstance/showEditText.do" />
-	<digi:context name="topicDeleteAction" 		property="context/ampModule/moduleinstance/deleteTopic.do" />
-	<digi:context name="topicSearchAction" 		property="context/ampModule/moduleinstance/searchGlossary.do" />
-	<digi:context name="topicShowAddAction" 	property="context/ampModule/moduleinstance/showAddGlossary.do" />
-	<digi:context name="topicTitleSaveAction" 	property="context/ampModule/moduleinstance/saveTopicTitle.do" />
+	<digi:context name="topicDeleteAction" 		property="context/module/moduleinstance/deleteTopic.do" />
+	<digi:context name="topicSearchAction" 		property="context/module/moduleinstance/searchGlossary.do" />
+	<digi:context name="topicShowAddAction" 	property="context/module/moduleinstance/showAddGlossary.do" />
+	<digi:context name="topicTitleSaveAction" 	property="context/module/moduleinstance/saveTopicTitle.do" />
 	
 	var getBodyURL 		= '<%=topicBodyAction%>';
 	var editorLink 		= '<%=topicEditAction%>';

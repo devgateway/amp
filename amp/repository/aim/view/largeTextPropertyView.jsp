@@ -3,7 +3,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <bean:define name="largeTextFeature" id="largeTextFeature"
 	scope="request" />
@@ -13,7 +13,7 @@
 <bean:define id="useColonInLabel" toScope="request" value="true"/>
 
 
-<ampModule:display name="${moduleName}" parentModule="${parentModule}">
+<module:display name="${moduleName}" parentModule="${parentModule}">
 	<digi:trn key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn><c:if test="${useColonInLabel}">:&nbsp;</c:if>
 	<c:if test="${largeTextKey!=null}">
 		<c:if test="${boldText}">
@@ -24,4 +24,4 @@
 		</c:if>
 	</c:if>
 	<hr />
-</ampModule:display>
+</module:display>

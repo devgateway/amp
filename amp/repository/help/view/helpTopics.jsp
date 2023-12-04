@@ -5,15 +5,15 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@page import="org.digijava.ampModule.help.util.HelpUtil"%>
+<%@page import="org.digijava.module.help.util.HelpUtil"%>
  <digi:ref href="css/dhtmlxtree.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/help/script/dhtmlxtree.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/help/script/dhtmlXTree_xw.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/help/script/dhtmlXTree_ed.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxtree.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlXTree_xw.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlXTree_ed.js"/>"></script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/help/script/dhtmlxcommon.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxcommon.js"/>"></script>
 <!--
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/dhtmlxcommon_debug.js"/>"></script>
 -->
@@ -53,7 +53,7 @@
 </script>
 
 <digi:instance property="helpForm" />
-<digi:context name="url" property="context/ampModule/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
+<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
 <div id="content"  class="yui-skin-sam" style="width:100%;">
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                <ul class="yui-nav">&nbsp;

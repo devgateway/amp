@@ -59,7 +59,7 @@ communications failing and reacting accordingly.
 ## Motivation aka wasn't "Flux good enough for you?"
 I find that Flux works well when building monolithic applications from scratch, however, I found it quite troublesome
 to develop Flux submodules that then can be plugged into other existing Flux architecture. As well as transitioning
-an already existing application to Flux on a ampModule-by-ampModule basis.
+an already existing application to Flux on a module-by-module basis.
 
 ## Implementation
 This particular implementation of MVU uses a custom immutable Model type for its state. Other Immutable solutions
@@ -89,7 +89,7 @@ export class Model extends AMP.Model{
     value: number
 }
 ```
-Next, by conventions, we'll export a variable named _model_ that'll represent the initial state of our ampModule.
+Next, by conventions, we'll export a variable named _model_ that'll represent the initial state of our module.
 ```js
 export var model: Model = new Model({
     value: 0
@@ -97,7 +97,7 @@ export var model: Model = new Model({
 ```
 ##### Resolvable models
 In case you need to do AJAX in order to evaluate your initial model, the convention is to export a function
-called _init_ that will return a promise that will resolve with your ampModule's initial state.
+called _init_ that will return a promise that will resolve with your module's initial state.
 ```js
 export init = () => fetch('/rest/counter')
     .then(response => response.json())
@@ -196,11 +196,11 @@ export var view = AMP.view((model, actions) => (
   </div>
 ))
 ```
-As you see, we reuse the Counter ampModule, but notice its view's props.
+As you see, we reuse the Counter module, but notice its view's props.
 By invoking _actions.counter_ we get a copy of _Counter.actions_ that are modified
 in such a way that they will get sent to our _update_ function, rather than to
 _Counter.update_.
-Next we give it its submodule within our ampModule, this is where it's going to keep
+Next we give it its submodule within our module, this is where it's going to keep
 its state, we will contain the Counter within that submodel.
 
 As you can also see, our view emits the Save action, but in order to process it

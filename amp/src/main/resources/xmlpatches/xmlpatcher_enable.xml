@@ -3,7 +3,7 @@
   <jira>AMPOPS-18</jira>
   <keyword>xmlpatcher</keyword>
   <author>Mihai</author>
-  <description>This will enable the XML Patcher ampModule, so that you don't have to add it manually from Digi Admin</description>
+  <description>This will enable the XML Patcher module, so that you don't have to add it manually from Digi Admin</description>
   <trigger type="all">
       <condition type="custom">
           <script returnVar="y">

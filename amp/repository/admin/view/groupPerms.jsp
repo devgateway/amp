@@ -11,13 +11,13 @@
 <script>
 
   function fnOnAddPerm() {
-      <digi:context name="addUrl" property="context/ampModule/moduleinstance/addPermission.do" />
+      <digi:context name="addUrl" property="context/module/moduleinstance/addPermission.do" />
       document.groupPermissionsForm.action = "<%= addUrl %>";
       document.groupPermissionsForm.submit();
   }
 
   function fnOnDeletePerm(index) {
-      <digi:context name="deleteUrl" property="context/ampModule/moduleinstance/deletePermission.do" />
+      <digi:context name="deleteUrl" property="context/module/moduleinstance/deletePermission.do" />
       document.groupPermissionsForm.action = "<%= deleteUrl %>?index=" + index;
       document.groupPermissionsForm.submit();
   }
@@ -52,7 +52,7 @@
 </table>
 <br>
 <table>
-<logic:iterate name="groupPermissionsForm" property="permissions" id="permission" indexId="index" type="org.digijava.ampModule.admin.form.GroupPermissionsForm.PermissionInfo">
+<logic:iterate name="groupPermissionsForm" property="permissions" id="permission" indexId="index" type="org.digijava.module.admin.form.GroupPermissionsForm.PermissionInfo">
 <tr>
 <td><html:hidden name="permission" property="id" indexed="true" />
  <html:select name="permission" property="resourceId" indexed="true" style="text">
@@ -75,14 +75,14 @@
 <tr><td>&nbsp;</td></tr>
 <tr><td><html:submit value="Save"/></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td><digi:trn key="admin:permOnOtherSiteModuleInstances">Permissions on other site's ampModule instances</digi:trn></td></tr>
+<tr><td><digi:trn key="admin:permOnOtherSiteModuleInstances">Permissions on other site's module instances</digi:trn></td></tr>
 <tr><td>
 <table>
 <tr bgColor=#f0f0f0><td noWrap><digi:trn key="admin:siteName">Site Name</digi:trn></td><td noWrap><digi:trn key="admin:moduleName">Module Name</digi:trn></td><td noWrap><digi:trn key="admin:moduleInstance">Module Instance</digi:trn></td><td noWrap><digi:trn key="admin:permActions">Permitted action(s)</digi:trn></td></tr>
 <c:forEach var="perm" items="${groupPermissionsForm.foreignPerms}">
 <tr>
    <td><c:out value="${perm.site.name}" /></td>
-   <td><c:out value="${perm.ampModule}" /></td>
+   <td><c:out value="${perm.module}" /></td>
    <td><c:out value="${perm.instance}" /></td>
    <td><c:out value="${perm.actions}" /></td>
 </tr>
@@ -97,7 +97,7 @@
 <c:forEach var="perm" items="${groupPermissionsForm.inheritedPermissions}">
 <tr>
    <td><c:out value="${perm.site.name}" /></td>
-   <td><c:out value="${perm.ampModule}" /></td>
+   <td><c:out value="${perm.module}" /></td>
    <td><c:out value="${perm.instance}" /></td>
    <td><c:out value="${perm.actions}" /></td>
 </tr>

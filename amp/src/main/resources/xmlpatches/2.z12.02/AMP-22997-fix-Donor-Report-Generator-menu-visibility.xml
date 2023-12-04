@@ -14,8 +14,8 @@
                 <!-- 1.      CLEANUP duplicate 'Donor Profile Report' FM -->
                 <!-- change everything to be linked to the latest 'Donor Profile Report' id -->
                 UPDATE amp_modules_templates
-                    SET ampModule = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Donor Profile Report')
-                    WHERE ampModule IN (SELECT id FROM amp_modules_visibility WHERE name = 'Donor Profile Report');
+                    SET module = (SELECT max(id) FROM amp_modules_visibility WHERE name = 'Donor Profile Report')
+                    WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = 'Donor Profile Report');
                 <!-- delete older entries -->
                 DELETE FROM amp_modules_visibility 
                     WHERE name = 'Donor Profile Report' 

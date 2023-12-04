@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <!-- popin for pre-defined values -->
 
@@ -139,7 +139,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 
 <script langauage="JavaScript">
 	function addNewField() {
-		<digi:context name="addEdiNewField" property="context/ampModule/moduleinstance/tempDocManager.do?actType=addTemplateDocumentField" />
+		<digi:context name="addEdiNewField" property="context/module/moduleinstance/tempDocManager.do?actType=addTemplateDocumentField" />
 		tempDocManagerForm.action = "<%=addEdiNewField%>";        
 		tempDocManagerForm.submit();
 	}
@@ -151,7 +151,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 			alert('Select Field Type First !');
 			return false;
 		}else{
-			<digi:context name="commentUrl" property="context/ampModule/moduleinstance/manageField.do?" />
+			<digi:context name="commentUrl" property="context/module/moduleinstance/manageField.do?" />
 			var url = "<%=commentUrl %>";
 			var temlateName=document.getElementById('tempName').value;
 			var params="&action=manage&templateDocFieldTemporaryId="+fieldTempId+"&selectedFieldType="+selectedFieldType.value+"&templateName="+temlateName;
@@ -160,7 +160,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	}
 
 	function addNewPreDefinedValue(){
-		<digi:context name="addVal" property="context/ampModule/moduleinstance/manageField.do?"/>;
+		<digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
         var url="${addVal}&action=addNewValue";
         var parameters=getFieldParams();
         YAHOOAmp.util.Connect.asyncRequest("POST", url, callback,parameters);
@@ -169,7 +169,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	function deleteData(valueId,isTextArea){ //delete pre-defined value
 		  var flag = confirm("Delete this data?");
 		  if(flag == true){
-			  <digi:context name="addVal" property="context/ampModule/moduleinstance/manageField.do?"/>;
+			  <digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
 		        var url="${addVal}&action=deleteValue&valueId="+valueId;
 		        var parameters=getFieldParams(isTextArea);
 		        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback,parameters);
@@ -193,7 +193,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
         	}
     	}
     	
-		<digi:context name="addVal" property="context/ampModule/moduleinstance/manageField.do?"/>;
+		<digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
         var url="${addVal}&action=saveValues";
         var parameters=getFieldParams(isTextArea);
         YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackAfterSave,parameters);
@@ -252,7 +252,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 		if(checkboxes!=null && checkboxes.length>0){
             var flag = confirm("<digi:trn jsFriendly='true'>Delete this data?</digi:trn>");
             if(flag){
-			<digi:context name="remFields" property="context/ampModule/moduleinstance/tempDocManager.do?actType=deleteTemplateDocumentField" />
+			<digi:context name="remFields" property="context/module/moduleinstance/tempDocManager.do?actType=deleteTemplateDocumentField" />
 			tempDocManagerForm.action = "${remFields}";
 			tempDocManagerForm.submit();
             }
@@ -266,7 +266,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	function fieldTypeChanged(fieldTempId){
 		var fieldTypeSelId="fieldType_"+fieldTempId;
 		var fieldType=document.getElementById(fieldTypeSelId).value;
-		<digi:context name="addEdiNewField" property="context/ampModule/moduleinstance/tempDocManager.do?actType=editTemplateDocumentField" />
+		<digi:context name="addEdiNewField" property="context/module/moduleinstance/tempDocManager.do?actType=editTemplateDocumentField" />
 		tempDocManagerForm.action = "<%=addEdiNewField%>&templateDocFieldTemporaryId="+fieldTempId+"&selFieldType="+fieldType;
 		tempDocManagerForm.submit();
 	}

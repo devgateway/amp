@@ -18,7 +18,7 @@ function login()
 
 {
 
-	<digi:context name="addUrl" property="context/ampModule/moduleinstance/login.do" />
+	<digi:context name="addUrl" property="context/module/moduleinstance/login.do" />
 
     document.aimPhysicalProgressForm.action = "<%=addUrl%>";
 
@@ -34,7 +34,7 @@ function login()
 
 <logic:equal name="aimPhysicalProgressForm" property="validLogin" value="false">
 
-<digi:form action="/login.do" name="aimPhysicalProgressForm" type="org.digijava.ampModule.aim.form.PhysicalProgressForm"
+<digi:form action="/login.do" name="aimPhysicalProgressForm" type="org.digijava.module.aim.form.PhysicalProgressForm"
 
 method="post">
 

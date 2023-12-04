@@ -117,7 +117,7 @@
 	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>
-			org.digijava.ampModule.aim.patches.DBPatcher:patchAMPDB
+			org.digijava.module.aim.patches.DBPatcher:patchAMPDB
 		</param-value>
 	</context-param>
 
@@ -153,13 +153,13 @@
 
 	<listener>
 		<listener-class>
-			org.digijava.ampModule.aim.startup.AMPStartupListener
+			org.digijava.module.aim.startup.AMPStartupListener
 		</listener-class>
 	</listener>
 
 	<!-- Quartz Listener -->
 	<listener>
-		<listener-class>org.digijava.ampModule.aim.startup.QuartzStartupListener</listener-class>
+		<listener-class>org.digijava.module.aim.startup.QuartzStartupListener</listener-class>
 	</listener>
 
 	<listener>
@@ -248,7 +248,7 @@
 	<servlet>
 		<servlet-name>action</servlet-name>
 		<servlet-class>
-			org.digijava.ampModule.aim.config.AMPActionServlet
+			org.digijava.module.aim.config.AMPActionServlet
 		</servlet-class>
 		<init-param>
 			<param-name>config</param-name>

@@ -41,7 +41,7 @@
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>
+						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 							<digi:trn key="aim:registeredUserLogIn">
 							Registered <u>U</u>ser Log In:
 							</digi:trn>
@@ -58,7 +58,7 @@
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>
+						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 						<digi:trn key="aim:password">
 						<u>P</u>assword:
 						</digi:trn>
@@ -125,7 +125,7 @@
         		</tr>
         		<tr>
 	          	<td class=r-dotted-lg-buttom valign="top">
-						<digi:img src="ampModule/aim/images/i-C2160E.gif" width="13" height="9"/>
+						<digi:img src="module/aim/images/i-C2160E.gif" width="13" height="9"/>
 						 <digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for        
 	        		     official business. You have been granted the right to access these        

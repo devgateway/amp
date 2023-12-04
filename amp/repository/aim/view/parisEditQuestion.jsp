@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
@@ -31,7 +31,7 @@
 	function saveIndicator()
 	{
 		
-		<digi:context name="addPIInd" property="context/ampModule/moduleinstance/parisIndicatorAdd.do?editquestion=false" />
+		<digi:context name="addPIInd" property="context/module/moduleinstance/parisIndicatorAdd.do?editquestion=false" />
 		document.aimParisIndicatorManagerForm.action = "<%= addPIInd%>";
 		document.aimParisIndicatorManagerForm.target = window.opener.name;
 		document.aimParisIndicatorManagerForm.submit();

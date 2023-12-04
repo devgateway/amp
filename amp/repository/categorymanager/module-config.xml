@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ampModule-config>
+<module-config>
 	<name>categorymanager</name>
 
 
@@ -9,13 +9,13 @@
 
 	<hibernate-classes required="true">
 		<hibernate-class>
-			org.digijava.ampModule.categorymanager.dbentity.AmpCategoryClass
+			org.digijava.module.categorymanager.dbentity.AmpCategoryClass
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue
+			org.digijava.module.categorymanager.dbentity.AmpCategoryValue
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.ampModule.categorymanager.dbentity.AmpLinkedCategoriesState
+			org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState
 		</hibernate-class>
 	</hibernate-classes>
-</ampModule-config>
+</module-config>

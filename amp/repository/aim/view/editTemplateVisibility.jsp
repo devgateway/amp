@@ -23,14 +23,14 @@
 	<digi:form action="/visibilityManager.do" method="post" >
 	<logic:notEmpty name="aimVisibilityManagerForm" property="templateModules">
 	<logic:iterate name="aimVisibilityManagerForm" property="templateModules" id="visibility"
-		type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility">
+		type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 		<tr bgcolor="#ffffff">
 			<td width="9">
 					<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 			</td>																	
 			<td width="100%"> <bean:write name="visibility" property="name"/> </td>
 			<td>
-			<select name='<%="ampModule:"+visibility.getNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#0000ff; ">
+			<select name='<%="module:"+visibility.getNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#0000ff; ">
 				<option value="disable" >-- Disable --</option>
 				<option value="enable" selected>-- Enabled --</option>											
 			</select>
@@ -40,14 +40,14 @@
 	</logic:notEmpty>
 	<logic:notEmpty name="aimVisibilityManagerForm" property="templateModulesNotActive">
 	<logic:iterate name="aimVisibilityManagerForm" property="templateModulesNotActive" id="visibility"
-		type="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility">
+		type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 		<tr bgcolor="#ffffff">
 			<td width="9">
 					<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 			</td>																	
 			<td width="100%"> <bean:write name="visibility" property="name"/> </td>
 			<td>
-			<select name='<%="ampModule:"+visibility.getNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#ff0000;">
+			<select name='<%="module:"+visibility.getNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#ff0000;">
 				<option value="disable" selected>-- Disabled --</option>
 				<option value="enable" >-- Enable --</option>
 			</select>

@@ -30,7 +30,7 @@
                                        WHERE  NAME = '/Activity Form/M&E/ME Item/Risk') ;
 
                 INSERT INTO amp_modules_templates
-                            (ampModule,
+                            (module,
                              template)
                 SELECT (SELECT id
                         FROM   amp_modules_visibility
@@ -40,14 +40,14 @@
                 WHERE  EXISTS (SELECT 1
                                FROM   amp_modules_templates mt
                                WHERE  mt.template = tv.id
-                                      AND mt.ampModule = (SELECT id
+                                      AND mt.module = (SELECT id
                                                        FROM   amp_modules_visibility
                                                        WHERE  name =
                                                       '/Activity Form/M&E/ME Item'))
                        AND NOT EXISTS (SELECT 1
                                        FROM   amp_modules_templates mt
                                        WHERE  mt.template = tv.id
-                                              AND mt.ampModule = (SELECT id
+                                              AND mt.module = (SELECT id
                                                                FROM   amp_modules_visibility
                                                                WHERE  name =
                                                               '/Activity Form/M&E/ME Item/Risk')

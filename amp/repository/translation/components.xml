@@ -13,9 +13,9 @@
     <page page="contentTrnExport" name="contentTrnExportLayout" title=" - Export Content Translations" />
     <page page="contentTrnImport" name="contentTrnImportLayout" title=" - Import Content Translations" />
 </secondary-pages>
-<ampModule>
+<module>
 	<teaser-file>dropdownLangSwitch.jsp</teaser-file>
 	<teaser name="flatLangSwitch" action="renderTeaser.do">flatLangSwitch.jsp</teaser>
 	<teaser name="dropdownLangSwitch" action="renderTeaser.do">dropdownLangSwitch.jsp</teaser>
-</ampModule>
+</module>
 </config>

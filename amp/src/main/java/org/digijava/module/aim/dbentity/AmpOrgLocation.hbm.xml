@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.digijava.ampModule.aim.dbentity.AmpOrgLocation" table="AMP_ORG_LOCATION" lazy="false">
+    <class name="org.digijava.module.aim.dbentity.AmpOrgLocation" table="AMP_ORG_LOCATION" lazy="false">
         <cache usage="read-write" />
         <id name="ampOrgLocId" column="amp_org_loc_id" type="java.lang.Long">
             <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -9,7 +9,7 @@
             </generator>
         </id>
         <property name="percent" column="percent" type="java.lang.Double" />
-        <many-to-one name="organization" column="amp_org_id" class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
-        <many-to-one name="location" column="location_id" class="org.digijava.ampModule.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+        <many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+        <many-to-one name="location" column="location_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
     </class>
 </hibernate-mapping>

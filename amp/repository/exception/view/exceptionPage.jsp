@@ -7,7 +7,7 @@
 
 <html>
 <body bgcolor="#ffffff">
-<digi:form method="post" action="/exceptionReport.do" ampModule="exception">
+<digi:form method="post" action="/exceptionReport.do" module="exception">
   <html:hidden property="exceptionInfo.sourceURL"/>
   <html:hidden property="exceptionInfo.exceptionCode"/>
   <html:hidden property="exceptionInfo.errorMessage"/>

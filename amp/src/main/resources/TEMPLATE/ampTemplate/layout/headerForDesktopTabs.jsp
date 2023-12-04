@@ -5,8 +5,8 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
-<%@ page import="org.digijava.ampModule.aim.util.FeaturesUtil" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
 <!-- Stylesheet of AMP -->
@@ -79,7 +79,7 @@ table tr td {
 </c:set>
 
 <logic:notEmpty name="currentMember" scope="session">
-	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.ampModule.aim.helper.TeamMember" />
+	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
 </logic:notEmpty>
 <logic:empty name="currentMember" scope="session">
 	<logic:notEmpty name="currentUser" scope="session">

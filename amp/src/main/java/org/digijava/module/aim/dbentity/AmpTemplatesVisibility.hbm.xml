@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpTemplatesVisibility"
+	<class name="org.digijava.module.aim.dbentity.AmpTemplatesVisibility"
 		table="AMP_TEMPLATES_VISIBILITY" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -15,22 +15,22 @@
 		<set name="items" table="amp_modules_templates" lazy="false" sort="natural"	cascade="none">
 			<cache usage="read-write" />
 			<key column="template" />
-			<many-to-many column="ampModule"
-				class="org.digijava.ampModule.aim.dbentity.AmpModulesVisibility" />
+			<many-to-many column="module"
+				class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
 		</set>
 
 		<set name="features" table="amp_features_templates" lazy="false" sort="natural" cascade="none">
 			<cache usage="read-write" />
 			<key column="template" />
 			<many-to-many column="feature"
-				class="org.digijava.ampModule.aim.dbentity.AmpFeaturesVisibility" />
+				class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />
 		</set>
 
 		<set name="fields" table="amp_fields_templates" lazy="false" sort="natural" cascade="none"> 
 			<cache usage="read-write" />
 			<key column="template" />
 			<many-to-many column="field"
-				class="org.digijava.ampModule.aim.dbentity.AmpFieldsVisibility" />
+				class="org.digijava.module.aim.dbentity.AmpFieldsVisibility" />
 		</set>
 
 	</class>

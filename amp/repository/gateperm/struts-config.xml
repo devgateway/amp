@@ -3,18 +3,18 @@
 <struts-config>
 	<form-beans>
 		<form-bean name="permissionForm"
-			type="org.digijava.ampModule.gateperm.form.PermissionForm"
+			type="org.digijava.module.gateperm.form.PermissionForm"
 		/>
 		<form-bean name="permissionMapForm"
-			type="org.digijava.ampModule.gateperm.form.PermissionMapForm"
+			type="org.digijava.module.gateperm.form.PermissionMapForm"
 		/>
 		<form-bean name="exchangePermissionForm"
-			type="org.digijava.ampModule.gateperm.form.ExchangePermissionForm"/>
+			type="org.digijava.module.gateperm.form.ExchangePermissionForm"/>
 	
 	</form-beans>
 	<action-mappings>
 		<action path="/gateperm/managePerm" scope="session"
-			type="org.digijava.ampModule.gateperm.action.ManagePermission"
+			type="org.digijava.module.gateperm.action.ManagePermission"
 			name="permissionForm"
 			input="/showLayout.do?layout=gateperm_editPermission"
 		>
@@ -23,7 +23,7 @@
 			/>
 		</action>
 		<action path="/gateperm/managePermMap" scope="session"
-			type="org.digijava.ampModule.gateperm.action.ManagePermissionMap"
+			type="org.digijava.module.gateperm.action.ManagePermissionMap"
 			name="permissionMapForm"
 			input="/showLayout.do?layout=gateperm_editPermissionMap"
 		>
@@ -33,7 +33,7 @@
 		</action>
 		
 		<action path="/gateperm/exchangePermission" scope="request"
-			type="org.digijava.ampModule.gateperm.action.ExchangePermission"
+			type="org.digijava.module.gateperm.action.ExchangePermission"
 			name="exchangePermissionForm"
 			input="/showLayout.do?layout=gateperm_exportPermission">
 			<forward name="option"

@@ -402,7 +402,7 @@
 	<page page="orgProfileReport" name="aim_orgProfileReport" title="Donor Report Generator" />
 	<page name="de_interchangeResult" page="interchangeableResultList" title="Data Import Manager Results" />
 </secondary-pages>
-<ampModule>
+<module>
 
 
 
@@ -573,6 +573,6 @@
     </teaser>
 
     <!-- Teasers Add/Edit End	-->
-</ampModule>
+</module>
 
 </config>

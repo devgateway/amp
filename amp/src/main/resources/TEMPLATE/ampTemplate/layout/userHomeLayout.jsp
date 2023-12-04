@@ -7,11 +7,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <html>
 	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge" />
 	<digi:base />
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='ampModule/aim/scripts/EnterHitBinder.js'/>" >.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 	<digi:context name="digiContext" property="context"/>
 	<head>
 		<title>
@@ -107,7 +107,7 @@
 				<td valign="top" width="1px" id="right-column">
 					<digi:secure authenticated="true">
 					<div id="rightpanel">
-						<feature:display name="Desktop Search form" ampModule="Tools">
+						<feature:display name="Desktop Search form" module="Tools">
 							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>
 						</feature:display>
 						<logic:present name="currentMember">
@@ -118,9 +118,9 @@
 							<c:set var="translation">
 								<digi:trn key="aim:clickToViewMoreResources">Click here to view more resources</digi:trn>
 							</c:set>
-							<ampModule:display name="Content Repository" parentModule="Resources">
+							<module:display name="Content Repository" parentModule="Resources">
 								<div id='resources-widget-container'></div>
-							</ampModule:display>
+							</module:display>
 							
 							<digi:insert attribute="myMessages"/>																		
 						</logic:present>

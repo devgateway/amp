@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpDataFreezeSettings" table="AMP_DATA_FREEZE_SETTINGS">
+	<class name="org.digijava.module.aim.dbentity.AmpDataFreezeSettings" table="AMP_DATA_FREEZE_SETTINGS">
 		<cache usage="read-write" />
 		<id name="ampDataFreezeSettingsId" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -20,7 +20,7 @@
 	    <property name="filters" column="filters" type="text" />
 	    <property name="freezeOption" column="freeze_option">
 			<type name="org.hibernate.type.EnumType">
-				<param name="enumClass">org.digijava.ampModule.aim.dbentity.AmpDataFreezeSettings$FreezeOptions</param>
+				<param name="enumClass">org.digijava.module.aim.dbentity.AmpDataFreezeSettings$FreezeOptions</param>
 				<param name="useNamed">true</param>
 			</type>
 		</property>

@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 
-<%@ page import = "org.digijava.ampModule.aim.helper.ChartGenerator" %>
+<%@ page import = "org.digijava.module.aim.helper.ChartGenerator" %>
 
 <%@ page import = "java.io.PrintWriter, java.util.*" %>
 
@@ -17,11 +17,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="ampModule/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
@@ -36,9 +36,9 @@
 <digi:trn key="aim:risk:verylow">Very Low</digi:trn>
 <digi:trn key="aim:performance:actual">Actual</digi:trn>
 <digi:trn key="aim:performance:target">Target</digi:trn>
-	<feature:display name="Activity" ampModule="M & E"></feature:display>
-	<feature:display name="Portfolio Dashboard" ampModule="M & E"></feature:display>
-	<feature:display name="Admin" ampModule="M & E"></feature:display>
+	<feature:display name="Activity" module="M & E"></feature:display>
+	<feature:display name="Portfolio Dashboard" module="M & E"></feature:display>
+	<feature:display name="Admin" module="M & E"></feature:display>
 
 </div>
 
@@ -46,19 +46,19 @@
 
 <script language="Javascript">
 	function showPrinterFriendlyPortPerf() {
-		<digi:context name="ptUrl" property="context/ampModule/moduleinstance/viewPrintablePortPerf.do" />
+		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPrintablePortPerf.do" />
 		var url = "<%=ptUrl%>";
 	 	openURLinWindow(url,650,500);
 	}
 
 	function showPrinterFriendlyPortRisk() {
-		<digi:context name="ptUrl" property="context/ampModule/moduleinstance/viewPrintablePortRisk.do" />
+		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPrintablePortRisk.do" />
 		var url = "<%=ptUrl%>";
 	 	openURLinWindow(url,650,450);
 	}
 
 	function portPerfWithoutBaseline() {
-		<digi:context name="ptUrl" property="context/ampModule/moduleinstance/viewPortPerfWithoutBase.do" />
+		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPortPerfWithoutBase.do" />
 		var url = "<%=ptUrl%>";
 	 	openURLinWindow(url,650,500);
 	}
@@ -126,7 +126,7 @@
     <div id="content" class="yui-skin-sam" style="width:100%;">
         <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
             <ul class="yui-nav">
-                <ampModule:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+                <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
                 <li>
                     <digi:link href="/nationalPlaningDashboard.do">
                         <div>
@@ -134,8 +134,8 @@
                         </div>
                     </digi:link>
                 </li>
-                </ampModule:display>
-                <feature:display name="Portfolio Dashboard" ampModule="M & E">
+                </module:display>
+                <feature:display name="Portfolio Dashboard" module="M & E">
                 <li class="selected">
                     <a style="cursor:pointer">
                         <div>
@@ -148,7 +148,7 @@
         </div>
 	</div>
 <div class="yui-content" style="background-color:#ffffff;border:1px solid #CCCCCC;height:auto;">
-        <feature:display name="Portfolio Dashboard" ampModule="M & E">
+        <feature:display name="Portfolio Dashboard" module="M & E">
 		<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
 			<TR><TD align=left>
 				<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">

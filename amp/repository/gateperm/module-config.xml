@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ampModule-config>
+<module-config>
 	<name>gateperm</name>
 
 <security>
@@ -11,10 +11,10 @@
 
 	<hibernate-classes required="true">
 		<hibernate-class>
-			org.digijava.ampModule.gateperm.core.Permission
+			org.digijava.module.gateperm.core.Permission
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.ampModule.gateperm.core.PermissionMap
+			org.digijava.module.gateperm.core.PermissionMap
 		</hibernate-class>
 	</hibernate-classes>	
-</ampModule-config>
+</module-config>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This mostly deals with Spring Security configuration for AMP -->
-<!-- Please do not put your http patterns here, use ampModule-spring.xml files !! -->
+<!-- Please do not put your http patterns here, use module-spring.xml files !! -->
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -113,8 +113,8 @@
 	<http pattern="/showLayout.do/?layout=viewActivityHistory" request-matcher="regex"
 		security="none" />
 
-	<!-- import digi ampModule spring configuration files -->
-	<beans:import resource="classpath:../../repository/**/ampModule-spring.xml" />
+	<!-- import digi module spring configuration files -->
+	<beans:import resource="classpath:../../repository/**/module-spring.xml" />
 
 	<!-- uncomment this to see debugging info about spring security -->
 	<!-- <debug/> -->

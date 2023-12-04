@@ -8,11 +8,11 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
-<%@page import="org.digijava.ampModule.aim.action.TabManagerAction" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@page import="org.digijava.module.aim.action.TabManagerAction" %>
 
 <digi:instance property="aimTabManagerForm" />
-<bean:define name="aimTabManagerForm" id="myForm" type="org.digijava.ampModule.aim.form.TabManagerForm" toScope="request"/>
+<bean:define name="aimTabManagerForm" id="myForm" type="org.digijava.module.aim.form.TabManagerForm" toScope="request"/>
 
 <c:if test="${myForm.exceptionOccurred}" >
 	<font color="red">

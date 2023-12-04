@@ -10,7 +10,7 @@
 		<script>
             <lang delimiter=";" type="postgres"><![CDATA[
                 INSERT INTO amp_quartz_job_class (jc_id, jc_name, jc_class_fullname) 
-                VALUES (nextval('amp_quartz_job_class_seq'), 'Updates performance alert levels for activities', 'org.digijava.ampModule.message.jobs.PerformanceRulesAlertJob');
+                VALUES (nextval('amp_quartz_job_class_seq'), 'Updates performance alert levels for activities', 'org.digijava.module.message.jobs.PerformanceRulesAlertJob');
             ]]></lang>
         </script>
 	</apply>

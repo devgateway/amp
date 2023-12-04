@@ -6,7 +6,7 @@
 <html>
 <digi:base />
 <%--<link href="css/global.css" rel="stylesheet" type="text/css">--%>
-<link rel="stylesheet" href="<digi:file src="ampModule/admin/css/admin.css"/>">
+<link rel="stylesheet" href="<digi:file src="module/admin/css/admin.css"/>">
 <head>
 <title>DEMOSITE TEMPLATE : <tiles:getAsString name="title"/></title>
 </head>

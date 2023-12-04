@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-                delete from amp_modules_templates where ampModule in (select id from amp_modules_visibility where name like '%Type of Implementation%' and name != '/Activity Form/Identification/Type of Implementation');
+                delete from amp_modules_templates where module in (select id from amp_modules_visibility where name like '%Type of Implementation%' and name != '/Activity Form/Identification/Type of Implementation');
                 delete from amp_modules_visibility where name like '%Type of Implementation%' and name != '/Activity Form/Identification/Type of Implementation';
 			</lang>
 		</script>

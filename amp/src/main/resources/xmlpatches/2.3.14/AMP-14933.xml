@@ -5,7 +5,7 @@
 	<jira>AMP-14933</jira>
 	<keyword>ModuleInstance</keyword>
 	<author>vlymanskyi</author>
-	<description>Update ampModule instance name for admin help</description>
+	<description>Update module instance name for admin help</description>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">

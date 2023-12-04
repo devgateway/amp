@@ -24,9 +24,9 @@
 <DIV id="TipLayer"
 	style="visibility: hidden; position: absolute; z-index: 1000; top: -100;"></DIV>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/dscript120.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="ampModule/aim/scripts/dscript120_ar_style.js"/>"></script>
+	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <digi:form action="/exchangePermission.do">
 <h1 class="admintitle" style="text-align:left;">Permission Exchange Management</h1>
 	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">

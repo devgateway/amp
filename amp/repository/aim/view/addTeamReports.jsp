@@ -42,7 +42,7 @@
 
 	function resetSearch() {
 		var addrepVal="List of Unassigned Reports";
-		<digi:context name="searchOrg" property="context/ampModule/moduleinstance/updateTeamReports.do"/>
+		<digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamReports.do"/>
 		url = "<%= searchOrg %>?reset=true&addReport="+addrepVal;
 		//document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
 		document.aimTeamReportsForm.action = url;
@@ -53,7 +53,7 @@
 
 	function searchActivity(teamId) {
 		var addrepVal="List of Unassigned Reports";
-			 <digi:context name="searchOrg" property="context/ampModule/moduleinstance/updateTeamReports.do"/>
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamReports.do"/>
 		     url = "<%= searchOrg %>?addReport="+addrepVal;
 		     //document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
 		     document.aimTeamReportsForm.action = url;
@@ -236,7 +236,7 @@
 											</tr>
 										</logic:empty>
 										<logic:notEmpty name="aimTeamReportsForm" property="reports">
-											<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" type="org.digijava.ampModule.aim.dbentity.AmpReports">
+											<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" type="org.digijava.module.aim.dbentity.AmpReports">
 													<tr>
 														<td style="5%" align="center"   class="inside1">
 															<html:multibox property="selReports" >

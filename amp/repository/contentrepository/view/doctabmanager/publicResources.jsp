@@ -7,11 +7,11 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="java.util.List"%>
-<%@ page import="org.digijava.ampModule.categorymanager.util.CategoryConstants"%>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 

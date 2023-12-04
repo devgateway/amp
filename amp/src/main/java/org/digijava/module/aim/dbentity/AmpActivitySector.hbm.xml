@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.ampModule.aim.dbentity.AmpActivitySector" table="AMP_ACTIVITY_SECTOR">
+	<class name="org.digijava.module.aim.dbentity.AmpActivitySector" table="AMP_ACTIVITY_SECTOR">
 		<cache usage="read-write" />
 		<id name="ampActivitySectorId" column="amp_activity_sector_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -11,13 +11,13 @@
 		</id>
 
 		<many-to-one name="activityId" column="amp_activity_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 		
 		<many-to-one name="sectorId" column="amp_sector_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpSector" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpSector" cascade="none" not-null="true" />
 
 		<many-to-one name="classificationConfig" column="classification_config_id"
-			class="org.digijava.ampModule.aim.dbentity.AmpClassificationConfiguration" cascade="none"
+			class="org.digijava.module.aim.dbentity.AmpClassificationConfiguration" cascade="none"
 			not-null="true"/>
 
 		<property name="sectorPercentage" column="sector_percentage" type="java.lang.Float" />

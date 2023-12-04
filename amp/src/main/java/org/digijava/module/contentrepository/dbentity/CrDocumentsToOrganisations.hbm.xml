@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.contentrepository.dbentity.CrDocumentsToOrganisations"
+	<class name="org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations"
 		table="CR_DOCUMENTS_TO_ORGANISATIONS">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
@@ -11,7 +11,7 @@
 		</id>
 
 		<many-to-one name="ampOrganisation" column="amp_organisation_id" lazy="no-proxy"
-			class="org.digijava.ampModule.aim.dbentity.AmpOrganisation" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<property name="uuid" column="document_uuid" type="java.lang.String" index="uuid_index" />
 
 	</class>

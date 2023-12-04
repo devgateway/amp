@@ -2,14 +2,14 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
 	<form-beans>
-		<form-bean name="gpiForm" type="org.digijava.ampModule.gpi.form.GPIForm">
+		<form-bean name="gpiForm" type="org.digijava.module.gpi.form.GPIForm">
 			<form-property name="selectedStartYear" type="int" />
 			<form-property name="selectedEndYear" type="int" />
 		</form-bean>
 	</form-beans>
 	<action-mappings>
 		<action name="gpiForm" path="/gpi/gpi" scope="session"
-			type="org.digijava.ampModule.gpi.action.GPIAction">
+			type="org.digijava.module.gpi.action.GPIAction">
 			<forward name="forward" path="/showLayout.do?layout=gpi_base" />
 			<forward name="print" path="/showLayout.do?layout=newGPILayout" />
 		</action>

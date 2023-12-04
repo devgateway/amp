@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ page import="org.digijava.ampModule.aim.helper.ChartGenerator"%>
+<%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
 <%@ page import="java.io.PrintWriter, java.util.*"%>
 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
@@ -22,14 +22,14 @@
 					<td>
 					<table width="100%" border="0" cellpadding="0" cellSpacing=8 class="">
 						<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
-							<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.ampModule.aim.helper.FundingOrganization">
+							<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 
 								<logic:notEmpty name="fundingOrganization" property="fundings">
-									<logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.ampModule.aim.helper.Funding">
+									<logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
 										<tr>
 											<td>
 											<table cellspacing="1" cellpadding="0" border="0" width="100%">
-												<%--<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification"
+												<%--<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification"
 													     parentModule="/Activity Form/Funding/Funding Group/Funding Item">  --%>
 												<tr>
 													<td>
@@ -37,7 +37,7 @@
 														<tr>
 															<td>
 															<table width="100%" border="0" cellpadding="0" bgcolor="#dddddd" cellspacing="1" style="font-size:11px;">
-<%--														<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id"
+<%--														<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id"
 															 parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification"> --%>
 
 																<logic:notEmpty name="funding" property="orgFundingId">
@@ -53,8 +53,8 @@
 																		</td>
 																	</tr>
 																</logic:notEmpty>
-																<%-- </ampModule:display>  --%>
-																<%-- <ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation"
+																<%-- </module:display>  --%>
+																<%-- <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item"> --%>
 																<tr>
 																	<td width="150">
@@ -81,9 +81,9 @@
 																</tr>
 																</logic:present>
 																
-																<%-- </ampModule:display> --%>
+																<%-- </module:display> --%>
 																<!-- type of assistance -->
-																<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence"
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence"
 																	    parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td width="150"><a
@@ -96,9 +96,9 @@
 																			<b><digi:trn><bean:write name="funding" property="typeOfAssistance.value"/></digi:trn></b>
 																		</logic:notEmpty></td>
 																	</tr>
-																</ampModule:display>
+																</module:display>
 																
-																<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument"
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<logic:notEmpty name="funding" property="financingInstrument">
 																	<tr>
@@ -113,8 +113,8 @@
 																		</td>
 																	</tr>
 																	</logic:notEmpty>
-																</ampModule:display>
-																<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status"
+																</module:display>
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td width="150"><a
@@ -128,7 +128,7 @@
 																			</logic:notEmpty>
 																		</td>
 																	</tr>
-																</ampModule:display>
+																</module:display>
 																<logic:notEmpty name="funding" property="modeOfPayment">
 																	<tr>
 																		<td width="150"><a
@@ -214,7 +214,7 @@
 																
 																<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 																<logic:notEmpty name="funding" property="donorObjective">
-																<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 																	<tr>
 																		<td width="150"><a
 																			title='<digi:trn jsFriendly="true" key="aim:donorobjective">Donor Objective</digi:trn>'>
@@ -225,10 +225,10 @@
 																			<span class="word_break bold"><bean:write name="funding" property="donorObjective" /></span>
 																		</td>
 																	</tr>
-																</ampModule:display>
+																</module:display>
 																</logic:notEmpty>
                                                              <logic:notEmpty name="funding" property="conditions">
-                                                                <ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Conditions" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+                                                                <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Conditions" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                                     <tr>
                                                                         <td width="150"><a
                                                                                 title='<digi:trn jsFriendly="true" key="aim:donorobjective">Conditions</digi:trn>'>
@@ -239,9 +239,9 @@
                                                                             <span class="word_break bold"><bean:write name="funding" property="conditions" /></span>
                                                                         </td>
                                                                     </tr>
-                                                                </ampModule:display>
+                                                                </module:display>
                                                               </logic:notEmpty>
-                                                                <ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
+                                                                <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td width="150">
@@ -265,7 +265,7 @@
 																			<b>${funding.code}</b>
 																		</td>
 																	</tr>
-																</ampModule:display>
+																</module:display>
 																<logic:notEmpty name="funding" property="fundingClassificationDate">
 																<tr>
 																	<td width="150">
@@ -279,7 +279,7 @@
 																	</td>
 																</tr>
 																</logic:notEmpty>
-																<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date"
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<logic:notEmpty name="funding" property="effectiveFundingDate">
 																	<tr>
@@ -294,8 +294,8 @@
 																		</td>
 																	</tr>
 																</logic:notEmpty>
-																</ampModule:display>
-																<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date"
+																</module:display>
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date"
 																		parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<logic:notEmpty name="funding" property="fundingClosingDate">
 																	<tr>
@@ -310,62 +310,62 @@
 																		</td>
 																	</tr>
 																</logic:notEmpty>
-																</ampModule:display>
+																</module:display>
 															</table>
 															</td>
 														</tr>
 													</table>
 													</td>
 												</tr>
-												<%-- </ampModule:display> --%>
+												<%-- </module:display> --%>
 
 												<tr>
 												<td>
 												<!-- Begin funding detail -->
 												<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;">
 													<bean:define id="funding" name="funding" scope="page" toScope="request"
-														type="org.digijava.ampModule.aim.helper.Funding">
+														type="org.digijava.module.aim.helper.Funding">
 														</bean:define>
-													<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<bean:define id="transaction" value="Commitments" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingCommitments.jsp" />
-													</ampModule:display>
-													<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
+													</module:display>
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
 							 							parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<bean:define id="transaction" value="Disbursements" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
-													</ampModule:display>
-													<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
+													</module:display>
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<bean:define id="transaction" value="Expenditures" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
-													</ampModule:display>
-                                                    <ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
+													</module:display>
+                                                    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
                                                             parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                         <jsp:include page="previewActivityFundingMTEF.jsp" />
-                                                    </ampModule:display>
- 												    <ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
+                                                    </module:display>
+ 												    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingRoF.jsp" />
-													</ampModule:display>
-													<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements"
+													</module:display>
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingEDD.jsp" />
-													</ampModule:display>
-													<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
+													</module:display>
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<bean:define id="transaction" value="Arrears" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingArrears.jsp" />
-													</ampModule:display>
+													</module:display>
 
                                                     <%-- Do not display disbursement orders for now --%>
-                                                    <%--ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders"
+                                                    <%--module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders"
                                                         parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                         <jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
-                                                    </ampModule:display--%>
+                                                    </module:display--%>
 
-													<feature:display ampModule="Funding" name="Undisbursed Balance">
+													<feature:display module="Funding" name="Undisbursed Balance">
 													    <jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
 													</feature:display>
 												</table>
@@ -397,7 +397,7 @@
                     <tr>
                         <td>
                         <table cellspacing="1" cellpadding="0" border="0" style="font-size:11px;" width="100%">
-                        	<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
+                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
 									parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplannedcommittment'>Total Planned Commitments</digi:trn></c:set>
@@ -416,9 +416,9 @@
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalPipelineCommitments}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
                         		</c:if></c:if>                        	
-                        	</ampModule:display>
+                        	</module:display>
                         
-                        	<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
+                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
 											parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplanneddisbursement'>Total Planned Disbursements</digi:trn></c:set>
@@ -437,9 +437,9 @@
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalPipelineDisbursements}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
                         		</c:if></c:if> --%>
-                        	</ampModule:display>
+                        	</module:display>
                         
-							<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplannedexpenditure'>Total Planned Expenditures</digi:trn></c:set>
@@ -458,10 +458,10 @@
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalPipelineExpenditures}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
                         		</c:if></c:if> --%>
-                        	</ampModule:display>
+                        	</module:display>
 
 
-							<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedArrears}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplannedarrears'>Total Planned Arrears</digi:trn></c:set>
@@ -473,9 +473,9 @@
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalArrears}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
 	                    		</c:if></c:if>
-                        	</ampModule:display>
+                        	</module:display>
 
-                        	<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders"
+                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders"
 								parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								
 								<c:if test="${not empty aimEditActivityForm.funding.totalActualDisbursementsOrders}">
@@ -483,10 +483,10 @@
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalActualDisbursementsOrders}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
 								</c:if>
-                        	</ampModule:display>
+                        	</module:display>
 
  			<!--  RELEASE OF FUNDS START -->
-							<ampModule:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
 								parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedRoF}">
@@ -500,7 +500,7 @@
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalActualRoF}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
 	                    		</c:if></c:if>
-                        	</ampModule:display>
+                        	</module:display>
 			<!--  RELEASE OF FUNDS END -->
  
   			<!--  EDD START -->
@@ -535,7 +535,7 @@
 	                    	</c:if></c:if>
                       	
  							<%-- activity-global undisbursed balance --%>
-                        	<feature:display ampModule="Funding" name="Undisbursed Balance">
+                        	<feature:display module="Funding" name="Undisbursed Balance">
                         		<c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
 	                        		<c:set var="activity_funding_text"><digi:trn key="aim:undisbursedBalance">Undisbursed Balance</digi:trn></c:set>
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.unDisbursementsBalance}</c:set>

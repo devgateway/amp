@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.content.dbentity.AmpContentItemThumbnail" table="AMP_CONTENT_ITEM_THUMBNAIL">
+	<class name="org.digijava.module.content.dbentity.AmpContentItemThumbnail" table="AMP_CONTENT_ITEM_THUMBNAIL">
 		<id name="ampContentItemThumbnailId" column="AMP_CONTENT_THUMBNAIL_ITEM_ID" type="java.lang.Long" unsaved-value="null">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator" >
 			<param name="sequence_name">AMP_CONTENT_ITEM_THUMBNAIL_seq</param>
 			</generator>
 		</id>
-		<many-to-one name="contentItem" column="AMP_CONTENT_ITEM_ID" class="org.digijava.ampModule.content.dbentity.AmpContentItem" cascade="none"/>
+		<many-to-one name="contentItem" column="AMP_CONTENT_ITEM_ID" class="org.digijava.module.content.dbentity.AmpContentItem" cascade="none"/>
 		<property name="thumbnail" column="THUMBNAIL" type="binary" length="500000"/>
 		<property name="placeholder" column="PLACEHOLDER" type="java.lang.Integer" />
 		<property name="optionalFile" column="OPTIONAL_FILE" type="binary" length="500000"/>

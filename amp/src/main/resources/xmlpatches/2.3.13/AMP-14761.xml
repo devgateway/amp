@@ -15,7 +15,7 @@
 				SELECT id FROM amp_modules_visibility WHERE name = 'Org. Dashboard' OR name = 'Sector Dashboard' OR name = 'Region Dashboard');
 			
 			
-			DELETE FROM amp_modules_templates WHERE ampModule IN (
+			DELETE FROM amp_modules_templates WHERE module IN (
 				SELECT id FROM amp_modules_visibility WHERE name = 'Org. Dashboard' OR name = 'Sector Dashboard' OR name = 'Region Dashboard');
 			
 			DELETE FROM amp_modules_visibility WHERE name = 'Org. Dashboard' OR name = 'Sector Dashboard' OR name = 'Region Dashboard';

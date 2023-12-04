@@ -4,18 +4,18 @@
 		<layout name="default">
 			<put name="title">Digi Default Template</put>
 			<put-item name="footer" layout="footerLayout"/>
-			<put-item name="left" ampModule="um" instance="user"/>
+			<put-item name="left" module="um" instance="user"/>
 			<put-item name="body" file="blank.jsp"/>
 		</layout>
 		<layout name="footerLayout" file="footerLayout.jsp">
-			<put-item name="adminLink" ampModule="admin" instance="default" teaser="adminLink"/>
-			<put-item name="flatLangSwitch" ampModule="translation" instance="default" teaser="flatLangSwitch"/>
+			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
 		<layout name="admin" file="adminLayout.jsp">
 			<put name="title">Default Admin Page</put>
-			<put-item name="header" ampModule="admin" page="header"/>
-			<put-item name="left" ampModule="admin" page="left"/>
-			<put-item name="body" ampModule="admin" page="body"/>
+			<put-item name="header" module="admin" page="header"/>
+			<put-item name="left" module="admin" page="left"/>
+			<put-item name="body" module="admin" page="body"/>
 		</layout>
 		<layout name="single" file="popupLayout.jsp">
 			<put name="title">Popup</put>
@@ -25,72 +25,72 @@
 			<put name="title">Please log in</put>
 			<put-item name="header" layout="headerLayout"/>
 			<put-item name="footer"/>
-			<put-item name="body" ampModule="um" instance="user"/>
+			<put-item name="body" module="um" instance="user"/>
 		</layout>
 		<!-- UM LAYOUT -->
 		<layout name="userAccount" extends="default">
 			<put name="title">Default Template page title with user update account body</put>
-			<put-item name="body" ampModule="um" instance="user" teaser="userAccount"/>
+			<put-item name="body" module="um" instance="user" teaser="userAccount"/>
 		</layout>
 		<layout name="updateUserProfile" extends="default">
 			<put name="title">Default template page title with user update Profile body</put>
-			<put-item name="body" ampModule="um" instance="user" teaser="updateUserProfile"/>
+			<put-item name="body" module="um" instance="user" teaser="updateUserProfile"/>
 		</layout>
 		<layout name="userRegister" extends="default">
 			<put name="title">Default template page title with user register body</put>
-			<put-item name="body" ampModule="um" instance="user" teaser="userRegister"/>
+			<put-item name="body" module="um" instance="user" teaser="userRegister"/>
 		</layout>
 		<layout name="userRegisterSuccess" extends="default">
 			<put name="title">Default template page title with user register success body</put>
-			<put-item name="body" ampModule="um" instance="user" teaser="userRegisterSuccess"/>
+			<put-item name="body" module="um" instance="user" teaser="userRegisterSuccess"/>
 		</layout>
 		<layout name="successResetPassword" extends="default">
 			<put name="title">Default template page title with user reset success</put>
-			<put-item name="body" ampModule="um" page="successResetPassword"/>
+			<put-item name="body" module="um" page="successResetPassword"/>
 		</layout>
 		<layout name="errorResetPassword" extends="default">
 			<put name="title">Default template page title with user reset error</put>
-			<put-item name="body" ampModule="um" page="errorResetPassword"/>
+			<put-item name="body" module="um" page="errorResetPassword"/>
 		</layout>
 		<!-- END UM LAYOUT -->
 		<!-- TRANSLATE LAYOUT -->
 		<layout name="TranslatorPortlet" extends="single">
 			<put name="title"> </put>
-			<put-item name="body" ampModule="translate" instance="default" teaser="translate"/>
+			<put-item name="body" module="translate" instance="default" teaser="translate"/>
 		</layout>
 		<layout name="translation" extends="single">
 			<put name="title">Translation</put>
-			<put-item name="body" ampModule="translate" instance="complete" teaser="completeTranslation"/>
+			<put-item name="body" module="translate" instance="complete" teaser="completeTranslation"/>
 		</layout>
 		<layout name="globaltranslation" extends="single">
 			<put name="title">Translation</put>
-			<put-item name="body" ampModule="translate" instance="global" teaser="globalTranslation"/>
+			<put-item name="body" module="translate" instance="global" teaser="globalTranslation"/>
 		</layout>
 		<!-- TRANSLATE LAYOUT -->
 		<page-group masterLayout="default" tile="body"/>
 		<page-group masterLayout="admin" tile="body">
-			<ampModule name="admin"/>
+			<module name="admin"/>
 		</page-group>
 		<page-group masterLayout="single" tile="body">
-			<ampModule name="admin">
+			<module name="admin">
 				<page>admin_usersPopupLayout</page>
 				<page>admin_instPopupLayout</page>
 				<page>admin_pickupGroupPopupLayout</page>
-			</ampModule>
-			<ampModule name="highlights">
+			</module>
+			<module name="highlights">
 				<page>viewHighlight</page>
-			</ampModule>
-			<ampModule name="um">
+			</module>
+			<module name="um">
 				<page>um_popupLayout</page>
-			</ampModule>
-			<ampModule name="translate"/>
-			<ampModule name="cms">
+			</module>
+			<module name="translate"/>
+			<module name="cms">
 				<page>cms_selectCategory</page>
 				<page>cms_selectFile</page>				
 				<page>cms_showSendEmail</page>
 				<page>cms_sendEmailSuccess</page>
 				<page>cms_sendEmailError</page>
-			</ampModule>
+			</module>
 		</page-group>
 	</site-layout>
 </site-config>

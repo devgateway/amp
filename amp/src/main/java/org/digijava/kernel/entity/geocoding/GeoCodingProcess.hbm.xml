@@ -9,7 +9,7 @@
 			</generator>
 		</id>
 		<many-to-one name="teamMember" column="TEAM_MEMBER_ID"
-					 class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" cascade="none" lazy="false"
+					 class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" lazy="false"
 					 not-null="true" />
 		<list name="activities" lazy="false" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />

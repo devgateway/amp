@@ -11,7 +11,7 @@
 
 function selectProgram(){
 
-  <digi:context name="addprogram" property="context/ampModule/moduleinstance/selectProgramForIndicator.do?action=add" />
+  <digi:context name="addprogram" property="context/module/moduleinstance/selectProgramForIndicator.do?action=add" />
   document.aimNewIndicatorForm.action="<%=addprogram%>";
   document.aimNewIndicatorForm.target = window.opener.name;
   document.aimNewIndicatorForm.submit();

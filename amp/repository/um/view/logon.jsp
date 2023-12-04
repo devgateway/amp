@@ -9,7 +9,7 @@
 <c:if test="${!empty org.digijava.kernel.user}">
 <table border="0" >
 <tr><td nowrap ><digi:link href="/showUserAccount.do" styleClass="title_topic"><c:out value="${org.digijava.kernel.user.name}" /></digi:link></td></tr>
-<tr><td><digi:link site="dglogin" contextPath="/ampModule/moduleinstance" href="/logoutAction.do" styleClass="text" ><digi:trn key="um:logOut">Log out</digi:trn></digi:link></td></tr>
+<tr><td><digi:link site="dglogin" contextPath="/module/moduleinstance" href="/logoutAction.do" styleClass="text" ><digi:trn key="um:logOut">Log out</digi:trn></digi:link></td></tr>
 </table>
 </c:if>
 <% // ---------------------------------  %>
@@ -18,7 +18,7 @@
 <html:javascript formName="logonForm" />
 <c:if test="${ empty org.digijava.kernel.user}">
 <div align="center">
-<digi:form site="dglogin" contextPath="/ampModule/moduleinstance" action="/logonAction.do" onsubmit="return validateLogonForm(this);">
+<digi:form site="dglogin" contextPath="/module/moduleinstance" action="/logonAction.do" onsubmit="return validateLogonForm(this);">
 <table border="0" class="border">
 <tr><td nowrap bgcolor="#C0C0C0">
 <B>DEMOSITE LOGON</B>

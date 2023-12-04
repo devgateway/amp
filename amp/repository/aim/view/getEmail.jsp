@@ -31,7 +31,7 @@ function checkEmptyEmail(){
 
 </script>
 
-<digi:form name="aimUserEmailForm" type="org.digijava.ampModule.um.form.UserEmailForm" action="/resetUserPassword.do" >
+<digi:form name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" action="/resetUserPassword.do" >
 <div class="reg_form_container">
 <div class="home_sec_title"><digi:trn key="aim:changePassword">
 						Reset your e-mail address
@@ -54,7 +54,7 @@ function checkEmptyEmail(){
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap valign=top>
-<!--						<digi:img src="ampModule/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:email">Email</digi:trn>
 					</td>
 					<td align="left">

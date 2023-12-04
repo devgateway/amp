@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.ampModule.aim.dbentity.AmpIndicatorLayer" table="AMP_INDICATOR_LAYER" lazy="false">
+	<class name="org.digijava.module.aim.dbentity.AmpIndicatorLayer" table="AMP_INDICATOR_LAYER" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
@@ -10,7 +10,7 @@
 		</id>
 		<property name="name" column="indicator_name" type="java.lang.String" />
 		<many-to-one name="admLevel" column="adm_level"
-			class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
         <property name="accessType" >
             <column name="access_type" not-null="true" default="0" />
             <type name="org.hibernate.type.EnumType">
@@ -24,7 +24,7 @@
 		<property name="unit" column="unit" type="java.lang.String" />
 		
 		<many-to-one name="indicatorType" column="indicator_type_id" foreign-key="indTypeForeignKey"
-            class="org.digijava.ampModule.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="false" />
+            class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="false" />
 		<property name="population" type="java.lang.Boolean">
 		  <column name="is_population" not-null="true" default="false"/>
 		</property>
@@ -33,23 +33,23 @@
 		<property name="zeroCategoryEnabled" type="java.lang.Boolean">
 		  <column name="zero_category_enabled" default="false"/>
 		</property>
-		<many-to-one name="createdBy" column="created_by" class="org.digijava.ampModule.aim.dbentity.AmpTeamMember" />
+		<many-to-one name="createdBy" column="created_by" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 
 		<set name="colorRamp" cascade="all-delete-orphan" order-by="amp_indicator_color_id asc" lazy="false">
 			<cache usage="read-write" />
 			<key column="amp_indicator_layer_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpIndicatorColor" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorColor" />
 		</set>
 
 		<set name="indicatorValues" table="AMP_LOCATION_INDICATOR_VALUE" inverse="true" lazy="false" cascade="all-delete-orphan">
 			<key column="indicator_id" />
-			<one-to-many class="org.digijava.ampModule.aim.dbentity.AmpLocationIndicatorValue"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpLocationIndicatorValue"/>
 		</set>
 
         <set name="sharedWorkspaces" cascade="all-delete-orphan" order-by="amp_indicator_workspace_id asc" lazy="false">
             <cache usage="read-write" />
             <key column="amp_indicator_layer_id" />
-            <one-to-many class="org.digijava.ampModule.aim.dbentity.AmpIndicatorWorkspace" />
+            <one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorWorkspace" />
         </set>
 	</class>
 </hibernate-mapping>

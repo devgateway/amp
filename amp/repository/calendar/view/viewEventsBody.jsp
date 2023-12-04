@@ -12,14 +12,14 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="ampModule"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@page import="java.util.*"%>
-<%@page import="org.digijava.ampModule.calendar.form.CalendarViewForm" %>
-<%@page import="org.digijava.ampModule.calendar.util.CalendarUtil"%>
+<%@page import="org.digijava.module.calendar.form.CalendarViewForm" %>
+<%@page import="org.digijava.module.calendar.util.CalendarUtil"%>
 
 <script type="text/javascript" charset="utf-8">
     var trn_today_button 	='<digi:trn jsFriendly="true">Today</digi:trn>';
@@ -80,11 +80,11 @@
 
 </script>
 
-<link rel="stylesheet"  href="<digi:file src="ampModule/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.css"/>" type="text/css"/>
+<link rel="stylesheet"  href="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.css"/>" type="text/css"/>
 
-<script src="<digi:file src="ampModule/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.js"/>" type="text/javascript"></script>
+<script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.js"/>" type="text/javascript"></script>
  
-<script src="<digi:file src="ampModule/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_year_view.js"/>" type="text/javascript"></script>
+<script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_year_view.js"/>" type="text/javascript"></script>
 
 <!-- Recurring Events -->
 <!--
@@ -92,9 +92,9 @@ By default, the scheduler doesn't support recurring events. To enable such suppo
 
 read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
 -->
-<script src="<digi:file src="ampModule/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_recurring.js"/>" type="text/javascript"></script>
+<script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_recurring.js"/>" type="text/javascript"></script>
 
-<script src="<digi:file src="ampModule/calendar/dhtmlxScheduler/property.js"/>" type="text/javascript"></script>
+<script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" type="text/javascript"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
@@ -237,7 +237,7 @@ read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
 			if(eventId.indexOf("#") != "-1"){
 			var	eventId = eventId.slice(0,eventId.indexOf("#"));
 			}
-			<digi:context name="previewEvent" property="context/ampModule/moduleinstance/showCalendarEvent.do" />
+			<digi:context name="previewEvent" property="context/module/moduleinstance/showCalendarEvent.do" />
 		        document.forms[0].action = "<%= previewEvent%>~ampCalendarId="+eventId+"~method=preview~resetForm=true";
 		       document.forms[0].submit();
 		    return true;
@@ -347,7 +347,7 @@ window.onload=init;
 		<div id="newContainer" style="width: 100%; height: 100%;  position:relative; border: 1px #CCCCCC solid;">
 			<div class="dhx_cal_header" style=""></div>
 			<div class="dhx_cal_data"></div>
-			<feature:display name="Filter" ampModule="Calendar">
+			<feature:display name="Filter" module="Calendar">
 				<div style="width:auto; height:28px;white-space: nowrap;bottom:0;position:absolute;">
 			      	<input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
 			      	<c:if test="${not empty sessionScope.currentMember}">

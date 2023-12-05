@@ -1,0 +1,41 @@
+<wicket:extend>
+
+	<div class="opt_item">
+		<div class="opt_item_cont">
+			<div class="issue_act">
+				<table cellpadding="0px" cellspacing="0px">
+					<tr>
+					    <td>
+							<span wicket:id="addTitle"/>
+						</td>
+						<td>
+							<span wicket:id="add"/>
+						</td>
+						<td>
+							<span wicket:id="delete"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<table cellpadding="2px" cellspacing="2px">
+				<tr>
+					<td valign="middle"><span wicket:id="label">[]</span>
+					</td>
+					<td><textarea wicket:id="name" cols="35" class="inputx"></textarea>
+					</td>
+					<td valign="middle"><span wicket:id="date" /></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<table width="100%" cellpadding="0px" cellspacing="0px">
+		<tr wicket:id="list">
+			<td valign="top" width="35px" >
+				&nbsp;&nbsp;&nbsp;&nbsp;<img src="/TEMPLATE/ampTemplate/img_2/tree_dot.gif" />
+			</td>
+			<td>
+				<span wicket:id="item" />
+			</td>
+		</tr>
+	</table>
+</wicket:extend>

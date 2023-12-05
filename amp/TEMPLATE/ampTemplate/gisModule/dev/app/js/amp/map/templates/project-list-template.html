@@ -1,0 +1,25 @@
+
+  <% _.each(obj.activities, function(activity){ var activityJSON = activity.toJSON();%>
+    <tr>
+      <td>
+        <a target="_blank" href="<%= activityJSON.ampUrl %>" title="<%= activityJSON["Project Title"] %>">
+          <%= (activityJSON["Project Title"].length > 35 ? activityJSON["Project Title"].substring(0, 33)+'...': activityJSON["Project Title"]) %>
+        </a>
+      </td>
+      <td class="text-right">
+        <% if(activityJSON["formattedColumnName1"]){ %>
+            <%= activityJSON["formattedColumnName1"] %>
+        <% } else { %>
+          -
+        <% }%>
+      </td>
+      <td class="text-right">
+        <% if(activityJSON["formattedColumnName2"]){ %>
+            <%= activityJSON["formattedColumnName2"] %>
+        <% } else { %>
+          -
+        <% }%>
+      </td>
+    </tr>
+	<% });%>
+

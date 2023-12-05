@@ -1,0 +1,48 @@
+<wicket:extend>
+	<div>
+		<span class="wicketFloatLeft wicketPaddingRight10" wicket:id="agreementText" />
+        <span class="wicketFloatLeft" wicket:id="editAgreement" />
+        <span wicket:id="deleteAgreement" />
+	</div>
+	<div style="clear: both;">
+		<div wicket:id="search" />
+	</div>
+	<form wicket:id="newAgreement">
+		<div style="background: #EFEFEF; padding: 5px; margin: 5px;">
+			<div><b><wicket:trn>Edit agreement</wicket:trn></b></div>
+			<!-- Form to add new agreement here -->
+			<div>
+				<div class="wicketFloatLeft wicketPaddingRight10">
+					<span wicket:id="newAgCode"/>
+				</div>
+				<div class="wicketPaddingRight10" style="padding-left: 150px;">
+					<span wicket:id="newAgTitle"/>
+				</div>
+			</div>
+			<div style="clear:both; height:1px;">&nbsp;</div>
+			<div>
+				<div class="wicketFloatLeft wicketPaddingRight10">
+					<span wicket:id="newAgSgDate"/>
+				</div>
+				<div class="wicketFloatLeft wicketPaddingRight10">
+					<span wicket:id="newAgEfDate"/>
+				</div>
+				<div class="wicketPaddingRight10">
+					<span wicket:id="newAgClDate"/>
+				</div>
+
+				<div class="wicketPaddingRight10">
+					<span wicket:id="newAgPaDate"/>
+				</div>
+                <div class="wicketFloatLeft wicketPaddingRight10">
+                    <span wicket:id="submit"/>
+                    <span wicket:id="duplicateWarning" />
+                </div>
+                <div class="wicketPaddingRight10">
+                    <span wicket:id="cancel"/>
+                    
+                </div>
+			</div>
+		</div>
+	</form>
+</wicket:extend>

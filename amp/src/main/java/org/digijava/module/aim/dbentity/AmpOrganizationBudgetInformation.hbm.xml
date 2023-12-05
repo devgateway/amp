@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation" table="AMP_ORG_BUDGET_INFO">
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_ORG_BUDGET_INFO_seq</param>
+            </generator>
+        </id>
+
+        <property name="amount" column="amount" type="java.lang.Double"  />
+        <property name="year" column="year" type="java.lang.Long"  />
+        <many-to-one name="currency" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+        <many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+        <many-to-one name="type" column="type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+        <set name="organizations" cascade="none" lazy="false" table="amp_budget_organizations">
+            <key column="id" />
+            <many-to-many column="org_id"  class="org.digijava.module.aim.dbentity.AmpOrganisation"/>
+        </set>
+    </class>
+</hibernate-mapping>

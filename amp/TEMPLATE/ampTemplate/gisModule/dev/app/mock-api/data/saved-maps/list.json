@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Gray DRC",
+    "description": "The DRC in grayscale.",
+    "stateBlob": "{\"map\":{\"center\":[-2.9978987411030444,21.983642578125],\"zoom\":6},\"basemap\":\"Gray\"}"
+  },
+  {
+    "id": 2,
+    "title": "OSM DRC",
+    "description": "The DRC on open data",
+    "stateBlob": "{\"map\":{\"center\":[-2.9978987411030444,21.983642578125],\"zoom\":6},\"basemap\":\"Open Street Map\"}"
+  },
+  {
+    "id": 3,
+    "title": "Earth",
+    "description": "The whole world in pictures",
+    "stateBlob": "{\"map\":{\"center\":[27.371767300523047,-15.1171875],\"zoom\":1},\"basemap\":\"Labeled Imagery\"}"
+  },
+  {
+    "id": 4,
+    "title": "Nothingness",
+    "description": "An empty map to a specific place...",
+    "stateBlob": "{\"map\":{\"center\":[44.234659997528354,-76.49580851197243],\"zoom\":19},\"basemap\":\"Empty Basemap\"}"
+  }
+]

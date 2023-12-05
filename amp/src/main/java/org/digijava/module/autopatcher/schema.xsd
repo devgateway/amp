@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ************************************************** -->
+<!--              AID MANAGEMENT PLATFORM               -->
+<!--            AUTOPATCHER METADATA SCHEMA             -->
+<!--             version 0.1 - 30-Jul-2007              -->
+<!--                      (DRAFT)                       -->
+<!-- ************************************************** -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://digijava.org/module/autopatcher/schema.xml"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           targetNamespace="http://digijava.org/module/autopatcher/schema.xml" elementFormDefault="qualified"
+           id="autopatcher" jaxb:version="1.0">
+	<xs:element name="patch" type="patchType"/>
+	<xs:complexType name="patchType">
+		<xs:sequence>
+			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="dependencies" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="keywords" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="databaseTargets" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="sql" type="sqlType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="keyName" type="xs:string" use="required"/>
+		<xs:attribute name="reApplicable" type="xs:boolean" use="optional"/>
+		<xs:attribute name="author" type="xs:string" use="required"/>
+		<xs:attribute name="creationDate" type="xs:date" use="optional"/>
+		<xs:attribute name="featureAdded" type="xs:string" use="optional"/>
+		<xs:attribute name="retryIfFailure" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="sqlType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="type" type="sqlTypeCategory" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="sqlTypeCategory">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="patch"/>
+			<xs:enumeration value="condition"/>
+			<xs:enumeration value="cleanup"/>
+			<xs:enumeration value="rollback"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

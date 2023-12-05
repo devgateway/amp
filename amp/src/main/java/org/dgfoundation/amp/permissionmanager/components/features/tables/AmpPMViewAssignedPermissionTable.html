@@ -1,0 +1,21 @@
+<wicket:extend>
+<table cellpadding="1" cellpspacing="1" border="0">
+	<tr style="border:1px solid #fff;">
+    	<td valign="middle" style="background:#f2f2f2;color:#666;text-align:center;width:70%;padding:5px;">Name</td>
+        <td valign="middle" style="background:#f2f2f2;color:#666;text-align:center;width:15%;padding:5px;">View</td>
+        <td valign="middle" style="background:#f2f2f2;color:#666;text-align:center;width:15%;padding:5px;">Edit</td>
+    </tr>
+	<tr style="border:1px solid #fff;" wicket:id="permContentList">
+		<td valign="middle" style="background:#f6f6f6;color:#666;text-left;width:70%;padding:5px;">
+			<span wicket:id="label"/>
+		</td>
+        <td valign="middle" style="background:#f6f6f6;color:#666;text-align:left;width:15%;padding:5px;">
+        	<img wicket:id="viewIcon" style="width:12px;"/>
+        </td>
+        <td  valign="middle" style="background:#f6f6f6;color:#666;text-align:left;width:15%;padding:5px;">
+        	<img wicket:id="editIcon" style="width:12px;"/>
+        </td>
+	</tr>
+	<tr><td><div wicket:id="navigator"></div></td></tr>
+</table>
+</wicket:extend>

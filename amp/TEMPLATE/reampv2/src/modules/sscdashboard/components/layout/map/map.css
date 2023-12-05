@@ -1,0 +1,23 @@
+
+.map-wrapper {
+    padding: 0;
+}
+
+.h-filter-wrapper {
+    background-color: #273142;
+    height: 60px;
+    padding: 12px 0;
+    position: relative;
+    z-index: 1;
+    top:9px;
+}
+
+.map-container {
+    height: 100%;
+    width: inherit;
+    position: fixed;
+    top: 86px;
+}
+
+
+

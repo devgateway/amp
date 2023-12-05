@@ -1,0 +1,12 @@
+node/
+node_modules/
+/dependencies-bundle.js
+modules/gpi-reports/script.min.js
+modules/gpi-data/script.min.js
+modules/activity/preview/script.min.js
+modules/admin/resource-manager-admin/script.min.js
+modules/admin/data-freeze-manager/script.min.js
+modules/admin/dashboard/script.min.js
+modules/admin/currency/deflator/script.min.js
+modules/admin/performance-alert-manager/script.min.js
+modules/ampoffline/download/script.min.js

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpRegionalObservationActor" table="AMP_REG_OBS_ACTOR">
+		<cache usage="read-write" />
+		<id name="ampRegionalObservationActorId" column="amp_reg_obs_actor_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_REG_OBS_ACTOR_seq</param>
+			</generator>
+		</id>
+		<property column="name" name="name" type="text" />
+		<many-to-one name="measure" column="amp_reg_obs_measure_id"
+			class="org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure" cascade="all" />
+	</class>
+</hibernate-mapping>

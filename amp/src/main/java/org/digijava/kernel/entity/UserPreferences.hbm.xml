@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.entity.UserPreferences" table="DG_USER_PREFERENCES" lazy="false">
+		<cache usage="read-write" />
+		<composite-id name="id" class="org.digijava.kernel.entity.UserPreferencesPK">
+			<key-many-to-one name="user" class="org.digijava.kernel.user.User" column="USER_ID" />
+			<key-many-to-one name="site" class="org.digijava.kernel.request.Site" column="SITE_ID" />
+		</composite-id>
+		<property column="BIOGRAPHY" name="biography" type="text" />
+		<property column="SHOW_PUBLIC_P" name="publicProfile" type="boolean" />
+		<property column="RECEIVE_ALERTS_P" name="receiveAlerts" type="boolean" />
+	</class>
+</hibernate-mapping>

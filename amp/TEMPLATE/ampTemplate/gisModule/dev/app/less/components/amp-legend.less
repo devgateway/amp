@@ -1,0 +1,99 @@
+
+// note: color-blocks is in amp-widgets.less
+  
+  
+.legend-collapsed {
+  max-height: 27px !important;
+}
+.legend {
+  z-index: @amp_map_footer_layers;
+  position: absolute;
+  bottom: 0;
+  right: 5px;
+  width: 260px;
+  color: @amp_inverse;
+  max-height: 300px;
+  select {
+    display: inline;
+    padding-left: 0;
+    width: auto;
+    font-size: 1em;
+  }
+
+
+  .info-icon {
+    margin: 0;
+    color: @amp_sidebar_help_icon;
+    padding: 0;
+    background: none;
+    border: none;
+  }
+  
+  .legend-header {
+    background: @amp_map_header_bg;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.333);
+    width: 100%;
+  }
+  .legend-header > a {
+    display: block;
+    padding: 4px;
+    color: #eee;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      height: 17px;
+      width: 16px;
+      border: 2px solid white;
+      border-width: 0 0 2px;
+    }
+    &:hover:after {
+      background: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .legend-content {
+    padding: 1em;
+    font-size: 0.9em;
+    color: #333;
+    border: 1px solid #aaa;
+    border-width: 0 1px;
+    background: @amp_content_bg;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 270px;
+    width: 100% !important;
+
+    h3 {
+      margin: 0.5em 0;
+      font-size: 1em;
+      font-weight: bold;
+    }
+  }
+
+  &:not(.expanded) {    
+    .legend-header > a {
+      &:after {
+        display: none;
+      }
+      &:hover:after {
+        display: block;
+        border-width: 2px 0 0;
+      }
+    }
+    .legend-content {
+      height: 0 !important;
+      padding: 0;
+    }
+  }
+}
+
+

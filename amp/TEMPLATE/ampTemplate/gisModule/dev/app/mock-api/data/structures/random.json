@@ -1,0 +1,271 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":863,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8837890625,
+          -9.752370139173285
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":863,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.158203125,
+          -4.609278084409823
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":98443,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.916015625,
+          2.1088986592431382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":963,
+        "structureTitle":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.631835937499996,
+          1.8893059628373186
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":963,
+        "structureTitle":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.0380859375,
+          -1.4061088354351468
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":9863,
+        "structureTitle":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.16015625,
+          -4.784468966579375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":9863,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.4677734375,
+          -0.4833927027896987
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":9863,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.3349609375,
+          -7.057282352971569
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":9863,
+        "structureTitle":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.97265625,
+          -3.7327083213358336
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":984463,
+        "structureTitle":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.3779296875,
+          -0.17578097424708533
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":984463,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8837890625,
+          3.030812122664383
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":984463,
+        "structureTitle":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.5771484375,
+          -0.5273363048115043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":984463,
+        "structureTitle":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.775390625,
+          3.425691524418075
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":563,
+        "structureTitle":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.2158203565,
+          -5.04717073691972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":563,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.0810546875,
+          -7.144498849647323
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":563,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.203125,
+          -9.44906182688142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":563,
+        "structureTitle":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.8291015625,
+          -4.434044005032582
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":98443,
+        "structureTitle":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.7646484375,
+          -2.2406396093827206
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "projectId":863,
+        "structureTitle":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.48828125,
+          1.537901237431487
+        ]
+      }
+    }
+  ]
+}

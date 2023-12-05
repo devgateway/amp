@@ -1,0 +1,26 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title"><wicket:trn key="trn:organization">Organization</wicket:trn></b></td>
+		<wicket:fm fmNames="relOrgadditionalInfo">
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:departmentDivision">Department/Division</wicket:trn></b></td>
+		</wicket:fm>
+		<wicket:fm fmNames="percentage">
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+				<b class="ins_title"><wicket:trn>Percentage</wicket:trn></b>
+			</td>
+		</wicket:fm>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="list">
+		<td class="inside" align="right"><span wicket:id="name"/></td>
+		<wicket:fm fmNames="relOrgadditionalInfo">
+			<td class="inside"><span wicket:id="departmentDivision"/></td>
+		</wicket:fm>
+		<wicket:fm fmNames="percentage">
+			<td class="inside"><span wicket:id="percentage"/></td>
+		</wicket:fm>
+		<td class="inside" align="left">
+			<span wicket:id="delRelOrg"/>
+		</td>
+	</tr>
+</wicket:extend>

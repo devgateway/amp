@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpVisibilityRule" table="AMP_VISIBILITY_RULE" lazy="false">
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_VISIBILITY_RULE_seq</param>
+            </generator>
+        </id>
+
+        <many-to-one name="parent" column="PARENT_ID" class="org.digijava.module.aim.dbentity.AmpVisibilityRule" />
+        
+        <property name="type" column="RULE_TYPE" >
+        	<type name="org.hibernate.type.EnumType">
+        		<param name="enumClass">org.dgfoundation.amp.visibility.AmpVisibilityRuleType</param>
+        		<param name="useNamed">false</param>
+        	</type>
+        </property>
+        
+        <set name="children" cascade="all" inverse="true" lazy="false">
+			<cache usage="read-write" />
+			<key column="PARENT_ID" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpVisibilityRule" />
+		</set>
+		
+		<set name="fields" table="AMP_VISIBILITY_RULE_AMP_FIELDS_VISIBILITY">
+	         <key column="RULE_ID"/>
+	         <many-to-many column="FIELD_ID" class="org.digijava.module.aim.dbentity.AmpFieldsVisibility"/>
+      	</set>
+      	<set name="features" table="AMP_VISIBILITY_RULE_AMP_FEATURES_VISIBILITY">
+	         <key column="RULE_ID"/>
+	         <many-to-many column="FEATURE_ID" class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
+      	</set>
+      	<set name="modules" table="AMP_VISIBILITY_RULE_AMP_MODULES_VISIBILITY">
+	         <key column="RULE_ID"/>
+	         <many-to-many column="MODULE_ID" class="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
+      	</set>
+
+    </class>
+</hibernate-mapping>

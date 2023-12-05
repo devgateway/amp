@@ -1,0 +1,88 @@
+@media only print {
+
+  body {
+    background: transparent;
+  	-webkit-print-color-adjust:exact;
+  }
+
+  // forces colouring of map-circles, won't work on IE.
+  .map-circle {
+    color:white !important;
+    background-color: #f99 !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+
+  .marker-cluster {
+    color:white !important;
+    //background-color: #f99 !important; // needs !important.
+    -webkit-print-color-adjust: exact;
+  }
+
+
+  #amp-header {
+    display: none;
+  }
+
+  #sidebar {
+    display: none;
+  }
+
+  #map-header {
+    display: none;
+  }
+
+  #map-container {
+    overflow: visible;
+    top: 0px;
+    left: 0px;
+    height: 18cm;
+    width: 32cm;  // letter and a4 are both ~21cm, but printing scales it down a bit (?)
+  }
+
+  .leaflet-left {
+    left: 0px !important;
+  }
+
+  .leaflet-control-zoom {
+    display: none;
+  }
+  
+   .legend {
+  	right: auto;
+    bottom: auto;
+    padding-top: 2em;
+    background: transparent;
+    box-shadow: none;
+    &:not(.expanded) {
+      display: none;
+    }
+    .legend-header{
+      text-align: left;
+      & > a {
+        padding-left: 0;
+        font-size: 2em;
+        color: #000;
+      }
+    }
+    .legend-content {
+      border: none;
+      max-height: 1000em;
+      overflow-y: visible;
+      width:800px;
+      
+    }
+    
+  }
+
+  .datasources {
+    display: none;
+  }
+ 
+ // Make sure whatever this code is doing also works for legend for other types:
+ // indicatorwms-legend, legend-indicatorjoin etc.
+ .legend-indicatorarcgisdynamic {
+   float:left;
+   margin-right:60px;
+ }
+}

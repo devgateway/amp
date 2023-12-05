@@ -1,0 +1,48 @@
+<!-- this template is for structure sites -->
+<div class="cluster-popup">
+  <span class="templateBugWorkaround">
+  <h5><%= structures.length %> <span data-i18n="amp.gis:popup-project-site-geocoded">projects are geocoded here</span></h5>
+
+  <div class="scroll-container">
+    <table class="table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th data-i18n="amp.gis:popup-project-site-activity">Project</th>
+          <th data-i18n="amp.gis:popup-project-site">Project Site</th>
+          <th data-i18n="amp.gis:activities-donors">Funding Organization</th>
+          <!-- <th data-i18n="amp.gis:activities-sectors">Sectors</th> -->
+        </tr>
+      </thead>
+      <tbody class="structure-list">
+        <%   _.each(structures, function(structure){  %>
+        <tr>
+          <td>
+            <% if (structure.activity) { %>
+              <a target="_blank"  href="<%= structure.activity.get('ampUrl')%>">
+                <%= structure.activity.get('Project Title') %> (<%= structure.activity.get('AMP ID') %>)
+              </a>
+            <% } %>
+          </td>
+          <td>
+              <%= structure.title %>
+          </td>
+          <td>
+            <% structure.activity.tempDirtyForceJoin().then(function(){ %>
+              <%= structure.activity.toJSON().donorNames %>
+            <%}); %>
+          </td>
+<!--           <td>
+            <% structure.activity.tempDirtyForceJoin().then(function(){ %>
+              <%= structure.activity.toJSON().sectorNames %>
+            <%}); %>
+          </td> -->
+        </tr>
+        <% });%>
+      </tbody>
+    </table>
+  </div>
+  <!--% if (structures.length >= 10) { %-->
+  <!--div class="btn btn-sm btn-info load-more"><span data-i18n="amp.gis:popup-loadmore">load more</span>...</div-->
+  <!--% } %-->
+  </span>
+</div>

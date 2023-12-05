@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+	<tlibversion>1.0</tlibversion>
+	<jspversion>2.0</jspversion>
+	<shortname>globalsettings</shortname>
+	<uri>http://digijava.org/GlobalSettings</uri>
+	<tag>
+		<name>test</name>
+		<tagclass>org.dgfoundation.amp.globalsettings.GlobalSettingsTagClass</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>name</name> 
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>compareWith</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onTrueEvalBody</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+        <tag>
+		<name>value</name>
+		<tagclass>org.dgfoundation.amp.globalsettings.GlobalSettingsValueTagClass</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>name</name> 
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	
+</taglib>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="Required">Field is required!</entry>
+	<entry key="nullValid">Choose One</entry>
+	<entry key="null">Choose One</entry>
+	<entry key="ContactEmailValidator">incorrect email format!</entry>
+	<entry key="not_unique">email should be unique!</entry>
+	<entry key="AmpMinSizeCollectionValidator">Please add at least ${minimum} item(s) here!</entry>
+    <entry key="AmpMaxSizeCollectionValidator">Please add no more than ${maximum} item(s) here!</entry>
+	<entry key="AmpPercentageCollectionValidator">Sum of all percentages is ${label}, it needs to be 100!</entry>
+	<entry key="AmpUniqueCollectionValidator">The following items are repeated at least once: ${label}</entry>
+	<entry key="AmpTreeCollectionValidator">Both parent and child items are present: ${label}</entry>
+	<entry key="AmpProgramMappingCollectionValidator">The program has not been mapped correctly: ${label}</entry>
+	<entry key="AmpUniqueActivityTitleValidator">An activity with this title exists inside workspace ${workspace}.</entry>
+	<entry key="AmpUniqueActivityTitleNoWorkspaceValidator">An activity with this title exists and is not assigned to a workspace.</entry>
+	<entry key="AmpUniqueComponentTitleValidator">A component with this title already exists.</entry>
+	<entry key="CoordinatesValidator">The coordinates are not in the correct format.</entry>
+	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Disbursements are bigger than sum of commitments</entry>
+	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Expenditures are bigger than sum of disbursements</entry>
+	<entry key="StrictPatternDateConverter">Please enter the date in the following format: ${format}</entry>
+	<entry key="LowerDateOutOfRange">Please enter date lower than ${year}</entry>
+	<entry key="BiggerDateOutOfRange">Please enter date bigger than ${year}</entry>
+	<entry key="DoubleFormatConverter">Number not in a valid format</entry>
+	<entry key="AmpGPINiIndicatorValidator">The following questions are required: ${label}</entry>
+	<entry key="AmpGPINiDependentQuestionValidator">${label} should only have values less than or equal to ${dest}</entry>
+	<entry key="AmpGPINiQuestionNumericValidator">Answers may only be positive whole numbers</entry>
+	<entry key="AmpFreezingEventTransactionDateValidator">Due to an active freezing event, you can only add a transaction with date between ${openPeriodFrom} and ${openPeriodTo}</entry>
+	<entry key="AmpFreezingEventTransactionDateValidatorNoOpenPeriod">Due to an active freezing event, you cannot add new transactions</entry>
+	<entry key="AmpFreezingEventTransactionDateValidatorNoEnd">Due to an active freezing event, you can only add a transaction with date greater than ${openPeriodFrom} </entry>
+	
+</properties>

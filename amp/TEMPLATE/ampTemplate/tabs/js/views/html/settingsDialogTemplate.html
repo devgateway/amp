@@ -1,0 +1,62 @@
+<!-- TODO: move this logic inside the js files. -->
+<script type="text/javascript">
+	function resetSettings() {
+		jQuery('#calendar').removeAttr('selected');
+		jQuery('#currency').removeAttr('selected');
+		if (jQuery('#selectedCalendar').val() != "") {
+			jQuery('#calendar').val(jQuery('#selectedCalendar').val());
+		}
+		if (jQuery('#selectedCurrency').val() != "") {
+			jQuery('#currency').val(jQuery('#selectedCurrency').val());
+		}
+	}
+</script>
+
+<div class="settings-container">
+	<input type="hidden" id="selectedCurrency" value="<%=selectedCurrency%>"/>
+	<input type="hidden" id="selectedCalendar" value="<%=selectedCalendar%>"/>
+	<span style="color: red; font-weight: bold; display: none;" class="i18n" id="settings-missing-values-error">Error: Please select Currency and Calendar.</span>	
+	<table width="100%" align="center">
+		<tbody>
+			<tr>
+				<td data-i18n="tabs.common:calendar">Calendar</td>
+				<td>
+					<select name="calendar" id="calendar"> 
+						<% for(var c in calendars) { 
+							var selected = '';
+							if(parseInt(calendars[c].id) === parseInt(selectedCalendar)) {
+								selected = "selected = 'selected' "; 
+							}%>
+							<option value="<%= calendars[c].id%>"<%= selected %> ><%=calendars[c].name%></option> 
+						<% } %>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td data-i18n="tabs.common:currency">Currency</td>
+				<td>
+					<select name="currency" id="currency"> 
+						<% for(var c in currencies) { %> 
+							<% 
+							var selected = ''; 
+							if(currencies[c].id === selectedCurrency) { 
+								selected = "selected = 'selected' ";
+							} 
+							%>
+							<option value="<%= currencies[c].id%>"<%= selected %>><%= currencies[c].name%></option> <% } %>
+					</select>
+				</td>
+			</tr>			
+	</table>
+	<br>
+	<div>
+		<div style="margin-right: auto; margin-left: auto; text-align: center;">
+			<button name="applyFormat" id="applySettingsBtn" class="buttonify" role="button">
+				<span data-i18n="tabs.common:applyFormat">Apply Format</span>
+			</button>
+			<button name="resetFormat" id="resetSettingsBtn" class="buttonify"  onclick="resetSettings()" role="button">
+				<span data-i18n="tabs.common:reset">Reset</span>
+			</button>
+		</div>
+	</div>
+</div>

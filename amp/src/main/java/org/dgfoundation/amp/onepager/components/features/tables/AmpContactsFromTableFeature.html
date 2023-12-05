@@ -1,0 +1,33 @@
+<wicket:extend>
+    <tr wicket:id="tableHeading">
+        <td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+    </tr>
+    <tr  wicket:id="contactsList">
+        <td class="inside">
+            <a href="#"  onclick="$(this).siblings('.contactDetailsContainerDiv').slideToggle();return false;" style="float:left"><b><span wicket:id="contactName" /></b></a><span style="float: right"><input type="checkbox" wicket:id="primaryContact" /><wicket:trn key="trn:markAsPrimary">Mark as primary</wicket:trn></span>
+            <div class="contactDetailsContainerDiv" style="clear:both;">
+                <table width="330" border="0" cellpadding="3" cellspacing="3">
+                    <tr><td><div wicket:id="title"/></td></tr>
+                    <tr><td><span wicket:id="name"/></td></tr>
+                    <tr><td><span wicket:id="lastname"/></td></tr>
+                    <tr><td><span wicket:id="addContactEmail"/></td></tr>
+                    <tr><td><span wicket:id="function"/></td></tr>
+                    <tr><td width="300"><span wicket:id="organisationName"/></td></tr>
+                    <tr><td width="300"><span wicket:id="contactOrganizations"/></td></tr>
+                    <tr><td><span wicket:id="addContactPhone"/></td></tr>
+                    <tr><td><span wicket:id="addContactFax"/></td></tr>
+                    <tr><td><span wicket:id="officeaddress"/></td></tr>
+                </table>
+            </div>
+        </td>
+        <td class="inside" align="left" valign="top">
+            <span wicket:id="delContact"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="inside" align="center" width="100%">
+            <div wicket:id="searchContact"/>	
+        </td>
+        
+    </tr>
+</wicket:extend>

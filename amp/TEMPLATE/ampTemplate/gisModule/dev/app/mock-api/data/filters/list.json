@@ -1,0 +1,37 @@
+[
+{
+"name": "Sectors",
+"ui": true,
+"endpoint": "/rest/filters/sectors"
+},
+{
+"name": "ActivityStatus",
+"ui": true,
+"endpoint": "/rest/filters/activityStatus"
+},
+{
+"name": "Boundaries",
+"ui": false,
+"endpoint": "/rest/filters/boundaries"
+},
+{
+"name": "SectorConfigName",
+"ui": false,
+"endpoint": "/rest/filters/sectorConfigName"
+},
+{
+"name": "Programs",
+"ui": true,
+"endpoint": "/rest/filters/programs"
+},
+{
+"name": "Organizations",
+"ui": true,
+"endpoint": "/rest/filters/orgs"
+},
+{
+"name": "Years",
+"ui": true,
+"endpoint": "/rest/filters/dates"
+}
+]

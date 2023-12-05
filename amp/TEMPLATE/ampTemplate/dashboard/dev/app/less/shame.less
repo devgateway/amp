@@ -1,0 +1,612 @@
+// big mess of styles that should probably be organized
+
+body {
+  background: #eee;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #444;
+}
+
+.dash-row {
+  padding: 0 16px;
+}
+
+// .dash-chart-wrap svg {
+//   height: 260px;
+//   .big-chart & {
+//     height: 350px;
+//   }
+// }
+
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+h3 {
+  // for filters and share
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.inline-heading {
+  display: inline-block;
+  margin: 0 20px 0 0;
+  // vertical-align: bottom;
+}
+
+.applied-filters {
+  display: inline-block;
+  margin: 0 20px 0 0;
+  vertical-align: top;
+  h5 {
+    color: @c-title;
+    font-weight: 800;
+    &::first-letter {
+	  text-transform: capitalize;
+   }
+  }
+  li {
+    list-style-type: none;
+    &:before {
+      content: "";
+      display: inline-block;
+      height: 1em;
+      width: 1em;
+      margin: 3px 5px 0 -22px;
+      border-radius: 0.5em;
+      background: #a1d367;
+    }
+  }
+}
+
+.dash-form {
+
+  label {
+    color: #333;
+  }
+
+  .radio-ui {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    position: absolute;
+    margin: 4px 0 0 -16px;
+    border-radius: 0.5em;
+    border: 2px solid #ccc;
+    background: #eee;
+  }
+
+  input {
+    opacity: 0;
+    &:checked + .radio-ui {
+      border-color: #3071a9;
+      background: #3071a9;
+    }
+  }
+}
+
+.dollaz {
+  white-space: nowrap;
+}
+
+.panel {
+
+  &.panel-chart {
+    border: 1px solid #ddd;
+    border-radius: 0;
+
+    .panel-heading {      
+      h2 {
+        margin: 5px 0 0.2em;
+        font-size: 1.6em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: @c-title;
+        .big-chart & {
+          font-size: 2em;
+        }
+        float: left;
+      }
+    }
+    
+    .fix-title-height {    
+    	height: 78px;
+      	display: block;
+    }
+
+    .dash-chart-wrap {
+      height: 300px;
+      overflow-y: auto;
+      .big-chart-0 & {
+        min-height: 400px;
+      }
+      .big-chart-1 & {
+        min-height: 475px;
+      }
+      .big-chart-2 & {
+        min-height: 625px;
+      }
+      .big-chart-3 & {
+        min-height: 775px;
+      }
+      .big-chart-4 & {
+        min-height: 925px;
+      }
+      .big-chart-5 & {
+        min-height: 1075px;
+      }
+      .big-chart-6 & {
+        min-height: 1225px;
+      }
+      .big-chart-7 & {
+        min-height: 1375px;
+      }
+    }
+
+    .panel-footer {
+      form {
+        display: inline-block;
+      }
+      .cheat-lineheight {
+        display: inline-block;
+        vertical-align: middle;
+        width: 1px;
+        margin-right: -1px;
+        background: transparent;
+        min-height: 30px;
+      }
+    }
+  }
+
+  &.panel-popover {
+    margin-bottom: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.333);
+    .panel-heading {
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+  }
+
+  b {
+    color: @c-title;
+  }
+
+  .panel-heading,
+  .panel-body,
+  .panel-footer {
+    padding: 9px 12px;
+  }
+}
+
+
+.big-number {
+  font-size: 2.4em;
+  line-height: 1em;
+  b {
+    color: #666;
+  }
+  .big-chart & {
+    font-size: 3em;
+  }
+}
+
+
+.legend-value {
+  white-space: nowrap;
+  .legend-key {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+  }
+}
+
+
+.dash-chart-diagnostic {
+  position: absolute;
+  width: 100%;
+  padding-top: 80px;
+  color: rgb(48, 113, 169);
+  text-shadow: 0 0 1em #fff;
+  font-weight: 800;
+}
+
+.modal-dialog {
+  // where did the z-index get lost???
+  z-index: 1080;
+}
+.dash-settings-modal {
+  width: 610px;
+}
+.dash-settings-modal .modal-dialog,
+.dash-settings-modal .panel {
+  // width: 805px
+}
+.dash-settings-modal .nav-pills > li > a {
+  font-weight: 800;
+  font-size: 0.9em;
+  border-radius: 0;
+}
+.dash-settings-modal .sub-filters-content {
+  width: 347px;
+}
+
+.filters-err {
+  vertical-align: bottom;
+  margin-right: 10px;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+
+.chart-drawing-area {
+  position: absolute;
+  left: -99999em;
+}
+
+//@preview-width: 1024px;  // sync with views/download.js
+//@preview-height: 400px;  // sync with views/download.js
+.dash-download-modal {
+	/*width: @preview-width;*/
+	width: auto;
+	max-width: 90%;
+}
+.modal-preview-area {
+	visibility: visible;
+	display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width:100%;
+    height:100%;
+    text-align:center;
+    z-index: 9999;
+    opacity:0.75;
+    background-color:white;
+}
+.preview-area .svg-wrap {
+  /*height: @preview-height;*/
+  /*width: @preview-width - (15px * 2);*/
+  opacity: 0.0;
+}
+.preview-area .canvas-wrap {
+  /*height: @preview-height + 50px;*/
+  /*width: @preview-width - (15px * 2);*/
+}
+.modal-dialog.download {
+  /*width: @preview-width + (15px * 2);*/
+}
+
+
+.modal-dialog .container {
+  /*width: auto;*/
+}
+
+.csv-preview {
+  display: block;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 1em;
+  font: 16px monospace;
+  background: eee;
+}
+
+.download-chart {
+  position: relative;
+  & > object {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.like-btn-sm {
+  height: 30px;  // default 34
+  padding-top: 4px;  // default 6
+  padding-bottom: 4px;  // default 6
+}
+
+.chart-tops-info-container {
+	height: 400px;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	width: 100%;
+}
+
+.chart-tops-info-content {
+    overflow-y: auto;
+	max-height: 100%;
+	padding: 5px;
+}
+
+.chart-tops-info-category {
+	border-bottom: 1px solid lightblue;
+	margin-bottom: 5px;
+}
+
+.chart-tops-info-category b {
+	color: lightseagreen;
+}
+
+.chart-tops-info-content table {
+	width: 100%;
+}
+
+.chart-tops-info-content td, th {
+	padding-right: 3px;
+}
+
+.pointer { 
+	cursor: pointer;
+}
+
+.odd_row {
+	background-color: rgba(173, 216, 230, 0.5);
+}
+
+/*.heatmap-chart {
+	height: 1000px !important;
+}*/
+
+rect.bordered {
+	stroke: #E6E6E6;
+	stroke-width: 2px;
+}
+
+text.mono {
+	font-size: 9pt;
+	font-family: Arial;
+	fill: #000;
+}
+
+.heatmap-chart-wrap {
+	height: auto !important;
+	min-height: 300px !important;
+}
+
+.invisible {
+	display: none;
+	visibility: hidden;
+	font-family: Arial;
+	font-size: 11px;
+}
+
+.heatmap-cell {
+	cursor: pointer;
+}
+
+.question_mark {
+	width: 13px;
+	float: left;
+	margin-top: 11px;
+	margin-left: 5px;
+}
+
+.negative-values-message {
+  margin: 0;
+  opacity: 0.8;
+  z-index: 100;
+  padding: 0;
+  display: none;
+}
+
+.legend-others {
+	cursor: pointer;
+	fill: red !important;
+	font-weight: bold
+}
+
+.modal-backdrop.in {
+  filter: alpha(opacity=80);
+  opacity: .80;
+}
+
+.text-center {
+	margin-top: 10px;
+}
+
+.heatmap-table-responsive {
+	max-height: 500px; 
+	overflow-y: auto;
+}
+
+.tooltip-inner {
+  min-width: 100%;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.custom-panel{
+  background-color: #f5f8fa;
+}
+
+.bootstrap-typeahead-clear-button {
+  outline:none;
+  margin-top:-12px;
+  position:absolute;
+  right:11px;top:50%;
+  z-index:1;
+}
+
+.close-lg {
+  font-size:24px;
+  margin-top:-15px;
+  right:15px;
+}
+
+th {
+  font-size: 9pt;
+  color: #7f8fa4;
+  font-weight: 600;
+}
+
+td {
+  font-size: 12px;
+  color: #354052;
+}
+
+p {
+  margin: 0 0 10px 5px;
+  font-size: 13px;
+  color: #354052;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: #f5f8fa;
+}
+
+.funding-type-title-column{
+  text-align: right;
+  white-space: nowrap;
+}
+.amount-column{
+  text-align: right;
+  white-space: nowrap;
+  color: #000;
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+
+.number-divider-detail{
+  font-size: 9pt;
+  color: #000;
+  font-weight: 600;
+}
+
+.text-primary{
+  font-size: 9pt;
+  color: #163F66;
+  font-weight: 600;
+}
+
+.header-row{
+  border-bottom: 1px !important;
+  border-color: #FFF !important;
+}
+
+a.title-column:hover, a.title-column:focus {
+  color: #00496B !important;
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+a.title-column {
+  color: #00496B !important;
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+  text-align: right;
+}
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.active,
+.open > .dropdown-toggle.btn-success {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+.btn-success:active,
+.btn-success.active,
+.open > .dropdown-toggle.btn-success {
+  background-image: none;
+}
+.btn-success.disabled,
+.btn-success[disabled],
+fieldset[disabled] .btn-success,
+.btn-success.disabled:hover,
+.btn-success[disabled]:hover,
+fieldset[disabled] .btn-success:hover,
+.btn-success.disabled:focus,
+.btn-success[disabled]:focus,
+fieldset[disabled] .btn-success:focus,
+.btn-success.disabled:active,
+.btn-success[disabled]:active,
+fieldset[disabled] .btn-success:active,
+.btn-success.disabled.active,
+.btn-success[disabled].active,
+fieldset[disabled] .btn-success.active {
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.btn-success .badge {
+  color: #5cb85c;
+  background-color: #fff;
+}
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/K88pR3goAWT7BTt32Z01m1tXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/RjgO7rYTmqiVp7vzi-Q5UVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* devanagari */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/ttwNtsRpgsxVmgGGmiUOEltXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+02BC, U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200B-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/LWCjsQkB6EMdfHrEVqA1KVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/xozscpT2726on7jbcb_pAltXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/59ZRklaO5bWGqF5A9baEEVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+1EA0-1EF1, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/u-WUoqrET9fUeobQW7jkRVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/cJZKeOuBrn4kERxqtaUH3VtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+

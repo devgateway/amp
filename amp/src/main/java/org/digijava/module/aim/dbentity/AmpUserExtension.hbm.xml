@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpUserExtension" table="AMP_USER_EXT">
+		<composite-id name="ampUserExtId"
+			class="org.digijava.module.aim.dbentity.AmpUserExtensionPK">
+			<key-many-to-one name="user" class="org.digijava.kernel.user.User" column="user_id" />
+		</composite-id>
+
+		<many-to-one name="orgType" column="amp_org_type_id"
+			class="org.digijava.module.aim.dbentity.AmpOrgType" cascade="none" />
+
+		<many-to-one name="orgGroup" column="amp_org_group__id"
+			class="org.digijava.module.aim.dbentity.AmpOrgGroup" cascade="none" />
+
+		<many-to-one name="organization" column="amp_org_id"
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+
+	</class>
+</hibernate-mapping>

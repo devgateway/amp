@@ -1,0 +1,22 @@
+<div id='template-filters'>
+	<script type='text/template'>
+        <b><%= trnName %></b>:
+		<br> 
+		<% _.each(values, function(item, i) { %>			
+			<% if (item.trnName || item.name) { %>
+				<div class='round-filter'><%= item.trnName || item.name %></div>
+			<% } else { %>
+				<% if (name === 'Humanitarian Aid' || 'Disaster Response Marker') { %>
+					<% if (item === '1') { %>
+						<div class='round-filter' data-i18n='tabs.common:yes'>Yes</div>
+					<% } %>
+					<% if (item === '2') { %>
+						<div class='round-filter' data-i18n='tabs.common:no'>No</div>
+					<% } %>
+				<% } else { %>
+					<div class='round-filter'> - </div>
+				<% } %>
+			<% } %>
+		<% }); %>
+    </script>
+</div>

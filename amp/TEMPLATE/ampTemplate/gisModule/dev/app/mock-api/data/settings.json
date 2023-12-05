@@ -1,0 +1,30 @@
+[
+  {
+    "id": 0,
+    "name": "Funding Type",
+    "selected": "cm",
+    "options": [
+       {"name": "Commitments", "id":"cm"},
+       {"name": "Disbursements", "id":"dp"},
+       {"name": "Commitments & Disbursements", "id":"cm,dp"}
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Currency",
+    "selected": "usd",
+    "options": [
+       {"name": "USD", "id":"usd"},
+       {"name": "Local", "id":"lcl"}
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Calendar Type",
+    "selected": "grg",
+    "options": [
+       {"name": "Gregorian", "id":"grg"},
+       {"name": "Local", "id":"lcl"}
+    ]
+  }
+]

@@ -1,0 +1,46 @@
+/*
+  Check bootstrap icons first to see what you need already exists:
+  http://getbootstrap.com/components/#glyphicons
+
+  To consider: Can we generate a single icon font, with just what we use from
+  Bootstrap + our custom ones?
+ */
+
+.ampicon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 31px;
+  height: 30px;
+  background-image: url(../img/icons.png);
+}
+
+// List of icons to create, order matters:
+@icons: ampicon-projects, ampicon-layers, ampicon-filters, ampicon-search,  ampicon-share,   ampicon-settings;
+@amp-icons-grid: 40px;
+
+.iconize();
+.iconize(@i: length(@icons)) when (@i > 0) {
+  .iconize((@i - 1));
+
+  @value: extract(@icons, @i); // LESS arrays are 1-based
+  @position-y: -@amp-icons-grid * (@i - 1);
+
+  .ampicon.@{value} {
+    background-position: -@amp-icons-grid @position-y;
+  }
+
+  .collapsed .ampicon.@{value} {
+      background-position: 0 @position-y;
+    }
+
+  .accordion-heading > a {
+    // see also amp-sidebar.less for broader hover styling
+    &:hover .ampicon.@{value},
+    &:active .ampicon.@{value},
+    &:focus .ampicon.@{value},{
+      background-position: -@amp-icons-grid @position-y;
+    }
+  }
+
+}

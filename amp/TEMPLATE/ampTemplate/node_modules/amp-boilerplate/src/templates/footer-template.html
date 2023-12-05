@@ -1,0 +1,85 @@
+<style>
+    .footerText {
+    padding: 0;
+    font-family: arial;
+    font-size: 11px;
+    border: 0px;
+    }
+    .footer {
+    background-color: #8B8B8B;
+    color: #FFF;
+    margin-top: 0;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+    }
+    .dgf_footer {
+    color: #8B8B8B;
+    line-height: 18px;
+    text-align: center;
+    background-color:white;
+    padding-top:10px;
+    }
+    .dgf_footer img {
+    line-height: 18px;
+    margin-bottom: 5px;
+    }
+    .loading{   
+      margin: 10px 20px 10px 20px;
+    }
+    
+</style>
+
+<div class="footer footerText">
+    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>
+    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>
+    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>
+    <% } %>
+</div>
+<% if(showDGFooter == true)  { %>
+<div class="dgf_footer footerText">
+    <img src="/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif" class="dgf_logo_footer">
+    <br/>
+    Development Gateway
+    <br/>
+    1110 Vermont Ave, NW, Suite 500
+    <br/>
+    Washington, DC 20005 USA
+    <br/>
+    info@developmentgateway.org, Tel: +1.202.572.9200
+</div>
+<% } %>
+
+<% if(properties.trackingEnabled === true) { %>
+<!-- Piwik
+Site id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30
+Also,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik
+-->
+<script type="text/javascript">
+	  var _paq = _paq || [];
+    if (window.PiwikAlreadyFetched === undefined ) {
+      _paq.push(['setUserId', "<%= properties.email %>"]);
+      _paq.push(['setCustomVariable',
+          1,
+          "Workspace|WID",
+          "<%= properties.workspace %>|<%= properties.workspaceId %>",
+          "page"]);
+  	  _paq.push(["trackPageView"]);
+  	  _paq.push(["enableLinkTracking"]);
+
+      /* TDK: keep track of whether we put the script DOM node on the page already
+       *   in case the page reparses this javascript on another modification.
+       */
+      window.PiwikAlreadyFetched = true;
+
+      /* Stock Piwik code: */
+  	  (function() {
+  	    var u="<%=  properties.trackingUrl %>";
+  	    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+  	    _paq.push(["setSiteId", "<%=properties.siteId %>"]);
+  	    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g,s);
+  	  })();
+    }
+	</script>
+<!-- End Piwik Code -->
+<% } %>

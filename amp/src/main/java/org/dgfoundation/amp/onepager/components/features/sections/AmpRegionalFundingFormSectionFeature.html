@@ -1,0 +1,22 @@
+<wicket:extend>
+	<div style="position: relative; top: -30px; float: right;">
+		<a href="#" id="expandRegionItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item').css('display','block');$('#expandRegionItems').hide();$('#collapseRegionItems').show();"><wicket:trn>Expand all</wicket:trn></a>
+		<a href="#" style="display: none;" id="collapseRegionItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item').hide();$('#expandRegionItems').show();$('#collapseRegionItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
+	</div>
+	<tr><td colspan="2"><p/>
+		<div wicket:id="listRegions">
+			<div class="organization_box">
+				<div class="organization_box_content">
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tr>
+					<td valign="top">
+						<span wicket:id="regionItem"/>		
+					</td>
+				</tr>
+				</table>
+				</div>
+			</div>
+		</div>
+	<p/>
+	</td></tr>
+</wicket:extend>

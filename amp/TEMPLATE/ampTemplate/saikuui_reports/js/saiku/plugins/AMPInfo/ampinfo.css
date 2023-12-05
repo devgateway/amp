@@ -1,0 +1,116 @@
+#amp_info_filters {
+	float: right;
+    width: 500px;
+    position: relative;
+    /* top: 79px; */
+    right: 35px;
+    margin-bottom: 10px;    
+}
+
+#amp_info_filters>h3{
+	color: #00496B;
+	font-weight: 500;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+    font-size: 11px;
+}
+#amp_info_settings>h5{
+	font-weight: bold;
+}
+
+#amp_notification {
+	color: red;
+	/*font-weight:800;*/
+	margin-bottom: 5px;
+}
+
+.no_results {
+	color: black;
+	font-weight:500;
+	font-size: 1.1em;
+}
+
+.round-filter {
+	border: 1px solid #376091;
+	border-radius: 4px;
+	padding: 3px;
+	margin-right: 5px;
+	background: #ffffff;
+	margin-bottom: 3px;
+	float: left;
+}
+
+.round-filter-group {
+	border: 1px solid #376091;
+	border-radius: 4px;
+	padding-left: 7px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	float: left;
+	text-transform: capitalize;
+}
+
+#amp_info_filters_block {
+	border: 2px solid rgb(56, 121, 146);
+	max-height: 300px;
+	min-height: 200px;
+	z-index: 2;
+	width: inherit;
+	position: absolute;
+	top:26px;
+}
+.ui-widget {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #2d5379;
+	font-size: 12px;
+}
+	
+.ui-widget .ui-state-default {
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+	color: #2d5379;
+	background: #ededed;
+	border: 0px;
+	font-weight: normal;
+	background: #ededed url('/TEMPLATE/ampTemplate/tabs/css/images/new-admin-sprite.png') no-repeat; 
+	background-position: 0 -20px;
+}
+
+.ui-accordion .ui-accordion-header {
+  display: block;
+  cursor: pointer;
+  position: relative;
+  margin-top: 2px;
+  padding: .5em .5em .5em .7em;
+  min-height: 0;
+  /* support: IE7 */
+}
+
+.ui-accordion .ui-accordion-icons {
+  padding-left: 2.2em;
+}
+.ui-accordion .ui-accordion-noicons {
+  padding-left: .7em;
+}
+.ui-accordion .ui-accordion-icons .ui-accordion-icons {
+  padding-left: 2.2em;
+}
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+  position: absolute;
+  left: .5em;
+  top: 50%;
+  margin-top: -8px;
+}
+.ui-accordion .ui-accordion-content {
+  padding: 0.5em;
+  border-top: 0;
+  overflow: auto;
+}
+
+.ui-widget-content .ui-state-default {
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	color: #2d5379;
+	background: #ededed;
+	border: 1px solid #ededed;
+	font-weight: normal;
+	background: #ededed url('/TEMPLATE/ampTemplate/tabs/css/images/new-admin-sprite.png') no-repeat;
+	background-position: 0 -20px;
+}

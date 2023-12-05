@@ -1,0 +1,89 @@
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: @light;
+  background: @amp_inverse_bg;
+}
+
+
+h4 {
+  padding: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  background: @amp_content_highlight_bg;
+
+  label {
+    margin: 0;
+  }
+}
+h4.modal-title.text-primary {
+  font-size: 18px;
+  font-weight: 520;
+  background: rgba(0, 0, 0, 0);
+}
+
+// styled checkboxes. + is a sibling selector
+input[type="checkbox"] + .styled-checkbox{
+  width:10px;
+  height:10px;
+  background: #999;
+  border-radius: 5px;
+  display:inline-block;
+}
+
+input[type="checkbox"]:checked + .styled-checkbox{
+  background: @amp_sidebar_input_active;
+}
+
+
+// Fix a chrome/bootstrap render issue: http://codepen.io/uniphil/pen/jfbem
+#sidebar .modal.in .modal-dialog {
+  -webkit-transform: none;
+}
+
+#map-container {
+height:90%;
+position: fixed !important;
+}
+
+#amp-footer {
+z-index: 2000;
+position: fixed;
+top: 95%;
+width: 100%;
+}
+
+// Override of Bootstrap for narrower amp nav
+#amp-header{
+  .navbar-nav > li > a { padding-top:5px ; padding-bottom:5px; }
+  .navbar {
+    min-height:30px;
+    border-left:0;
+    border-bottom: 2px solid @amp_emph;
+    border-radius: 0;
+  }
+  .navbar-brand {
+    height:auto;
+    padding-top:5px ;
+    padding-bottom:5px;
+    & > img{
+      display: inline-block;
+    }
+  }
+  border-bottom: 2px solid @amp_emph;   
+    position: fixed !important; 
+    width: 100% !important;
+}
+
+.ui-tooltip {
+  background-color: black !important;
+  color: white !important;
+  border-radius: 5px;
+  border: 0px;
+}
+
+.ui-tooltip-content {
+  background-color: black !important;
+  color: white !important;
+  font-size: 12px;
+  font-family: arial, helvetica, clean, sans-serif;
+}

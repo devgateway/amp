@@ -1,0 +1,28 @@
+{
+  "name": "amp-common",
+  "version": "0.0.1",
+  "description": "Common libraries shared between AMP components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "shared",
+    "common",
+    "amp"
+  ],
+  "author": "phil",
+  "license": "none",
+  "dependencies": {
+    "backbone": "=1.1.2",
+    "bootstrap": "=3.3.0",
+    "d3": "=3.5.12",
+    "jquery": "2.1.1",
+    "underscore": "1.7.0"
+  },
+  "devDependencies": {
+    "browserify": "6.2.0",
+    "uglify-js": "2.4.15",
+    "uglify-stream": "1.1.0"
+  }
+}

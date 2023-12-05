@@ -1,0 +1,112 @@
+<wicket:extend>
+	<tr>
+		<td>
+			<div wicket:id="list">
+				<div class="organization_box">
+					<div class="organization_box_content">
+						<table width="100%" cellspacing="0" cellpadding="0" border="0">
+							<tr>
+								<td valign="top">
+									<span wicket:id="item" />
+								</td>
+								<td valign="top" align="right">
+									<span wicket:id="delete" />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<span wicket:id="uniqueMEValidator"/>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">
+			<table class="inside" width="100%" cellpadding="0" cellspacing="0">
+				<tr><td background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside inside-header">
+					<b class="ins_header"><wicket:trn key="trn:searchForIndicator">Search for existing indicator</wicket:trn></b>
+				</td></tr>
+				<tr><td class="inside" align="left">
+					<span wicket:id="search" />
+				</td></tr>
+				
+				
+				<tr><td background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside inside-header">
+				
+					<a href="#" class="slider" onclick="$('#addNewIndicatorH').slideToggle();">
+					<b class="ins_header"><wicket:trn key="addNewIndicator">Add new indicator</wicket:trn></b>
+					</a>
+				</td></tr>
+				<tr><td class="inside">
+					<div id="addNewIndicatorH" class="invisible-item">
+					<table width="100%">
+						<tr>
+							<td>
+								<span wicket:id="indName" />
+							</td>
+							<td>
+								<span wicket:id="indType" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<span wicket:id="indDesc" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span wicket:id="indCode" />
+							</td>
+							<td>
+								<span wicket:id="indDate" />
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2">
+								<div style="white-space: nowrap;" wicket:id="meSectorContainer">
+									<span ><span style="color:Red;">*</span><wicket:trn key="aim:Sectors">Sectors</wicket:trn></span>
+									<br />
+									<table class="inside" width="100%" cellpadding="0" cellspacing="0">
+										<tr wicket:id="listSectors">
+											<td class="inside" align="right">
+											 	&nbsp;&nbsp;&nbsp;<span wicket:id="sectorLabel"/>
+											</td>
+											<td class="inside" align="left"><span wicket:id="delSector"/></td>
+										</tr>
+										<tr>
+											<td colspan="2" class="inside" align="left">
+												<!--
+												<span wicket:id="uniqueSectorsValidator"/>
+												 -->
+												<span wicket:id="searchSectors"/>	
+											</td>
+										</tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="left">
+								<span wicket:id="addIndicator" />
+							</td>
+						</tr>
+						<tr>
+							<td class="inside" align="left" colspan="2">
+							<span wicket:id="uniqueSectorsValidator"/>
+								<span wicket:id="indicatorFeedbackContainer" style="color: red;">
+									<span wicket:id="indicatorFeedbackLabel" class="feedbacklabel.error"></span>
+								</span>
+							</td>
+						</tr>
+					</table>
+					</div>
+				</td></tr>
+			</table>	
+		</td>
+	</tr>
+</wicket:extend>

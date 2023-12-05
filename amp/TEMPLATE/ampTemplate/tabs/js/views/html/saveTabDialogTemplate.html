@@ -1,0 +1,23 @@
+<div class="save-tab-container">
+<% if (languages.length > 1) { %>
+<ul class="nav ui-tabs">
+<% _(languages).each(function(language,index) { %>
+ <li class="tab<% if(index==0){%><%= ' focused' %><%}%> " data-label='<%= language %>'><a href="#"><%= language %></a></li>
+
+<% }) %>  
+</ul>
+<% } %> 
+ <% _(languages).each(function(language,index) { %>
+   <div width="100%"  class="save-tab <%=language %>" align="center" <% if(index!=0){%>style="display:none" <%}%> >
+		
+					<input class="save-text" type="text" id="newTabNameInput_<%= language %>" value="<%=translatedNames[language]%>">
+	</div>
+	<% }) %>
+    
+	<br>
+	<div style="margin-right: auto; margin-left: auto; text-align: center;">
+		<button id="saveTabsBtn"  name="saveTabsBtn" class="buttonify" role="button">
+			<span data-i18n="tabs.common:saveTabsBtn">Save Tab</span>
+		</button>
+	</div>
+</div>

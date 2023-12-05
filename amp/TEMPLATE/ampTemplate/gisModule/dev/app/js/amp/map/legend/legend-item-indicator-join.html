@@ -1,0 +1,29 @@
+<div class="templateBugWorkaround">
+<div>
+    <h3 data-i18n="amp.gis:title-<%= title.replace(/ /g,'') %>"><%= title %></h3>
+  <small><%= obj.description %></small>
+</div>
+  <% if (status === 'loading') { %>
+    <p><em data-18n="amp.gis:legend-loading">Loading...</em>></p>
+  <% } else if(colourBuckets && colourBuckets.length > 0) { %>
+    <% colourBuckets.each(function(bucket) { %>
+      <% if(bucket.get('value') && !_.isNaN(bucket.get('value')[0]) && _.isFinite(bucket.get('value')[0])) { %>
+        <div class="legend-item-indicator-join">
+        <div style="background: <%= bucket.hex() %> !important;" class="color-block-indicator-join"></div>
+        <div class="legend-item-label">
+        <% var values = getLegendValues(model, bucket) %>        
+         <%= values.min %>
+         <%if(values.min !==values.max ){%>
+            &mdash;<%= values.max %> 
+         <%}%>
+         <%if(!values.isPercent){%>        
+            <%= unit %>
+        <%}%>     
+       </div>
+      </div>
+      <% } %>
+    <% }) %>
+  <% } else { %>
+    <p><em data-18n="amp.gis:legend-noDataAvailable">No Data Available</em>></p>
+  <% } %>
+</div>

@@ -1,0 +1,84 @@
+
+// note: color-blocks is in amp-widgets.less
+
+.load-more-hide{
+     display:none;
+    }
+    
+.datasources {
+  z-index: @amp_map_footer_layers;
+  position: absolute;
+  bottom: 0;
+  right: 270px;
+  width: 605px;
+  color: @amp_inverse;
+  background: @amp_map_header_bg;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.333);
+
+  .table > thead > tr > th {
+    line-height: 1em;
+  }
+
+  .table td.commitments, .table td.disbursements {
+    text-align: right;
+  }
+
+  .datasources-header > a {
+    display: block;
+    padding: 4px;
+    color: #eee;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      height: 17px;
+      width: 16px;
+      border: 2px solid white;
+      border-width: 0 0 2px;
+    }
+    &:hover:after {
+      background: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .datasources-content {
+    max-height: 240px;
+    padding: 1em;
+    font-size: 0.9em;
+    overflow-y: scroll;
+    color: #333;
+    border: 1px solid #aaa;
+    border-width: 0 1px;
+    background: @amp_content_bg;
+
+    h3 {
+      margin: 0.5em 0;
+      font-size: 1.2em;
+    }
+  }
+
+  &:not(.expanded) {
+    .datasources-header > a {
+      &:after {
+        display: none;
+      }
+      &:hover:after {
+        display: block;
+        border-width: 2px 0 0;
+      }
+    }
+    .datasources-content {
+      height: 0;
+      padding: 0;
+    }
+    
+  }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="Required">Поле необходимо заполнить!</entry>
+	<entry key="nullValid">Выберите</entry>
+	<entry key="null">Выберите</entry>
+	<entry key="ContactEmailValidator">неправильный формат адреса эл. почты!</entry>
+	<entry key="not_unique">адрес эл. почты должен быть уникальным!</entry>
+	<entry key="AmpMinSizeCollectionValidator">Пожалуйста, введите не меньше ${minimum} элементa!</entry>
+    <entry key="AmpMaxSizeCollectionValidator">Максимальное количество пунктов не должно превышать ${maximum}!</entry>
+	<entry key="AmpPercentageCollectionValidator">Сумма всех процентов ${label}, она должна быть 100!</entry>
+	<entry key="AmpUniqueCollectionValidator">Эти элементы повторяются 2 или более раз: ${label}</entry>
+	<entry key="AmpTreeCollectionValidator">Нелизя иметь и родительские и потомочные элементы: ${label}</entry>
+	<entry key="AmpUniqueActivityTitleValidator">Проект с таким названием уже существует в этом раб. столе ( ${workspace} ).</entry>
+	<entry key="AmpUniqueActivityTitleNoWorkspaceValidator">Проект с таким названием уже существует и не присваивается к рабочему столу.</entry>
+	<entry key="AmpUniqueComponentTitleValidator">Подпроект с таким названием уже существует.</entry>
+	<entry key="CoordinatesValidator">Координаты в неправильном формате.</entry>
+	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Выплаты больше, чем сумма обязательств</entry>
+	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Расходы больше, чем сумма выплат</entry>
+	<entry key="StrictPatternDateConverter">Пожалуйста, введите дату в формате: ${format}</entry>
+	<entry key="LowerDateOutOfRange">Пожалуйста, введите дату ниже, чем ${year}</entry>
+	<entry key="BiggerDateOutOfRange">Пожалуйста, введите дату, больше, чем ${year}</entry>
+</properties>

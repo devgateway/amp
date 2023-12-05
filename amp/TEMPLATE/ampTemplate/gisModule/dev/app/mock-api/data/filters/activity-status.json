@@ -1,0 +1,26 @@
+[
+   {
+       "id": "edited",
+       "name": "Edited but not validated"
+   },
+   {
+       "id": "approved",
+       "name": "Edited and validated"
+   },
+   {
+       "id": "rejected",
+       "name": "Edited and rejected"
+   },
+   {
+       "id": "startedapproved",
+       "name": "New and validated"
+   },
+   {
+       "id": "started",
+       "name": "New"
+   },
+   {
+       "id": "not_approved",
+       "name": "Not Approved"
+   }
+] 

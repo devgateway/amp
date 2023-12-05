@@ -1,0 +1,174 @@
+var fs = require('fs');
+var $ = require('jquery');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Translator = require('amp-translate');
+var Wizard = require('./wizard-view');
+var Admin = require('./admin-view');
+var PopulationLayerView = require('./population-layer-view');
+var Translator = require('amp-translate');
+var IndicatorLayer = require('../models/indicator-layer.js');
+var Template = fs.readFileSync(__dirname + '/../templates/main-template.html', 'utf8');
+var EventsBus = _({}).extend(Backbone.Events);
+var Events = require('../utils/events.js');
+var Settings = require('../models/setting');
+var UserModel = require('../models/user-model.js');
+//var boilerplate = require('amp-boilerplate');
+
+
+module.exports = Backbone.View.extend({
+	id: 'layer-manager',
+	events: {  
+		'click .cancel': 'close'
+	},
+	template: _.template(Template),  
+	initialize:function(options) {		
+		_.bindAll(this, 'render','configureDialog', 'renderBoilerTemplate');
+		var self = this;		
+		this.draggable = options.draggable;
+		this.caller = options.caller;
+		this.settings = new Settings();
+		this.user = new UserModel();
+		if(options.translator === undefined) {
+			this.createTranslator(true);
+		} else {
+			this.translator = options.translator;
+		}		
+		EventsBus.on(Events.UPDATE_LAYER_EVENT, function(selected) {
+			self.wizard = new Wizard({translate: self.translate,translator: self.translator, model: selected, EventsBus: EventsBus, settings: self.settings});
+			self.$el.find("#layers-wizard").html(self.wizard.render().el);
+			self.$el.find("#layers-admin").hide();
+			self.$el.find("#layers-wizard").show();
+			self.wizard.delegateEvents();
+			self.bubbleEvents(); 
+		});
+		
+		EventsBus.on(Events.CREATE_LAYER_EVENT, function() {
+			self.showWizard();
+		});
+		
+		EventsBus.on(Events.WIZARD_CLOSED_EVENT,function(){
+			if(self.user.get('logged')){
+			  self.showAdmin();	
+			}else{
+				self.close();
+			}
+		});	
+		
+		EventsBus.on(Events.OPEN_POPULATION_VIEW_EVENT, function() {			
+			self.showPopulationConfig();
+		});
+		
+		EventsBus.on(Events.POPULATION_VIEW_CLOSED_EVENT, function() {			
+			self.showAdmin();	
+		});		
+		 
+	},  
+	render: function() {
+		
+		var self = this;
+		this.deffered = [];
+	    this.deffered.push(this.settings.fetch());
+	    this.deffered.push(this.user.fetch());
+	    $.when.apply($, this.deffered).then(function () {
+	    	self.configureDialog();
+			self.$el.html(self.template({caller: self.caller}));
+			
+			self.$el.show();
+			if(self.user.get('logged')){
+				self.showAdmin();				
+			}else{
+				self.showWizard();
+			}
+			self.translate(self.$el);
+			self.renderBoilerTemplate();
+			
+	    });		
+		return this;
+	},
+	configureDialog: function(){
+		if(this.caller === 'GIS'){
+			this.$el.addClass('panel panel-primary');
+			if (this.draggable) {
+				this.$el.draggable({cursor: 'move', containment: 'window' });
+			}
+		}
+	},
+	renderBoilerTemplate: function(){
+		/*var headerWidget = new boilerplate.layout(
+				{
+					callingModule: 'ADMIN',
+					showDGFooter: false,
+					useSingleRowHeader: true
+				});
+		$.when(headerWidget.menu.menuRendered).then(function() {
+			$('.dropdown-toggle').dropdown();
+		});*/
+	},
+	createTranslator: function(force) {
+		var self = this;
+		var translateKeys = JSON.parse(fs.readFileSync(__dirname + '/../lib/initial-translation-request.json', 'utf8'));
+		// setup any popovers as needed...
+		//self.popovers = self.$('[data-toggle="popover"]');
+		//self.popovers.popover();
+		if (force === true || self.translator === undefined) {	      
+			self.translator = new Translator({defaultKeys: translateKeys});
+		}
+	},
+	showWizard: function(){
+		var model = new IndicatorLayer({name:{}});
+		this.wizard = new Wizard({translate: this.translate,translator: this.translator, model: model, EventsBus: EventsBus, settings: this.settings});
+		this.$el.find("#layers-wizard").html(this.wizard.render().el);
+		this.$el.find("#layers-admin").hide();
+		this.bubbleEvents(); 
+		this.$el.find("#layers-wizard").show();
+	},
+	showAdmin: function(){
+		this.$el.find("#population-layer-view").hide();
+		this.$el.find("#layers-wizard").hide();
+		this.$el.find("#layers-admin").empty();		
+		this.admin = new Admin({translate: this.translate,translator: this.translator, EventsBus: EventsBus, settings: this.settings});
+		this.$el.find("#layers-admin").html(this.admin.render().el);
+		this.admin.delegateEvents();
+        this.bubbleEvents();        
+        this.trigger('showAdmin');
+		this.$el.find("#layers-admin").show();	
+	},
+	showPopulationConfig: function(){
+		this.$el.find("#layers-wizard").hide();
+		this.$el.find("#layers-admin").hide();		
+		this.populationLayerView = new PopulationLayerView({translate: this.translate,translator: this.translator, EventsBus: EventsBus, settings: this.settings});
+		this.$el.find("#population-layer-view").html(this.populationLayerView.render().el);
+		this.populationLayerView.delegateEvents();
+		this.$el.find("#population-layer-view").show();	
+	},
+	translate: function(target) {
+		var element = this;
+		if (target !== undefined) {
+			element = target;
+		}
+		if (element.el !== undefined) {
+			this.translator.translateDOM(element.el);
+		} else {
+			this.translator.translateDOM(element);
+		}
+	},
+	show: function(){
+		this.render();
+	},
+	close: function(){
+		this.trigger('cancel');
+	},
+    bubbleEvents: function(){
+        if(!_.isUndefined(this.admin)){
+            this.listenTo(this.admin, 'all', function() {
+                this.trigger.apply(this, arguments);
+            });
+        }
+        if(!_.isUndefined(this.wizard)){
+            this.listenTo(this.wizard, 'all', function() {
+                this.trigger.apply(this, arguments);
+            });
+        }
+    }
+});

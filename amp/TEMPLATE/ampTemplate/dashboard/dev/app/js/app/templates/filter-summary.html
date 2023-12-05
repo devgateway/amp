@@ -1,0 +1,11 @@
+<% if (!countApplied) { %>
+  <em data-i18n="amp.dashboard:filters-none-applied">No filters applied</em>
+<% } else { %>
+  <span>
+    <button class="btn btn-default btn-sm show-filter-details">
+      <span class="glyphicon glyphicon-eye-open"></span>
+      <span data-i18n="amp.dashboard:filters-show-settings">Show filter settings</span>
+      (<b><%= countApplied %></b>)
+    </button>
+  </span>
+<% } %>

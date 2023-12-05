@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+.container-fluid.no-padding {
+    padding: 0;
+}
+
+.content-wrapper {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 0;
+    margin-top: -30px;
+}
+
+.content-wrapper > .row ,
+.h-filter-wrapper >.row {
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#amp-footer {
+    flex-shrink: 0;
+    margin-top: 15px;
+    width: 100%;
+    z-index: 1;
+}
+
+.footer {
+    /*bottom: 0;
+    position: absolute;*/
+    /*width: 100%;
+    z-index: 1;*/
+}
+
+#main-container {
+    flex: 1 0 auto;
+}
+
+.dgf_footer {
+    display: none;
+}
+
+[id^=accordion] .panel {
+    margin-bottom: 0;
+    background-color: inherit;
+    border: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.map-control {
+    height: 26px;
+    width: 26px;
+    background: white;
+    border-radius:4px;
+    cursor: pointer;
+}
+
+@media print {
+    .footer {
+        visibility: hidden;
+    }
+
+}

@@ -330,27 +330,27 @@
 	<jsp-config>
 		<taglib>
 			<taglib-uri>/taglib/struts-bean</taglib-uri>
-			<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/struts-bean.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/struts-html</taglib-uri>
-			<taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/struts-html.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/struts-logic</taglib-uri>
-			<taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/struts-logic.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/struts-nested</taglib-uri>
-			<taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/struts-nested.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/struts-tiles</taglib-uri>
-			<taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/struts-tiles.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/digijava</taglib-uri>
-			<taglib-location>/WEB-INF/digijava.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/digijava.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/gateperm</taglib-uri>
@@ -358,55 +358,55 @@
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/category</taglib-uri>
-			<taglib-location>/WEB-INF/category.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/category.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/globalsettings</taglib-uri>
-			<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/globalsettings.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/resourcesettings</taglib-uri>
-			<taglib-location>/WEB-INF/resourcesettings.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/resourcesettings.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/aim</taglib-uri>
-			<taglib-location>/WEB-INF/aim.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/aim.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/moduleVisibility</taglib-uri>
-			<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/moduleVisibility.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/featureVisibility</taglib-uri>
 			<taglib-location>
-				/WEB-INF/featureVisibility.tld
+				src/main/webapp/WEB-INF/featureVisibility.tld
 			</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/fieldVisibility</taglib-uri>
-			<taglib-location>/WEB-INF/fieldVisibility.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/fieldVisibility.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/editlivejava</taglib-uri>
-			<taglib-location>/WEB-INF/taglib.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/taglib.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/jstl-core</taglib-uri>
-			<taglib-location>/WEB-INF/c.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/c.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/fmt</taglib-uri>
-			<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/tld/fmt.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/displaytag</taglib-uri>
 			<taglib-location>
-				/WEB-INF/tld/displaytag-11.tld
+				src/main/webapp/WEB-INF/tld/displaytag-11.tld
 			</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>/taglib/jstl-functions</taglib-uri>
-			<taglib-location>/WEB-INF/fn.tld</taglib-location>
+			<taglib-location>src/main/webapp/WEB-INF/fn.tld</taglib-location>
 		</taglib>
 	</jsp-config>
 

@@ -107,7 +107,7 @@ public class ConfigLoaderListener
         //ResourceStreamHandlerFactory.installIfNeeded();
         String path = sce.getServletContext().getRealPath("/") + Security.getSiteConfigPath();
         try {
-            String jaasConfPath = sce.getServletContext().getRealPath("/WEB-INF/jaas.config");
+            String jaasConfPath = sce.getServletContext().getRealPath("/src/main/webapp/WEB-INF/jaas.config");
             if (jaasConfPath != null) {
                 File file = new File(jaasConfPath);
                 if (file.exists()) {

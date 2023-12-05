@@ -1,6 +1,6 @@
 
 
-<%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %><html>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %><html>
 
 
 

@@ -202,7 +202,7 @@ public final class PermissionUtil {
      * All Gates must extend the Gate class
      */
     public static synchronized Class[] getAvailableGates(ServletContext sc) {
-        String realPath = sc.getRealPath("/WEB-INF/");
+        String realPath = sc.getRealPath("/src/main/webapp/WEB-INF/");
         if(GatePermConst.availableGatesSingleton!=null) return GatePermConst.availableGatesSingleton;
         
         File dir = new File(realPath+gateDefLocation);

@@ -25,7 +25,7 @@ public class PIExportUseCase {
             int[][] miniTable, int startYear, int endYear, String type, String currency) throws Exception {
 
         String reportsFolderPath = servlet.getServletContext().getRealPath(
-                "/WEB-INF/classes/org/digijava/module/parisindicator/jasperreports");
+                "/src/main/webapp/WEB-INF/classes/org/digijava/module/parisindicator/jasperreports");
         java.io.File reportsFolder = new java.io.File(reportsFolderPath);
         if (!reportsFolder.exists() || !reportsFolder.isDirectory()) {
             reportsFolder.mkdirs();

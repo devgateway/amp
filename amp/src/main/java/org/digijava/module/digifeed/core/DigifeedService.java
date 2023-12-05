@@ -28,7 +28,7 @@ public class DigifeedService extends AbstractServiceImpl {
     protected void processInitEvent(ServiceContext serviceContext)
             throws ServiceException {
         try {
-            String realRootPath=serviceContext.getRealPath("/WEB-INF/");
+            String realRootPath=serviceContext.getRealPath("/src/main/webapp/WEB-INF/");
             logger.debug("Computed WEB-INF realPath is "+realRootPath);
             FeedControl.initFeeds(realRootPath);        
             logger.info(this.toString());

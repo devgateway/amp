@@ -1515,3 +1515,4 @@ public class ActivityUtil {
         return checkSum;
     }
 }
+

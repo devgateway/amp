@@ -1,4 +1,4 @@
-<%@ taglib uri="/WEB-INF/tiles.tld" prefix="tiles" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tiles.tld" prefix="tiles" %>
 
 
 

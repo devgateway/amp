@@ -1115,7 +1115,12 @@
         <finalName>${project.artifactId}</finalName>
 
         <resources>
-
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
             <resource>
 
                 <directory>${project.basedir}/src</directory>
@@ -1152,6 +1157,7 @@
                             <Implementation-Vendor>Development Gateway</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
+
                     <webResources>
                         <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
                         <resource>

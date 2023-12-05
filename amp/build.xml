@@ -16,7 +16,7 @@
     <property name="lib" location="./src/main/webapp/WEB-INF/lib" />
     <property name="webinf" location="./src/main/webapp/WEB-INF" />
 	<property name="metainf" location="./META-INF" />
-    <property name="classes" location="./src" />
+	<property name="classes" location="./src/main/webapp/WEB-INF/classes" />
     <property name="src" location="./src" />
     <property name="test" location="./test" />
     <property name="etc" location="./etc" />
@@ -24,7 +24,7 @@
 	<property name="repository" location="./repository"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./src/main/webapp/WEB-INF/amp-test" />
-	<property name="ampSelenium" location="./src/main/webapp/WEB-INF/amp-selenium-test" />
+	<property name="ampSelenium" location="./src/mainin/webapp/WEB-INF/amp-selenium-test" />
 	<!-- <property name="jdbc"gen-.driverClassName" value="org.postgresql.Driver"/> -->
 	<property name="dbName" value="postgresql"/>
 

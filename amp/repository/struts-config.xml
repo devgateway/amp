@@ -29,13 +29,13 @@
   <message-resources parameter="java.resources.application" />
   <!-- comment following if struts1.0.x -->
   <plug-in className="org.apache.struts.tiles.TilesPlugin">
-    <set-property value="/src/main/webapp/WEB-INF/tiles-defs.xml" property="definitions-config" />
+    <set-property value="WEB-INF/tiles-defs.xml" property="definitions-config" />
     <set-property value="true" property="moduleAware" />
     <set-property value="true" property="definitions-parser-validate" />
   </plug-in>
   <!-- end comment if struts1.0.x -->
   <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
-    <set-property value="/src/main/webapp/WEB-INF/validator-rules.xml,
+    <set-property value="WEB-INF/validator-rules.xml,
 						 /repository/struts-validation.xml,
 						 /repository/admin/struts-validation.xml,
 						 /repository/um/struts-validation.xml,

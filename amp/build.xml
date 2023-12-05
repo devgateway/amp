@@ -16,7 +16,7 @@
     <property name="lib" location="./src/main/webapp/WEB-INF/lib" />
     <property name="webinf" location="./src/main/webapp/WEB-INF" />
 	<property name="metainf" location="./META-INF" />
-    <property name="classes" location="./src/main/webapp/WEB-INF/classes" />
+    <property name="classes" location="./src" />
     <property name="src" location="./src" />
     <property name="test" location="./test" />
     <property name="etc" location="./etc" />

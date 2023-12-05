@@ -523,7 +523,7 @@ myTable.enhanceMarkup = function(markupName) {
 	var myPaginator = new YAHOO.widget.Paginator({ 
     	rowsPerPage:10,
     	template : "<span class='t_sm'><b><digi:trn>Pages:</digi:trn></b><span> {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
-    	//template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;",
+    	/TEMPLATE : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;",
     	firstPageLinkLabel : 	"<digi:trn>&lt;&lt;</digi:trn>", 
         previousPageLinkLabel : "<digi:trn>prev</digi:trn>",
         nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',

@@ -3,8 +3,8 @@ META-INF/
 amp.iml
 gen-src/
 target/
-jackrabbit/
-lucene/
+#jackrabbit/
+#lucene/
 
 #jrebel files - usually local dirs
 rebel.xml

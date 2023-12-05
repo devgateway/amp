@@ -47,7 +47,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 <c:if test="${not empty aimUserDetailForm.mailingAddress}">
 					<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<tr>
-							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							<td colspan="2" background="${pageContext.request.contextPath}/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:userProfile">User Profile</digi:trn>
 							</td>
 						</tr>

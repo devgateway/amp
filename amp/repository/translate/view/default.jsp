@@ -6,7 +6,7 @@
 <%@ page import="org.digijava.kernel.translator.form.TranslatorForm"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="dgcs"%>
 
 

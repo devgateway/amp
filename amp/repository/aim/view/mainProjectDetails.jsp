@@ -288,14 +288,14 @@ function fnEditProject(id)
 }
 
 #tabs a:hover {
-    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
+    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;
 }
 
 #tabs a:hover span {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;
 }
 #tabs a:hover div {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;
 }
 
 #tabs a.active {

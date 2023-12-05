@@ -24,13 +24,13 @@
 			<li id="lid-${label.uuid}" ${liClassString} >
 				<a  class="atree" id="aid-${label.uuid}" style="-moz-border-radius:3px;border-radius: 3px;padding:3px;color: ${label.color};background-color: ${label.backgroundColor}"><c:out value="${label.name}"></c:out></a>
 				 <c:if test="${label.type=='FOLDER_LABEL' }">
-					<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
+					<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;"
 						title="Add Label" 
 						onclick="addLabel('${label.uuid}')" />
 				</c:if>
-				<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;" 
+				<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;"
 						onclick="editLabel('${label.uuid}')" title="Edit" />
-				<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;" 
+				<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;"
 						onclick="deleteLabel('${label.uuid}')" title="Delete"/>
 				<span class="spantree" style="display: none; color: red;"><digi:trn>ERROR</digi:trn></span>
 				<logic:notEmpty name="label" property="children">

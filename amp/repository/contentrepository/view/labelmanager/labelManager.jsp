@@ -18,12 +18,12 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 
 <!-- Individual YUI CSS files --> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/slider/assets/skins/sam/slider.css"> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/assets/skins/sam/colorpicker.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/slider/assets/skins/sam/slider.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/assets/skins/sam/colorpicker.css">
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/slider/slider-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/colorpicker-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/slider/slider-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/colorpicker-min.js"></script>
 
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
@@ -239,7 +239,7 @@
 										<ul>
 											<li noDrag="true">
 												<a class="atree"><digi:trn>Labels</digi:trn></a>
-												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
+												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;"
 														onclick="addLabel('${myForm.rootLabel.uuid}', '<%=CrConstants.LABEL_TYPE_FOLDER %>')" 
 														title="<digi:trn>Add Label</digi:trn>" />
 												<jsp:include page="listLabels.jsp" />

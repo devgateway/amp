@@ -291,7 +291,7 @@
 										<ul>
 											<li noDrag="true">
 												<a class="atree" id="a-locations"><digi:trn>Locations</digi:trn></a>
-												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
+												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;"
 														onclick="addLocation(-1, ${aimDynLocationManagerForm.firstLayerId})" 
 														title="Add ${locationLevels[lvlIndex]}" />
 												<jsp:include page="listLocations.jsp" />

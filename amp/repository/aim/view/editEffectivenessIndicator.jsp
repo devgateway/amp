@@ -12,7 +12,7 @@
 
 <%@ page import="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" %>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
 <script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>

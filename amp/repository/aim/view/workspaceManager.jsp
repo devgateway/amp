@@ -565,7 +565,7 @@
     function showPanelLoading(msg){
         myPanel.setHeader(msg);	
         var bodymsg='<div style="text-align: center">' + 
-        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
         '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>'
         myPanel.setBody(bodymsg);
         showContent();
@@ -1134,7 +1134,7 @@
             var url = "<%=commentUrl %>";
             url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
             var bodymsg='<div style="text-align: center">' + 
-            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
             '<digi:trn jsFriendly="true">Saving, please wait ...</digi:trn><br/><br/></div>'
             myPanel.setBody(bodymsg);
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');

@@ -24,9 +24,9 @@
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/mappopupstyles.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp-wicket.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"/>"></script>    
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/leaflet.js"/>"></script>
-    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>      
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>
      <!--Leaflet Draw-->      
      <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.draw.js"></script>
     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.Draw.Event.js"></script>

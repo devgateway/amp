@@ -105,7 +105,7 @@ QueryLabel.prototype.onRemove	= function( ) {
 QueryLabel.prototype.render	= function( ) {
 	this.htmlStr	= 
 		"<span id='" + this.spanId + "' style='background: #F2F2F2;padding: 3px;'>" + this.name + 
-		"<img align='bottom' src='/TEMPLATE/ampTemplate/images/cancel.png' onclick='queryManager.remove(\"" + 
+		"<img align='bottom' src='/TEMPLATE/ampTemplate/images/cancel.png' onclick='queryManager.remove(\"" +
 		this.group  + "\"," + this.id  +
 		")' style='cursor:pointer ; height: 14px;' />" +
 		"</span>";

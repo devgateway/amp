@@ -12,7 +12,7 @@
 				<digi:trn>Printer Friendly</digi:trn>
 			</c:set>
 			<a target="_blank" onclick="exportXSL(); return false;" title="${translationxls}" style="cursor: pointer;"> 
-				<digi:img hspace="2" vspace="2"	src="/TEMPLATE/ampTemplate/imagesSource/common/ico_exc.gif"	border="0" alt="Export to Excel" /> 
+				<digi:img hspace="2" vspace="2"	src="/TEMPLATE/ampTemplate/imagesSource/common/ico_exc.gif"	border="0" alt="Export to Excel" />
 			</a> 
 			<digi:link styleId="printWin" href="#" onclick="window.print(); return false;" title="${translationPrinter }">
 				<digi:img hspace="2" vspace="2"	src="/TEMPLATE/ampTemplate/imagesSource/common/ico_print.gif" border="0" alt="Printer Friendly" />

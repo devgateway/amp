@@ -128,7 +128,7 @@
                                 <c:set var="trnProjectPerformanceAlertsManager">
                                     <digi:trn invisibleLinks="true">Click here to access Project Performance Alerts Manager</digi:trn>
                                 </c:set>
-                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html" 
+                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html"
                                 title="${trnProjectPerformanceAlertsManager}">
                                     <digi:trn>Project Performance Alerts Manager</digi:trn>
                                 </a>

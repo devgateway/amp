@@ -212,7 +212,7 @@ function showHidePositions(id,selectedPosition){
 }
 
 function updateProcessingChangesInfo(id){
-	var processingChangesStr = "<img src='/TEMPLATE/ampTemplate/images/amploading.gif' width='10' height='10' />" + 
+	var processingChangesStr = "<img src='/TEMPLATE/ampTemplate/images/amploading.gif' width='10' height='10' />" +
 	"<digi:trn>applying changes</digi:trn>";
 	updateStatusInfo(id, processingChangesStr, "black");
 }

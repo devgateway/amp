@@ -37,10 +37,10 @@ class HeaderActions extends Component {
                         disabled={busy || !unsavedChanges}>
                     {translations[`${trnPrefix}button-revert-all-edits`]}
                 </button>
-                    <button type="button" onClick={onUpdateActivities} className="btn btn-primary"
-                        disabled={busy || !dataPresent || unsavedChanges}>
-                      {translations[`${trnPrefix}button-update-activities`]}
-                    </button>
+                <button type="button" onClick={onUpdateActivities} className="btn btn-primary"
+                    disabled={busy || !dataPresent || unsavedChanges}>
+                  {translations[`${trnPrefix}button-update-activities`]}
+                </button>
               </span>
             </div>
           </div>
@@ -56,7 +56,7 @@ HeaderActions.propTypes = {
   onSaveAll: PropTypes.func.isRequired,
   onRevertAll: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
-  //onUpdateActivities: PropTypes.func.isRequired,
+  onUpdateActivities: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
   busy: PropTypes.bool.isRequired,

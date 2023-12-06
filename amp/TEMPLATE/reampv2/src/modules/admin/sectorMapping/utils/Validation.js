@@ -12,7 +12,6 @@ export function checkSchemes(src, dst) {
 }
 
 export function checkMappings(data) {
-  console.log(data);
   let errorNumber = 0;
   if (data && data.length > 0) {
     data.every((item) => {

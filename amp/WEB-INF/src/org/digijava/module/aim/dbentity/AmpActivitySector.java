@@ -2,6 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.SectorPossibleValuesProvider;
@@ -28,13 +30,30 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
     @Interchangeable(fieldTitle = "Sector", importable = true, pickIdOnly = true, uniqueConstraint = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpSector sectorId;
-    
-    @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
+
+    @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true,
             fmPath = FMVisibility.PARENT_FM + "/sectorPercentage",
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Float sectorPercentage;
 
     private AmpClassificationConfiguration classificationConfig;
+
+    @Interchangeable(fieldTitle = "Indirect Sectors")
+    private Set<AmpActivityIndirectSector> indirectSectors = new HashSet<>();
+
+    public Set<AmpActivityIndirectSector> getIndirectSectors() { return indirectSectors; }
+
+    public void setIndirectSectors(Set<AmpActivityIndirectSector> indirectSectors) {
+        this.indirectSectors = indirectSectors;
+    }
+
+    public void addIndirectSector(AmpActivityIndirectSector pIndirectSector) {
+        pIndirectSector.setActivitySector(this);
+        indirectSectors.add(pIndirectSector);
+    }
+
+
+
 
     public AmpClassificationConfiguration getClassificationConfig() {
         return classificationConfig;
@@ -75,7 +94,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
     public void setSectorPercentage(Float sectorPercentage) {
         this.sectorPercentage = sectorPercentage;
     }
-    
+
     public String toString() {
         return sectorId!=null?sectorId.getName():"";
     }
@@ -89,7 +108,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
         }
         return false;
     }
-    
+
     public Object getValue() {
         return this.sectorPercentage;
     }
@@ -118,14 +137,20 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
         out.getOutputs().add(new Output(null, new String[] { scheme + name + " - Percentage: "}, new Object[] { this.sectorPercentage }));
         return out;
     }
-    
+
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivitySector aux = (AmpActivitySector) clone();
         aux.activityId = newActivity;
+
+        aux.setIndirectSectors(new HashSet());
+        for(AmpActivityIndirectSector indirectSector : this.indirectSectors) {
+            AmpActivityIndirectSector auxIndirectSector = (AmpActivityIndirectSector) indirectSector.clone();
+            auxIndirectSector.setId(null);
+            aux.addIndirectSector(auxIndirectSector);
+        }
+
         aux.ampActivitySectorId = null;
-        //aux.sectorId = (AmpSector) aux.sectorId.clone();
-        //this.sectorId.setAmpSectorId(null);
         return aux;
     }
 

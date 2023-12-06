@@ -21,9 +21,9 @@ import {
     sendSectorMappingPending,
     sendSectorMappingSaving
 } from "../reducers/saveSectorMappingReducer";
-import {updateActivitiesError, updateActivitiesPending} from "../../ndd/reducers/updateActivitiesReducer";
+import {updateActivitiesError, updateActivitiesPending} from "../reducers/updateActivitiesReducer";
 import saveSectorMappings from "../actions/saveSectorMappings";
-import updateActivities from "../../ndd/actions/updateActivities";
+import updateActivities from "../actions/updateActivities";
 import SectorsHeader from "./SectorsHeader";
 import Notifications from "./Notifications";
 import HeaderActions from "./HeaderActions";
@@ -178,6 +178,22 @@ class FormSectors extends Component {
         });
     }
 
+    onUpdateActivities = () => {
+        const { _updateActivities, translations } = this.props;
+        const { trnPrefix } = this.context;
+        const { data } = this.state;
+        const validateMappings = Validation.checkMappings(data);
+        if (validateMappings === 0) {
+            if (window.confirm(translations[`${trnPrefix}button-update-activities-confirmation`])) {
+                this.clearMessages();
+                this.setState({ blockUI: true });
+                _updateActivities();
+            }
+        } else {
+            this.setState({ validationErrors: translations[`${trnPrefix}validation_error_${validateMappings}`] });
+        }
+    }
+
     saveAll() {
         const { data, src, dst } = this.state;
         const { _saveSectorMappings, translations } = this.props;
@@ -249,6 +265,7 @@ class FormSectors extends Component {
         if (this.src_ && this.dst_ && autoAddRow) {
             this.addRow();
         }
+        this.setState({ unsavedChanges: true });
     }
 
     clearAll() {
@@ -276,20 +293,12 @@ class FormSectors extends Component {
         if (!saving && !error && !unsavedChanges && saved) {
             messages.push({ isError: false, text: translations[`${trnPrefix}notification-saved-ok`] });
         }
-
-        //TODO: check this flags
-        // if (updatedActivities) {
-        //     messages.push({
-        //         isError: false,
-        //         text: translations[`${trnPrefix}update-activities-successful`]
-        //     });
-        // }
-        // if (updating) {
-        //     messages.push({
-        //         isError: false,
-        //         text: translations[`${trnPrefix}update-activities-wait`]
-        //     });
-        // }
+        if (updatedActivities) {
+            messages.push({ isError: false, text: translations[`${trnPrefix}update-activities-successful`] });
+        }
+        if (updating) {
+            messages.push({ isError: false, text: translations[`${trnPrefix}update-activities-wait`] });
+        }
         if (errorUpdating) {
             messages.push({
                 isError: true,
@@ -341,7 +350,7 @@ FormSectors.propTypes = {
     updating: PropTypes.bool,
     errorUpdating: PropTypes.string,
     _saveSectorMappings: PropTypes.func.isRequired,
-    //_updateActivities: PropTypes.func.isRequired,
+    _updateActivities: PropTypes.func.isRequired,
     saving: PropTypes.bool.isRequired
 };
 
@@ -357,11 +366,11 @@ const mapStateToProps = state => ({
     error: sendSectorMappingError(state.saveSectorMappingReducer),
     saving: sendSectorMappingSaving(state.saveSectorMappingReducer),
     pending: sendSectorMappingPending(state.saveSectorMappingReducer),
-    // updating: updateActivitiesPending(state.updateActivitiesReducer),
-    // errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
+    updating: updateActivitiesPending(state.updateActivitiesReducer),
+    errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
     _saveSectorMappings: saveSectorMappings,
-    // _updateActivities: updateActivities
+    _updateActivities: updateActivities
 }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(FormSectors);

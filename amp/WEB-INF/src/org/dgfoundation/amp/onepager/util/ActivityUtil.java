@@ -202,12 +202,12 @@ public class ActivityUtil {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
         }
     }
-    
+
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
             AmpTeamMember ampCurrentMember, boolean draft,
             Session session, SaveContext context, EditorStore editorStore, Site site) throws Exception {
-        
+
         boolean draftChange = detectDraftChange(a, draft);
         return saveActivityNewVersion(a, translations, cumulativeTranslations, ampCurrentMember, draft,
                 draftChange, session, context, editorStore, site);
@@ -335,6 +335,7 @@ public class ActivityUtil {
         }
 
         updateIndirectPrograms(a, session);
+        updateIndirectSectors(a, session);
 
         logAudit(ampCurrentMember, a, newActivity);
 
@@ -351,10 +352,14 @@ public class ActivityUtil {
         new IndirectProgramUpdater().updateIndirectPrograms(a, session);
     }
 
+    private static void updateIndirectSectors(AmpActivityVersion a, Session session) {
+        new IndirectSectorUpdater().updateIndirectSectors(a, session);
+    }
+
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
         return Boolean.TRUE.equals(a.getDraft()) != draft;
     }
-    
+
     public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
         // it would be nicer to rely upon AMP ID, but some old activities may lack it
         return a.getAmpActivityId() == null;
@@ -628,7 +633,7 @@ public class ActivityUtil {
         }
         return false;
     }
-    
+
     /**
      *  An activity can be rejected only if:
      *  1. the activity is not new
@@ -645,7 +650,7 @@ public class ActivityUtil {
         return BooleanUtils.isFalse(isNewActivity) && BooleanUtils.isFalse(isDraft)
                 && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
     }
-    
+
     /**
      * Detect if the teammember is approver of the workspace or is the teamlead of the ws
      *

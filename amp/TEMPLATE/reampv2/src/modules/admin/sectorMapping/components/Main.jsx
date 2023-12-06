@@ -47,7 +47,7 @@ class Main extends Component {
     }
 
     render() {
-        const { mappings, schemes, api, trnPrefix } = this.props;
+        const { mappings, schemes, api, trnPrefix, indirectSectorUpdatePending } = this.props;
         const { translations } = this.context;
         const { isSuperAdmin, settings } = this.state;
 
@@ -64,8 +64,7 @@ class Main extends Component {
                                 <FormSectors />
                             </div>
                         </div>
-                        {/*<BlockUI blocking={indirectProgramUpdatePending} />*/}
-                        <BlockUI blocking={false} />
+                        <BlockUI blocking={indirectSectorUpdatePending} />
                     </SectorMappingContext.Provider>
                 </div>
             );
@@ -91,7 +90,7 @@ const mapStateToProps = state => ({
     pendingMappings: getSectorMappingPending(state.startupReducer),
     pendingSchemes: getSchemesPending(state.startupReducer),
     translations: state.translationsReducer.translations,
-    //indirectProgramUpdatePending: state.updateActivitiesReducer.indirectProgramUpdatePending
+    indirectSectorUpdatePending: state.updateActivitiesReducer.indirectSectorUpdatePending
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

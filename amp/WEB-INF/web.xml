@@ -2,7 +2,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-  version="3.0"> 
+  version="3.0">
 
 	<display-name>AMP 2.0</display-name>
 	<description>Aid Management Platform</description>
@@ -51,7 +51,7 @@
          <param-value>utf-8</param-value>
       </init-param>
    </filter>
-   
+
    <filter>
         <filter-name>populateTLSRequestFilter</filter-name>
         <filter-class>org.digijava.kernel.request.PopulateTLSRequestFilter</filter-class>
@@ -62,7 +62,7 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-   
+
 	<filter>
 		<filter-name>HibernateFilter</filter-name>
 		<filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
@@ -96,10 +96,10 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
-	
+
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>	
+    </listener>
 	<listener>
     	<listener-class>org.digijava.kernel.startup.AmpSessionListener</listener-class>
 	</listener>
@@ -108,12 +108,12 @@
  	<listener>
           <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
      </listener>
-     
+
     <context-param>
 		<param-name>log4jExposeWebAppRoot</param-name>
 		<param-value>false</param-value>
 	</context-param>
-     
+
 	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>
@@ -150,7 +150,7 @@
 		<filter-name>showMasterLayout</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<listener>
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
@@ -206,6 +206,7 @@
 		<filter-name>asyncDetector</filter-name>
 		<url-pattern>/rest/activity/async/*</url-pattern>
 		<url-pattern>/rest/activity/updateMappings/async/*</url-pattern>
+		<url-pattern>/rest/activity/updateSectorMappings/async/*</url-pattern>
 	</filter-mapping>
 
 
@@ -272,14 +273,14 @@
 				/repository/help/struts-config.xml,
 				/repository/contentrepository/struts-config.xml, /repository/categorymanager/struts-config.xml,
 				/repository/sdm/struts-config.xml,
-				/repository/message/struts-config.xml,				
+				/repository/message/struts-config.xml,
 				/repository/parisindicator/struts-config.xml,
 				/repository/search/struts-config.xml,
 				/repository/content/struts-config.xml,
 				/repository/xmlpatcher/struts-config.xml,
 				/repository/esrigis/struts-config.xml,
 				/repository/budgetexport/struts-config.xml,
-				/repository/gpi/struts-config.xml				
+				/repository/gpi/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>
@@ -328,7 +329,7 @@
 	<error-code>403</error-code>
 		<location>/showLayout.do?layout=login</location>
 	</error-page>
-	
+
 	<error-page>
 		<error-code>404</error-code>
 		<location>/exceptionHandle.do</location>

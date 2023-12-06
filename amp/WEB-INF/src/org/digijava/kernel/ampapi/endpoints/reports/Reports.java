@@ -273,31 +273,6 @@ public class Reports {
         return htmlRenderer.renderTable().toString();
     }
 
-
-    /**
-     * @see Reports#getReportResult(ReportFormParameters)
-     * @return a JSON with the report
-     */
-    @POST
-    @Path("/public/report/custom")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation("Render a report preview in JSON format.")
-    public final GeneratedReport getReportResultInJson(
-            @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
-        int reportType = ArConstants.DONOR_TYPE;
-        if (formParams.getReportType() != null) {
-            reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
-        }
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", reportType);
-        spec.setSummaryReport(Boolean.TRUE.equals(formParams.getSummary()));
-        String groupingOption = formParams.getGroupingOption();
-        ReportsUtil.setGroupingCriteria(spec, groupingOption);
-        ReportsUtil.update(spec, formParams);
-        SettingsUtils.applySettings(spec, formParams.getSettings(), true);
-        FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
-        return EndpointUtils.runReport(spec);
-    }
-
     /**
      * @see ReportsUtil#getReportResultByPage
      */

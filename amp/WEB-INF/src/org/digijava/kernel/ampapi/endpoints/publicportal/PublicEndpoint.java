@@ -8,13 +8,19 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
@@ -25,6 +31,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 
 /**
  * Publicly available endpoints
@@ -174,6 +182,42 @@ public class PublicEndpoint {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeSearchProjects() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    /**
+     * @see org.digijava.kernel.ampapi.endpoints.reports.Reports#getReportResult(ReportFormParameters)
+     * @return a JSON with the report
+     */
+    @POST
+    @Path("/generateReport")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @ApiOperation("Render a report preview in JSON format.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
+            response = GeneratedReport.class))
+    public final GeneratedReport getReportResultInJson(
+            @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
+        int reportType = ArConstants.DONOR_TYPE;
+        if (formParams.getReportType() != null) {
+            reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
+        }
+        ReportSpecificationImpl
+                spec = new ReportSpecificationImpl("preview report", reportType);
+        spec.setSummaryReport(Boolean.TRUE.equals(formParams.getSummary()));
+        String groupingOption = formParams.getGroupingOption();
+        ReportsUtil.setGroupingCriteria(spec, groupingOption);
+        ReportsUtil.update(spec, formParams);
+        SettingsUtils.applySettings(spec, formParams.getSettings(), true);
+        FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
+        return EndpointUtils.runReport(spec);
+    }
+
+    @OPTIONS
+    @Path("/report/custom")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeReportResultInJson() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 }

@@ -213,7 +213,7 @@ public class PublicEndpoint {
     }
 
     @OPTIONS
-    @Path("/report/custom")
+    @Path("/generateReport")
     @ApiOperation(
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")

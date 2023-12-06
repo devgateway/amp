@@ -71,8 +71,8 @@ public class AmpComponentsFundingFormTableFeature extends
             @Override
             protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpComponentFunding> item) {
                 IModel<AmpComponentFunding> model = item.getModel();
-                if (model.getObject().getComponentFundingDocuments() == null)
-                    model.getObject().getComponentFundingDocuments().addAll(new HashSet<>());
+//                if (model.getObject().getComponentFundingDocuments() == null)
+//                    model.getObject().getComponentFundingDocuments();
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS)== null)
                     getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS,new HashMap<>());
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS) == null)
@@ -154,11 +154,11 @@ public class AmpComponentsFundingFormTableFeature extends
                     logger.info("Unable to add component funding status dropdown: ",e);
                 }
                 try {
-                    final AmpComponentFundingResourcesTableFeature resourcesList =
+                     AmpComponentFundingResourcesTableFeature resourcesList =
                             new AmpComponentFundingResourcesTableFeature("componentFundingDocuments", "Component Funding Documents", model);
                     item.add(resourcesList);
 
-                    final AmpComponentFundingNewResourceFieldPanel newDoc =
+                     AmpComponentFundingNewResourceFieldPanel newDoc =
                         new AmpComponentFundingNewResourceFieldPanel("addNewComponentFundingDocument", model, "Add New Document", resourcesList);
                 newDoc.setOutputMarkupId(true);
                 item.add(newDoc);

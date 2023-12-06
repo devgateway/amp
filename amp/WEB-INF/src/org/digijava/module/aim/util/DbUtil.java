@@ -20,9 +20,12 @@ import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
+import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 import org.hibernate.type.*;
@@ -35,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -1259,16 +1263,27 @@ public class DbUtil {
 
     public static void add(Object object) {
         PersistenceManager.getSession().save(object);
+        PersistenceManager.getSession().flush();
     }
+    public static void addPatch(AmpXmlPatch ampXmlPatch, Session session) {
+        session.doWork(connection -> {
+            try (Statement statement = connection.createStatement()) {
+                String insertPatch =String.format("INSERT INTO AMP_XML_PATCH(patch_id,location,state,discovered) VALUES('%s','%s',%d,'%tF %tT')",ampXmlPatch.getPatchId(),ampXmlPatch.getLocation(), ampXmlPatch.getState(), ampXmlPatch.getDiscovered(),ampXmlPatch.getDiscovered());
+                statement.executeUpdate(insertPatch);
+            }
+        });
+
+    }
+
 
     public static void update(Object object) {
         PersistenceManager.getSession().update(object);
+        PersistenceManager.getSession().flush();
     }
 
     public static void updateField(String className, Long id, String fieldName, Object newValue) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
-//            String idName = PersistenceManager.sf().getClassMetadata(className).getIdentifierPropertyName();
             String idName = InternationalizedModelDescription.getPersister(Class.forName(className),session).getIdentifierPropertyName();
             Query query = session
                     .createQuery("update " + className + " c set c." + fieldName + "=:val where c." + idName + "=:id");
@@ -1277,7 +1292,7 @@ public class DbUtil {
             query.executeUpdate();
         } catch (Exception ex) {
             logger.error(String.format("Could not update \"%s.%s\"=\"%s\". Cause: %s", className, fieldName,
-                    String.valueOf(newValue), ex.getMessage()));
+                    newValue, ex.getMessage()));
         }
     }
 

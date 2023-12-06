@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="false" retryOnFail="true"
-	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+		   xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMP-16115</jira>
 	<keyword>Views</keyword>
 	<author>Constantin Dolghier</author>
@@ -13,9 +13,9 @@
 					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
 				</lang>
 			</script>
- 			<test>val.equalsIgnoreCase("true")</test>
+			<test>val.equalsIgnoreCase("true")</test>
 		</condition>
-	</trigger> 
+	</trigger>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[

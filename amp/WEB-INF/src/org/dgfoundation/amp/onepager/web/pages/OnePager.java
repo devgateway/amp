@@ -107,9 +107,7 @@ public class OnePager extends AmpHeaderFooter {
 
 
     public static OnepagerSection findByName(String name){
-        Iterator<OnepagerSection> it = sectionsList.iterator();
-        while (it.hasNext()) {
-            OnepagerSection os = it.next();
+        for (OnepagerSection os : sectionsList) {
             if (os.getClassName().compareTo(name) == 0)
                 return os;
         }
@@ -117,9 +115,7 @@ public class OnePager extends AmpHeaderFooter {
     }
 
     public static OnepagerSection findByPosition(int pos){
-        Iterator<OnepagerSection> it = sectionsList.iterator();
-        while (it.hasNext()) {
-            OnepagerSection os = it.next();
+        for (OnepagerSection os : sectionsList) {
             if (os.getPosition() == pos)
                 return os;
         }
@@ -146,7 +142,7 @@ public class OnePager extends AmpHeaderFooter {
 
         long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
 
-        if ((activityId == null) || (activityId.compareTo("new") == 0)) {
+        if (activityId.compareTo("new") == 0) {
             am = new AmpActivityModel();
 
             newActivity.value = true;
@@ -245,22 +241,21 @@ public class OnePager extends AmpHeaderFooter {
                 }
                 // AMP-19698
                 // keep alive jdbc connection
-                AmpActivityModel.getHibernateSession().doWork(new Work() {
-                    @Override
-                    public void execute(Connection connection) throws SQLException {
+                // keep alive jdbc connection
+                PersistenceManager.doInTransaction(s -> {
+                    s.doWork(connection -> {
                         try {
                             java.sql.Statement stm = connection.createStatement();
                             java.sql.ResultSet rs = stm.executeQuery("select 1");
-                            if (rs.next())
-                                ;
+                            if (rs.next());
                             rs.close();
                             stm.close();
                         } catch (Exception e) {
-                            //this is a ajax triger and the connectionas has already been closed. so its good to
+                            //this is a ajax trigger and the connections has already been closed. so its good to
                             //ignore the exception
                             logger.error(e.getMessage(), e);
                         }
-                    }
+                    });
                 });
             }
         };

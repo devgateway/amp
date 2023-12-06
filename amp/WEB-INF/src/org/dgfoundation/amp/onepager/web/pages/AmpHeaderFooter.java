@@ -6,6 +6,8 @@ package org.dgfoundation.amp.onepager.web.pages;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.yui.YuiLib;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -14,6 +16,7 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
@@ -60,6 +63,14 @@ public class AmpHeaderFooter extends WebPage {
         add(new DocumentReadyBehavior());
         AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
         add(ampajax);
+        add(new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
+            @Override
+            protected void onTimer(AjaxRequestTarget target) {
+                // This is where you could perform any server-side logic
+                getSession().getAttribute("dummyAttribute");
+
+            }
+        });
         
         add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
         add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));

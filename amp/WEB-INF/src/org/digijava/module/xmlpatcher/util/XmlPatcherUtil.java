@@ -16,6 +16,7 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.xml.sax.SAXException;
 
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -67,6 +69,7 @@ public final class XmlPatcherUtil {
             throw new RuntimeException(
                     "Patch discovery location is not a directory!");
         String[] files = dir.list();
+
         for (String file : files) {
             File f = new File(dir, file);
             // directories ignored in xmlpatch dir
@@ -488,10 +491,10 @@ public final class XmlPatcherUtil {
         algorithm.reset();
 
         BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream(f));
+                Files.newInputStream(f.toPath()));
 
         byte[] buffer = new byte[8192];
-        int read = 0;
+        int read;
         while ((read = bis.read(buffer)) > 0) {
             algorithm.update(buffer, 0, read);
         }

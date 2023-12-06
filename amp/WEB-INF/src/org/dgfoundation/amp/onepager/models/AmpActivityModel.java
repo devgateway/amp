@@ -32,7 +32,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
     
     
     protected transient AmpActivityVersion a;
-    protected transient HashMap<String, AmpContentTranslation> translationHashMap = new HashMap<String, AmpContentTranslation>();
+    protected transient HashMap<String, AmpContentTranslation> translationHashMap = new HashMap<>();
     protected Long id;
     protected String editingKey;
 
@@ -72,7 +72,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
             s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
     
-            translationHashMap = new HashMap<String, AmpContentTranslation>();
+            translationHashMap = new HashMap<>();
         }
         Session ses = getHibernateSession(reset);
         ses.clear();

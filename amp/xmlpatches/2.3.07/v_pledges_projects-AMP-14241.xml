@@ -7,8 +7,8 @@
   <apply>
     <script>
       <lang delimiter=";" type="postgres">
-      	DROP VIEW v_pledges_projects;
-		CREATE OR REPLACE VIEW v_pledges_projects AS
+<!--      	DROP VIEW v_pledges_projects;-->
+		CREATE VIEW v_pledges_projects AS
 		SELECT fp.id AS pledge_id, ac.name AS title, ac.amp_activity_id,ac.amp_team_id,ac.approval_status
 		FROM amp_funding_pledges fp
 		JOIN amp_funding_detail fd ON fd.pledge_id = fp.id

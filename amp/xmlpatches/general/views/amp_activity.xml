@@ -22,7 +22,8 @@
 			    DROP VIEW IF EXISTS amp_activity CASCADE;
 			    CREATE OR REPLACE VIEW amp_activity AS
 					SELECT amp_activity_version.*
-					FROM amp_activity_version JOIN amp_activity_group ON 
+					FROM amp_activity_version
+				JOIN amp_activity_group ON
 						amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id AND (amp_activity_version.deleted is null or amp_activity_version.deleted=false);
        		</lang>
 		</script>

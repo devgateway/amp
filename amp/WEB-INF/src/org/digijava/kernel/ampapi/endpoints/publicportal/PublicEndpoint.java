@@ -195,7 +195,7 @@ public class PublicEndpoint {
     @ApiOperation("Render a report preview in JSON format.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
             response = GeneratedReport.class))
-    public final GeneratedReport getReportResultInJson(
+    public final Response getReportResultInJson(
             @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
         int reportType = ArConstants.DONOR_TYPE;
         if (formParams.getReportType() != null) {
@@ -209,7 +209,7 @@ public class PublicEndpoint {
         ReportsUtil.update(spec, formParams);
         SettingsUtils.applySettings(spec, formParams.getSettings(), true);
         FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
-        return EndpointUtils.runReport(spec);
+        return PublicServices.buildOkResponseWithOriginHeaders(EndpointUtils.runReport(spec));
     }
 
     @OPTIONS

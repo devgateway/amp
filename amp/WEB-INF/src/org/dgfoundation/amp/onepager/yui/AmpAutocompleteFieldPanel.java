@@ -74,6 +74,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      */
     private TextField<String> textField;
 
+
     public TextField<String> getTextField() {
         return textField;
     }

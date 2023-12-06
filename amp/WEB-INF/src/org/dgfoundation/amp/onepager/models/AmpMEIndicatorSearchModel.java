@@ -4,7 +4,12 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -15,6 +20,8 @@ import org.hibernate.criterion.Restrictions;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author aartimon@dginternational.org
@@ -32,30 +39,52 @@ public class AmpMEIndicatorSearchModel extends
     private static final long serialVersionUID = 8211300754918658832L;
     private Session session;
 
-    
+    public enum PARAM implements AmpAutoCompleteModelParam {
+        ACTIVITY_PROGRAM
+    }
+
+
     @Override
     protected Collection<AmpIndicator> load() {
         try {
             List<AmpIndicator> ret = null;
+            List<AmpIndicator> filterAmpIndicators = null;
             session = AmpActivityModel.getHibernateSession();
+
             Integer maxResults = (Integer) getParams().get(
                     AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
+
             Criteria crit = session.createCriteria(AmpIndicator.class);
-            
+
+            Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
+
             crit.setCacheable(true);
             if (input.trim().length() > 0){
                 Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
                 crit.add(junction);
             }
+
             crit.addOrder(Order.asc("name"));
             if (maxResults != null && maxResults != 0)
                 crit.setMaxResults(maxResults);
             ret = crit.list();
             //session.close();
-            return ret;
+
+            // If not activity programs then do not return any indicator
+            if (ampActivityPrograms != null && !ampActivityPrograms.isEmpty()) {
+                Set<AmpTheme> programThemes = ampActivityPrograms.stream()
+                        .map(AmpActivityProgram::getProgram)
+                        .collect(Collectors.toSet());
+
+
+                filterAmpIndicators = ret.stream()
+                        .filter(indicator -> programThemes.contains(indicator.getProgram()))
+                        .collect(Collectors.toList());
+            }
+            return filterAmpIndicators;
         } catch (HibernateException e) {
             throw new RuntimeException(e);
-        } 
+        }
     }
 
 }

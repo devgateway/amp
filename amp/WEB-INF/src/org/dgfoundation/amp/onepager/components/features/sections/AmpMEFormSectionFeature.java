@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -28,9 +27,7 @@ import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 
 import java.util.HashSet;
@@ -130,6 +127,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
                 };
 
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
         add(searchIndicators);
     }
 }

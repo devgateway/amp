@@ -1175,7 +1175,7 @@ public final class HttpLoginManager {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            result = (User) session.load(User.class, id);
+            result = session.load(User.class, id);
         }
 
         catch (Exception ex) {

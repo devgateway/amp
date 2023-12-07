@@ -60,9 +60,9 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 
     private static final long serialVersionUID = 1L;
 
-    private static Logger logger = Logger.getLogger(ErrorsTag.class);
+    private static final Logger logger = Logger.getLogger(ErrorsTag.class);
     
-    private static ResourceBundle bundleApplication = ResourceBundle.getBundle("java.resources.application");
+    private static final ResourceBundle bundleApplication = ResourceBundle.getBundle("java.resources.application");
 
     public ErrorsTag() {
     }

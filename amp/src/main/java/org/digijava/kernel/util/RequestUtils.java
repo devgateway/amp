@@ -231,10 +231,10 @@ public class RequestUtils {
         Locale res = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
         if (res == null)
         {
-            res = new Locale("en", "");
-            String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
-            logger.error(errMsg);
-            ExceptionHelper.printReducedStacktrace(logger);
+            res = new Locale("en", "English");
+//            String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
+//            logger.error(errMsg);
+//            ExceptionHelper.printReducedStacktrace(logger);
         }
         return res;
     }

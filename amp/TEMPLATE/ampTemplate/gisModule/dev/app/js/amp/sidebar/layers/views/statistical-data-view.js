@@ -31,7 +31,6 @@ module.exports = BaseControlView.extend({
     //create layer manager
     var self = this;    
 
-   
     self.app.data.indicators.loadAll().then(function() {  	
     	
     	self.addSection(StatisticalLayersConfig.STANDARD);

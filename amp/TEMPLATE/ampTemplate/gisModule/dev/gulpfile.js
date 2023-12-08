@@ -42,8 +42,6 @@ var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
 var connect = require('gulp-connect');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-var log = require('fancy-log');
-
 var gulpi18nScraper = require('gulp-i18n-scraper');
 var gulpUtil = require('gulp-util');
 var mold = require('mold-source-map');
@@ -112,12 +110,14 @@ function _bundlify(ifyer, entry, destFolder, destName) {
 
   var rebundle = function() {
     g.util.log('rebrowserifying ' + entry + '....');
-    return bundler.bundle()
-        .on('end', function() { log('bundle: finished'); })
-        .on('error', function(e) { log('bundle: error: ', e); })
-        .pipe(source(destName))
-        .pipe(gulp.dest(destFolder));
+    return bundler.bundle({debug: true})
+      /* Fix sourcemaps in firefox (not in amp-filters though)though https://github.com/substack/node-browserify/issues/681#issuecomment-39530724 */
+      .pipe(mold.transformSourcesRelativeTo(__dirname))
+      .on('error', function(e) { g.util.log('Browserify error: ', e); })
+      .pipe(source(destName))
+      .pipe(gulp.dest(destFolder));
   };
+
   bundler.on('update', rebundle);
 
   return rebundle();

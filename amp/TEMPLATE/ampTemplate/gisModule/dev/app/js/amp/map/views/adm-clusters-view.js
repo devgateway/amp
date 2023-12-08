@@ -140,11 +140,11 @@ module.exports = Backbone.View.extend({
       });
 
       boundaries.forEach(function (boundary) {
-        const i = _.chain(boundary.objects)
-            .keys()
-            .first()
-            .value();
-        const feature = TopojsonLibrary.feature(boundary, boundary.objects[i]);
+        var i = _.chain(boundary.objects)
+          .keys()
+          .first()
+          .value();
+        var feature = TopojsonLibrary.feature(boundary, boundary.objects[i]);
         if (feature) {
           geoJson.addData(feature);
         }
@@ -158,7 +158,7 @@ module.exports = Backbone.View.extend({
   // Create pop-ups
   _onEachFeature: function(feature, layer, admLayer) {
     if (feature.properties) {
-      const activities = feature.properties.activityid;
+      var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
       // temp. will be template.

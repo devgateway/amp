@@ -17,10 +17,7 @@ import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -47,8 +44,8 @@ public class AmpMEIndicatorSearchModel extends
     @Override
     protected Collection<AmpIndicator> load() {
         try {
-            List<AmpIndicator> ret = null;
-            List<AmpIndicator> filterAmpIndicators = null;
+            List<AmpIndicator> ret = new ArrayList<>();
+            List<AmpIndicator> filterAmpIndicators = new ArrayList<>();
             session = AmpActivityModel.getHibernateSession();
 
             Integer maxResults = (Integer) getParams().get(
@@ -58,7 +55,7 @@ public class AmpMEIndicatorSearchModel extends
 
             Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
 
-            crit.setCacheable(true);
+            crit.setCacheable(false);
             if (input.trim().length() > 0){
                 Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
                 crit.add(junction);
@@ -68,7 +65,7 @@ public class AmpMEIndicatorSearchModel extends
             if (maxResults != null && maxResults != 0)
                 crit.setMaxResults(maxResults);
             ret = crit.list();
-            //session.close();
+
 
             // If not activity programs then do not return any indicator
             if (ampActivityPrograms != null && !ampActivityPrograms.isEmpty()) {
@@ -76,11 +73,19 @@ public class AmpMEIndicatorSearchModel extends
                         .map(AmpActivityProgram::getProgram)
                         .collect(Collectors.toSet());
 
+                // Check if program has siblings and add them to themes to get all indicators for objectives in a program
+                for( AmpTheme program: programThemes){
+                    if(program.getSiblings() != null){
+                        programThemes.addAll(program.getSiblings());
+                    }
+                }
+
 
                 filterAmpIndicators = ret.stream()
                         .filter(indicator -> programThemes.contains(indicator.getProgram()))
                         .collect(Collectors.toList());
             }
+
             return filterAmpIndicators;
         } catch (HibernateException e) {
             throw new RuntimeException(e);

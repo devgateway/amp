@@ -26,7 +26,7 @@ import org.digijava.module.aim.action.ExportActivityToPDF;
 public class AmountCellPDF extends PDFExporter {
 
     
-    public AmountCellPDF(Exporter parent,Viewable item) {
+    public AmountCellPDF(Exporter parent, Viewable item) {
         super(parent, item);
     }
     

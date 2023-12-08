@@ -68,22 +68,15 @@ module.exports = Backbone.Model
   },
 
   loadBoundary: function() {
-    var boundary = this.collection.boundaries.findWhere({id: this.get('value')});  // TODO ...
-    if (boundary) {
-      var boundaryLoaded = boundary.load();
-      when(boundaryLoaded, this.load())         // Order is important!
-        .done(function(boundaryModel, self) {  // ... because their return value is passed here
-          self.set('boundary', boundaryModel.toJSON());
+    const boundaries = this.collection.boundaries.where({admLevel: this.get('value')});
+    const promises = [this.load()];
+    boundaries.forEach(function (b) { promises.push(b.load()); });
+    return $.when.apply($, promises)
+        .done(function() {
+          const self = arguments[0];
+          const boundaryModels = Array.prototype.slice.call(arguments, 1);
+          self.set('boundaries', boundaryModels.map(function(model) { return model.toJSON(); }));
         });
-      return boundaryLoaded.promise();
-    } else {
-      console.error('No boundary found for ' + this.get('value'));
-
-      var failedBoundary = new $.Deferred();
-      failedBoundary.reject();
-      return failedBoundary.promise();
-
-    }
   },
 
   loadAll: function() {
@@ -91,7 +84,7 @@ module.exports = Backbone.Model
   },
 
   _translateADMToMagicWord: function(admString) {
-    var magicWords = {
+    const magicWords = {
       'adm-0': 'Administrative Level 0',
       'adm-1': 'Administrative Level 1',
       'adm-2': 'Administrative Level 2',

@@ -46,7 +46,7 @@ module.exports = BaseControlView.extend({
             self.projectLayerCollection.select(selectedModel);
           }
         },
-        empty: 'Administrative Level 1'
+          empty: 'Administrative Level 0'
       });
     });
   },

@@ -41,9 +41,9 @@ var watchify = require('watchify');
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
 var connect = require('gulp-connect');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 var log = require('fancy-log');
 
-const { createProxyMiddleware } = require('http-proxy-middleware');
 var gulpi18nScraper = require('gulp-i18n-scraper');
 var gulpUtil = require('gulp-util');
 var mold = require('mold-source-map');

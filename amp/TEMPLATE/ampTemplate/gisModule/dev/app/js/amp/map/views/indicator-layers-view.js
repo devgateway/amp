@@ -117,7 +117,7 @@ module.exports = Backbone.View.extend({
     var colour;
     var self = this;
 
-    return new L.geoJson(layerModel.get('geoJSON'), {
+      var layer = new L.geoJson(null, {
       style: function(feature) {
         featureValue = feature.properties.value;
         // sets colour for each polygon
@@ -138,6 +138,11 @@ module.exports = Backbone.View.extend({
       },
       onEachFeature: function(feature, layer) {self.tmpFundingOnEachFeature(feature, layer, layerModel);}
     });
+      layerModel.get('geoJSONs').forEach(function(geoJSON) {
+          layer.addData(geoJSON);
+      });
+
+      return layer;
   },
 
   // used to hilight the geojson layer on click, show popup, and unhilight after.

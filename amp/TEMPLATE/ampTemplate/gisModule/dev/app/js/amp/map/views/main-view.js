@@ -92,59 +92,55 @@ module.exports = Backbone.View.extend({
   _renderCountryBoundary: function() {
     var self = this;
     this.app.data.boundaries.load().then(function() {
-      var boundary0 = self.app.data.boundaries.get('adm-0');
+      var adm0Boundaries = self.app.data.boundaries.where({admLevel: 'adm-0'});
 
-      boundary0.fetch().then(function(topoJSON) {
-        var topoboundaries = topoJSON;
+      var promises = adm0Boundaries.map(function (b) {return b.load();});
+      $.when.apply($, promises).then(function() {
+        var outerBounds = null;
 
-        //retrieve the TopoJSON index key
-        var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
+        var updateOuterBounds = function(feature) {
+          var bounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
+          if (!outerBounds) {
+            outerBounds = bounds;
+          } else {
+            outerBounds = outerBounds.extend(bounds);
+          }
+        };
 
-        var boundary = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+        for (var i = 0; i < arguments.length; i++) {
+          var topoboundaries = arguments[i].toJSON();
 
-        self.countryBoundary = L.geoJson(boundary, {
-          onEachFeature: function(feature) {
+          //retrieve the TopoJSON index key
+          var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
 
-              //For the AMP GIS app, use the sidebar width as padding */
-              var sidebarExpansionWidth = $('#sidebar').width();
+          var boundary = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
 
-              var paddingToLeft = {
-                  paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
-              };
+          self.countryBoundary = L.geoJson(boundary, {
+            onEachFeature: updateOuterBounds,
+            style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
+          }).addTo(self.map);
+        }
 
-              /*TODO(thadk): consider using mapHeader height as well, shrinks DRC for me: */
-              /*var mapHeaderHeight = $('#map-header').height();*/
+        if (outerBounds) {
+          //For the AMP GIS app, use the sidebar width as padding */
+          var sidebarExpansionWidth = $('#sidebar').width();
 
-              var natlBounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
+          var paddingToLeft = {
+            paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
+          };
 
-              if (boundary0.attributes['rectangle-to-center-gis']) { //If there is a rectangle configured in
-                  // list.json then we use it to center the map so that rectangle is visible
-                  var upperLeftCorner = boundary0.attributes['rectangle-to-center-gis']['upper-left-corner'],
-                      lowerRightCorner = boundary0.attributes['rectangle-to-center-gis']['lower-right-corner'];
-
-                  var corner1 = L.latLng(upperLeftCorner.lat, upperLeftCorner.long),
-                      corner2 = L.latLng(lowerRightCorner.lat, lowerRightCorner.long),
-                      jordanBounds = L.latLngBounds(corner1, corner2);
-
-
-                  self.map.fitBounds(jordanBounds, paddingToLeft);
-              }
-              else {
-                  /*
-                   * If current viewport is already in
-                   * the AMP country, then preserve the state rather that resetting.
-                   *
-                   * for the case where a state is saved which is not quite exactly inside
-                   * the AMP national boundarybox, we add 30% padding to all directions
-                   *
-                   **/
-                  if (!natlBounds.pad(30).contains(self.map.getBounds())) {
-                      self.map.fitBounds(natlBounds, paddingToLeft);
-                  }
-              }
-          },
-          style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
-        }).addTo(self.map);
+          /*
+           * If current viewport is already in
+           * the AMP country, then preserve the state rather that resetting.
+           *
+           * for the case where a state is saved which is not quite exactly inside
+           * the AMP national boundarybox, we add 30% padding to all directions
+           *
+           **/
+          if (!outerBounds.pad(0.3).contains(self.map.getBounds())) {
+            self.map.fitBounds(outerBounds, paddingToLeft);
+          }
+        }
 
       });
     });

@@ -191,8 +191,14 @@ public class SettingsUtils {
     }
 
     private static String getReportCalendarId(final ReportSettings settings) {
-        if (settings.getCurrencyCode() != null) {
-            return settings.getCalendar().getIdentifier().toString();
+        if (settings!=null) {
+            if (settings.getCurrencyCode() != null && settings.getCalendar()!=null) {
+                CalendarConverter calendarConverter = settings.getCalendar();
+                if (calendarConverter!=null) {
+                    Long id = calendarConverter.getIdentifier();
+                    return id!=null?id.toString():null;
+                }
+            }
         }
 
         return null;

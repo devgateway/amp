@@ -1296,6 +1296,7 @@ public class SectorUtil {
             for (AmpSectorMapping em : existingMappings) {
                 session.delete(em);
             }
+            session.flush();
             for (AmpSectorMapping asm : sectorMappings) {
                 session.save(asm);
             }

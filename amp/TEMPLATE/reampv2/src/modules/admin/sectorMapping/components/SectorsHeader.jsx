@@ -25,7 +25,8 @@ class SectorsHeader extends Component {
                                     disabled={busy}
                                     placeholder={translations[`${trnPrefix}choose_src_scheme`]}
                                     label={translations[`${trnPrefix}src-scheme-sector`]}
-                                    options={schemes.filter(p => p.visible === true)}
+                                    // options={schemes.filter(p => p.visible === true)}
+                                    options={schemes.filter(p => p.classificationId !== null)}
                                     selected={src ? [src] : []}
                                     onChange={onChange.bind(null, TYPE_SRC)} />
                             </td>
@@ -35,7 +36,8 @@ class SectorsHeader extends Component {
                                     disabled={busy}
                                     placeholder={translations[`${trnPrefix}choose_dst_scheme`]}
                                     label={translations[`${trnPrefix}dst-scheme-sector`]}
-                                    options={schemes.filter(p => p.visible === false)}
+                                    // options={schemes.filter(p => p.visible === false)}
+                                    options={schemes.filter(p => p.classificationId !== null)}
                                     selected={dst ? [dst] : []}
                                     onChange={onChange.bind(null, TYPE_DST)} />
                             </td>

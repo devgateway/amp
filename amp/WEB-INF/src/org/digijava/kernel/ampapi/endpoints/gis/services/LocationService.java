@@ -1,8 +1,21 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+
+import com.google.common.collect.ImmutableSet;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -12,7 +25,18 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.IdentifiedReportCell;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
@@ -21,7 +45,11 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.helpers.geojson.*;
+import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.GeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -36,30 +64,23 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.jdbc.Work;
-import org.hibernate.query.Query;
-
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.regex.Matcher;
 
 /**
- * 
+ *
  * @author Diego Dimunzio
  *
  */
 public class LocationService {
     protected static Logger logger = Logger.getLogger(LocationService.class);
-    
+
     private ReportSpecification spec = null;
-    
+
     public ReportSpecification getLastReportSpec() {
         return spec;
     }
-    
+
     /**
      * Get totals (actual commitments/ actual disbursements) by administrative level
      * @param admlevel
@@ -70,7 +91,7 @@ public class LocationService {
         HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
                 CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
         admlevel = admLevelCV.getValueKey();
-        
+
         ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
         this.spec = spec;
         spec.addColumn(new ReportColumn(admlevel));
@@ -78,12 +99,12 @@ public class LocationService {
         // also configures the measure(s) from funding type settings request
         SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
-        // THIS IS OLD, just allowing now to not reset the units when used by other services 
+        // THIS IS OLD, just allowing now to not reset the units when used by other services
         if (amountUnits != null)
             mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
-        
+
         AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
-        
+
         if(config != null){
             Map<String, Object> filters = config.getFilters();
             if (filters != null) {
@@ -92,46 +113,19 @@ public class LocationService {
 
             GisUtils.configurePerformanceFilter(config, filterRules);
         }
-        Map<Long, String> admLevelToGeoCode;
-        if (admlevel.equals(ColumnConstants.LOCATION_ADM_LEVEL_0)) {
-            // If the admin level is country we filter only to show projects at
-            // the country of the current installation
-            final ValueWrapper<String> countryId = new ValueWrapper<String>("");
-            final ValueWrapper<String> countryName = new ValueWrapper<>("");
-            PersistenceManager.getSession().doWork(conn -> {
-                String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,"
-                        + "amp_global_settings gs  ,amp_category_value acv "
-                        + "where acvl.iso=gs.settingsvalue and gs.settingsname ='%s' "
-                        + "and acvl.parent_category_value=acv.id "
-                        + "and acv.category_value = 'Administrative Level 0' ";
-                RsInfo rsi = SQLUtils.rawRunQuery(conn, String.format(countryIdQuery,
-                        GlobalSettingsConstants.DEFAULT_COUNTRY),
-                        null);
-                if (rsi.rs.next()) {
-                    countryId.value = rsi.rs.getString(1);
-                    countryName.value = rsi.rs.getString(2);
-                }
-                rsi.close();
-            });
-
-            filterRules.addFilterRule(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0),
-                    new FilterRule(countryId.value, true));
-            
-        } 
-        
-        admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
+        Map<Long, String> admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
         spec.setFilters(filterRules);
-        
+
         String currcode = FilterUtils.getSettingbyName(config.getSettings(), SettingsConstants.CURRENCY_ID);
 
         String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 
         GeneratedReport report = EndpointUtils.runReport(spec);
         List<AdmLevelTotal> values = new ArrayList<>();
-        
+
         if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
             // find the admID (geocode) for each implementation location name
-            
+
             for (ReportArea reportArea : report.reportContents.getChildren()) {
                 Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
                 BigDecimal value = (BigDecimal) iter.next().value;
@@ -146,7 +140,7 @@ public class LocationService {
         }
         return new AdmLevelTotals(currcode, numberformat, values);
     }
-    
+
     /**
      * Provides admLevel name to geo code map
      * @param admLevel
@@ -163,7 +157,7 @@ public class LocationService {
         }
         return levelToGeoCodeMap;
     }
-    
+
     public static List<ClusteredPoints> getClusteredPoints(PerformanceFilterParameters config) throws AmpApiException {
         String adminLevel = "";
         final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
@@ -174,12 +168,9 @@ public class LocationService {
                 adminLevel = filters.get("adminLevel").toString();
             }
         }
-        
-        final String usedAdminLevel = adminLevel;
+
         Set<Long> activitiesId = getActivitiesForFiltering(config, adminLevel);
-        
-        final Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
-        final Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
+
         final ValueWrapper<String> qry = new ValueWrapper<String>(null);
         if (adminLevel.equals("Administrative Level 0")) {
             qry.value = " SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name "
@@ -189,32 +180,30 @@ public class LocationService {
                     + " join amp_category_value amcv on acvl.parent_category_value =amcv.id "
                     + " where amcv.category_value ='Administrative Level 0'"
                     + " and (acvl.deleted is null or acvl.deleted = false) "
-                    + " and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
-                    + " and location_name=(select country_name "
-                    + " from DG_COUNTRIES where iso='" + FeaturesUtil
-                    .getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) + "')";
+                    + " and al.amp_activity_id in (" + Util.toCSStringForIN(activitiesId) + ")"
+                    + " order by acvl.id";
 
-            
+
         }else{
-        qry.value = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
-                + " select acvl.id, acvl.parent_location, acvl.gs_lat, acvl.gs_long, acvl.parent_category_value, 1, acvl.id,acvl.location_name  "
-                + " from amp_category_value_location acvl  "
-                + " join amp_category_value amcv on acvl.parent_category_value =amcv.id  "
-                + " where amcv.category_value ='"
-                + adminLevel
-                + "'  "
-                + " and acvl.gs_lat is not null and acvl.gs_long is not null  "
-                + " and (acvl.deleted is null or acvl.deleted = false) "
-                + " UNION ALL  "
-                + " SELECT acvl.id, acvl.parent_location, rt.gs_lat, rt.gs_long, acvl.parent_category_value, rt.LEVEL + 1, rt.root_location_id, rt.root_location_description  "
-                + " FROM rt_amp_category_value_location rt, amp_category_value_location acvl  "
-                + " WHERE acvl.parent_location =rt.id  "
-                + " )  "
-                + " SELECT distinct al.amp_activity_id, acvl.root_location_id, acvl.root_location_description, acvl.gs_lat, acvl.gs_long  "
-                + " FROM amp_activity_location al  "
-                + " join rt_amp_category_value_location acvl on al.location_id = acvl.id  "
-                + " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
-                + " order by acvl.root_location_id,al.amp_activity_id";
+            qry.value = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
+                    + " select acvl.id, acvl.parent_location, acvl.gs_lat, acvl.gs_long, acvl.parent_category_value, 1, acvl.id,acvl.location_name  "
+                    + " from amp_category_value_location acvl  "
+                    + " join amp_category_value amcv on acvl.parent_category_value =amcv.id  "
+                    + " where amcv.category_value ='"
+                    + adminLevel
+                    + "'  "
+                    + " and acvl.gs_lat is not null and acvl.gs_long is not null  "
+                    + " and (acvl.deleted is null or acvl.deleted = false) "
+                    + " UNION ALL  "
+                    + " SELECT acvl.id, acvl.parent_location, rt.gs_lat, rt.gs_long, acvl.parent_category_value, rt.LEVEL + 1, rt.root_location_id, rt.root_location_description  "
+                    + " FROM rt_amp_category_value_location rt, amp_category_value_location acvl  "
+                    + " WHERE acvl.parent_location =rt.id  "
+                    + " )  "
+                    + " SELECT distinct al.amp_activity_id, acvl.root_location_id, acvl.root_location_description, acvl.gs_lat, acvl.gs_long  "
+                    + " FROM amp_activity_location al  "
+                    + " join rt_amp_category_value_location acvl on al.location_id = acvl.id  "
+                    + " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
+                    + " order by acvl.root_location_id,al.amp_activity_id";
         }
 
         try {
@@ -235,14 +224,8 @@ public class LocationService {
                                 cp = new ClusteredPoints();
                                 cp.setAdmId(rootLocationId);
                                 cp.setAdmin(rs.getString("root_location_description"));
-                                if (usedAdminLevel.equals(
-                                        CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey())) {
-                                    cp.setLat(countryLatitude.toString());
-                                    cp.setLon(countryLongitude.toString());                         
-                                }else{
-                                    cp.setLat(rs.getString("gs_lat"));
-                                    cp.setLon(rs.getString("gs_long"));
-                                }
+                                cp.setLat(rs.getString("gs_lat"));
+                                cp.setLon(rs.getString("gs_long"));
                             }
                             cp.getActivityids().add(rs.getLong("amp_activity_id"));
                         }
@@ -251,27 +234,26 @@ public class LocationService {
                         }
                     }
                 }});
-        }
-        catch(HibernateException e){
+        } catch (HibernateException e) {
             throw new RuntimeException(e);
         }
-    
+
         return l;
     }
     private static Set<Long> getActivitiesForFiltering(PerformanceFilterParameters config, String adminLevel)
             throws AmpApiException {
         Set<Long> activitiesId = new HashSet<Long>();
-         
+
         ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIdsForCluster", ArConstants.DONOR_TYPE);
 
         spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
-        // AMP-20903 - In order to not have inconsistency with data used in gis map, DONOR_ID was added 
+        // AMP-20903 - In order to not have inconsistency with data used in gis map, DONOR_ID was added
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 
         OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{
             add(ColumnConstants.AMP_ID);
         }});
-        
+
         SettingsUtils.configureMeasures(spec, config.getSettings());
 
         ReportColumn implementationLevelColumn = null;
@@ -299,7 +281,7 @@ public class LocationService {
             spec.setHierarchies(implementationLevelHierarchy);
         }
         spec.setDisplayEmptyFundingRows(true);
-        
+
         SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
         mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
@@ -316,7 +298,7 @@ public class LocationService {
         }
 
         GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, outSettings);
-        
+
         List<ReportArea> ll = null;
         ll = report.reportContents.getChildren();
         if (ll != null) {
@@ -354,7 +336,7 @@ public class LocationService {
         List<AmpStructure> al = null;
         Set<Long> activitiesId = getActivitiesForFiltering(config, null);
         String queryString = "select s from " + AmpStructure.class.getName() + " s where"
-                    + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
+                + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
 
         Query q = PersistenceManager.getSession().createQuery(queryString);
         al = q.list();
@@ -377,16 +359,16 @@ public class LocationService {
             if (structure.getStructureColor() != null) {
                 AmpCategoryValue cValue = structure.getStructureColor();
                 if (isValidColor(cValue.getValue())) {
-                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
-                }                
-            }            
-            
+                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));
+                }
+            }
+
             fgj.properties.put("activity", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
                     + structure.getTitle());
-            
+
             return null;
         }
 
@@ -408,14 +390,14 @@ public class LocationService {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();
         switch (shape) {
-        case GisConstants.GIS_STRUCTURE_POLYGON:
-            return buildPolygon(structure);
-        case GisConstants.GIS_STRUCTURE_POLYLINE:
-            return buildPolyLine(structure);
-        case GisConstants.GIS_STRUCTURE_POINT:
-            return buildPoint(structure);
-        default:
-            return null;
+            case GisConstants.GIS_STRUCTURE_POLYGON:
+                return buildPolygon(structure);
+            case GisConstants.GIS_STRUCTURE_POLYLINE:
+                return buildPolyLine(structure);
+            case GisConstants.GIS_STRUCTURE_POINT:
+                return buildPoint(structure);
+            default:
+                return null;
         }
     }
 
@@ -430,12 +412,12 @@ public class LocationService {
         LineStringGeoJSON line = new LineStringGeoJSON();
         line.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {
-          for (AmpStructureCoordinate coord : structure.getCoordinates()) {
-              List<Double> lngLat =  new ArrayList<>();
-              lngLat.add(parseDouble(coord.getLatitude()));
-              lngLat.add(parseDouble(coord.getLongitude()));
-              line.coordinates.add(lngLat);
-          }
+            for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                List<Double> lngLat =  new ArrayList<>();
+                lngLat.add(parseDouble(coord.getLatitude()));
+                lngLat.add(parseDouble(coord.getLongitude()));
+                line.coordinates.add(lngLat);
+            }
         }
 
         return line;
@@ -460,7 +442,7 @@ public class LocationService {
     }
 
     private static Double parseDouble(String value) {
-       return Double.parseDouble(value == null ? "0" : value);
+        return Double.parseDouble(value == null ? "0" : value);
     }
 
 }

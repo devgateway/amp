@@ -161,10 +161,10 @@ public class IndicatorEndPoints {
     public List<CategoryValueLabel> getLevels() {
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", false);
-        Map<String, Boundary> boundariesMap = BoundariesService.getBoundariesAsList();
+        Set<String> admLevelsForBoundaries = BoundariesService.getAdmLevelsForBoundaries();
         List<CategoryValueLabel> indicatorLayerList = new ArrayList<>();
-        for (AmpCategoryValue level: admLevels) {
-            if (boundariesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + level.getIndex())) {
+        for (AmpCategoryValue level : admLevels) {
+            if (admLevelsForBoundaries.contains(IndicatorEPConstants.ADM_PREFIX + level.getIndex())) {
                 indicatorLayerList.add(new CategoryValueLabel(level.getId(), level.getValue(), level.getLabel()));
             }            
         }

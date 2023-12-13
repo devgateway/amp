@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.swagger.annotations.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -102,11 +103,12 @@ public class GisEndPoints {
         List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
         for (ClusteredPoints clusteredPoints : c) {
-            if (!clusteredPoints.getLon().equalsIgnoreCase("") && !clusteredPoints.getLat().equalsIgnoreCase("")){ 
-            result.features.add(getPoint(new Double(clusteredPoints.getLon()),
-                    new Double(clusteredPoints.getLat()),
-                    clusteredPoints.getActivityids(),
-                    clusteredPoints.getAdmin(), clusteredPoints.getAdmId()));
+            if (StringUtils.isNotBlank(clusteredPoints.getLon())
+                    && StringUtils.isNotBlank(clusteredPoints.getLat())){
+                result.features.add(getPoint(new Double(clusteredPoints.getLon()),
+                        new Double(clusteredPoints.getLat()),
+                        clusteredPoints.getActivityids(),
+                        clusteredPoints.getAdmin(), clusteredPoints.getAdmId()));
             }
         }
         return PublicServices.buildOkResponseWithOriginHeaders(result);
@@ -385,7 +387,7 @@ public class GisEndPoints {
     private boolean hasMapBoundaries(AmpCategoryValue value, List<Boundary> boundaries) {
         AdmLevel admLevel = AdmLevel.fromString("adm-" + value.getIndex());
         for (Boundary boundary : boundaries) {
-            if (admLevel.equals(boundary.getId())) {
+            if (admLevel.equals(boundary.getAdmLevel())) {
                 return true;
             }           
         }

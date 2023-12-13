@@ -74,24 +74,23 @@ module.exports = Backbone.Model
     // var boundaryId = boundaryLink.split('gis/boundaries/')[1];  // for now, (for ever?,) they are all local
     // var boundary = this.collection.boundaries.find(function(boundary) { return boundary.id === boundaryId; });
 
-    var boundary = this.collection.boundaries.findWhere({id: this.get('adminLevel')});
-    if (!boundary) {  // sanity check
-      throw new Error('No boundary found for indicator layer:', this.get('title'));
-    }
-
-    var boundaryLoaded = boundary.load();
-    when(boundaryLoaded, this.load())         // Order is important...
-      .done(function(boundaryModel, self) {  // ...args follow "when" order
-        var topoboundaries = boundaryModel.toJSON();
-        var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
-                                 .keys()
-                                 .first()
-                                 .value();
-        var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
-        self._joinDataWithBoundaries(boundaries);               
-      });
-
-    return boundaryLoaded;
+	  var boundaries = this.collection.boundaries.where({admLevel: this.get('adminLevel')});
+	  var promises = [ this.load() ];
+	  boundaries.forEach(function (b) { promises.push(b.load()); });
+	  return $.when.apply($, promises)
+		  .done(function() {
+			  var self = arguments[0];
+			  var boundaryModels = Array.prototype.slice.call(arguments, 1);
+			  var features = boundaryModels.map(function(model) {
+				  var topoboundaries = model.toJSON();
+				  var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
+					  .keys()
+					  .first()
+					  .value();
+				  return TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+			  });
+			  self._joinDataWithBoundaries(features);
+		  });
   },
 
 loadAll: function(options) {

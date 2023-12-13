@@ -68,22 +68,15 @@ module.exports = Backbone.Model
   },
 
   loadBoundary: function() {
-    var boundary = this.collection.boundaries.findWhere({id: this.get('value')});  // TODO ...
-    if (boundary) {
-      var boundaryLoaded = boundary.load();
-      when(boundaryLoaded, this.load())         // Order is important!
-        .done(function(boundaryModel, self) {  // ... because their return value is passed here
-          self.set('boundary', boundaryModel.toJSON());
+    var boundaries = this.collection.boundaries.where({admLevel: this.get('value')});
+    var promises = [ this.load() ];
+    boundaries.forEach(function (b) { promises.push(b.load()); });
+    return $.when.apply($, promises)
+        .done(function() {
+          var self = arguments[0];
+          var boundaryModels = Array.prototype.slice.call(arguments, 1);
+          self.set('boundaries', boundaryModels.map(function(model) { return model.toJSON(); }));
         });
-      return boundaryLoaded.promise();
-    } else {
-      console.error('No boundary found for ' + this.get('value'));
-
-      var failedBoundary = new $.Deferred();
-      failedBoundary.reject();
-      return failedBoundary.promise();
-
-    }
   },
 
   loadAll: function() {

@@ -1244,7 +1244,7 @@
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-        <outputDirectory>${project.basedir}/target</outputDirectory>
+<!--        <outputDirectory>${project.basedir}/target</outputDirectory>-->
 
         <finalName>${project.artifactId}</finalName>
 
@@ -1346,7 +1346,6 @@
                         </configuration>
                     </execution>
 
-                    <!-- Add similar executions for other XSD files -->
 
                 </executions>
             </plugin>

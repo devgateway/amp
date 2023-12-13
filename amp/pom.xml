@@ -1686,11 +1686,11 @@
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
                                 <property name="jdbc.db" value="amp_drc" />
 
-                                <ant antfile="${project.basedir}/build.xml">
-<!--                                    <target name="deployForServer" />-->
-<!--                                    <target name="jaxb" />-->
+<!--                                <ant antfile="${project.basedir}/build.xml">-->
+<!--&lt;!&ndash;                                    <target name="deployForServer" />&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <target name="jaxb" />&ndash;&gt;-->
 
-                                </ant>
+<!--                                </ant>-->
                             </target>
                         </configuration>
                         <goals>
@@ -1708,9 +1708,9 @@
                                 <property name="test_classpath" refid="maven.test.classpath" />
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <ant antfile="${project.basedir}/build.xml">
-<!--                                    <target name="clean" />-->
-                                </ant>
+<!--                                <ant antfile="${project.basedir}/build.xml">-->
+<!--&lt;!&ndash;                                    <target name="clean" />&ndash;&gt;-->
+<!--                                </ant>-->
                             </target>
                         </configuration>
                         <goals>

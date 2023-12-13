@@ -1,7 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.*;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -42,7 +47,10 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,8 +65,18 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBElement;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
@@ -272,15 +290,6 @@ public class Reports {
         SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
 
         return htmlRenderer.toString();
-    }
-
-    @GET
-    @Path("/report/funding")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiOperation("Render a report preview in HTML format.")
-    public final List<?> getReportScheduler() {
-        List<AmpOrganisation> donorOrganisations= OrganisationUtil.getAllOrganisations();
-        return donorOrganisations;
     }
 
     /**

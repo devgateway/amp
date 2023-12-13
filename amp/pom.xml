@@ -24,7 +24,7 @@
         <!-- Project settings -->
         <project.title>DiGiJava</project.title>
         <project.distname>amp</project.distname>
-        <project.version>2.0.0</project.version>
+        <project.version>4.0</project.version>
 
         <lib>${project.basedir}/src/main/webapp/WEB-INF/lib</lib>
         <webinf>${project.basedir}/src/main/webapp/WEB-INF</webinf>
@@ -1660,10 +1660,15 @@
                         <filesets>
                             <fileset>
                                 <directory>${metainf}</directory>
+                                <directory>${project.basedir}/generated-sources</directory>
+                                <directory>${doc.path}</directory>
+                                <directory>${classes}</directory>
+
                             </fileset>
                         </filesets>
                     </configuration>
                 </execution>
+
             </executions>
             </plugin>
             <plugin>

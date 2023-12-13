@@ -2,6 +2,7 @@
 META-INF/
 amp.iml
 gen-src/
+generated-sources/
 target/
 #jackrabbit/
 #lucene/

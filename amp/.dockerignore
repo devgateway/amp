@@ -2,6 +2,7 @@
 *.iml
 target
 gen-src
+generated-sources
 META-INF
 WEB-INF/classes
 WEB-INF/lib

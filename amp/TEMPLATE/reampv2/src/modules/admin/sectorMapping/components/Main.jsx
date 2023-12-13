@@ -33,7 +33,6 @@ class Main extends Component {
                 if (layout && layout.logged && layout.administratorMode === true) {
                     _fetchSectorMappings(api.mappingConfig);
                     _fetchSchemes(api.allSchemes);
-                    //this.setState({ isSuperAdmin: layout.email.indexOf('super') === 0, settings });
                 } else {
                     window.location.replace('/login.do');
                 }
@@ -47,7 +46,7 @@ class Main extends Component {
     }
 
     render() {
-        const { mappings, schemes, api, trnPrefix, indirectSectorUpdatePending } = this.props;
+        const { mappings, schemes, api, trnPrefix } = this.props;
         const { translations } = this.context;
         const { isSuperAdmin, settings } = this.state;
 
@@ -64,7 +63,6 @@ class Main extends Component {
                                 <FormSectors />
                             </div>
                         </div>
-                        <BlockUI blocking={indirectSectorUpdatePending} />
                     </SectorMappingContext.Provider>
                 </div>
             );
@@ -89,8 +87,7 @@ const mapStateToProps = state => ({
     schemes: getSchemes(state.startupReducer),
     pendingMappings: getSectorMappingPending(state.startupReducer),
     pendingSchemes: getSchemesPending(state.startupReducer),
-    translations: state.translationsReducer.translations,
-    indirectSectorUpdatePending: state.updateActivitiesReducer.indirectSectorUpdatePending
+    translations: state.translationsReducer.translations
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

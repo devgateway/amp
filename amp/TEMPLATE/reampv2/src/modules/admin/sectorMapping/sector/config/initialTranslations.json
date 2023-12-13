@@ -30,7 +30,5 @@
   "amp.admin.sectorMapping:choose_src_scheme": "Choose a Source Scheme",
   "amp.admin.sectorMapping:choose_dst_scheme": "Choose a Destination Scheme",
   "amp.admin.sectorMapping:choose_src_sector": "Choose a Source Sector",
-  "amp.admin.sectorMapping:choose_dst_sector": "Choose a Destination Sector",
-  "amp.admin.sectorMapping:update-activities-successful": "Activities where successfully updated",
-  "amp.admin.sectorMapping:update-activities-wait": "Updating activities, please wait..."
+  "amp.admin.sectorMapping:choose_dst_sector": "Choose a Destination Sector"
 }

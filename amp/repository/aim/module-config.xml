@@ -272,7 +272,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpThemeMapping</hibernate-class>
 
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSectorMapping</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityIndirectSector</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

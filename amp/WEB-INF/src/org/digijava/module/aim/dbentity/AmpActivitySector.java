@@ -38,19 +38,19 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
 
     private AmpClassificationConfiguration classificationConfig;
 
-    @Interchangeable(fieldTitle = "Indirect Sectors")
-    private Set<AmpActivityIndirectSector> indirectSectors = new HashSet<>();
+//    @Interchangeable(fieldTitle = "Indirect Sectors")
+//    private Set<AmpActivityIndirectSector> indirectSectors = new HashSet<>();
 
-    public Set<AmpActivityIndirectSector> getIndirectSectors() { return indirectSectors; }
+    //public Set<AmpActivityIndirectSector> getIndirectSectors() { return indirectSectors; }
 
-    public void setIndirectSectors(Set<AmpActivityIndirectSector> indirectSectors) {
-        this.indirectSectors = indirectSectors;
-    }
-
-    public void addIndirectSector(AmpActivityIndirectSector pIndirectSector) {
-        pIndirectSector.setActivitySector(this);
-        indirectSectors.add(pIndirectSector);
-    }
+//    public void setIndirectSectors(Set<AmpActivityIndirectSector> indirectSectors) {
+//        this.indirectSectors = indirectSectors;
+//    }
+//
+//    public void addIndirectSector(AmpActivityIndirectSector pIndirectSector) {
+//        pIndirectSector.setActivitySector(this);
+//        indirectSectors.add(pIndirectSector);
+//    }
 
 
 
@@ -142,13 +142,6 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivitySector aux = (AmpActivitySector) clone();
         aux.activityId = newActivity;
-
-        aux.setIndirectSectors(new HashSet());
-        for(AmpActivityIndirectSector indirectSector : this.indirectSectors) {
-            AmpActivityIndirectSector auxIndirectSector = (AmpActivityIndirectSector) indirectSector.clone();
-            auxIndirectSector.setId(null);
-            aux.addIndirectSector(auxIndirectSector);
-        }
 
         aux.ampActivitySectorId = null;
         return aux;

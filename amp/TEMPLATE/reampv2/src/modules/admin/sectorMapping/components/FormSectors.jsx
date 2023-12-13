@@ -21,9 +21,7 @@ import {
     sendSectorMappingPending,
     sendSectorMappingSaving
 } from "../reducers/saveSectorMappingReducer";
-import {updateActivitiesError, updateActivitiesPending} from "../reducers/updateActivitiesReducer";
 import saveSectorMappings from "../actions/saveSectorMappings";
-import updateActivities from "../actions/updateActivities";
 import SectorsHeader from "./SectorsHeader";
 import Notifications from "./Notifications";
 import HeaderActions from "./HeaderActions";
@@ -54,7 +52,7 @@ class FormSectors extends Component {
     }
 
     componentDidMount() {
-        const { mappings, schemes, translations, trnPrefix, settings, isIndirect } = this.context;
+        const { mappings, schemes, translations, trnPrefix } = this.context;
         document.title = translations[`${trnPrefix}page-title`];
 
         // Load Source Scheme Sector selected
@@ -178,22 +176,6 @@ class FormSectors extends Component {
         });
     }
 
-    onUpdateActivities = () => {
-        const { _updateActivities, translations } = this.props;
-        const { trnPrefix } = this.context;
-        const { data } = this.state;
-        const validateMappings = Validation.checkMappings(data);
-        if (validateMappings === 0) {
-            if (window.confirm(translations[`${trnPrefix}button-update-activities-confirmation`])) {
-                this.clearMessages();
-                this.setState({ blockUI: true });
-                _updateActivities();
-            }
-        } else {
-            this.setState({ validationErrors: translations[`${trnPrefix}validation_error_${validateMappings}`] });
-        }
-    }
-
     saveAll() {
         const { data, src, dst } = this.state;
         const { _saveSectorMappings, translations } = this.props;
@@ -279,8 +261,8 @@ class FormSectors extends Component {
     }
 
     render() {
-        const { data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved } = this.state;
-        const { error, pending, translations, updating, errorUpdating, saving } = this.props;
+        const { data, validationErrors, src, dst, unsavedChanges, saved } = this.state;
+        const { error, pending, translations, saving } = this.props;
 
         const { trnPrefix } = this.context;
         const messages = [];
@@ -293,18 +275,6 @@ class FormSectors extends Component {
         if (!saving && !error && !unsavedChanges && saved) {
             messages.push({ isError: false, text: translations[`${trnPrefix}notification-saved-ok`] });
         }
-        if (updatedActivities) {
-            messages.push({ isError: false, text: translations[`${trnPrefix}update-activities-successful`] });
-        }
-        if (updating) {
-            messages.push({ isError: false, text: translations[`${trnPrefix}update-activities-wait`] });
-        }
-        if (errorUpdating) {
-            messages.push({
-                isError: true,
-                text: errorUpdating
-            });
-        }
 
         return (
             <div className="form-container">
@@ -312,17 +282,16 @@ class FormSectors extends Component {
                     src={src}
                     dst={dst}
                     key={Math.random()}
-                    busy={updating}
+                    busy={false}
                     onChange={this.onChangeMainScheme} />
 
                 <HeaderActions
                     onAddRow={this.addRow}
                     onSaveAll={this.saveAll}
                     onRevertAll={this.revertAllChanges}
-                    onUpdateActivities={this.onUpdateActivities}
                     src={src}
                     dst={dst}
-                    busy={updating || pending}
+                    busy={pending}
                     unsavedChanges={unsavedChanges}
                     dataPresent={data && data.length > 0} />
 
@@ -334,7 +303,7 @@ class FormSectors extends Component {
                     remove={this.remove}
                     src={src}
                     dst={dst}
-                    busy={updating}/>
+                />
             </div>
         );
     }
@@ -347,30 +316,22 @@ FormSectors.propTypes = {
     translations: PropTypes.object.isRequired,
     error: PropTypes.object,
     pending: PropTypes.bool,
-    updating: PropTypes.bool,
-    errorUpdating: PropTypes.string,
     _saveSectorMappings: PropTypes.func.isRequired,
-    _updateActivities: PropTypes.func.isRequired,
     saving: PropTypes.bool.isRequired
 };
 
 FormSectors.defaultProps = {
     error: undefined,
-    pending: false,
-    updating: false,
-    errorUpdating: null
+    pending: false
 };
 
 const mapStateToProps = state => ({
     translations: state.translationsReducer.translations,
     error: sendSectorMappingError(state.saveSectorMappingReducer),
     saving: sendSectorMappingSaving(state.saveSectorMappingReducer),
-    pending: sendSectorMappingPending(state.saveSectorMappingReducer),
-    updating: updateActivitiesPending(state.updateActivitiesReducer),
-    errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
+    pending: sendSectorMappingPending(state.saveSectorMappingReducer)
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
-    _saveSectorMappings: saveSectorMappings,
-    _updateActivities: updateActivities
+    _saveSectorMappings: saveSectorMappings
 }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(FormSectors);

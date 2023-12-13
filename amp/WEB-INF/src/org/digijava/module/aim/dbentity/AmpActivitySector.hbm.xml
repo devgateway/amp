@@ -22,13 +22,6 @@
 
 		<property name="sectorPercentage" column="sector_percentage" type="java.lang.Float" />
 
-		<set name="indirectSectors" inverse="true" cascade="all-delete-orphan">
-			<cache usage="read-write" />
-			<key column="amp_activity_sector_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityIndirectSector" />
-		</set>
-
-
 	</class>
 
 </hibernate-mapping>

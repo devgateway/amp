@@ -62,7 +62,6 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.X_ASYNC_RESULT_ID;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.X_ASYNC_STATUS;
 import static org.digijava.kernel.ampapi.endpoints.async.AsyncActivityIndirectProgramUpdaterService.PROGRAM_UPDATER_KEY;
-import static org.digijava.kernel.ampapi.endpoints.async.AsyncActivityIndirectSectorUpdaterService.SECTOR_UPDATER_KEY;
 
 
 /**
@@ -564,33 +563,6 @@ public class InterchangeEndpoints {
     public Response getUpdateMappingsResult(@PathParam("result-id") String resultId) {
         return buildResultId(PROGRAM_UPDATER_KEY + resultId);
     }
-
-
-    @GET
-    @Path("/updateSectorMappings/async")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateSectorMappings", ui = false)
-    public Response updateSectorMappings() {
-
-        String resultId = (String) TLSUtils.getRequest().getAttribute(X_ASYNC_RESULT_ID);
-        if (resultId == null) {
-            ApiErrorResponseService.reportError(BAD_REQUEST, ActivityErrors.ONLY_SYNC
-                    .withDetails("Only sync process is allowed"));
-        }
-        if (!AsyncResultCacher.canAddAnotherUnique(SECTOR_UPDATER_KEY)) {
-            ApiErrorResponseService.reportError(BAD_REQUEST, ActivityErrors.PROCESS_ALREADY_RUNNING
-                    .withDetails("Only one process at a time is allowed"));
-        } else {
-            // Start the process
-            AsyncActivityIndirectSectorUpdaterService.getInstance().
-                    updateIndirectSectors(SECTOR_UPDATER_KEY + resultId);
-        }
-        String location = String.format("%s/result/%s", UrlUtils.buildRequestUrl(TLSUtils.getRequest()), resultId);
-        return Response.ok()
-                .header("location", location)
-                .build();
-    }
-
 
     private Response buildResultId(String resultId) {
         AsyncResult asyncResult = AsyncResultCacher.getAsyncResult(resultId);

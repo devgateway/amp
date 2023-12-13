@@ -11,7 +11,7 @@ import SectorMappingTableRow from "./SectorMappingTableRow";
 class SectorMappingTable extends Component {
 
   render() {
-    const { list, translations, onChange, remove, dst, src, busy } = this.props;
+    const { list, translations, onChange, remove, dst, src } = this.props;
     const { trnPrefix } = this.context;
 
     return (
@@ -41,7 +41,7 @@ class SectorMappingTable extends Component {
                     remove={remove}
                     dst={dst}
                     src={src}
-                    disabled={busy} />
+                    disabled={false} />
             ))}
             </tbody>
           </table>

@@ -335,7 +335,6 @@ public class ActivityUtil {
         }
 
         updateIndirectPrograms(a, session);
-        updateIndirectSectors(a, session);
 
         logAudit(ampCurrentMember, a, newActivity);
 
@@ -350,10 +349,6 @@ public class ActivityUtil {
 
     private static void updateIndirectPrograms(AmpActivityVersion a, Session session) {
         new IndirectProgramUpdater().updateIndirectPrograms(a, session);
-    }
-
-    private static void updateIndirectSectors(AmpActivityVersion a, Session session) {
-        new IndirectSectorUpdater().updateIndirectSectors(a, session);
     }
 
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {

@@ -8,7 +8,7 @@ import './css/style.css';
 class HeaderActions extends Component {
   render() {
     const {
-      translations, onAddRow, onSaveAll, onRevertAll, src, dst, onUpdateActivities, busy, dataPresent, unsavedChanges
+      translations, onAddRow, onSaveAll, onRevertAll, src, dst, busy, dataPresent, unsavedChanges
     } = this.props;
     const {trnPrefix} = this.context;
 
@@ -37,10 +37,6 @@ class HeaderActions extends Component {
                         disabled={busy || !unsavedChanges}>
                     {translations[`${trnPrefix}button-revert-all-edits`]}
                 </button>
-                <button type="button" onClick={onUpdateActivities} className="btn btn-primary"
-                    disabled={busy || !dataPresent || unsavedChanges}>
-                  {translations[`${trnPrefix}button-update-activities`]}
-                </button>
               </span>
             </div>
           </div>
@@ -56,7 +52,6 @@ HeaderActions.propTypes = {
   onSaveAll: PropTypes.func.isRequired,
   onRevertAll: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
-  onUpdateActivities: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
   busy: PropTypes.bool.isRequired,

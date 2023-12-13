@@ -3,6 +3,9 @@ package org.digijava.module.message.jobs;
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.Column;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.*;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
@@ -11,10 +14,12 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.jetbrains.annotations.NotNull;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,66 +32,65 @@ import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYP
 public class AmpDonorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
     protected static final Logger logger = Logger.getLogger(AmpDonorFundingJob.class);
+
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        ReportFormParameters formParams = new ReportFormParameters();
-        List<String> additionalColumns = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0","Status");
-        List<String> additionalHierarchies = Arrays.asList("Donor Agency", "National Planning Objectives Level 1", "Implementation Level", "Administrative Level 0","Status");
-        List<String> additionalMeasures = Arrays.asList("Actual Commitments", "Actual Disbursements");
-        formParams.setAdditionalColumns(additionalColumns);
-        formParams.setAdditionalHierarchies(additionalHierarchies);
-        formParams.setAdditionalMeasures(additionalMeasures);
-        formParams.setGroupingOption("A");
-        formParams.setReportType("D");
-        formParams.setShowEmptyRows(true);
-        formParams.setShowOriginalCurrency(false);
-        formParams.setSummary(true);
-        int reportType = ArConstants.DONOR_TYPE;
-        if (formParams.getReportType() != null) {
-            reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
-        }
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", reportType);
-        spec.setSummaryReport(Boolean.TRUE.equals(formParams.getSummary()));
-        String groupingOption = formParams.getGroupingOption();
-        ReportsUtil.setGroupingCriteria(spec, groupingOption);
-        ReportsUtil.update(spec, formParams);
-        SettingsUtils.applySettings(spec, formParams.getSettings(), true);
-        FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
-        GeneratedReport report = EndpointUtils.runReport(spec);
+        GeneratedReport report = generateReport();
+        List<ReportsDashboard> ampDashboardFunding = processReportData(report);
+        // The ampDashboardFunding data contains objects for commitments and disbursment differently in
+        // separate objects. We need to combine them in same object combining commitment and disbursment values.
+        List<Map<String, Object>> combinedData = combineObjects(ampDashboardFunding);
+        // Specify the server's endpoint URL
+        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
+        sendReportsToServer(combinedData, serverUrl);
+    }
 
-        List<ReportsDashboard> ampDashboardFunding = new ArrayList<ReportsDashboard>();
-        for (ReportArea child: report.reportContents.getChildren()){
-            if(child.getChildren() != null){
-                for (ReportArea donorData: child.getChildren()){
-                    for (ReportArea implLevel: donorData.getChildren()) {
-                        for (ReportArea location: implLevel.getChildren()) {
-                            for (Map.Entry<ReportOutputColumn, ReportCell> content : location.getContents().entrySet()) {
-                                ReportOutputColumn col = content.getKey();
-                                ReportsDashboard fundingReport = new ReportsDashboard();
+    private List<ReportsDashboard> processReportData(GeneratedReport report) {
 
-                                if (col.parentColumn != null && col.parentColumn.originalColumnName != null
-                                        && !col.parentColumn.originalColumnName.equals("Totals")) {
-//                                  // check if the field is actual commitment or actual disbursement
-                                    if(col.originalColumnName.equals("Actual Commitments")){
-                                        BigDecimal commitment = (BigDecimal) content.getValue().value;
-                                        fundingReport.setActualCommitment(commitment.setScale(2, RoundingMode.HALF_UP));
-                                    }else {
-                                        BigDecimal disbursement = (BigDecimal) content.getValue().value;
-                                        fundingReport.setActualDisbursment(disbursement.setScale(2, RoundingMode.HALF_UP));
+        ReportOutputColumn donorAgency = report.leafHeaders.get(0);
+        ReportOutputColumn pilar = report.leafHeaders.get(1);
+        ReportOutputColumn implementationLevel = report.leafHeaders.get(2);
+        ReportOutputColumn country = report.leafHeaders.get(3);
+        ReportOutputColumn status = report.leafHeaders.get(4);
+
+        List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
+        for (ReportArea child : report.reportContents.getChildren()) {
+            TextCell donorAgencyCell = (TextCell) child.getContents().get(donorAgency);
+            if (child.getChildren() != null) {
+                for (ReportArea pilarData : child.getChildren()) {
+                    TextCell pilarCell = (TextCell) pilarData.getContents().get(pilar);
+                    for (ReportArea implLevel : pilarData.getChildren()) {
+                        TextCell implLevelCell = (TextCell) implLevel.getContents().get(implementationLevel);
+                        for (ReportArea location : implLevel.getChildren()) {
+                            TextCell countryCell = (TextCell) location.getContents().get(country);
+                            for (ReportArea statusData : location.getChildren()) {
+                                TextCell statusCell = (TextCell) statusData.getContents().get(status);
+                                for (Map.Entry<ReportOutputColumn, ReportCell> content : statusData.getContents().entrySet()) {
+                                    ReportOutputColumn col = content.getKey();
+                                    System.out.println(statusData.getContents().get(status));
+                                    if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
+                                        if (!col.parentColumn.originalColumnName.equals("Totals")) {
+                                            ReportsDashboard fundingReport = new ReportsDashboard();
+                                            fundingReport.setDonorAgency(donorAgencyCell.value.toString());
+                                            fundingReport.setPillar(pilarCell.value.toString());
+                                            fundingReport.setCountry(countryCell.value.toString());
+                                            fundingReport.setImplimentationLevel(implLevelCell.value.toString());
+                                            fundingReport.setStatus(statusCell.value.toString());
+                                            fundingReport.setYear(col.parentColumn.originalColumnName);
+                                            AmountCell amount = (AmountCell) content.getValue();
+                                            if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
+                                                fundingReport.setActualCommitment(amount.extractValue());
+                                            } else {
+                                                fundingReport.setActualDisbursment(amount.extractValue());
+
+                                            }
+                                            fundingReport.setCurrency("USD");
+                                            ampDashboardFunding.add(fundingReport);
+                                        }
                                     }
-
-                                    if (location.getChildren() != null) {
-                                        fundingReport.setStatus(location.getChildren().get(0).getOwner().debugString);
-                                    }
-
-                                    fundingReport.setCountry(location.getOwner().debugString);
-                                    fundingReport.setImplimentationLevel(implLevel.getOwner().debugString);
-                                    fundingReport.setDonorAgency(child.getOwner().debugString);
-                                    fundingReport.setPillar(donorData.getOwner().debugString);
-                                    fundingReport.setYear(col.parentColumn.originalColumnName);
-                                    fundingReport.setCurrency("USD");
-                                    ampDashboardFunding.add(fundingReport);
                                 }
+
+
                             }
                         }
                     }
@@ -94,12 +98,28 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             }
         }
 
-        // The ampDashboardFunding data contains objects for commitments and disbursment differently in
-        // separate objects. We need to combine them in same object combining commitment and disbursment values.
-        List<Map<String, Object>> combinedData = combineObjects(ampDashboardFunding);
-        // Specify the server's endpoint URL
-        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
-        sendReportsToServer(combinedData, serverUrl);
+        return ampDashboardFunding;
+    }
+
+    private GeneratedReport generateReport() {
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
+        addColumnsToSpecification(spec);
+        spec.setSummaryReport(true);
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+        spec.setShowOriginalCurrency(false);
+        spec.setDisplayEmptyFundingRows(true);
+        return EndpointUtils.runReport(spec);
+    }
+
+    private void addColumnsToSpecification(ReportSpecificationImpl spec) {
+        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
+        spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTATION_LEVEL));
+        spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
+        spec.addColumn(new ReportColumn(ColumnConstants.STATUS));
+        spec.setHierarchies(spec.getColumns());
+        spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+        spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
     }
 
     public static List<Map<String, Object>> combineObjects(List<ReportsDashboard> ampDashboardFunding) {
@@ -162,20 +182,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public static void sendReportsToServer(List<Map<String, Object>> ampDashboardFunding, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
-            URL url = new URL(serverUrl);
-
-            // Open a connection to the server
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            // Set the HTTP request method to POST
-            connection.setRequestMethod("POST");
-
-            // Set the content type of the request
-            connection.setRequestProperty("Content-Type", "application/json");
-
-            // Enable input and output streams for the connection
-            connection.setDoOutput(true);
-
+            HttpURLConnection connection = getHttpURLConnection(serverUrl);
             // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
             String jsonData = gson.toJson(ampDashboardFunding);
@@ -205,5 +212,23 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             logger.error("Exception raised when sending data to dashboard", e);
             e.printStackTrace();
         }
+    }
+
+    @NotNull
+    private static HttpURLConnection getHttpURLConnection(String serverUrl) throws IOException {
+        URL url = new URL(serverUrl);
+
+        // Open a connection to the server
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Set the HTTP request method to POST
+        connection.setRequestMethod("POST");
+
+        // Set the content type of the request
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        // Enable input and output streams for the connection
+        connection.setDoOutput(true);
+        return connection;
     }
 }

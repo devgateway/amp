@@ -1687,8 +1687,9 @@
                                 <property name="jdbc.db" value="amp_drc" />
 
                                 <ant antfile="${project.basedir}/build.xml">
-                                    <target name="deployForServer" />
+<!--                                    <target name="deployForServer" />-->
 <!--                                    <target name="jaxb" />-->
+
                                 </ant>
                             </target>
                         </configuration>

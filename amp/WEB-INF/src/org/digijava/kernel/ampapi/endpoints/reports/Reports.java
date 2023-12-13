@@ -14,7 +14,11 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
-import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.CachedReportData;
@@ -53,12 +57,18 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ReflectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -91,8 +101,6 @@ public class Reports {
 
     protected static final Logger logger = Logger.getLogger(Reports.class);
 
-    @Value("${ampDashboard.api}")
-    private String ampDashboardUrl;
     @Context
     private HttpServletRequest httpRequest;
 
@@ -129,7 +137,7 @@ public class Reports {
     private JSONResult getReport(AmpReports ampReport) {
         // TODO: for now we do not translate other types of reports than Donor
         // Type reports (hide icons for non-donor-type reports?)
-        ReportSpecificationImpl spec = null;
+        ReportSpecificationImpl spec;
         try {
             spec = AmpReportsToReportSpecification.convert(ampReport);
             // AMP-29012: We need to change the Location filter according to include-location-children.
@@ -150,27 +158,6 @@ public class Reports {
         metadata.setRecordsPerPage(ReportPaginationUtils.getRecordsNumberPerPage());
 
         result.setReportMetadata(metadata);
-
-        //Translate column names.
-        /*Set<ReportColumn> translatedColumns = new LinkedHashSet<ReportColumn>();  
-        Iterator<ReportColumn> iCols = metadata.getReportSpec().getColumns().iterator();
-        while(iCols.hasNext()) {
-            ReportColumn auxCol = iCols.next();
-            String translatedName = TranslatorWorker.translateText(auxCol.getEntityName());
-            auxCol = new ReportColumn(translatedName, auxCol.getEntityType());
-            translatedColumns.add(auxCol);          
-        }
-        metadata.getReportSpec().setColumns(translatedColumns);
-        
-        List<ReportMeasure> translatedMeasures = new ArrayList<ReportMeasure>(); 
-        Iterator<ReportMeasure> iMs = metadata.getReportSpec().getMeasures().iterator();
-        while(iMs.hasNext()) {
-            ReportMeasure auxMeasure = iMs.next();
-            String translatedName = TranslatorWorker.translateText(auxMeasure.getMeasureName());
-            auxMeasure = new ReportMeasure(translatedName, auxMeasure.getEntityType());
-            translatedMeasures.add(auxMeasure);
-        }
-        metadata.getReportSpec().setMeasures(translatedMeasures);*/
         return result;
     }
 
@@ -370,7 +357,7 @@ public class Reports {
                                                              @PathParam("report_id") Long reportId) {
 
         // TODO: normally all extra columns should come from formParams
-        List<String> extraColumns = new ArrayList<String>();
+        List<String> extraColumns = new ArrayList<>();
         extraColumns.add(ColumnConstants.ACTIVITY_ID);
         extraColumns.add(ColumnConstants.APPROVAL_STATUS);
         extraColumns.add(ColumnConstants.DRAFT);
@@ -404,7 +391,7 @@ public class Reports {
     }
 
     private List<JSONTab> getDefaultTabs(AmpTeamMember ampTeamMember) {
-        List<JSONTab> tabs = new ArrayList<JSONTab>();
+        List<JSONTab> tabs = new ArrayList<>();
 
         // Look for the Default Tab and add it visible to the list
         AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeamMember.getAmpTeam().getAmpTeamId());
@@ -414,9 +401,9 @@ public class Reports {
         }
 
         // Get the visible tabs of the currently logged user
-        if (ampTeamMember.getDesktopTabSelections() != null && ampTeamMember.getDesktopTabSelections().size() > 0) {
+        if (ampTeamMember.getDesktopTabSelections() != null && !ampTeamMember.getDesktopTabSelections().isEmpty()) {
             TreeSet<AmpDesktopTabSelection> sortedSelection =
-                    new TreeSet<AmpDesktopTabSelection>(AmpDesktopTabSelection.tabOrderComparator);
+                    new TreeSet<>(AmpDesktopTabSelection.tabOrderComparator);
             sortedSelection.addAll(ampTeamMember.getDesktopTabSelections());
             for (AmpDesktopTabSelection adts : sortedSelection) {
                 AmpReports report = adts.getReport();
@@ -429,10 +416,8 @@ public class Reports {
         List<AmpReports> userActiveTabs = TeamUtil.getAllTeamReports(ampTeamMember.getAmpTeam().getAmpTeamId(), true,
                 null, null, true,
                 ampTeamMember.getAmpTeamMemId(), null, null);
-        Iterator<AmpReports> iter = userActiveTabs.iterator();
 
-        while (iter.hasNext()) {
-            AmpReports report = iter.next();
+        for (AmpReports report : userActiveTabs) {
             JSONTab tab = new JSONTab(report.getAmpReportId(), false);
             boolean found = false;
             Iterator<JSONTab> iTabs = tabs.iterator();
@@ -451,8 +436,7 @@ public class Reports {
     }
 
     private List<JSONTab> getPublicTabs() {
-        List<JSONTab> tabs = new ArrayList<JSONTab>();
-        return tabs;
+        return new ArrayList<>();
     }
 
     public enum ExcelType {
@@ -479,7 +463,7 @@ public class Reports {
         }
 
         // AMP-19189 - add columns used for coloring the project title and amp id (but not for summary reports).
-        List<String> extraColumns = new ArrayList<String>();
+        List<String> extraColumns = new ArrayList<>();
         if (spec.getColumns().size() != spec.getHierarchies().size() && !spec.getMeasures().isEmpty()) {
             extraColumns.add(ColumnConstants.APPROVAL_STATUS);
             extraColumns.add(ColumnConstants.DRAFT);

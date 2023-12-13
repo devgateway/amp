@@ -5,14 +5,18 @@ import java.math.BigDecimal;
 public class ReportsDashboard {
     private String donorAgency;
     private String pillar;
-    private String implimentationLevel;
+    private String implementationLevel;
 
     private String country;
     private String status;
     private String currency;
     private String year;
     private BigDecimal actualCommitment;
-    private BigDecimal actualDisbursment;
+    private BigDecimal actualDisbursement;
+    public ReportsDashboard() {
+        this.actualCommitment = BigDecimal.ZERO;
+        this.actualDisbursement = BigDecimal.ZERO;
+    }
 
 
     public String getDonorAgency() {
@@ -55,20 +59,20 @@ public class ReportsDashboard {
         this.country = country;
     }
 
-    public BigDecimal getActualDisbursment() {
-        return actualDisbursment;
+    public String getImplementationLevel() {
+        return implementationLevel;
     }
 
-    public void setActualDisbursment(BigDecimal actualDisbursment) {
-        this.actualDisbursment = actualDisbursment;
+    public void setImplementationLevel(String implementationLevel) {
+        this.implementationLevel = implementationLevel;
     }
 
-    public String getImplimentationLevel() {
-        return implimentationLevel;
+    public BigDecimal getActualDisbursement() {
+        return actualDisbursement;
     }
 
-    public void setImplimentationLevel(String implimentationLevel) {
-        this.implimentationLevel = implimentationLevel;
+    public void setActualDisbursement(BigDecimal actualDisbursement) {
+        this.actualDisbursement = actualDisbursement;
     }
 
     public String getStatus() {
@@ -85,5 +89,13 @@ public class ReportsDashboard {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+    public void sumWith(ReportsDashboard other) {
+        if (other.actualCommitment != null) {
+            this.actualCommitment = this.actualCommitment.add(other.actualCommitment);
+        }
+        if (other.actualDisbursement != null) {
+            this.actualDisbursement = this.actualDisbursement.add(other.actualDisbursement);
+        }
     }
 }

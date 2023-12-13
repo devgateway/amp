@@ -55,7 +55,7 @@
         <!-- Path Settings -->
         <doc.path>./doc/api</doc.path>
         <doc.src>./src/java</doc.src>
-        <gen-src>./gen-src</gen-src>
+        <generated-sources>./generated-sources</generated-sources>
 
         <buildSource/>
         <buildDate/>
@@ -1290,7 +1290,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/translation</outputDirectory>
+                            <outputDirectory>${project.basedir}/generated-sources/jaxb/translation</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1307,7 +1307,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/help</outputDirectory>
+                            <outputDirectory>${project.basedir}/generated-sources/jaxb/help</outputDirectory>
 
                         </configuration>
                     </execution>
@@ -1325,7 +1325,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/xmlpatcher</outputDirectory>
+                            <outputDirectory>${project.basedir}/generated-sources/jaxb/xmlpatcher</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1342,7 +1342,7 @@
                                 </source>
                             </sources>
                             <packageName>org.dgfoundation.amp.reports.xml</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/report</outputDirectory>
+                            <outputDirectory>${project.basedir}/generated-sources/jaxb/report</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1574,7 +1574,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.basedir}/gen-src</source>
+                                <source>${project.basedir}/generated-sources</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -1709,6 +1709,24 @@
                         </configuration>
                         <goals>
                             <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration>
+                    <outputDirectory>${metainf}</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
                         </goals>
                     </execution>
                 </executions>

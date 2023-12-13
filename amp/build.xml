@@ -1,731 +1,731 @@
-<!--<project name="digijava" basedir="." default="compile">-->
+<project name="digijava" basedir="." default="compile">
 
 
-<!--    &lt;!&ndash; Local system paths &ndash;&gt;-->
-<!--    <property file="digijava.properties"/>-->
-<!--	<property file="${user.home}/ant-global.properties"/>-->
+    <!-- Local system paths -->
+    <property file="digijava.properties"/>
+	<property file="${user.home}/ant-global.properties"/>
 
-<!--	<property file="compat.properties"/>-->
-<!--	<property name="debug" value="true" />-->
-
-
-<!--    &lt;!&ndash; Project settings &ndash;&gt;-->
-<!--    <property name="project.title" value="DiGiJava "/>-->
-<!--    <property name="project.distname" value="amp"/>-->
-<!--    <property name="project.version" value="2.0.0"/>-->
-<!--    <property name="lib" location="./src/main/webapp/WEB-INF/lib" />-->
-<!--    <property name="webinf" location="./src/main/webapp/WEB-INF" />-->
-<!--	<property name="metainf" location="./META-INF" />-->
-<!--	<property name="classes" location="./src/main/webapp/WEB-INF/classes" />-->
-<!--    <property name="src" location="./src" />-->
-<!--    <property name="test" location="./test" />-->
-<!--    <property name="etc" location="./etc" />-->
-<!--    <property name="deployConfigs" location="deployConfigs"/>-->
-<!--	<property name="repository" location="./repository"/>-->
-<!--	<property name="jackrabbit" location="./jackrabbit"/>-->
-<!--    <property name="ampTest" location="./src/main/webapp/WEB-INF/amp-test" />-->
-<!--	<property name="ampSelenium" location="./src/mainin/webapp/WEB-INF/amp-selenium-test" />-->
-<!--	&lt;!&ndash; <property name="jdbc"gen-.driverClassName" value="org.postgresql.Driver"/> &ndash;&gt;-->
-<!--	<property name="dbName" value="postgresql"/>-->
-
-<!--	<condition property="external-lib" value="${jboss-lib}">-->
-<!--		<isset property="jboss-lib"/>-->
-<!--	</condition>-->
-
-<!--	<condition property="jdbc.password" value="1234">-->
-<!--	 	<not>-->
-<!--	 		<isset property="jdbc.password"/>-->
-<!--	 	</not>-->
-<!--	 </condition>-->
-
-<!--	<condition property="serverName" value="generic">-->
-<!--	 	<not>-->
-<!--	 		<isset property="serverName"/>-->
-<!--	 	</not>-->
-<!--	 </condition>-->
+	<property file="compat.properties"/>
+	<property name="debug" value="true" />
 
 
-<!--	<condition property="jdbc.user" value="postgres">-->
-<!--	 	<not>-->
-<!--	 		<isset property="jdbc.user"/>-->
-<!--	 	</not>-->
-<!--	 </condition>-->
+    <!-- Project settings -->
+    <property name="project.title" value="DiGiJava "/>
+    <property name="project.distname" value="amp"/>
+    <property name="project.version" value="2.0.0"/>
+    <property name="lib" location="./src/main/webapp/WEB-INF/lib" />
+    <property name="webinf" location="./src/main/webapp/WEB-INF" />
+	<property name="metainf" location="./META-INF" />
+	<property name="classes" location="./src/main/webapp/WEB-INF/classes" />
+    <property name="src" location="./src" />
+    <property name="test" location="./test" />
+    <property name="etc" location="./etc" />
+    <property name="deployConfigs" location="deployConfigs"/>
+	<property name="repository" location="./repository"/>
+	<property name="jackrabbit" location="./jackrabbit"/>
+    <property name="ampTest" location="./src/main/webapp/WEB-INF/amp-test" />
+	<property name="ampSelenium" location="./src/mainin/webapp/WEB-INF/amp-selenium-test" />
+	<!-- <property name="jdbc"gen-.driverClassName" value="org.postgresql.Driver"/> -->
+	<property name="dbName" value="postgresql"/>
 
-<!--	<condition property="jdbc.port" value="5432">-->
-<!--	 	<not>-->
-<!--	 		<isset property="jdbc.port"/>-->
-<!--	 	</not>-->
-<!--	 </condition>-->
+	<condition property="external-lib" value="${jboss-lib}">
+		<isset property="jboss-lib"/>
+	</condition>
 
-<!--	<condition property="jdbc.host" value="localhost">-->
-<!--		<not>-->
-<!--			<isset property="jdbc.host"/>-->
-<!--		</not>-->
-<!--	</condition>-->
+	<condition property="jdbc.password" value="1234">
+	 	<not>
+	 		<isset property="jdbc.password"/>
+	 	</not>
+	 </condition>
 
-<!--	<condition property="antilock" value="false">-->
-<!--		 	<not>-->
-<!--		 		<isset property="antilock"/>-->
-<!--		 	</not>-->
-<!--	</condition>-->
-
-<!--	<fail unless="jdbc.db" message="jdbc.db parameter is missing. This is required to build the DBCP datasource"/>-->
-
-<!--	<property name="jdbc.url" value="jdbc:postgresql://localhost"/>-->
-<!--	<property name="jdbc.params" value="useUnicode=true&amp;characterEncoding=UTF-8"/>-->
-<!--	<property name="jdbc.paramsClean" value="useUnicode=true&amp;characterEncoding=UTF-8"/>-->
-
-<!--	<property name="clean.db" value="amp_clean"/>-->
-
-<!--    &lt;!&ndash; Path settings &ndash;&gt;-->
-<!--    <property name="doc.path" value="./doc/api"/>-->
-<!--    <property name="doc.src" value="./src/java"/>-->
-<!--    <property name="gen-src" value="./gen-src"/>-->
+	<condition property="serverName" value="generic">
+	 	<not>
+	 		<isset property="serverName"/>
+	 	</not>
+	 </condition>
 
 
-<!--    &lt;!&ndash; classpath for Struts 1.1 &ndash;&gt;-->
-<!--    <path id="compile.classpath">-->
-<!--    	<pathelement location="${classes}"/>-->
+	<condition property="jdbc.user" value="postgres">
+	 	<not>
+	 		<isset property="jdbc.user"/>
+	 	</not>
+	 </condition>
+
+	<condition property="jdbc.port" value="5432">
+	 	<not>
+	 		<isset property="jdbc.port"/>
+	 	</not>
+	 </condition>
+
+	<condition property="jdbc.host" value="localhost">
+		<not>
+			<isset property="jdbc.host"/>
+		</not>
+	</condition>
+
+	<condition property="antilock" value="false">
+		 	<not>
+		 		<isset property="antilock"/>
+		 	</not>
+	</condition>
+
+	<fail unless="jdbc.db" message="jdbc.db parameter is missing. This is required to build the DBCP datasource"/>
+
+	<property name="jdbc.url" value="jdbc:postgresql://localhost"/>
+	<property name="jdbc.params" value="useUnicode=true&amp;characterEncoding=UTF-8"/>
+	<property name="jdbc.paramsClean" value="useUnicode=true&amp;characterEncoding=UTF-8"/>
+
+	<property name="clean.db" value="amp_clean"/>
+
+    <!-- Path settings -->
+    <property name="doc.path" value="./doc/api"/>
+    <property name="doc.src" value="./src/java"/>
+    <property name="gen-src" value="./gen-src"/>
+
+
+    <!-- classpath for Struts 1.1 -->
+    <path id="compile.classpath">
+    	<pathelement location="${classes}"/>
+    	<pathelement path="${compile_classpath}"/>
+    </path>
+
+    <!-- classpath for JAXB -->
+<!--    <path id="xjc.classpath">-->
 <!--    	<pathelement path="${compile_classpath}"/>-->
 <!--    </path>-->
 
-<!--    &lt;!&ndash; classpath for JAXB &ndash;&gt;-->
-<!--&lt;!&ndash;    <path id="xjc.classpath">&ndash;&gt;-->
-<!--&lt;!&ndash;    	<pathelement path="${compile_classpath}"/>&ndash;&gt;-->
-<!--&lt;!&ndash;    </path>&ndash;&gt;-->
-
-<!--    &lt;!&ndash; classpath for Struts 1.1 &ndash;&gt;-->
-<!--    <path id="run.classpath">-->
-<!--		<pathelement location="${etc}"/>-->
-<!--		<pathelement location="${classes}"/>-->
-<!--    	<pathelement path="${compile_classpath}"/>-->
-<!--        <fileset dir="${lib}">-->
-<!--          <include name="**/*.jar"/>-->
-<!--          <include name="**/*.zip"/>-->
-<!--        </fileset>-->
-<!--    </path>-->
-
-<!--&lt;!&ndash;<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">&ndash;&gt;-->
-<!--&lt;!&ndash;    <classpath refid="xjc.classpath" />&ndash;&gt;-->
-<!--&lt;!&ndash;  </taskdef>&ndash;&gt;-->
-
-<!--  &lt;!&ndash;Generate Java source files&ndash;&gt;-->
-<!--	&lt;!&ndash; Note on migration to maven:-->
-<!--	Tried to run XJC with org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:0.12.3 plugin and could not generate all-->
-<!--	classes using one execution (hence one configuration) since most of these schemas use same target namespace and-->
-<!--	have clashing names. To overcome this limitation, I had to configure multiple executions of this plugin and repeat-->
-<!--	somewhat long configuration (30-40 lines) for each XJC invocation. I therefore leave this ant script 'as is' since-->
-<!--	it is more concise here as ant script than a maven configuration would be. &ndash;&gt;-->
-<!--&lt;!&ndash;  <target name="jaxb" description="Generate JAXB Java source files">&ndash;&gt;-->
-<!--&lt;!&ndash;    <echo message="Compiling the schema..." />&ndash;&gt;-->
-<!--&lt;!&ndash;    <mkdir dir="${gen-src}" />&ndash;&gt;-->
-<!--&lt;!&ndash;   	<xjc destdir="${gen-src}" schema="./doc/translation.xsd" package="org.digijava.module.translation.jaxb">&ndash;&gt;-->
-<!--&lt;!&ndash;   		<produces dir="${gen-src}" includes="org/digijava/module/translation/jaxb/*.java"/>&ndash;&gt;-->
-<!--&lt;!&ndash;    </xjc>&ndash;&gt;-->
-<!--&lt;!&ndash;    <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi" >&ndash;&gt;-->
-<!--&lt;!&ndash;    	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>&ndash;&gt;-->
-<!--&lt;!&ndash;    </xjc>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">&ndash;&gt;-->
-<!--&lt;!&ndash;         <produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>&ndash;&gt;-->
-<!--&lt;!&ndash;    </xjc>&ndash;&gt;-->
-
-<!--&lt;!&ndash;	<xjc destdir="${gen-src}" schema="./src/main/resources/schemas/report.xsd" package="org.dgfoundation.amp.reports.xml">&ndash;&gt;-->
-<!--&lt;!&ndash;  		<produces dir="${gen-src}" includes="org/dgfoundation/amp/report/xml/*.java"/>&ndash;&gt;-->
-<!--&lt;!&ndash;	</xjc>&ndash;&gt;-->
-<!--&lt;!&ndash;   </target>&ndash;&gt;-->
-
-<!--    <target name="testResources">-->
-<!--        <copy todir="${classes}" includeEmptyDirs="no">-->
-<!--            <fileset dir="${test}">-->
-<!--            <patternset>-->
-<!--                <include name="**/*.conf"/>-->
-<!--                <include name="**/*.properties"/>-->
-<!--                <include name="**/*.xml"/>-->
-<!--                <include name="**/*.ccf"/>-->
-<!--                <include name="**/*.xsl"/>-->
-<!--                <include name="**/*.xsd"/>-->
-<!--	            </patternset>-->
-<!--            </fileset>-->
-<!--        </copy>-->
-<!--    	<copy todir="${classes}" includeemptydirs="no">-->
-<!--    		<fileset dir="${ampTest}">-->
-<!--    			   <patternset>-->
-<!--    			     <include name="**/*.sql"/>-->
-<!--    				 <include name="**/*.conf"/>-->
-<!--    			     <include name="**/*.properties"/>-->
-<!--    			     <include name="**/*.xml"/>-->
-<!--    			     <include name="**/*.ccf"/>-->
-<!--    			     <include name="**/*.xsl"/>-->
-<!--    			     <include name="**/*.xsd"/>-->
-<!--    				</patternset>-->
-<!--    	 	</fileset>-->
-<!--    	</copy>-->
-<!--    </target>-->
-
-<!--	<target name="seleniumResources">-->
-<!--        <copy todir="${classes}" includeEmptyDirs="no">-->
-<!--            <fileset dir="${test}">-->
-<!--            <patternset>-->
-<!--                <include name="**/*.conf"/>-->
-<!--                <include name="**/*.properties"/>-->
-<!--                <include name="**/*.xml"/>-->
-<!--                <include name="**/*.ccf"/>-->
-<!--                <include name="**/*.xsl"/>-->
-<!--                <include name="**/*.xsd"/>-->
-<!--	            </patternset>-->
-<!--            </fileset>-->
-<!--        </copy>-->
-<!--    	<copy todir="${classes}" includeemptydirs="no">-->
-<!--    		<fileset dir="${ampSelenium}">-->
-<!--    			   <patternset>-->
-<!--    				 <include name="**/*.conf"/>-->
-<!--    			     <include name="**/*.properties"/>-->
-<!--    			     <include name="**/*.xml"/>-->
-<!--    			     <include name="**/*.ccf"/>-->
-<!--    			     <include name="**/*.xsl"/>-->
-<!--    			     <include name="**/*.xsd"/>-->
-<!--    				</patternset>-->
-<!--    	 	</fileset>-->
-<!--    	</copy>-->
-<!--    </target>-->
-
-<!--    &lt;!&ndash; Create DB data-model in a fresh schema &ndash;&gt;-->
-<!--    <target name="database" depends="compile">-->
-<!--      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">-->
-<!--  	    <classpath refid="run.classpath"/>-->
-<!--      </java>-->
-<!--    </target>-->
-
-<!--    &lt;!&ndash; Create DB data-model in a fresh schema &ndash;&gt;-->
-<!--    <target name="permissions" depends="compile">-->
-<!--      <java classname="org.digijava.kernel.security.util.PermissionConverter" fork="yes">-->
-<!--  	    <classpath refid="run.classpath"/>-->
-<!--      </java>-->
-<!--    </target>-->
-
-<!--    &lt;!&ndash; Create DB data-model in a fresh schema &ndash;&gt;-->
-<!--    <target name="modDatabase" depends="compile">-->
-<!--      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">-->
-<!--        <arg value="-m"/>-->
-<!-- 	    <arg value="${module.name}"/>-->
-<!--  	    <classpath refid="run.classpath"/>-->
-<!--      </java>-->
-<!--    </target>-->
-
-<!--    &lt;!&ndash; Export table names in comma-separated style &ndash;&gt;-->
-<!--    <target name="tableNames" depends="compile">-->
-<!--      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">-->
-<!--        <arg value="-names"/>-->
-<!--  	    <classpath refid="run.classpath"/>-->
-<!--      </java>-->
-<!--    </target>-->
-
-<!--    &lt;!&ndash; Export table names in comma-separated style &ndash;&gt;-->
-<!--    <target name="modTableNames" depends="compile">-->
-<!--      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">-->
-<!--        <arg value="-names"/>-->
-<!--        <arg value="-m"/>-->
-<!-- 	    <arg value="${module.name}"/>-->
-<!--  	    <classpath refid="run.classpath"/>-->
-<!--      </java>-->
-<!--    </target>-->
-
-<!--    &lt;!&ndash; Populate fresh data-model with initial data &ndash;&gt;-->
-<!--    <target name="install" depends="database">-->
-<!--      <java classname="org.digijava.kernel.util.DigiSchemaPopulate" fork="yes">-->
-<!--         <classpath refid="run.classpath"/>-->
-<!--      </java>-->
-<!--    </target>-->
-
-<!--    <target name="autoBuild">-->
-<!--        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}" source="1.8" target="1.8" fork="yes" memoryMaximumSize="1024m">-->
-<!--            <classpath refid="compile.classpath"/>-->
-<!--        </javac>-->
-<!--    </target>-->
-
-<!--	<target name="compile">-->
-<!--		&lt;!&ndash; Since maven is compiling this ant task does nothing. Keeping it here because otherwise will have-->
-<!--		     to edit all dependent tasks. &ndash;&gt;-->
-<!--	</target>-->
-
-<!--    <target name="standalone">-->
-<!--		<java classname="org.dgfoundation.amp.StandaloneAMPStartup" fork="true">-->
-<!--		    <classpath refid="run.classpath"/>-->
-<!--		</java>-->
-<!--    </target>-->
-
-<!--&lt;!&ndash;    <target name="compileTest" depends="compile,testResources">-->
-<!--        <javac  srcdir="${ampTest}" destdir="${classes}" deprecation="off" debug="${debug}">-->
-<!--            <classpath refid="compile.classpath"/>-->
-<!--        </javac>-->
-<!--    </target> &ndash;&gt;-->
-
-<!--	<target name="compileSelenium" depends="compile,seleniumResources">-->
-<!--        <javac  srcdir="${ampSelenium}" destdir="${classes}" deprecation="off" debug="${debug}">-->
-<!--            <classpath refid="compile.classpath"/>-->
-<!--        </javac>-->
-<!--    </target>-->
-
-<!--&lt;!&ndash;	<target name="runTest" depends="compileTest">-->
-<!--		<mkdir dir="test-reports"/>-->
-<!--    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">-->
-<!--    	  <classpath refid="run.classpath"/>-->
-<!--    	 	<formatter type="xml"/>-->
-<!--    		 <test   name="org.dgfoundation.amp.test.AllTest" haltonfailure="no"  todir="test-reports"/>-->
-<!--    	</junit>-->
-<!--    </target>-->
-
-<!--	<target name="runTestByTarget" depends="compileTest">-->
-<!--			<mkdir dir="test-reports"/>-->
-<!--	    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">-->
-<!--	    	  <classpath refid="run.classpath"/>-->
-<!--	    	 	<formatter type="xml"/>-->
-<!--	    		 <test   name="org.dgfoundation.amp.test.${test-class}" haltonfailure="no"  todir="test-reports"/>-->
-<!--	    	</junit>-->
-<!--	    </target> &ndash;&gt;-->
-
-<!--    &lt;!&ndash; Remove classes directory for clean build &ndash;&gt;-->
-<!--    <target name="clean"-->
-<!--      description="Prepare for clean build">-->
-<!--      <delete dir="${classes}"/>-->
-<!--      <delete dir="${doc.path}"/>-->
-<!--      <delete dir="${gen-src}"/>-->
-<!--      <delete dir="${metainf}"/>-->
-<!--  	  <delete includeemptydirs="true" failonerror="false">-->
-<!--  	    <fileset dir="${webinf}/lib" includes="**/*"/>-->
-<!--  	  </delete>-->
-<!--    </target>-->
-
-
-<!--    &lt;!&ndash; Build Javadoc documentation &ndash;&gt;-->
-<!--    <target name="javadoc"-->
-<!--     description="Generate JavaDoc API docs">-->
-<!--        <delete dir="${doc.path}"/>-->
-<!--        <mkdir dir="${doc.path}"/>-->
-<!--        <javadoc sourcepath="${src}"-->
-<!--            destdir="${doc.path}"-->
-<!--            packagenames="*"-->
-<!--            author="true"-->
-<!--            private="true"-->
-<!--            version="true"-->
-<!--            windowtitle="${project.title} API Documentation"-->
-<!--            doctitle="&lt;h1&gt;${project.title} Documentation (Version ${project.version})&lt;/h1&gt;">-->
-<!--            <classpath refid="compile.classpath"/>-->
-<!--        </javadoc>-->
-<!--    </target>-->
-
-
-<!--    &lt;!&ndash; Build entire project &ndash;&gt;-->
-<!--    <target name="project" depends="clean,compile,javadoc"/>-->
-
-
-<!--    &lt;!&ndash; compile and deploy to the folder specified in digijava.deploy &ndash;&gt;-->
-<!--    <target name="deployDir" depends="compile"-->
-<!--    description="Compiles the source code, and moves the war into the deployment directory specified in the properties file">-->
-<!--        <mkdir dir="${digijava.deploy}/${project.distname}.war"/>-->
-<!--        <copy toDir="${digijava.deploy}/${project.distname}.war">-->
-<!--            <fileset dir="../">-->
-<!--                <exclude name="**/*.jpx" />-->
-<!--                <exclude name="**/*.library" />-->
-<!--                <exclude name="**/.*" />-->
-<!--            </fileset>-->
-<!--        </copy>-->
-<!--    </target>-->
-
-<!--	<target name="createCleanMySQLDatabase" depends="compile">-->
-<!--		<fail unless="clean.source" message="clean.source parameter must be supplied! This is the source database to produce ${clean.db} from."/>-->
-<!--		<fail unless="clean.host" message="clean.host parameter must be supplied! This is the dg_site_domain host that you want to use with it."/>-->
-<!--		<echo message="Dropping former ${clean.db} and creating new ${clean.db} database..."/>-->
-<!--		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/mysql?${mysql.params}" userid="${jdbc.user}" print="true">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>-->
-<!--			<transaction>CREATE DATABASE ${clean.db} character set utf8 collate utf8_general_ci</transaction>-->
-<!--		</sql>-->
-
-<!--		<echo message="Creating Hibernate table structure and keys..."/>-->
-<!--		<antcall target="database"/>-->
-
-<!--		<echo message="Exporting stored functions from ${clean.source}..."/>-->
-<!--		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/mysql?${jdbc.params}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,')',if(returns!='',' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}';</transaction>-->
-<!--		</sql>-->
-<!--		<echo message="Exporting views from ${clean.source}..."/>-->
-<!--		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/information_schema?${jdbc.params}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>SELECT concat('CREATE OR REPLACE VIEW ',table_name,' AS ',view_definition,';;') FROM views WHERE table_schema='${clean.source}'</transaction>-->
-<!--		</sql>-->
-<!--		<replace file="tmp_${clean.db}_ddl_copy.sql" token="`${clean.source}`." value=""/>-->
-
-<!--		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>-->
-<!--		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.params}" userid="${jdbc.user}" print="true">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>CREATE SCHEMA clean; </transaction>-->
-<!--			<transaction>INSERT INTO AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>-->
-<!--			<transaction>INSERT INTO amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>-->
-<!--			<transaction>INSERT INTO amp_category_value (SELECT * from ${clean.source}.amp_category_value)</transaction>-->
-<!--			<transaction>INSERT INTO amp_category_value_location (SELECT * from ${clean.source}.amp_category_value_location)</transaction>-->
-<!--			<transaction>INSERT INTO amp_columns (SELECT * from ${clean.source}.amp_columns)</transaction>-->
-<!--			<transaction>INSERT INTO amp_columns_order (SELECT * from ${clean.source}.amp_columns_order)</transaction>-->
-<!--			<transaction>INSERT INTO amp_columns_filters (SELECT * from ${clean.source}.amp_columns_filters)</transaction>-->
-<!--			<transaction>INSERT INTO amp_currency (SELECT * from ${clean.source}.amp_currency)</transaction>-->
-<!--			<transaction>INSERT INTO amp_global_settings (SELECT * from ${clean.source}.amp_global_settings)</transaction>-->
-<!--			<transaction>INSERT INTO amp_level (SELECT * from ${clean.source}.amp_level)</transaction>-->
-<!--			<transaction>INSERT INTO amp_measures (SELECT * from ${clean.source}.amp_measures)</transaction>-->
-<!--			<transaction>INSERT INTO amp_org_type (SELECT * from ${clean.source}.amp_org_type)</transaction>-->
-<!--			<transaction>INSERT INTO amp_quartz_job_class (SELECT * from ${clean.source}.amp_quartz_job_class)</transaction>-->
-<!--			<transaction>INSERT INTO amp_role (SELECT * from ${clean.source}.amp_role)</transaction>-->
-<!--			<transaction>INSERT INTO dg_countries (SELECT * from ${clean.source}.dg_countries)</transaction>-->
-<!--			<transaction>INSERT INTO dg_item_status (SELECT * from ${clean.source}.dg_item_status)</transaction>-->
-<!--			<transaction>INSERT INTO dg_locale (SELECT * from ${clean.source}.dg_locale)</transaction>-->
-<!--			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>-->
-<!--			<transaction>INSERT INTO dg_site (SELECT * from ${clean.source}.dg_site)</transaction>-->
-<!--			<transaction>INSERT INTO dg_module_instance (SELECT * from ${clean.source}.dg_module_instance)</transaction>-->
-<!--			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>-->
-<!--			<transaction>INSERT INTO dg_site_domain (SELECT * from ${clean.source}.dg_site_domain WHERE site_domain NOT LIKE '192.168%')</transaction>-->
-<!--			<transaction>UPDATE dg_site_domain SET site_domain='${clean.host}'</transaction>-->
-<!--			<transaction>INSERT INTO dg_principal_permission (SELECT * from ${clean.source}.dg_principal_permission)</transaction>-->
-<!--			<transaction>INSERT INTO dg_principal_permission_param (SELECT * from ${clean.source}.dg_principal_permission_param)</transaction>-->
-<!--			<transaction>INSERT INTO patch_file (SELECT * from ${clean.source}.patch_file)</transaction>-->
-<!--			<transaction>INSERT INTO amp_currency_rate (SELECT * from ${clean.source}.amp_currency_rate)</transaction>-->
-<!--			<transaction>INSERT INTO dg_message (SELECT * from ${clean.source}.dg_message)</transaction>-->
-<!--			<transaction>INSERT INTO amp_templates_visibility (SELECT * from ${clean.source}.amp_templates_visibility)</transaction>-->
-<!--			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>-->
-<!--			<transaction>INSERT INTO amp_modules_visibility (SELECT * from ${clean.source}.amp_modules_visibility)</transaction>-->
-<!--			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>-->
-<!--			<transaction>INSERT INTO amp_features_visibility (SELECT * from ${clean.source}.amp_features_visibility)</transaction>-->
-<!--			<transaction>INSERT INTO amp_fields_visibility (SELECT * from ${clean.source}.amp_fields_visibility)</transaction>-->
-<!--			<transaction>INSERT INTO dg_site_trans_lang_map (SELECT * from ${clean.source}.dg_site_trans_lang_map)</transaction>-->
-<!--			<transaction>INSERT INTO dg_site_user_lang_map (SELECT * from ${clean.source}.dg_site_user_lang_map)</transaction>-->
-<!--			<transaction>INSERT INTO amp_team_member_roles (SELECT * from ${clean.source}.amp_team_member_roles)</transaction>-->
-<!--			<transaction>INSERT INTO amp_fields_templates (SELECT * from ${clean.source}.amp_fields_templates)</transaction>-->
-<!--			<transaction>INSERT INTO amp_features_templates (SELECT * from ${clean.source}.amp_features_templates)</transaction>-->
-<!--			<transaction>INSERT INTO amp_modules_templates (SELECT * from ${clean.source}.amp_modules_templates)</transaction>-->
-<!--			<transaction>INSERT INTO amp_sector_scheme (SELECT * from ${clean.source}.amp_sector_scheme)</transaction>-->
-<!--			<transaction>INSERT INTO AMP_CLASSIFICATION_CONFIG (SELECT * from ${clean.source}.AMP_CLASSIFICATION_CONFIG)</transaction>-->
-<!--			<transaction>INSERT INTO dg_user (SELECT * from ${clean.source}.dg_user WHERE email='admin@amp.org')</transaction>-->
-<!--			<transaction>INSERT INTO dg_group (SELECT * from ${clean.source}.dg_group WHERE id IN (SELECT ug.group_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO dg_user_group (SELECT * from ${clean.source}.dg_user_group WHERE user_id IN (SELECT ug.user_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO dg_user_preferences (SELECT * from ${clean.source}.dg_user_preferences WHERE user_id IN (SELECT up.user_id FROM  ${clean.source}.dg_user_preferences up,  ${clean.source}.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO dg_user_lang_preferences (SELECT * from ${clean.source}.dg_user_lang_preferences WHERE user_id IN (SELECT up.user_id FROM ${clean.source}.dg_user_lang_preferences up, ${clean.source}.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO amp_fiscal_calendar (SELECT * from ${clean.source}.amp_fiscal_calendar WHERE amp_fiscal_cal_id IN (SELECT settingsValue FROM  ${clean.source}.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>-->
-<!--			<transaction>INSERT INTO amp_application_settings (SELECT * from ${clean.source}.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  ${clean.source}.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>-->
-<!--			<transaction>INSERT INTO amp_theme (SELECT * from ${clean.source}.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  ${clean.source}.amp_theme at,  ${clean.source}.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>-->
-<!--			<transaction>INSERT INTO amp_program_settings (SELECT * from ${clean.source}.amp_program_settings WHERE default_hierarchy=2)</transaction>-->
-<!--			<transaction>INSERT INTO amp_field (SELECT * from ${clean.source}.amp_field)</transaction>-->
-<!--			<transaction>CREATE TABLE util_global_settings_possible_ LIKE ${clean.source}.util_global_settings_possible_</transaction><transaction>INSERT INTO util_global_settings_possible_ (SELECT * from ${clean.source}.util_global_settings_possible_)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_blob_triggers LIKE ${clean.source}.qrtz_blob_triggers</transaction><transaction>INSERT INTO qrtz_blob_triggers (SELECT * from ${clean.source}.qrtz_blob_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_calendars LIKE ${clean.source}.qrtz_calendars</transaction><transaction> INSERT INTO qrtz_calendars (SELECT * from ${clean.source}.qrtz_calendars)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_cron_triggers LIKE ${clean.source}.qrtz_cron_triggers</transaction><transaction>  INSERT INTO qrtz_cron_triggers (SELECT * from ${clean.source}.qrtz_cron_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_fired_triggers  LIKE ${clean.source}.qrtz_fired_triggers</transaction><transaction> INSERT INTO qrtz_fired_triggers (SELECT * from ${clean.source}.qrtz_fired_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_job_details LIKE ${clean.source}.qrtz_job_details</transaction><transaction> INSERT INTO qrtz_job_details (SELECT * from ${clean.source}.qrtz_job_details)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_job_listeners LIKE ${clean.source}.qrtz_job_listeners</transaction><transaction> INSERT INTO  qrtz_job_listeners(SELECT * from ${clean.source}.qrtz_job_listeners)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_locks LIKE ${clean.source}.qrtz_locks</transaction><transaction>INSERT INTO qrtz_locks (SELECT * from ${clean.source}.qrtz_locks)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_paused_trigger_grps LIKE ${clean.source}.qrtz_paused_trigger_grps</transaction><transaction> INSERT INTO qrtz_paused_trigger_grps (SELECT * from ${clean.source}.qrtz_paused_trigger_grps)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_scheduler_state LIKE ${clean.source}.qrtz_scheduler_state</transaction><transaction>INSERT INTO qrtz_scheduler_state (SELECT * from ${clean.source}.qrtz_scheduler_state)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_simple_triggers LIKE ${clean.source}.qrtz_simple_triggers</transaction><transaction>INSERT INTO qrtz_simple_triggers (SELECT * from ${clean.source}.qrtz_simple_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_trigger_listeners LIKE ${clean.source}.qrtz_trigger_listeners</transaction><transaction>INSERT INTO qrtz_trigger_listeners (SELECT * from ${clean.source}.qrtz_trigger_listeners)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT INTO qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>-->
-
-<!--			&lt;!&ndash; create cached table mockups &ndash;&gt;-->
-<!--			<transaction>CREATE TABLE cached_amp_activity LIKE ${clean.source}.cached_amp_activity</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_donor_date_hierarchy LIKE ${clean.source}.cached_v_donor_date_hierarchy</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_donor_funding LIKE ${clean.source}.cached_v_donor_funding</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_national_program LIKE ${clean.source}.cached_v_national_program</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_primary_program LIKE ${clean.source}.cached_v_primary_program</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_primary_sector LIKE ${clean.source}.cached_v_primary_sector</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_regions LIKE ${clean.source}.cached_v_regions</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_sec_sub_sector LIKE ${clean.source}.cached_v_sec_sub_sector</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_secondary_program LIKE ${clean.source}.cached_v_secondary_program</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_secondary_sector LIKE ${clean.source}.cached_v_secondary_sector</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_status LIKE ${clean.source}.cached_v_status</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_sub_sector LIKE ${clean.source}.cached_v_sub_sector</transaction>-->
-
-<!--			&lt;!&ndash; mandatory custom indexes &ndash;&gt;-->
-<!--			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>-->
-<!--			<transaction>CREATE INDEX amp_currency_to_currency_code ON amp_currency_rate(to_currency_code)</transaction>-->
-<!--			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>-->
-<!--			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>-->
-<!--		</sql>-->
-
-<!--		<echo message="Importing functions and views into ${clean.db}..."/>-->
-<!--			<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.params}" userid="${jdbc.user}" print="true" delimiter=";;">-->
-<!--				<classpath refid="compile.classpath"/>-->
-<!--				<transaction src="tmp_${clean.db}_ddl_copy.sql"/>-->
-<!--			</sql>-->
-
-<!--		<delete file="tmp_${clean.db}_ddl_copy.sql"/>-->
-<!--	</target>-->
-
-
-<!--	<target name="createCleanPostGreDatabase" depends="compile">-->
-<!--		<fail unless="clean.source" message="clean.source parameter must be supplied! This is the source database to produce ${clean.db} from."/>-->
-<!--		<fail unless="clean.host" message="clean.host parameter must be supplied! This is the dg_site_domain host that you want to use with it."/>-->
-
-<!--		<echo message="Dropping former ${clean.db} and creating new ${clean.db} database..."/>-->
-<!--		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/postgres?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" autocommit="true">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>-->
-<!--			<transaction>CREATE DATABASE ${clean.db} encoding='UTF8'</transaction>-->
-<!--		</sql>-->
-
-<!--		<echo message="Creating Hibernate table structure and keys..."/>-->
-<!--		<antcall target="database"/>-->
-<!--		<echo message="Exporting stored functions from ${clean.source}..."/>-->
-<!--		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.source}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>select pg_get_functiondef(oid)||';' from pg_proc where pronamespace = (select oid from pg_namespace where nspname='public') and prolang=(select oid from pg_language where lanname='plpgsql')</transaction>-->
-<!--		</sql>-->
-
-<!--		<replaceregexp file="tmp_${clean.db}_ddl_copy.sql"-->
-<!--		               match="\r"-->
-<!--		               flags="g"-->
-<!--		               replace="" />-->
-
-<!--		<echo message="Exporting views from ${clean.source}..."/>-->
-<!--		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.source}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>SELECT 'CREATE OR REPLACE VIEW ' || viewname || ' AS ' || definition || ';;' FROM pg_views WHERE schemaname='public'</transaction>-->
-<!--		</sql>-->
-<!--		<replace file="tmp_${clean.db}_ddl_copy.sql" token="`${clean.source}`." value=""/>-->
-<!--		<replace file="tmp_${clean.db}_ddl_copy.sql" token="amp_activity_version.archived," value=""/> &lt;!&ndash; in some 2.0 db's the field exists in the view  &ndash;&gt;-->
-
-<!--		<exec executable="pg_dump" vmlauncher="false" output="tmp_${clean.db}_backup.sql">-->
-<!--			<arg line="-U${jdbc.user}"/>-->
-<!--			<arg line="-w"/>-->
-<!--			<arg line="${clean.source}"/>-->
-<!--		</exec>-->
-
-<!--		<exec executable="createdb" vmlauncher="false">-->
-<!--			<arg value="-U${jdbc.user}"/>-->
-<!--			<arg value="-w"/>-->
-<!--			<arg value="${clean.source}_tmp"/>-->
-<!--		</exec>-->
-
-<!--		<exec executable="psql" vmlauncher="false">-->
-<!--			<arg line="-U${jdbc.user}"/>-->
-<!--			<arg line="-w"/>-->
-<!--			<arg line="${clean.source}_tmp"/>-->
-<!--			<arg line="&#45;&#45;file=tmp_${clean.db}_backup.sql"/>-->
-<!--		</exec>-->
-
-<!--		<exec executable="psql" vmlauncher="false">-->
-<!--			<arg line="-U${jdbc.user}"/>-->
-<!--			<arg line="-w"/>-->
-<!--			<arg line="${clean.source}_tmp"/>-->
-<!--			<arg line="&#45;&#45;command='ALTER schema public RENAME to clean'"/>-->
-<!--		</exec>-->
-
-<!--		<exec executable="pg_dump" vmlauncher="false" output="tmp_${clean.db}_backup.sql">-->
-<!--			<arg line="-U${jdbc.user}"/>-->
-<!--			<arg line="-w"/>-->
-<!--			<arg line="${clean.source}_tmp"/>-->
-<!--		</exec>-->
-
-<!--		<exec executable="dropdb" vmlauncher="false">-->
-<!--			<arg value="-U${jdbc.user}"/>-->
-<!--			<arg value="-w"/>-->
-<!--			<arg value="${clean.source}_tmp"/>-->
-<!--		</exec>-->
-
-<!--		<exec executable="psql" vmlauncher="false">-->
-<!--			<arg line="-U${jdbc.user}"/>-->
-<!--			<arg line="-w"/>-->
-<!--			<arg line="${clean.db}"/>-->
-<!--			<arg line="&#45;&#45;file=tmp_${clean.db}_backup.sql"/>-->
-<!--		</exec>-->
-
-<!--		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>-->
-<!--		<sql driver="${jdbc.driverClassName}" delimitertype="row" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>-->
-<!--				CREATE OR REPLACE FUNCTION fn_triggerall(DoEnable boolean) RETURNS integer AS-->
-<!--				$BODY$-->
-<!--				DECLARE	mytables RECORD;-->
-<!--				BEGIN-->
-<!--				  FOR mytables IN select tablename from pg_tables where schemaname='public'-->
-<!--				  LOOP-->
-<!--				    IF DoEnable THEN-->
-<!--				      EXECUTE 'ALTER TABLE ' || mytables.tablename || ' ENABLE TRIGGER ALL';-->
-<!--				    ELSE-->
-<!--				      EXECUTE 'ALTER TABLE ' || mytables.tablename || ' DISABLE TRIGGER ALL';-->
-<!--				    END IF;-->
-<!--				  END LOOP;-->
-
-<!--				  RETURN 1;-->
-
-<!--				END;-->
-<!--				$BODY$-->
-<!--				LANGUAGE 'plpgsql' VOLATILE;-->
-<!--			</transaction>-->
-<!--		</sql>-->
-
-<!--		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true">-->
-<!--			<classpath refid="compile.classpath"/>-->
-<!--			<transaction>select fn_triggerall(false);</transaction>-->
-<!--			<transaction>INSERT INTO AMP_INDICATOR_RISK_RATINGS (SELECT * from clean.AMP_INDICATOR_RISK_RATINGS)</transaction>-->
-<!--			<transaction>INSERT INTO amp_category_class (SELECT * from clean.amp_category_class)</transaction>-->
-<!--			<transaction>INSERT INTO amp_category_value (SELECT * from clean.amp_category_value)</transaction>-->
-<!--			<transaction>INSERT INTO amp_category_value_location (SELECT * from clean.amp_category_value_location)</transaction>-->
-<!--			<transaction>INSERT INTO amp_columns  (SELECT columnid,columnname, aliasname,celltype, extractorview, tokenexpression, totalexpression, relatedcontentpersisterclass, filterretrievable, showrowcalculations, description from clean.amp_columns)</transaction>-->
-<!--			<transaction>INSERT INTO amp_columns_order (SELECT * from clean.amp_columns_order)</transaction>-->
-<!--			<transaction>INSERT INTO amp_columns_filters (SELECT * from clean.amp_columns_filters)</transaction>-->
-<!--			<transaction>INSERT INTO amp_currency (SELECT * from clean.amp_currency)</transaction>-->
-<!--			<transaction>INSERT INTO amp_global_settings (SELECT * from clean.amp_global_settings)</transaction>-->
-<!--			<transaction>INSERT INTO amp_level (SELECT * from clean.amp_level)</transaction>-->
-<!--			<transaction>INSERT INTO amp_measures (SELECT * from clean.amp_measures)</transaction>-->
-<!--			<transaction>INSERT INTO amp_org_type (SELECT * from clean.amp_org_type)</transaction>-->
-<!--			<transaction>INSERT INTO amp_quartz_job_class (SELECT * from clean.amp_quartz_job_class)</transaction>-->
-<!--			<transaction>INSERT INTO amp_role (SELECT * from clean.amp_role)</transaction>-->
-<!--			<transaction>INSERT INTO dg_countries (SELECT * from clean.dg_countries)</transaction>-->
-<!--			<transaction>INSERT INTO dg_item_status (SELECT * from clean.dg_item_status)</transaction>-->
-<!--			<transaction>INSERT INTO dg_locale (SELECT * from clean.dg_locale)</transaction>-->
-<!--			<transaction>INSERT INTO dg_site (SELECT * from clean.dg_site)</transaction>-->
-<!--			<transaction>INSERT INTO dg_module_instance (SELECT * from clean.dg_module_instance)</transaction>-->
-<!--			<transaction>INSERT INTO dg_site_domain (SELECT * from clean.dg_site_domain WHERE site_domain NOT LIKE '192.168%')</transaction>-->
-<!--			<transaction>UPDATE dg_site_domain SET site_domain='${clean.host}'</transaction>-->
-<!--			<transaction>INSERT INTO dg_principal_permission (SELECT * from clean.dg_principal_permission)</transaction>-->
-<!--			<transaction>INSERT INTO dg_principal_permission_param (SELECT * from clean.dg_principal_permission_param)</transaction>-->
-<!--			<transaction>INSERT INTO patch_file (SELECT * from clean.patch_file)</transaction>-->
-<!--			<transaction>INSERT INTO amp_currency_rate (SELECT * from clean.amp_currency_rate)</transaction>-->
-<!--			<transaction>INSERT INTO dg_message (SELECT * from clean.dg_message)</transaction>-->
-<!--			<transaction>INSERT INTO amp_templates_visibility (SELECT * from clean.amp_templates_visibility)</transaction>-->
-<!--			<transaction>INSERT INTO amp_modules_visibility (SELECT * from clean.amp_modules_visibility)</transaction>-->
-<!--			<transaction>INSERT INTO amp_features_visibility (SELECT * from clean.amp_features_visibility)</transaction>-->
-<!--			<transaction>INSERT INTO amp_fields_visibility (SELECT * from clean.amp_fields_visibility)</transaction>-->
-<!--			<transaction>INSERT INTO dg_site_trans_lang_map (SELECT * from clean.dg_site_trans_lang_map)</transaction>-->
-<!--			<transaction>INSERT INTO dg_site_user_lang_map (SELECT * from clean.dg_site_user_lang_map)</transaction>-->
-<!--			<transaction>INSERT INTO amp_team_member_roles (SELECT amp_team_mem_role_id, role, description, team_head, approver from clean.amp_team_member_roles)</transaction>-->
-<!--			<transaction>INSERT INTO amp_fields_templates (SELECT * from clean.amp_fields_templates)</transaction>-->
-<!--			<transaction>INSERT INTO amp_features_templates (SELECT * from clean.amp_features_templates)</transaction>-->
-<!--			<transaction>INSERT INTO amp_modules_templates (SELECT * from clean.amp_modules_templates)</transaction>-->
-<!--			<transaction>INSERT INTO amp_sector_scheme (SELECT * from clean.amp_sector_scheme)</transaction>-->
-<!--			<transaction>INSERT INTO AMP_CLASSIFICATION_CONFIG (SELECT id, name, description, multisector, is_primary_sector, classification_id from clean.AMP_CLASSIFICATION_CONFIG)</transaction>-->
-<!--			<transaction>INSERT INTO dg_user (SELECT id, creation_date, creation_ip, last_modified, modifying_ip, first_names, last_name, email, email_verified, email_bouncing, no_alerts_until, password, salt, pass_question, pass_answer, url, active, banned, referral, organization_type_other, address, country_iso, region_id, assigned_org_id, image_id, organization_type_id, registration_language, global_admin, registered_through, pledger from clean.dg_user WHERE email='admin@amp.org')</transaction>-->
-<!--			<transaction>INSERT INTO dg_group (SELECT * from clean.dg_group WHERE id IN (SELECT ug.group_id FROM  clean.dg_user_group ug,  clean.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO dg_user_group (SELECT * from clean.dg_user_group WHERE user_id IN (SELECT ug.user_id FROM  clean.dg_user_group ug,  clean.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO dg_user_preferences (SELECT * from clean.dg_user_preferences WHERE user_id IN (SELECT up.user_id FROM  clean.dg_user_preferences up,  clean.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO dg_user_lang_preferences (SELECT * from clean.dg_user_lang_preferences WHERE user_id IN (SELECT up.user_id FROM clean.dg_user_lang_preferences up, clean.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>-->
-<!--			<transaction>INSERT INTO amp_fiscal_calendar (SELECT * from clean.amp_fiscal_calendar WHERE amp_fiscal_cal_id IN (SELECT settingsValue::text::int FROM  clean.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>-->
-<!--			<transaction>INSERT INTO amp_application_settings (SELECT amp_app_settings_id, def_rec_per_page, num_pages_to_display, def_rep_per_page, report_start_year, report_end_year, language, validation, use_default, default_team_ampreport_id, team_id, currency_id, fis_cal_id, member, allow_add_team_res, allow_share_res_globally, allow_publishing_resources FROM clean.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  clean.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>-->
-<!--			<transaction>INSERT INTO amp_theme (SELECT * from clean.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  clean.amp_theme at,  clean.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>-->
-<!--			<transaction>INSERT INTO amp_program_settings (SELECT * from clean.amp_program_settings WHERE default_hierarchy=2)</transaction>-->
-<!--			<transaction>INSERT INTO amp_field (SELECT * from clean.amp_field)</transaction>-->
-<!--			<transaction>CREATE TABLE util_global_settings_possible_ (LIKE clean.util_global_settings_possible_)</transaction><transaction>INSERT INTO util_global_settings_possible_ (SELECT * from clean.util_global_settings_possible_)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_blob_triggers (LIKE clean.qrtz_blob_triggers)</transaction><transaction>INSERT INTO qrtz_blob_triggers (SELECT * from clean.qrtz_blob_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_calendars (LIKE clean.qrtz_calendars)</transaction><transaction> INSERT INTO qrtz_calendars (SELECT * from clean.qrtz_calendars)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_cron_triggers (LIKE clean.qrtz_cron_triggers)</transaction><transaction>  INSERT INTO qrtz_cron_triggers (SELECT * from clean.qrtz_cron_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_fired_triggers  (LIKE clean.qrtz_fired_triggers)</transaction><transaction> INSERT INTO qrtz_fired_triggers (SELECT * from clean.qrtz_fired_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_job_details (LIKE clean.qrtz_job_details)</transaction><transaction> INSERT INTO qrtz_job_details (SELECT * from clean.qrtz_job_details)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_job_listeners (LIKE clean.qrtz_job_listeners)</transaction><transaction> INSERT INTO  qrtz_job_listeners(SELECT * from clean.qrtz_job_listeners)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_locks (LIKE clean.qrtz_locks)</transaction><transaction>INSERT INTO qrtz_locks (SELECT * from clean.qrtz_locks)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_paused_trigger_grps (LIKE clean.qrtz_paused_trigger_grps)</transaction><transaction> INSERT INTO qrtz_paused_trigger_grps (SELECT * from clean.qrtz_paused_trigger_grps)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_scheduler_state (LIKE clean.qrtz_scheduler_state)</transaction><transaction>INSERT INTO qrtz_scheduler_state (SELECT * from clean.qrtz_scheduler_state)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_simple_triggers (LIKE clean.qrtz_simple_triggers)</transaction><transaction>INSERT INTO qrtz_simple_triggers (SELECT * from clean.qrtz_simple_triggers)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_trigger_listeners (LIKE clean.qrtz_trigger_listeners)</transaction><transaction>INSERT INTO qrtz_trigger_listeners (SELECT * from clean.qrtz_trigger_listeners)</transaction>-->
-<!--			<transaction>CREATE TABLE qrtz_triggers (LIKE clean.qrtz_triggers)</transaction><transaction>INSERT INTO qrtz_triggers (SELECT * from clean.qrtz_triggers)</transaction>-->
-
-<!--			&lt;!&ndash; create cached table mockups &ndash;&gt;-->
-<!--			&lt;!&ndash;-->
-<!--			<transaction>CREATE TABLE cached_amp_activity (LIKE clean.cached_amp_activity)</transaction>-->
-<!--			 &ndash;&gt;-->
-<!--			<transaction>CREATE TABLE cached_v_donor_date_hierarchy (LIKE clean.cached_v_donor_date_hierarchy)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_donor_funding (LIKE clean.cached_v_donor_funding)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_national_program (LIKE clean.cached_v_national_program)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_primary_program (LIKE clean.cached_v_primary_program)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_primary_sector (LIKE clean.cached_v_primary_sector)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_regions (LIKE clean.cached_v_regions)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_sec_sub_sector (LIKE clean.cached_v_sec_sub_sector)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_secondary_program (LIKE clean.cached_v_secondary_program)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_secondary_sector (LIKE clean.cached_v_secondary_sector)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_status (LIKE clean.cached_v_status)</transaction>-->
-<!--			<transaction>CREATE TABLE cached_v_sub_sector (LIKE clean.cached_v_sub_sector)</transaction>-->
-
-<!--			&lt;!&ndash; mandatory custom indexes &ndash;&gt;-->
-<!--			<transaction>CREATE INDEX cv_index ON amp_category_value(category_value)</transaction>-->
-<!--			<transaction>CREATE INDEX amp_currency_to_currency_code ON amp_currency_rate(to_currency_code)</transaction>-->
-<!--			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>-->
-<!--			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>-->
-
-<!--			&lt;!&ndash; amp_activity is not a table ... currently added by hibernate &ndash;&gt;-->
-<!--			<transaction>DROP TABLE amp_activity CASCADE</transaction>-->
-<!--			<transaction>DROP SCHEMA clean CASCADE </transaction>-->
-<!--			<transaction>select fn_triggerall(true);</transaction>-->
-<!--			<transaction>CREATE TYPE table_count AS (table_name text, record_count integer);</transaction>-->
-<!--			<transaction>CREATE OR REPLACE FUNCTION comma_concat(text, text) RETURNS text AS 'BEGIN return "a"; END; ' LANGUAGE plpgsql VOLATILE; </transaction> &lt;!&ndash; dummy function! run the manual_sql_queries.sql file after that! &ndash;&gt;-->
-<!--			&lt;!&ndash; <transaction src="manual_sql_queries.sql" /> &ndash;&gt;-->
-<!--			<transaction>CREATE AGGREGATE textagg(text) ( SFUNC=comma_concat, STYPE=text, INITCOND='');</transaction>-->
-<!--		</sql>-->
-<!--		<echo message="Importing functions and views into ${clean.db}..."/>-->
-<!--			<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" delimiter=";;">-->
-<!--				<classpath refid="compile.classpath"/>-->
-<!--				<transaction src="tmp_${clean.db}_ddl_copy.sql"/>-->
-<!--			</sql>-->
-
-<!--		<delete file="tmp_${clean.db}_ddl_copy.sql"/>-->
-<!--		<delete file="tmp_${clean.db}_backup.sql"/>-->
-<!--	</target>-->
-
-<!--	<target name="deployForServer" description="deploys the project for use with a given database">-->
-<!--		<delete file="${repository}/digi.xml"/>-->
-<!--		<delete dir="${metainf}"/>-->
-<!--		<mkdir dir="${metainf}"/>-->
-<!--		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>-->
-<!--		<xslt in="context.xml" out="${metainf}/context.xml" style="context.xsl">-->
-<!--		          <param name="jdbc.user" expression="${jdbc.user}"/>-->
-<!--				  <param name="jdbc.password" expression="${jdbc.password}"/>-->
-<!--		      	  <param name="jdbc.db" expression="${jdbc.db}"/>-->
-<!--		      	  <param name="jdbc.host" expression="${jdbc.host}"/>-->
-<!--		  	  	  <param name="serverName" expression="${serverName}"/>-->
-<!--		  	  	  <param name="jdbc.port" expression="${jdbc.port}"/>-->
-<!--				  <param name="dbName" expression="${dbName}"/>-->
-<!--				  <param name="jdbc.driverClassName" expression="${jdbc.driverClassName}"/>-->
-<!--				  <param name="antilock" expression="${antilock}"/>-->
-<!--		</xslt>-->
-
-<!--		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>-->
-<!--		<antcall target="createDeployConfigCommon"/>-->
-
-<!--	</target>-->
-
-<!--	<target name="createDeployConfigCommon" description="Creates file with description of the selected config">-->
-<!--		<echo message="Creating Deploy config common" />-->
-<!--		<delete file="${deployConfigs}/selected.properties"/>-->
-<!--		<propertyfile  file="${deployConfigs}/selected.properties"  comment="Description of the selected config">-->
-<!--		  <entry  key="serverName" value="${serverName}"/>-->
-<!--		</propertyfile>-->
-<!--	</target>-->
-
-<!--	&lt;!&ndash;	<target name="junit" depends="compileTest">-->
-<!--        <junit printsummary="yes" haltonfailure="yes" showoutput="yes">-->
-<!--    	    <classpath refid="run.classpath"/>-->
-<!--  		<formatter type="xml"/>-->
-<!--  		<formatter type="plain"/>-->
-<!--  		<test name="org.digijava.test.AllTests" haltonfailure="no" outfile="test_result"/>-->
-<!--	</junit>-->
-<!--    </target> &ndash;&gt;-->
-
-<!--    <target name="restart" description="restarts the web application">-->
-<!--    	<touch file="${webinf}/web.xml"/>-->
-<!--    </target>-->
-
-
-<!--    &lt;!&ndash; Build project and create distribution&ndash;&gt;-->
-<!--    <target name="all" depends="project"/>-->
-
-<!--	<target name="ecsJar" description="ECS Client Jar">-->
-<!--		<jar destfile="ecs-client.jar"-->
-<!--			 basedir="${classes}"-->
-<!--			 includes="**/*.class"-->
-<!--			 />-->
-<!--	</target>-->
-
-<!--	<target name="patchDemo" description="Patch for applying GIS PDF to Demo Site">-->
-<!--		<touch file="${deployConfigs}/${serverName}/gisMenu.jsp"/>-->
-<!--		<copy file="${deployConfigs}/${serverName}/gisMenu.jsp" todir="TEMPLATE/ampTemplate/layout"/>-->
-<!--	</target>-->
-
-<!--</project>-->
+    <!-- classpath for Struts 1.1 -->
+    <path id="run.classpath">
+		<pathelement location="${etc}"/>
+		<pathelement location="${classes}"/>
+    	<pathelement path="${compile_classpath}"/>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+          <include name="**/*.zip"/>
+        </fileset>
+    </path>
+
+<!--<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">-->
+<!--    <classpath refid="xjc.classpath" />-->
+<!--  </taskdef>-->
+
+  <!--Generate Java source files-->
+	<!-- Note on migration to maven:
+	Tried to run XJC with org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:0.12.3 plugin and could not generate all
+	classes using one execution (hence one configuration) since most of these schemas use same target namespace and
+	have clashing names. To overcome this limitation, I had to configure multiple executions of this plugin and repeat
+	somewhat long configuration (30-40 lines) for each XJC invocation. I therefore leave this ant script 'as is' since
+	it is more concise here as ant script than a maven configuration would be. -->
+<!--  <target name="jaxb" description="Generate JAXB Java source files">-->
+<!--    <echo message="Compiling the schema..." />-->
+<!--    <mkdir dir="${gen-src}" />-->
+<!--   	<xjc destdir="${gen-src}" schema="./doc/translation.xsd" package="org.digijava.module.translation.jaxb">-->
+<!--   		<produces dir="${gen-src}" includes="org/digijava/module/translation/jaxb/*.java"/>-->
+<!--    </xjc>-->
+<!--    <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi" >-->
+<!--    	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>-->
+<!--    </xjc>-->
+
+<!--    <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">-->
+<!--         <produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>-->
+<!--    </xjc>-->
+
+<!--	<xjc destdir="${gen-src}" schema="./src/main/resources/schemas/report.xsd" package="org.dgfoundation.amp.reports.xml">-->
+<!--  		<produces dir="${gen-src}" includes="org/dgfoundation/amp/report/xml/*.java"/>-->
+<!--	</xjc>-->
+<!--   </target>-->
+
+    <target name="testResources">
+        <copy todir="${classes}" includeEmptyDirs="no">
+            <fileset dir="${test}">
+            <patternset>
+                <include name="**/*.conf"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.ccf"/>
+                <include name="**/*.xsl"/>
+                <include name="**/*.xsd"/>
+	            </patternset>
+            </fileset>
+        </copy>
+    	<copy todir="${classes}" includeemptydirs="no">
+    		<fileset dir="${ampTest}">
+    			   <patternset>
+    			     <include name="**/*.sql"/>
+    				 <include name="**/*.conf"/>
+    			     <include name="**/*.properties"/>
+    			     <include name="**/*.xml"/>
+    			     <include name="**/*.ccf"/>
+    			     <include name="**/*.xsl"/>
+    			     <include name="**/*.xsd"/>
+    				</patternset>
+    	 	</fileset>
+    	</copy>
+    </target>
+
+	<target name="seleniumResources">
+        <copy todir="${classes}" includeEmptyDirs="no">
+            <fileset dir="${test}">
+            <patternset>
+                <include name="**/*.conf"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.ccf"/>
+                <include name="**/*.xsl"/>
+                <include name="**/*.xsd"/>
+	            </patternset>
+            </fileset>
+        </copy>
+    	<copy todir="${classes}" includeemptydirs="no">
+    		<fileset dir="${ampSelenium}">
+    			   <patternset>
+    				 <include name="**/*.conf"/>
+    			     <include name="**/*.properties"/>
+    			     <include name="**/*.xml"/>
+    			     <include name="**/*.ccf"/>
+    			     <include name="**/*.xsl"/>
+    			     <include name="**/*.xsd"/>
+    				</patternset>
+    	 	</fileset>
+    	</copy>
+    </target>
+
+    <!-- Create DB data-model in a fresh schema -->
+    <target name="database" depends="compile">
+      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">
+  	    <classpath refid="run.classpath"/>
+      </java>
+    </target>
+
+    <!-- Create DB data-model in a fresh schema -->
+    <target name="permissions" depends="compile">
+      <java classname="org.digijava.kernel.security.util.PermissionConverter" fork="yes">
+  	    <classpath refid="run.classpath"/>
+      </java>
+    </target>
+
+    <!-- Create DB data-model in a fresh schema -->
+    <target name="modDatabase" depends="compile">
+      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">
+        <arg value="-m"/>
+ 	    <arg value="${module.name}"/>
+  	    <classpath refid="run.classpath"/>
+      </java>
+    </target>
+
+    <!-- Export table names in comma-separated style -->
+    <target name="tableNames" depends="compile">
+      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">
+        <arg value="-names"/>
+  	    <classpath refid="run.classpath"/>
+      </java>
+    </target>
+
+    <!-- Export table names in comma-separated style -->
+    <target name="modTableNames" depends="compile">
+      <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">
+        <arg value="-names"/>
+        <arg value="-m"/>
+ 	    <arg value="${module.name}"/>
+  	    <classpath refid="run.classpath"/>
+      </java>
+    </target>
+
+    <!-- Populate fresh data-model with initial data -->
+    <target name="install" depends="database">
+      <java classname="org.digijava.kernel.util.DigiSchemaPopulate" fork="yes">
+         <classpath refid="run.classpath"/>
+      </java>
+    </target>
+
+    <target name="autoBuild">
+        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}" source="1.8" target="1.8" fork="yes" memoryMaximumSize="1024m">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+
+	<target name="compile">
+		<!-- Since maven is compiling this ant task does nothing. Keeping it here because otherwise will have
+		     to edit all dependent tasks. -->
+	</target>
+
+    <target name="standalone">
+		<java classname="org.dgfoundation.amp.StandaloneAMPStartup" fork="true">
+		    <classpath refid="run.classpath"/>
+		</java>
+    </target>
+
+<!--    <target name="compileTest" depends="compile,testResources">
+        <javac  srcdir="${ampTest}" destdir="${classes}" deprecation="off" debug="${debug}">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target> -->
+
+	<target name="compileSelenium" depends="compile,seleniumResources">
+        <javac  srcdir="${ampSelenium}" destdir="${classes}" deprecation="off" debug="${debug}">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+
+<!--	<target name="runTest" depends="compileTest">
+		<mkdir dir="test-reports"/>
+    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
+    	  <classpath refid="run.classpath"/>
+    	 	<formatter type="xml"/>
+    		 <test   name="org.dgfoundation.amp.test.AllTest" haltonfailure="no"  todir="test-reports"/>
+    	</junit>
+    </target>
+
+	<target name="runTestByTarget" depends="compileTest">
+			<mkdir dir="test-reports"/>
+	    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
+	    	  <classpath refid="run.classpath"/>
+	    	 	<formatter type="xml"/>
+	    		 <test   name="org.dgfoundation.amp.test.${test-class}" haltonfailure="no"  todir="test-reports"/>
+	    	</junit>
+	    </target> -->
+
+    <!-- Remove classes directory for clean build -->
+    <target name="clean"
+      description="Prepare for clean build">
+      <delete dir="${classes}"/>
+      <delete dir="${doc.path}"/>
+      <delete dir="${gen-src}"/>
+      <delete dir="${metainf}"/>
+  	  <delete includeemptydirs="true" failonerror="false">
+  	    <fileset dir="${webinf}/lib" includes="**/*"/>
+  	  </delete>
+    </target>
+
+
+    <!-- Build Javadoc documentation -->
+    <target name="javadoc"
+     description="Generate JavaDoc API docs">
+        <delete dir="${doc.path}"/>
+        <mkdir dir="${doc.path}"/>
+        <javadoc sourcepath="${src}"
+            destdir="${doc.path}"
+            packagenames="*"
+            author="true"
+            private="true"
+            version="true"
+            windowtitle="${project.title} API Documentation"
+            doctitle="&lt;h1&gt;${project.title} Documentation (Version ${project.version})&lt;/h1&gt;">
+            <classpath refid="compile.classpath"/>
+        </javadoc>
+    </target>
+
+
+    <!-- Build entire project -->
+    <target name="project" depends="clean,compile,javadoc"/>
+
+
+    <!-- compile and deploy to the folder specified in digijava.deploy -->
+    <target name="deployDir" depends="compile"
+    description="Compiles the source code, and moves the war into the deployment directory specified in the properties file">
+        <mkdir dir="${digijava.deploy}/${project.distname}.war"/>
+        <copy toDir="${digijava.deploy}/${project.distname}.war">
+            <fileset dir="../">
+                <exclude name="**/*.jpx" />
+                <exclude name="**/*.library" />
+                <exclude name="**/.*" />
+            </fileset>
+        </copy>
+    </target>
+
+	<target name="createCleanMySQLDatabase" depends="compile">
+		<fail unless="clean.source" message="clean.source parameter must be supplied! This is the source database to produce ${clean.db} from."/>
+		<fail unless="clean.host" message="clean.host parameter must be supplied! This is the dg_site_domain host that you want to use with it."/>
+		<echo message="Dropping former ${clean.db} and creating new ${clean.db} database..."/>
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/mysql?${mysql.params}" userid="${jdbc.user}" print="true">
+			<classpath refid="compile.classpath"/>
+			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>
+			<transaction>CREATE DATABASE ${clean.db} character set utf8 collate utf8_general_ci</transaction>
+		</sql>
+
+		<echo message="Creating Hibernate table structure and keys..."/>
+		<antcall target="database"/>
+
+		<echo message="Exporting stored functions from ${clean.source}..."/>
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/mysql?${jdbc.params}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
+			<classpath refid="compile.classpath"/>
+			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,')',if(returns!='',' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}';</transaction>
+		</sql>
+		<echo message="Exporting views from ${clean.source}..."/>
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/information_schema?${jdbc.params}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
+			<classpath refid="compile.classpath"/>
+			<transaction>SELECT concat('CREATE OR REPLACE VIEW ',table_name,' AS ',view_definition,';;') FROM views WHERE table_schema='${clean.source}'</transaction>
+		</sql>
+		<replace file="tmp_${clean.db}_ddl_copy.sql" token="`${clean.source}`." value=""/>
+
+		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.params}" userid="${jdbc.user}" print="true">
+			<classpath refid="compile.classpath"/>
+			<transaction>CREATE SCHEMA clean; </transaction>
+			<transaction>INSERT INTO AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>
+			<transaction>INSERT INTO amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>
+			<transaction>INSERT INTO amp_category_value (SELECT * from ${clean.source}.amp_category_value)</transaction>
+			<transaction>INSERT INTO amp_category_value_location (SELECT * from ${clean.source}.amp_category_value_location)</transaction>
+			<transaction>INSERT INTO amp_columns (SELECT * from ${clean.source}.amp_columns)</transaction>
+			<transaction>INSERT INTO amp_columns_order (SELECT * from ${clean.source}.amp_columns_order)</transaction>
+			<transaction>INSERT INTO amp_columns_filters (SELECT * from ${clean.source}.amp_columns_filters)</transaction>
+			<transaction>INSERT INTO amp_currency (SELECT * from ${clean.source}.amp_currency)</transaction>
+			<transaction>INSERT INTO amp_global_settings (SELECT * from ${clean.source}.amp_global_settings)</transaction>
+			<transaction>INSERT INTO amp_level (SELECT * from ${clean.source}.amp_level)</transaction>
+			<transaction>INSERT INTO amp_measures (SELECT * from ${clean.source}.amp_measures)</transaction>
+			<transaction>INSERT INTO amp_org_type (SELECT * from ${clean.source}.amp_org_type)</transaction>
+			<transaction>INSERT INTO amp_quartz_job_class (SELECT * from ${clean.source}.amp_quartz_job_class)</transaction>
+			<transaction>INSERT INTO amp_role (SELECT * from ${clean.source}.amp_role)</transaction>
+			<transaction>INSERT INTO dg_countries (SELECT * from ${clean.source}.dg_countries)</transaction>
+			<transaction>INSERT INTO dg_item_status (SELECT * from ${clean.source}.dg_item_status)</transaction>
+			<transaction>INSERT INTO dg_locale (SELECT * from ${clean.source}.dg_locale)</transaction>
+			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
+			<transaction>INSERT INTO dg_site (SELECT * from ${clean.source}.dg_site)</transaction>
+			<transaction>INSERT INTO dg_module_instance (SELECT * from ${clean.source}.dg_module_instance)</transaction>
+			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
+			<transaction>INSERT INTO dg_site_domain (SELECT * from ${clean.source}.dg_site_domain WHERE site_domain NOT LIKE '192.168%')</transaction>
+			<transaction>UPDATE dg_site_domain SET site_domain='${clean.host}'</transaction>
+			<transaction>INSERT INTO dg_principal_permission (SELECT * from ${clean.source}.dg_principal_permission)</transaction>
+			<transaction>INSERT INTO dg_principal_permission_param (SELECT * from ${clean.source}.dg_principal_permission_param)</transaction>
+			<transaction>INSERT INTO patch_file (SELECT * from ${clean.source}.patch_file)</transaction>
+			<transaction>INSERT INTO amp_currency_rate (SELECT * from ${clean.source}.amp_currency_rate)</transaction>
+			<transaction>INSERT INTO dg_message (SELECT * from ${clean.source}.dg_message)</transaction>
+			<transaction>INSERT INTO amp_templates_visibility (SELECT * from ${clean.source}.amp_templates_visibility)</transaction>
+			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
+			<transaction>INSERT INTO amp_modules_visibility (SELECT * from ${clean.source}.amp_modules_visibility)</transaction>
+			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
+			<transaction>INSERT INTO amp_features_visibility (SELECT * from ${clean.source}.amp_features_visibility)</transaction>
+			<transaction>INSERT INTO amp_fields_visibility (SELECT * from ${clean.source}.amp_fields_visibility)</transaction>
+			<transaction>INSERT INTO dg_site_trans_lang_map (SELECT * from ${clean.source}.dg_site_trans_lang_map)</transaction>
+			<transaction>INSERT INTO dg_site_user_lang_map (SELECT * from ${clean.source}.dg_site_user_lang_map)</transaction>
+			<transaction>INSERT INTO amp_team_member_roles (SELECT * from ${clean.source}.amp_team_member_roles)</transaction>
+			<transaction>INSERT INTO amp_fields_templates (SELECT * from ${clean.source}.amp_fields_templates)</transaction>
+			<transaction>INSERT INTO amp_features_templates (SELECT * from ${clean.source}.amp_features_templates)</transaction>
+			<transaction>INSERT INTO amp_modules_templates (SELECT * from ${clean.source}.amp_modules_templates)</transaction>
+			<transaction>INSERT INTO amp_sector_scheme (SELECT * from ${clean.source}.amp_sector_scheme)</transaction>
+			<transaction>INSERT INTO AMP_CLASSIFICATION_CONFIG (SELECT * from ${clean.source}.AMP_CLASSIFICATION_CONFIG)</transaction>
+			<transaction>INSERT INTO dg_user (SELECT * from ${clean.source}.dg_user WHERE email='admin@amp.org')</transaction>
+			<transaction>INSERT INTO dg_group (SELECT * from ${clean.source}.dg_group WHERE id IN (SELECT ug.group_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO dg_user_group (SELECT * from ${clean.source}.dg_user_group WHERE user_id IN (SELECT ug.user_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO dg_user_preferences (SELECT * from ${clean.source}.dg_user_preferences WHERE user_id IN (SELECT up.user_id FROM  ${clean.source}.dg_user_preferences up,  ${clean.source}.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO dg_user_lang_preferences (SELECT * from ${clean.source}.dg_user_lang_preferences WHERE user_id IN (SELECT up.user_id FROM ${clean.source}.dg_user_lang_preferences up, ${clean.source}.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO amp_fiscal_calendar (SELECT * from ${clean.source}.amp_fiscal_calendar WHERE amp_fiscal_cal_id IN (SELECT settingsValue FROM  ${clean.source}.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>
+			<transaction>INSERT INTO amp_application_settings (SELECT * from ${clean.source}.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  ${clean.source}.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>
+			<transaction>INSERT INTO amp_theme (SELECT * from ${clean.source}.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  ${clean.source}.amp_theme at,  ${clean.source}.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>
+			<transaction>INSERT INTO amp_program_settings (SELECT * from ${clean.source}.amp_program_settings WHERE default_hierarchy=2)</transaction>
+			<transaction>INSERT INTO amp_field (SELECT * from ${clean.source}.amp_field)</transaction>
+			<transaction>CREATE TABLE util_global_settings_possible_ LIKE ${clean.source}.util_global_settings_possible_</transaction><transaction>INSERT INTO util_global_settings_possible_ (SELECT * from ${clean.source}.util_global_settings_possible_)</transaction>
+			<transaction>CREATE TABLE qrtz_blob_triggers LIKE ${clean.source}.qrtz_blob_triggers</transaction><transaction>INSERT INTO qrtz_blob_triggers (SELECT * from ${clean.source}.qrtz_blob_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_calendars LIKE ${clean.source}.qrtz_calendars</transaction><transaction> INSERT INTO qrtz_calendars (SELECT * from ${clean.source}.qrtz_calendars)</transaction>
+			<transaction>CREATE TABLE qrtz_cron_triggers LIKE ${clean.source}.qrtz_cron_triggers</transaction><transaction>  INSERT INTO qrtz_cron_triggers (SELECT * from ${clean.source}.qrtz_cron_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_fired_triggers  LIKE ${clean.source}.qrtz_fired_triggers</transaction><transaction> INSERT INTO qrtz_fired_triggers (SELECT * from ${clean.source}.qrtz_fired_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_job_details LIKE ${clean.source}.qrtz_job_details</transaction><transaction> INSERT INTO qrtz_job_details (SELECT * from ${clean.source}.qrtz_job_details)</transaction>
+			<transaction>CREATE TABLE qrtz_job_listeners LIKE ${clean.source}.qrtz_job_listeners</transaction><transaction> INSERT INTO  qrtz_job_listeners(SELECT * from ${clean.source}.qrtz_job_listeners)</transaction>
+			<transaction>CREATE TABLE qrtz_locks LIKE ${clean.source}.qrtz_locks</transaction><transaction>INSERT INTO qrtz_locks (SELECT * from ${clean.source}.qrtz_locks)</transaction>
+			<transaction>CREATE TABLE qrtz_paused_trigger_grps LIKE ${clean.source}.qrtz_paused_trigger_grps</transaction><transaction> INSERT INTO qrtz_paused_trigger_grps (SELECT * from ${clean.source}.qrtz_paused_trigger_grps)</transaction>
+			<transaction>CREATE TABLE qrtz_scheduler_state LIKE ${clean.source}.qrtz_scheduler_state</transaction><transaction>INSERT INTO qrtz_scheduler_state (SELECT * from ${clean.source}.qrtz_scheduler_state)</transaction>
+			<transaction>CREATE TABLE qrtz_simple_triggers LIKE ${clean.source}.qrtz_simple_triggers</transaction><transaction>INSERT INTO qrtz_simple_triggers (SELECT * from ${clean.source}.qrtz_simple_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_trigger_listeners LIKE ${clean.source}.qrtz_trigger_listeners</transaction><transaction>INSERT INTO qrtz_trigger_listeners (SELECT * from ${clean.source}.qrtz_trigger_listeners)</transaction>
+			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT INTO qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>
+
+			<!-- create cached table mockups -->
+			<transaction>CREATE TABLE cached_amp_activity LIKE ${clean.source}.cached_amp_activity</transaction>
+			<transaction>CREATE TABLE cached_v_donor_date_hierarchy LIKE ${clean.source}.cached_v_donor_date_hierarchy</transaction>
+			<transaction>CREATE TABLE cached_v_donor_funding LIKE ${clean.source}.cached_v_donor_funding</transaction>
+			<transaction>CREATE TABLE cached_v_national_program LIKE ${clean.source}.cached_v_national_program</transaction>
+			<transaction>CREATE TABLE cached_v_primary_program LIKE ${clean.source}.cached_v_primary_program</transaction>
+			<transaction>CREATE TABLE cached_v_primary_sector LIKE ${clean.source}.cached_v_primary_sector</transaction>
+			<transaction>CREATE TABLE cached_v_regions LIKE ${clean.source}.cached_v_regions</transaction>
+			<transaction>CREATE TABLE cached_v_sec_sub_sector LIKE ${clean.source}.cached_v_sec_sub_sector</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_program LIKE ${clean.source}.cached_v_secondary_program</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_sector LIKE ${clean.source}.cached_v_secondary_sector</transaction>
+			<transaction>CREATE TABLE cached_v_status LIKE ${clean.source}.cached_v_status</transaction>
+			<transaction>CREATE TABLE cached_v_sub_sector LIKE ${clean.source}.cached_v_sub_sector</transaction>
+
+			<!-- mandatory custom indexes -->
+			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>
+			<transaction>CREATE INDEX amp_currency_to_currency_code ON amp_currency_rate(to_currency_code)</transaction>
+			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>
+			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>
+		</sql>
+
+		<echo message="Importing functions and views into ${clean.db}..."/>
+			<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.params}" userid="${jdbc.user}" print="true" delimiter=";;">
+				<classpath refid="compile.classpath"/>
+				<transaction src="tmp_${clean.db}_ddl_copy.sql"/>
+			</sql>
+
+		<delete file="tmp_${clean.db}_ddl_copy.sql"/>
+	</target>
+
+
+	<target name="createCleanPostGreDatabase" depends="compile">
+		<fail unless="clean.source" message="clean.source parameter must be supplied! This is the source database to produce ${clean.db} from."/>
+		<fail unless="clean.host" message="clean.host parameter must be supplied! This is the dg_site_domain host that you want to use with it."/>
+
+		<echo message="Dropping former ${clean.db} and creating new ${clean.db} database..."/>
+		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/postgres?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" autocommit="true">
+			<classpath refid="compile.classpath"/>
+			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>
+			<transaction>CREATE DATABASE ${clean.db} encoding='UTF8'</transaction>
+		</sql>
+
+		<echo message="Creating Hibernate table structure and keys..."/>
+		<antcall target="database"/>
+		<echo message="Exporting stored functions from ${clean.source}..."/>
+		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.source}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
+			<classpath refid="compile.classpath"/>
+			<transaction>select pg_get_functiondef(oid)||';' from pg_proc where pronamespace = (select oid from pg_namespace where nspname='public') and prolang=(select oid from pg_language where lanname='plpgsql')</transaction>
+		</sql>
+
+		<replaceregexp file="tmp_${clean.db}_ddl_copy.sql"
+		               match="\r"
+		               flags="g"
+		               replace="" />
+
+		<echo message="Exporting views from ${clean.source}..."/>
+		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.source}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
+			<classpath refid="compile.classpath"/>
+			<transaction>SELECT 'CREATE OR REPLACE VIEW ' || viewname || ' AS ' || definition || ';;' FROM pg_views WHERE schemaname='public'</transaction>
+		</sql>
+		<replace file="tmp_${clean.db}_ddl_copy.sql" token="`${clean.source}`." value=""/>
+		<replace file="tmp_${clean.db}_ddl_copy.sql" token="amp_activity_version.archived," value=""/> <!-- in some 2.0 db's the field exists in the view  -->
+
+		<exec executable="pg_dump" vmlauncher="false" output="tmp_${clean.db}_backup.sql">
+			<arg line="-U${jdbc.user}"/>
+			<arg line="-w"/>
+			<arg line="${clean.source}"/>
+		</exec>
+
+		<exec executable="createdb" vmlauncher="false">
+			<arg value="-U${jdbc.user}"/>
+			<arg value="-w"/>
+			<arg value="${clean.source}_tmp"/>
+		</exec>
+
+		<exec executable="psql" vmlauncher="false">
+			<arg line="-U${jdbc.user}"/>
+			<arg line="-w"/>
+			<arg line="${clean.source}_tmp"/>
+			<arg line="--file=tmp_${clean.db}_backup.sql"/>
+		</exec>
+
+		<exec executable="psql" vmlauncher="false">
+			<arg line="-U${jdbc.user}"/>
+			<arg line="-w"/>
+			<arg line="${clean.source}_tmp"/>
+			<arg line="--command='ALTER schema public RENAME to clean'"/>
+		</exec>
+
+		<exec executable="pg_dump" vmlauncher="false" output="tmp_${clean.db}_backup.sql">
+			<arg line="-U${jdbc.user}"/>
+			<arg line="-w"/>
+			<arg line="${clean.source}_tmp"/>
+		</exec>
+
+		<exec executable="dropdb" vmlauncher="false">
+			<arg value="-U${jdbc.user}"/>
+			<arg value="-w"/>
+			<arg value="${clean.source}_tmp"/>
+		</exec>
+
+		<exec executable="psql" vmlauncher="false">
+			<arg line="-U${jdbc.user}"/>
+			<arg line="-w"/>
+			<arg line="${clean.db}"/>
+			<arg line="--file=tmp_${clean.db}_backup.sql"/>
+		</exec>
+
+		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>
+		<sql driver="${jdbc.driverClassName}" delimitertype="row" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true">
+			<classpath refid="compile.classpath"/>
+			<transaction>
+				CREATE OR REPLACE FUNCTION fn_triggerall(DoEnable boolean) RETURNS integer AS
+				$BODY$
+				DECLARE	mytables RECORD;
+				BEGIN
+				  FOR mytables IN select tablename from pg_tables where schemaname='public'
+				  LOOP
+				    IF DoEnable THEN
+				      EXECUTE 'ALTER TABLE ' || mytables.tablename || ' ENABLE TRIGGER ALL';
+				    ELSE
+				      EXECUTE 'ALTER TABLE ' || mytables.tablename || ' DISABLE TRIGGER ALL';
+				    END IF;
+				  END LOOP;
+
+				  RETURN 1;
+
+				END;
+				$BODY$
+				LANGUAGE 'plpgsql' VOLATILE;
+			</transaction>
+		</sql>
+
+		<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true">
+			<classpath refid="compile.classpath"/>
+			<transaction>select fn_triggerall(false);</transaction>
+			<transaction>INSERT INTO AMP_INDICATOR_RISK_RATINGS (SELECT * from clean.AMP_INDICATOR_RISK_RATINGS)</transaction>
+			<transaction>INSERT INTO amp_category_class (SELECT * from clean.amp_category_class)</transaction>
+			<transaction>INSERT INTO amp_category_value (SELECT * from clean.amp_category_value)</transaction>
+			<transaction>INSERT INTO amp_category_value_location (SELECT * from clean.amp_category_value_location)</transaction>
+			<transaction>INSERT INTO amp_columns  (SELECT columnid,columnname, aliasname,celltype, extractorview, tokenexpression, totalexpression, relatedcontentpersisterclass, filterretrievable, showrowcalculations, description from clean.amp_columns)</transaction>
+			<transaction>INSERT INTO amp_columns_order (SELECT * from clean.amp_columns_order)</transaction>
+			<transaction>INSERT INTO amp_columns_filters (SELECT * from clean.amp_columns_filters)</transaction>
+			<transaction>INSERT INTO amp_currency (SELECT * from clean.amp_currency)</transaction>
+			<transaction>INSERT INTO amp_global_settings (SELECT * from clean.amp_global_settings)</transaction>
+			<transaction>INSERT INTO amp_level (SELECT * from clean.amp_level)</transaction>
+			<transaction>INSERT INTO amp_measures (SELECT * from clean.amp_measures)</transaction>
+			<transaction>INSERT INTO amp_org_type (SELECT * from clean.amp_org_type)</transaction>
+			<transaction>INSERT INTO amp_quartz_job_class (SELECT * from clean.amp_quartz_job_class)</transaction>
+			<transaction>INSERT INTO amp_role (SELECT * from clean.amp_role)</transaction>
+			<transaction>INSERT INTO dg_countries (SELECT * from clean.dg_countries)</transaction>
+			<transaction>INSERT INTO dg_item_status (SELECT * from clean.dg_item_status)</transaction>
+			<transaction>INSERT INTO dg_locale (SELECT * from clean.dg_locale)</transaction>
+			<transaction>INSERT INTO dg_site (SELECT * from clean.dg_site)</transaction>
+			<transaction>INSERT INTO dg_module_instance (SELECT * from clean.dg_module_instance)</transaction>
+			<transaction>INSERT INTO dg_site_domain (SELECT * from clean.dg_site_domain WHERE site_domain NOT LIKE '192.168%')</transaction>
+			<transaction>UPDATE dg_site_domain SET site_domain='${clean.host}'</transaction>
+			<transaction>INSERT INTO dg_principal_permission (SELECT * from clean.dg_principal_permission)</transaction>
+			<transaction>INSERT INTO dg_principal_permission_param (SELECT * from clean.dg_principal_permission_param)</transaction>
+			<transaction>INSERT INTO patch_file (SELECT * from clean.patch_file)</transaction>
+			<transaction>INSERT INTO amp_currency_rate (SELECT * from clean.amp_currency_rate)</transaction>
+			<transaction>INSERT INTO dg_message (SELECT * from clean.dg_message)</transaction>
+			<transaction>INSERT INTO amp_templates_visibility (SELECT * from clean.amp_templates_visibility)</transaction>
+			<transaction>INSERT INTO amp_modules_visibility (SELECT * from clean.amp_modules_visibility)</transaction>
+			<transaction>INSERT INTO amp_features_visibility (SELECT * from clean.amp_features_visibility)</transaction>
+			<transaction>INSERT INTO amp_fields_visibility (SELECT * from clean.amp_fields_visibility)</transaction>
+			<transaction>INSERT INTO dg_site_trans_lang_map (SELECT * from clean.dg_site_trans_lang_map)</transaction>
+			<transaction>INSERT INTO dg_site_user_lang_map (SELECT * from clean.dg_site_user_lang_map)</transaction>
+			<transaction>INSERT INTO amp_team_member_roles (SELECT amp_team_mem_role_id, role, description, team_head, approver from clean.amp_team_member_roles)</transaction>
+			<transaction>INSERT INTO amp_fields_templates (SELECT * from clean.amp_fields_templates)</transaction>
+			<transaction>INSERT INTO amp_features_templates (SELECT * from clean.amp_features_templates)</transaction>
+			<transaction>INSERT INTO amp_modules_templates (SELECT * from clean.amp_modules_templates)</transaction>
+			<transaction>INSERT INTO amp_sector_scheme (SELECT * from clean.amp_sector_scheme)</transaction>
+			<transaction>INSERT INTO AMP_CLASSIFICATION_CONFIG (SELECT id, name, description, multisector, is_primary_sector, classification_id from clean.AMP_CLASSIFICATION_CONFIG)</transaction>
+			<transaction>INSERT INTO dg_user (SELECT id, creation_date, creation_ip, last_modified, modifying_ip, first_names, last_name, email, email_verified, email_bouncing, no_alerts_until, password, salt, pass_question, pass_answer, url, active, banned, referral, organization_type_other, address, country_iso, region_id, assigned_org_id, image_id, organization_type_id, registration_language, global_admin, registered_through, pledger from clean.dg_user WHERE email='admin@amp.org')</transaction>
+			<transaction>INSERT INTO dg_group (SELECT * from clean.dg_group WHERE id IN (SELECT ug.group_id FROM  clean.dg_user_group ug,  clean.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO dg_user_group (SELECT * from clean.dg_user_group WHERE user_id IN (SELECT ug.user_id FROM  clean.dg_user_group ug,  clean.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO dg_user_preferences (SELECT * from clean.dg_user_preferences WHERE user_id IN (SELECT up.user_id FROM  clean.dg_user_preferences up,  clean.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO dg_user_lang_preferences (SELECT * from clean.dg_user_lang_preferences WHERE user_id IN (SELECT up.user_id FROM clean.dg_user_lang_preferences up, clean.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT INTO amp_fiscal_calendar (SELECT * from clean.amp_fiscal_calendar WHERE amp_fiscal_cal_id IN (SELECT settingsValue::text::int FROM  clean.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>
+			<transaction>INSERT INTO amp_application_settings (SELECT amp_app_settings_id, def_rec_per_page, num_pages_to_display, def_rep_per_page, report_start_year, report_end_year, language, validation, use_default, default_team_ampreport_id, team_id, currency_id, fis_cal_id, member, allow_add_team_res, allow_share_res_globally, allow_publishing_resources FROM clean.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  clean.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>
+			<transaction>INSERT INTO amp_theme (SELECT * from clean.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  clean.amp_theme at,  clean.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>
+			<transaction>INSERT INTO amp_program_settings (SELECT * from clean.amp_program_settings WHERE default_hierarchy=2)</transaction>
+			<transaction>INSERT INTO amp_field (SELECT * from clean.amp_field)</transaction>
+			<transaction>CREATE TABLE util_global_settings_possible_ (LIKE clean.util_global_settings_possible_)</transaction><transaction>INSERT INTO util_global_settings_possible_ (SELECT * from clean.util_global_settings_possible_)</transaction>
+			<transaction>CREATE TABLE qrtz_blob_triggers (LIKE clean.qrtz_blob_triggers)</transaction><transaction>INSERT INTO qrtz_blob_triggers (SELECT * from clean.qrtz_blob_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_calendars (LIKE clean.qrtz_calendars)</transaction><transaction> INSERT INTO qrtz_calendars (SELECT * from clean.qrtz_calendars)</transaction>
+			<transaction>CREATE TABLE qrtz_cron_triggers (LIKE clean.qrtz_cron_triggers)</transaction><transaction>  INSERT INTO qrtz_cron_triggers (SELECT * from clean.qrtz_cron_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_fired_triggers  (LIKE clean.qrtz_fired_triggers)</transaction><transaction> INSERT INTO qrtz_fired_triggers (SELECT * from clean.qrtz_fired_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_job_details (LIKE clean.qrtz_job_details)</transaction><transaction> INSERT INTO qrtz_job_details (SELECT * from clean.qrtz_job_details)</transaction>
+			<transaction>CREATE TABLE qrtz_job_listeners (LIKE clean.qrtz_job_listeners)</transaction><transaction> INSERT INTO  qrtz_job_listeners(SELECT * from clean.qrtz_job_listeners)</transaction>
+			<transaction>CREATE TABLE qrtz_locks (LIKE clean.qrtz_locks)</transaction><transaction>INSERT INTO qrtz_locks (SELECT * from clean.qrtz_locks)</transaction>
+			<transaction>CREATE TABLE qrtz_paused_trigger_grps (LIKE clean.qrtz_paused_trigger_grps)</transaction><transaction> INSERT INTO qrtz_paused_trigger_grps (SELECT * from clean.qrtz_paused_trigger_grps)</transaction>
+			<transaction>CREATE TABLE qrtz_scheduler_state (LIKE clean.qrtz_scheduler_state)</transaction><transaction>INSERT INTO qrtz_scheduler_state (SELECT * from clean.qrtz_scheduler_state)</transaction>
+			<transaction>CREATE TABLE qrtz_simple_triggers (LIKE clean.qrtz_simple_triggers)</transaction><transaction>INSERT INTO qrtz_simple_triggers (SELECT * from clean.qrtz_simple_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_trigger_listeners (LIKE clean.qrtz_trigger_listeners)</transaction><transaction>INSERT INTO qrtz_trigger_listeners (SELECT * from clean.qrtz_trigger_listeners)</transaction>
+			<transaction>CREATE TABLE qrtz_triggers (LIKE clean.qrtz_triggers)</transaction><transaction>INSERT INTO qrtz_triggers (SELECT * from clean.qrtz_triggers)</transaction>
+
+			<!-- create cached table mockups -->
+			<!--
+			<transaction>CREATE TABLE cached_amp_activity (LIKE clean.cached_amp_activity)</transaction>
+			 -->
+			<transaction>CREATE TABLE cached_v_donor_date_hierarchy (LIKE clean.cached_v_donor_date_hierarchy)</transaction>
+			<transaction>CREATE TABLE cached_v_donor_funding (LIKE clean.cached_v_donor_funding)</transaction>
+			<transaction>CREATE TABLE cached_v_national_program (LIKE clean.cached_v_national_program)</transaction>
+			<transaction>CREATE TABLE cached_v_primary_program (LIKE clean.cached_v_primary_program)</transaction>
+			<transaction>CREATE TABLE cached_v_primary_sector (LIKE clean.cached_v_primary_sector)</transaction>
+			<transaction>CREATE TABLE cached_v_regions (LIKE clean.cached_v_regions)</transaction>
+			<transaction>CREATE TABLE cached_v_sec_sub_sector (LIKE clean.cached_v_sec_sub_sector)</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_program (LIKE clean.cached_v_secondary_program)</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_sector (LIKE clean.cached_v_secondary_sector)</transaction>
+			<transaction>CREATE TABLE cached_v_status (LIKE clean.cached_v_status)</transaction>
+			<transaction>CREATE TABLE cached_v_sub_sector (LIKE clean.cached_v_sub_sector)</transaction>
+
+			<!-- mandatory custom indexes -->
+			<transaction>CREATE INDEX cv_index ON amp_category_value(category_value)</transaction>
+			<transaction>CREATE INDEX amp_currency_to_currency_code ON amp_currency_rate(to_currency_code)</transaction>
+			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>
+			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>
+
+			<!-- amp_activity is not a table ... currently added by hibernate -->
+			<transaction>DROP TABLE amp_activity CASCADE</transaction>
+			<transaction>DROP SCHEMA clean CASCADE </transaction>
+			<transaction>select fn_triggerall(true);</transaction>
+			<transaction>CREATE TYPE table_count AS (table_name text, record_count integer);</transaction>
+			<transaction>CREATE OR REPLACE FUNCTION comma_concat(text, text) RETURNS text AS 'BEGIN return "a"; END; ' LANGUAGE plpgsql VOLATILE; </transaction> <!-- dummy function! run the manual_sql_queries.sql file after that! -->
+			<!-- <transaction src="manual_sql_queries.sql" /> -->
+			<transaction>CREATE AGGREGATE textagg(text) ( SFUNC=comma_concat, STYPE=text, INITCOND='');</transaction>
+		</sql>
+		<echo message="Importing functions and views into ${clean.db}..."/>
+			<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" delimiter=";;">
+				<classpath refid="compile.classpath"/>
+				<transaction src="tmp_${clean.db}_ddl_copy.sql"/>
+			</sql>
+
+		<delete file="tmp_${clean.db}_ddl_copy.sql"/>
+		<delete file="tmp_${clean.db}_backup.sql"/>
+	</target>
+
+	<target name="deployForServer" description="deploys the project for use with a given database">
+		<delete file="${repository}/digi.xml"/>
+		<delete dir="${metainf}"/>
+		<mkdir dir="${metainf}"/>
+		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
+		<xslt in="context.xml" out="${metainf}/context.xml" style="context.xsl">
+		          <param name="jdbc.user" expression="${jdbc.user}"/>
+				  <param name="jdbc.password" expression="${jdbc.password}"/>
+		      	  <param name="jdbc.db" expression="${jdbc.db}"/>
+		      	  <param name="jdbc.host" expression="${jdbc.host}"/>
+		  	  	  <param name="serverName" expression="${serverName}"/>
+		  	  	  <param name="jdbc.port" expression="${jdbc.port}"/>
+				  <param name="dbName" expression="${dbName}"/>
+				  <param name="jdbc.driverClassName" expression="${jdbc.driverClassName}"/>
+				  <param name="antilock" expression="${antilock}"/>
+		</xslt>
+
+		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>
+		<antcall target="createDeployConfigCommon"/>
+
+	</target>
+
+	<target name="createDeployConfigCommon" description="Creates file with description of the selected config">
+		<echo message="Creating Deploy config common" />
+		<delete file="${deployConfigs}/selected.properties"/>
+		<propertyfile  file="${deployConfigs}/selected.properties"  comment="Description of the selected config">
+		  <entry  key="serverName" value="${serverName}"/>
+		</propertyfile>
+	</target>
+
+	<!--	<target name="junit" depends="compileTest">
+        <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
+    	    <classpath refid="run.classpath"/>
+  		<formatter type="xml"/>
+  		<formatter type="plain"/>
+  		<test name="org.digijava.test.AllTests" haltonfailure="no" outfile="test_result"/>
+	</junit>
+    </target> -->
+
+    <target name="restart" description="restarts the web application">
+    	<touch file="${webinf}/web.xml"/>
+    </target>
+
+
+    <!-- Build project and create distribution-->
+    <target name="all" depends="project"/>
+
+	<target name="ecsJar" description="ECS Client Jar">
+		<jar destfile="ecs-client.jar"
+			 basedir="${classes}"
+			 includes="**/*.class"
+			 />
+	</target>
+
+	<target name="patchDemo" description="Patch for applying GIS PDF to Demo Site">
+		<touch file="${deployConfigs}/${serverName}/gisMenu.jsp"/>
+		<copy file="${deployConfigs}/${serverName}/gisMenu.jsp" todir="TEMPLATE/ampTemplate/layout"/>
+	</target>
+
+</project>
 
 

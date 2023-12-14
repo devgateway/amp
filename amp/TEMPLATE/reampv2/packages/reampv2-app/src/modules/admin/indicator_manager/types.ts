@@ -95,6 +95,8 @@ export interface SettingsType {
     "gis-default-max-year-range":               string;
     "gis-default-min-date":                     null;
     "gis-default-min-year-range":               string;
+    "indicator-filter-by-program":              boolean;
+    "indicator-filter-by-sector":                boolean;
 }
 
 export interface EffectiveCurrency {

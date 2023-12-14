@@ -49,8 +49,8 @@ public class IndicatorManagerService {
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    public static final String FILTER_BY_PROGRAM = "/ADMINISTRATIVE SECTION/Indicator Manager/Filter by Program";
-    public static final String FILTER_BY_SECTOR = "Filter by Sector";
+    public static final String FILTER_BY_PROGRAM = "Filter By Program";
+    public static final String FILTER_BY_SECTOR = "Filter By Sector";
 
     protected static final Logger logger = Logger.getLogger(IndicatorManagerService.class);
 

@@ -72,5 +72,6 @@
   "amp.indicatormanager:error-used-by-activities": "This indicator is used by activities and cannot be deleted",
   "amp.indicatormanager:program-scheme": "Program Scheme",
   "amp.indicatormanager:no-program-scheme": "No Programs Scheme Available",
-  "amp.indicatormanager:no-programs": "No Programs Available"
+  "amp.indicatormanager:no-programs": "No Programs Available",
+  "amp.indicatormanager:all-programs": "All Programs"
 }

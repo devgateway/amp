@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { ColumnDescription } from '@musicstory/react-bootstrap-table-next';
 import SkeletonTable from './Table';
 import styles from './IndicatorTable.module.css';
-import {DefaultComponentProps, IndicatorObjectType, SettingsType} from '../../types';
+import {DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SettingsType} from '../../types';
 
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 
@@ -29,6 +29,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const { indicators: fetchedIndicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
   const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+  const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
 
   useLayoutEffect(() => {
     dispatch(getIndicators());
@@ -40,6 +41,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const [showEditIndicatorModal, setShowEditIndicatorModal] = useState<boolean>(false);
   const [showDeleteIndicatorModal, setShowDeleteIndicatorModal] = useState<boolean>(false);
   const [selectedSector, setSelectedSector] = useState(0);
+  const [selectedProgram, setSelectedProgram] = useState(0);
   const [indicators, setIndicators] = useState<IndicatorObjectType[]>(fetchedIndicators);
 
   useEffect(() => {
@@ -82,57 +84,78 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       sort: true,
       headerStyle: { width: '35%' },
     },
-    {
-      dataField: 'sectors',
-      text: translations['amp.indicatormanager:sectors'],
-      sort: true,
-      headerStyle: { width: '30%' },
-      formatter: (_cell: any, row: any) => {
-        return (
-          <div>
-            {
-              _cell.map((sectorId: any) => {
-                const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
+      ...(globalSettings["indicator-filter-by-sector"] ? [
+        {
+          dataField: 'sectors',
+          text: translations['amp.indicatormanager:sectors'],
+          sort: true,
+          headerStyle: { width: '30%' },
+          formatter: (_cell: any, row: any) => {
+            console.log("cell in sectors=====>", _cell)
+            return (
+                <div>
+                  {
+                    _cell.map((sectorId: any) => {
+                      const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
 
-                if (foundSector) {
-                  return <span key={sectorId}>{foundSector.name}
-                    <br />
+                      if (foundSector) {
+                        return <span key={sectorId}>{foundSector.name}
+                          <br />
 
                   </span>
-                }
+                      }
 
-                return (
-                  <span key={sectorId}>
+                      return (
+                          <span key={sectorId}>
                     {sectorId}
+                            <br />
+                  </span>
+                      )
+                    })
+                  }
+                </div>
+            )
+          },
+        }
+      ]: []),
+
+        ...(globalSettings["indicator-filter-by-program"] ? [
+          {
+            dataField: 'programs',
+            text: translations['amp.indicatormanager:programs'],
+            sort: true,
+            headerStyle: {width: '40%'},
+            formatter: (_cell: any, row: any) => {
+              const programId = row.programId;
+              const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
+
+              if (foundProgram) {
+                return <span key={programId}>{foundProgram.name}
+                  <br />
+                  </span>
+              }
+              return (
+                  <span key={programId}>
+                    {programId}
                     <br />
                   </span>
-                )
-              })
+              )
             }
-          </div>
-        )
-      },
-    },
-    {
-      dataField: 'programs',
-      text: translations['amp.indicatormanager:programs'],
-      sort: true,
-      headerStyle: { width: '30%' },
-      formatter: (_cell: any, row: any) => {}
-    },
+          }
+        ]: []),
     {
       dataField: 'creationDate',
       text: translations['amp.indicatormanager:table-header-creation-date'],
       sort: true,
       headerStyle: { width: '10%' },
-      formatter: (_cell: any, row: any) => {
-        const formattedDate = globalSettings["default-date-format"] && dayjs(row.creationDate).format(globalSettings["default-date-format"])
-        return (
-          <div>
-            {formattedDate}
-          </div>
-        )
-      },
+      // formatter: (_cell: any, row: any) => {
+      //   const formattedDate = globalSettings["default-date-format"] && dayjs(row.creationDate).format(globalSettings["default-date-format"])
+      //   return (
+      //     <div>
+      //       {formattedDate}
+      //     </div>
+      //   )
+      // },
     },
     {
       dataField: 'action',
@@ -182,9 +205,26 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
     setIndicators(filteredIndicators);
   }
 
+  const handleFilterIndicatorsByProgram = () => {
+    if (Number(selectedProgram) === 0) {
+      setIndicators(fetchedIndicators);
+      return;
+    }
+    const filteredIndicators = fetchedIndicators.filter((indicator: IndicatorObjectType) => {
+      // @ts-ignore
+      return indicator.programId === Number(selectedProgram);
+    });
+    setIndicators([]);
+    setIndicators(filteredIndicators);
+  }
+
   useEffect(() => {
     handleFilterIndicators();
-  }, [selectedSector])
+  }, [selectedSector]);
+
+    useEffect(() => {
+        handleFilterIndicatorsByProgram();
+    }, [selectedProgram]);
 
   return (
     <>
@@ -223,8 +263,12 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
             data={indicators}
             columns={columns}
             sectors={sectorsReducer.sectors}
+            programs={programsReducer.programs as ProgramObjectType[]}
             setSelectedSector={setSelectedSector}
+            setSelectedProgram={setSelectedProgram}
             translations={translations}
+            filterBySector={globalSettings["indicator-filter-by-sector"]}
+            filterByProgram={globalSettings["indicator-filter-by-program"]}
           />
       }
     </>

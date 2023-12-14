@@ -72,11 +72,11 @@ module.exports = Backbone.Model
     var promises = [ this.load() ];
     boundaries.forEach(function (b) { promises.push(b.load()); });
     return $.when.apply($, promises)
-        .done(function() {
-          var self = arguments[0];
-          var boundaryModels = Array.prototype.slice.call(arguments, 1);
-          self.set('boundaries', boundaryModels.map(function(model) { return model.toJSON(); }));
-        });
+      .done(function() {
+        var self = arguments[0];
+        var boundaryModels = Array.prototype.slice.call(arguments, 1);
+        self.set('boundaries', boundaryModels.map(function(model) { return model.toJSON(); }));
+      });
   },
 
   loadAll: function() {

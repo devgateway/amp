@@ -141,9 +141,9 @@ module.exports = Backbone.View.extend({
 
       boundaries.forEach(function (boundary) {
         var i = _.chain(boundary.objects)
-            .keys()
-            .first()
-            .value();
+          .keys()
+          .first()
+          .value();
         var feature = TopojsonLibrary.feature(boundary, boundary.objects[i]);
         if (feature) {
           geoJson.addData(feature);

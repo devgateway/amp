@@ -5,6 +5,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class AmpStructureCoordinate implements Serializable, Cloneable {
 
@@ -58,6 +59,18 @@ public class AmpStructureCoordinate implements Serializable, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpStructureCoordinate that = (AmpStructureCoordinate) o;
+        return Objects.equals(latitude, that.latitude) && Objects.equals(longitude, that.longitude) && Objects.equals(structure.getAmpStructureId(), that.structure.getAmpStructureId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(latitude, longitude, structure.getAmpStructureId());
     }
 
 }

@@ -186,8 +186,8 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
         aux.setActivity(newActivity);
         aux.setAmpStructureId(null);
         
-        if (aux.getImages() != null && aux.getImages().size() > 0) {
-            Set<AmpStructureImg> auxSetImages = new HashSet<AmpStructureImg>();
+        if (aux.getImages() != null && !aux.getImages().isEmpty()) {
+            Set<AmpStructureImg> auxSetImages = new HashSet<>();
             for (AmpStructureImg img : aux.getImages()) {
                 AmpStructureImg auxImg = (AmpStructureImg) img.clone();
                 auxImg.setId(null);
@@ -196,11 +196,11 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             }
             aux.setImages(auxSetImages);
         } else {
-            aux.setImages(null);
+            aux.setImages(new HashSet<>());
         }
 
-        if (aux.getCoordinates() != null && aux.getCoordinates().size() > 0) {
-            List<AmpStructureCoordinate> coords = new ArrayList<AmpStructureCoordinate>();
+        if (aux.getCoordinates() != null && !aux.getCoordinates().isEmpty()) {
+            List<AmpStructureCoordinate> coords = new ArrayList<>();
             for (AmpStructureCoordinate coord : aux.getCoordinates()) {
                 AmpStructureCoordinate auxCoord = (AmpStructureCoordinate) coord.clone();
                 auxCoord.setAmpStructureCoordinateId(null);
@@ -209,7 +209,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             }
             aux.setCoordinates(coords);
         } else {
-            aux.setCoordinates(null);
+            aux.setCoordinates(new ArrayList<>());
         }
 
         return aux;

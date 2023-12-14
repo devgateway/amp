@@ -39,7 +39,7 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
     }
 
     public static IndicatorTextualTokenBehaviour forDouble(NiDimensionUsage indicatorDimensionUsage) {
-        return new IndicatorTextualTokenBehaviour((engine, cell) -> formatDouble(engine, ((DoubleCell) cell).value), indicatorDimensionUsage, true);
+        return new IndicatorTextualTokenBehaviour((engine, cell) -> formatDouble(engine, ((DoubleCell) cell).value), indicatorDimensionUsage, false);
     }
 
     private IndicatorTextualTokenBehaviour(BiFunction<NiReportsEngine, Cell, String> formatter,

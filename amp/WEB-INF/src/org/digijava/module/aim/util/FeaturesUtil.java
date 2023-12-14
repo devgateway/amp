@@ -2124,8 +2124,7 @@ public class FeaturesUtil {
         String qryStr = "select gs.globalSettingsValue from " + AmpGlobalSettings.class.getName() +
                     " gs where gs.globalSettingsName = 'Default Country' ";
         Query qry = PersistenceManager.getRequestDBSession().createQuery(qryStr);
-        String defaultCountryIso = (String) qry.uniqueResult();
-        return defaultCountryIso;
+        return (String) qry.uniqueResult();
     }
 
     public static String makeProperString(String theString) throws java.io.IOException{

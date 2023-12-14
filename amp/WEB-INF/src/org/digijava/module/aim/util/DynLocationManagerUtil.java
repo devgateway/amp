@@ -727,9 +727,8 @@ public class DynLocationManagerUtil {
      */
     public static AmpCategoryValueLocations getDefaultCountry()
     {
-        AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(
+        return DynLocationManagerUtil.getLocationByIso(
                 FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
-        return country;
     }
     
     public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException 

@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { ColumnDescription } from '@musicstory/react-bootstrap-table-next';
 import SkeletonTable from './Table';
 import styles from './IndicatorTable.module.css';
-import { DefaultComponentProps, IndicatorObjectType } from '../../types';
+import {DefaultComponentProps, IndicatorObjectType, SettingsType} from '../../types';
 
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 
@@ -19,6 +19,7 @@ import ViewIndicatorModal from '../modals/ViewIndicatorModal';
 import EditIndicatorModal from '../modals/EditIndicatorModal';
 import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
 import { Loading } from '../../../../../utils/components/Loading';
+import dayjs from 'dayjs';
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
@@ -26,6 +27,7 @@ interface IndicatorTableProps extends DefaultComponentProps {
 const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const dispatch = useDispatch();
   const { indicators: fetchedIndicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
+  const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
 
   useLayoutEffect(() => {
@@ -112,10 +114,25 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       },
     },
     {
+      dataField: 'programs',
+      text: translations['amp.indicatormanager:programs'],
+      sort: true,
+      headerStyle: { width: '30%' },
+      formatter: (_cell: any, row: any) => {}
+    },
+    {
       dataField: 'creationDate',
       text: translations['amp.indicatormanager:table-header-creation-date'],
       sort: true,
       headerStyle: { width: '10%' },
+      formatter: (_cell: any, row: any) => {
+        const formattedDate = globalSettings["default-date-format"] && dayjs(row.creationDate).format(globalSettings["default-date-format"])
+        return (
+          <div>
+            {formattedDate}
+          </div>
+        )
+      },
     },
     {
       dataField: 'action',

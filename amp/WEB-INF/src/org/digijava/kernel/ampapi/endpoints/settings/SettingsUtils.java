@@ -16,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.common.AmpGeneralSettings;
 import org.digijava.kernel.ampapi.endpoints.common.CurrencySettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -469,6 +470,9 @@ public class SettingsUtils {
             settings.setShowActivityWorkspaces(true);
         }
         addDateRangeSettingsForDashboardsAndGis(settings);
+
+        settings.setIndicatorFilterBySector(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR));
+        settings.setIndicatorFilterByProgram(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM));
 
         return settings;
     }

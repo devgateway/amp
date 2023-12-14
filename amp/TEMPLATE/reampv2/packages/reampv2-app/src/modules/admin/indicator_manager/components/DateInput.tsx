@@ -26,7 +26,7 @@ export interface DateInputProps {
 const DateInput: React.FC<DateInputProps> = (props) => {
     const { className, value, onChange, name, defaultValue, disabled, clearIcon, calendarIcon, inputRef, minDate, maxDate, onClear } = props;
     const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
-    const [dateFormat, setDateFormat] = useState('dd/MM/yyyy');
+    const [dateFormat, setDateFormat] = useState('');
     const [inputValue, setInputValue] = useState<string | Date | undefined>(value);
 
     const getDefaultDateFormat = () => {
@@ -72,29 +72,36 @@ const DateInput: React.FC<DateInputProps> = (props) => {
         )
     }
 
+    console.log("dateformat", dateFormat);
+
     return (
-        <DatePicker
-            format={dateFormat}
-            monthPlaceholder="mm"
-            dayPlaceholder="dd"
-            yearPlaceholder="yyyy"
-            className={className}
-            onChange={onChange}
-            name={name}
-            value={inputValue}
-            minDate={minDate && new Date('1970-01-01')}
-            maxDate={maxDate && new Date('2200-12-31')}
-            defaultValue={defaultValue}
-            disabled={disabled}
-            clearIcon={clearIcon === null ? null : <ClearInputButton />}
-            monthAriaLabel="Month"
-            dayAriaLabel="Day"
-            yearAriaLabel="Year"
-            closeCalendar
-            clearAriaLabel="Clear Date"
-            calendarAriaLabel="Toggle Calendar"
-            inputRef={inputRef}
-        />
+        <div>
+            {dateFormat !== '' && (
+                <DatePicker
+                    format={dateFormat !== '' ? dateFormat : 'dd/MM/yyyy'}
+                    monthPlaceholder="mm"
+                    dayPlaceholder="dd"
+                    yearPlaceholder="yyyy"
+                    className={className}
+                    onChange={onChange}
+                    name={name}
+                    value={inputValue}
+                    minDate={minDate && new Date('1970-01-01')}
+                    maxDate={maxDate && new Date('2200-12-31')}
+                    defaultValue={defaultValue}
+                    disabled={disabled}
+                    clearIcon={clearIcon === null ? null : <ClearInputButton />}
+                    monthAriaLabel="Month"
+                    dayAriaLabel="Day"
+                    yearAriaLabel="Year"
+                    closeCalendar
+                    clearAriaLabel="Clear Date"
+                    calendarAriaLabel="Toggle Calendar"
+                    inputRef={inputRef}
+                />
+            )}
+        </div>
+
 
     )
 }

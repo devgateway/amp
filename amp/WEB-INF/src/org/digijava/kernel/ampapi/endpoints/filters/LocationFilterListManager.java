@@ -115,18 +115,15 @@ public class LocationFilterListManager implements FilterListManager {
                 LocationUtil.getCountriesWithChildren(pShowAllCountries);
 
         AmpApplicationSettings appSettings = EndpointUtils.getAppSettings();
-        final boolean showAllCountries = appSettings == null ? false : appSettings.getShowAllCountries();
-
+        final boolean showAllCountries = appSettings == null || appSettings.getShowAllCountries();
         String defaultCountryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
 
-        List<Long> countryIds = countryCollection
+        return countryCollection
                 .stream()
                 .filter(country -> showAllCountries || pShowAllCountries
-                        || country.getIso().equals(defaultCountryIso) || defaultCountryIso.equals("zz"))
-                .map(country -> country.getId())
+                        || country.getIso().equals(defaultCountryIso) || Objects.equals(defaultCountryIso,"zz"))
+                .map(AmpCategoryValueLocations::getId)
                 .collect(Collectors.toList());
-
-        return countryIds;
     }
 
     protected FilterListTreeNode getLocations(LocationSkeleton location, boolean firstLevelOnly) {

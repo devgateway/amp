@@ -141,7 +141,6 @@ module.exports = Backbone.View.extend({
             self.map.fitBounds(outerBounds, paddingToLeft);
           }
         }
-
       });
     });
   },

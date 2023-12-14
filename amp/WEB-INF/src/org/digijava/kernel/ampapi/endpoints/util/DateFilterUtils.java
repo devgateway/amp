@@ -66,7 +66,12 @@ public class DateFilterUtils {
         if (from == null && to == null)
             throw new AmpApiException(elemType + ": at least 'from' or 'to' range limit must be specified. Do not use the range filter if no filter is needed.");
         if (from != null && to != null && from > to)
-            throw new AmpApiException("The lower limit 'from' must be smaller or equal to the upper limit 'to'. Failed request for from = " + from + ", to = " + to);
+        {
+            Integer tempFrom = from;
+            from=to;
+            to=tempFrom;
+        }
+//            throw new AmpApiException("The lower limit 'from' must be smaller or equal to the upper limit 'to'. Failed request for from = " + from + ", to = " + to);
         if (to == null)
             to = ArConstants.UNDEFINED_KEY - 1; //to skip undefined dates
         return new FilterRule(toStringOrNull(from), toStringOrNull(to), fromName, toName, true, true);

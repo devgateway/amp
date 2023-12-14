@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
 
 public class BoundariesService {
 
@@ -32,7 +39,16 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = CONTEXT_PATH + BOUNDARY_PATH + "regional-list.json";
-        try (InputStream is = new FileInputStream(path)) {
+
+        if (!DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
+        {
+            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+            if (countryIso!=null) {
+                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+            }
+        }
+        logger.info("Boundaries path is: "+path);
+        try (InputStream is = Files.newInputStream(Paths.get(path))) {
             String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);
             return MAPPER.readValue(jsonTxt, new TypeReference<List<Boundary>>() { });
         } catch (IOException e) {

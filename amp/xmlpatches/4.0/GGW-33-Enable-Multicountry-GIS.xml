@@ -9,7 +9,7 @@
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES (nextval('amp_global_settings_seq'), 'Multicountry Enabled', 'false', 't_Boolean', 'Multicountry Enabled', null, null, TRUE);
+				VALUES (nextval('amp_global_settings_seq'), 'Multicountry Enabled', 'false', 't_Boolean', 'Multicountry Enabled', 'general', null, TRUE);
 			]]></lang>
         </script>
     </apply>

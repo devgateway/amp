@@ -39,7 +39,7 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = CONTEXT_PATH + BOUNDARY_PATH + "regional-list.json";
-
+        logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
         if (!DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
         {
             String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);

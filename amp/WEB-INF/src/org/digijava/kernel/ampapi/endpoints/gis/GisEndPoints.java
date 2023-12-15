@@ -103,6 +103,7 @@ public class GisEndPoints {
             @ApiParam("filter") final PerformanceFilterParameters config) throws AmpApiException {
 
         List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
+        logger.info("Clustered points :"+c);
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
         for (ClusteredPoints clusteredPoints : c) {
             if (StringUtils.isNotBlank(clusteredPoints.getLon())

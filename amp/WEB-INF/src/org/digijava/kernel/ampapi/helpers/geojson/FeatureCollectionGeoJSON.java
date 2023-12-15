@@ -14,8 +14,12 @@ import java.util.List;
  */
 public class FeatureCollectionGeoJSON extends GeoJSON
 {
+
+
     public List<FeatureGeoJSON> features;
-    
+    public List<FeatureGeoJSON> getFeatures() {
+        return features;
+    }
     public FeatureCollectionGeoJSON() {
         super();
         this.features = new ArrayList<>();

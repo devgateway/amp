@@ -113,7 +113,7 @@ public class GisEndPoints {
                         clusteredPoints.getActivityids(),
                         clusteredPoints.getAdmin(), clusteredPoints.getAdmId());
                 logger.info("Point is : "+point);
-                result.features.add(point);
+                result.getFeatures().add(point);
             }
         }
 

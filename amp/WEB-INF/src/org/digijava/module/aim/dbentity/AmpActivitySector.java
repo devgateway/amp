@@ -38,23 +38,6 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
 
     private AmpClassificationConfiguration classificationConfig;
 
-//    @Interchangeable(fieldTitle = "Indirect Sectors")
-//    private Set<AmpActivityIndirectSector> indirectSectors = new HashSet<>();
-
-    //public Set<AmpActivityIndirectSector> getIndirectSectors() { return indirectSectors; }
-
-//    public void setIndirectSectors(Set<AmpActivityIndirectSector> indirectSectors) {
-//        this.indirectSectors = indirectSectors;
-//    }
-//
-//    public void addIndirectSector(AmpActivityIndirectSector pIndirectSector) {
-//        pIndirectSector.setActivitySector(this);
-//        indirectSectors.add(pIndirectSector);
-//    }
-
-
-
-
     public AmpClassificationConfiguration getClassificationConfig() {
         return classificationConfig;
     }

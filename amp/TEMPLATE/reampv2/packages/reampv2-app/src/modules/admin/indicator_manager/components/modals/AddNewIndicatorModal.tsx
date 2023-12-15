@@ -177,7 +177,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         text: 'Indicator created successfully',
         icon: 'success',
         confirmButtonText: 'Ok',
-      }).then(() => { 
+      }).then(() => {
         dispatch(getIndicators());
         handleClose();
       });
@@ -372,7 +372,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                           classNamePrefix="select"
                         />
-                      ) : null
+                      ) : (
+                            <Select
+                                name="sectors"
+                                isDisabled={true}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                            />
+                      )
                     }
                   </Form.Group>
                 </Row>
@@ -397,7 +403,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           className={`basic-multi-select ${styles.input_field}`}
                           classNamePrefix="select"
                         />
-                      ) : null
+                      ) : (
+                          <Select
+                              name="programScheme"
+                              isDisabled={true}
+                              defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                          />
+                      )
                     }
                   </Form.Group>
                 </Row>
@@ -425,7 +437,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           <Select
                             name="programs"
                             isDisabled={true}
-                            defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-programs"] }}
+                            defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                           />
                       }
                     </Form.Group>

@@ -51,6 +51,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
 
+  const creationDateRef = useRef<HTMLInputElement>(null);
+  const baseOriginalValueDateRef = useRef<HTMLInputElement>(null);
+  const baseRevisedValueDateRef = useRef<HTMLInputElement>(null);
+  const targetOriginalValueDateRef = useRef<HTMLInputElement>(null);
+  const targetRevisedValueDateRef = useRef<HTMLInputElement>(null);
+
   const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
 
 
@@ -109,7 +115,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       setProgramFieldVisible(false);
       setBaseOriginalValueDateDisabled(false);
       setTargetOriginalValueDateDisabled(false);
-      
+
       const programScheme: ProgramSchemeType = programsReducer.programSchemes.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
         const children = extractChildrenFromProgramScheme(programScheme);
@@ -123,12 +129,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         setProgramFieldVisible(true);
 
         if (programScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(programScheme.startDate || ''));
           setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(programScheme.endDate || ''));
           setTargetOriginalValueDateDisabled(true);
         }
       }
@@ -184,12 +190,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         })
 
         if (foundProgramScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.startDate || ''));
           setBaseOriginalValueDateDisabled(true);
         }
 
         if (foundProgramScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.endDate || ''));
           setTargetOriginalValueDateDisabled(true);
         }
       }
@@ -261,18 +267,18 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     sectors: getDefaultSectors() || [],
     programId: '',
     ascending: indicator?.ascending || false,
-    creationDate: indicator?.creationDate && DateUtil.backendDateToJavascriptDate(indicator?.creationDate),
+    creationDate: indicator?.creationDate,
     base: {
       originalValue: indicator?.base?.originalValue,
-      originalValueDate: indicator?.base?.originalValueDate && DateUtil.backendDateToJavascriptDate(indicator?.base?.originalValueDate),
+      originalValueDate: indicator?.base?.originalValueDate,
       revisedValue: indicator?.base?.revisedValue,
-      revisedValueDate: indicator?.base?.revisedValueDate && DateUtil.backendDateToJavascriptDate(indicator?.base?.revisedValueDate),
+      revisedValueDate: indicator?.base?.revisedValueDate,
     },
     target: {
       originalValue: indicator?.target?.originalValue,
-      originalValueDate: indicator?.target?.originalValueDate && DateUtil.backendDateToJavascriptDate(indicator?.target?.originalValueDate),
+      originalValueDate: indicator?.target?.originalValueDate,
       revisedValue: indicator?.target?.revisedValue,
-      revisedValueDate: indicator?.target?.revisedValueDate && DateUtil.backendDateToJavascriptDate(indicator?.target?.revisedValueDate),
+      revisedValueDate: indicator?.target?.revisedValueDate,
     }
   };
 
@@ -327,6 +333,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       >
         {(props) => (
           <>
+            { console.log("form values ======>", props.values)}
             <Form noValidate onSubmit={props.handleSubmit}>
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
@@ -409,7 +416,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         defaultValue={new Date()}
                         clearIcon={null}
                         calendarIcon={null}
-                        className={styles.input_field} />
+                        className={styles.input_field}
+                       id="creationDate"
+                      inputRef={creationDateRef}/>
                     </Form.Group>
                   </Row>
 
@@ -433,7 +442,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             classNamePrefix="select"
                             defaultValue={props.values.sectors}
                           />
-                        ) : null
+                        ) : (
+                            <Select
+                                isDisabled={true}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                            />
+                        )
                       }
                     </Form.Group>
                   </Row>
@@ -459,7 +473,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             classNamePrefix="select"
                             value={defaultProgramScheme}
                           />
-                        ) : null
+                        ) : (
+                            <Select
+                                isDisabled={true}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                            />
+                        )
                       }
                     </Form.Group>
                   </Row>
@@ -488,7 +507,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                               name="programs"
                               isDisabled={true}
-                              defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-programs"] }}
+                              defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         }
                       </Form.Group>
@@ -536,6 +555,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           name="base.originalValueDate"
                           disabled={baseOriginalValueDateDisabled}
                           className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
+                          id="baseOriginalValueDate"
+                          inputRef={baseOriginalValueDateRef}
                         />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
@@ -575,7 +596,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           }}
                           onBlur={props.handleBlur}
                           name="base.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`} />
+                          className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
+                          id="baseRevisedValueDate"
+                          inputRef={baseRevisedValueDateRef}
+                        />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValueDate}
@@ -617,7 +641,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           disabled={targetOriginalValueDateDisabled}
                           onBlur={props.handleBlur}
                           name="target.originalValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />
+                          className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
+                          id="targetOriginalValueDate"
+                          inputRef={targetOriginalValueDateRef}
+                        />
                       </Form.Group>
                     </Row>
 
@@ -652,7 +679,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           }}
                           onBlur={props.handleBlur}
                           name="target.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`} />
+                          className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
+                          id="targetRevisedValueDate"
+                          inputRef={targetRevisedValueDateRef}
+                        />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.revisedValueDate}

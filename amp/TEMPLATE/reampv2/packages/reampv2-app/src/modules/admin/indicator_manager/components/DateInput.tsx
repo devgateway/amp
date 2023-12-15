@@ -8,6 +8,7 @@ import './css/React-Calendar.css';
 import './css/DateInput.css';
 
 export interface DateInputProps {
+    id?: string;
     value?: string | Date;
     defaultValue?: string | Date;
     className?: string;
@@ -24,10 +25,26 @@ export interface DateInputProps {
 }
 
 const DateInput: React.FC<DateInputProps> = (props) => {
-    const { className, value, onChange, name, defaultValue, disabled, clearIcon, calendarIcon, inputRef, minDate, maxDate, onClear } = props;
+    const {
+        id,
+        className,
+        value,
+        onChange,
+        name,
+        defaultValue,
+        disabled,
+        clearIcon,
+        calendarIcon,
+        inputRef,
+        minDate,
+        maxDate,
+        onClear
+    } = props;
     const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
-    const [dateFormat, setDateFormat] = useState('');
+    const [dateFormat, setDateFormat] = useState<string | undefined>();
     const [inputValue, setInputValue] = useState<string | Date | undefined>(value);
+
+    console.log("inputValue", inputValue);
 
     const getDefaultDateFormat = () => {
         if (globalSettings) {
@@ -73,12 +90,14 @@ const DateInput: React.FC<DateInputProps> = (props) => {
     }
 
     console.log("dateformat", dateFormat);
+    console.log("inputValue====>", inputValue);
 
     return (
         <div>
-            {dateFormat !== '' && (
+            {dateFormat && (
                 <DatePicker
-                    format={dateFormat !== '' ? dateFormat : 'dd/MM/yyyy'}
+                    id={id}
+                    format={dateFormat}
                     monthPlaceholder="mm"
                     dayPlaceholder="dd"
                     yearPlaceholder="yyyy"
@@ -98,6 +117,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
                     clearAriaLabel="Clear Date"
                     calendarAriaLabel="Toggle Calendar"
                     inputRef={inputRef}
+                    locale="en-US"
                 />
             )}
         </div>

@@ -55,4 +55,15 @@ public class ClusteredPoints {
     public void setAdmId(Long admId) {
         this.admId = admId;
     }
+
+    @Override
+    public String toString() {
+        return "ClusteredPoints{" +
+                "activityids=" + activityids +
+                ", lat='" + lat + '\'' +
+                ", lon='" + lon + '\'' +
+                ", admin='" + admin + '\'' +
+                ", admId=" + admId +
+                '}';
+    }
 }

@@ -106,13 +106,14 @@ public class GisEndPoints {
         logger.info("Clustered points :"+c.size());
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
         for (ClusteredPoints clusteredPoints : c) {
-            logger.info("Point is : "+clusteredPoints);
             if (StringUtils.isNotBlank(clusteredPoints.getLon())
                     && StringUtils.isNotBlank(clusteredPoints.getLat())){
-                result.features.add(getPoint(new Double(clusteredPoints.getLon()),
+                FeatureGeoJSON point = getPoint(new Double(clusteredPoints.getLon()),
                         new Double(clusteredPoints.getLat()),
                         clusteredPoints.getActivityids(),
-                        clusteredPoints.getAdmin(), clusteredPoints.getAdmId()));
+                        clusteredPoints.getAdmin(), clusteredPoints.getAdmId());
+                logger.info("Point is : "+point);
+                result.features.add(point);
             }
         }
 

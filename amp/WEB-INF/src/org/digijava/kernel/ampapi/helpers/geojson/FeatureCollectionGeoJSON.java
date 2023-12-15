@@ -24,7 +24,7 @@ public class FeatureCollectionGeoJSON extends GeoJSON
     public boolean isValid( PositionValidator validator )
     {
         if ( features==null ) return false;
-        if ( features.size()==0 ) return false;
+        if (features.isEmpty()) return false;
 
         for ( FeatureGeoJSON feature : features )
         {

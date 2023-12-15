@@ -232,6 +232,7 @@ public class LocationService {
                         if (cp != null) {
                             l.add(cp);
                         }
+                        logger.info("Point fetched is "+cp);
                     }
                 }});
         } catch (HibernateException e) {

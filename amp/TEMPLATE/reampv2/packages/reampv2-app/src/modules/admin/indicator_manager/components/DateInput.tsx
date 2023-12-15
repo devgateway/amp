@@ -44,8 +44,6 @@ const DateInput: React.FC<DateInputProps> = (props) => {
     const [dateFormat, setDateFormat] = useState<string | undefined>();
     const [inputValue, setInputValue] = useState<string | Date | undefined>(value);
 
-    console.log("inputValue", inputValue);
-
     const getDefaultDateFormat = () => {
         if (globalSettings) {
             const format = globalSettings['default-date-format'];
@@ -88,9 +86,6 @@ const DateInput: React.FC<DateInputProps> = (props) => {
             </svg>
         )
     }
-
-    console.log("dateformat", dateFormat);
-    console.log("inputValue====>", inputValue);
 
     return (
         <div>

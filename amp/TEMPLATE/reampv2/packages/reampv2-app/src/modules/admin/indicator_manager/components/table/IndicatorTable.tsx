@@ -20,6 +20,7 @@ import EditIndicatorModal from '../modals/EditIndicatorModal';
 import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
 import { Loading } from '../../../../../utils/components/Loading';
 import dayjs from 'dayjs';
+import {DateUtil} from "../../utils/dateFn";
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
@@ -91,7 +92,6 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
           sort: true,
           headerStyle: { width: '30%' },
           formatter: (_cell: any, row: any) => {
-            console.log("cell in sectors=====>", _cell)
             return (
                 <div>
                   {
@@ -147,15 +147,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       dataField: 'creationDate',
       text: translations['amp.indicatormanager:table-header-creation-date'],
       sort: true,
-      headerStyle: { width: '10%' },
-      // formatter: (_cell: any, row: any) => {
-      //   const formattedDate = globalSettings["default-date-format"] && dayjs(row.creationDate).format(globalSettings["default-date-format"])
-      //   return (
-      //     <div>
-      //       {formattedDate}
-      //     </div>
-      //   )
-      // },
+      headerStyle: { width: '10%' }
     },
     {
       dataField: 'action',

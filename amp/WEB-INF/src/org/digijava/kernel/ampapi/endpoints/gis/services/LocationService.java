@@ -185,25 +185,25 @@ public class LocationService {
 
 
         }else{
-        qry.value = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
-                + " select acvl.id, acvl.parent_location, acvl.gs_lat, acvl.gs_long, acvl.parent_category_value, 1, acvl.id,acvl.location_name  "
-                + " from amp_category_value_location acvl  "
-                + " join amp_category_value amcv on acvl.parent_category_value =amcv.id  "
-                + " where amcv.category_value ='"
-                + adminLevel
-                + "'  "
-                + " and acvl.gs_lat is not null and acvl.gs_long is not null  "
-                + " and (acvl.deleted is null or acvl.deleted = false) "
-                + " UNION ALL  "
-                + " SELECT acvl.id, acvl.parent_location, rt.gs_lat, rt.gs_long, acvl.parent_category_value, rt.LEVEL + 1, rt.root_location_id, rt.root_location_description  "
-                + " FROM rt_amp_category_value_location rt, amp_category_value_location acvl  "
-                + " WHERE acvl.parent_location =rt.id  "
-                + " )  "
-                + " SELECT distinct al.amp_activity_id, acvl.root_location_id, acvl.root_location_description, acvl.gs_lat, acvl.gs_long  "
-                + " FROM amp_activity_location al  "
-                + " join rt_amp_category_value_location acvl on al.location_id = acvl.id  "
-                + " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
-                + " order by acvl.root_location_id,al.amp_activity_id";
+            qry.value = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
+                    + " select acvl.id, acvl.parent_location, acvl.gs_lat, acvl.gs_long, acvl.parent_category_value, 1, acvl.id,acvl.location_name  "
+                    + " from amp_category_value_location acvl  "
+                    + " join amp_category_value amcv on acvl.parent_category_value =amcv.id  "
+                    + " where amcv.category_value ='"
+                    + adminLevel
+                    + "'  "
+                    + " and acvl.gs_lat is not null and acvl.gs_long is not null  "
+                    + " and (acvl.deleted is null or acvl.deleted = false) "
+                    + " UNION ALL  "
+                    + " SELECT acvl.id, acvl.parent_location, rt.gs_lat, rt.gs_long, acvl.parent_category_value, rt.LEVEL + 1, rt.root_location_id, rt.root_location_description  "
+                    + " FROM rt_amp_category_value_location rt, amp_category_value_location acvl  "
+                    + " WHERE acvl.parent_location =rt.id  "
+                    + " )  "
+                    + " SELECT distinct al.amp_activity_id, acvl.root_location_id, acvl.root_location_description, acvl.gs_lat, acvl.gs_long  "
+                    + " FROM amp_activity_location al  "
+                    + " join rt_amp_category_value_location acvl on al.location_id = acvl.id  "
+                    + " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
+                    + " order by acvl.root_location_id,al.amp_activity_id";
         }
 
         try {
@@ -336,7 +336,7 @@ public class LocationService {
         List<AmpStructure> al = null;
         Set<Long> activitiesId = getActivitiesForFiltering(config, null);
         String queryString = "select s from " + AmpStructure.class.getName() + " s where"
-                    + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
+                + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
 
         Query q = PersistenceManager.getSession().createQuery(queryString);
         al = q.list();
@@ -390,14 +390,14 @@ public class LocationService {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();
         switch (shape) {
-        case GisConstants.GIS_STRUCTURE_POLYGON:
-            return buildPolygon(structure);
-        case GisConstants.GIS_STRUCTURE_POLYLINE:
-            return buildPolyLine(structure);
-        case GisConstants.GIS_STRUCTURE_POINT:
-            return buildPoint(structure);
-        default:
-            return null;
+            case GisConstants.GIS_STRUCTURE_POLYGON:
+                return buildPolygon(structure);
+            case GisConstants.GIS_STRUCTURE_POLYLINE:
+                return buildPolyLine(structure);
+            case GisConstants.GIS_STRUCTURE_POINT:
+                return buildPoint(structure);
+            default:
+                return null;
         }
     }
 
@@ -412,12 +412,12 @@ public class LocationService {
         LineStringGeoJSON line = new LineStringGeoJSON();
         line.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {
-          for (AmpStructureCoordinate coord : structure.getCoordinates()) {
-              List<Double> lngLat =  new ArrayList<>();
-              lngLat.add(parseDouble(coord.getLatitude()));
-              lngLat.add(parseDouble(coord.getLongitude()));
-              line.coordinates.add(lngLat);
-          }
+            for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                List<Double> lngLat =  new ArrayList<>();
+                lngLat.add(parseDouble(coord.getLatitude()));
+                lngLat.add(parseDouble(coord.getLongitude()));
+                line.coordinates.add(lngLat);
+            }
         }
 
         return line;
@@ -442,7 +442,7 @@ public class LocationService {
     }
 
     private static Double parseDouble(String value) {
-       return Double.parseDouble(value == null ? "0" : value);
+        return Double.parseDouble(value == null ? "0" : value);
     }
 
 }

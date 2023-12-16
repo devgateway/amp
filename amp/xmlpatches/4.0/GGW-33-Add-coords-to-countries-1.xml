@@ -18,7 +18,7 @@
 
 );
 
-COPY temp_country_data FROM 'classpath:countries.csv' DELIMITER ',' CSV HEADER;
+COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER;
 
 UPDATE amp_category_value_location
 SET

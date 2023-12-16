@@ -8,8 +8,27 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES (nextval('amp_global_settings_seq'), 'Multicountry Enabled', 'false', 't_Boolean', 'Multicountry Enabled', 'general', null, TRUE);
+CREATE TEMP TABLE IF NOT EXISTS temp_country_data (
+
+                                        longitude VARCHAR,
+                                        latitude VARCHAR,
+                                        countryName VARCHAR,
+                                          ISO VARCHAR,
+                                        COUNTRYAFF VARCHAR,AFF_ISO VARCHAR
+
+);
+
+COPY temp_country_data FROM '/src/main/resources/countries.csv' DELIMITER ',' CSV HEADER;
+
+UPDATE amp_category_value_location
+SET
+    gs_lat = temp_data.latitude,
+    gs_long = temp_data.longitude
+FROM temp_country_data temp_data
+WHERE amp_category_value_location.location_name = temp_data.countryName;
+
+DROP TABLE temp_country_data;
+
 			]]></lang>
         </script>
     </apply>

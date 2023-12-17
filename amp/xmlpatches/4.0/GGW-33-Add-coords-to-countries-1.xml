@@ -4,12 +4,11 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>GGW-33</jira>
     <author>bmokandu</author>
-    <description>Enable Multicountry switch in GIS.</description>
+    <description>Add coordinates to countries</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
 				CREATE TEMP TABLE IF NOT EXISTS temp_country_data (
-
                                         longitude VARCHAR,
                                         latitude VARCHAR,
                                         countryName VARCHAR,
@@ -18,7 +17,7 @@
 
 );
 
-COPY temp_country_data FROM 'xmlpatches/4.0/countries.csv' DELIMITER ',' CSV HEADER;
+\COPY temp_country_data FROM 'countries.csv' DELIMITER ',' WITH NULL AS '' CSV HEADER;
 
 UPDATE amp_category_value_location
 SET

@@ -1111,6 +1111,9 @@
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
+                <includes>
+                    <include>**/*.csv</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>

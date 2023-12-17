@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tns:patch closeOnSuccess="true" retryOnFail="true"
-           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-    <jira>GGW-33</jira>
-    <author>bmokandu</author>
-    <description>Add coordinates to countries</description>
-    <apply>
-        <script>
-            <lang delimiter=";" type="postgres"><![CDATA[
-				CREATE TEMP TABLE IF NOT EXISTS temp_country_data (
-                                        longitude VARCHAR,
-                                        latitude VARCHAR,
-                                        countryName VARCHAR,
-                                          ISO VARCHAR,
-                                        COUNTRYAFF VARCHAR,AFF_ISO VARCHAR
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<tns:patch closeOnSuccess="true" retryOnFail="true"-->
+<!--           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">-->
+<!--    <jira>GGW-33</jira>-->
+<!--    <author>bmokandu</author>-->
+<!--    <description>Add coordinates to countries</description>-->
+<!--    <apply>-->
+<!--        <script>-->
+<!--            <lang delimiter=";" type="postgres"><![CDATA[-->
+<!--				CREATE TEMP TABLE IF NOT EXISTS temp_country_data (-->
+<!--                                        longitude VARCHAR,-->
+<!--                                        latitude VARCHAR,-->
+<!--                                        countryName VARCHAR,-->
+<!--                                          ISO VARCHAR,-->
+<!--                                        COUNTRYAFF VARCHAR,AFF_ISO VARCHAR-->
 
-);
+<!--);-->
 
-COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER;
+<!--COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER;-->
 
-UPDATE amp_category_value_location
-SET
-    gs_lat = temp_data.latitude,
-    gs_long = temp_data.longitude
-FROM temp_country_data temp_data
-WHERE amp_category_value_location.location_name = temp_data.countryName;
+<!--UPDATE amp_category_value_location-->
+<!--SET-->
+<!--    gs_lat = temp_data.latitude,-->
+<!--    gs_long = temp_data.longitude-->
+<!--FROM temp_country_data temp_data-->
+<!--WHERE amp_category_value_location.location_name = temp_data.countryName;-->
 
-DROP TABLE temp_country_data;
-			]]></lang>
-        </script>
-    </apply>
-</tns:patch>
+<!--DROP TABLE temp_country_data;-->
+<!--			]]></lang>-->
+<!--        </script>-->
+<!--    </apply>-->
+<!--</tns:patch>-->

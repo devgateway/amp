@@ -41,6 +41,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.sql.Statement;
 import java.util.Collection;
@@ -260,9 +261,12 @@ public class AMPStartupListener extends HttpServlet implements
         Transaction transaction = session.beginTransaction();
 
         // Using Hibernate's native SQL execution
+        File file = new File("countries.csv");
+        String absolutePath = file.getAbsolutePath();
+
         session.doWork(connection -> {
             try (Statement statement = connection.createStatement()) {
-                String newCoords = "CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
+                String newCoords = String.format("CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
                         "                                        longitude VARCHAR,\n" +
                         "                                        latitude VARCHAR,\n" +
                         "                                        countryName VARCHAR,\n" +
@@ -271,7 +275,7 @@ public class AMPStartupListener extends HttpServlet implements
                         "\n" +
                         ");\n" +
                         "\n" +
-                        "COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER;\n" +
+                        "COPY temp_country_data FROM '%s' DELIMITER ',' CSV HEADER;\n" +
                         "\n" +
                         "UPDATE amp_category_value_location\n" +
                         "SET\n" +
@@ -280,7 +284,7 @@ public class AMPStartupListener extends HttpServlet implements
                         "FROM temp_country_data temp_data\n" +
                         "WHERE amp_category_value_location.location_name = temp_data.countryName;\n" +
                         "\n" +
-                        "DROP TABLE temp_country_data;";
+                        "DROP TABLE temp_country_data;",absolutePath);
 
                 statement.executeUpdate(newCoords);
 

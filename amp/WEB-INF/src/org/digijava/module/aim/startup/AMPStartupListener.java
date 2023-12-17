@@ -254,7 +254,7 @@ public class AMPStartupListener extends HttpServlet implements
     }
 
     public static void runQuery() {
-        logger.info("Creating trubudget relations");
+        logger.info("Adding coords");
         Session session = PersistenceManager.openNewSession();
 
         Transaction transaction = session.beginTransaction();

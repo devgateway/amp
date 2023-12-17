@@ -34,6 +34,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.management.MBeanServer;
 import javax.servlet.ServletContext;
@@ -41,6 +42,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 import java.lang.management.ManagementFactory;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -180,7 +182,7 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
             ContentRepositoryManager.initialize();
-            
+            runQuery();
             checkDatabaseSanity();
             initNiReports();
             importGazeteer();
@@ -249,6 +251,46 @@ public class AMPStartupListener extends HttpServlet implements
         }finally {
             PersistenceManager.cleanupSession(session);
         }
+    }
+
+    public static void runQuery() {
+        logger.info("Creating trubudget relations");
+        Session session = PersistenceManager.openNewSession();
+
+        Transaction transaction = session.beginTransaction();
+
+        // Using Hibernate's native SQL execution
+        session.doWork(connection -> {
+            try (Statement statement = connection.createStatement()) {
+                String newCoords = "CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
+                        "                                        longitude VARCHAR,\n" +
+                        "                                        latitude VARCHAR,\n" +
+                        "                                        countryName VARCHAR,\n" +
+                        "                                          ISO VARCHAR,\n" +
+                        "                                        COUNTRYAFF VARCHAR,AFF_ISO VARCHAR\n" +
+                        "\n" +
+                        ");\n" +
+                        "\n" +
+                        "COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER;\n" +
+                        "\n" +
+                        "UPDATE amp_category_value_location\n" +
+                        "SET\n" +
+                        "    gs_lat = temp_data.latitude,\n" +
+                        "    gs_long = temp_data.longitude\n" +
+                        "FROM temp_country_data temp_data\n" +
+                        "WHERE amp_category_value_location.location_name = temp_data.countryName;\n" +
+                        "\n" +
+                        "DROP TABLE temp_country_data;";
+
+                statement.executeUpdate(newCoords);
+
+            } catch (Exception e) {
+                // Handle the exception
+                logger.info("Error occurred during init db  operations", e);
+            }
+        });
+        transaction.commit();
+        session.close();
     }
     
     public void maintainMondrianCaches()

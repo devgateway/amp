@@ -262,6 +262,13 @@ public class AMPStartupListener extends HttpServlet implements
 
 
         String appPath = DocumentManagerUtil.getApplicationPath();
+        File[] files = new File(appPath+"/WEB-INF/src").listFiles();
+        for (File file : files) {
+            if (file.isFile()) {
+                logger.info("FIle is: "+ file.getName());
+            }
+        }
+
         String absolutePath = appPath+"/WEB-INF/src/countries.csv";
         logger.info("Countries file location is: "+absolutePath);
 

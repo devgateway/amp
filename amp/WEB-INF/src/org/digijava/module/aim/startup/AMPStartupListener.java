@@ -270,6 +270,7 @@ public class AMPStartupListener extends HttpServlet implements
         }
 
         String absolutePath = appPath+"/WEB-INF/classes/countries.csv";
+        DocumentManagerUtil.setFilePermission(absolutePath,"rw-r--r--");
         logger.info("Countries file location is: "+absolutePath);
 
         session.doWork(connection -> {

@@ -49,6 +49,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.*;
 
 
@@ -111,6 +116,22 @@ public class DocumentManagerUtil {
     public static String getApplicationPath() {
         PathHelper ph   = new DocumentManagerUtil().new PathHelper();
         return ph.getApplicationPath();
+    }
+
+    public static void setFilePermission(String path, String permission)
+    {
+        Path filePath = Paths.get(path);
+
+        // Define the desired permissions
+        Set<PosixFilePermission> permissions = PosixFilePermissions.fromString(permission);
+
+        try {
+            // Set the permissions to the file
+            Files.setPosixFilePermissions(filePath, permissions);
+            System.out.println("File permissions set successfully.");
+        } catch (Exception e) {
+            System.out.println("Error setting file permissions: " + e.getMessage());
+        }
     }
     
     public static String calendarToString(Calendar cal,boolean yearofPublication) {

@@ -42,6 +42,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.management.ManagementFactory;
 import java.sql.Statement;
 import java.util.Collection;
@@ -272,6 +273,13 @@ public class AMPStartupListener extends HttpServlet implements
         String absolutePath = appPath+"/WEB-INF/classes/countries.csv";
         DocumentManagerUtil.setFilePermission(absolutePath,"rw-r--r--");
         logger.info("Countries file location is: "+absolutePath);
+        try {
+            FileInputStream fileInputStream =new FileInputStream(absolutePath);
+            System.out.println(fileInputStream.available());
+        }catch (Exception e)
+        {
+            logger.error("Error in csv: ",e);
+        }
 
         session.doWork(connection -> {
             try (Statement statement = connection.createStatement()) {

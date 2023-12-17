@@ -602,7 +602,7 @@ public class DocumentManagerUtil {
             try {
                 String path;
                 try {
-                    path                    = rootUrl.toURI().getPath();
+                    path           = rootUrl.toURI().getPath();
                 }
                 catch (Exception E) {
                     ////System.out.println("PathHelper:::0)Trying to recover from URI error ! ");

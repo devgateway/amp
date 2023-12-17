@@ -261,8 +261,8 @@ public class AMPStartupListener extends HttpServlet implements
         Transaction transaction = session.beginTransaction();
 
 
-        ServletContext servletContext = getServletContext();
-        String absolutePath = servletContext.getRealPath("/WEB-INF/src/countries.csv");
+        String appPath = DocumentManagerUtil.getApplicationPath();
+        String absolutePath = appPath+"/WEB-INF/src/countries.csv";
         logger.info("Countries file location is: "+absolutePath);
 
         session.doWork(connection -> {

@@ -254,15 +254,15 @@ public class AMPStartupListener extends HttpServlet implements
         }
     }
 
-    public static void runQuery() {
+    public void runQuery() {
         logger.info("Adding coords");
         Session session = PersistenceManager.openNewSession();
 
         Transaction transaction = session.beginTransaction();
 
-        // Using Hibernate's native SQL execution
-        File file = new File("WEB-INF/src/countries.csv");
-        String absolutePath = file.getAbsolutePath();
+
+        ServletContext servletContext = getServletContext();
+        String absolutePath = servletContext.getRealPath("/WEB-INF/src/countries.csv");
         logger.info("Countries file location is: "+absolutePath);
 
         session.doWork(connection -> {

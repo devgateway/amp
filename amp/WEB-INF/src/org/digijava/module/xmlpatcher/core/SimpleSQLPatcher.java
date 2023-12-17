@@ -335,25 +335,19 @@ public class SimpleSQLPatcher {
                             + "('Persian','Urdu','Hebrew','Arabic',"
                             + "'Kurdish')", "UPDATE dg_locale SET left_to_right = true WHERE name NOT IN ('Persian',"
                     + "'Urdu','Hebrew','Arabic','Kurdish')"));
-            addPatch(new SimpleSQLPatch("016","CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
+            addPatch(new SimpleSQLPatch("017","CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
                     "                                        longitude VARCHAR,\n" +
                     "                                        latitude VARCHAR,\n" +
                     "                                        countryName VARCHAR,\n" +
                     "                                          ISO VARCHAR,\n" +
-                    "                                        COUNTRYAFF VARCHAR,AFF_ISO VARCHAR\n" +
-                    "\n" +
-                    ");\n" +
-                    "\n" +
-                    "COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER;\n" +
-                    "\n" +
-                    "UPDATE amp_category_value_location\n" +
-                    "SET\n" +
-                    "    gs_lat = temp_data.latitude,\n" +
-                    "    gs_long = temp_data.longitude\n" +
-                    "FROM temp_country_data temp_data\n" +
-                    "WHERE amp_category_value_location.location_name = temp_data.countryName;\n" +
-                    "\n" +
-                    "DROP TABLE temp_country_data;"));
+                    "                                        COUNTRYAFF VARCHAR,AFF_ISO VARCHAR\n"+
+                    ")","COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER",
+                    "UPDATE amp_category_value_location " +
+                            "SET" +
+                            "    gs_lat = temp_data.latitude,\n" +
+                            "    gs_long = temp_data.longitude\n" +
+                            "FROM temp_country_data temp_data\n" +
+                            "WHERE amp_category_value_location.location_name = temp_data.countryName;","DROP TABLE temp_country_data"));
             // AMP-27104 for the patch to work a double restart is needed with a simple_sql_patch we avoid this
             // this was introduced in AMP-26932
 

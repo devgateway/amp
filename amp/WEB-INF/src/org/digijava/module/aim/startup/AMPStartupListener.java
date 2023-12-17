@@ -263,6 +263,7 @@ public class AMPStartupListener extends HttpServlet implements
         // Using Hibernate's native SQL execution
         File file = new File("countries.csv");
         String absolutePath = file.getAbsolutePath();
+        logger.info("Countries file location is: "+absolutePath);
 
         session.doWork(connection -> {
             try (Statement statement = connection.createStatement()) {

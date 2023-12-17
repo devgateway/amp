@@ -261,7 +261,7 @@ public class AMPStartupListener extends HttpServlet implements
         Transaction transaction = session.beginTransaction();
 
         // Using Hibernate's native SQL execution
-        File file = new File("countries.csv");
+        File file = new File("classpath:countries.csv");
         String absolutePath = file.getAbsolutePath();
         logger.info("Countries file location is: "+absolutePath);
 

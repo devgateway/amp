@@ -17,7 +17,7 @@
 
 );
 
-COPY temp_country_data FROM 'countries.csv' DELIMITER ',' WITH NULL AS '' CSV HEADER;
+COPY temp_country_data FROM 'countries.csv' DELIMITER ',' CSV HEADER;
 
 UPDATE amp_category_value_location
 SET

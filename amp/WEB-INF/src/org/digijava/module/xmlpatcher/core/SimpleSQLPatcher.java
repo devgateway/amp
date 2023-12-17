@@ -335,7 +335,7 @@ public class SimpleSQLPatcher {
                             + "('Persian','Urdu','Hebrew','Arabic',"
                             + "'Kurdish')", "UPDATE dg_locale SET left_to_right = true WHERE name NOT IN ('Persian',"
                     + "'Urdu','Hebrew','Arabic','Kurdish')"));
-            addPatch(new SimpleSQLPatch("016,CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
+            addPatch(new SimpleSQLPatch("016","CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
                     "                                        longitude VARCHAR,\n" +
                     "                                        latitude VARCHAR,\n" +
                     "                                        countryName VARCHAR,\n" +

@@ -184,7 +184,6 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
             ContentRepositoryManager.initialize();
-            runQuery();
             checkDatabaseSanity();
             initNiReports();
             importGazeteer();
@@ -255,64 +254,7 @@ public class AMPStartupListener extends HttpServlet implements
         }
     }
 
-    public void runQuery() {
-        logger.info("Adding coords");
-        Session session = PersistenceManager.openNewSession();
 
-        Transaction transaction = session.beginTransaction();
-
-
-        String appPath = DocumentManagerUtil.getApplicationPath();
-        File[] files = new File(appPath+"/WEB-INF/classes").listFiles();
-        for (File file : files) {
-            if (file.isFile()) {
-                logger.info("FIle is: "+ file.getName());
-            }
-        }
-
-        String absolutePath = appPath+"/WEB-INF/classes/countries.csv";
-        DocumentManagerUtil.setFilePermission(absolutePath,"rwxr--r--");
-        logger.info("Countries file location is: "+absolutePath);
-        try {
-            FileInputStream fileInputStream =new FileInputStream(absolutePath);
-            logger.info("Available "+fileInputStream.available());
-        }catch (Exception e)
-        {
-            logger.error("Error in csv: ",e);
-        }
-
-        session.doWork(connection -> {
-            try (Statement statement = connection.createStatement()) {
-                String newCoords = String.format("CREATE TEMP TABLE IF NOT EXISTS temp_country_data (\n" +
-                        "                                        longitude VARCHAR,\n" +
-                        "                                        latitude VARCHAR,\n" +
-                        "                                        countryName VARCHAR,\n" +
-                        "                                          ISO VARCHAR,\n" +
-                        "                                        COUNTRYAFF VARCHAR,AFF_ISO VARCHAR\n" +
-                        "\n" +
-                        ");\n" +
-                        "\n" +
-                        "COPY temp_country_data FROM '%s' DELIMITER ',' CSV HEADER;\n" +
-                        "\n" +
-                        "UPDATE amp_category_value_location\n" +
-                        "SET\n" +
-                        "    gs_lat = temp_data.latitude,\n" +
-                        "    gs_long = temp_data.longitude\n" +
-                        "FROM temp_country_data temp_data\n" +
-                        "WHERE amp_category_value_location.location_name = temp_data.countryName;\n" +
-                        "\n" +
-                        "DROP TABLE temp_country_data;",absolutePath);
-
-                statement.executeUpdate(newCoords);
-
-            } catch (Exception e) {
-                // Handle the exception
-                logger.info("Error occurred during init db  operations", e);
-            }
-        });
-        transaction.commit();
-        session.close();
-    }
     
     public void maintainMondrianCaches()
     {

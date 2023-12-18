@@ -275,7 +275,7 @@ public class AMPStartupListener extends HttpServlet implements
         logger.info("Countries file location is: "+absolutePath);
         try {
             FileInputStream fileInputStream =new FileInputStream(absolutePath);
-            System.out.println(fileInputStream.available());
+            logger.info("Available "+fileInputStream.available());
         }catch (Exception e)
         {
             logger.error("Error in csv: ",e);

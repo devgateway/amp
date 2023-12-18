@@ -11,6 +11,8 @@ def extract_country_data(csv_file_path):
             longitude = float(row['longitude'])
             latitude = float(row['latitude'])
             country = row['COUNTRY']
+            if("'" in country):
+                continue
 
             print((country, str(longitude), str(latitude)),end="," )
 

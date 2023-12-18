@@ -172,10 +172,7 @@ public class AMPStartupListener extends HttpServlet implements
             }
             
             logger.info("loading the activity->pledge view twins configuration and checking for consistency...");
-            int a = PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.size();
-            if (a < 0)
-                throw new RuntimeException("should not happen!");
-            
+
             logger.info("loading the column ancestorship relationships and checking for consistency with the database...");
             logger.info("loaded relationships for " + ARDimension.columnAncestors.size() + " columns"); // DO NOT DELETE THIS LINE! it has the sideeffect of checking database for consistency (else it will crash anyway at the first run report)
             

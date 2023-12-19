@@ -1,19 +1,26 @@
 <wicket:extend>
-	<div wicket:id="container">
-		<div id="indicatorTabs" class="yui-navset" >
-			<ul class="yui-nav">
-				<li wicket:id="locationItemsForTabs">
-					<a wicket:id="locationLinkForTabs">
-						<span wicket:id="locationTabsLabel"/>
-					</a>
-				</li>
-			</ul>
-			<div class="yui-content" id="theContent"></div>
-		</div>
+	<tr><td colspan="2">
+		<div wicket:id="container">
+			<div id="indicatorTabs" class="yui-navset" >
+				<ul class="yui-nav">
+					<li wicket:id="locationItemsForTabs">
+						<a wicket:id="locationLinkForTabs">
+							<span wicket:id="locationTabsLabel"/>
+						</a>
+					</li>
+				</ul>
+				<div class="yui-content" id="theLocationIndicatorContent"></div>
+			</div>
 
-		<div wicket:id="listIndicatorLocation" class="funding_group_feature_box">
-			<div wicket:id="indicatorLocation" />
+			<div wicket:id="listIndicatorLocation" class="funding_group_feature_box">
+				<div wicket:id="indicatorLocation" />
+			</div>
 		</div>
+	</td></tr>
+
+
+
+
 <!--		<tr>-->
 <!--			<td>-->
 <!--				<div wicket:id="list">-->
@@ -51,5 +58,5 @@
 <!--				</table>-->
 <!--			</td>-->
 <!--		</tr>-->
-	</div>
+
 </wicket:extend>

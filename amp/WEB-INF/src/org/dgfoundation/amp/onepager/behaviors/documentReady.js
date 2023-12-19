@@ -244,8 +244,8 @@ function switchTabs(lastIndex) {
 
 function indicatorTabs(lastIndex) {
 	if (isTabView) {
-		$('div[data-is_tab=true]').each(function(index) {
-			$(this).appendTo("#theContent");
+		$('div[data-is_location_tab=true]').each(function(index) {
+			$(this).appendTo("#theLocationIndicatorContent");
 		});
 
 		var loader = new YAHOO.util.YUILoader({
@@ -261,7 +261,7 @@ function indicatorTabs(lastIndex) {
 					if (lastIndex >= 0) { // if its grater or equals than 0 we
 						// focus on that tab
 						myFundingTabs.selectTab(lastIndex);
-						$('div[data-is_tab=true]').find(
+						$('div[data-is_location_tab=true]').find(
 							".organization_box_content").last().find(
 							".collapsable").first().show();
 					} else {

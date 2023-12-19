@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -21,6 +22,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSecti
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
@@ -34,10 +36,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
@@ -54,14 +53,21 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
      * @param fmName
      * @throws Exception
      */
-    private final ListView<IndicatorActivity> list;
+//    private final ListView<IndicatorActivity> list;
+    private final ListEditor<IndicatorActivity> list;
     protected ListEditor<AmpActivityLocation> tabsList;
 
     protected ListEditor<AmpActivityLocation> indicatorLocationList;
 
     private boolean isTabsView = true;
+
+    private Integer tabIndex;
+
+    protected IModel<Set<IndicatorActivity>> parentModel;
+
+    protected IModel<Set<IndicatorActivity>> setModel;
     public AmpMEItemFeaturePanel(String id, String fmName, IModel<AmpActivityLocation> location,
-                                 final IModel<AmpActivityVersion> conn, IModel<Set<AmpActivityLocation>> locations) throws Exception {
+                                 final IModel<AmpActivityVersion> conn, IModel<Set<AmpActivityLocation>> locations, AmpMEFormSectionFeature parent) throws Exception {
         super(id, fmName, true);
 
 //        if (values.getObject() == null) values.setObject(new HashSet<>());
@@ -76,8 +82,18 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         final IModel<List<IndicatorActivity>> listModel = OnePagerUtil
                 .getReadOnlyListModelFromSetModel(new PropertyModel(conn, "indicators"));
 
+        parentModel = new PropertyModel<>(conn, "indicators");
+
+        setModel = new AbstractMixedSetModel<IndicatorActivity>(parentModel) {
+            @Override
+            public boolean condition(IndicatorActivity item) {
+//                return item.getActivityLocation() == location.getObject();
+                return true;
+            }
+        };
+
         final AmpUniqueCollectionValidatorField<IndicatorActivity> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<IndicatorActivity>(
-                "uniqueMEValidator", listModel, "Unique MEs Validator") {
+                "uniqueMEValidator", setModel, "Unique MEs Validator") {
 
             @Override
             public Object getIdentifier(IndicatorActivity t) {
@@ -86,19 +102,16 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         };
         add(uniqueCollectionValidationField);
 
-        list = new ListView<IndicatorActivity>("list", listModel) {
+        list = new ListEditor<IndicatorActivity>("list", setModel) {
             @Override
-            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<IndicatorActivity> item) {
-//                AmpMEItemFeaturePanel indicator = null;
-//                try {
-//                    indicator = new AmpMEItemFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"), locations);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//                item.add(indicator);
+            protected void onPopulateItem(ListItem<IndicatorActivity> item) {
+
+
+//            @Override
+//            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<IndicatorActivity> item) {
                 AmpMEIndicatorFeaturePanel indicatorItem = null;
                 try {
-                    indicatorItem = new AmpMEIndicatorFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"));
+                    indicatorItem = new AmpMEIndicatorFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"), location);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -120,7 +133,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 item.add(deleteLinkField);
             }
         };
-        list.setReuseItems(true);
+//        list.setReuseItems(true);
         add(list);
 
 
@@ -137,13 +150,28 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
                     @Override
                     public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
+                        //                        IndicatorActivity ia = new IndicatorActivity();
+//                        ia.setActivity(am.getObject());
+//                        ia.setIndicator(choice);
+//                        am.getObject().getIndicators().add(ia);
+//                        uniqueCollectionValidationField.reloadValidationField(target);
+//
+//                        //setModel.getObject().add(ia);
+//                        list.removeAll();
+//                        target.add(list.getParent());
+//
+//                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+//                        target.appendJavaScript("indicatorTabs();");
+
                         IndicatorActivity ia = new IndicatorActivity();
                         ia.setActivity(conn.getObject());
                         ia.setIndicator(choice);
+                        ia.setActivityLocation(location.getObject());
                         conn.getObject().getIndicators().add(ia);
                         uniqueCollectionValidationField.reloadValidationField(target);
 
-                        //setModel.getObject().add(ia);
+//                        parent.addLocationIndicator(conn.getObject());
+//                        setModel.getObject().add(ia);
                         list.removeAll();
                         target.add(list.getParent());
 
@@ -327,4 +355,11 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 //        add(setValue);
     }
 
+    public Integer getTabIndex() {
+        return tabIndex;
+    }
+
+    public void setTabIndex(Integer tabIndex) {
+        this.tabIndex = tabIndex;
+    }
 }

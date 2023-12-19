@@ -37,7 +37,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
      */
     
     public AmpMEIndicatorFeaturePanel(String id, String fmName, final IModel<IndicatorActivity> conn,
-                                 IModel<AmpIndicator> indicator, final IModel<Set<AmpIndicatorValue>> values) throws Exception {
+                                 IModel<AmpIndicator> indicator, final IModel<Set<AmpIndicatorValue>> values, IModel<AmpActivityLocation> location) throws Exception {
         super(id, fmName, true);
 
         if (values.getObject() == null) values.setObject(new HashSet<>());
@@ -108,7 +108,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<String>(targetVal, "valueDate"));
         add(indicatorTargetDateLabel);
 
-        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7);
+        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
         add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
@@ -116,6 +116,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             public void onClick(AjaxRequestTarget target) {
                 AmpIndicatorValue value = new AmpIndicatorValue();
                 value.setIndicatorConnection(conn.getObject());
+                value.setActivityLocation(location.getObject());
                 value.setValueDate(new Date(System.currentTimeMillis()));
                 value.setValueType(AmpIndicatorValue.ACTUAL);
                 valuesTable.getEditorList().addItem(value);

@@ -331,9 +331,9 @@ public class AmpDonorFundingFormSectionFeature extends
                         "fundingItem", "Funding Group", new Model<AmpRole>(orgRole.getRole()), fundingModel,
                         new Model<AmpOrganisation>(orgRole.getOrganisation()), am,
                         AmpDonorFundingFormSectionFeature.this);
-//                fg.setTabIndex(item.getIndex());
-//                item.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
-//                listItems.put(orgRole, fg);
+                fg.setTabIndex(item.getIndex());
+                item.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
+                listItems.put(orgRole, fg);
 
                 FundingOrganization fo = new FundingOrganization();
                 fo.setAmpOrgId(orgRole.getOrganisation().getAmpOrgId());
@@ -345,24 +345,24 @@ public class AmpDonorFundingFormSectionFeature extends
                 //TODO to be able to test the gates
                 //TODO Putting the scope here we guarantee that every object underneath receives the proper information
                 //TODO and we avoid duplicate code
-//                PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
-//                        GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-//                PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
-//                        GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
+                PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
+                        GatePermConst.ScopeKeys.CURRENT_ORG, fo);
+                PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
+                        GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
                 item.add(fg);
-//                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-//                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-//                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
+                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
+                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
 
             }
 
-//            @Override
-//            public void addItem(AmpOrgRole orgRole) {
-//                addToOrganisationSection(orgRole.getOrganisation());
-//                addItemToList(orgRole.getOrganisation(), orgRole);
-//
-//                orgRolelist.updateModel();
-//            }
+            @Override
+            public void addItem(AmpOrgRole orgRole) {
+                addToOrganisationSection(orgRole.getOrganisation());
+                addItemToList(orgRole.getOrganisation(), orgRole);
+
+                orgRolelist.updateModel();
+            }
         };
         wmc.add(orgRolelist);
 

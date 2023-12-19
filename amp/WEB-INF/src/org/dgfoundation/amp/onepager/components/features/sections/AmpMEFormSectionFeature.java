@@ -3,11 +3,8 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,6 +19,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEIndicatorFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
@@ -49,6 +47,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     protected ListEditor<AmpActivityLocation> tabsList;
 
     protected ListEditor<AmpActivityLocation> indicatorLocationList;
+
+    private Map<AmpActivityLocation, AmpMEItemFeaturePanel> locationIndicatorItems = new TreeMap<>();
 
     private boolean isTabsView = true;
 
@@ -120,29 +120,22 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
                 AmpMEItemFeaturePanel indicatorLoc = null;
                 try {
-                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations);
+                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations,
+                            AmpMEFormSectionFeature.this);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                item.add(indicatorLoc);
+                indicatorLoc.setTabIndex(item.getIndex());
 
-//                String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this indicator?");
-//                AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-//                        "delete", "Delete ME Item", new Model<String>(translatedMessage)) {
-//                    @Override
-//                    public void onClick(AjaxRequestTarget target) {
-//                        am.getObject().getIndicators().remove(item.getModelObject());
-//                        uniqueCollectionValidationField.reloadValidationField(target);
-//                        //setModel.getObject().remove(item.getModelObject());
-//                        list.removeAll();
-//                        target.add(AmpMEFormSectionFeature.this);
-//                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-//                    }
-//                };
-//                item.add(deleteLinkField);
+                item.add(new AttributePrepender("data-is_location_tab", new Model<String>("true"), ""));
+                locationIndicatorItems.put(item.getModelObject(), indicatorLoc);
+
+                item.add(indicatorLoc);
             }
 
         };
+
+
 
         wmc.add(indicatorLocationList);
 
@@ -213,5 +206,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 //                };
 //
 //        add(searchIndicators);
+    }
+    public void addLocationIndicator(AmpActivityVersion indicator){
+        if (indicator == null) return;
+        indicatorLocationList.updateModel();
     }
 }

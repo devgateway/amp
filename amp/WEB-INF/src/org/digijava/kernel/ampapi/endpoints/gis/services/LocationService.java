@@ -91,6 +91,8 @@ public class LocationService {
         HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
                 CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
         admlevel = admLevelCV.getValueKey();
+        logger.info("Filters are: "+config);
+        logger.info("Admin level: "+admlevel);
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
         this.spec = spec;
@@ -105,14 +107,12 @@ public class LocationService {
 
         AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 
-        if(config != null){
-            Map<String, Object> filters = config.getFilters();
-            if (filters != null) {
-                filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
-            }
-
-            GisUtils.configurePerformanceFilter(config, filterRules);
+        Map<String, Object> filters = config.getFilters();
+        if (filters != null) {
+            filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
         }
+
+        GisUtils.configurePerformanceFilter(config, filterRules);
         Map<Long, String> admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
         spec.setFilters(filterRules);
 
@@ -123,7 +123,7 @@ public class LocationService {
         GeneratedReport report = EndpointUtils.runReport(spec);
         List<AdmLevelTotal> values = new ArrayList<>();
 
-        if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
+        if (report != null && report.reportContents.getChildren() != null) {
             // find the admID (geocode) for each implementation location name
 
             for (ReportArea reportArea : report.reportContents.getChildren()) {
@@ -138,6 +138,7 @@ public class LocationService {
                 }
             }
         }
+        logger.info("Filtered values: "+values);
         return new AdmLevelTotals(currcode, numberformat, values);
     }
 

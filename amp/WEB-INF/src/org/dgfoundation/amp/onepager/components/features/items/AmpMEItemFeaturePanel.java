@@ -115,7 +115,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         };
 
         final AmpUniqueCollectionValidatorField<IndicatorActivity> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<IndicatorActivity>(
-                "uniqueMEValidator", setModel, "Unique MEs Validator") {
+                "uniqueMEValidator", filteredListModel, "Unique MEs Validator") {
 
             @Override
             public Object getIdentifier(IndicatorActivity t) {
@@ -157,40 +157,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         list.setReuseItems(true);
         add(list);
 
-//        list = new ListEditor<IndicatorActivity>("list", setModel) {
-//            @Override
-//            protected void onPopulateItem(ListItem<IndicatorActivity> item) {
-//
-//
-////            @Override
-////            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<IndicatorActivity> item) {
-//                AmpMEIndicatorFeaturePanel indicatorItem = null;
-//                try {
-//                    indicatorItem = new AmpMEIndicatorFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"), location);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//                item.add(indicatorItem);
-//
-//                String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this indicator?");
-//                AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-//                        "delete", "Delete ME Item", new Model<String>(translatedMessage)) {
-//                    @Override
-//                    public void onClick(AjaxRequestTarget target) {
-//                        conn.getObject().getIndicators().remove(item.getModelObject());
-//                        uniqueCollectionValidationField.reloadValidationField(target);
-//                        //setModel.getObject().remove(item.getModelObject());
-//                        list.removeAll();
-//                        target.add(AmpMEItemFeaturePanel.this);
-//                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));
-//                    }
-//                };
-//                item.add(deleteLinkField);
-//            }
-//        };
-////        list.setReuseItems(true);
-//        add(list);
-
         final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
                 new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
                         AmpMEIndicatorSearchModel.class) {
@@ -204,18 +170,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
                     @Override
                     public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
-                        //                        IndicatorActivity ia = new IndicatorActivity();
-//                        ia.setActivity(am.getObject());
-//                        ia.setIndicator(choice);
-//                        am.getObject().getIndicators().add(ia);
-//                        uniqueCollectionValidationField.reloadValidationField(target);
-//
-//                        //setModel.getObject().add(ia);
-//                        list.removeAll();
-//                        target.add(list.getParent());
-//
-//                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-//                        target.appendJavaScript("indicatorTabs();");
 
                         IndicatorActivity ia = new IndicatorActivity();
                         ia.setActivity(conn.getObject());
@@ -225,7 +179,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                         setModel.getObject().add(ia);
                         uniqueCollectionValidationField.reloadValidationField(target);
 
-//                        parent.addLocationIndicator(conn.getObject());
                         target.add(list.getParent());
 
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));

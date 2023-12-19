@@ -73,5 +73,6 @@
   "amp.indicatormanager:program-scheme": "Program Scheme",
   "amp.indicatormanager:no-program-scheme": "No Programs Scheme Available",
   "amp.indicatormanager:no-programs": "No Programs Available",
-  "amp.indicatormanager:all-programs": "All Programs"
+  "amp.indicatormanager:all-programs": "All Programs",
+  "amp.indicatormanager:indicators-category": "Indicators Category"
 }

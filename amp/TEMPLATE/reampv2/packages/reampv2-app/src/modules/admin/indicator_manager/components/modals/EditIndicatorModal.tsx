@@ -44,6 +44,7 @@ interface IndicatorFormValues {
   programId: string | any;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
+  indicatorsCategory?: string;
 }
 
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
@@ -67,6 +68,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const handleClose = () => setShow(false);
 
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const updateIndicatorReducer = useSelector((state: any) => state.updateIndicatorReducer);
 
@@ -74,10 +76,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
 
   const [sectors, setSectors] = useState<{ value: string, name: string }[]>([]);
+  const [categories, setCategories] = useState<{ value: string, label: string }[]>([]);
   const [programSchemes, setProgramSchemes] = useState<{ value: string, label: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
-  const [defaultProgram, setDefaultProgram] = useState<{ value: string, label: string } | null>(null);
 
+  const [defaultCategory, setDefaultCategory] = useState<{ value: string, label: string } | null>(null);
+  const [defaultProgram, setDefaultProgram] = useState<{ value: string, label: string } | null>(null);
   const [defaultProgramScheme, setDefaultProgramScheme] = useState<{ value: string, label: string } | null>(null);
 
   const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
@@ -85,6 +89,14 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
 
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
+
+  const getCategories = () => {
+    const categoryData = categoriesReducer.categories.map((category: any) => ({
+      value: category.id,
+      label: category.value
+    }));
+    setCategories(categoryData);
+  }
 
   const getSectors = () => {
     const sectorData = sectorsReducer.sectors.map((sector: any) => ({
@@ -153,7 +165,21 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   useEffect(() => {
     getProgramsForProgramScheme();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProgramSchemeId])
+  }, [selectedProgramSchemeId]);
+
+  const getDefaultCategory = () => {
+    if (indicator?.indicatorsCategory) {
+      const foundCategory = categoriesReducer.categories.find((category: any) => category.id === indicator?.indicatorsCategory);
+      if (foundCategory) {
+        setDefaultCategory({
+            value: foundCategory.id.toString(),
+            label: foundCategory.value
+        });
+
+        formikRef?.current?.setFieldValue("indicatorsCategory", foundCategory.id.toString());
+      }
+    }
+  }
 
   const getDefaultSectors = () => {
     if (indicator?.sectors.length === 0) {
@@ -219,6 +245,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   useLayoutEffect(() => {
     getSectors();
+    getCategories();
     getProgramSchemes();
     getPrograms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,6 +255,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   useEffect(() => {
     getDefaultProgram();
     getDefaultPropgramScheme();
+    getDefaultCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indicator]);
 
@@ -279,7 +307,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       originalValueDate: indicator?.target?.originalValueDate,
       revisedValue: indicator?.target?.revisedValue,
       revisedValueDate: indicator?.target?.revisedValueDate,
-    }
+    },
+    indicatorsCategory: indicator?.indicatorsCategory?.toString()
   };
 
   return (
@@ -303,8 +332,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         validationSchema={indicatorValidationSchema}
         innerRef={formikRef}
         onSubmit={(values) => {
-          const { name, description, code, sectors, ascending, programId, creationDate, base, target } = values;
-
+          const { name, description, code, sectors, ascending, programId, creationDate, base, target, indicatorsCategory } = values;
           const updatedIndicatorData = {
             id: indicator.id,
             name,
@@ -325,7 +353,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
               originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
               revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
-            }
+            },
+            indicatorsCategory : indicatorsCategory ? parseInt(indicatorsCategory) : null
           };
 
           dispatch(updateIndicator(updatedIndicatorData as IndicatorObjectType));
@@ -333,7 +362,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       >
         {(props) => (
           <>
-            { console.log("form values ======>", props.values)}
             <Form noValidate onSubmit={props.handleSubmit}>
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
@@ -451,6 +479,39 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       }
                     </Form.Group>
                   </Row>
+
+                  <Row className={styles.view_row}>
+                    <Form.Group className={styles.view_one_item} controlId="formIndicatorCategories">
+                      <Form.Label>{translations["amp.indicatormanager:indicators-category"]}</Form.Label>
+                      {
+                        categories.length > 0 ? (
+                            <Select
+                                name="indicatorsCategory"
+                                options={categories}
+                                onChange={(value) => {
+                                  // set the formik value with the selected values and remove the label
+                                  if (value) {
+                                    props.setFieldValue('indicatorsCategory', value?.value);
+                                  }
+                                }}
+                                isClearable
+                                getOptionValue={(option: any) => option.value}
+                                onBlur={props.handleBlur}
+                                className={`basic-multi-select ${(props.errors.indicatorsCategory && props.touched.indicatorsCategory) && styles.text_is_invalid}`}
+                                classNamePrefix="select"
+                                value={defaultCategory}
+                            />
+                        ) : (
+                            <Select
+                                name="categories"
+                                isDisabled={true}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                            />
+                        )
+                      }
+                    </Form.Group>
+                  </Row>
+
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="programScheme">
                       <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>

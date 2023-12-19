@@ -9,6 +9,7 @@ import { getSectors } from '../reducers/fetchSectorsReducer';
 import { getPrograms } from '../reducers/fetchProgramsReducer';
 import { getSettings } from '../reducers/fetchSettingsReducer';
 import { resetSizePerPage } from '../reducers/fetchIndicatorsReducer';
+import {getAmpCategories} from "../reducers/fetchAmpCategoryReducer";
 
 export const AdminIndicatorManagerContext = React.createContext({});
 
@@ -34,17 +35,19 @@ const Startup: React.FC<StartupProps> = (props: any) => {
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const settingsReducer = useSelector((state: any) => state.fetchSettingsReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
 
   useEffect(() => {
     dispatch(getSettings());
     _fetchTranslations(defaultTrnPack);
     dispatch(getSectors());
     dispatch(getPrograms());
+    dispatch(getAmpCategories());
     dispatch(resetSizePerPage());
     // eslint-disable-next-line
   }, []);
 
-  if (translationPending || sectorsReducer.loading || programsReducer.loading || settingsReducer.loading) {
+  if (translationPending || sectorsReducer.loading || programsReducer.loading || settingsReducer.loading || categoriesReducer.loading) {
     return (<Loading />);
   } else {
     document.title = translations['amp.indicatormanager:page-title'];

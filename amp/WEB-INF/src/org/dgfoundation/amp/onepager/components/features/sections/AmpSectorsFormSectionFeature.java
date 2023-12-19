@@ -11,6 +11,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpSectorsFormTableFeature;
+import org.dgfoundation.amp.onepager.interfaces.ISectorTableDeleteListener;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -24,7 +25,7 @@ import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
  * since Oct 20, 2010
  */
 public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
-        implements ISectorTableUpdateListener {
+        implements ISectorTableUpdateListener, ISectorTableDeleteListener {
 
     private static final long serialVersionUID = -5601918041949098629L;
 
@@ -36,8 +37,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
      * @param fmName
      * @throws Exception
      */
-    public AmpSectorsFormSectionFeature(String id, String fmName,final IModel<AmpActivityVersion> am)
-            throws Exception {
+    public AmpSectorsFormSectionFeature(String id, String fmName,final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
         this.fmType = AmpFMTypes.MODULE;
 
@@ -60,6 +60,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         primarySectorsTable = new AmpSectorsFormTableFeature(view.newChildId(),
                 primaryConf.getName() + " Sectors", am, primaryConf);
         primarySectorsTable.setUpdateListener(this);
+        primarySectorsTable.setDeleteListener(this);
 
         secondarySectorsTable = new AmpSectorsFormTableFeature(view.newChildId(),
                 secondaryConf.getName() + " Sectors", am, secondaryConf);
@@ -69,10 +70,16 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
     }
 
 
+    /**
+     * Updates the user interface based on the given data. This method is called when the trigger is fired.
+     * Used to filter secondary sectors based on the primary sector selection when exist mapping between them.
+     *
+     * @param data the list of AmpSector objects to update the UI with
+     */
     @Override
     public void onUpdate(List<AmpSector> data) {
         if (secondarySectorsTable != null) {
-            // Update user interface if the request is ajax
+            // Update user interface
              AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
              if (target != null) {
                  secondarySectorsTable.updateBasedOnData(data);
@@ -81,4 +88,22 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         }
     }
 
+    /**
+     * Updates the user interface when a deletion event is triggered.
+     * This method is called when the onDelete method is invoked in the containing class.
+     *
+     * @param data the AmpSector object to be deleted
+     */
+    @Override
+    public void onDelete(AmpSector data) {
+        if (secondarySectorsTable != null) {
+            // Update user interface
+            AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
+            if (target != null) {
+                secondarySectorsTable.deleteBasedOnData(data);
+                secondarySectorsTable.refreshTable(target);
+                target.add(secondarySectorsTable);
+            }
+        }
+    }
 }

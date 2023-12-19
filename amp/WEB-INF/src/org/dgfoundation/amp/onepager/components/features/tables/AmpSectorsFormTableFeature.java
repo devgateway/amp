@@ -21,27 +21,23 @@ import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionVa
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.interfaces.ISectorTableDeleteListener;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DbUtil;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
+import org.digijava.module.aim.util.SectorUtil;
+import org.hibernate.Session;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
 
@@ -52,15 +48,27 @@ public class AmpSectorsFormTableFeature extends
         AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivitySector> {
 
     private ISectorTableUpdateListener updateListener;
+    private ISectorTableDeleteListener deleteListener;
 
     public void setUpdateListener(ISectorTableUpdateListener listener) {
         this.updateListener = listener;
     }
 
-    private AmpAutocompleteFieldPanel<AmpSector> searchSectors;
-    public AmpAutocompleteFieldPanel<AmpSector> getSearchSectors() {
-        return this.searchSectors;
+    public void setDeleteListener(ISectorTableDeleteListener listener) {
+        this.deleteListener = listener;
     }
+
+    private AmpAutocompleteFieldPanel<AmpSector> searchSectors;
+    public AmpAutocompleteFieldPanel<AmpSector> getSearchSectors() { return this.searchSectors; }
+
+    private IModel<Set<AmpActivitySector>> setModel;
+    public IModel<Set<AmpActivitySector>> getSetModel() { return this.setModel; }
+
+    private AmpPercentageCollectionValidatorField<AmpActivitySector> percentageValidationField;
+    private AmpUniqueCollectionValidatorField<AmpActivitySector> uniqueCollectionValidationField;
+    private AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField;
+    private AmpTreeCollectionValidatorField<AmpActivitySector> treeCollectionValidationField;
+
 
     /**
      * Triggers an update event with the selected sectors based on the given sector classification.
@@ -94,19 +102,90 @@ public class AmpSectorsFormTableFeature extends
         this.searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED, selectedSectors);
     }
 
+    protected void triggerDeleteEvent(AmpSector sectorDeleted) {
+        if (deleteListener != null) {
+            deleteListener.onDelete(sectorDeleted);
+        }
+    }
 
     /**
-     * @param id
-     * @param fmName
-     * @param am
-     * @throws Exception
+     * Deletes all sector in the Activity component that are mapped with the given sector.
+     *
+     * @param sectorDeleted the sector to delete mappings for
+     */
+    public void deleteBasedOnData(AmpSector sectorDeleted) {
+        Collection<AmpSectorMapping> allMappings = SectorUtil.getAllSectorMappings();
+        List<AmpSector> dstSectorsMappedWithDeletedSector = new ArrayList<AmpSector>();
+        for (AmpSectorMapping ampSectorMapping : allMappings) {
+            if (ampSectorMapping.getSrcSector().getAmpSectorId().equals(sectorDeleted.getAmpSectorId())) {
+                dstSectorsMappedWithDeletedSector.add(ampSectorMapping.getDstSector());
+            }
+        }
+
+        // We search for the destination sectors in Activity
+        if (!dstSectorsMappedWithDeletedSector.isEmpty()) {
+            Iterator<AmpActivitySector> iterator = setModel.getObject().iterator();
+            while (iterator.hasNext()) {
+                AmpActivitySector sector = iterator.next();
+                for (AmpSector dstSectorMapped : dstSectorsMappedWithDeletedSector) {
+                    if (sector.getSectorId().getAmpSectorId().equals(dstSectorMapped.getAmpSectorId())) {
+                        // if the sector is not mapped to another sector
+                        if (dstSectorHasOnlyOneMap(dstSectorMapped, allMappings)) {
+                            iterator.remove();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if a given destination sector has only one mapping in a collection of mappings.
+     *
+     * @param dstSector    the destination sector to check for
+     * @param allMappings the collection of all mappings
+     * @return true if the destination sector has only one mapping, false otherwise
+     */
+    private boolean dstSectorHasOnlyOneMap(AmpSector dstSector, Collection<AmpSectorMapping> allMappings) {
+        int count = 0;
+        for (AmpSectorMapping ampSectorMapping : allMappings) {
+            if (ampSectorMapping.getDstSector().getAmpSectorId().equals(dstSector.getAmpSectorId())) {
+                count++;
+            }
+        }
+        return count == 1;
+    }
+
+    /**
+     * Clears the table and reloads the validation fields.
+     *
+     * @param target the {@link AjaxRequestTarget} used to refresh the table
+     */
+    public void refreshTable(AjaxRequestTarget target) {
+        list.removeAll();
+        percentageValidationField.reloadValidationField(target);
+        uniqueCollectionValidationField.reloadValidationField(target);
+        minSizeCollectionValidationField.reloadValidationField(target);
+        treeCollectionValidationField.reloadValidationField(target);
+    }
+
+
+    /**
+     * Constructor for the AmpSectorsFormTableFeature class.
+     *
+     * @param id                    The id of the component.
+     * @param fmName                The name of the feature model.
+     * @param am                    The model for the AmpActivityVersion.
+     * @param sectorClassification  The classification configuration for sectors.
+     *
+     * @throws Exception   If there is an exception during construction.
      */
     public AmpSectorsFormTableFeature(String id, String fmName,
             final IModel<AmpActivityVersion> am,
             final AmpClassificationConfiguration sectorClassification)
             throws Exception {
         super(id, am, fmName, false, true);
-        final IModel<Set<AmpActivitySector>> setModel = new PropertyModel<Set<AmpActivitySector>>(am, "sectors");
+        setModel = new PropertyModel<Set<AmpActivitySector>>(am, "sectors");
         if (setModel.getObject() == null) setModel.setObject(new HashSet<AmpActivitySector>());
         if (sectorClassification.getDescription() != null) addInfoText(sectorClassification.getDescription());
 
@@ -119,24 +198,19 @@ public class AmpSectorsFormTableFeature extends
                 // remove sectors with other classification
                 ArrayList<AmpActivitySector> ret = new ArrayList<AmpActivitySector>();
 
-                if(setModel.getObject()!=null)
-                for (AmpActivitySector ampActivitySector : setModel.getObject()) {
-                    if (ampActivitySector.getClassificationConfig().getId().equals(sectorClassification.getId()))
-                        ret.add(ampActivitySector);
-                }
+                if (setModel.getObject() != null)
+                    for (AmpActivitySector ampActivitySector : setModel.getObject()) {
+                        if (ampActivitySector.getClassificationConfig().getId().equals(sectorClassification.getId()))
+                            ret.add(ampActivitySector);
+                    }
+                Comparator<AmpActivitySector> comparator = new Comparator<AmpActivitySector>() {
+                    @Override
+                    public int compare(AmpActivitySector o1, AmpActivitySector o2) {
+                        return o1.getSectorId().getSectorPathString().compareTo(o2.getSectorId().getSectorPathString());
+                    }
+                };
 
-                Comparator<AmpActivitySector> comparator = new Comparator<AmpActivitySector>(){
-
-                @Override
-                public int compare(AmpActivitySector o1, AmpActivitySector o2) {
-                    return o1.getSectorId().getSectorPathString().compareTo(o2.getSectorId().getSectorPathString());
-                }
-
-
-            };
-
-               Collections.sort(ret, comparator);
-
+                Collections.sort(ret, comparator);
                 return ret;
             }
         };
@@ -145,7 +219,7 @@ public class AmpSectorsFormTableFeature extends
         add(wmc);
         AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
         wmc.add(iValidator);
-        final AmpPercentageCollectionValidatorField<AmpActivitySector> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivitySector>(
+        percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivitySector>(
                 "sectorPercentageTotal", listModel, "sectorPercentageTotal") {
             @Override
             public Number getPercentage(AmpActivitySector item) {
@@ -175,7 +249,7 @@ public class AmpSectorsFormTableFeature extends
         percentageValidationField.setIndicatorAppender(iValidator);
         add(percentageValidationField);
 
-        final AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
+        minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
                 "minSizeSectorsValidator", listModel, "minSizeSectorsValidator"){
             @Override
             protected void onConfigure() {
@@ -186,8 +260,7 @@ public class AmpSectorsFormTableFeature extends
         minSizeCollectionValidationField.setIndicatorAppender(iValidator);
         add(minSizeCollectionValidationField);
 
-
-        final AmpUniqueCollectionValidatorField<AmpActivitySector> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivitySector>(
+        uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivitySector>(
                 "uniqueSectorsValidator", listModel, "uniqueSectorsValidator") {
             @Override
             public Object getIdentifier(AmpActivitySector t) {
@@ -196,7 +269,7 @@ public class AmpSectorsFormTableFeature extends
         };
         uniqueCollectionValidationField.setIndicatorAppender(iValidator);
         add(uniqueCollectionValidationField);
-        final AmpTreeCollectionValidatorField<AmpActivitySector> treeCollectionValidationField = new AmpTreeCollectionValidatorField<AmpActivitySector>(
+        treeCollectionValidationField = new AmpTreeCollectionValidatorField<AmpActivitySector>(
                 "treeSectorsValidator", listModel, "treeSectorsValidator") {
                     @Override
                     public AmpAutoCompleteDisplayable getItem(AmpActivitySector t) {
@@ -206,13 +279,12 @@ public class AmpSectorsFormTableFeature extends
         treeCollectionValidationField.setIndicatorAppender(iValidator);
         add(treeCollectionValidationField);
 
-
         list = new ListView<AmpActivitySector>("listSectors", listModel) {
+
             @Override
             protected void populateItem(final ListItem<AmpActivitySector> item) {
                 final MarkupContainer listParent = this.getParent();
-                PropertyModel<Double> percModel = new PropertyModel<Double>(
-                        item.getModel(), "sectorPercentage");
+                PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "sectorPercentage");
 
                 AmpPercentageTextField percentageField = new AmpPercentageTextField(
                         "percentage", percModel, "sectorPercentage",
@@ -231,19 +303,16 @@ public class AmpSectorsFormTableFeature extends
                 AmpDeleteLinkField delSector = new AmpDeleteLinkField("delSector", "Delete Sector") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        setModel.getObject().remove(item.getModelObject());
+                        AmpActivitySector sectorToDelete = item.getModelObject();
+                        setModel.getObject().remove(sectorToDelete);
+                        triggerDeleteEvent(sectorToDelete.getSectorId());
                         triggerUpdateEvent(setModel.getObject(), sectorClassification);
                         target.add(listParent);
                         target.add(totalLabel);
-                        list.removeAll();
-                        percentageValidationField.reloadValidationField(target);
-                        uniqueCollectionValidationField.reloadValidationField(target);
-                        minSizeCollectionValidationField.reloadValidationField(target);
-                        treeCollectionValidationField.reloadValidationField(target);
+                        refreshTable(target);
                     }
                 };
                 item.add(delSector);
-
             }
         };
         list.setReuseItems(true);
@@ -265,13 +334,10 @@ public class AmpSectorsFormTableFeature extends
 
             @Override
             public boolean itemInCollection(AmpActivitySector item) {
-                if (item.getClassificationConfig().getId()
-                        .equals(sectorClassification.getId()))
+                if (item.getClassificationConfig().getId().equals(sectorClassification.getId()))
                     return true;
-                else
-                    return false;
+                else return false;
             }
-
         });
 
         this.searchSectors = new AmpAutocompleteFieldPanel<AmpSector>(
@@ -297,12 +363,8 @@ public class AmpSectorsFormTableFeature extends
                 if (setModel.getObject() == null) setModel.setObject(new HashSet<AmpActivitySector>());
                 setModel.getObject().add(activitySector);
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
-                list.removeAll();
                 target.add(list.getParent());
-                percentageValidationField.reloadValidationField(target);
-                uniqueCollectionValidationField.reloadValidationField(target);
-                minSizeCollectionValidationField.reloadValidationField(target);
-                treeCollectionValidationField.reloadValidationField(target);
+                refreshTable(target);
             }
 
             @Override
@@ -314,17 +376,28 @@ public class AmpSectorsFormTableFeature extends
                     c = c.getParentSectorId();
                 }
                 return i;
-
             }
         };
-
-
 
         this.searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,
                                             sectorClassification.getClassification());
         this.searchSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
+        //For mappings between sectors with different classifications, we configure the search to show only the sectors
+        // mapped to the selected sectors from the primary classification in dropdown list.
+        if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+            List<AmpSector> primarySectorsSelected = new ArrayList<AmpSector>();
+            for (AmpActivitySector ampActivitySector : setModel.getObject()) {
+                if (ampActivitySector.getClassificationConfig().getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                    primarySectorsSelected.add(ampActivitySector.getSectorId());
+                }
+            }
+            if (!primarySectorsSelected.isEmpty()) {
+                this.searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED,
+                                                        primarySectorsSelected);
+            }
+        }
+
         add(this.searchSectors);
     }
-
 }

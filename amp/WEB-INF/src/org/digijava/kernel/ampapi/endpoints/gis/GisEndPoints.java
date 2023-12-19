@@ -266,6 +266,7 @@ public class GisEndPoints {
             PerformanceFilterParameters filters,
             @PathParam("admlevel") AdmLevel admlevel) {
         LocationService ls = new LocationService();
+        logger.info("Trying to get totals");
         // this Service was resetting the amount units so far (used by this EP only), now changed its interface to allow other "users" to not reset it
         return ls.getTotals(admlevel.getLabel(), filters, AmountsUnits.AMOUNTS_OPTION_UNITS);
     }

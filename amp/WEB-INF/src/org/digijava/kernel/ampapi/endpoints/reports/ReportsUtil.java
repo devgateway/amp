@@ -417,9 +417,7 @@ public class ReportsUtil {
     private static void addColumns(ReportSpecification spec, Collection<String> columns) {
         for (String columnName : columns) {
             ReportColumn column = new ReportColumn(columnName);
-            if (!spec.getColumns().contains(column)) {
-                spec.getColumns().add(column);
-            }
+            spec.getColumns().add(column);
         }
     }
 
@@ -446,8 +444,7 @@ public class ReportsUtil {
         //adding new hierarchies if not present
         if (formParams.getAdditionalHierarchies() != null) {
             List<String> hierarchies = formParams.getAdditionalHierarchies();
-            List<ReportColumn> existingColumns = new ArrayList<ReportColumn>();
-            existingColumns.addAll(spec.getColumns());
+            List<ReportColumn> existingColumns = new ArrayList<>(spec.getColumns());
             for (String columnName : hierarchies) {
                 ReportColumn column = new ReportColumn(columnName);
                 if (!spec.getHierarchies().contains(column)) {

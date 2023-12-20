@@ -152,11 +152,11 @@ module.exports = Backbone.View.extend({
         center.lat,
         center.lng
       ],
-      zoom: 3
+      zoom: this.map.getZoom()
     };
   },
   _setMapView: function(stateBlob) {
-    this.map.setView(stateBlob.center, 3);
+    this.map.setView(stateBlob.center, stateBlob.zoom);
   },
 
   // when indicator is shown, bring project sites to the front...

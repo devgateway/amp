@@ -1,39 +1,21 @@
 [
   {
-    "id": "BJ-adm-0",
+    "id": "ML-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "BJ"
+    "country": "ML"
   },
   {
-    "id": "BJ-adm-1",
+    "id": "ML-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "BJ"
+    "country": "ML"
   },
   {
-    "id": "BJ-adm-2",
+    "id": "ML-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "BJ"
-  },
-  {
-    "id": "CI-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "CI"
-  },
-  {
-    "id": "CI-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "CI"
-  },
-  {
-    "id": "CI-adm-2",
-    "admLevel": "adm-2",
-    "label": "ADM 2",
-    "country": "CI"
+    "country": "ML"
   },
   {
     "id": "SN-adm-0",
@@ -54,60 +36,6 @@
     "country": "SN"
   },
   {
-    "id": "TG-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "TG"
-  },
-  {
-    "id": "TG-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "TG"
-  },
-  {
-    "id": "TG-adm-2",
-    "admLevel": "adm-2",
-    "label": "ADM 2",
-    "country": "TG"
-  },
-  {
-    "id": "BF-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "BF"
-  },
-  {
-    "id": "BF-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "BF"
-  },
-  {
-    "id": "BF-adm-2",
-    "admLevel": "adm-2",
-    "label": "ADM 2",
-    "country": "BF"
-  },
-  {
-    "id": "ML-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "ML"
-  },
-  {
-    "id": "ML-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "ML"
-  },
-  {
-    "id": "ML-adm-2",
-    "admLevel": "adm-2",
-    "label": "ADM 2",
-    "country": "ML"
-  },
-  {
     "id": "NE-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
@@ -124,23 +52,5 @@
     "admLevel": "adm-2",
     "label": "ADM 2",
     "country": "NE"
-  },
-  {
-    "id": "GW-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "GW"
-  },
-  {
-    "id": "GW-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "GW"
-  },
-  {
-    "id": "GW-adm-2",
-    "admLevel": "adm-2",
-    "label": "ADM 2",
-    "country": "GW"
   }
 ]

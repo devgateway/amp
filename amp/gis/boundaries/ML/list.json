@@ -2,18 +2,16 @@
   {
     "id": "adm-0",
     "label": "ADM 0",
-    "country": "MW"
+    "country": "ML"
   },
   {
     "id": "adm-1",
     "label": "ADM 1",
-    "country": "MW"
- 
+    "country": "ML"
   },
   {
     "id": "adm-2",
     "label": "ADM 2",
-    "country": "MW"
- 
+    "country": "ML"
   }
 ]

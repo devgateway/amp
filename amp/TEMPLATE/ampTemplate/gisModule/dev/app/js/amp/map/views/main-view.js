@@ -29,6 +29,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.mapEl = $('<div id="map-canvas">');
     this.map = L.map(this.mapEl[0], {
+      minZoom: 10,
       maxZoom: 19 /* TODO: greater than 14 mostly only useful for imagery, consider limiting by basemap */
     });
     this.map.attributionControl.setPosition('bottomleft');

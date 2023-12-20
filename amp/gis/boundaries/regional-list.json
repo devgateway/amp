@@ -163,22 +163,22 @@
     "country": "BF"
   },
   {
-    "id": "CD-adm-0",
+    "id": "TD-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "CD"
+    "country": "TD"
   },
   {
-    "id": "CD-adm-1",
+    "id": "TD-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "CD"
+    "country": "TD"
   },
   {
-    "id": "CD-adm-2",
+    "id": "TD-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "CD"
+    "country": "TD"
   },
   {
     "id": "ET-adm-0",

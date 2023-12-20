@@ -1286,7 +1286,7 @@ public class DynLocationManagerUtil {
      Session dbSession = PersistenceManager.getSession();
         String queryString = "select value from "
                 + AmpLocationIndicatorValue.class.getName()
-                + " value where value.location.id=:id)";
+                + " value where value.location.id=:id";
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
         qry.setParameter("id", location.getId(), LongType.INSTANCE);
@@ -1337,7 +1337,7 @@ public class DynLocationManagerUtil {
      Session dbSession = PersistenceManager.getSession();
         String queryString = "select value from "
                 + AmpLocationIndicatorValue.class.getName()
-                + " value where value.location.id=:locationId and value.indicator.id=:indicatorId)";
+                + " value where value.location.id=:locationId and value.indicator.id=:indicatorId";
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
         qry.setParameter("locationId", location,LongType.INSTANCE);

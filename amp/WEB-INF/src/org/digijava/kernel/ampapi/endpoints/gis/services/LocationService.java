@@ -113,7 +113,7 @@ public class LocationService {
         }
 
         GisUtils.configurePerformanceFilter(config, filterRules);
-        Map<Long, String> admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
+        Map<Long, String> admLevelToGeoCode = getAdmLevelGeoCodeMap(admLevelCV);
         spec.setFilters(filterRules);
 
         String currcode = FilterUtils.getSettingbyName(config.getSettings(), SettingsConstants.CURRENCY_ID);
@@ -144,13 +144,12 @@ public class LocationService {
 
     /**
      * Provides admLevel name to geo code map
-     * @param admLevel
      * @param admLevelCV
      * @return
      */
-    public Map<Long, String> getAdmLevelGeoCodeMap(String admLevel, HardCodedCategoryValue admLevelCV) {
+    public Map<Long, String> getAdmLevelGeoCodeMap(HardCodedCategoryValue admLevelCV) {
         Set<AmpCategoryValueLocations> acvlData = DynLocationManagerUtil.getLocationsByLayer(admLevelCV);
-        Map<Long, String> levelToGeoCodeMap = new HashMap<Long, String>();
+        Map<Long, String> levelToGeoCodeMap = new HashMap<>();
         if (acvlData != null) {
             for (AmpCategoryValueLocations acvl : acvlData) {
                 levelToGeoCodeMap.put(acvl.getId(), acvl.getGeoCode());

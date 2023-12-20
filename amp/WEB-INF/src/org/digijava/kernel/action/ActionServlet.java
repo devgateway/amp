@@ -38,7 +38,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
             String configFiles = getConfigFiles();
 
-            if (configFiles != null && configFiles.trim().length() != 0) {
+            if (!configFiles.trim().isEmpty()) {
                 super.config = configFiles;
             }
 

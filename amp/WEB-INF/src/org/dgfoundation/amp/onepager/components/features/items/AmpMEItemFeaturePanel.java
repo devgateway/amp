@@ -79,16 +79,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         final IModel<List<IndicatorActivity>> listModel = OnePagerUtil
                 .getReadOnlyListModelFromSetModel(new PropertyModel(conn, "indicators"));
 
-//        IModel<List<IndicatorActivity>> filteredListModel = new LoadableDetachableModel<List<IndicatorActivity>>() {
-//            @Override
-//            protected List<IndicatorActivity> load() {
-//                Set<IndicatorActivity> indicators = conn.getObject().getIndicators();
-//                return indicators.stream()
-//                        .filter(ia -> ia.getActivityLocation().equals(location.getObject()))
-//                        .collect(Collectors.toList());
-//            }
-//        };
-
         final IModel<List<IndicatorActivity>> filteredListModel = new LoadableDetachableModel<List<IndicatorActivity>>() {
             @Override
             protected List<IndicatorActivity> load() {
@@ -144,10 +134,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         conn.getObject().getIndicators().remove(item.getModelObject());
+                        filteredListModel.detach();
+
                         uniqueCollectionValidationField.reloadValidationField(target);
-                        //setModel.getObject().remove(item.getModelObject());
+
+                        target.add(list.getParent());
                         list.removeAll();
-                        target.add(AmpMEItemFeaturePanel.this);
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));
                     }
                 };

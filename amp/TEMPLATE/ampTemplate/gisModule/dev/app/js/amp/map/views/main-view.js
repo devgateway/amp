@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.mapEl = $('<div id="map-canvas">');
     this.map = L.map(this.mapEl[0], {
-      minZoom: 10,
+      minZoom: 4,
       maxZoom: 19 /* TODO: greater than 14 mostly only useful for imagery, consider limiting by basemap */
     });
     this.map.attributionControl.setPosition('bottomleft');
@@ -157,7 +157,7 @@ module.exports = Backbone.View.extend({
     };
   },
   _setMapView: function(stateBlob) {
-    this.map.setView(stateBlob.center, stateBlob.zoom);
+    this.map.setView(stateBlob.center, 4);
   },
 
   // when indicator is shown, bring project sites to the front...

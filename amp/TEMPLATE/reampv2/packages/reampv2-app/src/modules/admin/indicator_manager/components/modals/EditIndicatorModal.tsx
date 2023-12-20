@@ -482,7 +482,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="formIndicatorCategories">
                       <Form.Label>{translations["amp.indicatormanager:indicators-category"]}</Form.Label>
-                      {console.log("deafault category", defaultCategory)}
                       {
                         categories.length > 0 ? (
                             <Select

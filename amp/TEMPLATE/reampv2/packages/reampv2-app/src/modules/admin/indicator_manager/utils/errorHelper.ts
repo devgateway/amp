@@ -12,7 +12,6 @@ export const errorHelper = <T>(error: T | any[]) => {
     const tempError = error as any;
 
     if (tempError) {
-        console.log("error, tempError: ", tempError);
         const detectKeys = Object.keys(tempError.error)[0];
         const extractedError = tempError.error[detectKeys][0];
 

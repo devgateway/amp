@@ -55,7 +55,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
         File configDir = new File(getServletContext().getRealPath(MODULE_DIRECTORY));
         File tmpFile;
-        StringBuffer retVal = new StringBuffer();
+        StringBuilder retVal = new StringBuilder();
 
         if (!configDir.exists() || !configDir.isDirectory()) {
             throw new DgException("Configuration directory " + MODULE_DIRECTORY + " does not exist or is not directory");
@@ -72,10 +72,10 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
             retVal.append(tmpFile.getName());
         }
 
-        for (int i = 0; i<dirList.length; i++) {
+        for (String s : dirList) {
 
-            tmpFile =  new File(configDir.getAbsolutePath() +
-                    File.separator + dirList[i] +
+            tmpFile = new File(configDir.getAbsolutePath() +
+                    File.separator + s +
                     File.separator + STRUTS_CONFIG_FILE);
 
             if (tmpFile.exists() && tmpFile.isFile()) {
@@ -83,7 +83,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
                 retVal.append(",");
                 retVal.append(MODULE_DIRECTORY);
                 retVal.append("/");
-                retVal.append(dirList[i]);
+                retVal.append(s);
                 retVal.append("/");
                 retVal.append(tmpFile.getName());
 

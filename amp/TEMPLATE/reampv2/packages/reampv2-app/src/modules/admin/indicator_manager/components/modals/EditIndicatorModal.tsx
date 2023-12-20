@@ -468,12 +468,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                             classNamePrefix="select"
-                            defaultValue={props.values.sectors}
+                            defaultValue={props.values.sectors ? props.values.sectors : []}
                           />
                         ) : (
                             <Select
                                 isDisabled={true}
-                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         )
                       }
@@ -499,13 +498,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                 onBlur={props.handleBlur}
                                 className={`basic-multi-select ${(props.errors.indicatorsCategory && props.touched.indicatorsCategory) && styles.text_is_invalid}`}
                                 classNamePrefix="select"
-                                value={defaultCategory}
+                                defaultValue={defaultCategory}
                             />
                         ) : (
                             <Select
                                 name="categories"
                                 isDisabled={true}
-                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         )
                       }

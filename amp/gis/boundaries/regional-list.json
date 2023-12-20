@@ -161,5 +161,23 @@
     "admLevel": "adm-2",
     "label": "ADM 2",
     "country": "BF"
+  },
+  {
+    "id": "CD-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "CD"
+  },
+  {
+    "id": "CD-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "CD"
+  },
+  {
+    "id": "CD-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "CD"
   }
 ]

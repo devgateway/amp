@@ -143,5 +143,23 @@
     "admLevel": "adm-2",
     "label": "ADM 2",
     "country": "SD"
+  },
+  {
+    "id": "BF-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "BF"
+  },
+  {
+    "id": "BF-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "BF"
+  },
+  {
+    "id": "BF-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "BF"
   }
 ]

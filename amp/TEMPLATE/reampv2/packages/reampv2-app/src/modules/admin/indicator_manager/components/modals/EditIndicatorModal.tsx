@@ -172,11 +172,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       const foundCategory = categoriesReducer.categories.find((category: any) => category.id === indicator?.indicatorsCategory);
       if (foundCategory) {
         setDefaultCategory({
-            value: foundCategory.id.toString(),
+            value: foundCategory.id,
             label: foundCategory.value
         });
 
-        formikRef?.current?.setFieldValue("indicatorsCategory", foundCategory.id.toString());
+        formikRef?.current?.setFieldValue("indicatorsCategory", foundCategory.id);
       }
     }
   }
@@ -253,9 +253,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
 
   useEffect(() => {
+    getDefaultCategory();
     getDefaultProgram();
     getDefaultPropgramScheme();
-    getDefaultCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indicator]);
 
@@ -308,7 +308,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       revisedValue: indicator?.target?.revisedValue,
       revisedValueDate: indicator?.target?.revisedValueDate,
     },
-    indicatorsCategory: indicator?.indicatorsCategory?.toString()
+    indicatorsCategory: indicator?.indicatorsCategory?.toString() || ''
   };
 
   return (
@@ -468,7 +468,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                             classNamePrefix="select"
-                            defaultValue={props.values.sectors ? props.values.sectors : []}
+                            defaultValue={props.values.sectors}
                           />
                         ) : (
                             <Select
@@ -482,23 +482,25 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="formIndicatorCategories">
                       <Form.Label>{translations["amp.indicatormanager:indicators-category"]}</Form.Label>
+                      {console.log("deafault category", defaultCategory)}
                       {
                         categories.length > 0 ? (
                             <Select
                                 name="indicatorsCategory"
                                 options={categories}
-                                onChange={(value) => {
+                                onChange={(selectedValue) => {
                                   // set the formik value with the selected values and remove the label
-                                  if (value) {
-                                    props.setFieldValue('indicatorsCategory', value?.value);
+                                  if (selectedValue) {
+                                    setDefaultCategory(selectedValue)
+                                    props.setFieldValue('indicatorsCategory', selectedValue?.value);
                                   }
                                 }}
                                 isClearable
-                                getOptionValue={(option: any) => option.value}
+                                getOptionValue={(option) => option.value}
                                 onBlur={props.handleBlur}
                                 className={`basic-multi-select ${(props.errors.indicatorsCategory && props.touched.indicatorsCategory) && styles.text_is_invalid}`}
                                 classNamePrefix="select"
-                                defaultValue={defaultCategory}
+                                value={defaultCategory}
                             />
                         ) : (
                             <Select

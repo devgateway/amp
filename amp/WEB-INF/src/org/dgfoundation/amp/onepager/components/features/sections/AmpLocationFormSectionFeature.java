@@ -43,11 +43,12 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
      * @param regionalFundingFeature
      * @throws Exception
      */
+    protected AmpRegionalFundingFormSectionFeature regionalFundingFeature;
     public AmpLocationFormSectionFeature(String id, String fmName,
-                                         final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFundingFeature) throws Exception {
+                                         final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFunding) throws Exception {
         super(id, fmName, am);
         this.fmType = AmpFMTypes.MODULE;
-
+        this.regionalFundingFeature = (AmpRegionalFundingFormSectionFeature) regionalFunding;
 
         final AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(
                 "implementationLevel",
@@ -73,7 +74,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         implementationLocation.setOutputMarkupId(true);
 
         final AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
-                "locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature,
+                "locationsTable", "Locations", am, regionalFundingFeature,
                 implementationLocation, implementationLevel, disablePercentagesForInternational);
 
         implementationLocation.getChoiceContainer().add(
@@ -81,7 +82,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
-                                target, locationsTable);
+                                target, locationsTable,regionalFundingFeature);
                     }
                 });
         add(implementationLocation);
@@ -114,7 +115,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                             }
                         }
                         defaultCountryChecks(implementationLevel, implementationLocation,
-                                disablePercentagesForInternational, target, locationsTable);
+                                disablePercentagesForInternational, target, locationsTable, regionalFundingFeature);
                     }
                 });
 
@@ -122,7 +123,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
         add(locationsTable);
         defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
-                null, locationsTable);
+                null, locationsTable, regionalFundingFeature);
     }
 
     private boolean checkInternationalCountry(AmpCategorySelectFieldPanel implementationLevel,
@@ -169,7 +170,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
     private void defaultCountryChecks(AmpCategorySelectFieldPanel implementationLevel,
                                       AmpCategorySelectFieldPanel implementationLocation,
                                       Model<Boolean> disablePercentagesForInternational,
-                                      AjaxRequestTarget target, AmpLocationFormTableFeature locationsTable) {
+                                      AjaxRequestTarget target, AmpLocationFormTableFeature locationsTable, AmpRegionalFundingFormSectionFeature regionalFundingFeature) {
         disablePercentagesForInternational.setObject(false);
         /**
          * When implementation level is international and implementation location is country
@@ -189,7 +190,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
             if (target != null) { //we're in an ajax context, and not in init
                 if (!defaultCountry.getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
-                    locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational, true);
+                    locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational, regionalFundingFeature,true);
                 } else {
                     disablePercentagesForInternational.setObject(false);
                 }

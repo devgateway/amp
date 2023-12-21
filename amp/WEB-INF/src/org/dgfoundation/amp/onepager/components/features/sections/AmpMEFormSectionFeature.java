@@ -5,36 +5,19 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.*;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.*;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
-import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.items.AmpMEIndicatorFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
-import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
-import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
-import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.DbUtil;
 
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * M&E section
@@ -52,7 +35,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     private boolean isTabsView = true;
 
-//    private Set<AmpActivityLocation> locations = new HashSet<>();
+    final IModel<Set<AmpActivityLocation>> locations;
+
+    final WebMarkupContainer wmc;
 
     public AmpMEFormSectionFeature(String id, String fmName,
                                    final IModel<AmpActivityVersion> am) throws Exception {
@@ -62,14 +47,19 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         if (am.getObject().getIndicators() == null) {
             am.getObject().setIndicators(new HashSet<>());
         }
-        final WebMarkupContainer wmc = new WebMarkupContainer("container");
+
+        wmc = new WebMarkupContainer("container");
         wmc.setOutputMarkupId(true);
-
-        final IModel<Set<AmpActivityLocation>> locations = new PropertyModel(am, "locations");
-
-
-
         add(wmc);
+//        locations = new PropertyModel(am, "locations");
+
+        locations = new LoadableDetachableModel<Set<AmpActivityLocation>>() {
+            @Override
+            protected Set<AmpActivityLocation> load() {
+                // Load or calculate the locations here
+                return am.getObject().getLocations();
+            }
+        };
 
         tabsList = new ListEditor<AmpActivityLocation>("locationItemsForTabs", locations) {
             private static final long serialVersionUID = -206108834217110807L;
@@ -100,24 +90,13 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
         };
         tabsList.setVisibilityAllowed(isTabsView);
+        tabsList.setOutputMarkupId(true);
         wmc.add(tabsList);
 
         indicatorLocationList = new ListEditor<AmpActivityLocation>("listIndicatorLocation", locations) {
 
             @Override
             protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpActivityLocation> item) {
-//                AmpCategoryValueLocations location = item.getModel().getObject().getLocation();
-
-
-//                AmpMEIndicatorFeaturePanel locationIndicator = null;
-//                try {
-//                    locationIndicator = new AmpMEIndicatorFeaturePanel("indicatorLocation", "ME Location Item",conn, indicator, values, new Model<AmpCategoryValueLocations>(location));
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                item.add(locationIndicator);
-
                 AmpMEItemFeaturePanel indicatorLoc = null;
                 try {
                     indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations,
@@ -134,81 +113,55 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             }
 
         };
-
-
-
+        indicatorLocationList.setOutputMarkupId(true);
         wmc.add(indicatorLocationList);
 
+    }
+    public void updateAmpLocationModel(AmpActivityLocation selectedLocation) {
+        am.getObject().getLocations().add(selectedLocation);
+        locations.getObject().add(selectedLocation);
 
-//        list = new ListView<IndicatorActivity>("list", listModel) {
-//            @Override
-//            protected void populateItem(final ListItem<IndicatorActivity> item) {
-//                AmpMEItemFeaturePanel indicator = null;
-////                try {
-////                    indicator = new AmpMEItemFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"), locations);
-////                } catch (Exception e) {
-////                    throw new RuntimeException(e);
-////                }
-////                item.add(indicator);
+        // Refresh the indicatorLocationList and tabsList components in the Ajax response
+//        AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
+//        if (target != null) {
+//            // Force re-render if needed
+//            target.add(AmpMEFormSectionFeature.this);
+//            target.appendJavaScript("indicatorTabs();");
+//            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
 //
-//                String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this indicator?");
-//                AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-//                        "delete", "Delete ME Item", new Model<String>(translatedMessage)) {
-//                    @Override
-//                    public void onClick(AjaxRequestTarget target) {
-//                        am.getObject().getIndicators().remove(item.getModelObject());
-//                        uniqueCollectionValidationField.reloadValidationField(target);
-//                        //setModel.getObject().remove(item.getModelObject());
-//                        list.removeAll();
-//                        target.add(AmpMEFormSectionFeature.this);
-//                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-//                    }
-//                };
-//                item.add(deleteLinkField);
-//            }
-//        };
-//        list.setReuseItems(true);
-//        add(list);
+//        }
 
-//
-//        final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
-//                new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
-//                        AmpMEIndicatorSearchModel.class) {
-//
-//                    private static final long serialVersionUID = 1227775244079125152L;
-//
-//                    @Override
-//                    protected String getChoiceValue(AmpIndicator choice) {
-//                        return DbUtil.filter(choice.getName());
-//                    }
-//
-//                    @Override
-//                    public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
-//                        IndicatorActivity ia = new IndicatorActivity();
-//                        ia.setActivity(am.getObject());
-//                        ia.setIndicator(choice);
-//                        am.getObject().getIndicators().add(ia);
-//                        uniqueCollectionValidationField.reloadValidationField(target);
-//
-//                        //setModel.getObject().add(ia);
-//                        list.removeAll();
-//                        target.add(list.getParent());
-//
-//                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-//                        target.appendJavaScript("indicatorTabs();");
-//                    }
-//
-//                    @Override
-//                    public Integer getChoiceLevel(AmpIndicator choice) {
-//                        return 0;
-//                    }
-//
-//                };
-//
-//        add(searchIndicators);
+    }
+    public void reloadMeFormSection(AjaxRequestTarget target){
+        target.add(AmpMEFormSectionFeature.this);
+        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
     }
     public void addLocationIndicator(AmpActivityVersion indicator){
         if (indicator == null) return;
         indicatorLocationList.updateModel();
+    }
+
+    public ListEditor<AmpActivityLocation> getList() {
+        return indicatorLocationList;
+    }
+
+    public boolean isTabsView() {
+        return isTabsView;
+    }
+
+    public void setTabsView(boolean tabsView) {
+        isTabsView = tabsView;
+    }
+
+    public ListEditor<AmpActivityLocation> getTabsList() {
+        return tabsList;
+    }
+
+    public void setTabsList(ListEditor<AmpActivityLocation> tabsList) {
+        this.tabsList = tabsList;
+    }
+
+    public WebMarkupContainer getWmc() {
+        return wmc;
     }
 }

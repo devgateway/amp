@@ -18,6 +18,7 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
@@ -307,16 +308,20 @@ public class AmpLocationFormTableFeature extends
                         }else{
                             disablePercentagesForInternational.setObject(false);
                         }
-                        locationSelected(choice, am, disablePercentagesForInternational);
+                        locationSelected(choice, am, disablePercentagesForInternational, regionalFundingFeature);
 
                         // toggleHeading(target, setModel.getObject());
                         target.add(list.getParent());
+
                         regionalFundingFeature.getList().removeAll();
 
                         if (regionalFundingFeature.isVisibleInHierarchy()) {
                             target.add(regionalFundingFeature);
                             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
                         }
+
+                        regionalFundingFeature.getMeFormSection().reloadMeFormSection(target);
+
                         reloadValidationFields(target);
                         list.removeAll();
                     }
@@ -352,11 +357,11 @@ public class AmpLocationFormTableFeature extends
         add(searchLocations);
     }
 
-    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational) {
-        locationSelected(choice, am, disablePercentagesForInternational, false);
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, AmpRegionalFundingFormSectionFeature regionalFundingFeature) {
+        locationSelected(choice, am, disablePercentagesForInternational, regionalFundingFeature,false);
     }
 
-    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, boolean isCountryNational) {
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, AmpRegionalFundingFormSectionFeature regionalFundingFeature, boolean isCountryNational) {
         AmpActivityLocation activityLocation = new AmpActivityLocation();
 
         activityLocation.setLocation(choice);
@@ -392,6 +397,8 @@ public class AmpLocationFormTableFeature extends
                 }
             }
         }
+        regionalFundingFeature.getMeFormSection().updateAmpLocationModel(activityLocation);
+
         set.add(activityLocation);
     }
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>GGW-143</jira>
+    <author>denismbugua</author>
+    <description>Add AMP Dashboard api endpoint to send funding data to dashboard</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+				INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
+				VALUES (nextval('amp_global_settings_seq'), 'AMP Dashboard URL', 'https://ggw-dashboard.dgstg.org/api/amp-funding/importDonorFunding', null, 'Amp Dashboard api url', 'general', null);
+
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -64,10 +64,15 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
     protected IModel<Set<IndicatorActivity>> parentModel;
 
     protected IModel<Set<IndicatorActivity>> setModel;
+
+    protected IModel<AmpActivityVersion> am;
+
+    protected IModel<Set<AmpActivityLocation>> parentLocations;
     public AmpMEItemFeaturePanel(String id, String fmName, IModel<AmpActivityLocation> location,
                                  final IModel<AmpActivityVersion> conn, IModel<Set<AmpActivityLocation>> locations, AmpMEFormSectionFeature parent) throws Exception {
         super(id, fmName, true);
-
+        am = conn;
+        parentLocations = locations;
         String locationName = location.getObject().getLocation().getName();
 
         if(location.getObject().getLocation().getParentLocation() != null){

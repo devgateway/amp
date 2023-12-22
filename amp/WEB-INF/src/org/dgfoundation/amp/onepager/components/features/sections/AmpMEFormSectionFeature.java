@@ -37,7 +37,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     final IModel<Set<AmpActivityLocation>> locations;
 
-    final WebMarkupContainer wmc;
+//    final WebMarkupContainer wmc;
 
     public AmpMEFormSectionFeature(String id, String fmName,
                                    final IModel<AmpActivityVersion> am) throws Exception {
@@ -48,9 +48,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             am.getObject().setIndicators(new HashSet<>());
         }
 
-        wmc = new WebMarkupContainer("container");
-        wmc.setOutputMarkupId(true);
-        add(wmc);
+//        wmc = new WebMarkupContainer("container");
+//        wmc.setOutputMarkupId(true);
+//        add(wmc);
 //        locations = new PropertyModel(am, "locations");
 
         locations = new LoadableDetachableModel<Set<AmpActivityLocation>>() {
@@ -91,7 +91,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         };
         tabsList.setVisibilityAllowed(isTabsView);
         tabsList.setOutputMarkupId(true);
-        wmc.add(tabsList);
+        add(tabsList);
 
         indicatorLocationList = new ListEditor<AmpActivityLocation>("listIndicatorLocation", locations) {
 
@@ -114,27 +114,19 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
         };
         indicatorLocationList.setOutputMarkupId(true);
-        wmc.add(indicatorLocationList);
+        add(indicatorLocationList);
 
     }
     public void updateAmpLocationModel(AmpActivityLocation selectedLocation) {
         am.getObject().getLocations().add(selectedLocation);
         locations.getObject().add(selectedLocation);
 
-        // Refresh the indicatorLocationList and tabsList components in the Ajax response
-//        AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
-//        if (target != null) {
-//            // Force re-render if needed
-//            target.add(AmpMEFormSectionFeature.this);
-//            target.appendJavaScript("indicatorTabs();");
-//            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-//
-//        }
-
     }
     public void reloadMeFormSection(AjaxRequestTarget target){
         target.add(AmpMEFormSectionFeature.this);
+//        target.addChildren(tabsList.getParent(), AmpMEFormSectionFeature.this);
         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+        target.appendJavaScript("indicatorTabs();");
     }
     public void addLocationIndicator(AmpActivityVersion indicator){
         if (indicator == null) return;
@@ -161,7 +153,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         this.tabsList = tabsList;
     }
 
-    public WebMarkupContainer getWmc() {
-        return wmc;
-    }
+//    public WebMarkupContainer getWmc() {
+//        return wmc;
+//    }
 }

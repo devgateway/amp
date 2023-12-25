@@ -55,7 +55,7 @@
         <!-- Path Settings -->
         <doc.path>./doc/api</doc.path>
         <doc.src>./src/java</doc.src>
-        <generated-sources>./generated-sources</generated-sources>
+        <gen-src>./gen-src</gen-src>
 
         <buildSource/>
         <buildDate/>
@@ -1290,7 +1290,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/generated-sources/jaxb/translation</outputDirectory>
+                            <outputDirectory>${project.basedir}/gen-src/jaxb/translation</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1307,7 +1307,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
-                            <outputDirectory>${project.basedir}/generated-sources/jaxb/help</outputDirectory>
+                            <outputDirectory>${project.basedir}/gen-src/jaxb/help</outputDirectory>
 
                         </configuration>
                     </execution>
@@ -1325,7 +1325,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/generated-sources/jaxb/xmlpatcher</outputDirectory>
+                            <outputDirectory>${project.basedir}/gen-src/jaxb/xmlpatcher</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1342,7 +1342,7 @@
                                 </source>
                             </sources>
                             <packageName>org.dgfoundation.amp.reports.xml</packageName>
-                            <outputDirectory>${project.basedir}/generated-sources/jaxb/report</outputDirectory>
+                            <outputDirectory>${project.basedir}/gen-src/jaxb/report</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1574,7 +1574,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.basedir}/generated-sources</source>
+                                <source>${project.basedir}/gen-src</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -1660,7 +1660,7 @@
                         <filesets>
                             <fileset>
                                 <directory>${metainf}</directory>
-                                <directory>${project.basedir}/generated-sources</directory>
+                                <directory>${project.basedir}/gen-src</directory>
                                 <directory>${doc.path}</directory>
                                 <directory>${classes}</directory>
 

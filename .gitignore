@@ -17,5 +17,5 @@ amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules/
 .idea/
 amp/TEMPLATE/reampv2/node/node_modules/
 amp/TEMPLATE/reampv2/node/
-amp/generated-sources/
-/amp/generated-sources/
+amp/gen-src/
+/amp/gen-src/

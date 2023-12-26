@@ -5,6 +5,7 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -12,6 +13,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
@@ -44,6 +46,11 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
      * @throws Exception
      */
     protected AmpRegionalFundingFormSectionFeature regionalFundingFeature;
+
+    public AmpRegionalFundingFormSectionFeature getRegionalFundingFeature() {
+        return regionalFundingFeature;
+    }
+
     public AmpLocationFormSectionFeature(String id, String fmName,
                                          final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFunding) throws Exception {
         super(id, fmName, am);
@@ -98,19 +105,20 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         target.add(implementationLocation);
-                        String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
+                            String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
                                 GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
                         if ("false".equals(mixedImplementationLocation)) {
                             Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
                             if (set != null && set.size() > 0) {
+                                //TODO check if we have indicators for this location and prevent deletion
                                 locationsTable.getSetModel().getObject().clear();
                                 locationsTable.getList().removeAll();
                                 //when we remove we need to show the search Component
                                 locationsTable.getSearchLocations().setVisibilityAllowed(true);
                                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
                                 target.add(locationsTable);
-
-
+                                getRegionalFundingFeature().getMeFormSection().clearLocations();
+                                send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
 
                             }
                         }
@@ -119,7 +127,6 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                     }
                 });
 
-        // add location table
 
         add(locationsTable);
         defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,

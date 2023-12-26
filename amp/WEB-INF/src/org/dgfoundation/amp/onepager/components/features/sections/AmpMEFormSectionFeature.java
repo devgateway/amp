@@ -9,10 +9,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.*;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
+import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.*;
@@ -21,21 +25,22 @@ import java.util.HashSet;
 
 /**
  * M&E section
- * @author aartimon@dginternational.org 
+ *
+ * @author aartimon@dginternational.org
  * @since Feb 10, 2011
  */
 public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 //    private final ListView<IndicatorActivity> list;
 
-    protected ListEditor<AmpActivityLocation> tabsList;
+    protected ListView<AmpActivityLocation> tabsList;
 
-    protected ListEditor<AmpActivityLocation> indicatorLocationList;
+    protected ListView<AmpActivityLocation> indicatorLocationList;
 
     private Map<AmpActivityLocation, AmpMEItemFeaturePanel> locationIndicatorItems = new TreeMap<>();
 
     private boolean isTabsView = true;
 
-    final IModel<Set<AmpActivityLocation>> locations;
+    final List<AmpActivityLocation> locations;
 
 //    final WebMarkupContainer wmc;
 
@@ -47,34 +52,33 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         if (am.getObject().getIndicators() == null) {
             am.getObject().setIndicators(new HashSet<>());
         }
+        locations = new ArrayList<>(am.getObject().getLocations());
 
-//        wmc = new WebMarkupContainer("container");
-//        wmc.setOutputMarkupId(true);
-//        add(wmc);
-//        locations = new PropertyModel(am, "locations");
+        ListView<AmpActivityLocation> listView = new ListView<AmpActivityLocation>("listView", locations) {
 
-        locations = new LoadableDetachableModel<Set<AmpActivityLocation>>() {
             @Override
-            protected Set<AmpActivityLocation> load() {
-                // Load or calculate the locations here
-                return am.getObject().getLocations();
+            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> listItem) {
+                listItem.add(new Label("item", listItem.getModelObject().getLocation().getName()));
+
             }
         };
+        add(listView);
+        add(UpdateEventBehavior.of(LocationChangedEvent.class));
 
-        tabsList = new ListEditor<AmpActivityLocation>("locationItemsForTabs", locations) {
+        tabsList = new ListView<AmpActivityLocation>("locationItemsForTabs", locations) {
             private static final long serialVersionUID = -206108834217110807L;
 
             @Override
-            protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpActivityLocation> item) {
-                AmpCategoryValueLocations location = item.getModel().getObject().getLocation();
+        protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {
+            AmpCategoryValueLocations location = item.getModel().getObject().getLocation();
                 String locationName = location.getName();
                 String locationIso = location.getIso3();
 
-                if(location.getParentLocation() != null){
+                if (location.getParentLocation() != null) {
                     locationIso = location.getParentLocation().getIso3();
                 }
 
-                if(location.getParentLocation() != null){
+                if (location.getParentLocation() != null) {
                     locationName = location.getParentLocation().getName() + "[" + location.getName() + "]";
                 }
 
@@ -93,11 +97,11 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         tabsList.setOutputMarkupId(true);
         add(tabsList);
 
-        indicatorLocationList = new ListEditor<AmpActivityLocation>("listIndicatorLocation", locations) {
+        indicatorLocationList = new ListView<AmpActivityLocation>("listIndicatorLocation", locations) {
+
 
             @Override
-            protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpActivityLocation> item) {
-                AmpMEItemFeaturePanel indicatorLoc = null;
+            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {                AmpMEItemFeaturePanel indicatorLoc = null;
                 try {
                     indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations,
                             AmpMEFormSectionFeature.this);
@@ -115,45 +119,25 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         };
         indicatorLocationList.setOutputMarkupId(true);
         add(indicatorLocationList);
-
+        this.add(UpdateEventBehavior.of(AmpActivityLocation.class));
     }
+
     public void updateAmpLocationModel(AmpActivityLocation selectedLocation) {
-        am.getObject().getLocations().add(selectedLocation);
-        locations.getObject().add(selectedLocation);
-
+        locations.add(selectedLocation);
     }
-    public void reloadMeFormSection(AjaxRequestTarget target){
+
+    /*public void reloadMeFormSection(AjaxRequestTarget target) {
         target.add(AmpMEFormSectionFeature.this);
-//        target.addChildren(tabsList.getParent(), AmpMEFormSectionFeature.this);
         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
         target.appendJavaScript("indicatorTabs();");
-    }
-    public void addLocationIndicator(AmpActivityVersion indicator){
-        if (indicator == null) return;
-        indicatorLocationList.updateModel();
-    }
-
-    public ListEditor<AmpActivityLocation> getList() {
-        return indicatorLocationList;
-    }
-
+    }*/
     public boolean isTabsView() {
         return isTabsView;
     }
+    public void clearLocations() {
+        if (locations != null) {
+            locations.clear();
+        }
 
-    public void setTabsView(boolean tabsView) {
-        isTabsView = tabsView;
     }
-
-    public ListEditor<AmpActivityLocation> getTabsList() {
-        return tabsList;
-    }
-
-    public void setTabsList(ListEditor<AmpActivityLocation> tabsList) {
-        this.tabsList = tabsList;
-    }
-
-//    public WebMarkupContainer getWmc() {
-//        return wmc;
-//    }
 }

@@ -4,42 +4,34 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.ListEditor;
-import org.dgfoundation.amp.onepager.components.ListItem;
-import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpMEValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
-import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.util.DbUtil;
+
 
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author aartimon@dginternational.org
@@ -48,16 +40,13 @@ import org.apache.log4j.Logger;
 public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
 
-    private static Logger logger = Logger.getLogger(AmpMEItemFeaturePanel.class);
+    private static final Logger logger = Logger.getLogger(AmpMEItemFeaturePanel.class);
     /**
      * @param id
      * @param fmName
      * @throws Exception
      */
     private final ListView<IndicatorActivity> list;
-//    private final ListEditor<IndicatorActivity> list;
-
-    private boolean isTabsView = true;
 
     private Integer tabIndex;
 
@@ -67,15 +56,16 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
     protected IModel<AmpActivityVersion> am;
 
-    protected IModel<Set<AmpActivityLocation>> parentLocations;
+    protected List<AmpActivityLocation> parentLocations;
+
     public AmpMEItemFeaturePanel(String id, String fmName, IModel<AmpActivityLocation> location,
-                                 final IModel<AmpActivityVersion> conn, IModel<Set<AmpActivityLocation>> locations, AmpMEFormSectionFeature parent) throws Exception {
+                                 final IModel<AmpActivityVersion> conn, List<AmpActivityLocation> locations, AmpMEFormSectionFeature parent) throws Exception {
         super(id, fmName, true);
         am = conn;
         parentLocations = locations;
         String locationName = location.getObject().getLocation().getName();
 
-        if(location.getObject().getLocation().getParentLocation() != null){
+        if (location.getObject().getLocation().getParentLocation() != null) {
             locationName = location.getObject().getLocation().getParentLocation().getName() + "[" + location.getObject().getLocation().getName() + "]";
         }
 
@@ -119,10 +109,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         };
         add(uniqueCollectionValidationField);
         list = new ListView<IndicatorActivity>("list", filteredListModel) {
-//            @Override
-//            protected void onPopulateItem(ListItem<IndicatorActivity> item) {
-
-
             @Override
             protected void populateItem(org.apache.wicket.markup.html.list.ListItem<IndicatorActivity> item) {
                 AmpMEIndicatorFeaturePanel indicatorItem = null;
@@ -177,9 +163,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                         uniqueCollectionValidationField.reloadValidationField(target);
 
                         target.add(list.getParent());
-
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));
-//                        target.appendJavaScript("indicatorTabs();");
                     }
 
                     @Override

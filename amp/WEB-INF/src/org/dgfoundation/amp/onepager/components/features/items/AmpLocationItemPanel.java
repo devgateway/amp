@@ -2,6 +2,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -15,12 +16,13 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -157,8 +159,9 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                 }
                 locationTable.reloadValidationFields(target);
                 setModel.getObject().remove(model.getObject());
-
-
+                //TODO check if we have indicators for this location and prevent deletion
+                findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature().getMeFormSection().clearLocations();
+                send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
                 target.add(list.getParent());
                 list.removeAll();
             }

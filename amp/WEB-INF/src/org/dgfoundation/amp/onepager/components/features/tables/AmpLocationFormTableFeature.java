@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -21,6 +22,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPa
 import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -320,8 +322,8 @@ public class AmpLocationFormTableFeature extends
                             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
                         }
 
-                        regionalFundingFeature.getMeFormSection().reloadMeFormSection(target);
-
+                       // regionalFundingFeature.getMeFormSection().reloadMeFormSection(target);
+                        send( getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
                         reloadValidationFields(target);
                         list.removeAll();
                     }
@@ -413,7 +415,6 @@ public class AmpLocationFormTableFeature extends
         return percentageValidationField;
     }
 
-    //expose searchLocations for testing
     public AmpAutocompleteFieldPanel<AmpCategoryValueLocations> getSearchLocations() {
         return searchLocations;
     }

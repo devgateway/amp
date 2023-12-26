@@ -3,12 +3,9 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

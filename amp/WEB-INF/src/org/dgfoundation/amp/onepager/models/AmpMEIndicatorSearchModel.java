@@ -1,6 +1,5 @@
 /**
  * Copyright (c) 2011 Development Gateway (www.developmentgateway.org)
- *
  */
 package org.dgfoundation.amp.onepager.models;
 
@@ -27,8 +26,8 @@ import java.util.stream.Collectors;
 public class AmpMEIndicatorSearchModel extends
         AbstractAmpAutoCompleteModel<AmpIndicator> {
 
-    public AmpMEIndicatorSearchModel(String input,String language,
-            Map<AmpAutoCompleteModelParam, Object> params) {
+    public AmpMEIndicatorSearchModel(String input, String language,
+                                     Map<AmpAutoCompleteModelParam, Object> params) {
         super(input, language, params);
         // TODO Auto-generated constructor stub
     }
@@ -56,7 +55,7 @@ public class AmpMEIndicatorSearchModel extends
             Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
 
             crit.setCacheable(false);
-            if (input.trim().length() > 0){
+            if (input.trim().length() > 0) {
                 Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
                 crit.add(junction);
             }
@@ -72,17 +71,17 @@ public class AmpMEIndicatorSearchModel extends
                 Set<AmpTheme> programThemes = ampActivityPrograms.stream()
                         .map(AmpActivityProgram::getProgram)
                         .collect(Collectors.toSet());
-
+                Set<AmpTheme> programThemesClone = new HashSet<>(programThemes);
                 // Check if program has siblings and add them to themes to get all indicators for objectives in a program
-                for( AmpTheme program: programThemes){
-                    if(program.getSiblings() != null){
-                        programThemes.addAll(program.getSiblings());
+                for (AmpTheme program : programThemes) {
+                    if (program.getSiblings() != null) {
+                        programThemesClone.addAll(program.getSiblings());
                     }
                 }
 
 
                 filterAmpIndicators = ret.stream()
-                        .filter(indicator -> programThemes.contains(indicator.getProgram()))
+                        .filter(indicator -> programThemesClone.contains(indicator.getProgram()))
                         .collect(Collectors.toList());
             }
 

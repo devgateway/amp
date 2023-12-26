@@ -208,7 +208,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
                         treeCollectionValidatorField.reloadValidationField(target);
                         maxSizeCollectionValidationField.reloadValidationField(target);
                         programMappingValidatorField.reloadValidationField(target);
-                        send(getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
+                        send(AmpProgramFormTableFeature.this.getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
+
                     }
                 };
                 item.add(delProgram);

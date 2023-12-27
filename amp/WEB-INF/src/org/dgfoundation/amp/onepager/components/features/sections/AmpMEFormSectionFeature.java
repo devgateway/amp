@@ -69,8 +69,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             private static final long serialVersionUID = -206108834217110807L;
 
             @Override
-        protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {
-            AmpCategoryValueLocations location = item.getModel().getObject().getLocation();
+            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {
+                AmpCategoryValueLocations location = item.getModel().getObject().getLocation();
                 String locationName = location.getName();
                 String locationIso = location.getIso3();
 
@@ -101,7 +101,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 
             @Override
-            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {                AmpMEItemFeaturePanel indicatorLoc = null;
+            protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {
+                AmpMEItemFeaturePanel indicatorLoc = null;
                 try {
                     indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations,
                             AmpMEFormSectionFeature.this);
@@ -134,9 +135,15 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     public boolean isTabsView() {
         return isTabsView;
     }
-    public void clearLocations() {
+
+    public void clearLocations(AmpCategoryValueLocations locationToClear) {
         if (locations != null) {
-            locations.clear();
+            if (locationToClear != null) {
+                locations.removeIf(location -> location.getLocation().getName().equals(locationToClear.getName()) &&
+                        location.getLocation().getIso().equals(locationToClear.getIso()));
+            } else {
+                locations.clear();
+            }
         }
 
     }

@@ -133,8 +133,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-
                 // remove any regional funding with this region
+                if (canDeleteLocation(target, am, model)) return;
                 if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.
                         equalsCategoryValue(model.getObject().getLocation().getParentCategoryValue())) {
                     final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(am, "regionalFundings");
@@ -160,7 +160,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                 locationTable.reloadValidationFields(target);
                 setModel.getObject().remove(model.getObject());
                 //TODO check if we have indicators for this location and prevent deletion
-                findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature().getMeFormSection().clearLocations();
+                findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature()
+                        .getMeFormSection().clearLocations(model.getObject().getLocation());
                 send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
                 target.add(list.getParent());
                 list.removeAll();
@@ -169,6 +170,23 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
         };
         add(delLocation);
     }
+
+    public static boolean canDeleteLocation(AjaxRequestTarget target, final IModel<AmpActivityVersion> am,
+                                             final IModel<AmpActivityLocation> model) {
+        if (am.getObject().getIndicators() != null
+                && !am.getObject().getIndicators().isEmpty()
+                && (model == null || model.getObject() == null ||
+                am.getObject().getIndicators().stream().anyMatch(indicator ->
+                        indicator.getActivityLocation().equals(model.getObject())))) {
+            String translatedMessage = TranslatorUtil.getTranslation("Cannot delete location with indicators");
+            String alert = "alert('" + translatedMessage + "');";
+            target.appendJavaScript(alert);
+
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     protected void onConfigure() {

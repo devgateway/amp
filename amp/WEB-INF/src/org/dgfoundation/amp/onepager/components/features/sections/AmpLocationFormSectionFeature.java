@@ -28,6 +28,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.Set;
 
+import static org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel.canDeleteLocation;
 import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
 
 /**
@@ -89,7 +90,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
-                                target, locationsTable,regionalFundingFeature);
+                                target, locationsTable, regionalFundingFeature);
                     }
                 });
         add(implementationLocation);
@@ -105,19 +106,22 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         target.add(implementationLocation);
-                            String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
+                        String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
                                 GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
                         if ("false".equals(mixedImplementationLocation)) {
                             Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
                             if (set != null && set.size() > 0) {
                                 //TODO check if we have indicators for this location and prevent deletion
+                                if (canDeleteLocation(target, am, null)) {
+                                    return;
+                                }
                                 locationsTable.getSetModel().getObject().clear();
                                 locationsTable.getList().removeAll();
                                 //when we remove we need to show the search Component
                                 locationsTable.getSearchLocations().setVisibilityAllowed(true);
                                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
                                 target.add(locationsTable);
-                                getRegionalFundingFeature().getMeFormSection().clearLocations();
+                                getRegionalFundingFeature().getMeFormSection().clearLocations(null);
                                 send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
 
                             }
@@ -197,7 +201,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
             if (target != null) { //we're in an ajax context, and not in init
                 if (!defaultCountry.getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
-                    locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational, regionalFundingFeature,true);
+                    locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational, regionalFundingFeature, true);
                 } else {
                     disablePercentagesForInternational.setObject(false);
                 }

@@ -91,7 +91,9 @@ function loadBaseMap() {
         });
     }
 
+
     map.addLayer(tileLayer);
+	map.setZoom(3);
     currentZoom = map.getZoom();
 
     // attach listener to basemap select to change the map's basemaps

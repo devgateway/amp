@@ -160,35 +160,33 @@ public class MainMap extends Action {
             filter.setModeexport(false);
         }
         //we set the map to center on one of the selected locations or else centre it in Africa
-        if (!AmpLocationFormTableFeature.LOCATIONS_SELECTED.isEmpty())
-        {
-            for(AmpActivityLocation ampActivityLocation: AmpLocationFormTableFeature.LOCATIONS_SELECTED)
-            {
-                if (ampActivityLocation.getLocation().getGsLat()!=null&& !Objects.equals(ampActivityLocation.getLocation().getGsLat(), ""))
-                {
-                    gsLat= Double.parseDouble(ampActivityLocation.getLocation().getGsLat());
-                }
-                if (ampActivityLocation.getLocation().getGsLong()!=null&& !Objects.equals(ampActivityLocation.getLocation().getGsLong(), ""))
-                {
-                    gsLong= Double.parseDouble(ampActivityLocation.getLocation().getGsLong());
+        if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) ) {
+            if (!AmpLocationFormTableFeature.LOCATIONS_SELECTED.isEmpty()) {
+                for (AmpActivityLocation ampActivityLocation : AmpLocationFormTableFeature.LOCATIONS_SELECTED) {
+                    if (ampActivityLocation.getLocation().getGsLat() != null && !Objects.equals(ampActivityLocation.getLocation().getGsLat(), "")) {
+                        gsLat = Double.parseDouble(ampActivityLocation.getLocation().getGsLat());
+                    }
+                    if (ampActivityLocation.getLocation().getGsLong() != null && !Objects.equals(ampActivityLocation.getLocation().getGsLong(), "")) {
+                        gsLong = Double.parseDouble(ampActivityLocation.getLocation().getGsLong());
+                    }
                 }
             }
+            logger.info("Latitude,Longitude " + gsLat + "," + gsLong);
+            String hql = "update " + AmpGlobalSettings.class.getName() + " s set s.globalSettingsValue = " +
+                    "case " +
+                    "when s.globalSettingsName = :latName then :newLat " +
+                    "when s.globalSettingsName = :longName then :newLong " +
+                    "else s.globalSettingsValue " +
+                    "end";
+            Query query = PersistenceManager.getRequestDBSession().createQuery(hql);
+            query.setParameter("latName", "Country Latitude", StringType.INSTANCE);
+            query.setParameter("longName", "Country Longitude", StringType.INSTANCE);
+            query.setParameter("newLat", String.valueOf(gsLat), StringType.INSTANCE);
+            query.setParameter("newLong", String.valueOf(gsLong), StringType.INSTANCE);
+            int rowCount = query.executeUpdate();
+            logger.info("Updated settings for latitude. " + rowCount);
+            FeaturesUtil.refreshSettingsCache();
         }
-        logger.info("Latitude,Longitude "+gsLat+","+gsLong);
-        String hql = "update " + AmpGlobalSettings.class.getName() + " s set s.globalSettingsValue = " +
-                "case " +
-                "when s.globalSettingsName = :latName then :newLat " +
-                "when s.globalSettingsName = :longName then :newLong " +
-                "else s.globalSettingsValue " +
-                "end";
-        Query query = PersistenceManager.getRequestDBSession().createQuery(hql);
-        query.setParameter("latName", "Country Latitude", StringType.INSTANCE);
-        query.setParameter("longName", "Country Longitude", StringType.INSTANCE);
-        query.setParameter("newLat", String.valueOf(gsLat), StringType.INSTANCE);
-        query.setParameter("newLong", String.valueOf(gsLong), StringType.INSTANCE);
-        int rowCount = query.executeUpdate();
-        logger.info("Updated settings for latitude. "+rowCount);
-        FeaturesUtil.refreshSettingsCache();
 
         if (request.getParameter("popup") != null
                 && request.getParameter("popup").equalsIgnoreCase("true")) {

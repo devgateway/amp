@@ -1,7 +1,6 @@
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
- *
-*/
+ */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import org.apache.wicket.AttributeModifier;
@@ -21,6 +20,7 @@ import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.events.DirectProgramMappingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.ProgramSelectedEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -47,7 +47,7 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
  * @author aartimon@dginternational.org
  * since Oct 21, 2010
  */
-public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpActivityVersion,AmpActivityProgram>{
+public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivityProgram> {
 
     /**
      * @param id
@@ -56,20 +56,20 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
      * @throws Exception
      */
     public AmpProgramFormTableFeature(String id, String fmName,
-            final IModel<AmpActivityVersion> am, final String programSettingsString) throws Exception{
-        this( id,  fmName,
-                 am,  programSettingsString,false);
+                                      final IModel<AmpActivityVersion> am, final String programSettingsString) throws Exception {
+        this(id, fmName,
+                am, programSettingsString, false);
     }
-    
+
     public AmpProgramFormTableFeature(String id, String fmName,
-            final IModel<AmpActivityVersion> am, final String programSettingsString,boolean required) throws Exception {
-        super(id, am, fmName,false,required);
-        final IModel<Set<AmpActivityProgram>> setModel=new PropertyModel<Set<AmpActivityProgram>>(am,"actPrograms");
+                                      final IModel<AmpActivityVersion> am, final String programSettingsString, boolean required) throws Exception {
+        super(id, am, fmName, false, required);
+        final IModel<Set<AmpActivityProgram>> setModel = new PropertyModel<Set<AmpActivityProgram>>(am, "actPrograms");
         if (setModel.getObject() == null)
             setModel.setObject(new HashSet<AmpActivityProgram>());
-        
-        AmpActivityProgramSettings setting=ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
-        final IModel<AmpActivityProgramSettings> programSettings = (setting != null) ? PersistentObjectModel.getModel(setting):null;
+
+        AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
+        final IModel<AmpActivityProgramSettings> programSettings = (setting != null) ? PersistentObjectModel.getModel(setting) : null;
 
         AbstractReadOnlyModel<List<AmpActivityProgram>> listModel = new AbstractReadOnlyModel<List<AmpActivityProgram>>() {
             private static final long serialVersionUID = 1L;
@@ -78,8 +78,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
             public List<AmpActivityProgram> getObject() {
                 Set<AmpActivityProgram> allProgs = setModel.getObject();
                 Set<AmpActivityProgram> specificProgs = new HashSet<AmpActivityProgram>();
-                
-                if (programSettings!=null&&programSettings.getObject() != null && allProgs!=null){
+
+                if (programSettings != null && programSettings.getObject() != null && allProgs != null) {
                     Iterator<AmpActivityProgram> it = allProgs.iterator();
                     while (it.hasNext()) {
                         AmpActivityProgram prog = it.next();
@@ -87,7 +87,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                             specificProgs.add(prog);
                     }
                 }
-                
+
                 return new ArrayList<AmpActivityProgram>(specificProgs);
             }
         };
@@ -96,7 +96,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         add(wmc);
         AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
         wmc.add(iValidator);
-        
+
         final AmpPercentageCollectionValidatorField<AmpActivityProgram> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivityProgram>(
                 "programPercentageTotal", listModel, "programPercentageTotal") {
             @Override
@@ -106,32 +106,32 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         };
         percentageValidationField.setIndicatorAppender(iValidator);
         add(percentageValidationField);
-        
+
         final AmpMinSizeCollectionValidationField<AmpActivityProgram> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivityProgram>(
-                "minSizeProgramValidator", listModel, "minSizeProgramValidator"){
+                "minSizeProgramValidator", listModel, "minSizeProgramValidator") {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                
+
                 //the required star should be visible, depending on whether the validator is active or not
                 reqStar.setVisible(isVisible());
-                        
-            }       
+
+            }
         };
         minSizeCollectionValidationField.setIndicatorAppender(iValidator);
         add(minSizeCollectionValidationField);
-        
+
         final AmpUniqueCollectionValidatorField<AmpActivityProgram> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityProgram>(
                 "uniqueProgramsValidator", listModel, "uniqueProgramsValidator") {
             @Override
             public Object getIdentifier(AmpActivityProgram t) {
                 return t.getProgram().getName();
-            }   
+            }
         };
         uniqueCollectionValidationField.setIndicatorAppender(iValidator);
         add(uniqueCollectionValidationField);
-        final AmpMaxSizeCollectionValidationField <AmpActivityProgram> maxSizeCollectionValidationField = 
-                new  AmpMaxSizeCollectionValidationField<AmpActivityProgram>("maxSizeProgramValidator",listModel, "max Size Program Validator");
+        final AmpMaxSizeCollectionValidationField<AmpActivityProgram> maxSizeCollectionValidationField =
+                new AmpMaxSizeCollectionValidationField<AmpActivityProgram>("maxSizeProgramValidator", listModel, "max Size Program Validator");
         boolean programAllowsMultiple = (programSettings != null) && (!programSettings.getObject().isAllowMultiple());
         maxSizeCollectionValidationField.setVisibilityAllowed(programAllowsMultiple);
         maxSizeCollectionValidationField.setOutputMarkupPlaceholderTag(true);
@@ -163,18 +163,19 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         this.getTableHeading().add(l);
         list = new ListView<AmpActivityProgram>("listProgs", listModel) {
             private static final long serialVersionUID = 7218457979728871528L;
+
             @Override
             protected void populateItem(final ListItem<AmpActivityProgram> item) {
-                final MarkupContainer listParent=this.getParent();
-                
+                final MarkupContainer listParent = this.getParent();
+
                 PropertyModel<Double> percModel = new PropertyModel<Double>(
                         item.getModel(), "programPercentage");
-                AmpPercentageTextField percentageField = new AmpPercentageTextField("percent", percModel, "programPercentage",percentageValidationField);
+                AmpPercentageTextField percentageField = new AmpPercentageTextField("percent", percModel, "programPercentage", percentageValidationField);
                 percentageField.getTextContainer().add(new AttributeModifier("style", "width: 40px;"));
                 item.add(percentageField);
-                
+
                 item.add(new Label("name", item.getModelObject().getHierarchyNames(true)).setEscapeModelStrings(false));
-                
+
                 AmpDeleteLinkField delProgram = new AmpDeleteLinkField(
                         "delProgram", "Delete Program") {
                     @Override
@@ -207,6 +208,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                         treeCollectionValidatorField.reloadValidationField(target);
                         maxSizeCollectionValidationField.reloadValidationField(target);
                         programMappingValidatorField.reloadValidationField(target);
+                        send(AmpProgramFormTableFeature.this.getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
+
                     }
                 };
                 item.add(delProgram);
@@ -216,30 +219,32 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         add(list);
 
 
-        add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivityProgram>>(list),programSettingsString){
+        add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivityProgram>>(list), programSettingsString) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void setPercentage(AmpActivityProgram loc, int val) {
                 loc.setProgramPercentage((float) val);
             }
+
             @Override
             public int getPercentage(AmpActivityProgram loc) {
-                return (int)((float)(loc.getProgramPercentage()));
+                return (int) ((float) (loc.getProgramPercentage()));
             }
+
             @Override
             public boolean itemInCollection(AmpActivityProgram item) {
                 if (item != null && item.getProgramSetting() != null && item.getProgramSetting().getAmpProgramSettingsId() == programSettings.getObject().getAmpProgramSettingsId())
                     return true;
                 return false;
             }
-            
+
         });
-        
-        final AmpAutocompleteFieldPanel<AmpTheme> searchThemes=new AmpAutocompleteFieldPanel<AmpTheme>("search","Add Program",
+
+        final AmpAutocompleteFieldPanel<AmpTheme> searchThemes = new AmpAutocompleteFieldPanel<AmpTheme>("search", "Add Program",
                 programSettingsString, AmpThemeSearchModel.class) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 9205254457879832345L;
 
@@ -247,19 +252,19 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
             protected String getChoiceValue(AmpTheme choice) {
                 //transientBoolean used internally to flag the default theme
                 if (choice.isTransientBoolean())
-                    return BOLD_DELIMITER_START +TranslatorUtil.getTranslatedText("Default program") + BOLD_DELIMITER_STOP + DbUtil.filter(choice.getName());
+                    return BOLD_DELIMITER_START + TranslatorUtil.getTranslatedText("Default program") + BOLD_DELIMITER_STOP + DbUtil.filter(choice.getName());
                 else
                     return DbUtil.filter(choice.getName());
             }
 
             @Override
             public void onSelect(AjaxRequestTarget target,
-                    AmpTheme choice) {
+                                 AmpTheme choice) {
                 /*
                  * if the default program has been selected
                  * since it is a fake AmpTheme we need to load it from the db
                  */
-                if (choice.isTransientBoolean()){
+                if (choice.isTransientBoolean()) {
                     AmpActivityProgramSettings aaps;
                     try {
                         aaps = ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
@@ -269,7 +274,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                     }
                     choice = aaps.getDefaultHierarchy();
                 }
-                
+
                 AmpActivityProgram aap = new AmpActivityProgram();
                 aap.setActivity(am.getObject());
                 aap.setProgram(choice);
@@ -280,7 +285,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                         aap.setProgramPercentage(MAXIMUM_PERCENTAGE.floatValue());
                     }
                 }
-                
+
                 if (setModel.getObject() == null)
                     setModel.setObject(new HashSet<AmpActivityProgram>());
                 setModel.getObject().add(aap);
@@ -297,13 +302,14 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                 if (ProgramUtil.isSourceMappedProgram(setting)) {
                     send(getPage(), Broadcast.BREADTH, new DirectProgramMappingUpdateEvent(target));
                 }
+                send(getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
             }
 
             @Override
             public Integer getChoiceLevel(AmpTheme choice) {
-                int i=0;
+                int i = 0;
                 AmpTheme c = choice;
-                while(c.getParentThemeId()!=null) {
+                while (c.getParentThemeId() != null) {
                     i++;
                     c = c.getParentThemeId();
                 }
@@ -328,7 +334,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         if (programMappingMap.containsKey(sourceProgram)) {
             return activityPrograms.stream()
                     .filter(p -> programMappingMap.get(sourceProgram)
-                    .contains(p.getProgram())).findAny().isPresent();
+                            .contains(p.getProgram())).findAny().isPresent();
         }
 
         return false;

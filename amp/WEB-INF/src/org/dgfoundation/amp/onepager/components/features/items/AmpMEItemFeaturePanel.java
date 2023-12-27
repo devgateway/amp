@@ -14,6 +14,8 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.ProgramSelectedEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -172,7 +174,8 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                     }
 
                 };
-
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
+        add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
         add(searchIndicators);
     }
 

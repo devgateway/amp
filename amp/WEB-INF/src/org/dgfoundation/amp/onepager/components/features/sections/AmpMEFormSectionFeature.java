@@ -3,17 +3,11 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.*;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.*;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.ListEditor;
-import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
 import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
@@ -21,7 +15,11 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * M&E section

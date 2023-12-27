@@ -1,11 +1,8 @@
 var callerGisObject;
 var structuresData;
 function gisPopup(caller, data){
-	const param = "width=780, height=500, scrollbars=yes,modal=yes, resizable, status";
+	var param = "width=780, height=500, scrollbars=yes,modal=yes, resizable, status";
 	callerGisObject = caller;
-	const centerCoordinates = [7.1881, 21.0938]; // Actual coordinates for the center of Africa
-	const queryString = "center=" + centerCoordinates.join(',');
-
 	if (data) {
 	    try {
 	    	structuresData = JSON.parse(data);
@@ -13,13 +10,8 @@ function gisPopup(caller, data){
 	        console.log('invalid json string');
 	    }
 	}
-	// Append the queryString to the URL
-	let url = "/esrigis/mainmap.do?popup=true";
-	if (queryString !== '') {
-		url += '&' + queryString;
-	}
 
-	window.open(url, "", param);
+	window.open("/esrigis/mainmap.do?popup=true", "", param);
 }
 
 

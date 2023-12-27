@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FeaturesUtil {
 
-    private static Logger logger = Logger.getLogger(FeaturesUtil.class);
+    private static final Logger logger = Logger.getLogger(FeaturesUtil.class);
 
     private static Map<String, AmpGlobalSettings> globalSettingsCache = null;
 
@@ -45,10 +45,9 @@ public class FeaturesUtil {
     public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
 
     public static void logGlobalSettingsCache() {
-        String log = "";
+        StringBuilder log = new StringBuilder();
         for (AmpGlobalSettings ampGlobalSetting:globalSettingsCache.values()) {
-            log = log + ampGlobalSetting.getGlobalSettingsName() + ":" +
-            ampGlobalSetting.getGlobalSettingsValue() + ";";
+            log.append(ampGlobalSetting.getGlobalSettingsName()).append(":").append(ampGlobalSetting.getGlobalSettingsValue()).append(";");
         }
         logger.info("GlobalSettingsCache is -> " + log);
     }
@@ -58,7 +57,7 @@ public class FeaturesUtil {
     }
 
     public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
-        globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
+        globalSettingsCache = new HashMap<>();
         for (AmpGlobalSettings sett : globalSettings) {
             globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
         }
@@ -668,6 +667,11 @@ public class FeaturesUtil {
         if (value == null)
             return null;
         return value.getGlobalSettingsValue();
+    }
+    public static void refreshSettingsCache()
+    {
+        buildGlobalSettingsCache(getGlobalSettings());
+
     }
 
     public static boolean getGlobalSettingValueBoolean(String globalSettingName) {

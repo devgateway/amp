@@ -44,6 +44,8 @@ public class AmpLocationFormTableFeature extends
         AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivityLocation> {
 
     private static final long serialVersionUID = 1L;
+    public final static Set<AmpActivityLocation> LOCATIONS_SELECTED=new HashSet<>();
+
     private IModel<Set<AmpActivityLocation>> setModel;
 
     public IModel<Set<AmpActivityLocation>> getSetModel() {
@@ -85,6 +87,7 @@ public class AmpLocationFormTableFeature extends
                 if (setModel.getObject() != null) {
                     for (AmpActivityLocation ampActivityLocation : setModel.getObject()) {
                         ret.add(ampActivityLocation);
+                        LOCATIONS_SELECTED.add(ampActivityLocation);
                     }
                 }
 
@@ -96,7 +99,7 @@ public class AmpLocationFormTableFeature extends
                     }
                 };
 
-                Collections.sort(ret, comparator);
+                ret.sort(comparator);
                 return ret;
             }
         };
@@ -208,12 +211,12 @@ public class AmpLocationFormTableFeature extends
                 String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.DECIMAL_LOCATION_PERCENTAGES_DIVIDE);
                 int factor = 1;
                 if (pattern != null && Integer.parseInt(pattern) > 0) {
-                    Integer numDecimals = Integer.parseInt(pattern);
+                    int numDecimals = Integer.parseInt(pattern);
                     factor = (int) (Math.pow(10, numDecimals));
                 }
 
                 Set<AmpActivityLocation> set = setModel.getObject();
-                if (set.size() == 0)
+                if (set.isEmpty())
                     return;
 
                 int size = 0;

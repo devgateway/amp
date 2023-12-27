@@ -24,6 +24,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
@@ -47,6 +49,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                                          final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFundingFeature) throws Exception {
         super(id, fmName, am);
         this.fmType = AmpFMTypes.MODULE;
+
+
 
 
         final AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(
@@ -101,7 +105,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                                 GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
                         if ("false".equals(mixedImplementationLocation)) {
                             Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-                            if (set != null && set.size() > 0) {
+                            if (set != null && !set.isEmpty()) {
                                 locationsTable.getSetModel().getObject().clear();
                                 locationsTable.getList().removeAll();
                                 //when we remove we need to show the search Component
@@ -140,9 +144,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 implLocValue = tmp.iterator().next();
         }
 
-        boolean defaultCountryCheck = CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+        return CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
                 CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue);
-        return defaultCountryCheck;
     }
 
     private boolean checkNationalCountry(AmpCategorySelectFieldPanel implementationLevel,

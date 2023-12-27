@@ -1,17 +1,30 @@
 var callerGisObject;
 var structuresData;
-function gisPopup(caller, data){
-	var param = "width=780, height=500, scrollbars=yes,modal=yes, resizable, status";
+function gisPopup(caller, data) {
+	var param = "width=780, height=500, scrollbars=yes, modal=yes, resizable, status";
 	callerGisObject = caller;
+	var structuresData = {}; // Initialize an empty object to hold parsed data
+
 	if (data) {
-	    try {
-	    	structuresData = JSON.parse(data);	    	
-	    } catch(e) {
-	        console.log('invalid json string');
-	    }
+		try {
+			structuresData = JSON.parse(data);
+		} catch(e) {
+			console.log('invalid json string');
+		}
 	}
-	
-	window.open("/esrigis/mainmap.do?popup=true", "", param);
+
+	// Convert structuresData object to a query string
+	var queryString = Object.keys(structuresData).map(function(key) {
+		return encodeURIComponent(key) + '=' + encodeURIComponent(structuresData[key]);
+	}).join('&');
+
+	// Append the queryString to the URL
+	var url = "/esrigis/mainmap.do?popup=true";
+	if (queryString !== '') {
+		url += '&' + queryString;
+	}
+
+	window.open(url, "", param);
 }
 
 

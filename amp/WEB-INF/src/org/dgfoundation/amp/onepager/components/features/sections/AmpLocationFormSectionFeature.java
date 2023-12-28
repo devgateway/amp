@@ -26,6 +26,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel.canDeleteLocation;
@@ -47,10 +49,14 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
      * @throws Exception
      */
     protected AmpRegionalFundingFormSectionFeature regionalFundingFeature;
+    private AmpCategoryValue previousImplementationLevel;
+    final AmpCategorySelectFieldPanel implementationLevel;
+
 
     public AmpRegionalFundingFormSectionFeature getRegionalFundingFeature() {
         return regionalFundingFeature;
     }
+
 
     public AmpLocationFormSectionFeature(String id, String fmName,
                                          final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFunding) throws Exception {
@@ -58,7 +64,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         this.fmType = AmpFMTypes.MODULE;
         this.regionalFundingFeature = (AmpRegionalFundingFormSectionFeature) regionalFunding;
 
-        final AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(
+        implementationLevel = new AmpCategorySelectFieldPanel(
                 "implementationLevel",
                 CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
                 new AmpCategoryValueByKeyModel(
@@ -111,8 +117,10 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                         if ("false".equals(mixedImplementationLocation)) {
                             Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
                             if (set != null && set.size() > 0) {
-                                //TODO check if we have indicators for this location and prevent deletion
                                 if (canDeleteLocation(target, am, null)) {
+                                    implementationLevel.getChoiceModel().setObject(
+                                            new HashSet<>(Arrays.asList(previousImplementationLevel)));
+                                    target.add(implementationLevel);
                                     return;
                                 }
                                 locationsTable.getSetModel().getObject().clear();
@@ -128,6 +136,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                         }
                         defaultCountryChecks(implementationLevel, implementationLocation,
                                 disablePercentagesForInternational, target, locationsTable, regionalFundingFeature);
+                        previousImplementationLevel = implementationLevel.getChoiceModel().getObject().iterator().next();
                     }
                 });
 
@@ -135,6 +144,13 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         add(locationsTable);
         defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
                 null, locationsTable, regionalFundingFeature);
+
+    }
+
+    public void onBeforeRender() {
+        super.onBeforeRender();
+        previousImplementationLevel = implementationLevel.getChoiceModel().getObject().iterator().next();
+
     }
 
     private boolean checkInternationalCountry(AmpCategorySelectFieldPanel implementationLevel,

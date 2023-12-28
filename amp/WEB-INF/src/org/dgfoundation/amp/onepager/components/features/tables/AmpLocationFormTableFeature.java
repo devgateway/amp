@@ -181,7 +181,9 @@ public class AmpLocationFormTableFeature extends
             protected void populateItem(final ListItem<AmpActivityLocation> item) {
                 boolean isCountryNationalAndMultiCountry = false;
 
-                if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
+                if (implementationLevel.getChoiceModel().getObject() != null &&
+                        !implementationLevel.getChoiceModel().getObject().isEmpty() &&
+                        CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
                         equalsCategoryValue(implementationLevel.getChoiceModel().getObject().iterator().next()) &&
                         CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.
                                 equalsCategoryValue(implementationLocation.getChoiceModel().getObject().iterator().next())

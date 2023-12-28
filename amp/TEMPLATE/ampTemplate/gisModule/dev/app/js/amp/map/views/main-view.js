@@ -33,13 +33,13 @@ module.exports = Backbone.View.extend({
     });
     this.map.attributionControl.setPosition('bottomleft');
     this.map.zoomControl.setPosition('topright');
+    this.map.panBy([-10,0]);
 
     this.app.state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
       empty: { center: [0, 40], zoom: 1 }
     });
-
 
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
 
@@ -147,7 +147,7 @@ module.exports = Backbone.View.extend({
   },
 
   _getMapView: function() {
-    const center = this.map.getCenter();
+    var center = this.map.getCenter();
     return {
       center: [
         center.lat,
@@ -158,9 +158,6 @@ module.exports = Backbone.View.extend({
   },
   _setMapView: function(stateBlob) {
     this.map.setView(stateBlob.center, stateBlob.zoom);
-    alert(stateBlob.center)
-    this.map.panBy(new L.point(-50, 0)); // Adjust the x-coordinate (-50) for your desired leftward shift
-
   },
 
   // when indicator is shown, bring project sites to the front...

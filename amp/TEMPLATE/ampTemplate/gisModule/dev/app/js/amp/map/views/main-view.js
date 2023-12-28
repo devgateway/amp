@@ -40,9 +40,6 @@ module.exports = Backbone.View.extend({
       empty: { center: [0, 10], zoom: 1 }
     });
 
-    var defaultView = this.app.state.get('map');
-    var shiftedCenter = [defaultView.center[0], defaultView.center[1] - 10]; // Adjust the shift value as needed
-    this.map.setView(shiftedCenter, defaultView.zoom);
 
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
 
@@ -161,6 +158,8 @@ module.exports = Backbone.View.extend({
   },
   _setMapView: function(stateBlob) {
     this.map.setView(stateBlob.center, stateBlob.zoom);
+    this.map.panBy(new L.Point(-50, 0)); // Adjust the x-coordinate (-50) for your desired leftward shift
+
   },
 
   // when indicator is shown, bring project sites to the front...

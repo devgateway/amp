@@ -149,8 +149,8 @@ module.exports = Backbone.View.extend({
     var center = this.map.getCenter();
     return {
       center: [
-        center.lat-1,
-        center.lng
+        center.lat,
+        center.lng-10
       ],
       zoom: this.map.getZoom()
     };

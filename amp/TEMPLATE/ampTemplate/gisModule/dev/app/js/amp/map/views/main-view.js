@@ -37,7 +37,7 @@ module.exports = Backbone.View.extend({
     this.app.state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
-      empty: { center: [0, 40], zoom: 1 }
+      empty: { center: [0, 20], zoom: 1 }
     });
 
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
@@ -146,11 +146,11 @@ module.exports = Backbone.View.extend({
   },
 
   _getMapView: function() {
-    var center = this.map.getCenter();
+    const center = this.map.getCenter();
     return {
       center: [
         center.lat,
-        center.lng-10
+        center.lng
       ],
       zoom: this.map.getZoom()
     };

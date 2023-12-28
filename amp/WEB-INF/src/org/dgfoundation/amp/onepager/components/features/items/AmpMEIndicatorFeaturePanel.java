@@ -4,13 +4,10 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.ListEditor;
-import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
@@ -18,7 +15,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
-import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -28,6 +24,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * M&E Indicator feature
+ * @author dmbugua@developmentgateway.org
+ * @since December 28, 2023
+ */
 public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
     private static Logger logger = Logger.getLogger(AmpMEItemFeaturePanel.class);
     /**
@@ -41,14 +42,6 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         super(id, fmName, true);
 
         if (values.getObject() == null) values.setObject(new HashSet<>());
-
-//        String locationName = location.getObject().getName();
-//
-//        if(location.getObject().getParentLocation() != null){
-//            locationName = location.getObject().getParentLocation().getName() + "[" + location.getObject().getName() + "]";
-//        }
-//
-//        add(new Label("location", locationName));
 
         final Label indicatorNameLabel = new Label("indicatorName", new PropertyModel<String>(indicator, "name"));
         add(indicatorNameLabel);

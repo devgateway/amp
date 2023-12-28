@@ -331,7 +331,6 @@ public class AmpLocationFormTableFeature extends
                             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
                         }
 
-                        // regionalFundingFeature.getMeFormSection().reloadMeFormSection(target);
                         send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
                         reloadValidationFields(target);
                         list.removeAll();

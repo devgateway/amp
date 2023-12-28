@@ -26,9 +26,10 @@ import java.util.TreeMap;
  *
  * @author aartimon@dginternational.org
  * @since Feb 10, 2011
+ * updated by @author dmbugua@developmentgateway.org
+ * @since December 28, 2023
  */
 public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
-//    private final ListView<IndicatorActivity> list;
 
     protected ListView<AmpActivityLocation> tabsList;
 
@@ -39,8 +40,6 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     private boolean isTabsView = true;
 
     final List<AmpActivityLocation> locations;
-
-//    final WebMarkupContainer wmc;
 
     public AmpMEFormSectionFeature(String id, String fmName,
                                    final IModel<AmpActivityVersion> am) throws Exception {
@@ -125,11 +124,6 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         locations.add(selectedLocation);
     }
 
-    /*public void reloadMeFormSection(AjaxRequestTarget target) {
-        target.add(AmpMEFormSectionFeature.this);
-        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-        target.appendJavaScript("indicatorTabs();");
-    }*/
     public boolean isTabsView() {
         return isTabsView;
     }

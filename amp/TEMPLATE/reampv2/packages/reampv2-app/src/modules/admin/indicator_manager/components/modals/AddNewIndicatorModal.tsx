@@ -6,7 +6,7 @@ import { Formik, FormikProps } from 'formik';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
 import { DateUtil } from '../../utils/dateFn';
-import { indicatorValidationSchema } from '../../utils/validator';
+import { translatedIndicatorValidationSchema } from '../../utils/validator';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseAndTargetValueType, DefaultComponentProps, ProgramSchemeType, SettingsType } from '../../types';
 import { createIndicator } from '../../reducers/createIndicatorReducer';
@@ -246,7 +246,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       <Formik
         innerRef={formikRef}
         initialValues={initialValues}
-        validationSchema={indicatorValidationSchema}
+        validationSchema={translatedIndicatorValidationSchema(translations)}
         onSubmit={(values) => {
           const { name, description, code, sectors, programId, ascending, creationDate, base, target, indicatorsCategory } = values;
 

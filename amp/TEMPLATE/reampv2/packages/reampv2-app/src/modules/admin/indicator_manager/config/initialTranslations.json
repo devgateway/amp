@@ -74,5 +74,15 @@
   "amp.indicatormanager:no-program-scheme": "No Programs Scheme Available",
   "amp.indicatormanager:no-programs": "No Programs Available",
   "amp.indicatormanager:all-programs": "All Programs",
-  "amp.indicatormanager:indicators-category": "Indicators Category"
+  "amp.indicatormanager:indicators-category": "Indicators Category",
+  "amp.indicatormanager:errors-name-required": "Name is required",
+  "amp.indicatormanager:errors-code-required": "Code is required",
+  "amp.indicatormanager:errors-code-unique": "Code must be unique",
+  "amp.indicatormanager:errors-description-required": "Description is required",
+  "amp.indicatormanager:errors-ascending-required": "Ascending is required",
+  "amp.indicatormanager:errors-creation-date-required": "Creation Date is required",
+  "amp.indicatormanager:errors-revised-base-value-invalid": "Revised base value must be greater than original base value",
+  "amp.indicatormanager:errors-revised-base-date-invalid": "Revised base date must be greater than original base date",
+  "amp.indicatormanager:errors-revised-target-value-invalid": "Revised target value must be greater than original target value",
+  "amp.indicatormanager:errors-revised-target-date-invalid": "Revised target date must be greater than original target date"
 }

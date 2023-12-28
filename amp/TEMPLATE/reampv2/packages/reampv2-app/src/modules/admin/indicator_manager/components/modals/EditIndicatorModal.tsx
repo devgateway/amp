@@ -6,7 +6,7 @@ import {
 import Select from 'react-select';
 import { Formik, FormikProps } from 'formik';
 import styles from './css/IndicatorModal.module.css';
-import { indicatorValidationSchema } from '../../utils/validator';
+import { translatedIndicatorValidationSchema } from '../../utils/validator';
 import { BaseAndTargetValueType, DefaultComponentProps, IndicatorObjectType, ProgramSchemeType, SectorObjectType, SettingsType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateIndicator } from '../../reducers/updateIndicatorReducer';
@@ -75,12 +75,13 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const [programFieldVisible, setProgramFieldVisible] = useState(false);
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
 
-  const [sectors, setSectors] = useState<{ value: string, name: string }[]>([]);
+  const [sectors, setSectors] = useState<{ value: string, label: string }[]>([]);
   const [categories, setCategories] = useState<{ value: string, label: string }[]>([]);
   const [programSchemes, setProgramSchemes] = useState<{ value: string, label: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
 
   const [defaultCategory, setDefaultCategory] = useState<{ value: string, label: string } | null>(null);
+  const [defaultSectors, setDefaultSectors] = useState<{ value: string, label: string }[] | null>(null);
   const [defaultProgram, setDefaultProgram] = useState<{ value: string, label: string } | null>(null);
   const [defaultProgramScheme, setDefaultProgramScheme] = useState<{ value: string, label: string } | null>(null);
 
@@ -183,7 +184,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const getDefaultSectors = () => {
     if (indicator?.sectors.length === 0) {
-      return [];
+      setDefaultSectors([]);
     }
 
     const indicatorSectorData = indicator?.sectors.map((sectorId: number) => {
@@ -202,7 +203,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       }
     });
 
-    return indicatorSectorData;
+    setDefaultSectors(indicatorSectorData);
   };
 
 
@@ -256,6 +257,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     getDefaultCategory();
     getDefaultProgram();
     getDefaultPropgramScheme();
+    getDefaultSectors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indicator]);
 
@@ -292,7 +294,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     name: indicator?.name || '',
     description: indicator?.description || '',
     code: indicator?.code || '',
-    sectors: getDefaultSectors() || [],
+    sectors: [],
     programId: '',
     ascending: indicator?.ascending || false,
     creationDate: indicator?.creationDate,
@@ -329,7 +331,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       </Modal.Header>
       <Formik
         initialValues={initialValues}
-        validationSchema={indicatorValidationSchema}
+        validationSchema={translatedIndicatorValidationSchema(translations)}
         innerRef={formikRef}
         onSubmit={(values) => {
           const { name, description, code, sectors, ascending, programId, creationDate, base, target, indicatorsCategory } = values;
@@ -454,10 +456,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
                       <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
                       {
-                        sectors.length > 0 ? (
+                        (sectors.length > 0 && defaultSectors)? (
                           <Select
                             isMulti
                             name="sectors"
+                            isClearable
                             options={sectors}
                             onChange={(values) => {
                               // set the formik value with the selected values and remove the label
@@ -468,7 +471,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                             classNamePrefix="select"
-                            defaultValue={props.values.sectors}
+                            defaultValue={defaultSectors}
                           />
                         ) : (
                             <Select
@@ -548,7 +551,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_one_item} controlId="programs">
                         <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
                         {
-                          programs.length > 0 ? (
+                          (programs.length > 0 && defaultProgram) ? (
                             <Select
                               name="programs"
                               options={programs}

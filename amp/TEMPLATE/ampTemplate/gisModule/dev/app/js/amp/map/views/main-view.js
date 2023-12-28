@@ -33,8 +33,8 @@ module.exports = Backbone.View.extend({
     });
     this.map.attributionControl.setPosition('bottomleft');
     this.map.zoomControl.setPosition('topright');
-    var offset = map.getSize().y * 0.15;
-    map.panBy(new L.Point (0, -offset), {animate: false});
+    var offset = this.map.getSize().y * 0.15;
+    this.map.panBy(new L.Point (0, -offset), {animate: false});
 
     this.app.state.register(this, 'map', {
       get: this._getMapView,

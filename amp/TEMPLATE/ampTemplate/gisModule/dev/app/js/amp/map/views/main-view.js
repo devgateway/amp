@@ -40,6 +40,10 @@ module.exports = Backbone.View.extend({
       empty: { center: [0, 10], zoom: 1 }
     });
 
+    var defaultView = this.app.state.get('map');
+    var shiftedCenter = [defaultView.center[0], defaultView.center[1] - 10]; // Adjust the shift value as needed
+    this.map.setView(shiftedCenter, defaultView.zoom);
+
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
 
     // init layers

@@ -33,7 +33,7 @@ module.exports = Backbone.View.extend({
     });
     this.map.attributionControl.setPosition('bottomleft');
     this.map.zoomControl.setPosition('topright');
-    this.map.panBy([-10,0]);
+    this.map.panBy(new L.Point(-20, 0), {animate: false});
 
     this.app.state.register(this, 'map', {
       get: this._getMapView,

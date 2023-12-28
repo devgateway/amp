@@ -37,7 +37,7 @@ module.exports = Backbone.View.extend({
     this.app.state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
-      empty: { center: [0, 10], zoom: 1 }
+      empty: { center: [0, 40], zoom: 1 }
     });
 
 
@@ -158,7 +158,7 @@ module.exports = Backbone.View.extend({
   },
   _setMapView: function(stateBlob) {
     this.map.setView(stateBlob.center, stateBlob.zoom);
-    this.map.panBy(new L.Point(-50, 0)); // Adjust the x-coordinate (-50) for your desired leftward shift
+    this.map.panBy(new L.point(-50, 0)); // Adjust the x-coordinate (-50) for your desired leftward shift
 
   },
 

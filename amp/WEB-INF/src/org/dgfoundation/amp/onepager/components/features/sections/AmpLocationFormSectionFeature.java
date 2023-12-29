@@ -26,7 +26,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,6 +51,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
     protected AmpRegionalFundingFormSectionFeature regionalFundingFeature;
     private AmpCategoryValue previousImplementationLevel;
     final AmpCategorySelectFieldPanel implementationLevel;
+    final AmpCategorySelectFieldPanel implementationLocation;
 
 
     public AmpRegionalFundingFormSectionFeature getRegionalFundingFeature() {
@@ -76,7 +77,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 
         final Model<Boolean> disablePercentagesForInternational = new Model<Boolean>(false);
-        final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
+        implementationLocation = new AmpCategorySelectFieldPanel(
                 "implementationLocation",
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
                 new AmpCategoryValueByKeyModel(
@@ -95,6 +96,15 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
+                        //if implementation level is not empty the implementation  location should be mandatory
+                        if (implementationLevel.getChoiceModel().getObject() != null
+                                && !implementationLevel.getChoiceModel().getObject().isEmpty()) {
+                            implementationLocation.getChoiceContainer().setRequired(true);
+                            target.add(implementationLocation);
+                        } else {
+                            implementationLocation.getChoiceContainer().setRequired(false);
+                            target.add(implementationLocation);
+                        }
                         defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
                                 target, locationsTable, regionalFundingFeature);
                     }
@@ -111,6 +121,16 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
+                        //if implementation level is not empty the implementation  location should be mandatory
+                        if (implementationLevel.getChoiceModel().getObject() != null
+                                && !implementationLevel.getChoiceModel().getObject().isEmpty()) {
+                            implementationLocation.getChoiceContainer().setRequired(true);
+                            target.add(implementationLocation);
+                        } else {
+                            implementationLocation.getChoiceContainer().setRequired(false);
+                            target.add(implementationLocation);
+                        }
+
                         target.add(implementationLocation);
                         String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
                                 GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
@@ -119,7 +139,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                             if (set != null && set.size() > 0) {
                                 if (canDeleteLocation(target, am, null)) {
                                     implementationLevel.getChoiceModel().setObject(
-                                            new HashSet<>(Arrays.asList(previousImplementationLevel)));
+                                            new HashSet<>(Collections.singletonList(previousImplementationLevel)));
                                     target.add(implementationLevel);
                                     return;
                                 }
@@ -136,7 +156,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                         }
                         defaultCountryChecks(implementationLevel, implementationLocation,
                                 disablePercentagesForInternational, target, locationsTable, regionalFundingFeature);
-                        previousImplementationLevel = implementationLevel.getChoiceModel().getObject().iterator().next();
+                        previousImplementationLevel = !implementationLevel.getChoiceModel().getObject().isEmpty() ?
+                                implementationLevel.getChoiceModel().getObject().iterator().next() : null;
                     }
                 });
 
@@ -149,8 +170,11 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     public void onBeforeRender() {
         super.onBeforeRender();
-        previousImplementationLevel = implementationLevel.getChoiceModel().getObject().iterator().next();
-
+        previousImplementationLevel = !implementationLevel.getChoiceModel().getObject().isEmpty()
+                ? implementationLevel.getChoiceModel().getObject().iterator().next() : null;
+        //if implementation level is not empty the implementation  location should be mandatory
+        implementationLocation.getChoiceContainer().setRequired(implementationLevel.getChoiceModel().getObject() != null
+                && !implementationLevel.getChoiceModel().getObject().isEmpty());
     }
 
     private boolean checkInternationalCountry(AmpCategorySelectFieldPanel implementationLevel,

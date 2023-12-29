@@ -185,6 +185,7 @@ public class AmpLocationFormTableFeature extends
                         !implementationLevel.getChoiceModel().getObject().isEmpty() &&
                         CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
                         equalsCategoryValue(implementationLevel.getChoiceModel().getObject().iterator().next()) &&
+                        !implementationLocation.getChoiceModel().getObject().isEmpty() &&
                         CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.
                                 equalsCategoryValue(implementationLocation.getChoiceModel().getObject().iterator().next())
                         && DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE)) {

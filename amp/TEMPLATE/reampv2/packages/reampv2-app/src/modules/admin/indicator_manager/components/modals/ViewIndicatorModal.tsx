@@ -22,7 +22,7 @@ const colorOptions = [
   { value: 'yellow', label: 'Yellow', color: '#FFC400' },
   { value: 'green', label: 'Green', color: '#36B37E' },
   { value: 'forest', label: 'Forest', color: '#00875A' },
-  { value: 'slate', label: 'Slate', color: '#253858' },
+  { value: 'slate', label: 'Slate', color: '#fffff2' },
   { value: 'silver', label: 'Silver', color: '#666666' },
 ];
 

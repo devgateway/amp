@@ -81,7 +81,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
 
   const [defaultCategory, setDefaultCategory] = useState<{ value: string, label: string } | null>(null);
-  const [defaultSectors, setDefaultSectors] = useState<{ value: string, label: string }[] | null>(null);
+  const [defaultSectors, setDefaultSectors] = useState<{ value: string, label: string }[]>();
   const [defaultProgram, setDefaultProgram] = useState<{ value: string, label: string } | null>(null);
   const [defaultProgramScheme, setDefaultProgramScheme] = useState<{ value: string, label: string } | null>(null);
 
@@ -101,7 +101,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const getSectors = () => {
     const sectorData = sectorsReducer.sectors.map((sector: any) => ({
-      value: sector.id,
+      value: sector.id.toString(),
       label: sector.name
     }));
     setSectors(sectorData);
@@ -183,12 +183,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   }
 
   const getDefaultSectors = () => {
-    if (indicator?.sectors.length === 0) {
+    if (indicator?.sectors === null || indicator?.sectors.length === 0) {
       setDefaultSectors([]);
     }
 
     const indicatorSectorData = indicator?.sectors.map((sectorId: number) => {
-      const foundSector: SectorObjectType = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
+      const foundSector: SectorObjectType = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: SectorObjectType) => sector.id === sectorId);
 
       if (foundSector) {
         return {
@@ -254,10 +254,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
 
   useEffect(() => {
+    getDefaultSectors();
     getDefaultCategory();
     getDefaultProgram();
     getDefaultPropgramScheme();
-    getDefaultSectors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indicator]);
 
@@ -294,7 +294,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     name: indicator?.name || '',
     description: indicator?.description || '',
     code: indicator?.code || '',
-    sectors: [],
+    sectors: indicator?.sectors || [],
     programId: '',
     ascending: indicator?.ascending || false,
     creationDate: indicator?.creationDate,
@@ -456,23 +456,23 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
                       <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
                       {
-                        (sectors.length > 0 && defaultSectors)? (
+                        (sectors.length > 0 && defaultSectors !== undefined)? (
                           <Select
                             isMulti
                             name="sectors"
-                            isClearable
                             options={sectors}
                             onChange={(values) => {
                               // set the formik value with the selected values and remove the label
                               const selectedValues = values.map((value: any) => parseInt(value.value))
+                              setDefaultSectors(values as any);
                               props.setFieldValue('sectors', selectedValues);
                             }}
-                            getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                             classNamePrefix="select"
-                            defaultValue={defaultSectors}
+                            value={defaultSectors}
                           />
+
                         ) : (
                             <Select
                                 isDisabled={true}

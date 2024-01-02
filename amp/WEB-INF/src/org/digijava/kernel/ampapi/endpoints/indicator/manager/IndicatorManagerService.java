@@ -2,41 +2,21 @@ package org.digijava.kernel.ampapi.endpoints.indicator.manager;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.apache.xpath.operations.Bool;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
-import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
-import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.kernel.util.ModuleUtils;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -44,23 +24,17 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE;
 import static org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE;
 
@@ -76,6 +50,11 @@ public class IndicatorManagerService {
     private final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    public static final String FILTER_BY_PROGRAM = "Filter By Program";
+    public static final String FILTER_BY_SECTOR = "Filter By Sector";
+
+    public static String INDICATOR_CATEGORY_KEY = "core_indicator_type";
 
     protected static final Logger logger = Logger.getLogger(IndicatorManagerService.class);
 
@@ -161,6 +140,13 @@ public class IndicatorManagerService {
                 .map(id -> (AmpSector) session.get(AmpSector.class, id))
                 .collect(Collectors.toSet());
         indicator.setSectors(sectors);
+
+        if (indicatorRequest.getIndicatorsCategory() != null) {
+            AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorsCategory());
+            indicator.setIndicatorsCategory(categoryValue);
+        }
+
+
 
         session.save(indicator);
 
@@ -339,6 +325,11 @@ public class IndicatorManagerService {
                 indicator.setProgram(null);
             }
 
+            if (indRequest.getIndicatorsCategory() != null) {
+                AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, indRequest.getIndicatorsCategory());
+                indicator.setIndicatorsCategory(categoryValue);
+            }
+
             session.update(indicator);
             return new MEIndicatorDTO(indicator);
         }
@@ -491,5 +482,17 @@ public class IndicatorManagerService {
             throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError("Indicator with code " + code + " already exists"));
         }
+    }
+
+    public List<AmpCategoryValueDTO> getCategoryValues () {
+        Session session = PersistenceManager.getSession();
+
+        List <AmpCategoryValue> categoryValues = session.createQuery("select o from " + AmpCategoryValue.class.getName() + " o "
+                        + "where o.ampCategoryClass.keyName=:keyName")
+                .setString("keyName", INDICATOR_CATEGORY_KEY).list();
+
+        return categoryValues.stream()
+                .map(AmpCategoryValueDTO::new)
+                .collect(Collectors.toList());
     }
 }

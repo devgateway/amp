@@ -14,7 +14,7 @@ import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-fi
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import styles from './Table.module.css';
 import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
-import { DefaultComponentProps, SectorObjectType } from '../../types';
+import {DefaultComponentProps, ProgramObjectType, SectorObjectType} from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSizePerPage} from '../../reducers/fetchIndicatorsReducer';
 
@@ -23,11 +23,26 @@ interface SkeletonTableProps extends DefaultComponentProps {
   data: any;
   title: string;
   sectors?: SectorObjectType[];
+  programs?: ProgramObjectType[];
   setSelectedSector: React.Dispatch<React.SetStateAction<number>>;
-};
+  setSelectedProgram: React.Dispatch<React.SetStateAction<number>>;
+  filterBySector: boolean;
+  filterByProgram: boolean;
+}
 
 const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
-  const { columns, data, title, sectors, setSelectedSector, translations } = props;
+  const {
+    columns,
+    data,
+    title,
+    sectors,
+    setSelectedSector,
+    setSelectedProgram,
+    translations,
+    filterBySector,
+    filterByProgram,
+    programs
+  } = props;
   const dispatch = useDispatch();
 
   const sizePerPage: number = useSelector((state: any) => state.fetchIndicatorsReducer.sizePerPage);
@@ -178,30 +193,59 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                     <Col sm={6}>
                       <div className={styles.table_header_bottom_right}>
 
-                        <div className={styles.sector_filter_container}>
-                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
-                          <Form.Control
-                            onChange={(e) => setSelectedSector(e.target.value as unknown as number)}
-                            as="select"
-                            className={styles.filter_select}>
-                            <option value="0">{translations['amp.indicatormanager:all-sectors']}</option>
-                            {
-                              sectors && sectors.length > 0 ?
-                                sectors.map((sector) => (
-                                  <option
-                                    key={sector.id}
-                                    value={sector.id}>
-                                    {sector.name}
-                                  </option>
-                                )) : <option value="0">{translations['amp.indicatormanager:no-data']}</option>
-                            }
-                          </Form.Control>
-                        </div>
+                        {filterBySector && (
+                            <div className={styles.sector_filter_container}>
+                              <Form.Label
+                                  className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
+                              <Form.Control
+                                  onChange={(e) => setSelectedSector(e.target.value as unknown as number)}
+                                  as="select"
+                                  className={styles.filter_select}>
+                                <option value="0">{translations['amp.indicatormanager:all-sectors']}</option>
+                                {
+                                  sectors && sectors.length > 0 ?
+                                      sectors.map((sector) => (
+                                          <option
+                                              key={sector.id}
+                                              value={sector.id}>
+                                            {sector.name}
+                                          </option>
+                                      )) : <option value="0">{translations['amp.indicatormanager:no-data']}</option>
+                                }
+                              </Form.Control>
+                            </div>
+                        )}
+
+                        {
+                          filterByProgram && (
+                                <div className={styles.sector_filter_container}>
+                                    <Form.Label
+                                        className={styles.filter_label}>{translations['amp.indicatormanager:programs']}</Form.Label>
+                                    <Form.Control
+                                        onChange={(e) => setSelectedProgram(e.target.value as unknown as number)}
+                                        as="select"
+                                        className={styles.filter_select}>
+                                    <option value="0">{translations['amp.indicatormanager:all-programs']}</option>
+                                    {
+                                        programs && programs.length > 0 ?
+                                            programs.map((program) => (
+                                                <option
+                                                    key={program.id}
+                                                    value={program.id}>
+                                                {program.name}
+                                                </option>
+                                            )) : <option value="0">{translations['amp.indicatormanager:no-data']}</option>
+                                    }
+                                    </Form.Control>
+                                </div>
+                            )
+                        }
+
 
                         <div className={styles.search_container}>
                           <SearchBar
-                            {...props.searchProps}
-                            placeholder={translations['amp.indicatormanager:search']}
+                              {...props.searchProps}
+                              placeholder={translations['amp.indicatormanager:search']}
                           />
                         </div>
                       </div>
@@ -209,22 +253,22 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                     </Col>
                   </Row>
                 </Col>
-                <hr />
+                <hr/>
                 <BootstrapTable
-                  {...props.baseProps}
-                  headerClasses={styles.table_header_titles}
-                  bodyClasses={styles.table_body}
-                  pagination={paginationFactory(paginationOptions)}
-                  selectRow={{
-                    mode: 'checkbox',
-                    clickToSelect: false,
-                  }}
-                  filter={filterFactory(filterOptions)}
-                  noDataIndication={() => (
-                    <div className={styles.no_data}>
-                      <h5>{translations['amp.indicatormanager:no-data']}</h5>
-                    </div>
-                  )}
+                    {...props.baseProps}
+                    headerClasses={styles.table_header_titles}
+                    bodyClasses={styles.table_body}
+                    pagination={paginationFactory(paginationOptions)}
+                    selectRow={{
+                      mode: 'checkbox',
+                      clickToSelect: false,
+                    }}
+                    filter={filterFactory(filterOptions)}
+                    noDataIndication={() => (
+                        <div className={styles.no_data}>
+                          <h5>{translations['amp.indicatormanager:no-data']}</h5>
+                        </div>
+                    )}
                 />
               </div>
             )

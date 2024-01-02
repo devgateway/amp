@@ -186,7 +186,6 @@ public class SettingsUtils {
         if (settings.getCurrencyCode() != null) {
             return settings.getCurrencyCode();
         }
-
         return null;
     }
 
@@ -200,7 +199,6 @@ public class SettingsUtils {
                 }
             }
         }
-
         return null;
     }
 

@@ -13,8 +13,8 @@ public class AmpMEValuesSubsectionFeature extends AmpSubsectionFeaturePanel<AmpI
     public AmpMEValuesSubsectionFeature(String id, String fmName, IModel<AmpIndicator> model, IModel<IndicatorActivity> indicatorActivity) throws Exception {
         super(id, "Actual Values", model);
 
-        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("table", model, indicatorActivity, "Actual Values", false, 7);
-        add(valuesTable);
+//        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("table", model, indicatorActivity,location, "Actual Values", false, 7);
+//        add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
             @Override
@@ -22,8 +22,8 @@ public class AmpMEValuesSubsectionFeature extends AmpSubsectionFeaturePanel<AmpI
                 AmpIndicatorValue value = new AmpIndicatorValue();
 
                 value.setIndValId(model.getObject().getIndicatorId());
-                valuesTable.getEditorList().addItem(value);
-                target.add(valuesTable);
+//                valuesTable.getEditorList().addItem(value);
+//                target.add(valuesTable);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };

@@ -209,7 +209,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                
+
                 ListItem listItem = findParent(ListItem.class);
                 AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
                 AmpFunding funding = fundingModel.getObject();

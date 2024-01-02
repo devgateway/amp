@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<style xmlns:wicket="http://www.w3.org/1999/xhtml">
+    .featuredLabelLnk{background-color:#FFFFFF; padding:5px; border:1px solid #CCCCCC; display:block; margin-top:7px;}
+</style>
+<wicket:extend>
+
+    <span wicket:id="featureLabel"></span>
+
+    <a href="#" class="slider featuredLabelLnk">
+        <b><span wicket:id="indicatorName"/></b><span wicket:id="indicatorCode" />
+    </a>
+    <div class="invisible-item">
+<!--        <div class="activity_me">-->
+                    <table width="100%" border="0" cellspacing="2" cellpadding="2" class="activity_me">
+
+                        <tr>
+                            <td colspan="2">
+                                <div>
+                                    <div>
+                                        <b><span>Base Values: </span></b><span wicket:id = "base"></span> <b><span>Base Date: </span></b> <span wicket:id = "baseDate"></span>
+                                        <b><span>Target Values: </span></b><span wicket:id = "target"></span> <b><span>Target Date: </span></b> <span wicket:id = "targetDate"></span>
+                                    </div>
+                                    <div wicket:id="valuesSubsection"></div>
+                                    <span wicket:id="addActualValue"></span>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+<!--        </div>-->
+
+    </div>
+</wicket:extend>
+</html>

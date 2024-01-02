@@ -66,6 +66,8 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     
     private AmpCategoryValue indicatorSource;
     private AmpIndicatorSubgroup subgroup;
+
+    private AmpActivityLocation activityLocation;
     /*
      * NOTICE
      * 
@@ -239,5 +241,12 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
         //r.setSubgroup(subgroup);
     }
 
+    public AmpActivityLocation getActivityLocation() {
+        return activityLocation;
+    }
+
+    public void setActivityLocation(AmpActivityLocation activityLocation) {
+        this.activityLocation = activityLocation;
+    }
 }
 

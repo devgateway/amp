@@ -26,4 +26,12 @@ public class AdmLevelTotal {
     public BigDecimal getAmount() {
         return amount;
     }
+
+    @Override
+    public String toString() {
+        return "AdmLevelTotal{" +
+                "admId='" + admId + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

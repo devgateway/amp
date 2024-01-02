@@ -14,7 +14,9 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.reports.ReportException;
@@ -28,6 +30,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.*;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -38,7 +42,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 public class MainMap extends Action {
-    private static Logger logger = Logger.getLogger(MainMap.class);
+    private static final Logger logger = Logger.getLogger(MainMap.class);
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +64,7 @@ public class MainMap extends Action {
 
         //Load indicator layers
         List<AmpMapConfig> indicators = DbHelper.getMapsBySubType(MapConstants.MapSubType.INDICATOR);
-        if(indicators.size() > 0) {
+        if(!indicators.isEmpty()) {
             dataDispatcherForm.setIndicators(indicators);
         }
         
@@ -76,7 +80,7 @@ public class MainMap extends Action {
             // Check if needed structures are loaded TODO: Check why this is
             // happening.
             if (filter.getStructureTypes() == null) {
-                List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+                List<AmpStructureType> sts;
                 sts = (List<AmpStructureType>) DbHelper.getAllStructureTypes();
                 filter.setStructureTypes(sts);
             }
@@ -98,7 +102,8 @@ public class MainMap extends Action {
         List<AmpCategoryValue> categoryvaluesprojectstatus = null;
         categoryvaluesprojectstatus = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
         filter.setProjectstatus(categoryvaluesprojectstatus);
-        
+        double gsLat=7.1881;
+        double gsLong=21.0938;
         if (request.getParameter("exportreport") != null) {
             
             populateFilterForExport(filter);
@@ -138,18 +143,49 @@ public class MainMap extends Action {
             }
                 
             Collection<AmpCategoryValueLocations> locs = reportfilter.getLocationSelected();
-            if (locs!=null && locs.size() > 0){
+//            7.1881, 21.0938
+            //Coordinates for center of Africa
+
+            if (locs!=null && !locs.isEmpty()){
                 Long[] sellocs= new Long[locs.size()];
                 int i=0;
-                for (Iterator iterator2 = locs.iterator(); iterator2.hasNext();) {
-                    AmpCategoryValueLocations loc = (AmpCategoryValueLocations) iterator2.next();
-                    sellocs[i]=loc.getId();
+                for (AmpCategoryValueLocations loc : locs) {
+                    sellocs[i] = loc.getId();
+
                     i++;
                 }
                 filter.setSelLocationIds(sellocs);
             }
         } else {
             filter.setModeexport(false);
+        }
+        //we set the map to center on one of the selected locations or else centre it in Africa
+        if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) ) {
+            if (!AmpLocationFormTableFeature.LOCATIONS_SELECTED.isEmpty()) {
+                for (AmpActivityLocation ampActivityLocation : AmpLocationFormTableFeature.LOCATIONS_SELECTED) {
+                    if (ampActivityLocation.getLocation().getGsLat() != null && !Objects.equals(ampActivityLocation.getLocation().getGsLat(), "")) {
+                        gsLat = Double.parseDouble(ampActivityLocation.getLocation().getGsLat());
+                    }
+                    if (ampActivityLocation.getLocation().getGsLong() != null && !Objects.equals(ampActivityLocation.getLocation().getGsLong(), "")) {
+                        gsLong = Double.parseDouble(ampActivityLocation.getLocation().getGsLong());
+                    }
+                }
+            }
+            logger.info("Latitude,Longitude " + gsLat + "," + gsLong);
+            String hql = "update " + AmpGlobalSettings.class.getName() + " s set s.globalSettingsValue = " +
+                    "case " +
+                    "when s.globalSettingsName = :latName then :newLat " +
+                    "when s.globalSettingsName = :longName then :newLong " +
+                    "else s.globalSettingsValue " +
+                    "end";
+            Query query = PersistenceManager.getRequestDBSession().createQuery(hql);
+            query.setParameter("latName", "Country Latitude", StringType.INSTANCE);
+            query.setParameter("longName", "Country Longitude", StringType.INSTANCE);
+            query.setParameter("newLat", String.valueOf(gsLat), StringType.INSTANCE);
+            query.setParameter("newLong", String.valueOf(gsLong), StringType.INSTANCE);
+            int rowCount = query.executeUpdate();
+            logger.info("Updated settings for latitude. " + rowCount);
+            FeaturesUtil.refreshSettingsCache();
         }
 
         if (request.getParameter("popup") != null

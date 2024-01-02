@@ -562,7 +562,7 @@ public class FilterUtils {
             filterRules = FilterUtils.getApiDateFilters(filters, filterRules);
             reportIgnoredFilters(filters);
         }
-        if(activityIds!=null && activityIds.size()>0){
+        if(activityIds!=null && !activityIds.isEmpty()){
             //if we have activityIds to add to the filter comming from the search by keyworkd
             if(filterRules==null){
                 filterRules = new AmpReportFilters();

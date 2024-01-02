@@ -673,7 +673,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
                     if (!AdvancedReportUtil.isColumnAdded(this.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
                         AmpReportColumn titleCol= new AmpReportColumn();
                         titleCol.setLevel(level1);
-                        titleCol.setOrderId( new Long((this.getColumns().size()+1)));
+                        titleCol.setOrderId((long) (this.getColumns().size() + 1));
                         titleCol.setColumn(tempCol); 
                         this.getColumns().add(titleCol);
                         break;

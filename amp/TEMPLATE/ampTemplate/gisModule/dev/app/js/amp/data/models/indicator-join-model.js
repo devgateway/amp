@@ -74,24 +74,23 @@ module.exports = Backbone.Model
     // var boundaryId = boundaryLink.split('gis/boundaries/')[1];  // for now, (for ever?,) they are all local
     // var boundary = this.collection.boundaries.find(function(boundary) { return boundary.id === boundaryId; });
 
-    var boundary = this.collection.boundaries.findWhere({id: this.get('adminLevel')});
-    if (!boundary) {  // sanity check
-      throw new Error('No boundary found for indicator layer:', this.get('title'));
-    }
-
-    var boundaryLoaded = boundary.load();
-    when(boundaryLoaded, this.load())         // Order is important...
-      .done(function(boundaryModel, self) {  // ...args follow "when" order
-        var topoboundaries = boundaryModel.toJSON();
-        var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
-                                 .keys()
-                                 .first()
-                                 .value();
-        var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
-        self._joinDataWithBoundaries(boundaries);               
-      });
-
-    return boundaryLoaded;
+    var boundaries = this.collection.boundaries.where({admLevel: this.get('adminLevel')});
+		var promises = [ this.load() ];
+		boundaries.forEach(function (b) { promises.push(b.load()); });
+		return $.when.apply($, promises)
+			.done(function() {
+				var self = arguments[0];
+				var boundaryModels = Array.prototype.slice.call(arguments, 1);
+				var features = boundaryModels.map(function(model) {
+					var topoboundaries = model.toJSON();
+					var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
+						.keys()
+						.first()
+						.value();
+					return TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+				});
+				self._joinDataWithBoundaries(features);
+			});
   },
 
 loadAll: function(options) {
@@ -236,8 +235,7 @@ loadAll: function(options) {
    	   this.minValue = this._getMinValue();
    	   this.valuesAreIntegers = this._valuesAreIntegers();
    },
-  _joinDataWithBoundaries: function(boundaryGeoJSON) {
-    var self = this;
+  _joinDataWithBoundaries: function(features) {
     var values = _.map(this.get('values'), function(value){
     	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId;
     	return value;
@@ -248,31 +246,37 @@ loadAll: function(options) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
 
-    var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
+    var admKey = parseInt(this.get('adminLevel').substring(4), 10);
 
-    // copy boundary geoJSON, and inject data
-    var geoJSON = _.extend({}, boundaryGeoJSON, {
-      features: _.map(boundaryGeoJSON.features, function(feature) {
-        // replace boundary properties with {value: value}
-        // TODO... keep the existing properties and just add value?
-        // replacing for now, to save weight
-    	var admCode = feature.properties[admKey + '_CODE'];
-    	feature.id = admCode ? $.trim(admCode) : admCode;
-        feature.properties.name = feature.properties[admKey + '_NAME'] || '';
+		// copy boundary geoJSON, and inject data
+		var geoJSONs = features.map(function(feature) {
+    	return _.extend({}, feature, {
+				features: _.map(feature.features, function(feature) {
+					// replace boundary properties with {value: value}
+					// TODO... keep the existing properties and just add value?
+					// replacing for now, to save weight
 
-        var value = null;
-        if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
-        	value = indexedValues[feature.id].value;
-        }
+					var admCode = feature.properties['ID_0'];
+					for (var i = 1; i <= admKey; i++) {
+						admCode += ':' + feature.properties['ID_' + i];
+					}
+					feature.id = admCode ? $.trim(admCode) : admCode;
+					feature.properties.name = feature.properties['NAME_' + admKey] || '';
 
-        return _.extend(feature, {
-          properties: _.extend(feature.properties, {
-            value: value
-          })
-        });
-      })
-    });
-    this.set('geoJSON', geoJSON);
+					var value = null;
+					if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
+						value = indexedValues[feature.id].value;
+					}
+
+					return _.extend(feature, {
+						properties: _.extend(feature.properties, {
+							value: value
+						})
+					});
+				})
+			});
+		});
+    this.set('geoJSONs', geoJSONs);
   }
 
 });

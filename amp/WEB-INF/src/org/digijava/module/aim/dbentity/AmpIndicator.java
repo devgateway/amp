@@ -67,6 +67,8 @@ public class AmpIndicator implements Serializable, Identifiable
 
     @Interchangeable(fieldTitle="Indicator Category")
     private AmpCategoryValue indicatorsCategory;
+    private AmpTheme theme;
+
 
     @Interchangeable(fieldTitle="Risk")
     private AmpIndicatorRiskRatings risk;
@@ -110,7 +112,14 @@ public class AmpIndicator implements Serializable, Identifiable
     }
     public String getDescription() {
         return description;
+    }    public AmpTheme getTheme() {
+    return theme;
+}
+
+    public void setTheme(AmpTheme theme) {
+        this.theme = theme;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }

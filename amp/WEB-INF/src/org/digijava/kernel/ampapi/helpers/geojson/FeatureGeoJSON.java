@@ -43,4 +43,16 @@ public class FeatureGeoJSON extends GeoJSON
 
         return super.isValid(validator);
     }
+
+    @Override
+    public String toString() {
+        return "FeatureGeoJSON{" +
+                "geometry=" + geometry +
+                ", properties=" + properties +
+                ", id='" + id + '\'' +
+                ", crs=" + crs +
+                ", bbox=" + bbox +
+                ", properties=" + properties +
+                '}';
+    }
 }

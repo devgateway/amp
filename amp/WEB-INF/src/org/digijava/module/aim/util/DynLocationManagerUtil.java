@@ -727,9 +727,8 @@ public class DynLocationManagerUtil {
      */
     public static AmpCategoryValueLocations getDefaultCountry()
     {
-        AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(
+        return DynLocationManagerUtil.getLocationByIso(
                 FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
-        return country;
     }
     
     public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException 
@@ -1287,7 +1286,7 @@ public class DynLocationManagerUtil {
      Session dbSession = PersistenceManager.getSession();
         String queryString = "select value from "
                 + AmpLocationIndicatorValue.class.getName()
-                + " value where value.location.id=:id)";
+                + " value where value.location.id=:id";
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
         qry.setParameter("id", location.getId(), LongType.INSTANCE);
@@ -1338,7 +1337,7 @@ public class DynLocationManagerUtil {
      Session dbSession = PersistenceManager.getSession();
         String queryString = "select value from "
                 + AmpLocationIndicatorValue.class.getName()
-                + " value where value.location.id=:locationId and value.indicator.id=:indicatorId)";
+                + " value where value.location.id=:locationId and value.indicator.id=:indicatorId";
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
         qry.setParameter("locationId", location,LongType.INSTANCE);

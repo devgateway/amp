@@ -46,7 +46,7 @@ import org.digijava.kernel.viewmanager.ViewConfigFactory;
 public final class DigiExceptionHandler
     extends Action {
 
-    private static Logger logger = Logger.getLogger(DigiExceptionHandler.class);
+    private static final Logger logger = Logger.getLogger(DigiExceptionHandler.class);
 
     public ActionForward execute(
         ActionMapping mapping,

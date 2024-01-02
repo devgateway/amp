@@ -1,0 +1,201 @@
+[
+  {
+    "id": "ML-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "ML"
+  },
+  {
+    "id": "ML-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "ML"
+  },
+  {
+    "id": "ML-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "ML"
+  },
+  {
+    "id": "SN-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "SN"
+  },
+  {
+    "id": "SN-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "SN"
+  },
+  {
+    "id": "SN-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "SN"
+  },
+  {
+    "id": "NE-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "NE"
+  },
+  {
+    "id": "NE-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "NE"
+  },
+  {
+    "id": "NE-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "NE"
+  },
+  {
+    "id": "DJ-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "DJ"
+  },
+  {
+    "id": "DJ-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "DJ"
+  },
+  {
+    "id": "DJ-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "DJ"
+  },
+  {
+    "id": "ER-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "ER"
+  },
+  {
+    "id": "ER-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "ER"
+  },
+  {
+    "id": "ER-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "ER"
+  },
+  {
+    "id": "MR-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "MR"
+  },
+  {
+    "id": "MR-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "MR"
+  },
+  {
+    "id": "MR-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "MR"
+  }
+  ,
+  {
+  "id": "NG-adm-0",
+  "admLevel": "adm-0",
+  "label": "ADM 0",
+  "country": "NG"
+},
+  {
+    "id": "NG-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "NG"
+  },
+  {
+    "id": "NG-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "NG"
+  },
+  {
+    "id": "SD-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "SD"
+  },
+  {
+    "id": "SD-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "SD"
+  },
+  {
+    "id": "SD-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "SD"
+  },
+  {
+    "id": "BF-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "BF"
+  },
+  {
+    "id": "BF-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "BF"
+  },
+  {
+    "id": "BF-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "BF"
+  },
+  {
+    "id": "TD-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "TD"
+  },
+  {
+    "id": "TD-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "TD"
+  },
+  {
+    "id": "TD-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "TD"
+  },
+  {
+    "id": "ET-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "ET"
+  },
+  {
+    "id": "ET-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "ET"
+  },
+  {
+    "id": "ET-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "ET"
+  }
+]

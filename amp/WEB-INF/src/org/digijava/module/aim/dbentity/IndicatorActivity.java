@@ -177,16 +177,21 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     }
 
     public List<AmpIndicatorValue> getValuesSorted() {
-        Map<Integer, AmpIndicatorValue> tree = new TreeMap<Integer, AmpIndicatorValue>();
+//        Map<Integer, AmpIndicatorValue> tree = new TreeMap<Integer, AmpIndicatorValue>();
 
         //Order used in Activity form
         List<Integer> listSorted = Arrays.asList(AmpIndicatorValue.BASE, AmpIndicatorValue.TARGET, AmpIndicatorValue.REVISED, AmpIndicatorValue.ACTUAL);
 
-        for (AmpIndicatorValue value : this.getValues()) {
-            tree.put(listSorted.indexOf(value.getValueType()), value);
-        }
+//        for (AmpIndicatorValue value : this.getValues()) {
+//            tree.put(listSorted.indexOf(value.getValueType()), value);
+//        }
+        ArrayList<AmpIndicatorValue> sorted = new ArrayList<>(getValues());
+        sorted.sort(
+                Comparator.<AmpIndicatorValue, Integer> comparing(v -> listSorted.indexOf(v.getValueType()))
+                        .thenComparing(Comparator.nullsFirst(Comparator.comparing(AmpIndicatorValue::getValueDate))));
+        return sorted;
 
-        return new ArrayList<AmpIndicatorValue>(tree.values());
+//        return new ArrayList<AmpIndicatorValue>(tree.values());
     }
     
 }

@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
-    <jira>GGW-84</jira>
+    <jira>GGW-162</jira>
     <keyword>fix report generator urls</keyword>
     <author>timothygachengo</author>
     <apply>

@@ -271,7 +271,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       return;
     }
 
-    if (!updateIndicatorReducer.loading && !updateIndicatorReducer.error) {
+    if (!updateIndicatorReducer.loading && !updateIndicatorReducer.error && updateIndicatorReducer?.indicator?.id) {
       MySwal.fire({
         icon: 'success',
         title: 'Indicator updated successfully',

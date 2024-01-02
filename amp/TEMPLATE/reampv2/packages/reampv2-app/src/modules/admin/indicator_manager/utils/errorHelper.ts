@@ -21,7 +21,7 @@ export const errorHelper = <T>(error: T | any[]) => {
 
         if (extractedError === NOT_AUTHENTICATED_ERROR) {
             window.location.href = '/';
-            return;
+            return "Auth Error";
         }
         return extractedError;
     }

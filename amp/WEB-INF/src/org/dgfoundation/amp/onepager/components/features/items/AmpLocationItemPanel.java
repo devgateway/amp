@@ -176,8 +176,9 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                 && !am.getObject().getIndicators().isEmpty()
                 && (model == null || model.getObject() == null ||
                 am.getObject().getIndicators().stream().anyMatch(indicator ->
-                        indicator.getActivityLocation().getLocation().getName().
-                                equals(model.getObject().getLocation().getName())))) {
+                        indicator.getActivityLocation() != null &&
+                                indicator.getActivityLocation().getLocation().getName().
+                                        equals(model.getObject().getLocation().getName())))) {
             String translatedMessage = TranslatorUtil.getTranslation("Cannot delete location with indicators");
             String alert = "alert('" + translatedMessage + "');";
             target.appendJavaScript(alert);

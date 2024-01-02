@@ -6,7 +6,7 @@ import {
 import Select from 'react-select';
 import { Formik, FormikProps } from 'formik';
 import styles from './css/IndicatorModal.module.css';
-import { indicatorValidationSchema } from '../../utils/validator';
+import { translatedIndicatorValidationSchema } from '../../utils/validator';
 import { BaseAndTargetValueType, DefaultComponentProps, IndicatorObjectType, ProgramSchemeType, SectorObjectType, SettingsType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateIndicator } from '../../reducers/updateIndicatorReducer';
@@ -44,12 +44,19 @@ interface IndicatorFormValues {
   programId: string | any;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
+  indicatorsCategory?: string;
 }
 
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const { show, setShow, indicator, translations } = props;
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
+
+  const creationDateRef = useRef<HTMLInputElement>(null);
+  const baseOriginalValueDateRef = useRef<HTMLInputElement>(null);
+  const baseRevisedValueDateRef = useRef<HTMLInputElement>(null);
+  const targetOriginalValueDateRef = useRef<HTMLInputElement>(null);
+  const targetRevisedValueDateRef = useRef<HTMLInputElement>(null);
 
   const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
 
@@ -61,17 +68,21 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const handleClose = () => setShow(false);
 
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const updateIndicatorReducer = useSelector((state: any) => state.updateIndicatorReducer);
 
   const [programFieldVisible, setProgramFieldVisible] = useState(false);
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
 
-  const [sectors, setSectors] = useState<{ value: string, name: string }[]>([]);
+  const [sectors, setSectors] = useState<{ value: string, label: string }[]>([]);
+  const [categories, setCategories] = useState<{ value: string, label: string }[]>([]);
   const [programSchemes, setProgramSchemes] = useState<{ value: string, label: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
-  const [defaultProgram, setDefaultProgram] = useState<{ value: string, label: string } | null>(null);
 
+  const [defaultCategory, setDefaultCategory] = useState<{ value: string, label: string } | null>(null);
+  const [defaultSectors, setDefaultSectors] = useState<{ value: string, label: string }[]>();
+  const [defaultProgram, setDefaultProgram] = useState<{ value: string, label: string } | null>(null);
   const [defaultProgramScheme, setDefaultProgramScheme] = useState<{ value: string, label: string } | null>(null);
 
   const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
@@ -80,9 +91,17 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
+  const getCategories = () => {
+    const categoryData = categoriesReducer.categories.map((category: any) => ({
+      value: category.id,
+      label: category.value
+    }));
+    setCategories(categoryData);
+  }
+
   const getSectors = () => {
     const sectorData = sectorsReducer.sectors.map((sector: any) => ({
-      value: sector.id,
+      value: sector.id.toString(),
       label: sector.name
     }));
     setSectors(sectorData);
@@ -109,7 +128,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       setProgramFieldVisible(false);
       setBaseOriginalValueDateDisabled(false);
       setTargetOriginalValueDateDisabled(false);
-      
+
       const programScheme: ProgramSchemeType = programsReducer.programSchemes.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
         const children = extractChildrenFromProgramScheme(programScheme);
@@ -123,12 +142,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         setProgramFieldVisible(true);
 
         if (programScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(programScheme.startDate || ''));
           setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(programScheme.endDate || ''));
           setTargetOriginalValueDateDisabled(true);
         }
       }
@@ -147,15 +166,29 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   useEffect(() => {
     getProgramsForProgramScheme();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProgramSchemeId])
+  }, [selectedProgramSchemeId]);
+
+  const getDefaultCategory = () => {
+    if (indicator?.indicatorsCategory) {
+      const foundCategory = categoriesReducer.categories.find((category: any) => category.id === indicator?.indicatorsCategory);
+      if (foundCategory) {
+        setDefaultCategory({
+            value: foundCategory.id,
+            label: foundCategory.value
+        });
+
+        formikRef?.current?.setFieldValue("indicatorsCategory", foundCategory.id);
+      }
+    }
+  }
 
   const getDefaultSectors = () => {
-    if (indicator?.sectors.length === 0) {
-      return [];
+    if (indicator?.sectors === null || indicator?.sectors.length === 0) {
+      setDefaultSectors([]);
     }
 
     const indicatorSectorData = indicator?.sectors.map((sectorId: number) => {
-      const foundSector: SectorObjectType = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
+      const foundSector: SectorObjectType = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: SectorObjectType) => sector.id === sectorId);
 
       if (foundSector) {
         return {
@@ -170,7 +203,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       }
     });
 
-    return indicatorSectorData;
+    setDefaultSectors(indicatorSectorData);
   };
 
 
@@ -184,12 +217,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         })
 
         if (foundProgramScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.startDate || ''));
           setBaseOriginalValueDateDisabled(true);
         }
 
         if (foundProgramScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.endDate || ''));
           setTargetOriginalValueDateDisabled(true);
         }
       }
@@ -213,6 +246,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   useLayoutEffect(() => {
     getSectors();
+    getCategories();
     getProgramSchemes();
     getPrograms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -220,6 +254,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
 
   useEffect(() => {
+    getDefaultSectors();
+    getDefaultCategory();
     getDefaultProgram();
     getDefaultPropgramScheme();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,7 +271,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       return;
     }
 
-    if (!updateIndicatorReducer.loading && !updateIndicatorReducer.error) {
+    if (!updateIndicatorReducer.loading && !updateIndicatorReducer.error && updateIndicatorReducer?.indicator?.id) {
       MySwal.fire({
         icon: 'success',
         title: 'Indicator updated successfully',
@@ -258,22 +294,23 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     name: indicator?.name || '',
     description: indicator?.description || '',
     code: indicator?.code || '',
-    sectors: getDefaultSectors() || [],
+    sectors: indicator?.sectors || [],
     programId: '',
     ascending: indicator?.ascending || false,
-    creationDate: indicator?.creationDate && DateUtil.backendDateToJavascriptDate(indicator?.creationDate),
+    creationDate: indicator?.creationDate,
     base: {
       originalValue: indicator?.base?.originalValue,
-      originalValueDate: indicator?.base?.originalValueDate && DateUtil.backendDateToJavascriptDate(indicator?.base?.originalValueDate),
+      originalValueDate: indicator?.base?.originalValueDate,
       revisedValue: indicator?.base?.revisedValue,
-      revisedValueDate: indicator?.base?.revisedValueDate && DateUtil.backendDateToJavascriptDate(indicator?.base?.revisedValueDate),
+      revisedValueDate: indicator?.base?.revisedValueDate,
     },
     target: {
       originalValue: indicator?.target?.originalValue,
-      originalValueDate: indicator?.target?.originalValueDate && DateUtil.backendDateToJavascriptDate(indicator?.target?.originalValueDate),
+      originalValueDate: indicator?.target?.originalValueDate,
       revisedValue: indicator?.target?.revisedValue,
-      revisedValueDate: indicator?.target?.revisedValueDate && DateUtil.backendDateToJavascriptDate(indicator?.target?.revisedValueDate),
-    }
+      revisedValueDate: indicator?.target?.revisedValueDate,
+    },
+    indicatorsCategory: indicator?.indicatorsCategory?.toString() || ''
   };
 
   return (
@@ -294,11 +331,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       </Modal.Header>
       <Formik
         initialValues={initialValues}
-        validationSchema={indicatorValidationSchema}
+        validationSchema={translatedIndicatorValidationSchema(translations)}
         innerRef={formikRef}
         onSubmit={(values) => {
-          const { name, description, code, sectors, ascending, programId, creationDate, base, target } = values;
-
+          const { name, description, code, sectors, ascending, programId, creationDate, base, target, indicatorsCategory } = values;
           const updatedIndicatorData = {
             id: indicator.id,
             name,
@@ -319,7 +355,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
               originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
               revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
-            }
+            },
+            indicatorsCategory : indicatorsCategory ? parseInt(indicatorsCategory) : null
           };
 
           dispatch(updateIndicator(updatedIndicatorData as IndicatorObjectType));
@@ -409,7 +446,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         defaultValue={new Date()}
                         clearIcon={null}
                         calendarIcon={null}
-                        className={styles.input_field} />
+                        className={styles.input_field}
+                       id="creationDate"
+                      inputRef={creationDateRef}/>
                     </Form.Group>
                   </Row>
 
@@ -417,7 +456,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
                       <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
                       {
-                        sectors.length > 0 ? (
+                        (sectors.length > 0 && defaultSectors !== undefined)? (
                           <Select
                             isMulti
                             name="sectors"
@@ -425,18 +464,56 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onChange={(values) => {
                               // set the formik value with the selected values and remove the label
                               const selectedValues = values.map((value: any) => parseInt(value.value))
+                              setDefaultSectors(values as any);
                               props.setFieldValue('sectors', selectedValues);
                             }}
-                            getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                             classNamePrefix="select"
-                            defaultValue={props.values.sectors}
+                            value={defaultSectors}
                           />
-                        ) : null
+
+                        ) : (
+                            <Select
+                                isDisabled={true}
+                            />
+                        )
                       }
                     </Form.Group>
                   </Row>
+
+                  <Row className={styles.view_row}>
+                    <Form.Group className={styles.view_one_item} controlId="formIndicatorCategories">
+                      <Form.Label>{translations["amp.indicatormanager:indicators-category"]}</Form.Label>
+                      {
+                        categories.length > 0 ? (
+                            <Select
+                                name="indicatorsCategory"
+                                options={categories}
+                                onChange={(selectedValue) => {
+                                  // set the formik value with the selected values and remove the label
+                                  if (selectedValue) {
+                                    setDefaultCategory(selectedValue)
+                                    props.setFieldValue('indicatorsCategory', selectedValue?.value);
+                                  }
+                                }}
+                                isClearable
+                                getOptionValue={(option) => option.value}
+                                onBlur={props.handleBlur}
+                                className={`basic-multi-select ${(props.errors.indicatorsCategory && props.touched.indicatorsCategory) && styles.text_is_invalid}`}
+                                classNamePrefix="select"
+                                value={defaultCategory}
+                            />
+                        ) : (
+                            <Select
+                                name="categories"
+                                isDisabled={true}
+                            />
+                        )
+                      }
+                    </Form.Group>
+                  </Row>
+
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="programScheme">
                       <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
@@ -459,7 +536,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             classNamePrefix="select"
                             value={defaultProgramScheme}
                           />
-                        ) : null
+                        ) : (
+                            <Select
+                                isDisabled={true}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                            />
+                        )
                       }
                     </Form.Group>
                   </Row>
@@ -469,7 +551,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_one_item} controlId="programs">
                         <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
                         {
-                          programs.length > 0 ? (
+                          (programs.length > 0 && defaultProgram) ? (
                             <Select
                               name="programs"
                               options={programs}
@@ -488,7 +570,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                               name="programs"
                               isDisabled={true}
-                              defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-programs"] }}
+                              defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         }
                       </Form.Group>
@@ -536,6 +618,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           name="base.originalValueDate"
                           disabled={baseOriginalValueDateDisabled}
                           className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
+                          id="baseOriginalValueDate"
+                          inputRef={baseOriginalValueDateRef}
                         />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
@@ -575,7 +659,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           }}
                           onBlur={props.handleBlur}
                           name="base.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`} />
+                          className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
+                          id="baseRevisedValueDate"
+                          inputRef={baseRevisedValueDateRef}
+                        />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValueDate}
@@ -617,7 +704,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           disabled={targetOriginalValueDateDisabled}
                           onBlur={props.handleBlur}
                           name="target.originalValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />
+                          className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
+                          id="targetOriginalValueDate"
+                          inputRef={targetOriginalValueDateRef}
+                        />
                       </Form.Group>
                     </Row>
 
@@ -652,7 +742,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           }}
                           onBlur={props.handleBlur}
                           name="target.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`} />
+                          className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
+                          id="targetRevisedValueDate"
+                          inputRef={targetRevisedValueDateRef}
+                        />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.revisedValueDate}

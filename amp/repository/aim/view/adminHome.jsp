@@ -287,9 +287,9 @@
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Indicator Manager</digi:trn>
                               </c:set>
-                              <digi:link href="/viewIndicators.do?sortBy=nameAsc" title="${translation}" >
+                              <a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/admin/indicator_manager" title="${translation}" >
                                 <digi:trn>Indicator Manager</digi:trn>
-                              </digi:link>
+                              </a>
                             </td>
                           </tr>
                         </module:display>

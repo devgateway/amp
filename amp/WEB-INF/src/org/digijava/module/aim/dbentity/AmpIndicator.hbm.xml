@@ -26,7 +26,7 @@
 		</set>
 
 		<many-to-one name="indicatorsCategory" column="indicators_category"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="false"  />
 
 		<many-to-one name="risk" column="risk"
 			class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />

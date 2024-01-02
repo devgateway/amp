@@ -3,7 +3,12 @@ package org.digijava.kernel.ampapi.endpoints.common;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import com.google.common.net.HttpHeaders;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -26,7 +31,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -57,8 +70,19 @@ public class AmpConfiguration {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Settings")
     @ApiOperation("General settings")
-    public AmpGeneralSettings getSettings() {
-        return SettingsUtils.getGeneralSettings();
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "General settings",
+            response = AmpGeneralSettings.class))
+    public Response getSettings() {
+        return PublicServices.buildOkResponseWithOriginHeaders(SettingsUtils.getGeneralSettings());
+    }
+
+    @OPTIONS
+    @Path("/settings")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeTopsDashboard() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @GET

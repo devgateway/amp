@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
@@ -229,8 +230,11 @@ public class ActivityVersionUtil {
                 initSet(out, field);
             }
         }
+        out = SerializationUtils.clone(in);
+
 
 //        out.setAmpActivityGroup(null);
+
         return out;
     }
     

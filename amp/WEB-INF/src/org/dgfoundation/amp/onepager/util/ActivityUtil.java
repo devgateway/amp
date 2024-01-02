@@ -79,10 +79,10 @@ public class ActivityUtil {
      *
      * @param am
      */
-    public static void saveActivity(AmpActivityModel am, boolean draft, boolean rejected) {
+    public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
 
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-        if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())) {
+        if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
             logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
         }
 
@@ -215,6 +215,7 @@ public class ActivityUtil {
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
+                a.setMember(new HashSet<>());
                 if (tmpGroup == null) {
                     //we need to create a group for this activity
                     tmpGroup = new AmpActivityGroup();
@@ -231,8 +232,8 @@ public class ActivityUtil {
                         session.merge(a);
 
                 }
-//                session.flush();
-                a.setMember(new HashSet<>());
+
+                session.flush();
 
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
@@ -305,7 +306,7 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
-//        session.flush();
+        session.flush();
 
         updatePerformanceRules(oldA, a);
 
@@ -328,6 +329,12 @@ public class ActivityUtil {
         {
             session.evict(object);
         }
+    }
+    private static void updateFunding(AmpActivityVersion ampActivityVersion)
+    {
+    Session session = PersistenceManager.getRequestDBSession();
+    List<AmpFunding> fundings = session.createQuery("FROM "+ AmpFunding.class.getName()+" af WHERE af.ampActivityId=:activityId",AmpFunding.class).setParameter("activityId",ampActivityVersion.getAmpActivityId(), LongType.INSTANCE).list();
+
     }
 
     private static void updateMultiStakeholderField(AmpActivityVersion a) {
@@ -1315,33 +1322,36 @@ public class ActivityUtil {
         if (creator == null) {
             creator = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
         }
-
-        //add or edit activity contact and amp contact
-        if (activityContacts != null && activityContacts.size() > 0) {
-            for (AmpActivityContact activityContact : activityContacts) {
-                Long contactId = activityContact.getContact().getId();
-                // if the contact already exists on the DB, and was not saved
-                // already
-                if (contactId != null && savedContacts.get(contactId) == null) {
-                    savedContacts.put(activityContact.getContact().getId(), false);
-                }
-                // save the contact first, if the contact is new or if it is not
-                // new but has not been saved already.
-                if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                    activityContact.getContact().setCreator(creator);
-                    session.saveOrUpdate(activityContact.getContact());
-                    savedContacts.put(activityContact.getContact().getId(), true);
-                }
-                if (activityContact.getId() == null) {
-                    session.saveOrUpdate(activityContact);
-                    if (!newActivity) {
-                        session.merge(activityContact.getContact());
+        try {
+            //add or edit activity contact and amp contact
+            if (activityContacts != null && activityContacts.size() > 0) {
+                for (AmpActivityContact activityContact : activityContacts) {
+                    Long contactId = activityContact.getContact().getId();
+                    // if the contact already exists on the DB, and was not saved
+                    // already
+                    if (contactId != null && savedContacts.get(contactId) == null) {
+                        savedContacts.put(activityContact.getContact().getId(), false);
+                    }
+                    // save the contact first, if the contact is new or if it is not
+                    // new but has not been saved already.
+                    if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
+                        activityContact.getContact().setCreator(creator);
+                        session.saveOrUpdate(activityContact.getContact());
+                        savedContacts.put(activityContact.getContact().getId(), true);
+                    }
+                    if (activityContact.getId() == null) {
+                        session.saveOrUpdate(activityContact);
+                        if (!newActivity) {
+                            session.merge(activityContact.getContact());
+                        }
                     }
                 }
             }
+        }catch (Exception e)
+        {
+            logger.error("Error saving activity contact:",e);
         }
     }
-
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,
                                                  Session session) {
         if (a.getAmpActivityId() != null) {
@@ -1423,6 +1433,36 @@ public class ActivityUtil {
             }
         }
 
+
+        return false;
+    }
+
+    public static boolean hasSectorIndicatorsInActivity(AmpActivityVersion activity, AmpActivitySector sector) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            List<Long> sectorIds = ind.getSectors().stream()
+                    .map(AmpSector::getAmpSectorId)
+                    .collect(Collectors.toList());
+            if (sectorIds.contains(sector.getSectorId().getAmpSectorId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean hasProgramIndicatorsInActivity(AmpActivityVersion activity, AmpActivityProgram program) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            Long programId = ind.getProgram().getAmpThemeId();
+            if (programId.equals(program.getProgram().getAmpThemeId())) {
+                return true;
+            }
+        }
 
         return false;
     }

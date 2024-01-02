@@ -1,6 +1,5 @@
 /**
  * Copyright (c) 2011 Development Gateway (www.developmentgateway.org)
- *
  */
 package org.dgfoundation.amp.onepager.yui;
 
@@ -47,10 +46,10 @@ import java.util.*;
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
  * can be used to show an autocomplete editbox {@linkplain http://developer.yahoo.com/yui/examples/autocomplete/ac_combobox.html}
- * 
+ *
  * @author mpostelnicu@dgateway.org
- * @since Jun 14, 2011
  * @see {@linkplain http://ptrthomas.wordpress.com/2009/08/12/wicket-tutorial-yui-autocomplete-using-json-and-ajax/}
+ * @since Jun 14, 2011
  */
 public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
         AmpFieldPanel<CHOICE> implements IAjaxIndicatorAware {
@@ -61,9 +60,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
     public static final String ACRONYM_DELIMITER_STOP = ACRONYM_DELIMITER_STOP_PART + " - ";
     public static final String BOLD_DELIMITER_START = "<b>";
     public static final String BOLD_DELIMITER_STOP = "</b> ";
-    
+
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
-    protected boolean reuseObjects; 
+    protected boolean reuseObjects;
 
     /**
      * The model to retrieve the list of options
@@ -74,6 +73,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * The text field of the autocomplete
      */
     private TextField<String> textField;
+
 
     public TextField<String> getTextField() {
         return textField;
@@ -97,18 +97,17 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * Message indicator - loading panel or
      */
     private WebMarkupContainer indicator;
-    
+
     /**
      * If YUI client side datasource cache should be used (some instances of this control may require no cache)
      */
-    private boolean useCache=true;
+    private boolean useCache = true;
 
     /**
      * store the class of CHOICE, needed to load the selected object by id
      */
     private Class<CHOICE> objClass;
-    
-    
+
 
     /**
      * Behavior that is invoked when an item is selected in YUI list. The
@@ -136,7 +135,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
         textField.add(new Behavior() {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
                 final CharSequence url = onSelectBehavior.getCallbackUrl();
@@ -162,91 +161,84 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
     public String getAjaxIndicatorMarkupId() {
         return indicatorAppender.getMarkupId();
     }
+
     /**
      * Instantiates a new autocomplete component
-     * 
-     * @param id
-     *            the Wicket id
-     * @param fmName
-     *            the FM name @see {@link AmpFMTypes}
-     * @param objectListModelClass
-     *            the model to retrieve the list of items
+     *
+     * @param id                   the Wicket id
+     * @param fmName               the FM name @see {@link AmpFMTypes}
+     * @param objectListModelClass the model to retrieve the list of items
      */
     public AmpAutocompleteFieldPanel(
             String id,
             String fmName,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
         this(id,
-        fmName,"",
-        objectListModelClass);
+                fmName, "",
+                objectListModelClass);
     }
+
     /**
      * Instantiates a new autocomplete component
-     * 
-     * @param id
-     *            the Wicket id
-     * @param fmName
-     *            the FM name @see {@link AmpFMTypes}
-     * @param objectListModelClass
-     *            the model to retrieve the list of items
+     *
+     * @param id                   the Wicket id
+     * @param fmName               the FM name @see {@link AmpFMTypes}
+     * @param objectListModelClass the model to retrieve the list of items
      */
     public AmpAutocompleteFieldPanel(
             String id,
-            String fmName,String aditionalTooltipKey,
+            String fmName, String aditionalTooltipKey,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-        this(id, fmName,aditionalTooltipKey, false, objectListModelClass,false);
+        this(id, fmName, aditionalTooltipKey, false, objectListModelClass, false);
     }
-    
+
     /**
-     * 
-     * @param id id
-     * @param fmName FM name
-     * @param hideLabel  the FM name @see {@link AmpFMTypes}
+     * @param id                   id
+     * @param fmName               FM name
+     * @param hideLabel            the FM name @see {@link AmpFMTypes}
      * @param objectListModelClass the model to retrieve the list of items
-     * @param useCache if YUI should use client side cache
+     * @param useCache             if YUI should use client side cache
      */
     public AmpAutocompleteFieldPanel(
             String id,
             String fmName,
             boolean hideLabel,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
-        this(id,fmName,hideLabel,false,objectListModelClass,"");
-        this.useCache=useCache;
+        this(id, fmName, hideLabel, false, objectListModelClass, "");
+        this.useCache = useCache;
     }
-    
-    
 
 
     /**
-     * 
-     * @param id id
-     * @param fmName  the FM name @see {@link AmpFMTypes}
+     * @param id                   id
+     * @param fmName               the FM name @see {@link AmpFMTypes}
      * @param objectListModelClass the model to retrieve the list of items
-     * @param useCache if YUI should use client side cache
+     * @param useCache             if YUI should use client side cache
      */
     public AmpAutocompleteFieldPanel(
             String id,
             String fmName,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
-        this(id, fmName, false, objectListModelClass,useCache);
+        this(id, fmName, false, objectListModelClass, useCache);
     }
+
     public AmpAutocompleteFieldPanel(
             String id,
             String fmName,
             boolean hideLabel,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
-            final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar,String aditionalTooltipKey,boolean showTooltipIfLabelHidden) {
-        this(id,fmName,aditionalTooltipKey,hideLabel,objectListModelClass,clazz, jsName,autoCompeleteVar,showTooltipIfLabelHidden);     
+            final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName, final String autoCompeleteVar, String aditionalTooltipKey, boolean showTooltipIfLabelHidden) {
+        this(id, fmName, aditionalTooltipKey, hideLabel, objectListModelClass, clazz, jsName, autoCompeleteVar, showTooltipIfLabelHidden);
     }
 
     public AmpAutocompleteFieldPanel(
             String id,
-            String fmName,String aditionalTooltipKey,
+            String fmName, String aditionalTooltipKey,
             boolean hideLabel,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
-            final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar,boolean showTooltipIfLabelHidden) {
+            final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName, final String autoCompeleteVar, boolean showTooltipIfLabelHidden) {
         //super(id, null, fmName, hideLabel );
-        super(id, null,showTooltipIfLabelHidden,aditionalTooltipKey, fmName,hideLabel,"",false);
+        super(id, null, showTooltipIfLabelHidden, aditionalTooltipKey, fmName, hideLabel, "", false);
         this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
         this.objectListModelClass = objectListModelClass;
         toggleButton = new WebMarkupContainer("toggleButton");
@@ -257,11 +249,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
         add(textField);
         container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
-        add(container);    
-        add(new YuiAutoCompleteBehavior(){
+        add(container);
+        add(new YuiAutoCompleteBehavior() {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
-                super.renderHead(component, response);              
+                super.renderHead(component, response);
                 response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"));
                 response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"));
                 response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"));
@@ -277,16 +269,17 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                         return variables;
                     }
                 };
-                response.render(JavaScriptHeaderItem.forReference(new TextTemplateResourceReference(clazz, jsName, PackageTextTemplate.DEFAULT_CONTENT_TYPE, "UTF-8",variablesModel)));
+                response.render(JavaScriptHeaderItem.forReference(new TextTemplateResourceReference(clazz, jsName, PackageTextTemplate.DEFAULT_CONTENT_TYPE, "UTF-8", variablesModel)));
                 /*
                  * currently renderOnDomReadyJavaScript doesn't work as expected in IE8
                  * that is why jquery's $(document).ready has been added here
                  */
-                
+
                 String disableControl = "true";
-                if (textField.getParent().isEnabled())
+                if (textField.getParent().isEnabled()) {
                     disableControl = "false";
-                response.render(OnDomReadyHeaderItem.forScript("$(document).ready(function() {"+getJsVarName()
+                }
+                response.render(OnDomReadyHeaderItem.forScript("$(document).ready(function() {" + getJsVarName()
                         + " = new YAHOO.widget." + autoCompeleteVar + "('"
                         + textField.getMarkupId() + "', '" + getCallbackUrl()
                         + "', '" + container.getMarkupId() + "', '"
@@ -308,12 +301,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             protected void respond(final AjaxRequestTarget target) {
                 String selectedString = getRequestCycle().getRequest().getRequestParameters().getParameterValue("selectedString").toString();
                 CHOICE choice = null;
-                if (objClass.isAssignableFrom(NodeWrapper.class)){
+                if (objClass.isAssignableFrom(NodeWrapper.class)) {
                     //we need to treat Jackrabbit Node differently
                     String objId = selectedString;
                     //get all choices
                     Collection<CHOICE> choices = getChoices(null);
-                    for (CHOICE ch: choices){
+                    for (CHOICE ch : choices) {
                         NodeWrapper nw = (NodeWrapper) ch;
                         String uuid = null;
                         try {
@@ -322,13 +315,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                             logger.error("Can't get uuid for node: ", e);
                             break;
                         }
-                        if (objId.equals(uuid)){
+                        if (objId.equals(uuid)) {
                             choice = ch;
                             break;
                         }
                     }
-                }
-                else{
+                } else {
                     Long objId = Long.parseLong(selectedString);
                     // hide loading icon:
                     choice = getSelectedChoice(objId);
@@ -343,39 +335,38 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
     public AmpAutocompleteFieldPanel(
             String id,
             String fmName,
-            boolean hideLabel,boolean showTooltipIfLabelHidden,
-            Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,String additionalTooltipKey) {
-        this(id,fmName,additionalTooltipKey,hideLabel,objectListModelClass,showTooltipIfLabelHidden);
-        
+            boolean hideLabel, boolean showTooltipIfLabelHidden,
+            Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, String additionalTooltipKey) {
+        this(id, fmName, additionalTooltipKey, hideLabel, objectListModelClass, showTooltipIfLabelHidden);
+
     }
+
     /**
      * Constructs a new component. Initializes all subcomponents
-     * 
+     *
      * @param id
-     * @param hideLabel
-     *            if true, the visible text label of the component is not shown
+     * @param hideLabel if true, the visible text label of the component is not shown
      */
     public AmpAutocompleteFieldPanel(
             String id,
-            String fmName,String aditionalTooltipKey,
+            String fmName, String aditionalTooltipKey,
             boolean hideLabel,
-            Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,boolean showTooltipIfLabelHidden) {
-        this(id, fmName,aditionalTooltipKey, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js","WicketAutoComplete",showTooltipIfLabelHidden);
+            Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean showTooltipIfLabelHidden) {
+        this(id, fmName, aditionalTooltipKey, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js", "WicketAutoComplete", showTooltipIfLabelHidden);
     }
 
     /**
      * Gets the object id for the specified choice
      * Beware: it returns String uuid for Jackrabbit nodes
      *
-     * @param choice
-     *            the choice that needs value extraction
+     * @param choice the choice that needs value extraction
      * @return the unique id value of the choice
      */
-    protected String getChoiceId(final CHOICE choice){
-        if (objClass == null){
-            objClass=(Class<CHOICE>)HibernateProxyHelper.getClassWithoutInitializingProxy(choice);
+    protected String getChoiceId(final CHOICE choice) {
+        if (objClass == null) {
+            objClass = (Class<CHOICE>) HibernateProxyHelper.getClassWithoutInitializingProxy(choice);
         }
-        if (choice instanceof NodeWrapper){
+        if (choice instanceof NodeWrapper) {
             //we can't use the ContentTranslationUtil for Jackrabbit items, since it works only with hibernate
             NodeWrapper nodeWrapper = (NodeWrapper) choice;
             String uuid = null;
@@ -386,46 +377,42 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                 return null;
             }
             return uuid;
-        }
-        else{
+        } else {
             return String.valueOf(ContentTranslationUtil.getObjectId(choice));
         }
     }
 
     /**
      * Gets the string value from the specified choice
-     * 
-     * @param choice
-     *            the choice that needs value extraction
+     *
+     * @param choice the choice that needs value extraction
      * @return the unique string value of the choice
      */
     protected abstract String getChoiceValue(final CHOICE choice);
 
     /**
-     * @param choice
-     *            the current choice to be rendered
+     * @param choice the current choice to be rendered
      * @return the level in the tree of the current choice, or null if no levels
-     *         should be drawn
+     * should be drawn
      */
     public abstract Integer getChoiceLevel(CHOICE choice);
 
     /**
      * Invoked when the choice is picked from the autocomplete list
-     * 
+     *
      * @param target
-     * @param choice
-     *            the <CHOICE> object selected
+     * @param choice the <CHOICE> object selected
      */
     protected abstract void onSelect(AjaxRequestTarget target, CHOICE choice);
-    
-    protected boolean showAcronyms(){
+
+    protected boolean showAcronyms() {
         return false;
     }
-    
-    protected String getAcronym(CHOICE choice){
+
+    protected String getAcronym(CHOICE choice) {
         return null;
     }
-    
+
 
     // @Override
     // public void updateModel() {
@@ -434,7 +421,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
     /**
      * Returns the real JS name of the textfield component
-     * 
+     *
      * @return
      */
     private String getJsVarName() {
@@ -445,10 +432,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * Returns an array of choiceValueS obtained by invoking
      * {@link #getChoiceValue(Object)} for each object within
      * {@link #getChoices(String)}
-     * 
-     * @param input
-     *            the search string that will be passed to
-     *            {@link #getChoices(String)}
+     *
+     * @param input the search string that will be passed to
+     *              {@link #getChoices(String)}
      * @return the array with values
      */
     protected String[][] getChoiceValues(String input) {
@@ -458,17 +444,17 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             Integer choiceLevel = getChoiceLevel(choice);
             String choiceId = getChoiceId(choice);
             String choiceValue = getChoiceValue(choice);
-            if (showAcronyms()){
+            if (showAcronyms()) {
                 String acronym = getAcronym(choice);
-                if (acronym != null){
+                if (acronym != null) {
                     acronym = acronym.replace(ACRONYM_DELIMITER_START, " ");
                     acronym = acronym.replace(ACRONYM_DELIMITER_STOP_PART, " ");
                     acronym = acronym.trim();
                     choiceValue = ACRONYM_DELIMITER_START + acronym + ACRONYM_DELIMITER_STOP + choiceValue;
                 }
             }
-                
-            choiceValues.add(new String[] { choiceValue,
+
+            choiceValues.add(new String[]{choiceValue,
                     choiceLevel != null ? choiceLevel.toString() : "0", choiceId});
         }
 
@@ -482,24 +468,24 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * {@link #modelParams} in its constructor and then uses this to query
      * {@link AbstractAmpAutoCompleteModel#getObject()} and to get the list of
      * choices
-     * 
+     *
      * @param input
      * @return
      */
     protected Collection<CHOICE> getChoices(String input) {
         /*
          * when adjusting minimum length for the search keyword, also
-         * adjust "autoComplete.minQueryLength" in the js file 
+         * adjust "autoComplete.minQueryLength" in the js file
          */
         if (input != null && input.length() > 0 && input.length() < 1)
             return Collections.emptyList();
         Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
-        
+
         AmpAuthWebSession session = (AmpAuthWebSession) this.getSession();
-        String language=session.getLocale().getLanguage();
-        
+        String language = session.getLocale().getLanguage();
+
         try {
-            constructor = objectListModelClass.getConstructor(String.class,String.class,
+            constructor = objectListModelClass.getConstructor(String.class, String.class,
                     Map.class);
             AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
                     .newInstance(input, language, modelParams);
@@ -521,6 +507,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
     /**
      * Retrieve the object coresponding to the user's selection
+     *
      * @param objId
      * @return
      */
@@ -535,7 +522,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * The {@link #respond(AjaxRequestTarget)} method invokes the
      * {@link JsonUtils#marshal(Object)} to get a JSON object which is sent to
      * YUI's dataSource.responseArray
-     * 
+     *
      * @author mpostelnicu@dgateway.org
      * @since Jun 15, 2011
      */
@@ -545,7 +532,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
         @Override
         protected void respond(AjaxRequestTarget target) {
-            Request request = getRequestCycle().getRequest(); 
+            Request request = getRequestCycle().getRequest();
             IRequestParameters paramMap = request.getRequestParameters();
             StringValue queryS = paramMap.getParameterValue("q");
             String query = queryS.toString();
@@ -565,4 +552,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
         this.reuseObjects = reuseObjects;
     }
 
+    public void changeEnabled(boolean enabled, final AjaxRequestTarget target) {
+        this.setEnabled(enabled);
+
+        target.appendJavaScript("$('#" + this.toggleButton.getMarkupId() + " span button').prop('disabled', " + !enabled + ")");
+        System.out.println("$('#" + this.toggleButton.getMarkupId() + " span button').prop('disabled', " + !enabled + ")");
+        this.toggleButton.setEnabled(enabled);
+        this.textField.setEnabled(enabled);
+    }
 }

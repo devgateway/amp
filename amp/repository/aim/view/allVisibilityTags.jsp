@@ -105,6 +105,8 @@
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Filter by Sector" parentModule="Indicator Manager"></module:display>
+<module:display name="Filter by Program" parentModule="Indicator Manager"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -723,7 +725,8 @@ deleted 6 fields, do not reinsert
 
 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display>
-<field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display>
+<field:display name="National Planning Objectives Code" feature="NPD Programs"></field:display>
 <field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 3" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 4" feature="NPD Programs"></field:display> 

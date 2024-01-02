@@ -220,7 +220,9 @@ public class DbUtil {
         return true;
 
     }
-
+    public static void updatePassword(String user, String newPassword) throws UMException{
+        updatePassword(user, null, newPassword);
+    }
     /**
      * Update password in database see table
      *
@@ -233,24 +235,14 @@ public class DbUtil {
 
         Session session = null;
         try {
-            session = org.digijava.kernel.persistence.PersistenceManager.getSession();
-            
-            String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-            Query query = session.createQuery(queryString);
-            query.setParameter("email", user,StringType.INSTANCE);
-            
-            Iterator iter = query.iterate();
-            User iterUser = null;
-            while(iter.hasNext()) {
-                iterUser = (User) iter.next();
-            }
-//beginTransaction();
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
-            iterUser.updateLastModified();
-            session.save(iterUser);
+            session = PersistenceManager.getSession();
 
-            //tx.commit();
+            User userToUpdate = UserUtils.getUserByEmailAddress(user);
+            userToUpdate.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
+            userToUpdate.setSalt(new Long(newPassword.trim().hashCode()).toString());
+            userToUpdate.updateLastModified();
+            session.saveOrUpdate(userToUpdate);
+            session.getTransaction().commit();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
@@ -403,6 +395,7 @@ public class DbUtil {
             if(user.getUserLangPreferences()!=null){
                 UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
             }
+            session.flush();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
@@ -484,7 +477,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
-            String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
+            String queryString = "select ID from DG_USER where encode(digest(CAST(EMAIL as text) || CAST(id as text), 'sha1'), 'hex')=:hash and EMAIL_VERIFIED=false";
             Query query = session.createNativeQuery(queryString);
             query.setParameter("hash", id,StringType.INSTANCE);
             iduser = (BigInteger) query.uniqueResult();

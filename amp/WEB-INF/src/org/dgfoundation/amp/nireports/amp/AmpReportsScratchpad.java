@@ -145,6 +145,9 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
     }
 
     private void checkMeasurelessHierarchies(ReportSpecification spec) {
+        if (spec.getReportType() == ArConstants.INDICATOR_TYPE) {
+            return;
+        }
         List<String> amountColumns = AmpReportsSchema.getInstance().getAmountColumns();
         List<String> onlyMeasurelessHierarchies = AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES;
 

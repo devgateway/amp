@@ -1,11 +1,11 @@
 /**
- * 
+ *
  */
 package org.dgfoundation.amp.ar;
 
 /**
  * Constants for Measure Names. <b>
- * Values are pulled from amp_measures.measurename 
+ * Values are pulled from amp_measures.measurename
  * @author Nadejda Mandrescu
  *
  */
@@ -40,6 +40,7 @@ public class MeasureConstants {
     public static final String TRIANGULAR_SSC_COMMITMENTS = "Triangular SSC Commitments";
     public static final String TRIANGULAR_SSC_DISBURSEMENTS = "Triangular SSC Disbursements";
     public static final String UNDISBURSED_BALANCE = "Undisbursed Balance";
+    public static final String UNEXPENDITURED_BALANCE = "Unexpenditured Balance";
     public static final String REAL_PLANNED_DISBURSEMENTS = "Real Planned Disbursements";
     public static final String REAL_DISBURSEMENTS = "Real Disbursements";
     public static final String REAL_COMMITMENTS = "Real Commitments";
@@ -55,8 +56,8 @@ public class MeasureConstants {
     public static final String NATIONAL_FINANCIAL_REPORTING_PROCEDURES = "National Financial Reporting Procedures";
     public static final String NATIONAL_AUDITING_PROCEDURES = "National Auditing Procedures";
     public static final String NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = "National Procurement Systems";
-    
-     
+
+
     //type = D (?)
     public static final String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";
     //PPC is for internal NiReports use only
@@ -71,7 +72,7 @@ public class MeasureConstants {
     public static final String PIPELINE_MTEF_PROJECTIONS = "Pipeline " + ArConstants.MTEF_PROJECTION;
     public static final String PROJECTION_MTEF_PROJECTIONS = "Projection " + ArConstants.MTEF_PROJECTION;
     public static final String REAL_MTEFS = "Real MTEFs";
-    
+
     // AMP-27467 MTEF measures
     public static final String MTEF = "MTEF";
     public static final String REAL_MTEF = "Real MTEF";
@@ -79,7 +80,7 @@ public class MeasureConstants {
     public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
     public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
     public static final String AVERAGE_SIZE_DISBURSEMENTS = "Average Size of Disbursements";
-    
+
     //type = P (pledge)
     public static final String PLEDGES_ACTUAL_COMMITMENTS = "Actual Commitments";
     public static final String PLEDGES_ACTUAL_DISBURSEMENTS = "Actual Disbursements";
@@ -88,7 +89,7 @@ public class MeasureConstants {
     public static final String PLEDGES_PERCENTAGE_OF_DISBURSEMENT = "Percentage of Disbursement";
     public static final String PLEDGES_PLANNED_COMMITMENTS = "Planned Commitments";
     public static final String PLEDGES_PLANNED_DISBURSEMENTS = "Planned Disbursements";
-    
+
     //type unset
     public static final String EXECUTION_RATE = "Execution Rate";
     public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
@@ -96,8 +97,11 @@ public class MeasureConstants {
     public static final String OVER_DISBURSED = "Over Disbursed";
     public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
     public static final String AVERAGE_DISBURSEMENT_RATE = "Average Disbursement Rate";
-    
+
     public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
+
+    //type = I
+    public static final String INDICATOR_ACTUAL_VALUE = "Indicator Actual Value";
 
     public static final String ALWAYS_PRESENT = "Always Present";
 }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.menu.AmpView;
@@ -15,10 +16,12 @@ import org.digijava.kernel.ampapi.endpoints.common.AmpGeneralSettings;
 import org.digijava.kernel.ampapi.endpoints.common.CurrencySettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -138,6 +141,35 @@ public class SettingsUtils {
     }
 
     /**
+     * @return enabled program settings/schemes
+     */
+    private static SettingOptions getEnabledProgramSettings() {
+        List<AmpActivityProgramSettings> programSettings = ProgramUtil.getEnabledProgramSettings();
+        List<SettingOptions.Option> options = new ArrayList<>();
+
+        programSettings.forEach(programSetting -> {
+            String programName = programSetting.getName();
+
+            if (Objects.equals(programName, ColumnConstants.PRIMARY_PROGRAM)) {
+                programName = ColumnConstants.PRIMARY_PROGRAM_LEVEL_1;
+            } else if (Objects.equals(programName, ColumnConstants.SECONDARY_PROGRAM)) {
+                programName = ColumnConstants.SECONDARY_PROGRAM_LEVEL_1;
+            }else if (Objects.equals(programName, ColumnConstants.TERTIARY_PROGRAM)) {
+                programName = ColumnConstants.TERTIARY_PROGRAM_LEVEL_1;
+            }else if (Objects.equals(programName, ColumnConstants.NATIONAL_PLAN_OBJECTIVE)) {
+                programName = ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1;
+            }
+
+            SettingOptions.Option option = new SettingOptions.Option(programName, String.valueOf(programSetting.getName()),true);
+            options.add(option);
+        });
+
+        String defaultId = options.size() > 0 ? options.get(0).value : null;
+        return new SettingOptions(defaultId, options);
+    }
+
+
+    /**
      * Provides current report settings
      *
      * @param spec
@@ -191,15 +223,18 @@ public class SettingsUtils {
     }
 
     private static String getReportCalendarId(final ReportSettings settings) {
-        if (settings!=null) {
-            if (settings.getCurrencyCode() != null && settings.getCalendar()!=null) {
-                CalendarConverter calendarConverter = settings.getCalendar();
-                if (calendarConverter!=null) {
-                    Long id = calendarConverter.getIdentifier();
-                    return id!=null?id.toString():null;
-                }
-            }
-        }
+
+          if (settings!=null) {
+              if (settings.getCurrencyCode() != null && settings.getCalendar()!=null) {
+                  CalendarConverter calendarConverter = settings.getCalendar();
+                  if (calendarConverter!=null) {
+                      Long id = calendarConverter.getIdentifier();
+                      if (id!=null) {
+                        return id.toString();
+                      }
+                  }
+              }
+          }
 
         return null;
     }
@@ -231,6 +266,10 @@ public class SettingsUtils {
 
     static SettingField getFundingTypeField(Set<String> measures) {
         return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings(measures));
+    }
+
+    static SettingField getEnabledProgramField() {
+        return getSettingFieldForOptions(SettingsConstants.PROGRAM_SETTINGS, getEnabledProgramSettings());
     }
 
     static SettingField getReportAmountFormatField() {
@@ -440,6 +479,9 @@ public class SettingsUtils {
             settings.setShowActivityWorkspaces(true);
         }
         addDateRangeSettingsForDashboardsAndGis(settings);
+
+        settings.setIndicatorFilterBySector(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR));
+        settings.setIndicatorFilterByProgram(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM));
 
         return settings;
     }

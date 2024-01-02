@@ -263,7 +263,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, ColumnConstants.SECTOR_GROUP);
         put(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, ColumnConstants.REGIONAL_GROUP);
-        
+
         String[][] contacts = new String[][] {
             {"Donor Contact", ColumnConstants.DONOR_CONTACT_ORGANIZATION}, 
             {"Sector Ministry Contact", ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION},
@@ -395,6 +395,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Pledge Status", ColumnConstants.PLEDGE_STATUS);
             put("Pledges Titles", ColumnConstants.PLEDGES_TITLES);
             put("Primary Sector Code Official", ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL);
+            put("National Planning Objectives Code", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_CODE);
             put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
             put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
             put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);

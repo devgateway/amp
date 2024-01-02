@@ -66,7 +66,7 @@ public class User
     private Country country;
     private AmpCategoryValueLocations region;
     private HashMap sitePreferences;
-    private Set groups;
+    private Set<Group> groups= new HashSet<>();
     private HashMap siteContentLocales;
     private String address;
     private Image photo;
@@ -242,7 +242,7 @@ public class User
         return registeredThrough;
     }
 
-    public Set getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
@@ -306,7 +306,7 @@ public class User
         this.banned = banned;
     }
 
-    public void setGroups(Set groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 
@@ -541,52 +541,5 @@ public class User
         }
         
         return email;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "subject=" + subject +
-                ", firstNames='" + firstNames + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", emailVerified=" + emailVerified +
-                ", emailBouncing=" + emailBouncing +
-                ", noAlertsUntil=" + noAlertsUntil +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", passQuestion='" + passQuestion + '\'' +
-                ", passAnswer='" + passAnswer + '\'' +
-                ", url='" + url + '\'' +
-                ", banned=" + banned +
-                ", pledger=" + pledger +
-                ", pledgeSuperUser=" + pledgeSuperUser +
-                ", registeredThrough=" + registeredThrough +
-                ", interests=" + interests +
-                ", bio=" + bio +
-                ", portrait=" + portrait +
-                ", organizationName='" + organizationName + '\'' +
-                ", organizationType=" + organizationType +
-                ", referral='" + referral + '\'' +
-                ", country=" + country +
-                ", region=" + region +
-                ", sitePreferences=" + sitePreferences +
-                ", groups=" + groups +
-                ", siteContentLocales=" + siteContentLocales +
-                ", address='" + address + '\'' +
-                ", photo=" + photo +
-                ", userPreference=" + userPreference +
-                ", userLangPreferences=" + userLangPreferences +
-                ", registerLanguage=" + registerLanguage +
-                ", globalAdmin=" + globalAdmin +
-                ", organizationTypeOther='" + organizationTypeOther + '\'' +
-                ", contacts=" + contacts +
-                ", userExtension=" + userExtension +
-                ", exemptFromDataFreezing=" + exemptFromDataFreezing +
-                ", notificationEmailEnabled=" + notificationEmailEnabled +
-                ", notificationEmail='" + notificationEmail + '\'' +
-                ", assignedOrgs=" + assignedOrgs +
-                ", passwordChangedAt=" + passwordChangedAt +
-                '}';
     }
 }

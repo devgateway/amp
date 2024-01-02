@@ -11,12 +11,14 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+import java.io.Serializable;
+
 /**
  * @author Alex Gartner
  * This class should be extended by all other classes that are referencing documents from
  * Content Repository through their UUID  
  */
-public abstract class ObjectReferringDocument {
+public abstract class ObjectReferringDocument implements Serializable {
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.UUID, importable = true,
             interValidators = {

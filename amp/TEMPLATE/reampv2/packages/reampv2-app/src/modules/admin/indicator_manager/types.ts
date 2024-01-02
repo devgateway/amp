@@ -31,6 +31,7 @@ export interface IndicatorObjectType {
     base:         BaseAndTargetValueType | null;
     target:       BaseAndTargetValueType | null;
     programId:       string | null;
+    indicatorsCategory: number | null;
 }
 
 export interface ProgramObjectType {
@@ -95,9 +96,34 @@ export interface SettingsType {
     "gis-default-max-year-range":               string;
     "gis-default-min-date":                     null;
     "gis-default-min-year-range":               string;
+    "indicator-filter-by-program":              boolean;
+    "indicator-filter-by-sector":                boolean;
 }
 
 export interface EffectiveCurrency {
     id:   number;
     code: string;
+}
+
+export interface AmpCategoryClass {
+    usedCategories:             any[];
+    usedByCategories:           any[];
+    usedByCategorySingleSelect: null;
+    ordered:                    boolean;
+    multiselect:                boolean;
+    id:                         number;
+    name:                       string;
+    description:                string;
+    keyName:                    string;
+    isMultiselect:              boolean;
+    isOrdered:                  boolean;
+}
+
+export interface AmpCategoryValue {
+    id:               number;
+    value:            string;
+    index:            number;
+    deleted:          boolean;
+    defaultUsedValue: null;
+    ampCategoryClass: AmpCategoryClass;
 }

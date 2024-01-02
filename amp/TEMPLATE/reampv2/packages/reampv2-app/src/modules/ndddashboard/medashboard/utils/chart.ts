@@ -16,7 +16,7 @@ interface GaugeUtils {
 
 class ChartUtils {
     public static generateTickValues = (min: number, max: number,  step: number) => {
-        const tickValues = [];
+        const tickValues: number[] = [];
         for (let i = min; i <= max; i += step) {
             tickValues.push(i);
         }

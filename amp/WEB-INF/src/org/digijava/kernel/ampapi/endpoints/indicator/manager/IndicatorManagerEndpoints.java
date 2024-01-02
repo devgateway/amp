@@ -7,6 +7,7 @@ import org.digijava.kernel.ampapi.endpoints.gpi.ValidationUtils;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,7 +18,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Path("indicatorManager")
 @Api("indicatorManager")
@@ -89,6 +92,15 @@ public class IndicatorManagerEndpoints {
             + "nested with their program schemes used by indicators.")
     public List<ProgramSchemeDTO> getPrograms() {
         return new IndicatorManagerService().getProgramScheme();
+    }
+
+    @GET
+    @Path("/categoryValues")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getCategoryValues")
+    @ApiOperation(value = "Retrieve and provide a list of category values.")
+    public List<AmpCategoryValueDTO> getCategoryValues() {
+        return new IndicatorManagerService().getCategoryValues();
     }
 
 }

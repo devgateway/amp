@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { useLayoutEffect } from 'react';
-import { Modal, Row } from 'react-bootstrap';
+import { Modal, Row, } from 'react-bootstrap';
 import backdropStyles from './css/IndicatorModal.module.css';
 import styles from './css/ViewIndicatorModal.module.css';
 import { DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SectorObjectType } from '../../types';
@@ -22,7 +22,7 @@ const colorOptions = [
   { value: 'yellow', label: 'Yellow', color: '#FFC400' },
   { value: 'green', label: 'Green', color: '#36B37E' },
   { value: 'forest', label: 'Forest', color: '#00875A' },
-  { value: 'slate', label: 'Slate', color: '#253858' },
+  { value: 'slate', label: 'Slate', color: '#fffff2' },
   { value: 'silver', label: 'Silver', color: '#666666' },
 ];
 
@@ -128,11 +128,63 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                 <p>{translations["amp.indicatormanager:no-data"]}</p>
               }
             </Row>
+
+            <div>
+              <h4 className={styles.header_text}>{translations["amp.indicatormanager:base-values"]}</h4>
+              <Row className={styles.view_row}>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:original-base-value"]}</h5>
+                  <p className={styles.value}>{indicator.base?.originalValue ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:original-value-date"]}</h5>
+                  <p className={styles.value}>{indicator.base?.originalValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+              </Row>
+
+              <Row className={styles.view_row}>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:revised-value"]}</h5>
+                  <p className={styles.value}>{indicator.base?.revisedValue ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:revised-value-date"]}</h5>
+                  <p className={styles.value}>{indicator.base?.revisedValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+              </Row>
+            </div>
+
+            <div>
+              <h4 className={styles.header_text}>{translations["amp.indicatormanager:target-values"]}</h4>
+              <Row className={styles.view_row}>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:target-value"]}</h5>
+                  <p className={styles.value}>{indicator.target?.originalValue ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:target-value-date"]}</h5>
+                  <p className={styles.value}>{indicator.target?.originalValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+              </Row>
+
+              <Row className={styles.view_row}>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:revised-value"]}</h5>
+                  <p className={styles.value}>{indicator.target?.revisedValue ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+                <div className={styles.view_item}>
+                  <h5>{translations["amp.indicatormanager:revised-value-date"]}</h5>
+                  <p className={styles.value}>{indicator.target?.revisedValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
+                </div>
+              </Row>
+            </div>
+
+
           </div>
         </Modal.Body> :
-        <Modal.Body>
-          <h3>{translations["amp.indicatormanager:view-error"]}</h3>
-        </Modal.Body>
+          <Modal.Body>
+            <h3>{translations["amp.indicatormanager:view-error"]}</h3>
+          </Modal.Body>
       }
 
     </Modal>

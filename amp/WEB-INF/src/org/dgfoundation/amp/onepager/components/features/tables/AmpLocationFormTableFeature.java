@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -20,7 +21,9 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
@@ -181,15 +184,18 @@ public class AmpLocationFormTableFeature extends
             protected void populateItem(final ListItem<AmpActivityLocation> item) {
                 boolean isCountryNationalAndMultiCountry = false;
 
-                if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
+                if (implementationLevel.getChoiceModel().getObject() != null &&
+                        !implementationLevel.getChoiceModel().getObject().isEmpty() &&
+                        CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
                         equalsCategoryValue(implementationLevel.getChoiceModel().getObject().iterator().next()) &&
+                        !implementationLocation.getChoiceModel().getObject().isEmpty() &&
                         CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.
                                 equalsCategoryValue(implementationLocation.getChoiceModel().getObject().iterator().next())
                         && DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
                     isCountryNationalAndMultiCountry = true;
                     disablePercentagesForInternational.setObject(true);
                     searchLocations.setVisibilityAllowed(false);
-                }else{
+                } else {
                     disablePercentagesForInternational.setObject(false);
                     searchLocations.setVisibilityAllowed(true);
                 }
@@ -297,6 +303,15 @@ public class AmpLocationFormTableFeature extends
                     @Override
                     public void onSelect(AjaxRequestTarget target,
                                          AmpCategoryValueLocations choice) {
+                        //check for duplicate choice
+                        for (AmpActivityLocation loc : setModel.getObject()) {
+                            if (loc.getLocation().getName().equals(choice.getName()) && loc.getLocation().getIso().equals(choice.getIso())) {
+                                String error = TranslatorUtil.getTranslatedText("The selected location is already added.");
+                                String alert = "alert('" + error + "');";
+                                target.appendJavaScript(alert);
+                                return;
+                            }
+                        }
                         //if national, country and multicountry then disable percentage
                         if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
                                 equalsCategoryValue(implementationLevel.getChoiceModel().getObject().iterator().next()) &&
@@ -307,19 +322,22 @@ public class AmpLocationFormTableFeature extends
                             //AmpLocationFormTableFeature.this.getSearchLocations().changeEnabled(false, target);
                             AmpLocationFormTableFeature.this.getSearchLocations().setVisibilityAllowed(false);
                             target.add(AmpLocationFormTableFeature.this.getSearchLocations());
-                        }else{
+                        } else {
                             disablePercentagesForInternational.setObject(false);
                         }
-                        locationSelected(choice, am, disablePercentagesForInternational);
+                        locationSelected(choice, am, disablePercentagesForInternational, regionalFundingFeature);
 
                         // toggleHeading(target, setModel.getObject());
                         target.add(list.getParent());
+
                         regionalFundingFeature.getList().removeAll();
 
                         if (regionalFundingFeature.isVisibleInHierarchy()) {
                             target.add(regionalFundingFeature);
                             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
                         }
+
+                        send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
                         reloadValidationFields(target);
                         list.removeAll();
                     }
@@ -355,11 +373,11 @@ public class AmpLocationFormTableFeature extends
         add(searchLocations);
     }
 
-    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational) {
-        locationSelected(choice, am, disablePercentagesForInternational, false);
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, AmpRegionalFundingFormSectionFeature regionalFundingFeature) {
+        locationSelected(choice, am, disablePercentagesForInternational, regionalFundingFeature, false);
     }
 
-    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, boolean isCountryNational) {
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, AmpRegionalFundingFormSectionFeature regionalFundingFeature, boolean isCountryNational) {
         AmpActivityLocation activityLocation = new AmpActivityLocation();
 
         activityLocation.setLocation(choice);
@@ -393,6 +411,8 @@ public class AmpLocationFormTableFeature extends
                 }
             }
         }
+        regionalFundingFeature.getMeFormSection().updateAmpLocationModel(activityLocation);
+
         set.add(activityLocation);
     }
 
@@ -407,7 +427,6 @@ public class AmpLocationFormTableFeature extends
         return percentageValidationField;
     }
 
-    //expose searchLocations for testing
     public AmpAutocompleteFieldPanel<AmpCategoryValueLocations> getSearchLocations() {
         return searchLocations;
     }

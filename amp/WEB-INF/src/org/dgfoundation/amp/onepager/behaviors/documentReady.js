@@ -242,6 +242,41 @@ function switchTabs(lastIndex) {
 	}
 }
 
+function indicatorTabs(lastIndex) {
+	if (isTabView) {
+		$('div[data-is_location_tab=true]').each(function(index) {
+			$(this).appendTo("#theLocationIndicatorContent");
+		});
+
+		var loader = new YAHOO.util.YUILoader({
+			base : "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/",
+			require : [ "tabview" ],
+			onSuccess : function() {
+				var myFundingTabs = new YAHOO.widget.TabView("indicatorTabs");
+				if (lastIndex == -1) {// if its -1 we go the the last one
+					var newIndex = myFundingTabs.get('tabs').length - 1;
+					myFundingTabs
+						.selectTab(myFundingTabs.get('tabs').length - 1);
+				} else {
+					if (lastIndex >= 0) { // if its grater or equals than 0 we
+						// focus on that tab
+						myFundingTabs.selectTab(lastIndex);
+						$('div[data-is_location_tab=true]').find(
+							".organization_box_content").last().find(
+							".collapsable").first().show();
+					} else {
+						// if no index is provided we focuse on the first tab
+						if (myFundingTabs.get('tabs').length > 0) {
+							myFundingTabs.selectTab(0);
+						}
+					}
+				}
+			}
+		});
+		loader.insert();
+	}
+}
+
 function getLeftPositionOfRightMenu(isAbsolutePosition) {
 	var contentMarginLeft = $('#stepHead').offset().left;
 	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
@@ -284,6 +319,7 @@ $(document).ready(function(){
 	pageLeaveConfirmationEnabler();
 	if(isTabView){
 		switchTabs();
+		indicatorTabs();
 	}
 
   setOpentip();

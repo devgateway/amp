@@ -129,7 +129,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             donorFundingSection.updateFundingGroups(ampOrgRole, target);
             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
             if (donorFundingSection.isTabsView()) {
-                target.appendJavaScript("switchTabs();");
+                target.appendJavaScript("indicatorTabs();");
             }
             target.add(donorFundingSection);
         }

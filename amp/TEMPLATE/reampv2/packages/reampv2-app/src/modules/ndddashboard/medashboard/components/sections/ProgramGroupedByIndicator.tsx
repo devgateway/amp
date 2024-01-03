@@ -210,6 +210,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                                         IndicatorSeparator: () => null,
                                     }}
                                     styles={{
+                                        //@ts-ignore
                                         control: (base) => ({
                                             ...base,
                                             boxShadow: 'none',
@@ -217,11 +218,13 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                                             display: 'flex',
                                             justifyContent: 'space-between',
                                         }),
+                                        // @ts-ignore
                                         valueContainer: (base) => ({
                                             ...base,
                                             paddingLeft: 20,
                                             justifyContent: 'flex-end',
                                         }),
+                                        // @ts-ignore
                                         singleValue: (base) => ({
                                             ...base,
                                             color: '#116282',

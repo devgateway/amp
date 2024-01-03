@@ -8,7 +8,7 @@ class NDDDashboardRouter extends Component {
     return (
       <Routes>
         <Route path="/" exact element={<NDDDashboardHome />} />
-        <Route path="/:id" component={<NDDDashboardHome />} />
+        <Route path=":id" component={<NDDDashboardHome />} />
       </Routes>
     );
   }

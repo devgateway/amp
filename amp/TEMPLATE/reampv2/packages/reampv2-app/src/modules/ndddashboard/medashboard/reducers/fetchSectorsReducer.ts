@@ -6,13 +6,13 @@ import { REST_SECTORS } from '../../utils/constants';
 const REDUCER_NAME = 'sectors';
 
 type SectorInitialStateType = {
-    sectors: SectorObjectType[];
+    data: SectorObjectType[];
     loading: boolean;
     error: any;
 }
 
 const initialState: SectorInitialStateType = {
-    sectors: [],
+    data: [],
     loading: false,
     error: null,
 }
@@ -44,9 +44,9 @@ const fetchSectorSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchSectors.fulfilled, (state, action) => {
-            state.sectors = [];
+            state.data = [];
             state.loading = false;
-            state.sectors = action.payload;
+            state.data = action.payload;
         });
         builder.addCase(fetchSectors.rejected, (state, action) => {
             state.loading = false;

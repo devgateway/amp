@@ -148,7 +148,7 @@ module.exports = Backbone.Collection
   toGeoJSON: function() {	
     var featureList = this.chain()
 	 .filter(function(model) {
-	     return model.get('activity') !== null && !_.isArray(model.get('activity'));
+	     return model.get('activityid') !== null && !_.isArray(model.get('activityid'));
 	  })
 	  .map(function(model) {    	
       return {
@@ -179,11 +179,11 @@ module.exports = Backbone.Collection
       // TODO: this is running twice on structures load?!?
       var orgSites = self.chain()
       .filter(function(structure) {
-    	     return structure.get('activity') !== null && !_.isArray(structure.get('activity'));
+    	     return structure.get('activityid') !== null && !_.isArray(structure.get('activityid'));
     	 })
         .groupBy(function(site) {
         	
-          var activity = site.get('activity');          
+          var activity = site.get('activityid');          
           var filterVerticalText = (filterVertical === 'Primary Sector' ? 'Sectors' : 'Donors');
 
           // TODO: Choosing a vertical will need to be configurable from drop down..
@@ -219,19 +219,19 @@ module.exports = Backbone.Collection
         })
         .map(function(sites, orgId) {
           var code = -1;
-          if (_.has(sites[0].get('activity').get('matchesFilters'), filterVertical)) {
-            if (sites[0].get('activity').get('matchesFilters')[filterVertical] === null) {
+          if (_.has(sites[0].get('activityid').get('matchesFilters'), filterVertical)) {
+            if (sites[0].get('activityid').get('matchesFilters')[filterVertical] === null) {
               //no value for sector/donor
               code = '1';
-            } else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
-                        sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
+            } else if (sites[0].get('activityid').get('matchesFilters')[filterVertical][0].get &&
+                        sites[0].get('activityid').get('matchesFilters')[filterVertical].length > 1) {
               code = '0';
             } else {
-              if ((sites[0].get('activity').get('matchesFilters')[filterVertical][0] instanceof Object) && 
-            		  sites[0].get('activity').get('matchesFilters')[filterVertical][0].get) {
-                code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
+              if ((sites[0].get('activityid').get('matchesFilters')[filterVertical][0] instanceof Object) && 
+            		  sites[0].get('activityid').get('matchesFilters')[filterVertical][0].get) {
+                code = sites[0].get('activityid').get('matchesFilters')[filterVertical][0].get('code');
               } else {
-                code = sites[0].get('activity').get('matchesFilters')[filterVertical][0];
+                code = sites[0].get('activityid').get('matchesFilters')[filterVertical][0];
               }
             }
           }

@@ -103,26 +103,26 @@ module.exports = Backbone.Collection
 
       // Do actual join
       self.each(function(structure) {  // TODO: this is currently expensive, and can be optimized.
-        var activity = structure.get('activityid');
+        var activity = structure.get('activity');
 
         // activity.attributes is a dirty way of checking if already a model...
         // if not joined yet, then join structure to parent activity.
-        
+
         if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
             return model.id === structure.get('activityZero');
           });
-          
+
           if (match) {
         	  match.joinFilters();
               structure.set('activity', match);
-          } 
-          
+          }
+
         } else if (activity.attributes) {
         	activity.joinFilters();
         }
-        
-        
+
+
       });
 
       // all activites joined filters
@@ -145,12 +145,12 @@ module.exports = Backbone.Collection
       .value();
   },
 
-  toGeoJSON: function() {	
+  toGeoJSON: function() {
     var featureList = this.chain()
 	 .filter(function(model) {
-	     return model.get('activityid') !== null && !_.isArray(model.get('activityid'));
+	     return model.get('activity') !== null && !_.isArray(model.get('activity'));
 	  })
-	  .map(function(model) {    	
+	  .map(function(model) {
       return {
         type: 'Feature',
         geometry: {
@@ -159,9 +159,9 @@ module.exports = Backbone.Collection
         },
         properties: model.attributes  // not toJSON() for performance
       };
-      
+
     }).value();
-    
+
     return {
       type: 'FeatureCollection',
       features: featureList
@@ -179,11 +179,11 @@ module.exports = Backbone.Collection
       // TODO: this is running twice on structures load?!?
       var orgSites = self.chain()
       .filter(function(structure) {
-    	     return structure.get('activityid') !== null && !_.isArray(structure.get('activityid'));
+    	     return structure.get('activity') !== null && !_.isArray(structure.get('activity'));
     	 })
         .groupBy(function(site) {
-        	
-          var activity = site.get('activityid');          
+
+          var activity = site.get('activity');
           var filterVerticalText = (filterVertical === 'Primary Sector' ? 'Sectors' : 'Donors');
 
           // TODO: Choosing a vertical will need to be configurable from drop down..
@@ -219,19 +219,19 @@ module.exports = Backbone.Collection
         })
         .map(function(sites, orgId) {
           var code = -1;
-          if (_.has(sites[0].get('activityid').get('matchesFilters'), filterVertical)) {
-            if (sites[0].get('activityid').get('matchesFilters')[filterVertical] === null) {
+          if (_.has(sites[0].get('activity').get('matchesFilters'), filterVertical)) {
+            if (sites[0].get('activity').get('matchesFilters')[filterVertical] === null) {
               //no value for sector/donor
               code = '1';
-            } else if (sites[0].get('activityid').get('matchesFilters')[filterVertical][0].get &&
-                        sites[0].get('activityid').get('matchesFilters')[filterVertical].length > 1) {
+            } else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
+                        sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
               code = '0';
             } else {
-              if ((sites[0].get('activityid').get('matchesFilters')[filterVertical][0] instanceof Object) && 
-            		  sites[0].get('activityid').get('matchesFilters')[filterVertical][0].get) {
-                code = sites[0].get('activityid').get('matchesFilters')[filterVertical][0].get('code');
+              if ((sites[0].get('activity').get('matchesFilters')[filterVertical][0] instanceof Object) &&
+            		  sites[0].get('activity').get('matchesFilters')[filterVertical][0].get) {
+                code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
               } else {
-                code = sites[0].get('activityid').get('matchesFilters')[filterVertical][0];
+                code = sites[0].get('activity').get('matchesFilters')[filterVertical][0];
               }
             }
           }

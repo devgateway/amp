@@ -351,7 +351,7 @@ public class LocationService {
             fgj.geometry = getGeometry(structure);
             fgj.id = structure.getAmpStructureId().toString();
 
-            fgj.properties.put("admName", new TextNode(StringEscapeUtils.escapeHtml(structure.getTitle())));
+            fgj.properties.put("title", new TextNode(StringEscapeUtils.escapeHtml(structure.getTitle())));
             if (structure.getDescription() != null && !structure.getDescription().trim().isEmpty()) {
                 fgj.properties.put("description", new TextNode(
                         StringEscapeUtils.escapeHtml(structure.getDescription())));

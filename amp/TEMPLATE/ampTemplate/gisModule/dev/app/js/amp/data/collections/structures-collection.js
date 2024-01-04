@@ -103,7 +103,7 @@ module.exports = Backbone.Collection
 
       // Do actual join
       self.each(function(structure) {  // TODO: this is currently expensive, and can be optimized.
-        var activity = structure.get('activity');
+        var activity = structure.get('activityid');
 
         // activity.attributes is a dirty way of checking if already a model...
         // if not joined yet, then join structure to parent activity.

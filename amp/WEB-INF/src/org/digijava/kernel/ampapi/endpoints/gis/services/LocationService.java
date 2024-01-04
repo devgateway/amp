@@ -364,7 +364,7 @@ public class LocationService {
                 }
             }
 
-            fgj.properties.put("activityid", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
+            fgj.properties.put("activity", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "

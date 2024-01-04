@@ -50,7 +50,7 @@
   "amp.ndd.dashboard:me-target": "Target",
   "amp.ndd.dashboard:me-current": "Current",
   "amp.ndd.dashboard:me-actual": "Actual",
-  "amp.ndd.dashboard:me-no-mpc": "No Available Prorgam Configuration",
+  "amp.ndd.dashboard:me-no-mpc": "No Available Program Configuration",
   "amp.ndd.dashboard:me-no-programs": "No Programs Available",
   "amp.ndd.dashboard:me-no-indicator": "No Indicators Available",
   "amp.ndd.dashboard:me-no-data": "No Data Available"

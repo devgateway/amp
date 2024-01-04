@@ -1,4 +1,5 @@
 import translations from '../config/initialTranslations.json';
+import {SectorObjectType} from "../../admin/indicator_manager/types";
 
 export type DefaultTranslations = typeof translations;
 
@@ -78,4 +79,22 @@ export interface LineChartData {
         x: string;
         y: number;
     } [];
+}
+
+export interface SectorClassifcation {
+    id:           number;
+    name:         string;
+    description:  string | null;
+    multisector:  boolean;
+    primary:      boolean;
+    sectorScheme: SectorScheme;
+}
+
+export interface SectorScheme {
+    ampSecSchemeId:  number;
+    secSchemeCode:   string;
+    secSchemeName:   string;
+    showInRMFilters: boolean;
+    used:            boolean;
+    children: SectorObjectType[];
 }

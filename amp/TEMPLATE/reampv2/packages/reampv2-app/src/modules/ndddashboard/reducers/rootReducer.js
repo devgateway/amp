@@ -15,6 +15,7 @@ import fetchIndicatorsReducer from '../medashboard/reducers/fetchIndicatorsReduc
 import indicatorReportReducer from '../medashboard/reducers/fetchIndicatorReportReducer';
 import fetchFmReducer from "../medashboard/reducers/fetchFmReducer";
 import fetchSectorsReducer from '../medashboard/reducers/fetchSectorsReducer';
+import fetchSectorSchemesReducer from '../medashboard/reducers/fetchSectorSchemesReducer';
 
 export default combineReducers({
   startupReducer,
@@ -30,5 +31,6 @@ export default combineReducers({
   fetchIndicatorsReducer,
   indicatorReportReducer,
   fetchFmReducer,
-  fetchSectorsReducer
+  fetchSectorsReducer,
+  fetchSectorSchemesReducer
 });

@@ -24,17 +24,13 @@ import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.DashboardUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -42,14 +38,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -207,6 +196,25 @@ public class MeService {
         }
 
         return data;
+    }
+
+    public List<SectorClassificationDTO> getSectorClassification () {
+        List<SectorClassificationDTO> sectorClassificationDTOs = new ArrayList<>();
+        List<AmpClassificationConfiguration> sectorClassificationConfig = SectorUtil.getAllClassificationConfigs()
+                .stream()
+                .filter(config -> config.getClassification() != null)
+                .collect(Collectors.toList());
+
+        for (AmpClassificationConfiguration config : sectorClassificationConfig) {
+            AmpSectorScheme scheme = config.getClassification();
+            List<AmpSector> schemeSectors = (List<AmpSector>) SectorUtil.getSectorLevel1(Math.toIntExact(scheme.getAmpSecSchemeId()));
+            SectorDTO[] children = schemeSectors.stream().map(SectorDTO::new).toArray(SectorDTO[]::new);
+
+            SectorSchemeDTO schemeDTO = new SectorSchemeDTO(scheme, children);
+            sectorClassificationDTOs.add(new SectorClassificationDTO(config, schemeDTO));
+        }
+
+        return sectorClassificationDTOs;
     }
 
     private GeneratedReport runIndicatorReport(SettingsAndFiltersParameters settingsAndFilters) {

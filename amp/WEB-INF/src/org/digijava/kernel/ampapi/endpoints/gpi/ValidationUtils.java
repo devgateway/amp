@@ -32,6 +32,7 @@ public final class ValidationUtils {
     }
 
     public static void valuesValid(Collection possibleValues, Object value) {
+        if (possibleValues == null) { throw new IllegalArgumentException("possibleValues cannot be null"); }
         for (Object possibleValue : possibleValues) {
             if (possibleValue.equals(value)) {
                 return;

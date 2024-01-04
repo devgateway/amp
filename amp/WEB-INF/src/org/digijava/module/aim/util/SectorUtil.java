@@ -1262,7 +1262,6 @@ public class SectorUtil {
             queryString = "select asm from " + AmpSectorMapping.class.getName() + " asm";
             qry = session.createQuery(queryString);
             col = qry.list();
-            session.flush();
         } catch (Exception ex) {
             logger.error("Unable to get sectors mappings from database " + ex.getMessage());
             ex.printStackTrace(System.out);

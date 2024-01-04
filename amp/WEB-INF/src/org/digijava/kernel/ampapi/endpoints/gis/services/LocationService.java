@@ -351,7 +351,7 @@ public class LocationService {
             fgj.geometry = getGeometry(structure);
             fgj.id = structure.getAmpStructureId().toString();
 
-            fgj.properties.put("title", new TextNode(StringEscapeUtils.escapeHtml(structure.getTitle())));
+            fgj.properties.put("admName", new TextNode(StringEscapeUtils.escapeHtml(structure.getTitle())));
             if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
                 fgj.properties.put("description", new TextNode(
                         StringEscapeUtils.escapeHtml(structure.getDescription())));
@@ -364,7 +364,7 @@ public class LocationService {
                 }
             }
 
-            fgj.properties.put("activity", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
+            fgj.properties.put("activityid", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Form } from 'react-bootstrap';
 import styles from './css/Styles.module.css';
 import Gauge from '../charts/GaugesChart';
-import BarChart from '../charts/BarChart';
+import BarChart, {DataType} from '../charts/BarChart';
 import LineChart from '../charts/LineChart';
 import Select from 'react-select';
 import { ComponentProps } from '../../types';
@@ -36,6 +36,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);
     const [yearCount, setYearCount] = useState<number>(5);
+    const [reportData, setReportData] = useState<DataType[]>();
 
     const calculateProgressValue = () => {
         if (indicatorReportReducer.data) {
@@ -77,6 +78,11 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
         dispatch(fetchIndicatorReport({ filters, id: selectedOption, yearCount, settings }));
         calculateProgressValue();
     }
+
+    useEffect(() => {
+        const generatedReport = ChartUtils.generateValuesDataset(indicatorReportReducer.data);
+        setReportData(generatedReport);
+    }, [indicatorReportReducer.data]);
 
 
     return (
@@ -164,10 +170,13 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         <div style={{
                             height: 250
                         }}>
-                            <BarChart
-                               translations={translations}
-                               data={indicatorReportReducer.data}
-                               title={translations["amp.ndd.dashboard:me-indicator-report"]}/>
+                            {reportData && (
+                                <BarChart
+                                    translations={translations}
+                                    data={reportData}
+                                    title={translations["amp.ndd.dashboard:me-indicator-report"]}/>
+                            )}
+
                         </div>
                     </Col>
                 </Row>

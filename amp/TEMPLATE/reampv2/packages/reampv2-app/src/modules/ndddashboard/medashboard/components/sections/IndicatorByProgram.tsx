@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import styles from './css/Styles.module.css';
 import Gauge from '../charts/GaugesChart';
-import BarChart from '../charts/BarChart';
-import { ComponentProps, ProgramConfig, ProgramConfigChild, YearValues } from '../../types';
+import BarChart, {DataType} from '../charts/BarChart';
+import {ComponentProps, DefaultTranslations, ProgramConfig, ProgramConfigChild, YearValues} from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProgramReport } from '../../reducers/fetchProgramReportReducer';
 import ChartUtils from '../../utils/chart';
@@ -38,6 +38,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     const [progressValue, setProgressValue] = React.useState<number>(0);
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [report, setReport] = React.useState<YearValues[] | null>( programReportReducer.data);
+    const [chartData, setChartData] = React.useState<DataType[] | null>(null);
 
     if (!selectedConfiguration && programConfiguration) {
         setSelectedConfiguration(programConfiguration[0].ampProgramSettingsId);
@@ -63,6 +64,14 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);
+
+    useEffect(() => {
+        const generateReport = ChartUtils.generateValuesDataset({
+            data: report,
+            translations
+        });
+        setChartData(generateReport);
+    }, []);
 
     return (
         <div>
@@ -153,10 +162,12 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         <div style={{
                             height: 250
                         }}>
-                            <BarChart
-                                translations={translations}
-                                data={report ? report : []}
-                                title={translations['amp.ndd.dashboard:me-program-progress']} />
+                            {chartData && (
+                                <BarChart
+                                    translations={translations}
+                                    data={chartData}
+                                    title={translations['amp.ndd.dashboard:me-program-progress']} />
+                            )}
                         </div>
                     </Col>
                 </Row>

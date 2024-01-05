@@ -98,3 +98,22 @@ export interface SectorScheme {
     used:            boolean;
     children: SectorObjectType[];
 }
+
+export interface SectorReport {
+    values:         SectorReportValue[];
+    total:          number;
+    sumarizedTotal: string;
+    currency:       string;
+    maxLimit:       number;
+    totalPositive:  number;
+    name:           string;
+    title:          string;
+    source:         null;
+}
+
+export interface SectorReportValue {
+    id:              number;
+    name:            string;
+    amount:          number;
+    formattedAmount: string;
+}

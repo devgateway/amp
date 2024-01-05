@@ -1,4 +1,4 @@
-import {ActualValue, LineChartData, YearValues} from "../types";
+import {ActualValue, DefaultTranslations, LineChartData, YearValues} from "../types";
 import {printChart} from "../../../sscdashboard/utils/PrintUtils";
 import {
     BASE_VALUE,
@@ -7,11 +7,18 @@ import {
     TARGET_VALUE,
     TARGET_VALUE_COLOR
 } from "../../utils/constants";
+import React from "react";
+import {DataType} from "../components/charts/BarChart";
 
 interface GaugeUtils {
     baseValue: number,
     actualValue: number,
     targetValue: number
+}
+
+interface ValuesDataset {
+    data: any,
+    translations: DefaultTranslations
 }
 
 class ChartUtils {
@@ -65,8 +72,8 @@ class ChartUtils {
     }
 
     public static generateLineChartValues = (data: YearValues): LineChartData [] => {
-        const { actualValues, targetValue, baseValue } = data;
-        const reportlength = actualValues.length >= 5 ? actualValues.length: DEFAULT_REPORTING_PERIOD;
+        const {actualValues, targetValue, baseValue} = data;
+        const reportlength = actualValues.length >= 5 ? actualValues.length : DEFAULT_REPORTING_PERIOD;
 
         const baseValueArrayWithYear = new Array(reportlength).fill(baseValue).map((value, index) => {
             return {
@@ -108,6 +115,63 @@ class ChartUtils {
                 data: targetValueArrayWithYear
             }
         ];
+    }
+
+    public static generateValuesDataset = (props: ValuesDataset) => {
+        const {data, translations } = props;
+
+        const finalDataSet: DataType [] = [];
+
+        if (data) {
+            let aggregateValue = {
+                baseValue: 0,
+                targetValue: 0,
+                actualValue: 0
+            };
+
+            if (Array.isArray(data)) {
+                aggregateValue = ChartUtils.computeAggregateValues(data);
+            } else {
+                aggregateValue = ChartUtils.computeAggregateValues([data]);
+            }
+
+            const year = new Date().getFullYear();
+            if (aggregateValue.baseValue) {
+                const baseData = {
+                    id: translations['amp.ndd.dashboard:me-baseline'],
+                    value: aggregateValue.baseValue,
+                    label: `${translations['amp.ndd.dashboard:me-baseline']} ${year}`,
+                    color: BASE_VALUE_COLOR
+                }
+
+                finalDataSet.push(baseData);
+            }
+
+            if (aggregateValue.actualValue) {
+                const actualData = {
+                    id: translations['amp.ndd.dashboard:me-current'],
+                    value: aggregateValue.actualValue,
+                    label: `${translations['amp.ndd.dashboard:me-current']} ${year}`,
+                    color: CURRENT_VALUE_COLOR
+                };
+
+                finalDataSet.push(actualData);
+            }
+
+            if (aggregateValue.targetValue) {
+                const targetData = {
+                    id: translations['amp.ndd.dashboard:me-target'],
+                    value: aggregateValue.targetValue,
+                    label: `${translations['amp.ndd.dashboard:me-target']} ${year}`,
+                    color: TARGET_VALUE_COLOR
+                };
+
+                finalDataSet.push(targetData);
+            }
+
+        }
+
+        return finalDataSet;
     }
 }
 

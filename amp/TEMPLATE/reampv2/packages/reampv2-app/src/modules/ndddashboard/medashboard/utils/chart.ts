@@ -1,11 +1,12 @@
-import {ActualValue, DefaultTranslations, LineChartData, YearValues} from "../types";
+import {ActualValue, DefaultTranslations, LineChartData, SectorReport, YearValues} from "../types";
 import {printChart} from "../../../sscdashboard/utils/PrintUtils";
 import {
     BASE_VALUE,
     BASE_VALUE_COLOR, CURRENT_VALUE, CURRENT_VALUE_COLOR,
     DEFAULT_REPORTING_PERIOD,
     TARGET_VALUE,
-    TARGET_VALUE_COLOR
+    TARGET_VALUE_COLOR,
+    SECTOR_COLOR
 } from "../../utils/constants";
 import React from "react";
 import {DataType} from "../components/charts/BarChart";
@@ -18,6 +19,11 @@ interface GaugeUtils {
 
 interface ValuesDataset {
     data: any,
+    translations: DefaultTranslations
+}
+
+interface SectorDataset {
+    data: SectorReport,
     translations: DefaultTranslations
 }
 
@@ -173,6 +179,28 @@ class ChartUtils {
 
         return finalDataSet;
     }
+
+    public static generateSectorsReport = (props: SectorDataset) => {
+        const {data, translations} = props;
+
+        const processedReport: DataType [] = [];
+
+        if (data) {
+            data.values.map((sector, index) => {
+                const sectorData = {
+                    id: sector.id.toString(),
+                    value: sector.id,
+                    label: sector.name,
+                    color: SECTOR_COLOR[index]
+                };
+
+                processedReport.push(sectorData);
+            })
+        }
+
+        return processedReport;
+
+    };
 }
 
 export default ChartUtils;

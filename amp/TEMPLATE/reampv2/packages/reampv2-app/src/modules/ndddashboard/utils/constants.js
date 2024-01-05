@@ -85,3 +85,11 @@ export const REST_PROGRAM_PROGRESS_REPORT = '/rest/dashboard/me/programReport';
 export const REST_INDICATOR_REPORT = '/rest/dashboard/me/indicatorReport'
 
 export const DEFAULT_REPORTING_PERIOD = 5;
+
+export const SECTOR_COLOR = [
+  '#4294F7',
+  '#F0A93E',
+  '#79A43E',
+  '#8856B6',
+  '#DA524B'
+];

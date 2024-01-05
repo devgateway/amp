@@ -287,7 +287,7 @@ public final class ActivityInterchangeUtils {
         Map<String, Object> activity = getActivity(projectId, null);
 
         // Add actual indicator values in indicators activity, but we can also add base and target values
-        addExtraFieldsToActivity(activity);
+        addExtraFieldsToActivity(activity, projectId);
         if (!isOfflineClientCall
                 && FeaturesUtil.isVisibleModule("Hide Documents if No Donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
@@ -295,16 +295,8 @@ public final class ActivityInterchangeUtils {
             return activity;
     }
 
-    private static void addExtraFieldsToActivity(Map<String, Object> activityFields){
+    private static void addExtraFieldsToActivity(Map<String, Object> activityFields, Long projectId){
         if(activityFields != null){
-            for (Map.Entry<String, Object> field : activityFields.entrySet()) {
-                String fieldName = field.getKey();
-                Object values = field.getValue();
-
-                if (fieldName.contains("indicators")){
-
-                }
-            }
             Optional<Object> indicatorsObject = activityFields.entrySet().stream()
                     .filter(entry -> "indicators".equals(entry.getKey()))
                     .map(Map.Entry::getValue)
@@ -316,14 +308,41 @@ public final class ActivityInterchangeUtils {
                     List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
                     for (Map<String, Object> indicator : indicatorsList) {
                         // Add the "actual" key with its array values to the indicator object
-                        System.out.println("Element in 'indicators': " + indicator);
                         List<Object> actualValues = new ArrayList<>();
-                        indicator.put("actual", actualValues);
-                        System.out.println("Element in 'indicators': " + indicator);
-                    }
 
-                    // Update the parent activityFields map with the modified indicators object
-//                    activityFields.put("indicators", indicatorsList);
+                        // Create an amp indicator class
+                        AmpIndicator ind = new AmpIndicator();
+                        ind.setIndicatorId((Long) indicator.get("indicator"));
+
+                        IndicatorActivity result = null;
+                        AmpActivityVersion activity = null;
+
+                        try {
+                            activity = ActivityUtil.loadActivity(projectId);
+                        } catch (DgException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                        try {
+                            result = IndicatorUtil.findActivityIndicatorConnection(activity, ind);
+                        } catch (DgException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        if(result != null && result.getValues() != null){
+                            for(AmpIndicatorValue indicatorValue: result.getValues()){
+                                actualValues.add(new HashMap<String, Object>() {{
+                                    put("comment", indicatorValue.getComment());
+                                    Date valueDate = indicatorValue.getValueDate();
+                                    put("date", valueDate);
+                                    put("value", indicatorValue.getValue());
+                                }});
+                            }
+                        }
+
+                        indicator.put("actual", actualValues);
+                    }
                 }
             });
         }

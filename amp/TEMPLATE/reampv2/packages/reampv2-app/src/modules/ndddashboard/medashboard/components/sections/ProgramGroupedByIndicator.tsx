@@ -80,7 +80,10 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
     }
 
     useEffect(() => {
-        const generatedReport = ChartUtils.generateValuesDataset(indicatorReportReducer.data);
+        const generatedReport = ChartUtils.generateValuesDataset({
+            data: indicatorReportReducer.data,
+            translations
+        });
         setReportData(generatedReport);
     }, [indicatorReportReducer.data]);
 

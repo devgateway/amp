@@ -117,3 +117,8 @@ export interface SectorReportValue {
     amount:          number;
     formattedAmount: string;
 }
+
+export enum ClassificationType {
+    PRIMARY = 'Primary',
+    SECONDARY = 'Secondary'
+}

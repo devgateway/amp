@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {Col, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch } from "react-redux";
 import styles from './css/Styles.module.css';
 import {SectorClassifcation, SectorScheme} from "../../types";
 import {SectorObjectType} from "../../../../admin/indicator_manager/types";
-import Gauge from "../charts/GaugesChart";
-import BarChart from "../charts/BarChart";
+import BarChart, {DataType} from "../charts/BarChart";
+import {fetchSectorReport} from "../../reducers/fetchSectorsReportReducer";
 
 interface SectorProgressProps {
     translations?: any,
@@ -17,6 +17,10 @@ interface SectorProgressProps {
 const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     const { translations, filters, settings } = props;
 
+    const dispatch = useDispatch();
+
+    const sectorReportReducer = useSelector((state: any) => state.fetchSectorReportReducer);
+
     const [selectedSectorClassification, setSelectedSectorClassification] = React.useState<number | null>(null);
     const [selectedSectorScheme, setSelectedSectorScheme] = React.useState<any>(null);
     const [selectedSector, setSelectedSector] = React.useState<number | null>(null);
@@ -25,6 +29,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
 
     const sectorClassification: SectorClassifcation [] = useSelector((state: any) => state.fetchSectorClassificationReducer.data);
     const [sectors, setSectors] = React.useState<SectorObjectType[]>([]);
+    const [sectorReport, setSectorReport] = React.useState<DataType[]>();
 
     const handleSectorClassificationChange = () => {
         const classification = sectorClassification.find(item => item.id === selectedSectorClassification);
@@ -35,6 +40,18 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
         }
     }
 
+    const handleFetchSectorReport = () => {
+        const classification = sectorClassification.find(item => item.id === selectedSectorClassification);
+
+        if (classification && filters && settings) {
+            dispatch(fetchSectorReport({ filters, classificationType : classification.name, settings }));
+        }
+    }
+
+    useEffect(() => {
+        handleFetchSectorReport();
+    }, [selectedSectorClassification, filters, settings]);
+
     useEffect(() => {
         if (sectorClassification.length > 0) {
             setSelectedSectorClassification(sectorClassification[0].id);
@@ -44,6 +61,18 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     useEffect(() => {
         handleSectorClassificationChange();
     }, [selectedSectorClassification]);
+
+    useEffect(() => {
+        if (!sectorReportReducer.loading && !sectorReportReducer.error && sectorReportReducer.data) {
+            const generatedData = ChartUtils.generateSectorsReport({
+                data: sectorReportReducer.data,
+                translations
+            });
+            setSectorReport([]);
+            setSectorReport(generatedData);
+        }
+
+    }, [sectorReportReducer]);
 
     return (
         <div>
@@ -76,7 +105,11 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                         ) : (
                             <select
                                 defaultValue={sectorClassification[0].id}
-                                onChange={(e) => setSelectedSectorClassification(parseInt(e.target.value))}
+                                onChange={(e) => {
+                                        setSelectedSectorClassification(parseInt(e.target.value));
+                                        handleSectorClassificationChange();
+                                    }
+                                }
                                 style={{
                                     backgroundColor: '#f3f5f8',
                                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
@@ -141,10 +174,40 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                         <div style={{
                             height: 250
                         }}>
-                            <BarChart
-                                translations={translations}
-                                data={[]}
-                                title={translations['amp.ndd.dashboard:me-program-progress']} />
+                            {
+                                sectorReport && (
+                                    <BarChart
+                                        translations={translations}
+                                        data={sectorReport}
+                                        width={500}
+                                        height={300}
+                                        legendProps={ [
+                                            {
+                                                dataFrom: 'indexes',
+                                                anchor: 'top-left',
+                                                direction: 'column',
+                                                justify: false,
+                                                itemHeight: 20,
+                                                itemWidth: 80,
+                                                itemDirection: 'left-to-right',
+                                                itemsSpacing: 2,
+                                                symbolSize: 10,
+                                                translateX: -15,
+                                                translateY: -96,
+                                                effects: [
+                                                    {
+                                                        on: 'hover',
+                                                        style: {
+                                                            itemOpacity: 1
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]}
+                                        title={translations['amp.ndd.dashboard:me-program-progress']} />
+                                )
+                            }
+
                         </div>
                     </Col>
                 </Row>

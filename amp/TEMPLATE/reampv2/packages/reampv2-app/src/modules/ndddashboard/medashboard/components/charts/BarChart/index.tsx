@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarDatum, ResponsiveBar } from '@nivo/bar';
+import {BarDatum, BarLegendProps, ResponsiveBar} from '@nivo/bar';
 import { ComponentProps, MarginProps } from '../../../types';
 
 export interface DataType {
@@ -15,10 +15,11 @@ export interface BarChartProps extends ComponentProps {
   width?: number;
   margin?: MarginProps;
   data?: DataType [];
+  legendProps?: BarLegendProps[];
 }
 
 const BarChart: React.FC<BarChartProps> = (props) => {
-  const { title, height, width, margin, data, translations } = props;
+  const { title, height, width, margin, data, legendProps } = props;
   const [displayDataSet, setDisplayDataSet] = React.useState<DataType[]>(data ? data : []);
 
   return (
@@ -62,7 +63,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
                 )
               }
             }
-            legends={[
+            legends={legendProps || [
               {
                 dataFrom: 'indexes',
                 anchor: 'top-left',

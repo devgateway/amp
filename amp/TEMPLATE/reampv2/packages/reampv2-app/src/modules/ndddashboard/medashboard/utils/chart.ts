@@ -188,8 +188,8 @@ class ChartUtils {
         if (data) {
             data.values.map((sector, index) => {
                 const sectorData = {
-                    id: sector.id.toString(),
-                    value: sector.id,
+                    id: sector.name,
+                    value: sector.amount,
                     label: sector.name,
                     color: SECTOR_COLOR[index]
                 };

@@ -7,7 +7,7 @@ import { fetchProgramConfiguration }  from '../medashboard/reducers/fetchProgram
 import { Loading } from '../../../utils/components/Loading';
 import defaultTrnPack from '../config/initialTranslations.json';
 import {fetchFm} from "../medashboard/reducers/fetchFmReducer";
-import { fetchSectorSchemesReducer } from '../medashboard/reducers/fetchSectorSchemesReducer';
+import { fetchSectorClassification } from '../medashboard/reducers/fetchSectorClassificationReducer';
 
 export const NDDTranslationContext = React.createContext({ translations: defaultTrnPack });
 
@@ -16,7 +16,7 @@ export const NDDTranslationContext = React.createContext({ translations: default
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
 const Startup = (props) => {
-  const { translationPending, translations, _fetchTranslations, programConfigurationPending, fmReducerPending, sectorSchemesPending } = props;
+  const { translationPending, translations, _fetchTranslations, programConfigurationPending, fmReducerPending, sectorClassificationPending } = props;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,11 +24,11 @@ const Startup = (props) => {
 
     dispatch(fetchProgramConfiguration());
     dispatch(fetchFm());
-    dispatch(fetchSectorSchemesReducer());
+    dispatch(fetchSectorClassification());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (translationPending || programConfigurationPending || fmReducerPending || sectorSchemesPending) {
+  if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending) {
     return (<Loading />);
   } else {
     document.title = translations['amp.ndd.dashboard:page-title'];
@@ -45,7 +45,7 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   programConfigurationPending: state.programConfigurationReducer.pending,
   fmReducerPending: state.fetchFmReducer.loading,
-  sectorSchemesPending: state.fetchSectorSchemesReducer.loading,
+  sectorClassificationPending: state.fetchSectorClassificationReducer.loading,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

@@ -78,6 +78,7 @@ export const REST_PROGRAM_CONFIGURATION = '/rest/dashboard/programConfiguration'
 export const REST_FM_SETTINGS = '/rest/common/fm/flat';
 export const REST_SECTORS = '/rest/dashboard/sectors';
 export const REST_SECTOR_SCHEMES = '/rest/dashboard/sectorSchemes';
+export const REST_SECTOR_CLASSIFICATION = '/rest/dashboard/sectorClassification';
 export const REST_INDICATORS = '/rest/dashboard/me/indicators';
 export const REST_INDICATORS_BY_PROGRAM = '/rest/dashboard/me/indicatorsByProgram';
 export const REST_PROGRAM_PROGRESS_REPORT = '/rest/dashboard/me/programReport';

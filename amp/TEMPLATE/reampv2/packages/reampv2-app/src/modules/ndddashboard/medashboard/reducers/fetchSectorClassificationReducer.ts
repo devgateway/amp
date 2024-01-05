@@ -38,15 +38,15 @@ const fetchSectorClassificationSlice = createSlice({
         resetState : () => initialState,
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchSectorClassificationReducer.pending, (state) => {
+        builder.addCase(fetchSectorClassification.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(fetchSectorClassificationReducer.fulfilled, (state, action) => {
+        builder.addCase(fetchSectorClassification.fulfilled, (state, action) => {
             state.data = [];
             state.loading = false;
             state.data = action.payload;
         });
-        builder.addCase(fetchSectorClassificationReducer.rejected, (state, action) => {
+        builder.addCase(fetchSectorClassification.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
 

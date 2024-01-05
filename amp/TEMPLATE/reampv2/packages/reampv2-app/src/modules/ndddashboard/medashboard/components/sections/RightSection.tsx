@@ -1,7 +1,7 @@
 import React from 'react';
 import {DefaultTranslations} from "../../types";
 import {Col} from "react-bootstrap";
-import SectorProgress from "./SectorProgress";
+import SectorClassification from "./SectorClassification";
 import {bindActionCreators, Dispatch} from "redux";
 import {connect} from "react-redux";
 
@@ -19,7 +19,7 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
             <div style={{
                 minHeight: '350px'
             }}>
-                <SectorProgress filters={filters} settings={settings} translations={translations}/>
+                <SectorClassification filters={filters} settings={settings} translations={translations}/>
             </div>
         </div>
     );

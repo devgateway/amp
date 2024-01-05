@@ -3,7 +3,7 @@ import {Col, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
 import {useSelector} from "react-redux";
 import styles from './css/Styles.module.css';
-import {SectorScheme} from "../../types";
+import {SectorClassifcation, SectorScheme} from "../../types";
 import {SectorObjectType} from "../../../../admin/indicator_manager/types";
 import Gauge from "../charts/GaugesChart";
 import BarChart from "../charts/BarChart";
@@ -14,22 +14,36 @@ interface SectorProgressProps {
     settings: any
 }
 
-const SectorProgress: React.FC<SectorProgressProps> = (props) => {
+const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     const { translations, filters, settings } = props;
 
+    const [selectedSectorClassification, setSelectedSectorClassification] = React.useState<number | null>(null);
     const [selectedSectorScheme, setSelectedSectorScheme] = React.useState<any>(null);
     const [selectedSector, setSelectedSector] = React.useState<number | null>(null);
 
-    const sectorSchemes: SectorScheme [] = useSelector((state: any) => state.fetchSectorSchemesReducer.data);
+    const [sectorScheme, setSectorScheme] = React.useState<SectorScheme>();
+
+    const sectorClassification: SectorClassifcation [] = useSelector((state: any) => state.fetchSectorClassificationReducer.data);
     const [sectors, setSectors] = React.useState<SectorObjectType[]>([]);
 
-    const handleSectorSchemeChange = (e: any) => {
+    const handleSectorClassificationChange = () => {
+        const classification = sectorClassification.find(item => item.id === selectedSectorClassification);
 
+        if (classification) {
+            setSectorScheme(classification.sectorScheme);
+            setSectors(classification.sectorScheme.children);
+        }
     }
 
     useEffect(() => {
-
+        if (sectorClassification.length > 0) {
+            setSelectedSectorClassification(sectorClassification[0].id);
+        }
     }, []);
+
+    useEffect(() => {
+        handleSectorClassificationChange();
+    }, [selectedSectorClassification]);
 
     return (
         <div>
@@ -50,25 +64,25 @@ const SectorProgress: React.FC<SectorProgressProps> = (props) => {
                     <Col md={11} style={{
                         paddingRight: 10
                     }}>
-                        {sectorSchemes.length === 0 ? (
+                        {sectorClassification.length === 0 ? (
                             <select
                                 style={{
                                     backgroundColor: '#f3f5f8',
                                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                 }}
                                 className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                <option>{translations['amp.ndd.dashboard:me-no-mpc']}</option>
+                                <option>{translations['amp.ndd.dashboard:me-no-data']}</option>
                             </select>
                         ) : (
                             <select
-                                defaultValue={sectorSchemes[0].ampSecSchemeId}
-                                onChange={(e) => setSelectedSectorScheme(parseInt(e.target.value))}
+                                defaultValue={sectorClassification[0].id}
+                                onChange={(e) => setSelectedSectorClassification(parseInt(e.target.value))}
                                 style={{
                                     backgroundColor: '#f3f5f8',
                                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                 }}
                                 className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                {sectorSchemes.map((item, index: number) => (<option key={index} value={item.ampSecSchemeId}>{item.secSchemeName}</option>))}
+                                {sectorClassification.map((item, index: number) => (<option key={index} value={item.id}>{item.name}</option>))}
                             </select>
                         )}
                         <span className="cheat-lineheight" />
@@ -94,25 +108,25 @@ const SectorProgress: React.FC<SectorProgressProps> = (props) => {
                     <Col md={11} style={{
                         paddingRight: 10
                     }}>
-                        {sectors.length === 0 ? (
+                        {!sectorScheme ? (
                             <select
                                 style={{
                                     backgroundColor: '#f3f5f8',
                                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                 }}
                                 className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                <option>{translations['amp.ndd.dashboard:me-no-mpc']}</option>
+                                <option>{translations['amp.ndd.dashboard:me-no-data']}</option>
                             </select>
                         ) : (
                             <select
-                                defaultValue={sectors[0].id}
-                                onChange={(e) => setSelectedSector(parseInt(e.target.value))}
+                                defaultValue={sectorScheme.ampSecSchemeId}
+                                onChange={(e) => setSelectedSectorScheme(parseInt(e.target.value))}
                                 style={{
                                     backgroundColor: '#f3f5f8',
                                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                 }}
                                 className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                {sectors.map((item, index: number) => (<option key={index} value={item.id}>{item.name}</option>))}
+                                <option key={sectorScheme.ampSecSchemeId} value={sectorScheme.ampSecSchemeId}>{sectorScheme.secSchemeName}</option>
                             </select>
                         )}
 
@@ -123,13 +137,7 @@ const SectorProgress: React.FC<SectorProgressProps> = (props) => {
                 <Row style={{
                     paddingLeft: -10
                 }}>
-
-                    <Col md={6} style={{
-                    }}>
-                        <Gauge innerValue={90} suffix={'%'} />
-                    </Col>
-                    <Col md={6}>
-
+                    <Col md={12}>
                         <div style={{
                             height: 250
                         }}>
@@ -150,4 +158,4 @@ const SectorProgress: React.FC<SectorProgressProps> = (props) => {
     );
 };
 
-export default  SectorProgress;
+export default  SectorClassification;

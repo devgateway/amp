@@ -286,11 +286,47 @@ public final class ActivityInterchangeUtils {
     public static Map<String, Object> getActivity(Long projectId, boolean isOfflineClientCall) {
         Map<String, Object> activity = getActivity(projectId, null);
 
+        // Add actual indicator values in indicators activity, but we can also add base and target values
+        addExtraFieldsToActivity(activity);
         if (!isOfflineClientCall
                 && FeaturesUtil.isVisibleModule("Hide Documents if No Donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
         }
             return activity;
+    }
+
+    private static void addExtraFieldsToActivity(Map<String, Object> activityFields){
+        if(activityFields != null){
+            for (Map.Entry<String, Object> field : activityFields.entrySet()) {
+                String fieldName = field.getKey();
+                Object values = field.getValue();
+
+                if (fieldName.contains("indicators")){
+
+                }
+            }
+            Optional<Object> indicatorsObject = activityFields.entrySet().stream()
+                    .filter(entry -> "indicators".equals(entry.getKey()))
+                    .map(Map.Entry::getValue)
+                    .findFirst();
+
+            // Loop through the elements of the ArrayList if present in indicators
+            indicatorsObject.ifPresent(indicators -> {
+                if (indicators instanceof ArrayList) {
+                    List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
+                    for (Map<String, Object> indicator : indicatorsList) {
+                        // Add the "actual" key with its array values to the indicator object
+                        System.out.println("Element in 'indicators': " + indicator);
+                        List<Object> actualValues = new ArrayList<>();
+                        indicator.put("actual", actualValues);
+                        System.out.println("Element in 'indicators': " + indicator);
+                    }
+
+                    // Update the parent activityFields map with the modified indicators object
+//                    activityFields.put("indicators", indicatorsList);
+                }
+            });
+        }
     }
 
     private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {

@@ -224,8 +224,7 @@ public class SettingsUtils {
 
     private static String getReportCalendarId(final ReportSettings settings) {
 
-          if (settings!=null) {
-              if (settings.getCurrencyCode() != null && settings.getCalendar()!=null) {
+          if (settings!=null && (settings.getCurrencyCode() != null && settings.getCalendar()!=null)) {
                   CalendarConverter calendarConverter = settings.getCalendar();
                   if (calendarConverter!=null) {
                       Long id = calendarConverter.getIdentifier();
@@ -233,7 +232,7 @@ public class SettingsUtils {
                         return id.toString();
                       }
                   }
-              }
+
           }
 
         return null;

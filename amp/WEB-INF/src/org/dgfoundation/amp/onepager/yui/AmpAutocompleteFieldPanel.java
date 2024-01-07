@@ -94,7 +94,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * The button that shows all options
      */
     private WebMarkupContainer toggleButton;
-    private final boolean rtll = SiteUtils.isEffectiveLangRTL();
+    private boolean rtll = true;
 
     /**
      * Message indicator - loading panel or
@@ -179,6 +179,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
         this(id,
                 fmName, "",
                 objectListModelClass);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     /**
@@ -193,6 +195,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             String fmName, String aditionalTooltipKey,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
         this(id, fmName, aditionalTooltipKey, false, objectListModelClass, false);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     /**
@@ -209,6 +213,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
         this(id, fmName, hideLabel, false, objectListModelClass, "");
         this.useCache = useCache;
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
 
@@ -223,6 +229,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             String fmName,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
         this(id, fmName, false, objectListModelClass, useCache);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     public AmpAutocompleteFieldPanel(
@@ -232,6 +240,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
             final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName, final String autoCompeleteVar, String aditionalTooltipKey, boolean showTooltipIfLabelHidden) {
         this(id, fmName, aditionalTooltipKey, hideLabel, objectListModelClass, clazz, jsName, autoCompeleteVar, showTooltipIfLabelHidden);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     public AmpAutocompleteFieldPanel(
@@ -341,6 +351,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             boolean hideLabel, boolean showTooltipIfLabelHidden,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, String additionalTooltipKey) {
         this(id, fmName, additionalTooltipKey, hideLabel, objectListModelClass, showTooltipIfLabelHidden);
+        rtll=SiteUtils.isEffectiveLangRTL();
 
     }
 
@@ -356,6 +367,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             boolean hideLabel,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean showTooltipIfLabelHidden) {
         this(id, fmName, aditionalTooltipKey, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js", "WicketAutoComplete", showTooltipIfLabelHidden);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     /**

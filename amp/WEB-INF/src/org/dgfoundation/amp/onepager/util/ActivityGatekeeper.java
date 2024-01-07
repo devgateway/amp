@@ -136,11 +136,8 @@ public class ActivityGatekeeper {
                 return false;
             
             long ampActivityId = Long.parseLong(activityId);
-            
-            if (!WorkspaceFilter.isActivityWithinWorkspace(ampActivityId))
-                return false;
-                        
-            return true;
+
+            return WorkspaceFilter.isActivityWithinWorkspace(ampActivityId);
 
         }
         catch(NumberFormatException ex)

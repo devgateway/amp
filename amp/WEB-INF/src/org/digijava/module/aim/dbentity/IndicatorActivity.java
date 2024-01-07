@@ -76,33 +76,30 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 
     @Override
     public Object getValue() {
-        String value = "";
+        StringBuilder value = new StringBuilder();
         if (getIndicator() != null)
-            value += getIndicator().getName();
+            value.append(getIndicator().getName());
         if (risk != null)
-            value += risk.getRatingName();
+            value.append(risk.getRatingName());
         if (values != null){
             ArrayList<AmpIndicatorValue> list = new ArrayList<AmpIndicatorValue>(values);
-            Collections.sort(list, new Comparator<AmpIndicatorValue>() {
+            list.sort(new Comparator<AmpIndicatorValue>() {
                 @Override
                 public int compare(AmpIndicatorValue arg0,
-                        AmpIndicatorValue arg1) {
+                                   AmpIndicatorValue arg1) {
                     return arg0.getValueType() - arg1.getValueType();
                 }
             });
-            
-            Iterator<AmpIndicatorValue> it = list.iterator();
-            while (it.hasNext()) {
-                AmpIndicatorValue ind = (AmpIndicatorValue) it
-                        .next();
-                value += ind.getValueType() + "" + ind.getValue() + "" + ind.getValueDate();
+
+            for (AmpIndicatorValue ind : list) {
+                value.append(ind.getValueType()).append(ind.getValue()).append(ind.getValueDate());
             }
         }
         if (logFrame != null) {
-            value += logFrame.getValue();
+            value.append(logFrame.getValue());
         }
 
-        return value;
+        return value.toString();
     }
 
     @Override
@@ -115,31 +112,28 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
         if (risk != null)
             out.getOutputs().add(new Output(null, new String[] {" Risk rating"}, new Object[] {risk.getRatingName()}));
         if (values != null){
-            Iterator<AmpIndicatorValue> it = values.iterator();
-            while (it.hasNext()) {
-                AmpIndicatorValue ind = (AmpIndicatorValue) it
-                        .next();
+            for (AmpIndicatorValue ind : values) {
                 String typeString = "";
                 switch (ind.getValueType()) {
-                case AmpIndicatorValue.BASE:
-                    typeString += "Base Value";
-                    break;
-                case AmpIndicatorValue.ACTUAL:
-                    typeString += "Actual Value";
-                    break;
-                case AmpIndicatorValue.REVISED:
-                    typeString += "Revised Value";
-                    break;
-                case AmpIndicatorValue.TARGET:
-                    typeString += "Target Value";
-                    break;
-                default:
-                    typeString += "Unknown Value";
-                    break;
+                    case AmpIndicatorValue.BASE:
+                        typeString += "Base Value";
+                        break;
+                    case AmpIndicatorValue.ACTUAL:
+                        typeString += "Actual Value";
+                        break;
+                    case AmpIndicatorValue.REVISED:
+                        typeString += "Revised Value";
+                        break;
+                    case AmpIndicatorValue.TARGET:
+                        typeString += "Target Value";
+                        break;
+                    default:
+                        typeString += "Unknown Value";
+                        break;
                 }
                 //typeString += ":&nbsp;";
                 out.getOutputs().add(
-                        new Output(null, new String[] {typeString}, new Object[]{ind.getValue()}));
+                        new Output(null, new String[]{typeString}, new Object[]{ind.getValue()}));
             }
         }
         if (logFrame != null) {
@@ -156,9 +150,8 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
         
         if (aux.values != null && aux.values.size() > 0){
             HashSet<AmpIndicatorValue> set = new HashSet<AmpIndicatorValue>();
-            Iterator<AmpIndicatorValue> i = aux.values.iterator();
-            while (i.hasNext()) {
-                AmpIndicatorValue ampIndicatorValue = (AmpIndicatorValue) i.next().clone();
+            for (AmpIndicatorValue value : aux.values) {
+                AmpIndicatorValue ampIndicatorValue = (AmpIndicatorValue) value.clone();
                 ampIndicatorValue.setIndValId(null);
                 ampIndicatorValue.setIndicatorConnection(aux);
                 set.add(ampIndicatorValue);

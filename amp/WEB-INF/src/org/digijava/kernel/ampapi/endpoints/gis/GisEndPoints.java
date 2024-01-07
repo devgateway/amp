@@ -222,7 +222,7 @@ public class GisEndPoints {
     @POST
     @Path("/activities")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ActivitiesById")
+    @ApiMethod(id = "ActivitiesById")
     @ApiOperation(value = "List activities", notes = "Returns activities that match both the filters and activity ids.")
     public ActivityList getActivities(
             @ApiParam(name = "Filters") PerformanceFilterParameters config,

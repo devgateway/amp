@@ -96,7 +96,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
     /**
      * Message indicator - loading panel or
      */
-    private WebMarkupContainer indicator;
+    private final WebMarkupContainer indicator;
 
     /**
      * If YUI client side datasource cache should be used (some instances of this control may require no cache)
@@ -250,6 +250,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
         container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
         add(container);
+        indicator = new WebMarkupContainer("indicator");
         add(new YuiAutoCompleteBehavior() {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
@@ -290,7 +291,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             }
         });
 
-        indicator = new WebMarkupContainer("indicator");
+
         indicator.setOutputMarkupId(true);
         add(indicator);
 
@@ -490,17 +491,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
                     .newInstance(input, language, modelParams);
             return newInstance.getObject();
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException |
+                 IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
@@ -512,7 +504,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * @return
      */
     protected CHOICE getSelectedChoice(Long objId) {
-        return (CHOICE) PersistenceManager.getSession().get(objClass, objId);
+        return PersistenceManager.getSession().get(objClass, objId);
     }
 
     /**

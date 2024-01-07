@@ -61,7 +61,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
     protected List<AmpActivityLocation> parentLocations;
 
     public AmpMEItemFeaturePanel(String id, String fmName, IModel<AmpActivityLocation> location,
-                                 final IModel<AmpActivityVersion> conn, List<AmpActivityLocation> locations, AmpMEFormSectionFeature parent) throws Exception {
+                                 final IModel<AmpActivityVersion> conn, List<AmpActivityLocation> locations) {
         super(id, fmName, true);
         am = conn;
         parentLocations = locations;
@@ -142,41 +142,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         list.setReuseItems(true);
         add(list);
 
-        final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
-                new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
-                        AmpMEIndicatorSearchModel.class) {
 
-                    private static final long serialVersionUID = 1227775244079125152L;
-
-                    @Override
-                    protected String getChoiceValue(AmpIndicator choice) {
-                        return DbUtil.filter(choice.getName());
-                    }
-
-                    @Override
-                    public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
-
-                        IndicatorActivity ia = new IndicatorActivity();
-                        ia.setActivity(conn.getObject());
-                        ia.setIndicator(choice);
-                        ia.setActivityLocation(location.getObject());
-                        conn.getObject().getIndicators().add(ia);
-                        setModel.getObject().add(ia);
-                        uniqueCollectionValidationField.reloadValidationField(target);
-
-                        target.add(list.getParent());
-                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));
-                    }
-
-                    @Override
-                    public Integer getChoiceLevel(AmpIndicator choice) {
-                        return 0;
-                    }
-
-                };
-        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
-        add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
-        add(searchIndicators);
     }
 
     public Integer getTabIndex() {

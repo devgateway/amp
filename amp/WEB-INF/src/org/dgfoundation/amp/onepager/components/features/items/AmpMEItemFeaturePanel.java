@@ -124,7 +124,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
                 String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this indicator?");
                 AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-                        "delete", "Delete ME Item", new Model<String>(translatedMessage)) {
+                        "delete", "Delete ME Item", new Model<>(translatedMessage)) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         conn.getObject().getIndicators().remove(item.getModelObject());
@@ -142,15 +142,9 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         };
         list.setReuseItems(true);
         add(list);
-//        final AmpButtonField searchIndicators = new AmpButtonField("searchIndicators","Search Indicators", AmpFMTypes.MODULE, true) {
-//            @Override
-//            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-//
-//            }
-//        };
-//        add(searchIndicators);
 
-            AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
+
+        final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
                 new AmpAutocompleteFieldPanel<AmpIndicator>("searchIndicators", "Search Indicators",
                         AmpMEIndicatorSearchModel.class) {
 
@@ -165,20 +159,15 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                     public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
 
                         IndicatorActivity ia = new IndicatorActivity();
-//                        ia.setActivity(conn.getObject());
+                        ia.setActivity(conn.getObject());
                         ia.setIndicator(choice);
                         ia.setActivityLocation(location.getObject());
-                        ia.setActivity(am.getObject());
-//                        conn.getObject().getIndicators().add(ia);
-                        if (setModel.getObject() == null)
-                            setModel.setObject(new HashSet<>());
+                        conn.getObject().getIndicators().add(ia);
                         setModel.getObject().add(ia);
-                        list.removeAll();
-                        target.add(list.getParent());
-                       uniqueCollectionValidationField.reloadValidationField(target);
-                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));
-                        send(getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
+                        uniqueCollectionValidationField.reloadValidationField(target);
 
+                        target.add(list.getParent());
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));
                     }
 
                     @Override
@@ -188,7 +177,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
                 };
         searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
-        searchIndicators.add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
+        add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
         add(searchIndicators);
     }
 

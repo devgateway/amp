@@ -4,7 +4,9 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -20,18 +22,17 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 
 
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -141,8 +142,54 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         };
         list.setReuseItems(true);
         add(list);
+//        final AmpButtonField searchIndicators = new AmpButtonField("searchIndicators","Search Indicators", AmpFMTypes.MODULE, true) {
+//            @Override
+//            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+//
+//            }
+//        };
+//        add(searchIndicators);
 
+            AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
+                new AmpAutocompleteFieldPanel<AmpIndicator>("searchIndicators", "Search Indicators",
+                        AmpMEIndicatorSearchModel.class) {
 
+                    private static final long serialVersionUID = 1227775244079125152L;
+
+                    @Override
+                    protected String getChoiceValue(AmpIndicator choice) {
+                        return DbUtil.filter(choice.getName());
+                    }
+
+                    @Override
+                    public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
+
+                        IndicatorActivity ia = new IndicatorActivity();
+//                        ia.setActivity(conn.getObject());
+                        ia.setIndicator(choice);
+                        ia.setActivityLocation(location.getObject());
+                        ia.setActivity(am.getObject());
+//                        conn.getObject().getIndicators().add(ia);
+                        if (setModel.getObject() == null)
+                            setModel.setObject(new HashSet<>());
+                        setModel.getObject().add(ia);
+                        list.removeAll();
+                        target.add(list.getParent());
+                       uniqueCollectionValidationField.reloadValidationField(target);
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEItemFeaturePanel.this));
+                        send(getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
+
+                    }
+
+                    @Override
+                    public Integer getChoiceLevel(AmpIndicator choice) {
+                        return 0;
+                    }
+
+                };
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
+        searchIndicators.add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
+        add(searchIndicators);
     }
 
     public Integer getTabIndex() {

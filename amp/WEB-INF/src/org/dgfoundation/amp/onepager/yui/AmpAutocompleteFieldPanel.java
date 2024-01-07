@@ -32,7 +32,9 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -92,6 +94,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * The button that shows all options
      */
     private WebMarkupContainer toggleButton;
+    private final boolean rtll = SiteUtils.isEffectiveLangRTL();
 
     /**
      * Message indicator - loading panel or
@@ -239,12 +242,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName, final String autoCompeleteVar, boolean showTooltipIfLabelHidden) {
         //super(id, null, fmName, hideLabel );
         super(id, null, showTooltipIfLabelHidden, aditionalTooltipKey, fmName, hideLabel, "", false);
-        this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
+        this.modelParams = new HashMap<>();
         this.objectListModelClass = objectListModelClass;
         toggleButton = new WebMarkupContainer("toggleButton");
         toggleButton.setOutputMarkupId(true);
         add(toggleButton);
-        textField = new TextField<String>("text", new Model<String>());
+        textField = new TextField<>("text", new Model<>());
         textField.setOutputMarkupId(true);
         add(textField);
         container = new WebMarkupContainer("container");
@@ -276,18 +279,17 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                  * that is why jquery's $(document).ready has been added here
                  */
 
-                String disableControl = "true";
-                if (textField.getParent().isEnabled()) {
-                    disableControl = "false";
-                }
-                response.render(OnDomReadyHeaderItem.forScript("$(document).ready(function() {" + getJsVarName()
+//
+                boolean disableControl = !textField.getParent().isEnabled();
+                String script="$(document).ready(function() {" + getJsVarName()
                         + " = new YAHOO.widget." + autoCompeleteVar + "('"
                         + textField.getMarkupId() + "', '" + getCallbackUrl()
-                        + "', '" + container.getMarkupId() + "', '"
-                        + toggleButton.getMarkupId() + "', '"
-                        + indicator.getMarkupId() + "', " + useCache + ", " + disableControl + ", "
-                        + SiteUtils.isEffectiveLangRTL() + ");"
-                        + "});"));
+                        + "', '" + container.getMarkupId() + "','"+toggleButton.getMarkupId()+"','"+indicator.getMarkupId()+"',"+true+
+                        ","+disableControl+","+ rtll +");"
+                        + "});";
+
+                logger.info("Script js: "+script);
+                response.render(OnDomReadyHeaderItem.forScript(script));
             }
         });
 

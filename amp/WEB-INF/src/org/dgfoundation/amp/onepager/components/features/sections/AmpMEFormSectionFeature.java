@@ -14,7 +14,6 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeatureP
 import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.events.ProgramSelectedEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
-import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
@@ -22,7 +21,11 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * M&E section
@@ -37,7 +40,6 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     protected ListView<AmpActivityLocation> tabsList;
 
     protected ListView<AmpActivityLocation> indicatorLocationList;
-    protected IModel<Set<IndicatorActivity>> setModel;
 
     private Map<AmpActivityLocation, AmpMEItemFeaturePanel> locationIndicatorItems = new TreeMap<>();
 
@@ -63,7 +65,6 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
             }
         };
-
         add(listView);
         add(UpdateEventBehavior.of(LocationChangedEvent.class));
 
@@ -124,41 +125,6 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         add(indicatorLocationList);
         this.add(UpdateEventBehavior.of(AmpActivityLocation.class));
 
-        final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
-                new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
-                        AmpMEIndicatorSearchModel.class) {
-
-                    private static final long serialVersionUID = 1227775244079125152L;
-
-                    @Override
-                    protected String getChoiceValue(AmpIndicator choice) {
-                        return DbUtil.filter(choice.getName());
-                    }
-
-                    @Override
-                    public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
-
-                        IndicatorActivity ia = new IndicatorActivity();
-                        ia.setActivity(am.getObject());
-                        ia.setIndicator(choice);
-                        am.getObject().getIndicators().add(ia);
-//                        uniqueCollectionValidationField.reloadValidationField(target);
-
-                        //setModel.getObject().add(ia);
-                        indicatorLocationList.removeAll();
-                        target.add(indicatorLocationList.getParent());
-                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-                    }
-
-                    @Override
-                    public Integer getChoiceLevel(AmpIndicator choice) {
-                        return 0;
-                    }
-
-                };
-        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
-        add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
-        add(searchIndicators);
     }
 
     public void updateAmpLocationModel(AmpActivityLocation selectedLocation) {

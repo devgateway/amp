@@ -84,6 +84,7 @@ export const REST_INDICATORS_BY_PROGRAM = '/rest/dashboard/me/indicatorsByProgra
 export const REST_PROGRAM_PROGRESS_REPORT = '/rest/dashboard/me/programReport';
 export const REST_INDICATOR_REPORT = '/rest/dashboard/me/indicatorReport';
 export const REST_SECTORS_REPORT = '/rest/dashboard/tops';
+export const REST_INDICATORS_BY_CLASSIFICATION = '/rest/dashboard/me/indicatorsByClassification';
 
 export const DEFAULT_REPORTING_PERIOD = 5;
 

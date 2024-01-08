@@ -18,6 +18,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
   const { translations, filters, settings } = props;
 
   const programConfigurationReducer = useSelector((state: any) => state.programConfigurationReducer);
+  const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
 
   const [selectedConfiguration, setSelectedConfiguration] = useState<number | null>(null);
   const [level1Children, setLevel1Children] = useState<ProgramConfigChild[]>([]);

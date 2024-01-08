@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import styles from './css/Styles.module.css';
-import {Col, Row} from "react-bootstrap";
+import {Col, Form, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
 import Gauge from "../charts/GaugesChart";
 import BarChart, {DataType} from "../charts/BarChart";
@@ -8,6 +8,9 @@ import {IndicatorObjectType, SectorObjectType} from "../../../../admin/indicator
 import {DefaultTranslations} from "../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIndicatorsByClassification } from "../../reducers/fetchIndicatorsByClassificationReducer";
+import Select from "react-select";
+import {fetchIndicatorReport} from "../../reducers/fetchIndicatorReportReducer";
+import LineChart from "../charts/LineChart";
 
 interface IndicatorBySectorProps {
     translations: DefaultTranslations;
@@ -15,6 +18,14 @@ interface IndicatorBySectorProps {
     settings: any;
     selectedClassification?: number | null;
 }
+
+const options = [
+    { value: 5, label: '5 Years' },
+    { value: 10, label: '10 Years' },
+    { value: 15, label: '15 Years' },
+    { value: 20, label: '20 Years' },
+    { value: 25, label: '25 Years' }
+]
 
 const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     const { translations, selectedClassification } = props;
@@ -27,6 +38,8 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     const [selectedIndicator, setSelectedIndicator] = React.useState<number | null>(null);
     const [selectedSector, setSelectedSector] = React.useState<number | null>(null);
     const [chartData, setChartData] = React.useState<DataType[]>([]);
+
+    const [yearCount, setYearCount] = React.useState<number>(5);
 
     useEffect(() => {
         if (selectedClassification) {
@@ -113,12 +126,80 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                                   <BarChart
                                       translations={translations}
                                       data={[]}
-                                      title={translations['amp.ndd.dashboard:me-program-progress']} />
+                                      title={translations['amp.ndd.dashboard:indicator-progress']} />
                               )}
                           </div>
                         </Col>
                       </Row>
                     }
+
+                    <Row style={{
+                        padding: '15px',
+                        borderTop: '1px solid #ddd',
+                        borderBottom: '1px solid #ddd'
+                    }}>
+                        <Col md={12}
+                             style={{
+                                 paddingLeft: 15,
+                                 paddingRight: 5,
+                             }}>
+                            <Row md={12} style={{
+                                alignItems: 'center',
+                            }}>
+                                <Col md={6}>
+                                    <Form.Check
+                                        type="radio"
+                                        label="Indicator Progress"
+                                    />
+                                </Col>
+                                <Col md={6}>
+                                    <Select
+                                        options={options}
+                                        defaultValue={options[0]}
+                                        isSearchable={false}
+                                        onChange={(option) => {
+                                            if  (option && selectedSector) {
+                                                setYearCount(option.value as any);
+                                            }
+                                        }}
+                                        components={{
+                                            IndicatorSeparator: () => null,
+                                        }}
+                                        styles={{
+                                            //@ts-ignore
+                                            control: (base) => ({
+                                                ...base,
+                                                boxShadow: 'none',
+                                                border: 'none',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                            }),
+                                            // @ts-ignore
+                                            valueContainer: (base) => ({
+                                                ...base,
+                                                paddingLeft: 20,
+                                                justifyContent: 'flex-end',
+                                            }),
+                                            // @ts-ignore
+                                            singleValue: (base) => ({
+                                                ...base,
+                                                color: '#116282',
+                                                fontWeight: 600,
+                                                border: 'none',
+                                                tetAlign: 'right',
+                                                order: 1
+                                            })
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                        </Col>
+                        {/*<Col md={12}>*/}
+                        {/*    {!indicatorReportReducer.loading && (*/}
+                        {/*        <LineChart data={[]}/>*/}
+                        {/*    )}*/}
+                        {/*</Col>*/}
+                    </Row>
                 </div>
             </Col>
         </div>

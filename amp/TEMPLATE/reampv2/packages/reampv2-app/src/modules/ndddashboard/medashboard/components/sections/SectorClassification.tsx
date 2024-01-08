@@ -232,7 +232,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                                 ]
                                             }
                                         ]}
-                                        title={translations['amp.ndd.dashboard:me-program-progress']} />
+                                        title={translations['amp.ndd.dashboard:sector-progress']} />
                                 ) : (
                                     <div className="loading"></div>
                                 )

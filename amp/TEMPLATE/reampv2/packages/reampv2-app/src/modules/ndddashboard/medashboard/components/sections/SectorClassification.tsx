@@ -3,10 +3,11 @@ import {Col, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
 import {useSelector, useDispatch } from "react-redux";
 import styles from './css/Styles.module.css';
-import {SectorClassifcation, SectorScheme} from "../../types";
+import {FundingType, SectorClassifcation, SectorScheme} from "../../types";
 import {SectorObjectType} from "../../../../admin/indicator_manager/types";
 import BarChart, {DataType} from "../charts/BarChart";
 import {fetchSectorReport} from "../../reducers/fetchSectorsReportReducer";
+import {FUNDING_TYPE} from "../../../utils/constants";
 
 interface SectorProgressProps {
     translations?: any,
@@ -20,16 +21,18 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     const dispatch = useDispatch();
 
     const sectorReportReducer = useSelector((state: any) => state.fetchSectorReportReducer);
+    const dashboardSettingsReducer = useSelector((state: any) => state.dashboardSettingsReducer);
 
     const [selectedSectorClassification, setSelectedSectorClassification] = React.useState<number | null>(null);
     const [selectedSectorScheme, setSelectedSectorScheme] = React.useState<any>(null);
-    const [selectedSector, setSelectedSector] = React.useState<number | null>(null);
 
     const [sectorScheme, setSectorScheme] = React.useState<SectorScheme>();
 
     const sectorClassification: SectorClassifcation [] = useSelector((state: any) => state.fetchSectorClassificationReducer.data);
     const [sectors, setSectors] = React.useState<SectorObjectType[]>([]);
     const [sectorReport, setSectorReport] = React.useState<DataType[]>();
+    const [defaultFundingType, setDefaultFundingType] = React.useState<string | undefined>(undefined);
+    const [fundingTypeList, setFundingTypeList] = React.useState<FundingType[]>([]);
 
     const handleSectorClassificationChange = () => {
         const classification = sectorClassification.find(item => item.id === selectedSectorClassification);
@@ -44,13 +47,33 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
         const classification = sectorClassification.find(item => item.id === selectedSectorClassification);
 
         if (classification && filters && settings) {
-            dispatch(fetchSectorReport({ filters, classificationType : classification.name, settings }));
+            const dashboardSettings = {
+                ...settings,
+                "funding-type": defaultFundingType
+            };
+
+            dispatch(fetchSectorReport({ filters, classificationType : classification.name, settings: dashboardSettings }));
+        }
+    }
+
+    const extractFundingType = () => {
+        if (dashboardSettingsReducer.dashboardSettingsLoaded) {
+            const fundingType = dashboardSettingsReducer.dashboardSettings.find((item: any) => item.id === FUNDING_TYPE);
+
+            if (fundingType) {
+                setDefaultFundingType(fundingType.value.defaultId);
+                setFundingTypeList(fundingType.value.options);
+            }
         }
     }
 
     useEffect(() => {
+        extractFundingType();
+    }, [dashboardSettingsReducer]);
+
+    useEffect(() => {
         handleFetchSectorReport();
-    }, [selectedSectorClassification, filters, settings]);
+    }, [selectedSectorClassification, filters, settings, defaultFundingType]);
 
     useEffect(() => {
         if (sectorClassification.length > 0) {
@@ -63,12 +86,13 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     }, [selectedSectorClassification]);
 
     useEffect(() => {
+        setSectorReport(undefined);
         if (!sectorReportReducer.loading && !sectorReportReducer.error && sectorReportReducer.data) {
             const generatedData = ChartUtils.generateSectorsReport({
                 data: sectorReportReducer.data,
                 translations
             });
-            setSectorReport([]);
+
             setSectorReport(generatedData);
         }
 
@@ -168,19 +192,21 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                 </Row>
 
                 <Row style={{
-                    paddingLeft: -10
+                    paddingLeft: -10,
                 }}>
-                    <Col md={12}>
-                        <div style={{
-                            height: 250
-                        }}>
+                    <Col md={12} style={{
+                        marginBottom: 100
+                    }}>
+                        <div>
                             {
-                                sectorReport && (
+                                sectorReport ? (
                                     <BarChart
                                         translations={translations}
                                         data={sectorReport}
-                                        width={500}
+                                        width={400}
                                         height={300}
+                                        margin={{ top: 140, right: 30, left: 20 }}
+                                        tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
                                         legendProps={ [
                                             {
                                                 dataFrom: 'indexes',
@@ -193,7 +219,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                                 itemsSpacing: 2,
                                                 symbolSize: 10,
                                                 translateX: -15,
-                                                translateY: -96,
+                                                translateY: -120,
                                                 effects: [
                                                     {
                                                         on: 'hover',
@@ -205,10 +231,42 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                             }
                                         ]}
                                         title={translations['amp.ndd.dashboard:me-program-progress']} />
+                                ) : (
+                                    <div className="loading"></div>
                                 )
                             }
 
                         </div>
+
+                        <Col md={12} style={{
+                            marginTop: 24
+                        }}>
+                            {(dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
+                                <select
+                                    defaultValue={defaultFundingType}
+                                    onChange={(e) => setDefaultFundingType(e.target.value)}
+                                    style={{
+                                        backgroundColor: '#f3f5f8',
+                                        boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                                    }}
+                                    className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
+                                    {
+                                        fundingTypeList.map((item: FundingType) => (
+                                            <option key={item.id} value={item.id}>{item.name}</option>
+                                        ))
+                                    }
+                                </select>
+                            ) : (
+                                <select
+                                    style={{
+                                        backgroundColor: '#f3f5f8',
+                                        boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                                    }}
+                                    className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
+                                    <option>{translations['amp.ndd.dashboard:me-no-data']}</option>
+                                </select>
+                            )}
+                        </Col>
                     </Col>
                 </Row>
             </div>
@@ -221,4 +279,4 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     );
 };
 
-export default  SectorClassification;
+export default SectorClassification;

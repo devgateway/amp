@@ -1,6 +1,7 @@
 import React from 'react';
 import {BarDatum, BarLegendProps, ResponsiveBar} from '@nivo/bar';
 import { ComponentProps, MarginProps } from '../../../types';
+import ChartUtils from "../../../utils/chart";
 
 export interface DataType {
   id: string;
@@ -16,10 +17,11 @@ export interface BarChartProps extends ComponentProps {
   margin?: MarginProps;
   data?: DataType [];
   legendProps?: BarLegendProps[];
+  tooltipSuffix?: string;
 }
 
 const BarChart: React.FC<BarChartProps> = (props) => {
-  const { title, height, width, margin, data, legendProps } = props;
+  const { title, height, width, margin, data, legendProps, tooltipSuffix } = props;
   const [displayDataSet, setDisplayDataSet] = React.useState<DataType[]>(data ? data : []);
 
   return (
@@ -39,6 +41,8 @@ const BarChart: React.FC<BarChartProps> = (props) => {
             indexBy="id"
             colors={(item: any) => item.data.color}
             tooltipLabel={(item: any) => item.data.label}
+            minValue={"auto"}
+            maxValue={"auto"}
             tooltip={
               (item) => {
                 return (
@@ -58,7 +62,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
                     }}></div>
                     <span style={{ fontWeight: 'normal', paddingLeft: 4 }}>{item.data.label}</span>
                     <span>:</span>
-                    <span style={{ fontWeight: 'bold', paddingLeft: 6 }}>{item.data.value} details</span>
+                    <span style={{ fontWeight: 'bold', paddingLeft: 6 }}>{ChartUtils.formatNumber(item.data.value as number)} {tooltipSuffix || 'details'}</span>
                   </div>
                 )
               }
@@ -95,8 +99,9 @@ const BarChart: React.FC<BarChartProps> = (props) => {
             axisLeft={null}
             margin={margin || { top: 50, right: 30, left: 20 }}
             borderRadius={3}
-            padding={0.3}
+            padding={0.2}
             enableLabel={false}
+            valueScale={{ type: 'linear' }}
             theme={{
               tooltip: {
                 container: {

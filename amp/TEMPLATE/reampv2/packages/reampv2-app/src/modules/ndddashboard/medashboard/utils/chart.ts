@@ -10,6 +10,7 @@ import {
 } from "../../utils/constants";
 import React from "react";
 import {DataType} from "../components/charts/BarChart";
+import _ from 'lodash';
 
 interface GaugeUtils {
     baseValue: number,
@@ -201,6 +202,10 @@ class ChartUtils {
         return processedReport;
 
     };
+
+    public static formatNumber = (value: number) => {
+        return value.toLocaleString('en-US', {maximumFractionDigits: 4});
+    }
 }
 
 export default ChartUtils;

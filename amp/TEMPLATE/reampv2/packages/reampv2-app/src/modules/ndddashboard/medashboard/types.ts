@@ -122,3 +122,8 @@ export enum ClassificationType {
     PRIMARY = 'Primary',
     SECONDARY = 'Secondary'
 }
+export interface FundingType {
+    id: number;
+    name: string;
+    value: string;
+}

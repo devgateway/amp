@@ -217,6 +217,25 @@ public class MeService {
         return sectorClassificationDTOs;
     }
 
+    public List<MEIndicatorDTO> getIndicatorsBySectorClassification (Long sectorClassificationId) throws DgException {
+        List<AmpIndicator> indicators = new ArrayList<>();
+        AmpClassificationConfiguration sectorClassification = SectorUtil.getClassificationConfigById(sectorClassificationId);
+
+        if (sectorClassification == null) {
+            throw new ApiRuntimeException(NOT_FOUND,
+                    ApiError.toError("Sector classification with id " + sectorClassificationId + " does not exist"));
+        };
+
+        List<AmpSector> schemeSectors = (List<AmpSector>) SectorUtil.getSectorLevel1(
+                Math.toIntExact(sectorClassification.getClassification().getAmpSecSchemeId()));
+
+        for (AmpSector sector : schemeSectors) {
+            indicators.addAll(sector.getIndicators());
+        };
+
+        return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
+    }
+
     private GeneratedReport runIndicatorReport(SettingsAndFiltersParameters settingsAndFilters) {
         ReportSpecificationImpl
                 spec = new ReportSpecificationImpl("indicator-data", ArConstants.INDICATOR_TYPE);

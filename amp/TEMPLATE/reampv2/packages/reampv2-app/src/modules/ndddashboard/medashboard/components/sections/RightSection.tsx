@@ -4,6 +4,7 @@ import {Col} from "react-bootstrap";
 import SectorClassification from "./SectorClassification";
 import {bindActionCreators, Dispatch} from "redux";
 import {connect} from "react-redux";
+import IndicatorBySector from "./IndicatorBySector";
 
 interface RightSectionProps {
     translations?: DefaultTranslations,
@@ -20,6 +21,10 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
                 minHeight: '350px'
             }}>
                 <SectorClassification filters={filters} settings={settings} translations={translations}/>
+            </div>
+
+            <div>
+                <IndicatorBySector translations={translations as DefaultTranslations} filters={filters} settings={settings} />
             </div>
         </div>
     );

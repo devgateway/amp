@@ -288,6 +288,15 @@ public class EndPoints {
     }
 
     @GET
+    @Path("indicatorsByClassification/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeIndicatorsByClassification")
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators by classification.")
+    public final List<MEIndicatorDTO> getIndicatorsByClassification(@PathParam("id") Long classificationId) {
+        return new MeService().getIndicatorsBySectorClassification(classificationId);
+    }
+
+    @GET
     @Path("indicators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getMeIndicators")
@@ -391,14 +400,5 @@ public class EndPoints {
     @ApiOperation(value = "Retrieve and provide a list of M&E indicators by sector.")
     public final List<MEIndicatorDTO> getIndicatorsBySector(@PathParam("id") Long sectorId) {
         return new MeService().getIndicatorsBySector(sectorId);
-    }
-
-    @GET
-    @Path("/me/indicatorsByClassification/{id}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getMeIndicatorsByClassificationReport")
-    @ApiOperation(value = "Retrieve and provide a list of M&E indicators by classification.")
-    public final List<MEIndicatorDTO> getIndicatorsByClassification(@PathParam("id") Long sectorSchemeId) throws DgException {
-        return new MeService().getIndicatorsBySectorClassification(sectorSchemeId);
     }
 }

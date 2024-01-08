@@ -15,16 +15,22 @@ interface RightSectionProps {
 const RightSection: React.FC<RightSectionProps> = (props) => {
     const { translations, filters, settings } = props;
 
+    const [selectedClassification, setSelectedClassification] = React.useState<number | null>(null);
+
     return (
         <div>
-            <div style={{
-                minHeight: '350px'
-            }}>
-                <SectorClassification filters={filters} settings={settings} translations={translations}/>
+            <div>
+                <SectorClassification
+                    filters={filters}
+                    settings={settings}
+                    translations={translations}
+                    selectedClassification={selectedClassification}
+                    setSelectedClassification={setSelectedClassification}
+                />
             </div>
 
             <div>
-                <IndicatorBySector translations={translations as DefaultTranslations} filters={filters} settings={settings} />
+                <IndicatorBySector translations={translations as DefaultTranslations} filters={filters} settings={settings} selectedClassification={selectedClassification} />
             </div>
         </div>
     );

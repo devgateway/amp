@@ -217,9 +217,16 @@ public class MeService {
         return sectorClassificationDTOs;
     }
 
-    public List<MEIndicatorDTO> getIndicatorsBySectorClassification (Long sectorClassificationId) throws DgException {
+    public List<MEIndicatorDTO> getIndicatorsBySectorClassification (Long sectorClassificationId) {
         List<AmpIndicator> indicators = new ArrayList<>();
-        AmpClassificationConfiguration sectorClassification = SectorUtil.getClassificationConfigById(sectorClassificationId);
+        AmpClassificationConfiguration sectorClassification = null;
+
+        try {
+            sectorClassification = SectorUtil.getClassificationConfigById(sectorClassificationId);
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicators");
+        }
+
 
         if (sectorClassification == null) {
             throw new ApiRuntimeException(NOT_FOUND,

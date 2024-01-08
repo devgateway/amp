@@ -12,11 +12,13 @@ import {FUNDING_TYPE} from "../../../utils/constants";
 interface SectorProgressProps {
     translations?: any,
     filters: any,
-    settings: any
+    settings: any,
+    selectedClassification?: number | null,
+    setSelectedClassification: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 const SectorClassification: React.FC<SectorProgressProps> = (props) => {
-    const { translations, filters, settings } = props;
+    const { translations, filters, settings, setSelectedClassification } = props;
 
     const dispatch = useDispatch();
 
@@ -78,6 +80,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     useEffect(() => {
         if (sectorClassification.length > 0) {
             setSelectedSectorClassification(sectorClassification[0].id);
+            setSelectedClassification(sectorClassification[0].id);
         }
     }, []);
 
@@ -131,6 +134,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                 defaultValue={sectorClassification[0].id}
                                 onChange={(e) => {
                                         setSelectedSectorClassification(parseInt(e.target.value));
+                                        setSelectedClassification(parseInt(e.target.value));
                                         handleSectorClassificationChange();
                                     }
                                 }
@@ -194,9 +198,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                 <Row style={{
                     paddingLeft: -10,
                 }}>
-                    <Col md={12} style={{
-                        marginBottom: 100
-                    }}>
+                    <Col md={12}>
                         <div>
                             {
                                 sectorReport ? (

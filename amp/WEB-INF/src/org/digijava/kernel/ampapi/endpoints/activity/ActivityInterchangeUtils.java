@@ -31,6 +31,7 @@ import org.hibernate.CacheMode;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.PathSegment;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -334,8 +335,10 @@ public final class ActivityInterchangeUtils {
                             for(AmpIndicatorValue indicatorValue: result.getValues()){
                                 actualValues.add(new HashMap<String, Object>() {{
                                     put("comment", indicatorValue.getComment());
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
                                     Date valueDate = indicatorValue.getValueDate();
-                                    put("date", valueDate);
+                                    String formattedDate = dateFormat.format(valueDate);
+                                    put("date", formattedDate);
                                     put("value", indicatorValue.getValue());
                                 }});
                             }

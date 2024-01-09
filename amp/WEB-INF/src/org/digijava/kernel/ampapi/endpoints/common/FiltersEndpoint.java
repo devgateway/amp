@@ -176,6 +176,15 @@ public class FiltersEndpoint {
         return FiltersManager.getInstance().getProgramFilterList();
     }
 
+    @OPTIONS
+    @Path("/programs")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describePrograms() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
     /**
      * List the sector schemas and items of 'Sectors' filter.
      * <p>

@@ -6,20 +6,22 @@ import { REST_INDICATOR_REPORT } from "../../utils/constants";
 const REDUCER_NAME = 'indicatorReport';
 
 type IndicatorReportInitialStateType = {
-    data: YearValues | null;
+    leftData: YearValues | null;
+    rightData: YearValues | null;
     loading: boolean;
     error: any;
 }
 
 const initialState: IndicatorReportInitialStateType = {
-    data: null,
+    leftData: null,
+    rightData: null,
     loading: false,
     error: null,
 }
 
 export const fetchIndicatorReport = createAsyncThunk(
     `${REDUCER_NAME}/fetch`,
-    async ({ filters, id, yearCount, settings } : { filters: any, id: number, yearCount?: number, settings: any }, { rejectWithValue }) => {
+    async ({ filters, id, yearCount, settings, section } : { filters: any, id: number, yearCount?: number, settings: any, section: 'left' | 'right' }, { rejectWithValue }) => {
         let count = 5;
 
         if (yearCount && yearCount > 5) {
@@ -46,7 +48,18 @@ export const fetchIndicatorReport = createAsyncThunk(
         if (response.status !== 200) {
             return rejectWithValue(data);
         }
-        return data;
+
+        if (section === 'left') {
+            return {
+                leftData: data,
+                rightData: null
+            }
+        }
+
+        return {
+            leftData: null,
+            rightData: data
+        }
     }
 );
 
@@ -55,7 +68,8 @@ const indicatorReportSlice = createSlice({
     initialState,
     reducers: {
         resetState : (state) => {
-            state.data = null;
+            state.rightData = null;
+            state.leftData = null;
             state.loading = false;
             state.error = null;
         }
@@ -67,7 +81,8 @@ const indicatorReportSlice = createSlice({
         builder.addCase(fetchIndicatorReport.fulfilled, (state, action) => {
             state.error = null;
             state.loading = false;
-            state.data = action.payload;
+            state.leftData = action.payload.leftData;
+            state.rightData = action.payload.rightData;
         });
         builder.addCase(fetchIndicatorReport.rejected, (state, action) => {
             state.loading = false;

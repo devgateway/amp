@@ -55,7 +55,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
         if (!selectedOption && indicatorsByProgramReducer.data.length > 0) {
             setSelectedOption(indicatorsByProgramReducer.data[0]);
             setSelectedIndicatorName(indicatorsByProgramReducer.data[0].name);
-            dispatch(fetchIndicatorReport({ filters, id: indicatorsByProgramReducer.data[0].id, yearCount, settings }));
+            dispatch(fetchIndicatorReport({ filters, id: indicatorsByProgramReducer.data[0].id, yearCount, settings, section: "left" }));
             calculateProgressValue();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,7 +75,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
     const handleIndicatorChange = (selectedOption: any, indicatorName: string) => {
         setSelectedOption(selectedOption);
         setSelectedIndicatorName(indicatorName);
-        dispatch(fetchIndicatorReport({ filters, id: selectedOption, yearCount, settings }));
+        dispatch(fetchIndicatorReport({ filters, id: selectedOption, yearCount, settings, section: "left" }));
         calculateProgressValue();
     }
 
@@ -215,6 +215,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                                                 filters,
                                                 id: selectedOption as any,
                                                 yearCount : option.value as number,
+                                                section: "left",
                                                 settings }));
                                         }
                                     }}

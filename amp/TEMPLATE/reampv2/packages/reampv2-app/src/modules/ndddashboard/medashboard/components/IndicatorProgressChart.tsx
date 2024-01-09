@@ -22,10 +22,11 @@ interface IndicatorProgressChartProps extends ComponentProps {
     filters: any;
     settings: any;
     indicator: IndicatorObjectType;
+    section: 'right' | 'left';
 }
 
 const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: IndicatorProgressChartProps) => {
-    const { translations, filters, settings, indicator } = props;
+    const { translations, filters, settings, indicator, section } = props;
     const dispatch = useDispatch();
 
     const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer);
@@ -35,6 +36,17 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const [progressValue, setProgressValue] = useState<number>(0);
     const [yearCount, setYearCount] = useState<number>(5);
     const [reportData, setReportData] = useState<DataType[]>();
+    const [sectionName, setSectionName] = useState<string>('');
+
+    useEffect(() => {
+        if (section === 'left') {
+            setSectionName('leftData');
+
+        } else {
+            setSectionName('rightData');
+        }
+    }, []);
+
 
     const calculateProgressValue = () => {
         if (indicatorReportReducer.data) {
@@ -51,7 +63,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
 
     useEffect(() => {
         setSelectedIndicatorName(indicator.name);
-        dispatch(fetchIndicatorReport({ filters, id: indicator.id, yearCount, settings }));
+        dispatch(fetchIndicatorReport({ filters, id: indicator.id, section, yearCount, settings }));
         // calculateProgressValue();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -151,6 +163,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                                 filters,
                                                 id: selectedOption as any,
                                                 yearCount : option.value as number,
+                                                section,
                                                 settings }));
                                         }
                                     }}
@@ -188,7 +201,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                     </Col>
                     <Col md={12}>
                         {!indicatorReportReducer.loading && (
-                            <LineChart data={indicatorReportReducer.data}/>
+                            <LineChart data={indicatorReportReducer[sectionName]}/>
                         )}
                     </Col>
                 </Row>

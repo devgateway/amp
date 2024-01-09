@@ -33,6 +33,13 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     const [selectedIndicatorId, setSelectedIndicatorId] = React.useState<number | null>(null);
     const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorObjectType | null>(null);
 
+    const handleIndicatorChange = () => {
+        if (!indicatorsReducer.loading && indicatorsReducer.data && !indicatorsReducer.error) {
+            setIndicators(indicatorsReducer.data);
+            setSelectedIndicatorId(indicatorsReducer.data[0].id);
+            setSelectedIndicator(indicatorsReducer.data[0])
+        }
+    }
 
     useEffect(() => {
         if (selectedClassification) {
@@ -41,13 +48,12 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     }, [selectedClassification]);
 
     useEffect(() => {
-        if (!indicatorsReducer.loading && indicatorsReducer.data && !indicatorsReducer.error) {
-            setIndicators(indicatorsReducer.data);
-            setSelectedIndicatorId(indicatorsReducer.data[0].id);
-            setSelectedIndicator(indicatorsReducer.data[0])
-        }
-
+        handleIndicatorChange();
     }, [indicatorsReducer]);
+
+    useEffect(() => {
+        handleIndicatorChange();
+    }, [selectedIndicatorId]);
 
     return (
         <div>
@@ -79,7 +85,10 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                             ) : (
                                 <select
                                     defaultValue={indicators[0].id}
-                                    onChange={(e) => setSelectedIndicatorId(parseInt(e.target.value))}
+                                    onChange={(e) => {
+                                        setSelectedIndicator(null);
+                                        setSelectedIndicatorId(parseInt(e.target.value))
+                                    }}
                                     style={{
                                         backgroundColor: '#f3f5f8',
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
@@ -102,8 +111,10 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                     </Row>
 
                     {
-                        selectedIndicator && (
-                            <IndicatorProgressChart translations={translations} filters={filters} settings={settings} indicator={selectedIndicator}/>
+                        (selectedIndicator && selectedIndicatorId) ? (
+                            <IndicatorProgressChart section="right" translations={translations} filters={filters} settings={settings} indicator={selectedIndicator}/>
+                        ) : (
+                            <div className="loading"></div>
                         )
                     }
                 </div>

@@ -1,7 +1,8 @@
 import React from 'react';
-import {BarDatum, BarLegendProps, ResponsiveBar} from '@nivo/bar';
+import {BarDatum, BarLegendProps, LabelFormatter, ResponsiveBar} from '@nivo/bar';
 import { ComponentProps, MarginProps } from '../../../types';
 import ChartUtils from "../../../utils/chart";
+import {BarItemProps} from "@nivo/bar/dist/types/types";
 
 export interface DataType {
   id: string;
@@ -18,10 +19,21 @@ export interface BarChartProps extends ComponentProps {
   data?: DataType [];
   legendProps?: BarLegendProps[];
   tooltipSuffix?: string;
+  labelFormat?: string | LabelFormatter;
+  barComponent?: React.FC<any>;
 }
 
 const BarChart: React.FC<BarChartProps> = (props) => {
-  const { title, height, width, margin, data, legendProps, tooltipSuffix } = props;
+  const {
+    title,
+    height,
+    width, margin,
+    data,
+    legendProps,
+    tooltipSuffix,
+    labelFormat,
+    barComponent
+  } = props;
   const [displayDataSet, setDisplayDataSet] = React.useState<DataType[]>(data ? data : []);
 
   return (
@@ -43,6 +55,8 @@ const BarChart: React.FC<BarChartProps> = (props) => {
             tooltipLabel={(item: any) => item.data.label}
             minValue={"auto"}
             maxValue={"auto"}
+            labelFormat={labelFormat}
+            barComponent={barComponent}
             tooltip={
               (item) => {
                 return (

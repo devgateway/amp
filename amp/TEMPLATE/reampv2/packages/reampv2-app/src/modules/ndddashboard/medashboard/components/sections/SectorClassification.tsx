@@ -8,6 +8,28 @@ import {SectorObjectType} from "../../../../admin/indicator_manager/types";
 import BarChart, {DataType} from "../charts/BarChart";
 import {fetchSectorReport} from "../../reducers/fetchSectorsReportReducer";
 import {FUNDING_TYPE} from "../../../utils/constants";
+import EllipsisText from "react-ellipsis-text";
+import ReactTooltip  from "react-tooltip";
+import 'react-tooltip/dist/react-tooltip';
+
+const CustomLegend = ({ data }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '20px' }}>
+        {data.map(item => (
+            <div key={item.id} style={{ margin: '0 10px' }} data-tooltip-id="my-tooltip"
+                 data-tooltip-content={item.label}>
+                <span style={{
+                    backgroundColor: item.color,
+                    width: '20px',
+                    height: '20px',
+                    display: 'inline-block',
+                    marginRight: '5px'
+                }}></span>
+                <EllipsisText text={item.label} length={10} />
+
+            </div>
+        ))}
+    </div>
+);
 
 interface SectorProgressProps {
     translations?: any,
@@ -203,37 +225,29 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                             <div>
                                 {
                                     sectorReport && (
-                                        <BarChart
-                                            translations={translations}
-                                            data={sectorReport}
-                                            width={400}
-                                            height={300}
-                                            margin={{top: 140, right: 30, left: 20}}
-                                            tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
-                                            legendProps={[
-                                                {
-                                                    dataFrom: 'indexes',
-                                                    anchor: 'top-left',
-                                                    direction: 'column',
-                                                    justify: false,
-                                                    itemHeight: 20,
-                                                    itemWidth: 80,
-                                                    itemDirection: 'left-to-right',
-                                                    itemsSpacing: 2,
-                                                    symbolSize: 10,
-                                                    translateX: -15,
-                                                    translateY: -120,
-                                                    effects: [
-                                                        {
-                                                            on: 'hover',
-                                                            style: {
-                                                                itemOpacity: 1
-                                                            }
-                                                        }
-                                                    ]
+                                        <>
+                                            <span style={{
+                                                fontSize: 14,
+                                                paddingTop: 15,
+                                                marginBottom: 10,
+                                            }}>{translations['amp.ndd.dashboard:sector-progress']}</span>
+                                            <CustomLegend data={sectorReport}/>
+                                            <ReactTooltip id="my-tooltip"  />
+                                            <BarChart
+                                                translations={translations}
+                                                data={sectorReport}
+                                                width={400}
+                                                height={300}
+                                                margin={{top: 40, right: 30, left: 20}}
+                                                tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
+                                                labelFormat={
+                                                    labelValue => (
+                                                        (<tspan y={0}>{labelValue}</tspan>) as unknown
+                                                    ) as string
                                                 }
-                                            ]}
-                                            title={translations['amp.ndd.dashboard:sector-progress']}/>
+                                                legendProps={[]}
+                                                 />
+                                        </>
                                     )
                                 }
 

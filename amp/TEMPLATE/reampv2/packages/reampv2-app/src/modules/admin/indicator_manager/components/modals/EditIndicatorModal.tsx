@@ -297,7 +297,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     sectors: indicator?.sectors || [],
     programId: '',
     ascending: indicator?.ascending || false,
-    creationDate: indicator?.creationDate,
+    creationDate: DateUtil.toISO8601(indicator?.creationDate || '', globalSettings['default-date-format']),
     base: {
       originalValue: indicator?.base?.originalValue,
       originalValueDate: indicator?.base?.originalValueDate,
@@ -447,8 +447,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         clearIcon={null}
                         calendarIcon={null}
                         className={styles.input_field}
-                       id="creationDate"
-                      inputRef={creationDateRef}/>
+                        id="creationDate"
+                        disableCalendar={true}
+                        inputRef={creationDateRef}/>
                     </Form.Group>
                   </Row>
 

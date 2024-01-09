@@ -303,11 +303,18 @@ public final class ActivityInterchangeUtils {
                     .map(Map.Entry::getValue)
                     .findFirst();
 
-            // Loop through the elements of the ArrayList if present in indicators
-            indicatorsObject.ifPresent(indicators -> {
-                if (indicators instanceof ArrayList) {
-                    List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
-                    for (Map<String, Object> indicator : indicatorsList) {
+            addActualIndicatorValues(indicatorsObject, projectId);
+        }
+    }
+
+    private static void addActualIndicatorValues(Optional<Object> indicatorsObject, Long projectId){
+        // Loop through the elements of the ArrayList if present in indicators
+        indicatorsObject.ifPresent(indicators -> {
+            if (indicators instanceof ArrayList) {
+                List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
+                for (Map<String, Object> indicator : indicatorsList) {
+                    // If indicator already has actual data skip it, only add if actual data is missing
+                    if(indicator.get("actual") == null) {
                         // Add the "actual" key with its array values to the indicator object
                         List<Object> actualValues = new ArrayList<>();
 
@@ -331,8 +338,8 @@ public final class ActivityInterchangeUtils {
                             throw new RuntimeException(e);
                         }
 
-                        if(result != null && result.getValues() != null){
-                            for(AmpIndicatorValue indicatorValue: result.getValues()){
+                        if (result != null && result.getValues() != null) {
+                            for (AmpIndicatorValue indicatorValue : result.getValues()) {
                                 actualValues.add(new HashMap<String, Object>() {{
                                     put("comment", indicatorValue.getComment());
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
@@ -347,8 +354,8 @@ public final class ActivityInterchangeUtils {
                         indicator.put("actual", actualValues);
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {

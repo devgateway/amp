@@ -9,11 +9,10 @@ import BarChart, {DataType} from "../charts/BarChart";
 import {fetchSectorReport} from "../../reducers/fetchSectorsReportReducer";
 import {FUNDING_TYPE} from "../../../utils/constants";
 import EllipsisText from "react-ellipsis-text";
-import ReactTooltip  from "react-tooltip";
-import 'react-tooltip/dist/react-tooltip';
+import { Tooltip }  from "react-tooltip";
 
 const CustomLegend = ({ data }) => (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '20px' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {data.map(item => (
             <div key={item.id} style={{ margin: '0 10px' }} data-tooltip-id="my-tooltip"
                  data-tooltip-content={item.label}>
@@ -222,22 +221,24 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                 }}>
                     <Col md={12}>
                         { (sectorReport && dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
-                            <div>
+                            <div style={{
+                                paddingTop: 20,
+                            }}>
                                 {
                                     sectorReport && (
                                         <>
                                             <span style={{
                                                 fontSize: 14,
-                                                paddingTop: 15,
+                                                paddingTop: 40,
                                                 marginBottom: 10,
                                             }}>{translations['amp.ndd.dashboard:sector-progress']}</span>
                                             <CustomLegend data={sectorReport}/>
-                                            <ReactTooltip id="my-tooltip"  />
+                                            <Tooltip id="my-tooltip"  />
                                             <BarChart
                                                 translations={translations}
                                                 data={sectorReport}
                                                 width={400}
-                                                height={300}
+                                                height={250}
                                                 margin={{top: 40, right: 30, left: 20}}
                                                 tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
                                                 labelFormat={

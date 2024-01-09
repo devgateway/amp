@@ -100,7 +100,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                             </div>
                         </Col>
                     </Row>
-                    
+
                     {
                         selectedIndicator && (
                             <IndicatorProgressChart translations={translations} filters={filters} settings={settings} indicator={selectedIndicator}/>

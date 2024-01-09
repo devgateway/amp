@@ -199,76 +199,80 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                     paddingLeft: -10,
                 }}>
                     <Col md={12}>
-                        <div>
-                            {
-                                sectorReport ? (
-                                    <BarChart
-                                        translations={translations}
-                                        data={sectorReport}
-                                        width={400}
-                                        height={300}
-                                        margin={{ top: 140, right: 30, left: 20 }}
-                                        tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
-                                        legendProps={ [
-                                            {
-                                                dataFrom: 'indexes',
-                                                anchor: 'top-left',
-                                                direction: 'column',
-                                                justify: false,
-                                                itemHeight: 20,
-                                                itemWidth: 80,
-                                                itemDirection: 'left-to-right',
-                                                itemsSpacing: 2,
-                                                symbolSize: 10,
-                                                translateX: -15,
-                                                translateY: -120,
-                                                effects: [
-                                                    {
-                                                        on: 'hover',
-                                                        style: {
-                                                            itemOpacity: 1
+                        { (sectorReport && dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
+                            <div>
+                                {
+                                    sectorReport && (
+                                        <BarChart
+                                            translations={translations}
+                                            data={sectorReport}
+                                            width={400}
+                                            height={300}
+                                            margin={{top: 140, right: 30, left: 20}}
+                                            tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
+                                            legendProps={[
+                                                {
+                                                    dataFrom: 'indexes',
+                                                    anchor: 'top-left',
+                                                    direction: 'column',
+                                                    justify: false,
+                                                    itemHeight: 20,
+                                                    itemWidth: 80,
+                                                    itemDirection: 'left-to-right',
+                                                    itemsSpacing: 2,
+                                                    symbolSize: 10,
+                                                    translateX: -15,
+                                                    translateY: -120,
+                                                    effects: [
+                                                        {
+                                                            on: 'hover',
+                                                            style: {
+                                                                itemOpacity: 1
+                                                            }
                                                         }
-                                                    }
-                                                ]
+                                                    ]
+                                                }
+                                            ]}
+                                            title={translations['amp.ndd.dashboard:sector-progress']}/>
+                                    )
+                                }
+
+                                <Col md={12} style={{
+                                    marginTop: 10,
+                                    marginBottom: 10
+                                }}>
+                                    {(dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
+                                        <select
+                                            defaultValue={defaultFundingType}
+                                            onChange={(e) => setDefaultFundingType(e.target.value)}
+                                            style={{
+                                                backgroundColor: '#f3f5f8',
+                                                boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                                            }}
+                                            className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
+                                            {
+                                                fundingTypeList.map((item: FundingType) => (
+                                                    <option key={item.id} value={item.id}>{item.name}</option>
+                                                ))
                                             }
-                                        ]}
-                                        title={translations['amp.ndd.dashboard:sector-progress']} />
-                                ) : (
-                                    <div className="loading"></div>
-                                )
-                            }
+                                        </select>
+                                    ) : (
+                                        <select
+                                            style={{
+                                                backgroundColor: '#f3f5f8',
+                                                boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                                            }}
+                                            className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
+                                            <option>{translations['amp.ndd.dashboard:me-no-data']}</option>
+                                        </select>
+                                    )}
+                                </Col>
 
-                        </div>
+                            </div>
+                        ): (
+                            <div className="loading"></div>
+                        )}
 
-                        <Col md={12} style={{
-                            marginTop: 24
-                        }}>
-                            {(dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
-                                <select
-                                    defaultValue={defaultFundingType}
-                                    onChange={(e) => setDefaultFundingType(e.target.value)}
-                                    style={{
-                                        backgroundColor: '#f3f5f8',
-                                        boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
-                                    }}
-                                    className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                    {
-                                        fundingTypeList.map((item: FundingType) => (
-                                            <option key={item.id} value={item.id}>{item.name}</option>
-                                        ))
-                                    }
-                                </select>
-                            ) : (
-                                <select
-                                    style={{
-                                        backgroundColor: '#f3f5f8',
-                                        boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
-                                    }}
-                                    className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                    <option>{translations['amp.ndd.dashboard:me-no-data']}</option>
-                                </select>
-                            )}
-                        </Col>
                     </Col>
                 </Row>
             </div>

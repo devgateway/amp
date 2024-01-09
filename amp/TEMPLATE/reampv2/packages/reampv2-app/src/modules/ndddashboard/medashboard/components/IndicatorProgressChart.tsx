@@ -92,7 +92,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                             fontSize: 14,
                             fontWeight: 600,
                             color: 'rgba(0, 0, 0, 0.5)',
-                        }}>{selectedIndicatorName || ' '}</div>
+                        }}>{selectedIndicatorName || translations["amp.ndd.dashboard:me-no-data"]}</div>
                     </Col>
                 </Row>
                 { !indicatorReportReducer.loading && (

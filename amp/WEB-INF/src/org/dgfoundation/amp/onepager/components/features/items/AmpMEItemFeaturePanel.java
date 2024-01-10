@@ -4,7 +4,9 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -20,18 +22,17 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 
 
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
     protected List<AmpActivityLocation> parentLocations;
 
     public AmpMEItemFeaturePanel(String id, String fmName, IModel<AmpActivityLocation> location,
-                                 final IModel<AmpActivityVersion> conn, List<AmpActivityLocation> locations, AmpMEFormSectionFeature parent) throws Exception {
+                                 final IModel<AmpActivityVersion> conn, List<AmpActivityLocation> locations) {
         super(id, fmName, true);
         am = conn;
         parentLocations = locations;
@@ -123,7 +124,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
                 String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this indicator?");
                 AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-                        "delete", "Delete ME Item", new Model<String>(translatedMessage)) {
+                        "delete", "Delete ME Item", new Model<>(translatedMessage)) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         conn.getObject().getIndicators().remove(item.getModelObject());
@@ -142,8 +143,9 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         list.setReuseItems(true);
         add(list);
 
+
         final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
-                new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
+                new AmpAutocompleteFieldPanel<AmpIndicator>("searchIndicators", "Search Indicators",
                         AmpMEIndicatorSearchModel.class) {
 
                     private static final long serialVersionUID = 1227775244079125152L;

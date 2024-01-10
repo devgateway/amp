@@ -89,16 +89,16 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             }
         }
 
-        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<String>(baseVal, "value"));
+        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<>(baseVal, "value"));
         add(indicatorBaseValueLabel);
 
-        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<String>(baseVal, "valueDate"));
+        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<>(baseVal, "valueDate"));
         add(indicatorBaseDateLabel);
 
-        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<String>(targetVal, "value"));
+        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<>(targetVal, "value"));
         add(indicatorTargetValueLabel);
 
-        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<String>(targetVal, "valueDate"));
+        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<>(targetVal, "valueDate"));
         add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);

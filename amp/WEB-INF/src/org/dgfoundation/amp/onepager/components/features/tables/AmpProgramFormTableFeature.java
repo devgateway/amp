@@ -80,15 +80,13 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
                 Set<AmpActivityProgram> specificProgs = new HashSet<AmpActivityProgram>();
 
                 if (programSettings != null && programSettings.getObject() != null && allProgs != null) {
-                    Iterator<AmpActivityProgram> it = allProgs.iterator();
-                    while (it.hasNext()) {
-                        AmpActivityProgram prog = it.next();
+                    for (AmpActivityProgram prog : allProgs) {
                         if (prog != null && prog.getProgramSetting() != null && prog.getProgramSetting().getAmpProgramSettingsId().equals(programSettings.getObject().getAmpProgramSettingsId()))
                             specificProgs.add(prog);
                     }
                 }
 
-                return new ArrayList<AmpActivityProgram>(specificProgs);
+                return new ArrayList<>(specificProgs);
             }
         };
 
@@ -241,7 +239,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
 
         });
 
-        final AmpAutocompleteFieldPanel<AmpTheme> searchThemes = new AmpAutocompleteFieldPanel<AmpTheme>("search", "Add Program",
+        final AmpAutocompleteFieldPanel<AmpTheme> searchThemes = new AmpAutocompleteFieldPanel<AmpTheme>("searchThemes", "Add Program",
                 programSettingsString, AmpThemeSearchModel.class) {
             /**
              *

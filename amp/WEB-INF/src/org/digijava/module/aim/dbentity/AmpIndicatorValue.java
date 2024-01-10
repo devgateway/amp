@@ -95,7 +95,7 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
         }
 
         public void setValueDateString(String valueDateString) throws Exception{
-            if(!valueDateString.trim().equals("")){
+            if(!valueDateString.trim().isEmpty()){
                valueDate=DateTimeUtil.parseDate(valueDateString);
             }
         }

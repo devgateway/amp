@@ -4,16 +4,22 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.*;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
 import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
+import org.dgfoundation.amp.onepager.events.ProgramSelectedEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
+import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.DbUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -101,8 +107,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {
                 AmpMEItemFeaturePanel indicatorLoc = null;
                 try {
-                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations,
-                            AmpMEFormSectionFeature.this);
+                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations
+                    );
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -118,6 +124,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         indicatorLocationList.setOutputMarkupId(true);
         add(indicatorLocationList);
         this.add(UpdateEventBehavior.of(AmpActivityLocation.class));
+
     }
 
     public void updateAmpLocationModel(AmpActivityLocation selectedLocation) {

@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FMFormCache {
     
-    private ConcurrentHashMap<String, Boolean> editPermCache = null;
-    private ConcurrentHashMap<String, Boolean> viewPermCache = null;
+    private ConcurrentHashMap<String, Boolean> editPermCache;
+    private ConcurrentHashMap<String, Boolean> viewPermCache;
 
     
     private boolean disabled    = true;
@@ -26,8 +26,8 @@ public class FMFormCache {
     }
     
     private FMFormCache () {
-        this.editPermCache  = new ConcurrentHashMap<String, Boolean>();
-        this.viewPermCache  = new ConcurrentHashMap<String, Boolean>();
+        this.editPermCache  = new ConcurrentHashMap<>();
+        this.viewPermCache  = new ConcurrentHashMap<>();
         
     }
     

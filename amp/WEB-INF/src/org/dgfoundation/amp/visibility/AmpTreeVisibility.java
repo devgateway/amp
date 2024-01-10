@@ -13,6 +13,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author dan
@@ -96,8 +97,6 @@ public class AmpTreeVisibility implements Serializable{
                 notEmpty = true;
             } else {
                 existSubmodules = true;
-                ;// ////System.out.println(" si NU are
-                // submodule:::"+module.getName());
             }
             if (notEmpty)
                 this.getItems().put(module.getName(), moduleNode);
@@ -196,7 +195,7 @@ public class AmpTreeVisibility implements Serializable{
     }
 
     public boolean isVisibleObject(AmpObjectVisibility aov) {
-        return this.getRoot().getTemplates().contains(aov.getId());
+        return this.getRoot().getTemplates().stream().map(AmpObjectVisibility::getId).collect(Collectors.toSet()).contains(aov.getId());
     }
 
     public boolean isVisibleId(Long id) {
@@ -214,8 +213,8 @@ public class AmpTreeVisibility implements Serializable{
         for (AmpTreeVisibility module : this.getItems().values()) {
             for (AmpTreeVisibility feature : module.getItems().values()) {
                 if (feature.getItems().containsKey(fieldName))
-                    return (AmpFieldsVisibility) ((AmpTreeVisibility) feature
-                            .getItems().get(fieldName)).getRoot();
+                    return (AmpFieldsVisibility) feature
+                            .getItems().get(fieldName).getRoot();
             }
         }
         return null;

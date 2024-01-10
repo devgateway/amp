@@ -6,17 +6,29 @@ import { REST_INDICATOR_REPORT } from "../../utils/constants";
 const REDUCER_NAME = 'indicatorReport';
 
 type IndicatorReportInitialStateType = {
-    leftData: YearValues | null;
-    rightData: YearValues | null;
-    loading: boolean;
-    error: any;
+    left: {
+        loading: boolean;
+        data: YearValues | null;
+        error: any;
+    }
+    right: {
+        loading: boolean;
+        data: YearValues | null;
+        error: any;
+    }
 }
 
 const initialState: IndicatorReportInitialStateType = {
-    leftData: null,
-    rightData: null,
-    loading: false,
-    error: null,
+    left: {
+        loading: false,
+        data: null,
+        error: null,
+    },
+    right: {
+        loading: false,
+        data: null,
+        error: null,
+    }
 }
 
 export const fetchIndicatorReport = createAsyncThunk(
@@ -68,25 +80,34 @@ const indicatorReportSlice = createSlice({
     initialState,
     reducers: {
         resetState : (state) => {
-            state.rightData = null;
-            state.leftData = null;
-            state.loading = false;
-            state.error = null;
+            state.right = {
+                loading: false,
+                data: null,
+                error: null,
+            } as const;
+            state.left = {
+                loading: false,
+                data: null,
+                error: null,
+            } as const;
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchIndicatorReport.pending, (state) => {
-            state.loading = true;
+            state.right.loading = true;
+            state.left.loading = true;
         });
         builder.addCase(fetchIndicatorReport.fulfilled, (state, action) => {
-            state.error = null;
-            state.loading = false;
-            state.leftData = action.payload.leftData;
-            state.rightData = action.payload.rightData;
+            state.right.loading = false;
+            state.left.loading = false;
+            state.left.data = action.payload.leftData;
+            state.right.data = action.payload.rightData;
         });
         builder.addCase(fetchIndicatorReport.rejected, (state, action) => {
-            state.loading = false;
-            state.error = errorHelper(action.payload);
+            state.right.loading = false;
+            state.left.loading = false;
+            state.right.error = errorHelper(action.payload);
+            state.left.error = errorHelper(action.payload);
 
         });
     }

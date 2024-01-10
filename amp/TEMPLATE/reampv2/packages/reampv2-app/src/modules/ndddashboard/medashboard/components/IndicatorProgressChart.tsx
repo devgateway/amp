@@ -29,23 +29,15 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const { translations, filters, settings, indicator, section } = props;
     const dispatch = useDispatch();
 
-    const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer);
+    const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer[section]);
+
+    console.log('indicatorReportReducer===>', indicatorReportReducer);
 
     const [selectedOption, setSelectedOption] = useState<IndicatorObjectType | null>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);
     const [yearCount, setYearCount] = useState<number>(5);
     const [reportData, setReportData] = useState<DataType[]>();
-    const [sectionName, setSectionName] = useState<string>('');
-
-    useEffect(() => {
-        if (section === 'left') {
-            setSectionName('leftData');
-
-        } else {
-            setSectionName('rightData');
-        }
-    }, []);
 
 
     const calculateProgressValue = () => {
@@ -72,7 +64,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     useEffect(() => {
         calculateProgressValue();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicatorReportReducer.data]);
+    }, [indicatorReportReducer[section].data]);
 
     useEffect(() => {
         const generatedReport = ChartUtils.generateValuesDataset({
@@ -80,7 +72,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
             translations
         });
         setReportData(generatedReport);
-    }, [indicatorReportReducer.data]);
+    }, [indicatorReportReducer[section].data]);
 
 
     return (
@@ -201,7 +193,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                     </Col>
                     <Col md={12}>
                         {!indicatorReportReducer.loading && (
-                            <LineChart data={indicatorReportReducer[sectionName]}/>
+                            <LineChart data={indicatorReportReducer.data}/>
                         )}
                     </Col>
                 </Row>

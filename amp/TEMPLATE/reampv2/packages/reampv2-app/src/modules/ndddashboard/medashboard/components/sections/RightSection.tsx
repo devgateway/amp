@@ -38,7 +38,12 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
             <div>
                 {new Array(numberOfIndicators).fill(0).map((_, index) => {
                     return (
-                        <IndicatorBySector translations={translations as DefaultTranslations} filters={filters} settings={settings} selectedClassification={selectedClassification} />
+                        <IndicatorBySector
+                            translations={translations as DefaultTranslations}
+                            filters={filters}
+                            settings={settings}
+                            key={index}
+                            selectedClassification={selectedClassification} />
                     );
                 })}
 

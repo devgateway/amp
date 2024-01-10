@@ -68,12 +68,8 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
         }
       </div>
 
-      <div style={{
-        minHeight: '350px'
-      }}>
-        {(level1Child) &&
-            (
-                new Array(numberOfIndicators).fill(0).map((_, index) => {
+      <div>
+        {level1Child && new Array(numberOfIndicators).fill(0).map((_, index) => {
                   return (
                       <ProgramGroupedByIndicator
                           translations={translations}
@@ -83,7 +79,6 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
                           filters={filters}/>
                   )
                 })
-            )
         }
       </div>
 

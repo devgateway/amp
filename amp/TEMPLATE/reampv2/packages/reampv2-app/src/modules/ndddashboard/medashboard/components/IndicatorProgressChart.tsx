@@ -30,9 +30,6 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const dispatch = useDispatch();
 
     const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer[section]);
-
-    console.log('indicatorReportReducer===>', indicatorReportReducer);
-
     const [selectedOption, setSelectedOption] = useState<IndicatorObjectType | null>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);
@@ -64,7 +61,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     useEffect(() => {
         calculateProgressValue();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicatorReportReducer[section].data]);
+    }, [indicatorReportReducer[section]]);
 
     useEffect(() => {
         const generatedReport = ChartUtils.generateValuesDataset({
@@ -72,7 +69,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
             translations
         });
         setReportData(generatedReport);
-    }, [indicatorReportReducer[section].data]);
+    }, [indicatorReportReducer[section]]);
 
 
     return (

@@ -35,7 +35,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     const dispatch = useDispatch();
 
     const programReportReducer = useSelector((state: any) => state.programReportReducer);
-    const [progressValue, setProgressValue] = React.useState<number>(0);
+    let progressValue = 0;
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [report, setReport] = React.useState<YearValues[] | null>( programReportReducer.data);
     const [chartData, setChartData] = React.useState<DataType[] | null>(null);
@@ -54,13 +54,11 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     useEffect(() => {
         if (report) {
             const aggregates = ChartUtils.computeAggregateValues(report);
-            const progress = ChartUtils.generateGaugeValue({
+            progressValue = ChartUtils.generateGaugeValue({
                 baseValue: aggregates.baseValue,
                 targetValue: aggregates.targetValue,
                 actualValue: aggregates.actualValue
             });
-
-            setProgressValue(progress);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);

@@ -29,12 +29,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -128,22 +123,31 @@ public class MeService {
     public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
         Map<String, Object> filters = params.getFilters();
 
-        List<AmpIndicator> existingIndicators = getAllAmpIndicators();
+        List<AmpIndicator> indicatorsList = getAllAmpIndicators();
+
         Object pillar = filters.get("pillar");
         Long pillarAsLong = (pillar != null) ? Long.valueOf(pillar.toString()) : null;
         // Filter indicators by pillars
         if(filters.get("pillar") != null){
-            existingIndicators = existingIndicators.stream()
+            indicatorsList = indicatorsList.stream()
                     .filter(indicator -> indicator.getProgram() != null)
-                    .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(pillarAsLong))
+                    .filter(indicator -> {
+                        AmpTheme program = indicator.getProgram();
+                        return program != null &&
+                                (program.getParentThemeId() != null && program.getParentThemeId().getAmpThemeId().equals(pillarAsLong) ||
+                                        program.getParentThemeId() == null && program.getAmpThemeId().equals(pillarAsLong));
+                    })
                     .collect(Collectors.toList());
+        }
 
-            for(AmpIndicator indicator: existingIndicators){
-                if(indicator.getProgram() != null){
-                    if(indicator.getProgram().getAmpThemeId().equals(282)){
-                        System.out.println(indicator);
-                    }
-                }
+        // Filter indicator by country
+        if(filters.get("country") != null){
+            for(AmpIndicator indicator: indicatorsList){
+                // In indicator you have a list of indicator connection linked to the location(COuntry)
+                Set<IndicatorActivity> indicatorConnections = indicator.getValuesActivity();
+                // inside the indicator connection 
+
+                System.out.println(indicatorConnections);
             }
         }
         List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
@@ -156,7 +160,7 @@ public class MeService {
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
 
-        for(AmpIndicator indicator: existingIndicators){
+        for(AmpIndicator indicator: indicatorsList){
             IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(indicator, indicatorsWithYearValues, yearsCount);
             singelIndicatorYearValues.setIndicatorName(indicator.getName());
             indicatorValues.add(singelIndicatorYearValues);
@@ -287,4 +291,13 @@ public class MeService {
             throw new RuntimeException("Failed to load indicators");
         }
     }
+
+    private List<IndicatorConnection> getIndicatorConnectionByIndicator(AmpIndicator indicator){
+        try {
+            return IndicatorUtil.getAllConnectionsOfIndicator(indicator);
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicators");
+        }
+    }
+
 }

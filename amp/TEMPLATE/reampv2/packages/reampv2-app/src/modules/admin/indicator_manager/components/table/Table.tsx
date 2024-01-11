@@ -14,9 +14,17 @@ import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-fi
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import styles from './Table.module.css';
 import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
-import {DefaultComponentProps, ProgramObjectType, SectorObjectType} from '../../types';
+import {
+  DefaultComponentProps,
+  GroupSelectValue,
+  ProgramObjectType,
+  ProgramSchemeType,
+  SectorObjectType, SelectValue
+} from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSizePerPage} from '../../reducers/fetchIndicatorsReducer';
+import Select from 'react-select';
+import {formatProgramSchemeToSelect} from "../../utils/helpers";
 
 interface SkeletonTableProps extends DefaultComponentProps {
   columns: any;
@@ -29,6 +37,32 @@ interface SkeletonTableProps extends DefaultComponentProps {
   filterBySector: boolean;
   filterByProgram: boolean;
 }
+
+const groupStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+};
+const groupBadgeStyles = {
+  backgroundColor: '#EBECF0',
+  borderRadius: '2em',
+  color: '#172B4D',
+  display: 'inline-block',
+  fontSize: 12,
+  fontWeight: 'normal',
+  lineHeight: '1',
+  minWidth: 1,
+  padding: '0.16666666666667em 0.5em',
+  textAlign: 'center',
+};
+
+const formatGroupLabel = (data: any) => (
+    <div style={groupStyles}>
+      <span>{data.label}</span>
+      <span style={groupBadgeStyles as any}>{data.options.length}</span>
+    </div>
+);
+
 
 const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const {
@@ -44,6 +78,9 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     programs
   } = props;
   const dispatch = useDispatch();
+  const programSchemeReducer = useSelector((state: any) => state.fetchProgramsReducer);
+  const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+  const programConfiguration: ProgramSchemeType [] = programSchemeReducer.programSchemes;
 
   const sizePerPage: number = useSelector((state: any) => state.fetchIndicatorsReducer.sizePerPage);
 
@@ -56,11 +93,38 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const { ExportCSVButton } = CSVExport;
 
   const [showAddNewIndicatorModal, setShowAddNewIndicatorModal] = useState(false);
+  const [programOptions, setProgramOptions] = useState<GroupSelectValue[]>([
+    {
+      label: translations['amp.indicatormanager:all-programs'],
+      options: [{
+        value: 0,
+        label: translations['amp.indicatormanager:all-programs']
+      }]
+    }
+  ]);
+  const [sectorOptions, setSectorOptions] = useState<SelectValue[]>([{
+    value: 0,
+    label: translations['amp.indicatormanager:all-sectors']
+  }]);
 
   const showAddNewIndicatorModalHandler = () => {
     setShowAddNewIndicatorModal(true);
   };
 
+  useEffect(() => {
+    const formatPrograms = formatProgramSchemeToSelect(programConfiguration);
+    setProgramOptions(prevState => [...prevState, ...formatPrograms]);
+
+
+     if (sectors) {
+       const formatSectors = sectors.map((sector) => ({
+            value: sector.id,
+            label: sector.name,
+       }));
+
+       setSectorOptions(prevState => [...prevState, ...formatSectors]);
+     }
+  }, []);
 
   useEffect(() => {
     setSelectedSector(0);
@@ -171,7 +235,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                   </Row>
 
                   <Row sm={12} className={styles.table_header_bottom}>
-                    <Col sm={6}>
+                    <Col sm={4}>
                       <div className={styles.table_header_bottom_left}>
                         <Button type="primary" onClick={showAddNewIndicatorModalHandler}>
                           <i className="fa fa-plus" />
@@ -190,29 +254,51 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
                     </Col>
                     {/* searchbar should be far right on the col */}
-                    <Col sm={6}>
+                    <Col sm={8}>
                       <div className={styles.table_header_bottom_right}>
 
                         {filterBySector && (
                             <div className={styles.sector_filter_container}>
                               <Form.Label
                                   className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
-                              <Form.Control
-                                  onChange={(e) => setSelectedSector(e.target.value as unknown as number)}
-                                  as="select"
-                                  className={styles.filter_select}>
-                                <option value="0">{translations['amp.indicatormanager:all-sectors']}</option>
-                                {
-                                  sectors && sectors.length > 0 ?
-                                      sectors.map((sector) => (
-                                          <option
-                                              key={sector.id}
-                                              value={sector.id}>
-                                            {sector.name}
-                                          </option>
-                                      )) : <option value="0">{translations['amp.indicatormanager:no-data']}</option>
-                                }
-                              </Form.Control>
+                              {
+                                sectorsReducer.sectors.length > 0 ? (
+                                    <Select
+                                        options={sectorOptions as any}
+                                        defaultValue={{
+                                          value: 0,
+                                          label: translations['amp.indicatormanager:all-sectors']
+                                        }}
+                                        className={styles.filter_select}
+                                        onChange={(item: any) => {
+                                          setSelectedSector(item.value)
+                                        }}
+                                        components={{
+                                          IndicatorSeparator: () => null,
+                                        }}
+                                    />
+                                ) : (
+                                    <>
+                                    {
+                                      !sectorsReducer.loading && (
+                                          <Select
+                                              options={[]}
+                                              defaultValue={{
+                                                value: 0,
+                                                label: translations['amp.indicatormanager:no-data']
+                                              }}
+                                              isDisabled
+                                              components={{
+                                                IndicatorSeparator: () => null,
+                                              }}
+                                              className={styles.filter_select}
+                                          />
+                                      )
+
+                                    }
+                                    </>
+                                )
+                              }
                             </div>
                         )}
 
@@ -221,22 +307,46 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                                 <div className={styles.sector_filter_container}>
                                     <Form.Label
                                         className={styles.filter_label}>{translations['amp.indicatormanager:programs']}</Form.Label>
-                                    <Form.Control
-                                        onChange={(e) => setSelectedProgram(e.target.value as unknown as number)}
-                                        as="select"
-                                        className={styles.filter_select}>
-                                    <option value="0">{translations['amp.indicatormanager:all-programs']}</option>
-                                    {
-                                        programs && programs.length > 0 ?
-                                            programs.map((program) => (
-                                                <option
-                                                    key={program.id}
-                                                    value={program.id}>
-                                                {program.name}
-                                                </option>
-                                            )) : <option value="0">{translations['amp.indicatormanager:no-data']}</option>
-                                    }
-                                    </Form.Control>
+                                  {
+                                    programOptions.length > 0 ? (
+                                        <Select
+                                            options={programOptions}
+                                            formatGroupLabel={formatGroupLabel}
+                                            defaultValue={{
+                                                value: 0,
+                                                label: translations['amp.indicatormanager:all-programs']
+                                            }}
+                                            className={styles.filter_select}
+                                            // Added this since it is using the optiongroup type rather than the option type
+                                            // @ts-ignore
+                                            onChange={(item: {value: number, label: string}) => {
+                                                setSelectedProgram(item.value)
+                                            }}
+                                            components={{
+                                              IndicatorSeparator: () => null,
+                                            }}
+                                        />
+                                    ) : (
+                                        <>
+                                        {
+                                          !programSchemeReducer.loading && (
+                                              <Select
+                                                  options={[]}
+                                                  defaultValue={{
+                                                    value: 0,
+                                                    label: translations['amp.indicatormanager:no-data']
+                                                  }}
+                                                  isDisabled
+                                                  components={{
+                                                    IndicatorSeparator: () => null,
+                                                  }}
+                                                  className={styles.filter_select}
+                                              />
+                                          )
+
+                                        }
+                                        </>
+                                  )}
                                 </div>
                             )
                         }

@@ -1,4 +1,4 @@
-import { ProgramObjectType, ProgramSchemeType } from "../types";
+import {GroupSelectValue, ProgramObjectType, ProgramSchemeType} from "../types";
 
 const extractChildren = (children: ProgramObjectType[]) => {
     const childrenArray: ProgramObjectType[] = [];
@@ -42,7 +42,7 @@ export const checkObjectIsNull = <T>(obj: T | any) => {
         return true;
     }
 
-    if (typeof obj === 'object') {
+    if (typeof obj === 'object')     {
         const keys = Object.keys(obj);
         if (keys.length === 0) {
             return true;
@@ -57,4 +57,17 @@ export const checkObjectIsNull = <T>(obj: T | any) => {
     }
 
     return false;
+}
+
+
+
+export const formatProgramSchemeToSelect = (programSchemes: Array<ProgramSchemeType>) => {
+    const childrenArray: GroupSelectValue [] = [];
+
+    programSchemes.forEach((scheme) => {
+        const children = extractChildrenFromProgramScheme(scheme);
+        childrenArray.push({ label: scheme.name, options: children.map((child) => ({ label: child.name, value: child.id })) });
+    });
+
+    return childrenArray;
 }

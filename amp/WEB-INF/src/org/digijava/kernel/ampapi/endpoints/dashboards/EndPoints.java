@@ -397,6 +397,42 @@ public class EndPoints {
         return new MeService().getIndicatorYearValuesByIndicatorId(id, params);
     }
 
+    /**
+     * Returns array of indicators values
+     * [
+     * {
+     *         "baseValue": 1000,
+     *         "actualValues": [
+     *             {
+     *                 "year": 2021,
+     *                 "value": 0
+     *             },
+     *             {
+     *                 "year": 2022,
+     *                 "value": 3000.000000000000
+     *             },
+     *             {
+     *                 "year": 2023,
+     *                 "value": 553.000000000000
+     *             }
+     *         ],
+     *         "targetValue": 3000,
+     *         "indicatorId": 11,
+     *         "indicatorName": ""
+     *     }
+     * ]
+     * @param params
+     * @return
+     */
+    @POST
+    @Path("/me/indicatorReportsByProgramCountry")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getValuesForIndicatorsCountryProgram")
+    @ApiOperation(value = "Returns indicator values for all indicators.")
+    public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
+        return new MeService().getIndicatorYearValuesByIndicatorCountryProgramId(params);
+    }
+
     @GET
     @Path("/me/indicatorsBySector/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

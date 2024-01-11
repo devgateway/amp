@@ -125,6 +125,46 @@ public class MeService {
         return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
     }
 
+    public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
+        Map<String, Object> filters = params.getFilters();
+
+        List<AmpIndicator> existingIndicators = getAllAmpIndicators();
+        Object pillar = filters.get("pillar");
+        Long pillarAsLong = (pillar != null) ? Long.valueOf(pillar.toString()) : null;
+        // Filter indicators by pillars
+        if(filters.get("pillar") != null){
+            existingIndicators = existingIndicators.stream()
+                    .filter(indicator -> indicator.getProgram() != null)
+                    .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(pillarAsLong))
+                    .collect(Collectors.toList());
+
+            for(AmpIndicator indicator: existingIndicators){
+                if(indicator.getProgram() != null){
+                    if(indicator.getProgram().getAmpThemeId().equals(282)){
+                        System.out.println(indicator);
+                    }
+                }
+            }
+        }
+        List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
+
+        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+
+        if (yearsCount < 5) {
+            yearsCount = 5;
+        }
+
+        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
+
+        for(AmpIndicator indicator: existingIndicators){
+            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(indicator, indicatorsWithYearValues, yearsCount);
+            singelIndicatorYearValues.setIndicatorName(indicator.getName());
+            indicatorValues.add(singelIndicatorYearValues);
+        }
+
+        return indicatorValues;
+    }
+
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
                                                        final Map<Long, List<YearValue>> indicatorsWithYearValues) {
         BigDecimal baseValue = BigDecimal.ZERO;

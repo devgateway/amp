@@ -37,14 +37,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -127,16 +120,12 @@ public class MeService {
 
         Object pillar = filters.get("pillar");
         Long pillarAsLong = (pillar != null) ? Long.valueOf(pillar.toString()) : null;
-        // Filter indicators by pillars
+        Long locationId = (filters.get("country") != null) ? Long.valueOf(filters.get("country").toString()) : null;
+        // Filter indicators by objective(pillar)
         if(filters.get("pillar") != null){
             indicatorsList = indicatorsList.stream()
                     .filter(indicator -> indicator.getProgram() != null)
-                    .filter(indicator -> {
-                        AmpTheme program = indicator.getProgram();
-                        return program != null &&
-                                (program.getParentThemeId() != null && program.getParentThemeId().getAmpThemeId().equals(pillarAsLong) ||
-                                        program.getParentThemeId() == null && program.getAmpThemeId().equals(pillarAsLong));
-                    })
+                    .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(pillarAsLong))
                     .collect(Collectors.toList());
         }
 
@@ -145,9 +134,21 @@ public class MeService {
             for(AmpIndicator indicator: indicatorsList){
                 // In indicator you have a list of indicator connection linked to the location(COuntry)
                 Set<IndicatorActivity> indicatorConnections = indicator.getValuesActivity();
-                // inside the indicator connection 
+                // Inside the indicator connection list get indicator with provided income, if no indicator
+                // with provided country remove the indicator from indicators list
 
-                System.out.println(indicatorConnections);
+                for(IndicatorActivity indicatorActivity: indicatorConnections){
+                    if(indicatorActivity.getActivityLocation() != null){
+                        if(indicatorActivity.getActivityLocation().getLocation().getParentLocation() != null){
+                            boolean isLocationInIndicator = indicatorActivity.getActivityLocation().getLocation().getParentLocation().getId().equals(locationId);
+                            if(!isLocationInIndicator){
+                                indicatorsList.remove(indicatorActivity.getIndicator());
+                            }
+                        }
+                    } else if(!indicatorActivity.getActivityLocation().getLocation().getId().equals(locationId)){
+                        indicatorsList.remove(indicatorActivity.getIndicator());
+                    }
+                }
             }
         }
         List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();

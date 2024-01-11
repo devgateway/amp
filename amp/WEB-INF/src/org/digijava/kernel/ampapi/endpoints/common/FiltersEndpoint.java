@@ -171,9 +171,20 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Programs' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each program settings.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Filter data",
+            response = FilterList.class))
     @FilterDefinition(tab = EPConstants.TAB_PROGRAMS)
-    public FilterList getPrograms() {
-        return FiltersManager.getInstance().getProgramFilterList();
+    public Response getPrograms() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getProgramFilterList());
+    }
+
+    @OPTIONS
+    @Path("/programs")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describePrograms() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     /**

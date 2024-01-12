@@ -117,9 +117,8 @@ public class MeService {
         Map<String, Object> filters = params.getFilters();
 
         List<AmpIndicator> indicatorsList = getAllAmpIndicators();
-
-        Object pillar = filters.get("pillar");
-        Long pillarAsLong = (pillar != null) ? Long.valueOf(pillar.toString()) : null;
+        
+        Long pillarAsLong = (filters.get("pillar") != null) ? Long.valueOf(filters.get("pillar").toString()) : null;
         Long locationId = (filters.get("country") != null) ? Long.valueOf(filters.get("country").toString()) : null;
         // Filter indicators by objective(pillar)
         if(filters.get("pillar") != null){
@@ -129,7 +128,10 @@ public class MeService {
                     .collect(Collectors.toList());
         }
 
-        // Filter indicator by country
+        // Clone the indicators to avoid affecting original list when removing indicators in the list
+        List<AmpIndicator> existingIndicatorsList = new ArrayList<>();
+
+        // Filter indicator list by country
         if(filters.get("country") != null){
             for(AmpIndicator indicator: indicatorsList){
                 // In indicator you have a list of indicator connection linked to the location(COuntry)
@@ -141,15 +143,18 @@ public class MeService {
                     if(indicatorActivity.getActivityLocation() != null){
                         if(indicatorActivity.getActivityLocation().getLocation().getParentLocation() != null){
                             boolean isLocationInIndicator = indicatorActivity.getActivityLocation().getLocation().getParentLocation().getId().equals(locationId);
-                            if(!isLocationInIndicator){
-                                indicatorsList.remove(indicatorActivity.getIndicator());
+                            if(isLocationInIndicator){
+                                existingIndicatorsList.add(indicatorActivity.getIndicator());
                             }
+                        } else if(indicatorActivity.getActivityLocation().getLocation().getId().equals(locationId)){
+                            existingIndicatorsList.add(indicatorActivity.getIndicator());
                         }
-                    } else if(!indicatorActivity.getActivityLocation().getLocation().getId().equals(locationId)){
-                        indicatorsList.remove(indicatorActivity.getIndicator());
                     }
                 }
             }
+        } else {
+            // if no country is passed assign indicatorList to this array for consistency of data
+            existingIndicatorsList = new ArrayList<>(indicatorsList);
         }
         List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
 
@@ -161,7 +166,7 @@ public class MeService {
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
 
-        for(AmpIndicator indicator: indicatorsList){
+        for(AmpIndicator indicator: existingIndicatorsList){
             IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(indicator, indicatorsWithYearValues, yearsCount);
             singelIndicatorYearValues.setIndicatorName(indicator.getName());
             indicatorValues.add(singelIndicatorYearValues);

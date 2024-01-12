@@ -13,7 +13,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import java.util.HashMap;
 
 public class ActivityGatekeeper {
-    private static HashMap<String, String> timestamp = new HashMap<String, String>();
+    private static HashMap<String, String> timestamp = new HashMap<>();
     private static HashMap<String, String> keycode = new HashMap<String, String>();
     private static HashMap<String, Long> userEditing = new HashMap<String, Long>();
     private static Boolean lock = false;
@@ -132,7 +132,7 @@ public class ActivityGatekeeper {
             if (teamMember == null)
                 return false;
 
-            if("Management".toLowerCase().equals(teamMember.getTeamAccessType().toLowerCase()))
+            if("Management".equalsIgnoreCase(teamMember.getTeamAccessType()))
                 return false;
             
             long ampActivityId = Long.parseLong(activityId);

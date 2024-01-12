@@ -102,6 +102,7 @@ public class MainMap extends Action {
         List<AmpCategoryValue> categoryvaluesprojectstatus = null;
         categoryvaluesprojectstatus = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
         filter.setProjectstatus(categoryvaluesprojectstatus);
+        //default for center of Africa
         double gsLat=7.1881;
         double gsLong=21.0938;
         if (request.getParameter("exportreport") != null) {
@@ -160,7 +161,7 @@ public class MainMap extends Action {
             filter.setModeexport(false);
         }
         //we set the map to center on one of the selected locations or else centre it in Africa
-        if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) ) {
+//        if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) ) {
             if (!AmpLocationFormTableFeature.LOCATIONS_SELECTED.isEmpty()) {
                 for (AmpActivityLocation ampActivityLocation : AmpLocationFormTableFeature.LOCATIONS_SELECTED) {
                     if (ampActivityLocation.getLocation().getGsLat() != null && !Objects.equals(ampActivityLocation.getLocation().getGsLat(), "")) {
@@ -184,9 +185,9 @@ public class MainMap extends Action {
             query.setParameter("newLat", String.valueOf(gsLat), StringType.INSTANCE);
             query.setParameter("newLong", String.valueOf(gsLong), StringType.INSTANCE);
             int rowCount = query.executeUpdate();
-            logger.info("Updated settings for latitude. " + rowCount);
+            logger.info("Updated settings for latitude and longitude. " + rowCount);
             FeaturesUtil.refreshSettingsCache();
-        }
+
 
         if (request.getParameter("popup") != null
                 && request.getParameter("popup").equalsIgnoreCase("true")) {
@@ -194,7 +195,7 @@ public class MainMap extends Action {
 
         }
 
-        Collection<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+        Collection<AmpStructureType> sts;
         sts = DbHelper.getAllStructureTypes();
         request.setAttribute("structureTypesList", sts);
 

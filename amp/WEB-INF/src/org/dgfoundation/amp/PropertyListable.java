@@ -70,7 +70,7 @@ public abstract class PropertyListable implements Cloneable {
      */
     @PropertyListableIgnore
     public Map<String, Object> getPropertiesMap() {
-        ArrayList<Class> annotations    = new ArrayList<Class>();
+        ArrayList<Class> annotations    = new ArrayList<>();
         annotations.add( PropertyListableIgnore.class );
         return this.generatePropertiesMap( annotations );
     }
@@ -83,7 +83,7 @@ public abstract class PropertyListable implements Cloneable {
     
     @PropertyListableIgnore
     private Map<String, Object> generatePropertiesMap(Collection<Class> annonations) {
-    Map<String, Object> ret = new TreeMap<String, Object>();
+    Map<String, Object> ret = new TreeMap<>();
     BeanInfo beanInfo = null;
     try {
         beanInfo = Introspector.getBeanInfo(this.getClass());
@@ -121,22 +121,16 @@ public abstract class PropertyListable implements Cloneable {
             if (object instanceof Collection) {
                 selProps = (Collection) object;
             } else {
-                selProps = new ArrayList();
+                selProps = new ArrayList<>();
                 selProps.add(object);
             }
 
             ret.put(propertyDescriptors[i].getName(), selProps);
         }
-    } catch (IntrospectionException e) {
-        logger.error(e.getMessage(), e);
-    } catch (IllegalArgumentException e) {
-        logger.error(e.getMessage(), e);
-    } catch (IllegalAccessException e) {
-        logger.error(e.getMessage(), e);
-    } catch (InvocationTargetException e) {
+    } catch (IntrospectionException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
         logger.error(e.getMessage(), e);
     }
-    return ret;
+        return ret;
 
     }
 

@@ -44,7 +44,6 @@ public final class FMUtil {
      * Singleton to check if FM root exists
      */
     public static synchronized void checkFmRoot(String root){
-        //if (!fmRootChecked){
             fmRootChecked = true;
             ServletContext context   = ((WebApplication)Application.get()).getServletContext();
             AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -61,7 +60,6 @@ public final class FMUtil {
                     }
 
             }
-        //}
     }
 
     public static boolean isFmEnabled(Component c) {

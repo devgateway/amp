@@ -33,7 +33,7 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
     @Override
     protected void onClick(final AjaxRequestTarget target) {
         Set<T> set = setModel.getObject();
-        if (set.size() == 0)
+        if (set.isEmpty())
             return;
         
         int size = 0;
@@ -71,13 +71,9 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
         list.getObject().removeAll();
         
         list.getObject().getParent().visitChildren(AmpCollectionValidatorField.class,
-                new IVisitor<AmpCollectionValidatorField, Void>() {
-                    @Override
-                    public void component(AmpCollectionValidatorField component,
-                            IVisit<Void> visit) {
-                        component.reloadValidationField(target);
-                        visit.dontGoDeeper();
-                    }
+                (IVisitor<AmpCollectionValidatorField, Void>) (component, visit) -> {
+                    component.reloadValidationField(target);
+                    visit.dontGoDeeper();
                 });
         target.add(list.getObject().getParent());
     }

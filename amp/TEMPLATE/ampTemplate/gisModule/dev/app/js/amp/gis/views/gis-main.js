@@ -43,6 +43,11 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
+    var loginRequired = self.app.data.generalSettings.get('login-required');
+    alert(loginRequired);
+    if (!loginRequired) {
+      return this;
+    }
     this.$el.html(ModuleTemplate);
 
     this.mapView.setElement(this.$('#map-container')).render();

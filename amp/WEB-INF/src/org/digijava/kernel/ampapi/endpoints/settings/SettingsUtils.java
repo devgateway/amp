@@ -545,18 +545,25 @@ public class SettingsUtils {
 
         String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
 
-        if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE)) {
-            settings.setDashboardDefaultMaxYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE)) {
-            settings.setDashboardDefaultMinYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MAX_YEAR_RANGE)) {
-            settings.setGisDefaultMaxYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE)) {
-            settings.setGisDefaultMinYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MAX_YEAR_RANGE)) {
-            settings.setReportDefaultMaxYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE)) {
-            settings.setReportDefaultMinYearRange(yearNumber);
+        switch (yearSettingsName) {
+            case SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE:
+                settings.setDashboardDefaultMaxYearRange(yearNumber);
+                break;
+            case SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE:
+                settings.setDashboardDefaultMinYearRange(yearNumber);
+                break;
+            case SettingsConstants.GIS_DEFAULT_MAX_YEAR_RANGE:
+                settings.setGisDefaultMaxYearRange(yearNumber);
+                break;
+            case SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE:
+                settings.setGisDefaultMinYearRange(yearNumber);
+                break;
+            case SettingsConstants.REPORT_DEFAULT_MAX_YEAR_RANGE:
+                settings.setReportDefaultMaxYearRange(yearNumber);
+                break;
+            case SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE:
+                settings.setReportDefaultMinYearRange(yearNumber);
+                break;
         }
 
         if (!StringUtils.equals(yearNumber, "-1")) {
@@ -572,18 +579,25 @@ public class SettingsUtils {
              */
             String formattedDate = DateTimeUtil.formatDateForPicker2(gsDate, Constants.CALENDAR_DATE_PICKER);
 
-            if (dateSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MAX_DATE)) {
-                settings.setDashboardDefaultMaxDate(formattedDate);
-            } else if (dateSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MIN_DATE)) {
-                settings.setDashboardDefaultMinDate(formattedDate);
-            } else if (dateSettingsName.equals(SettingsConstants.GIS_DEFAULT_MAX_DATE)) {
-                settings.setGisDefaultMaxDate(formattedDate);
-            } else if (dateSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_DATE)) {
-                settings.setGisDefaultMinDate(formattedDate);
-            } else if (dateSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MAX_DATE)) {
-                settings.setReportDefaultMaxDate(formattedDate);
-            } else if (dateSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MIN_DATE)) {
-                settings.setReportDefaultMinDate(formattedDate);
+            switch (dateSettingsName) {
+                case SettingsConstants.DASHBOARD_DEFAULT_MAX_DATE:
+                    settings.setDashboardDefaultMaxDate(formattedDate);
+                    break;
+                case SettingsConstants.DASHBOARD_DEFAULT_MIN_DATE:
+                    settings.setDashboardDefaultMinDate(formattedDate);
+                    break;
+                case SettingsConstants.GIS_DEFAULT_MAX_DATE:
+                    settings.setGisDefaultMaxDate(formattedDate);
+                    break;
+                case SettingsConstants.GIS_DEFAULT_MIN_DATE:
+                    settings.setGisDefaultMinDate(formattedDate);
+                    break;
+                case SettingsConstants.REPORT_DEFAULT_MAX_DATE:
+                    settings.setReportDefaultMaxDate(formattedDate);
+                    break;
+                case SettingsConstants.REPORT_DEFAULT_MIN_DATE:
+                    settings.setReportDefaultMinDate(formattedDate);
+                    break;
             }
         }
     }
@@ -631,7 +645,7 @@ public class SettingsUtils {
         applySettings(spec, settings, true);
 
         // now apply custom settings, i.e. selected measures
-        List<String> measureOptions = new ArrayList<String>();
+        List<String> measureOptions = new ArrayList<>();
         if (settings != null) {
             Object fundingTypes = settings.get(SettingsConstants.FUNDING_TYPE_ID);
             if (fundingTypes != null) {
@@ -644,7 +658,7 @@ public class SettingsUtils {
                     measureOptions.addAll((List<String>) fundingTypes);
             }
         }
-        if (measureOptions.size() > 0) {
+        if (!measureOptions.isEmpty()) {
             for (String measure : measureOptions)
                 spec.addMeasure(new ReportMeasure(measure));
         } else {
@@ -661,7 +675,7 @@ public class SettingsUtils {
         String fundingType = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
         Set<String> measures = new LinkedHashSet<>(GisConstants.FUNDING_TYPES);
         measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
-        if (measures.size() > 0) {
+        if (!measures.isEmpty()) {
             fundingType = measures.iterator().next();
         }
         return fundingType;

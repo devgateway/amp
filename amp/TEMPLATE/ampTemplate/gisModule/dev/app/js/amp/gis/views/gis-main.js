@@ -18,24 +18,13 @@ function loadResizeSensor() {
 	new ResizeSensor($('#amp-header-menu'), updateMapContainerSidebarPosition);
 	updateMapContainerSidebarPosition();
 }
-function fetchSettingsAndCheckLoginRequired() {
+function fetchSettingsAndCheckLoginRequired(): Promise {
   fetch('/rest/amp/settings')
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
-      })
-      .then(data => {
-        // Extract the login-required field
-        var loginRequired = data['login-required'];
-
-        // Perform actions based on the loginRequired value
-        alert(loginRequired);
-
-        if (!loginRequired) {
-          return this;
-        }
       })
       .catch(error => {
         // Handle errors, such as network issues or errors returned by the API
@@ -67,40 +56,55 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
-    fetchSettingsAndCheckLoginRequired();
-    this.$el.html(ModuleTemplate);
 
-    this.mapView.setElement(this.$('#map-container')).render();
-    /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
-    this.sidebarView.setElement(this.$('#sidebar-tools')).render();
+    fetchSettingsAndCheckLoginRequired() .then(data => {
+      // Extract the login-required field
+      var loginRequired = data['login-required'];
 
-    //auto-render the layout
-    var headerWidget = new boilerplate.layout(
+      // Perform actions based on the loginRequired value
+      alert(loginRequired);
+
+      if (!loginRequired) {
+        return this;
+      }
+      else
       {
-        callingModule: 'GIS',
-        showDGFooter: false,
-        useSingleRowHeader: true
-      });
-    $.when(headerWidget.layoutFetched).then(function() {
-      $('.dropdown-toggle').dropdown();
+        this.$el.html(ModuleTemplate);
 
-      $.when(headerWidget.header.menuRendered).then(function() {
-          loadResizeSensor();
+        this.mapView.setElement(this.$('#map-container')).render();
+        /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
+        this.sidebarView.setElement(this.$('#sidebar-tools')).render();
+
+        //auto-render the layout
+        var headerWidget = new boilerplate.layout(
+            {
+              callingModule: 'GIS',
+              showDGFooter: false,
+              useSingleRowHeader: true
+            });
+        $.when(headerWidget.layoutFetched).then(function() {
+          $('.dropdown-toggle').dropdown();
+
+          $.when(headerWidget.header.menuRendered).then(function() {
+            loadResizeSensor();
+          });
         });
-    });
 
-    // update translations
-    this.translator.translateDOM(this.el);
-    this.translationToggle();
+        // update translations
+        this.translator.translateDOM(this.el);
+        this.translationToggle();
 
-    // Translate parts of leaflet UI.
-    var leafletZoomIn = $('.leaflet-control-zoom-in');
-    $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
-    var leafletZoomOut = $('.leaflet-control-zoom-out');
-    $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
+        // Translate parts of leaflet UI.
+        var leafletZoomIn = $('.leaflet-control-zoom-in');
+        $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
+        var leafletZoomOut = $('.leaflet-control-zoom-out');
+        $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
 
-    /* TODO(thadk): test without app here? this?*/
-    app.translator.translateDOM('.leaflet-control-zoom');
+        /* TODO(thadk): test without app here? this?*/
+        app.translator.translateDOM('.leaflet-control-zoom');
+      }
+    })
+
   },
 
   translationToggle: function() {

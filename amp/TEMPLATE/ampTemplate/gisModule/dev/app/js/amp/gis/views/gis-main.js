@@ -20,6 +20,7 @@ function loadResizeSensor() {
 }
 function fetchDataAndCheckLoginRequired() {
   return new Promise((resolve, reject) => {
+    // Fetch settings data
     fetch('/rest/amp/settings')
         .then(response => {
           if (!response.ok) {
@@ -27,13 +28,48 @@ function fetchDataAndCheckLoginRequired() {
           }
           return response.json();
         })
+        .then(data => {
+          // Extract the login-required field
+          const loginRequired = data['login-required'];
+
+          // Perform actions based on the loginRequired value
+          console.log('Login required:', loginRequired);
+
+          if (loginRequired) {
+            // If login is required, fetch user login status
+            return fetch('/rest/amp/user-logged-in');
+          } else {
+            // If login is not required, resolve with a message
+            resolve('Login is not required.');
+          }
+        })
+        .then(response => {
+          // Check user login status
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(userData => {
+          // Perform actions based on user login status
+          const isLoggedIn = userData.isLoggedIn;
+
+          if (isLoggedIn) {
+            // If user is logged in, resolve with the user data
+            resolve({ isLoggedIn, userData });
+          } else {
+            // If user is not logged in, resolve with a message
+            resolve('User is not logged in.');
+          }
+        })
         .catch(error => {
           // Handle errors, such as network issues or errors returned by the API
-          console.error('Error fetching settings data:', error);
+          console.error('Error fetching data:', error);
           reject(error);
         });
   });
 }
+
 
 module.exports = Backbone.View.extend({
 
@@ -59,28 +95,14 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
-    fetchDataAndCheckLoginRequired().then(
-        data=>
-        {
-          var loginRequired = data['login-required'];
+    fetchDataAndCheckLoginRequired()
+        .then(result => {
+          // Handle success
+          alert(result);
 
-          // Perform actions based on the loginRequired value
-
-          if (loginRequired===true) {
-            fetch('/rest/amp/user-logged-in').then(
-                isUserLoggedIn=>
-                {
-                  alert(isUserLoggedIn);
-                  if (isUserLoggedIn===false)
-                  {
-                    alert("You must be logged in to access this map.");
-                    window.location.href = '/';
-                  }
-                }
-
-            )
-
-            // return this;
+          if (result.isLoggedIn) {
+            // User is logged in, do something
+            alert('User is logged in');
           }
           else
           {

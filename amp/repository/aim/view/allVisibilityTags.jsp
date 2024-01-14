@@ -1087,6 +1087,7 @@ deleted 6 fields, do not reinsert
 <feature:display name="Project sites" module="/GIS"></feature:display>
 <feature:display name="Download Map selector" module="/GIS"></feature:display>
 <feature:display name="Gap Analysis Map" module="/GIS"></feature:display>
+<feature:display name="Login Required" module="/GIS"></feature:display>
 
 <!-- Public View Modules/Features/Fields -->
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>

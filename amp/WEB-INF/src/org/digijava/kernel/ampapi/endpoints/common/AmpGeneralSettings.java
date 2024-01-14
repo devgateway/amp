@@ -58,6 +58,17 @@ public class AmpGeneralSettings {
     @JsonProperty("gap-analysis-map")
     private Boolean gapAnalysisMap;
 
+    public Boolean getLoginRequired() {
+        return loginRequired;
+    }
+
+    public void setLoginRequired(Boolean loginRequired) {
+        this.loginRequired = loginRequired;
+    }
+
+    @JsonProperty("login-required")
+    private Boolean loginRequired;
+
     @JsonProperty("has-ssc-workspaces")
     private Boolean hasSscWorkspaces;
 

@@ -450,6 +450,8 @@ public class SettingsUtils {
 
         settings.setGapAnalysisMap(FeaturesUtil.isVisibleFeature("Gap Analysis Map"));
 
+        settings.setLoginRequired(FeaturesUtil.isVisibleFeature("Login Required"));
+
         settings.setHasSscWorkspaces(!TeamUtil.getAllSSCWorkspaces().isEmpty());
 
         settings.setReorderFundingItemId(

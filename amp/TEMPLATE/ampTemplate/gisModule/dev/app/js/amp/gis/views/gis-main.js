@@ -100,9 +100,9 @@ module.exports = Backbone.View.extend({
           // Handle success
           alert(result);
 
-          if (result.isLoggedIn) {
+          if (result.isLoggedIn===false) {
             // User is logged in, do something
-            alert('User is logged in');
+            alert('User is not logged in');
           }
           else
           {

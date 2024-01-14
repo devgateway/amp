@@ -82,7 +82,7 @@ module.exports = Backbone.View.extend({
           if (loginRequired===true) {
             alert("You must be logged in to access this map.")
             window.location.href = '/';
-            return this;
+            // return this;
           }
           else
           {

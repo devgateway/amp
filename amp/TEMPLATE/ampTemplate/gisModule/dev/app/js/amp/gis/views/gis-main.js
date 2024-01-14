@@ -63,7 +63,6 @@ module.exports = Backbone.View.extend({
 
       // Perform actions based on the loginRequired value
       alert(loginRequired);
-
       if (!loginRequired) {
         return this;
       }

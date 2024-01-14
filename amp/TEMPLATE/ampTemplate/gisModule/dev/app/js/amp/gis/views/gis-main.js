@@ -19,28 +19,33 @@ function loadResizeSensor() {
 	updateMapContainerSidebarPosition();
 }
 function fetchDataAndCheckLoginRequired() {
-  fetch('/rest/amp/settings')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Extract the login-required field
-        var loginRequired = data['login-required'];
+  return new Promise((resolve, reject) => {
+    fetch('/rest/amp/settings')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Extract the login-required field
+          var loginRequired = data['login-required'];
 
-        // Perform actions based on the loginRequired value
-        alert(loginRequired);
+          // Perform actions based on the loginRequired value
+          alert(loginRequired);
 
-        if (!loginRequired) {
-          return this;
-        }
-      })
-      .catch(error => {
-        // Handle errors, such as network issues or errors returned by the API
-        console.error('Error fetching settings data:', error);
-      });
+          if (!loginRequired) {
+            resolve(this);
+          } else {
+            reject('Login is required.');
+          }
+        })
+        .catch(error => {
+          // Handle errors, such as network issues or errors returned by the API
+          console.error('Error fetching settings data:', error);
+          reject(error);
+        });
+  });
 }
 
 module.exports = Backbone.View.extend({
@@ -67,40 +72,55 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
-    fetchDataAndCheckLoginRequired();
-    this.$el.html(ModuleTemplate);
+    fetchDataAndCheckLoginRequired().then(
+        data=>
+        {
+          var loginRequired = data['login-required'];
 
-    this.mapView.setElement(this.$('#map-container')).render();
-    /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
-    this.sidebarView.setElement(this.$('#sidebar-tools')).render();
+          // Perform actions based on the loginRequired value
+          alert(loginRequired);
 
-    //auto-render the layout
-    var headerWidget = new boilerplate.layout(
-      {
-        callingModule: 'GIS',
-        showDGFooter: false,
-        useSingleRowHeader: true
-      });
-    $.when(headerWidget.layoutFetched).then(function() {
-      $('.dropdown-toggle').dropdown();
+          if (!loginRequired) {
+            return this;
+          }
+          else
+          {
+            this.$el.html(ModuleTemplate);
 
-      $.when(headerWidget.header.menuRendered).then(function() {
-          loadResizeSensor();
+            this.mapView.setElement(this.$('#map-container')).render();
+            /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
+            this.sidebarView.setElement(this.$('#sidebar-tools')).render();
+
+            //auto-render the layout
+            var headerWidget = new boilerplate.layout(
+                {
+                  callingModule: 'GIS',
+                  showDGFooter: false,
+                  useSingleRowHeader: true
+                });
+            $.when(headerWidget.layoutFetched).then(function() {
+              $('.dropdown-toggle').dropdown();
+
+              $.when(headerWidget.header.menuRendered).then(function() {
+                loadResizeSensor();
+              });
+            });
+
+            // update translations
+            this.translator.translateDOM(this.el);
+            this.translationToggle();
+
+            // Translate parts of leaflet UI.
+            var leafletZoomIn = $('.leaflet-control-zoom-in');
+            $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
+            var leafletZoomOut = $('.leaflet-control-zoom-out');
+            $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
+
+            /* TODO(thadk): test without app here? this?*/
+            app.translator.translateDOM('.leaflet-control-zoom');
+          }
         });
-    });
 
-    // update translations
-    this.translator.translateDOM(this.el);
-    this.translationToggle();
-
-    // Translate parts of leaflet UI.
-    var leafletZoomIn = $('.leaflet-control-zoom-in');
-    $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
-    var leafletZoomOut = $('.leaflet-control-zoom-out');
-    $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
-
-    /* TODO(thadk): test without app here? this?*/
-    app.translator.translateDOM('.leaflet-control-zoom');
   },
 
   translationToggle: function() {

@@ -9,7 +9,7 @@
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
 				INSERT INTO amp_features_visibility (id, name, haslevel, parent)
-				SELECT (select nextval('amp_features_visibility_seq')), 'Login Required', true,
+				SELECT (select nextval('amp_features_visibility_seq')), 'Login Required', false,
 				(SELECT id FROM amp_modules_visibility WHERE name = '/GIS')
 				WHERE NOT EXISTS (SELECT id FROM amp_features_visibility  WHERE name  = 'Login Required');
 

@@ -52,7 +52,7 @@ function fetchDataAndCheckLoginRequired() {
         })
         .then(userData => {
           // Perform actions based on user login status
-          const isLoggedIn = userData.isLoggedIn;
+          const isLoggedIn = userData;
 
           if (isLoggedIn) {
             // If user is logged in, resolve with the user data
@@ -97,7 +97,7 @@ module.exports = Backbone.View.extend({
   render: function() {
     fetchDataAndCheckLoginRequired()
         .then(result => {
-
+            alert(result.isLoggedIn);
           if (result.isLoggedIn===false) {
             // User is logged in, do something
               Backbone.history.navigate('index.do', { trigger: true });

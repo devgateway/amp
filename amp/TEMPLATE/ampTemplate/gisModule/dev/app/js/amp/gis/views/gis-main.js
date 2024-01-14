@@ -27,19 +27,6 @@ function fetchDataAndCheckLoginRequired() {
           }
           return response.json();
         })
-        .then(data => {
-          // Extract the login-required field
-          var loginRequired = data['login-required'];
-
-          // Perform actions based on the loginRequired value
-          alert(loginRequired);
-
-          if (!loginRequired) {
-            resolve(this);
-          } else {
-            reject('Login is required.');
-          }
-        })
         .catch(error => {
           // Handle errors, such as network issues or errors returned by the API
           console.error('Error fetching settings data:', error);

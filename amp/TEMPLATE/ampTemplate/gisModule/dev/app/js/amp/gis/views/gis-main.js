@@ -101,7 +101,6 @@ module.exports = Backbone.View.extend({
           if (result.isLoggedIn===false) {
             // User is logged in, do something
               Backbone.history.navigate('index.do', { trigger: true });
-
           }
           else
           {

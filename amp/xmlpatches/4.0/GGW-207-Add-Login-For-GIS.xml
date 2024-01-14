@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>GGW-207</jira>
+    <author>bmokandu</author>
+    <description>Add Login For GIS.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+				INSERT INTO amp_features_visibility (id, name, haslevel, parent)
+				SELECT (select nextval('amp_features_visibility_seq')), 'Login Required', true,
+				(SELECT id FROM amp_modules_visibility WHERE name = '/GIS')
+				WHERE NOT EXISTS (SELECT id FROM amp_features_visibility  WHERE name  = 'Login Required');
+
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

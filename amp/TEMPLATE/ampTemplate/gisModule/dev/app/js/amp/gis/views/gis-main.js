@@ -100,8 +100,8 @@ module.exports = Backbone.View.extend({
 
           if (result.isLoggedIn===false) {
             // User is logged in, do something
-            alert('User is not logged in');
-            return this;
+              Backbone.history.navigate('index.do', { trigger: true });
+
           }
           else
           {
@@ -139,7 +139,9 @@ module.exports = Backbone.View.extend({
             /* TODO(thadk): test without app here? this?*/
             app.translator.translateDOM('.leaflet-control-zoom');
           }
-        });
+        }).catch(error => {
+        console.error('Error checking login:', error);
+    });
 
   },
 

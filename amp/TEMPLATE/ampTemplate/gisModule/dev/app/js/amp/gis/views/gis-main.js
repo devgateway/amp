@@ -102,7 +102,7 @@ module.exports = Backbone.View.extend({
         /* TODO(thadk): test without app here? this?*/
         app.translator.translateDOM('.leaflet-control-zoom');
       }
-    })
+    });
 
   },
 

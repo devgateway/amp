@@ -19,56 +19,49 @@ function loadResizeSensor() {
 	updateMapContainerSidebarPosition();
 }
 function fetchDataAndCheckLoginRequired() {
-  return new Promise((resolve, reject) => {
-    // Fetch settings data
-    fetch('/rest/amp/settings')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          // Extract the login-required field
-          const loginRequired = data['login-required'];
+    return new Promise((resolve, reject) => {
+        // Fetch settings data
+        fetch('/rest/amp/settings')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Extract the login-required field
+                const loginRequired = data['login-required'];
 
-          // Perform actions based on the loginRequired value
-          console.log('Login required:', loginRequired);
+                // Perform actions based on the loginRequired value
+                console.log('Login required:', loginRequired);
 
-          if (loginRequired) {
-            // If login is required, fetch user login status
-            return fetch('/rest/amp/user-logged-in');
-          } else {
-            // If login is not required, resolve with a message
-            resolve('Login is not required.');
-          }
-        })
-        .then(response => {
-          // Check user login status
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(userData => {
-          // Perform actions based on user login status
-          const isLoggedIn = userData;
-
-          if (isLoggedIn) {
-            // If user is logged in, resolve with the user data
-            resolve({ isLoggedIn, userData });
-          } else {
-            // If user is not logged in, resolve with a message
-            resolve('User is not logged in.');
-          }
-        })
-        .catch(error => {
-          // Handle errors, such as network issues or errors returned by the API
-          console.error('Error fetching data:', error);
-          reject(error);
-        });
-  });
+                if (loginRequired) {
+                    // If login is required, fetch user login status
+                    return fetch('/rest/amp/user-logged-in');
+                } else {
+                    // If login is not required, resolve with a message
+                    resolve({ isLoggedIn: true, message: 'Login is not required.' });
+                }
+            })
+            .then(response => {
+                // Check user login status
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(isLoggedIn => {
+                // Resolve with user login status
+                resolve({ isLoggedIn, message: 'User is logged in.' });
+            })
+            .catch(error => {
+                // Handle errors, such as network issues or errors returned by the API
+                console.error('Error fetching data:', error);
+                reject(error);
+            });
+    });
 }
+
 
 
 module.exports = Backbone.View.extend({
@@ -99,7 +92,7 @@ module.exports = Backbone.View.extend({
         .then(result => {
             alert(result.isLoggedIn);
           if (result.isLoggedIn===false) {
-            // User is logged in, do something
+            // User is not logged in, do something
               Backbone.history.navigate('index.do', { trigger: true });
           }
           else

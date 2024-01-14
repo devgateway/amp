@@ -1332,8 +1332,7 @@ public class TeamMemberUtil {
      * @return
      */
     public static TeamMember getLoggedInTeamMember() {
-        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        return tm;
+        return (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
     }
 
     public static boolean isHeadRole(AmpTeamMemberRoles role) {

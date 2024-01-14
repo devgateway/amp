@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +84,15 @@ public class AmpConfiguration {
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeTopsDashboard() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    @GET
+    @Path("/user-logged-in")
+    @ApiOperation(
+            value = "Get if User is logged in",
+            notes = "Get if User is logged in")
+    public Boolean getUserLoggedIn() {
+        return TeamMemberUtil.getLoggedInTeamMember()!=null;
     }
 
     @GET

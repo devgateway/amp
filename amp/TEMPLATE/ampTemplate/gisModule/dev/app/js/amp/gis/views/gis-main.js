@@ -80,8 +80,19 @@ module.exports = Backbone.View.extend({
           // Perform actions based on the loginRequired value
 
           if (loginRequired===true) {
-            alert("You must be logged in to access this map.")
-            window.location.href = '/';
+            fetch('/rest/amp/user-logged-in').then(
+                isUserLoggedIn=>
+                {
+                  alert(isUserLoggedIn);
+                  if (isUserLoggedIn===false)
+                  {
+                    alert("You must be logged in to access this map.");
+                    window.location.href = '/';
+                  }
+                }
+
+            )
+
             // return this;
           }
           else

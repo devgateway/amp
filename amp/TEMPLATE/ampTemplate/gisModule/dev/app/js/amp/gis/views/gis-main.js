@@ -97,8 +97,6 @@ module.exports = Backbone.View.extend({
   render: function() {
     fetchDataAndCheckLoginRequired()
         .then(result => {
-          // Handle success
-          // alert(result);
 
           if (result.isLoggedIn===false) {
             // User is logged in, do something

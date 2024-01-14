@@ -80,7 +80,9 @@ module.exports = Backbone.View.extend({
           // Perform actions based on the loginRequired value
           alert(loginRequired);
 
-          if (!loginRequired) {
+          if (loginRequired) {
+            alert("You must be logged in to access this map.")
+            window.history.back()
             return this;
           }
           else

@@ -14,6 +14,7 @@ import org.digijava.kernel.util.ModuleUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -105,8 +106,11 @@ public class IndicatorManagerService {
 
         Set<AmpIndicatorGlobalValue> indicatorValues = new HashSet<>();
 
+        AmpTheme program = null;
+
         if (indicatorRequest.getProgramId() != null) {
-            indicator.setProgram(ProgramUtil.getTheme(indicatorRequest.getProgramId()));
+            program = ProgramUtil.getTheme(indicatorRequest.getProgramId());
+            indicator.setProgram(program);
             validateProgramSettingsAndGlobalValues(indicatorRequest, indicator);
         }
 
@@ -149,6 +153,15 @@ public class IndicatorManagerService {
 
 
         session.save(indicator);
+
+        if (program != null) {
+            try {
+                IndicatorUtil.assignIndicatorToTheme(program, indicator);
+            } catch (DgException e) {
+                throw new ApiRuntimeException(BAD_REQUEST,
+                        ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " could not be assigned to program with id " + program.getAmpThemeId()));
+            }
+        }
 
         return new MEIndicatorDTO(indicator);
     }
@@ -289,8 +302,11 @@ public class IndicatorManagerService {
             indicator.setType(indRequest.isAscending() ? "A" : "D");
             indicator.setCreationDate(indRequest.getCreationDate());
 
+            AmpTheme program = null;
+
             if (indRequest.getProgramId() != null) {
-                indicator.setProgram(ProgramUtil.getTheme(indRequest.getProgramId()));
+                program = ProgramUtil.getTheme(indRequest.getProgramId());
+                indicator.setProgram(program);
                 validateProgramSettingsAndGlobalValues(indRequest, indicator);
             }
 
@@ -331,6 +347,15 @@ public class IndicatorManagerService {
             }
 
             session.update(indicator);
+            if (program != null) {
+                try {
+                    IndicatorUtil.assignIndicatorToTheme(program, indicator);
+                } catch (DgException e) {
+                    throw new ApiRuntimeException(BAD_REQUEST,
+                            ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " could not be assigned to program with id " + program.getAmpThemeId()));
+                }
+            }
+
             return new MEIndicatorDTO(indicator);
         }
 

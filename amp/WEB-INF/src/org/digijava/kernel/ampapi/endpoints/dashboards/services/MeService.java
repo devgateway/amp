@@ -61,7 +61,14 @@ public class MeService {
         List<AmpIndicator> indicators = new ArrayList<>();
         AmpTheme program = ProgramUtil.getThemeById(programId);
 
-        Set<IndicatorTheme> programIndicators =  program.getIndicators();
+        Set<IndicatorTheme> programIndicators = null;
+
+        try {
+            programIndicators = IndicatorUtil.getIndicators(program, true);
+        } catch (Exception e) {
+            throw new ApiRuntimeException(NOT_FOUND,
+                    ApiError.toError("Program with id " + programId + " does not exist"));
+        }
 
 
         programIndicators.forEach(indicator -> {

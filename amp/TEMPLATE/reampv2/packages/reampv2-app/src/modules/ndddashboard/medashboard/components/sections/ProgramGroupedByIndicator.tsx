@@ -23,17 +23,17 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
     const [selectedIndicatorId, setSelectedIndicatorId] = useState<number | null>(null);
 
     useEffect(() => {
+        if (level1Child) dispatch(fetchIndicatorsByProgram(level1Child));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [level1Child]);
+
+    useEffect(() => {
         if (!selectedIndicator && indicatorsByProgramReducer.data.length > 0) {
             setSelectedIndicatorId(indicatorsByProgramReducer.data[0].id);
             setSelectedIndicator(indicatorsByProgramReducer.data[0]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() => {
-        if (level1Child) dispatch(fetchIndicatorsByProgram(level1Child));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [level1Child]);
 
     const handleIndicatorChange = () => {
         const findIndicator = indicatorsByProgramReducer.data.find((item: any) => item.id ===  selectedIndicatorId);

@@ -15,14 +15,6 @@ interface IndicatorBySectorProps {
     selectedClassification?: number | null;
 }
 
-const options = [
-    { value: 5, label: '5 Years' },
-    { value: 10, label: '10 Years' },
-    { value: 15, label: '15 Years' },
-    { value: 20, label: '20 Years' },
-    { value: 25, label: '25 Years' }
-]
-
 const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     const { translations, selectedClassification, filters, settings } = props;
 
@@ -33,12 +25,9 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     const [selectedIndicatorId, setSelectedIndicatorId] = React.useState<number | null>(null);
     const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorObjectType | null>(null);
 
-    const handleIndicatorChange = () => {
-        if (!indicatorsReducer.loading && indicatorsReducer.data && !indicatorsReducer.error) {
-            setIndicators(indicatorsReducer.data);
-            setSelectedIndicatorId(indicatorsReducer.data[0].id);
-            setSelectedIndicator(indicatorsReducer.data[0])
-        }
+    const handleIndicatorChange = (value: number) => {
+        const indicator = indicators.find((item: IndicatorObjectType) => item.id === value);
+        if (indicator) setSelectedIndicator(indicator);
     }
 
     useEffect(() => {
@@ -48,12 +37,12 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     }, [selectedClassification]);
 
     useEffect(() => {
-        handleIndicatorChange();
+        if (!indicatorsReducer.loading && indicatorsReducer.data && !indicatorsReducer.error) {
+            setIndicators(indicatorsReducer.data);
+            setSelectedIndicatorId(indicatorsReducer.data[0].id);
+            setSelectedIndicator(indicatorsReducer.data[0])
+        }
     }, [indicatorsReducer]);
-
-    useEffect(() => {
-        handleIndicatorChange();
-    }, [selectedIndicatorId]);
 
     return (
         <div>
@@ -88,6 +77,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                                     onChange={(e) => {
                                         setSelectedIndicator(null);
                                         setSelectedIndicatorId(parseInt(e.target.value))
+                                        handleIndicatorChange(parseInt(e.target.value))
                                     }}
                                     style={{
                                         backgroundColor: '#f3f5f8',
@@ -111,7 +101,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                     </Row>
 
                     {
-                        (selectedIndicator && selectedIndicatorId) ? (
+                        (selectedIndicator) ? (
                             <IndicatorProgressChart section="right" translations={translations} filters={filters} settings={settings} indicator={selectedIndicator}/>
                         ) : (
                             <div className="loading"></div>

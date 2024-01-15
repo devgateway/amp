@@ -53,15 +53,15 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     useEffect(() => {
         setSelectedIndicatorName(indicator.name);
         dispatch(fetchIndicatorReport({ filters, id: indicator.id, section, yearCount, settings }));
-        // calculateProgressValue();
+        calculateProgressValue();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [indicator.id]);
 
 
     useEffect(() => {
         calculateProgressValue();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicatorReportReducer[section]]);
+    }, [indicatorReportReducer]);
 
     useEffect(() => {
         const generatedReport = ChartUtils.generateValuesDataset({
@@ -69,8 +69,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
             translations
         });
         setReportData(generatedReport);
-    }, [indicatorReportReducer[section]]);
-
+    }, [indicatorReportReducer]);
 
     return (
         <div>
@@ -110,7 +109,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                             <div style={{
                                 height: 250
                             }}>
-                                {reportData && (
+                                {reportData && reportData.length > 0 && (
                                     <BarChart
                                         translations={translations}
                                         data={reportData}

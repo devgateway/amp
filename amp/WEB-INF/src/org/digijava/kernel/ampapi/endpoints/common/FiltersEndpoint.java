@@ -335,8 +335,19 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Activity Status' values.")
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.STATUS)
-    public FilterList getActivityStatus() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.STATUS);
+    public Response getActivityStatus() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().
+                getCategoryValueFilter(FiltersConstants.STATUS));
+    }
+
+
+    @OPTIONS
+    @Path("/activityStatus")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeActivityStatus() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     /**

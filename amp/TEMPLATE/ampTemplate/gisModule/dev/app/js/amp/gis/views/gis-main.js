@@ -62,45 +62,45 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
-    fetchDataAndCheckLoginRequired()
-        .then(data => {
-            return new Promise((resolve, reject)=> {
-                // Extract the login-required field
-                const loginRequired = data['login-required'];
-
-                // Perform actions based on the loginRequired value
-                console.log('Login required:', loginRequired);
-
-                if (loginRequired === false) {
-                    // If login is required, fetch user login status
-                    return fetch('/rest/amp/user-logged-in').then(
-                        response=>{
-                            alert(response.json())
-                            if (response.json().userId) {
-                                resolve({isLoggedIn: true, message: 'Login is required.'});
-                            }
-                            else
-                            {
-                                resolve({isLoggedIn: false, message: 'Login is required.'});
-
-                            }
-                        }
-                    )
-                } else {
-                    // If login is not required, resolve with a message
-                    resolve({isLoggedIn: true, message: 'Login is not required.'});
-                }
-            })
-        })
-        .then(result => {
-            console.log("Result",result);
-            alert("is Logged in",result.isLoggedIn);
-          if (result.isLoggedIn===false) {
-            // User is not logged in, do something
-              Backbone.history.navigate('index.do', { trigger: true });
-          }
-          else
-          {
+    // fetchDataAndCheckLoginRequired()
+    //     .then(data => {
+    //         return new Promise((resolve, reject)=> {
+    //             // Extract the login-required field
+    //             const loginRequired = data['login-required'];
+    //
+    //             // Perform actions based on the loginRequired value
+    //             console.log('Login required:', loginRequired);
+    //
+    //             if (loginRequired === false) {
+    //                 // If login is required, fetch user login status
+    //                 return fetch('/rest/amp/user-logged-in').then(
+    //                     response=>{
+    //                         alert(response.json())
+    //                         if (response.json().userId) {
+    //                             resolve({isLoggedIn: true, message: 'Login is required.'});
+    //                         }
+    //                         else
+    //                         {
+    //                             resolve({isLoggedIn: false, message: 'Login is required.'});
+    //
+    //                         }
+    //                     }
+    //                 )
+    //             } else {
+    //                 // If login is not required, resolve with a message
+    //                 resolve({isLoggedIn: true, message: 'Login is not required.'});
+    //             }
+    //         })
+    //     })
+    //     .then(result => {
+    //         console.log("Result",result);
+    //         alert("is Logged in",result.isLoggedIn);
+    //       if (result.isLoggedIn===false) {
+    //         // User is not logged in, do something
+    //           Backbone.history.navigate('index.do', { trigger: true });
+    //       }
+    //       else
+    //       {
             this.$el.html(ModuleTemplate);
 
             this.mapView.setElement(this.$('#map-container')).render();
@@ -134,10 +134,10 @@ module.exports = Backbone.View.extend({
 
             /* TODO(thadk): test without app here? this?*/
             app.translator.translateDOM('.leaflet-control-zoom');
-          }
-        }).catch(error => {
-        console.error('Error checking login:', error);
-    });
+          // }
+        // }).catch(error => {
+        // console.error('Error checking login:', error);
+    // });
 
   },
 

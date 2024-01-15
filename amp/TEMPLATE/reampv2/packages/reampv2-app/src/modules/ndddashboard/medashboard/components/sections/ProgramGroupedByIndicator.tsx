@@ -27,26 +27,22 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);
 
-    useEffect(() => {
-        if (!selectedIndicator && indicatorsByProgramReducer.data.length > 0) {
-            setSelectedIndicatorId(indicatorsByProgramReducer.data[0].id);
-            setSelectedIndicator(indicatorsByProgramReducer.data[0]);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const handleIndicatorChange = () => {
-        const findIndicator = indicatorsByProgramReducer.data.find((item: any) => item.id ===  selectedIndicatorId);
-
+    const handleIndicatorChange = (value: number) => {
+        const findIndicator = indicatorsByProgramReducer.data.find((item: any) => item.id ===  value);
         if (findIndicator) {
             setSelectedIndicator(findIndicator);
-            setSelectedIndicatorId(findIndicator.id);
         }
     }
 
     useEffect(() => {
-        handleIndicatorChange();
-    }, [selectedIndicatorId]);
+        if (!indicatorsByProgramReducer.loading && !indicatorsByProgramReducer.error && indicatorsByProgramReducer.data) {
+            if (indicatorsByProgramReducer.data.length > 0) {
+                setSelectedIndicatorId(indicatorsByProgramReducer.data[0].id);
+                setSelectedIndicator(indicatorsByProgramReducer.data[0]);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [indicatorsByProgramReducer]);
 
     return (
         <div>
@@ -71,7 +67,10 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                                     backgroundColor: '#f3f5f8',
                                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                 }}
-                                onChange={(e) => setSelectedIndicatorId(e.target.value as unknown as number)}
+                                onChange={(e) => {
+                                    setSelectedIndicatorId(e.target.value as unknown as number);
+                                    handleIndicatorChange(parseInt(e.target.value));
+                                }}
                                 className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
                                 {indicatorsByProgramReducer.data.map((item: any, index: number) => (<option key={index} value={item.id}>{item.name}</option>))}
                             </select>
@@ -99,6 +98,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         </div>
                     </Col>
                 </Row>
+                { console.log('selectedIndicator', selectedIndicator) }
                 {
                     (selectedIndicator) ? (
                         <IndicatorProgressChart

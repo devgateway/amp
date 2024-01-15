@@ -25,6 +25,7 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
@@ -91,8 +92,8 @@ public class AmpConfiguration {
     @ApiOperation(
             value = "Get if User is logged in",
             notes = "Get if User is logged in")
-    public Boolean getUserLoggedIn() {
-        return TeamMemberUtil.getLoggedInTeamMember()!=null;
+    public TeamMember getUserLoggedIn() {
+        return TeamMemberUtil.getLoggedInTeamMember();
     }
 
     @GET

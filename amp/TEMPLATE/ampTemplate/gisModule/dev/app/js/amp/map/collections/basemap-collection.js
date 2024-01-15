@@ -68,7 +68,7 @@ var BASEMAPS = [
   {
     id: 'Open Street Map',
     source: 'tile',
-    tileUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+    tileUrl: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
     thumb: 'img/basemaps/temposm.jpg'
   }
 ];

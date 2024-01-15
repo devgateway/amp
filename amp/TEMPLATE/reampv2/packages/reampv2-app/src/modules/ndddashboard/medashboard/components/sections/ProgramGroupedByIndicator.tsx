@@ -100,7 +100,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                     </Col>
                 </Row>
                 {
-                    (selectedIndicator && selectedIndicatorId) ? (
+                    (selectedIndicator) ? (
                         <IndicatorProgressChart
                             section="left"
                             translations={translations}

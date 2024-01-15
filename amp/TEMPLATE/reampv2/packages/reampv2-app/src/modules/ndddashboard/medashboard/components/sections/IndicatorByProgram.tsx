@@ -61,32 +61,34 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
         handleConfigurationChange();
     }, [selectedConfiguration]);
 
-    // useEffect(() => {
-    //     if (level1Child) {
-    //         dispatch(fetchProgramReport({ filters, id: level1Child, settings }));
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [level1Child]);
-    //
-    // useEffect(() => {
-    //     if (report) {
-    //         const aggregates = ChartUtils.computeAggregateValues(report);
-    //         progressValue = ChartUtils.generateGaugeValue({
-    //             baseValue: aggregates.baseValue,
-    //             targetValue: aggregates.targetValue,
-    //             actualValue: aggregates.actualValue
-    //         });
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [level1Child]);
-    //
-    // useEffect(() => {
-    //     const generateReport = ChartUtils.generateValuesDataset({
-    //         data: report,
-    //         translations
-    //     });
-    //     setChartData(generateReport);
-    // }, []);
+    useEffect(() => {
+        if (level1Child) {
+            dispatch(fetchProgramReport({ filters, id: level1Child, settings }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [level1Child]);
+
+    useEffect(() => {
+        if (report) {
+            const aggregates = ChartUtils.computeAggregateValues(report);
+            progressValue = ChartUtils.generateGaugeValue({
+                baseValue: aggregates.baseValue,
+                targetValue: aggregates.targetValue,
+                actualValue: aggregates.actualValue
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [level1Child]);
+
+    useEffect(() => {
+        if (programReportReducer.data && !programReportReducer.loading && !programReportReducer.error) {
+            const generateReport = ChartUtils.generateValuesDataset({
+                data: report,
+                translations
+            });
+            setChartData(generateReport);
+        }
+    }, [programReportReducer]);
 
     return (
         <div>

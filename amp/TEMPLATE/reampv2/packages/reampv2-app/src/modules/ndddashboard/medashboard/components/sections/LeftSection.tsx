@@ -17,30 +17,8 @@ interface LeftSectionProps {
 const LeftSection: React.FC<LeftSectionProps> = (props) => {
   const { translations, filters, settings } = props;
 
-  const programConfigurationReducer = useSelector((state: any) => state.programConfigurationReducer);
-  const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
-
-  const [selectedConfiguration, setSelectedConfiguration] = useState<number | null>(null);
-  const [level1Children, setLevel1Children] = useState<ProgramConfigChild[]>([]);
   const [level1Child, setLevel1Child] = useState<number | null>(null);
   const [numberOfIndicators, setNumberOfIndicators] = useState<number>(1);
-
-  if (!selectedConfiguration && programConfigurationReducer.data) {
-    setSelectedConfiguration(programConfigurationReducer.data[0].ampProgramSettingsId);
-  }
-
-  useEffect(() => {
-    if (selectedConfiguration && programConfigurationReducer.data) {
-      const foundProgram = findProgramConfig(selectedConfiguration, programConfigurationReducer.data);
-
-      if (foundProgram) {
-        const children = extractLv1Children(foundProgram);
-        setLevel1Children(children);
-        setLevel1Child(children[0].id);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConfiguration]);
 
   const handleAddIndicator = () => {
     setNumberOfIndicators(numberOfIndicators + 1);
@@ -52,20 +30,13 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
       <div style={{
         minHeight: '350px'
       }}>
-        {programConfigurationReducer.loading ? <div className="loading">Loading...</div> :
             <IndicatorByProgram
                 translations={translations}
-                programConfiguration={programConfigurationReducer.data}
                 setLevel1Child={setLevel1Child}
-                selectedConfiguration={selectedConfiguration}
-                setSelectedConfiguration={setSelectedConfiguration}
-                level1Children={level1Children}
-                setLevel1Children={setLevel1Children}
                 level1Child={level1Child}
                 filters={filters}
                 settings={settings}
             />
-        }
       </div>
 
       <div>

@@ -14,7 +14,7 @@ import { Tooltip }  from "react-tooltip";
 const CustomLegend = ({ data }) => (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {data.map(item => (
-            <div key={item.id} style={{ margin: '0 10px' }} data-tooltip-id="my-tooltip"
+            <div key={item.id} style={{ margin: '0 10px', cursor: 'pointer' }} data-tooltip-id="my-tooltip"
                  data-tooltip-content={item.label}>
                 <span style={{
                     backgroundColor: item.color,

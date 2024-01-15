@@ -15,7 +15,7 @@ export const extractLv1Children = (program: ProgramConfig) => {
 };
 
 export const findProgramConfig = (id: number, data: ProgramConfig[]) => {
-    return data.find((program) => program.ampProgramSettingsId === id);
+    return data.find((program) => program.ampProgramSettingsId === parseInt(id.toString()));
 }
 
 export const extractFmColumnsData = (data: FmSettings, columnName: string) => {

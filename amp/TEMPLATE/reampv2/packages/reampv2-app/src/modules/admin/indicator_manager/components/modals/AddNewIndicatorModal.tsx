@@ -173,8 +173,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectorsReducer.sectors, programsReducer.programs, programsReducer.programSchemes])
 
-  console.log("indicator===>", createIndicatorState);
-
   useDidMountEffect(() => {
     if (createIndicatorState.loading) {
       MySwal.fire({

@@ -37,6 +37,14 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     const [selectedConfiguration, setSelectedConfiguration] = React.useState<number | null>(null);
     const [level1Children, setLevel1Children] = React.useState<ProgramConfigChild[]>([]);
 
+
+    useEffect(() => {
+        if (programConfiguration.length > 0) {
+            const defaultConfig = programConfiguration[0].ampProgramSettingsId;
+            setSelectedConfiguration(defaultConfig);
+        }
+    }, []);
+
     const handleConfigurationChange = () => {
         if (selectedConfiguration) {
             const foundProgram = findProgramConfig(selectedConfiguration, programConfigurationReducer.data);
@@ -44,49 +52,41 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
             if (foundProgram) {
                 const children = extractLv1Children(foundProgram);
                 setLevel1Children(children);
-                // console.log("extracted children", children);
                 setLevel1Child(children[0].id);
             }
         }
     }
 
-    // useEffect(() => {
-    //     if (programConfiguration.length > 0) {
-    //         const defaultConfig = programConfiguration[0].ampProgramSettingsId;
-    //         setSelectedConfiguration(defaultConfig);
-    //     }
-    // }, []);
-
     useEffect(() => {
         handleConfigurationChange();
     }, [selectedConfiguration]);
 
-    useEffect(() => {
-        if (level1Child) {
-            dispatch(fetchProgramReport({ filters, id: level1Child, settings }));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [level1Child]);
-
-    useEffect(() => {
-        if (report) {
-            const aggregates = ChartUtils.computeAggregateValues(report);
-            progressValue = ChartUtils.generateGaugeValue({
-                baseValue: aggregates.baseValue,
-                targetValue: aggregates.targetValue,
-                actualValue: aggregates.actualValue
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [level1Child]);
-
-    useEffect(() => {
-        const generateReport = ChartUtils.generateValuesDataset({
-            data: report,
-            translations
-        });
-        setChartData(generateReport);
-    }, []);
+    // useEffect(() => {
+    //     if (level1Child) {
+    //         dispatch(fetchProgramReport({ filters, id: level1Child, settings }));
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [level1Child]);
+    //
+    // useEffect(() => {
+    //     if (report) {
+    //         const aggregates = ChartUtils.computeAggregateValues(report);
+    //         progressValue = ChartUtils.generateGaugeValue({
+    //             baseValue: aggregates.baseValue,
+    //             targetValue: aggregates.targetValue,
+    //             actualValue: aggregates.actualValue
+    //         });
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [level1Child]);
+    //
+    // useEffect(() => {
+    //     const generateReport = ChartUtils.generateValuesDataset({
+    //         data: report,
+    //         translations
+    //     });
+    //     setChartData(generateReport);
+    // }, []);
 
     return (
         <div>
@@ -153,9 +153,9 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         <Col md={11}  style={{
                             paddingRight: 10
                         }}>
-                            {level1Children.length === 0 ? <option>Loading...</option> : (
+                            {(level1Children.length === 0 && level1Child) ? <option>Loading...</option> : (
                                 <select
-                                    defaultValue={level1Child ? level1Child : level1Children[0].id}
+                                    defaultValue={level1Child?.toString()}
                                     onChange={(e) => setLevel1Child(Number(e.target.value))}
                                     className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
                                     {level1Children.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))}

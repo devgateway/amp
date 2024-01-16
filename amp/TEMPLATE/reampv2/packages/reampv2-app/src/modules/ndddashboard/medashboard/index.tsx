@@ -9,10 +9,11 @@ interface MeDashboardHomeProps {
   dashboardSettings?: any;
   settings?: any;
   globalSettings?: any;
+  translations?: any;
 }
 
 const MeDashboardHome: React.FC<MeDashboardHomeProps> = (props) => {
-  const { filters, settings } = props;
+  const { filters, settings, translations } = props;
 
   return (
       <Container style={{
@@ -29,10 +30,7 @@ const MeDashboardHome: React.FC<MeDashboardHomeProps> = (props) => {
               letterSpacing: 0.4,
               lineHeight: 1.5,
             }}>
-              The National Indicators page lists the indicators which are monitored at national level by the various organizations,
-              the latter being responsible for their entries and updates within the platform.
-              The various graphs of this page indicate, for each indicator, a base and a target value which,
-              together with the reference value, allow to measure the progress of an indicator towards its objective.
+             {translations["amp.ndd.dashboard:me-header-text"]}
             </span>
           </Col>
         </Row>

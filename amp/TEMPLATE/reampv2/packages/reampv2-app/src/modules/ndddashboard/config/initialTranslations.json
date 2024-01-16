@@ -56,5 +56,6 @@
   "amp.ndd.dashboard:me-no-data": "No Data Available",
   "amp.ndd.dashboard:sector-progress": "Sector Progress",
    "amp.ndd.dashboard:indicator-progress": "Indicator Progress",
-  "amp.ndd.dashboard:years": "Years"
+  "amp.ndd.dashboard:years": "Years",
+  "amp.ndd.dashboard:me-header-text": "The National Indicators page lists the indicators which are monitored at national level by the various organizations,\n              the latter being responsible for their entries and updates within the platform.\n              The various graphs of this page indicate, for each indicator, a base and a target value which,\n              together with the reference value, allow to measure the progress of an indicator towards its objective."
 }

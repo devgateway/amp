@@ -44,7 +44,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
 
     useEffect(() => {
         handleGetYearOptions();
-    }, [settings]);
+    }, []);
 
 
     const calculateProgressValue = () => {

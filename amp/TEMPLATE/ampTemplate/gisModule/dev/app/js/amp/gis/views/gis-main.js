@@ -92,7 +92,7 @@ module.exports = Backbone.View.extend({
               {
                   alert("User is not logged in")
                   // var MyApp = new Backbone.Router();
-                  window.location.href="index.do";
+                  window.location.href="/index.do";
                   // MyApp.navigate('index.do', {trigger: true});
               }
               else

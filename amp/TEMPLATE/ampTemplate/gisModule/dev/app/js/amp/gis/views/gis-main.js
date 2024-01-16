@@ -59,6 +59,29 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
+      fetchDataAndCheckLoginRequired().then(
+          result=>{
+              const loginRequired = data['login-required'];
+             console.log('Login required:', loginRequired);
+              if (loginRequired === true) {
+                  fetch('/rest/amp/user-logged-in').then(
+                                      response=>{
+                                          alert(response.json())
+                                          if (response.json()['userId']) {
+                                             alert("User logged in")
+                                          }
+                                          else
+                                          {
+                                              alert("User not logged in")
+
+                                          }
+                                      }
+                                  )
+              }
+
+
+          }
+      )
     // fetchDataAndCheckLoginRequired()
     //     .then(data => {
     //         return new Promise((resolve, reject)=> {

@@ -61,7 +61,7 @@ module.exports = Backbone.View.extend({
   render: function() {
       fetchDataAndCheckLoginRequired().then(
           result=>{
-              const loginRequired = data['login-required'];
+              const loginRequired = result['login-required'];
              console.log('Login required:', loginRequired);
               if (loginRequired === true) {
                   fetch('/rest/amp/user-logged-in').then(

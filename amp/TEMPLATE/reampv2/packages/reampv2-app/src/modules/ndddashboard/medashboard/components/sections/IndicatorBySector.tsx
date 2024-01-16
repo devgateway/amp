@@ -50,7 +50,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
             <Col md={12} style={{
                 borderBottom: '1px solid #ddd',
             }}>
-                <div id="indicator-by-sector">
+                <div id={`indicators-by-sector-${index}`}>
                     <Row md={12} style={{
                         width: '100%',
                         marginLeft: 0,
@@ -95,7 +95,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                             cursor: 'pointer'
                         }}>
                             <div className={styles.download_btn_wrapper} onClick={() => ChartUtils.downloadChartImage(
-                                `${translations['amp.ndd.dashboard:me-dashboard']}-programs`, 'indicators-by-program')}>
+                                `${translations['amp.ndd.dashboard:me-dashboard']}-sector`, `indicators-by-sector-${index}`)}>
                                 <span className="glyphicon glyphicon-cloud-download" />
                             </div>
                         </Col>

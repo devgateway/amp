@@ -83,7 +83,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
 
     return (
         <div>
-            <Col md={12} id="program-grouped-by-indicators" style={{
+            <Col md={12} style={{
                 borderBottom: '1px solid #ddd',
             }}>
                 <Row style={{

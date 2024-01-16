@@ -1,4 +1,4 @@
-FROM node:16.4.0 as node
+FROM node:21.3.0 as node
 
 FROM node as compile-amp-state
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state

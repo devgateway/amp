@@ -236,9 +236,9 @@ const NDDDashboardHome = (props) => {
 
 
     return (
-      <Container>
+      <Container fluid className="main-container" id="ndd-main-container">
           <div className="row header" style={{marginRight: '-30px', marginLeft: '-30px'}}>
-              {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
+              {mapping && settings && globalSettings && selectedPrograms && !embedded && (
                 <HeaderContainer
                   onApplySettings={onApplySettings}
                   onApplyFilters={onApplyFilters}
@@ -248,7 +248,7 @@ const NDDDashboardHome = (props) => {
                   fundingType={fundingType}
                   selectedPrograms={selectedPrograms}
                   dashboardId={dashboardId}/>
-              ) : null}
+              )}
           </div>
 
           <NDDDashboardTabs

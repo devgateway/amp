@@ -88,7 +88,7 @@ module.exports = Backbone.View.extend({
           .then(result => {
               // Handle the result if needed
               console.log('Result:', result);
-              if (result===false)
+              if (result.allowed===false)
               {
                   alert("User is not logged in")
                   // var MyApp = new Backbone.Router();

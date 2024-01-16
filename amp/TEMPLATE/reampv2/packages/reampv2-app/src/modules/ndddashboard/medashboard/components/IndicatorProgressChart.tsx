@@ -10,14 +10,6 @@ import { IndicatorObjectType } from '../../../admin/indicator_manager/types';
 import ChartUtils from '../utils/chart';
 import {fetchIndicatorReportData} from "../utils/fetchIndicatorReport";
 
-const options = [
-    { value: 5, label: '5 Years' },
-    { value: 10, label: '10 Years' },
-    { value: 15, label: '15 Years' },
-    { value: 20, label: '20 Years' },
-    { value: 25, label: '25 Years' }
-]
-
 interface IndicatorProgressChartProps extends ComponentProps {
     filters: any;
     settings: any;
@@ -30,6 +22,9 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const { translations, filters, settings, indicator, section, index } = props;
     const dispatch = useDispatch();
 
+    // @ts-ignore
+    const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
+
     const [indicatorReportData, setIndicatorReportData] = useState<any>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);
@@ -37,6 +32,19 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const [reportData, setReportData] = useState<DataType[]>();
 
     const [reportLoading, setReportLoading] = useState<boolean>(false);
+    const [yearOptions, setYearOptions] = useState<{label: string, value: number}[]>([]);
+
+    const handleGetYearOptions = () => {
+        const startDate = globalSettings["dashboard-default-min-date"];
+        const endDate = globalSettings["dashboard-default-max-date"];
+        const dateFormat = globalSettings["default-date-format"];
+        const options = ChartUtils.getYearOptions(startDate, endDate, dateFormat, translations);
+        setYearOptions(options);
+    }
+
+    useEffect(() => {
+        handleGetYearOptions();
+    }, [settings]);
 
 
     const calculateProgressValue = () => {
@@ -142,47 +150,49 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                 />
                             </Col>
                             <Col md={6}>
-                                <Select
-                                    options={options}
-                                    defaultValue={options[0]}
-                                    isSearchable={false}
-                                    onChange={(option) => {
-                                        if  (option) {
-                                            setYearCount(option.value as any);
-                                            promiseFetchIndicatorReport(indicator.id, option.value as any);
+                                { yearOptions.length > 0  && (
+                                    <Select
+                                        options={yearOptions}
+                                        defaultValue={yearOptions[0]}
+                                        isSearchable={false}
+                                        onChange={(option) => {
+                                            if  (option) {
+                                                setYearCount(option.value as any);
+                                                promiseFetchIndicatorReport(indicator.id, option.value as any);
 
 
-                                        }
-                                    }}
-                                    components={{
-                                        IndicatorSeparator: () => null,
-                                    }}
-                                    styles={{
-                                        //@ts-ignore
-                                        control: (base) => ({
-                                            ...base,
-                                            boxShadow: 'none',
-                                            border: 'none',
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                        }),
-                                        // @ts-ignore
-                                        valueContainer: (base) => ({
-                                            ...base,
-                                            paddingLeft: 20,
-                                            justifyContent: 'flex-end',
-                                        }),
-                                        // @ts-ignore
-                                        singleValue: (base) => ({
-                                            ...base,
-                                            color: '#116282',
-                                            fontWeight: 600,
-                                            border: 'none',
-                                            tetAlign: 'right',
-                                            order: 1
-                                        })
-                                    }}
-                                />
+                                            }
+                                        }}
+                                        components={{
+                                            IndicatorSeparator: () => null,
+                                        }}
+                                        styles={{
+                                            //@ts-ignore
+                                            control: (base) => ({
+                                                ...base,
+                                                boxShadow: 'none',
+                                                border: 'none',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                            }),
+                                            // @ts-ignore
+                                            valueContainer: (base) => ({
+                                                ...base,
+                                                paddingLeft: 20,
+                                                justifyContent: 'flex-end',
+                                            }),
+                                            // @ts-ignore
+                                            singleValue: (base) => ({
+                                                ...base,
+                                                color: '#116282',
+                                                fontWeight: 600,
+                                                border: 'none',
+                                                tetAlign: 'right',
+                                                order: 1
+                                            })
+                                        }}
+                                    />
+                                )}
                             </Col>
                         </Row>
                     </Col>

@@ -55,5 +55,6 @@
   "amp.ndd.dashboard:me-no-indicator": "No Indicators Available",
   "amp.ndd.dashboard:me-no-data": "No Data Available",
   "amp.ndd.dashboard:sector-progress": "Sector Progress",
-   "amp.ndd.dashboard:indicator-progress": "Indicator Progress"
+   "amp.ndd.dashboard:indicator-progress": "Indicator Progress",
+  "amp.ndd.dashboard:years": "Years"
 }

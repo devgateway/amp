@@ -8,6 +8,7 @@ import { Loading } from '../../../utils/components/Loading';
 import defaultTrnPack from '../config/initialTranslations.json';
 import {fetchFm} from "../medashboard/reducers/fetchFmReducer";
 import { fetchSectorClassification } from '../medashboard/reducers/fetchSectorClassificationReducer';
+import { getSettings} from '../reducers/fetchSettingsReducer';
 
 export const NDDTranslationContext = React.createContext({ translations: defaultTrnPack });
 
@@ -16,19 +17,19 @@ export const NDDTranslationContext = React.createContext({ translations: default
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
 const Startup = (props) => {
-  const { translationPending, translations, _fetchTranslations, programConfigurationPending, fmReducerPending, sectorClassificationPending } = props;
+  const { translationPending, translations, _fetchTranslations, programConfigurationPending, fmReducerPending, sectorClassificationPending, settingsPending } = props;
   const dispatch = useDispatch();
 
   useEffect(() => {
     _fetchTranslations(defaultTrnPack);
-
+    dispatch(getSettings());
     dispatch(fetchProgramConfiguration());
     dispatch(fetchFm());
     dispatch(fetchSectorClassification());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending) {
+  if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending || settingsPending) {
     return (<Loading />);
   } else {
     document.title = translations['amp.ndd.dashboard:page-title'];
@@ -46,6 +47,7 @@ const mapStateToProps = state => ({
   programConfigurationPending: state.programConfigurationReducer.pending,
   fmReducerPending: state.fetchFmReducer.loading,
   sectorClassificationPending: state.fetchSectorClassificationReducer.loading,
+  settingsPending: state.fetchSettingsReducer.loading,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

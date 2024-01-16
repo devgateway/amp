@@ -11,6 +11,8 @@ import {
 import React from "react";
 import {DataType} from "../components/charts/BarChart";
 import _ from 'lodash';
+import {DateUtil} from "../../../admin/indicator_manager/utils/dateFn";
+import dayjs from "dayjs";
 
 interface GaugeUtils {
     baseValue: number,
@@ -206,6 +208,28 @@ class ChartUtils {
     public static formatNumber = (value: number) => {
         return value.toLocaleString('en-US', {maximumFractionDigits: 4});
     }
+
+    public static getYearOptions = (startDate: string, endDate: string, dateFormat = 'dd/MM/yyyy', translations: DefaultTranslations) => {
+        const options: { label: string, value: number}[] = [];
+
+        if (startDate && endDate) {
+            const startYear = dayjs(startDate).year()
+            const endYear = new Date(endDate).getFullYear();
+
+            const yearDiff = endYear - startYear;
+            const yearRemainder = yearDiff % 5;
+            const yearOptions = yearDiff - yearRemainder;
+
+            for (let i = 5; i <= yearOptions; i += 5) {
+                options.push({
+                    label: `${i} ${translations['amp.ndd.dashboard:years']}`,
+                    value: i
+                });
+            }
+        }
+
+        return options;
+    };
 }
 
 export default ChartUtils;

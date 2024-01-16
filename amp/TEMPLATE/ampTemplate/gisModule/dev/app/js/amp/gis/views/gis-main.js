@@ -51,9 +51,6 @@ module.exports = Backbone.View.extend({
     this.url = options.url;
     this.data = options.data;
     this.state = options.state;
-
-    
-
   },
   createViews: function(){
 	  this.mapView = new MapView({app: this});

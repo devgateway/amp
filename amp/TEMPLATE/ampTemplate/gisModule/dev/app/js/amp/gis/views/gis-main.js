@@ -46,10 +46,8 @@ function fetchDataAndCheckLoginRequired() {
                         // Check if the user is logged in
                         var res ={loggedIn:false}
                         if (userData) {
-                            alert("User logged in");
+                            console.log("User logged in");
                             res['loggedIn']=true;
-                        } else {
-                            alert("User not logged in");
                         }
                         return res; // Resolve the promise with userData
                     });
@@ -83,11 +81,12 @@ module.exports = Backbone.View.extend({
           .then(result => {
               // Handle the result if needed
               console.log('Result:', result);
-              alert('Result:', result);
-              if (!result)
+              if (result===false)
               {
-                  var MyApp = new Backbone.Router();
-                  MyApp.navigate('index.do', {trigger: true});
+                  alert("User is not logged in")
+                  // var MyApp = new Backbone.Router();
+                  window.location.href="index.do";
+                  // MyApp.navigate('index.do', {trigger: true});
               }
           })
           .catch(error => {

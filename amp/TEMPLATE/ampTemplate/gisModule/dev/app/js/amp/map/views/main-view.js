@@ -91,16 +91,16 @@ module.exports = Backbone.View.extend({
      return this;
   },
 
-  _renderCountryBoundary: function() {
+  _renderCountryBoundary: function () {
     var self = this;
-    this.app.data.boundaries.load().then(function() {
-      var adm0Boundaries = self.app.data.boundaries.where({admLevel: 'adm-0'});
+    this.app.data.boundaries.load().then(function () {
+      var adm0Boundaries = self.app.data.boundaries.where({ admLevel: 'adm-0' });
 
-      var promises = adm0Boundaries.map(function (b) {return b.load();});
-      $.when.apply($, promises).then(function() {
+      var promises = adm0Boundaries.map(function (b) { return b.load(); });
+      $.when.apply($, promises).then(function () {
         var outerBounds = null;
 
-        var updateOuterBounds = function(feature) {
+        var updateOuterBounds = function (feature) {
           var bounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
           if (!outerBounds) {
             outerBounds = bounds;
@@ -112,19 +112,38 @@ module.exports = Backbone.View.extend({
         for (var i = 0; i < arguments.length; i++) {
           var topoboundaries = arguments[i].toJSON();
 
-          //retrieve the TopoJSON index key
+          // retrieve the TopoJSON index key
           var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
 
           var boundary = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
 
           self.countryBoundary = L.geoJson(boundary, {
-            onEachFeature: updateOuterBounds,
-            style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
+            onEachFeature: function (feature, layer) {
+              // Check if the "NAME" attribute is "extra"
+              console.log("Is belt",feature.properties['BELT'])
+              if (feature.properties['BELT'] === true) {
+                layer.setStyle({
+                  color: '#29343F',
+                  fillColor: 'green', // Set green color for the feature with NAME 'extra'
+                  weight: 1.4,
+                  dashArray: '1'
+                });
+              } else {
+                layer.setStyle({
+                  color: '#29343F',
+                  fillColor: 'none',
+                  weight: 1.4,
+                  dashArray: '1'
+                });
+              }
+
+              updateOuterBounds(feature);
+            }
           }).addTo(self.map);
         }
 
         if (outerBounds) {
-          //For the AMP GIS app, use the sidebar width as padding */
+          // For the AMP GIS app, use the sidebar width as padding
           var sidebarExpansionWidth = $('#sidebar').width();
 
           var paddingToLeft = {
@@ -132,13 +151,12 @@ module.exports = Backbone.View.extend({
           };
 
           /*
-           * If current viewport is already in
-           * the AMP country, then preserve the state rather that resetting.
+           * If the current viewport is already in
+           * the AMP country, then preserve the state rather than resetting.
            *
-           * for the case where a state is saved which is not quite exactly inside
-           * the AMP national boundarybox, we add 30% padding to all directions
-           *
-           **/
+           * For the case where a state is saved which is not quite exactly inside
+           * the AMP national boundary box, we add 30% padding to all directions.
+           */
           if (!outerBounds.pad(0.3).contains(self.map.getBounds())) {
             self.map.fitBounds(outerBounds, paddingToLeft);
           }

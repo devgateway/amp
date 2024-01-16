@@ -109,7 +109,7 @@ module.exports = Backbone.View.extend({
           }
         };
 
-        for (var i = 0; i < arguments.length; i++) {
+        for (let i = 0; i < arguments.length; i++) {
           var topoboundaries = arguments[i].toJSON();
 
           //retrieve the TopoJSON index key

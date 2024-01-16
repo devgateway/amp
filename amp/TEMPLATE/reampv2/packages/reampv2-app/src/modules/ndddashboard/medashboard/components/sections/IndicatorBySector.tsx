@@ -120,4 +120,4 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     )
 };
 
-export default IndicatorBySector;
+export default React.memo(IndicatorBySector);

@@ -44,12 +44,14 @@ function fetchDataAndCheckLoginRequired() {
                     })
                     .then(userData => {
                         // Check if the user is logged in
-                        if (userData['userId']) {
+                        var res ={loggedIn:false}
+                        if (userData) {
                             alert("User logged in");
+                            res['loggedIn']=true;
                         } else {
                             alert("User not logged in");
                         }
-                        return userData; // Resolve the promise with userData
+                        return res; // Resolve the promise with userData
                     });
             }
         });
@@ -82,6 +84,11 @@ module.exports = Backbone.View.extend({
               // Handle the result if needed
               console.log('Result:', result);
               alert('Result:', result);
+              if (!result)
+              {
+                  var MyApp = new Backbone.Router();
+                  MyApp.navigate('index.do', {trigger: true});
+              }
           })
           .catch(error => {
               // Handle errors, such as network issues or errors returned by the API

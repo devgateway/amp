@@ -32,8 +32,6 @@ function fetchDataAndCheckLoginRequired() {
             var loginRequired = data['login-required'];
 
             // Perform actions based on the loginRequired value
-            alert(loginRequired);
-
             if (loginRequired === true) {
                 // Return a new promise for the next asynchronous operation
                 return fetch('/rest/amp/user-logged-in')

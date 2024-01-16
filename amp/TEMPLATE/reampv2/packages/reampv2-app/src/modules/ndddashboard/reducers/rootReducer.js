@@ -12,7 +12,6 @@ import programConfigurationReducer from '../medashboard/reducers/fetchProgramCon
 import indicatorsByProgramReducer from '../medashboard/reducers/fetchIndicatorsByProgramReducer';
 import programReportReducer from '../medashboard/reducers/fetchProgramReportReducer';
 import fetchIndicatorsReducer from '../medashboard/reducers/fetchIndicatorsReducer';
-import indicatorReportReducer from '../medashboard/reducers/fetchIndicatorReportReducer';
 import fetchFmReducer from "../medashboard/reducers/fetchFmReducer";
 import fetchSectorsReducer from '../medashboard/reducers/fetchSectorsReducer';
 import fetchSectorClassificationReducer from '../medashboard/reducers/fetchSectorClassificationReducer';
@@ -31,7 +30,6 @@ export default combineReducers({
   indicatorsByProgramReducer,
   programReportReducer,
   fetchIndicatorsReducer,
-  indicatorReportReducer,
   fetchFmReducer,
   fetchSectorsReducer,
   fetchSectorClassificationReducer,

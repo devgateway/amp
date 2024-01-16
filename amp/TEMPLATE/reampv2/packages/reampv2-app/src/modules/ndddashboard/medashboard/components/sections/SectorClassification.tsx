@@ -227,13 +227,33 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                 {
                                     sectorReport && (
                                         <>
-                                            <span style={{
-                                                fontSize: 14,
-                                                paddingTop: 40,
-                                                marginBottom: 10,
-                                            }}>{translations['amp.ndd.dashboard:sector-progress']}</span>
+                                            <Row style={{
+                                                paddingTop: 10,
+                                                paddingLeft: 30
+                                            }} className="align-items-center justify-content-between" md={12}>
+                                                <Col md={8}>
+                                                    <span style={{
+                                                        fontSize: 14,
+                                                    }}>{translations['amp.ndd.dashboard:sector-progress']}</span>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <span style={{
+                                                        fontWeight: 'bold',
+                                                        fontSize: 20
+                                                    }}>{sectorReportReducer.data.sumarizedTotal}</span>
+                                                    <span style={{
+                                                        color: '#6f6f6f',
+                                                        fontWeight: 'bold',
+                                                        fontSize: 20,
+                                                        paddingLeft: 5
+                                                    }}>{sectorReportReducer.data.currency}</span>
+                                                </Col>
+
+
+                                            </Row>
+
                                             <CustomLegend data={sectorReport}/>
-                                            <Tooltip id="my-tooltip"  />
+                                            <Tooltip id="my-tooltip"/>
                                             <BarChart
                                                 translations={translations}
                                                 data={sectorReport}

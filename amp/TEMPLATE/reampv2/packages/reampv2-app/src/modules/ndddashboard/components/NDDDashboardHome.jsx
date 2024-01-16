@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NDDTranslationContext } from './StartUp';
 import HeaderContainer from './HeaderContainer';
 import { callReport, callTopReport, clearTopReport } from '../actions/callReports';
-import { CURRENCY_CODE, DIRECT, FUNDING_TYPE } from '../utils/constants';
+import { CURRENCY_CODE, DIRECT, FUNDING_TYPE, MEPath, NDDPath } from '../utils/constants';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
@@ -49,6 +49,11 @@ const NDDDashboardHome = (props) => {
         fundingByYearSource: SRC_DIRECT
     });
 
+    const fetchFmReducer = useSelector(state => state.fetchFmReducer);
+
+    const nddDashboard = fetchFmReducer.data.find(d => d === NDDPath);
+    const meDashboard = fetchFmReducer.data.find(d => d === MEPath);
+
     const getSharedDataOrResolve = (id) => {
         if (id) {
             return _getSharedData(id);
@@ -66,7 +71,7 @@ const NDDDashboardHome = (props) => {
         const fetchData = async () => {
             try {
                 const settingsResponse = await _loadDashboardSettings();
-                const mappingsResponse = await _getMappings();
+
                 const sharedDataResponse = await getSharedDataOrResolve(id);
 
                 const tempSettings = {
@@ -74,7 +79,13 @@ const NDDDashboardHome = (props) => {
                       .find(i => settingsResponse.payload[i].id === CURRENCY_CODE)].value.defaultId
                 };
 
-                let ids = [`${mappingsResponse.payload[SRC_PROGRAM].id}`, `${mappingsResponse.payload[DST_PROGRAM].id}`];
+                let ids = []
+
+                if (nddDashboard) {
+                    const mappingsResponse = await _getMappings();
+                    ids = [`${mappingsResponse.payload[SRC_PROGRAM].id}`, `${mappingsResponse.payload[DST_PROGRAM].id}`];
+                }
+
                 let fundingType = settingsResponse.payload.find(i => i.id === FUNDING_TYPE).value.defaultId;
 
                 if (id) {
@@ -261,6 +272,8 @@ const NDDDashboardHome = (props) => {
             onChangeSource={memoizedOnChangeSource}
             fundingByYearSource={fundingByYearSource}
             translations={translations}
+            nddDashboard={nddDashboard}
+            meDashboard={meDashboard}
           />
       </Container>
     );

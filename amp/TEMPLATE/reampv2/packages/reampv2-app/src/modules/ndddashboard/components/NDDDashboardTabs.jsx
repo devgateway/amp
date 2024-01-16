@@ -3,20 +3,16 @@ import {Col, Nav, Row, Tab} from "react-bootstrap";
 import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 import PropTypes from "prop-types";
 import {useSelector} from "react-redux";
+import { MEPath, NDDPath } from '../utils/constants';
 
 const MainDashboardContainer = React.lazy(() => import('./MainDashboardContainer'));
 const MeDashboardContainer = React.lazy(() => import('../medashboard'));
 
-const NDDPath = '/Progress Tracking Dashboards[true]/NDD Dashboard[true]';
-const MEPath = '/Progress Tracking Dashboards[true]/M&E Dashboard[true]';
 
 const NDDDashboardTabs = (props)  => {
-    const translations = props.translations;
+    const { translations, nddDashboard, meDashboard } = props;
     const [currentTab, setCurrentTab] = useState('ndd');
     const fetchFmReducer = useSelector(state => state.fetchFmReducer);
-
-    const nddDashboard = fetchFmReducer.data.find(d => d === NDDPath);
-    const meDashboard = fetchFmReducer.data.find(d => d === MEPath);
 
 
 
@@ -137,7 +133,9 @@ NDDDashboardTabs.propTypes = {
     downloadImage: PropTypes.func,
     embedded: PropTypes.bool,
     onChangeSource: PropTypes.func,
-    fundingByYearSource: PropTypes.string
+    fundingByYearSource: PropTypes.string,
+    nddDashboard: PropTypes.bool,
+    meDashboard: PropTypes.bool
 };
 
 export default NDDDashboardTabs;

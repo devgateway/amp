@@ -99,7 +99,6 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         </div>
                     </Col>
                 </Row>
-                { console.log('selectedIndicator', selectedIndicator) }
                 {
                     (selectedIndicator) ? (
                         <IndicatorProgressChart

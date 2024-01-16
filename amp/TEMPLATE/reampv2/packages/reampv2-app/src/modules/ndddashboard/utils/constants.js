@@ -95,3 +95,6 @@ export const SECTOR_COLOR = [
   '#8856B6',
   '#DA524B'
 ];
+
+export const NDDPath = '/Progress Tracking Dashboards[true]/NDD Dashboard[true]';
+export const MEPath = '/Progress Tracking Dashboards[true]/M&E Dashboard[true]';

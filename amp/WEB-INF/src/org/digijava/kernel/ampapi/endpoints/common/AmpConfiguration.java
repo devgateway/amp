@@ -93,7 +93,7 @@ public class AmpConfiguration {
             value = "Get if User is logged in",
             notes = "Get if User is logged in")
     public Response getUserLoggedIn() {
-        return  PublicServices.buildOkResponseWithOriginHeaders(TeamMemberUtil.getLoggedInTeamMember());
+        return  PublicServices.buildOkResponseWithOriginHeaders(TeamMemberUtil.getLoggedInTeamMember().getUserId()!=null);
     }
 
     @GET

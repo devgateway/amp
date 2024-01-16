@@ -88,9 +88,9 @@ module.exports = Backbone.View.extend({
           .then(result => {
               // Handle the result if needed
               console.log('Result:', result);
-              if (result.allowed===false)
+              if (result && result.allowed===false)
               {
-                  alert("User is not logged in")
+                  alert("You must be logged in to access this map.")
                   // var MyApp = new Backbone.Router();
                   window.location.href="/index.do";
                   // MyApp.navigate('index.do', {trigger: true});

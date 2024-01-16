@@ -114,7 +114,7 @@ class ChartUtils {
             {
                 id: CURRENT_VALUE,
                 color: CURRENT_VALUE_COLOR,
-                data: actualValueArrayWithYear
+                data: data.actualValues.length > 0 ? actualValueArrayWithYear : baseValueArrayWithYear
             },
             {
                 id: TARGET_VALUE,

@@ -7,8 +7,8 @@ import LineChart from './charts/LineChart';
 import Select from 'react-select';
 import { ComponentProps } from '../types';
 import { IndicatorObjectType } from '../../../admin/indicator_manager/types';
-import { fetchIndicatorReport } from '../reducers/fetchIndicatorReportReducer';
 import ChartUtils from '../utils/chart';
+import {fetchIndicatorReportData} from "../utils/fetchIndicatorReport";
 
 const options = [
     { value: 5, label: '5 Years' },
@@ -29,47 +29,48 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const { translations, filters, settings, indicator, section } = props;
     const dispatch = useDispatch();
 
-    const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer[section]);
-    const [selectedOption, setSelectedOption] = useState<IndicatorObjectType | null>(null);
+    const [indicatorReportData, setIndicatorReportData] = useState<any>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);
     const [yearCount, setYearCount] = useState<number>(5);
     const [reportData, setReportData] = useState<DataType[]>();
 
+    const [reportLoading, setReportLoading] = useState<boolean>(false);
+
 
     const calculateProgressValue = () => {
-        if (indicatorReportReducer.data) {
-            const actualValue = ChartUtils.getActualValueForCurrentYear(indicatorReportReducer.data.actualValues);
+        if (indicatorReportData) {
+            const actualValue = ChartUtils.getActualValueForCurrentYear(indicatorReportData.actualValues);
             const progress = ChartUtils.generateGaugeValue({
-                baseValue: indicatorReportReducer.data.baseValue,
-                targetValue: indicatorReportReducer.data.targetValue,
-                actualValue: actualValue === 0 ? indicatorReportReducer.data.baseValue : actualValue
+                baseValue: indicatorReportData.baseValue,
+                targetValue: indicatorReportData.targetValue,
+                actualValue: actualValue === 0 ? indicatorReportData.baseValue : actualValue
             });
 
             setProgressValue(progress);
         }
     }
 
+    const promiseFetchIndicatorReport = async (id: number, count: number) => {
+        await fetchIndicatorReportData(id, { setLoading: setReportLoading, filters, yearCount: count, settings })
+            .then((data) => {
+                setIndicatorReportData(data);
+                const generatedReport = ChartUtils.generateValuesDataset({
+                    data,
+                    translations
+                });
+                setReportData(generatedReport);
+                calculateProgressValue();
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+
     useEffect(() => {
         setSelectedIndicatorName(indicator.name);
-        dispatch(fetchIndicatorReport({ filters, id: indicator.id, section, yearCount, settings }));
-        calculateProgressValue();
+        promiseFetchIndicatorReport(indicator.id, yearCount)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [indicator.id]);
-
-
-    useEffect(() => {
-        calculateProgressValue();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicatorReportReducer]);
-
-    useEffect(() => {
-        const generatedReport = ChartUtils.generateValuesDataset({
-            data: indicatorReportReducer.data,
-            translations
-        });
-        setReportData(generatedReport);
-    }, [indicatorReportReducer]);
 
     return (
         <div>
@@ -95,7 +96,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                         }}>{selectedIndicatorName || translations["amp.ndd.dashboard:me-no-data"]}</div>
                     </Col>
                 </Row>
-                { !indicatorReportReducer.loading && (
+                { !reportLoading && (
                     <Row style={{
                         paddingLeft: -10
                     }}>
@@ -145,14 +146,11 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                     defaultValue={options[0]}
                                     isSearchable={false}
                                     onChange={(option) => {
-                                        if  (option && selectedOption) {
+                                        if  (option) {
                                             setYearCount(option.value as any);
-                                            dispatch(fetchIndicatorReport({
-                                                filters,
-                                                id: selectedOption as any,
-                                                yearCount : option.value as number,
-                                                section,
-                                                settings }));
+                                            promiseFetchIndicatorReport(indicator.id, option.value as any);
+
+
                                         }
                                     }}
                                     components={{
@@ -188,8 +186,8 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                         </Row>
                     </Col>
                     <Col md={12}>
-                        {!indicatorReportReducer.loading && (
-                            <LineChart data={indicatorReportReducer.data}/>
+                        {!reportLoading && (
+                            <LineChart data={indicatorReportData}/>
                         )}
                     </Col>
                 </Row>

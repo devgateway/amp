@@ -92,8 +92,8 @@ public class AmpConfiguration {
     @ApiOperation(
             value = "Get if User is logged in",
             notes = "Get if User is logged in")
-    public TeamMember getUserLoggedIn() {
-        return TeamMemberUtil.getLoggedInTeamMember();
+    public Response getUserLoggedIn() {
+        return  PublicServices.buildOkResponseWithOriginHeaders(TeamMemberUtil.getLoggedInTeamMember());
     }
 
     @GET

@@ -12,10 +12,11 @@ interface ProgramGroupedByIndicatorProps extends ComponentProps {
     level1Child: number | null;
     filters: any;
     settings: any;
+    index: number;
 }
 
 const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (props) => {
-    const { translations, level1Child, filters, settings } = props;
+    const { translations, level1Child, filters, settings, index } = props;
     const dispatch = useDispatch();
     const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
 
@@ -106,6 +107,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                             translations={translations}
                             filters={filters}
                             settings={settings}
+                            index={index}
                             indicator={selectedIndicator}/>
                     ) : (
                         <div className="loading"></div>

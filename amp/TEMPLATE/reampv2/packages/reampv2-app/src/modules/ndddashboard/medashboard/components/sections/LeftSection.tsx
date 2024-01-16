@@ -47,6 +47,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
                           level1Child={level1Child}
                           settings={settings}
                           key={index}
+                          index={index}
                           filters={filters}/>
                   )
                 })

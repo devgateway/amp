@@ -13,10 +13,11 @@ interface IndicatorBySectorProps {
     filters: any;
     settings: any;
     selectedClassification?: number | null;
+    index: number;
 }
 
 const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
-    const { translations, selectedClassification, filters, settings } = props;
+    const { translations, selectedClassification, filters, settings, index } = props;
 
     const dispatch = useDispatch();
     const indicatorsReducer = useSelector((state: any) => state.fetchIndicatorsByClassificationReducer);
@@ -102,7 +103,13 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
 
                     {
                         (selectedIndicator) ? (
-                            <IndicatorProgressChart section="right" translations={translations} filters={filters} settings={settings} indicator={selectedIndicator}/>
+                            <IndicatorProgressChart
+                                section="right"
+                                translations={translations}
+                                filters={filters}
+                                settings={settings}
+                                index={index}
+                                indicator={selectedIndicator}/>
                         ) : (
                             <div className="loading"></div>
                         )

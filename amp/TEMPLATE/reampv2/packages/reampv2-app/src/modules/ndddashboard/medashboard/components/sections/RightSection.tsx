@@ -43,6 +43,7 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
                             filters={filters}
                             settings={settings}
                             key={index}
+                            index={index}
                             selectedClassification={selectedClassification} />
                     );
                 })}

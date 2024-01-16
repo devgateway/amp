@@ -23,10 +23,11 @@ interface IndicatorProgressChartProps extends ComponentProps {
     settings: any;
     indicator: IndicatorObjectType;
     section: 'right' | 'left';
+    index: number;
 }
 
 const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: IndicatorProgressChartProps) => {
-    const { translations, filters, settings, indicator, section } = props;
+    const { translations, filters, settings, indicator, section, index } = props;
     const dispatch = useDispatch();
 
     const [indicatorReportData, setIndicatorReportData] = useState<any>(null);
@@ -70,7 +71,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
         setSelectedIndicatorName(indicator.name);
         promiseFetchIndicatorReport(indicator.id, yearCount)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicator.id]);
+    }, [indicator.id, index]);
 
     return (
         <div>

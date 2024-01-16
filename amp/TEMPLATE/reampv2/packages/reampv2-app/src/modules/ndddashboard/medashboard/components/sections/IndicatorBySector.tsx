@@ -12,17 +12,13 @@ interface IndicatorBySectorProps {
     translations: DefaultTranslations;
     filters: any;
     settings: any;
-    selectedClassification?: number | null;
     index: number;
+    indicators: IndicatorObjectType[];
 }
 
 const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
-    const { translations, selectedClassification, filters, settings, index } = props;
+    const { translations, filters, settings, index, indicators } = props;
 
-    const dispatch = useDispatch();
-    const indicatorsReducer = useSelector((state: any) => state.fetchIndicatorsByClassificationReducer);
-
-    const [indicators, setIndicators] = React.useState<IndicatorObjectType[]>([]);
     const [selectedIndicatorId, setSelectedIndicatorId] = React.useState<number | null>(null);
     const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorObjectType | null>(null);
 
@@ -31,19 +27,14 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
         if (indicator) setSelectedIndicator(indicator);
     }
 
-    useEffect(() => {
-        if (selectedClassification) {
-            dispatch(fetchIndicatorsByClassification(selectedClassification));
-        }
-    }, [selectedClassification]);
 
     useEffect(() => {
-        if (!indicatorsReducer.loading && indicatorsReducer.data && !indicatorsReducer.error) {
-            setIndicators(indicatorsReducer.data);
-            setSelectedIndicatorId(indicatorsReducer.data[0].id);
-            setSelectedIndicator(indicatorsReducer.data[0])
+        if (indicators.length > 0) {
+            setSelectedIndicatorId(indicators[0].id);
+            setSelectedIndicator(indicators[0])
         }
-    }, [indicatorsReducer]);
+
+    }, [indicators]);
 
     return (
         <div>

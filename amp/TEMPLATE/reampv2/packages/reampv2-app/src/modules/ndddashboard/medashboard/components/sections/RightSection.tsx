@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {DefaultTranslations} from "../../types";
 import {Button, Col, Row} from "react-bootstrap";
 import SectorClassification from "./SectorClassification";
 import {bindActionCreators, Dispatch} from "redux";
-import {connect} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import IndicatorBySector from "./IndicatorBySector";
 import styles from "./css/Styles.module.css";
+import {fetchIndicatorsByClassification} from "../../reducers/fetchIndicatorsByClassificationReducer";
+import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
 
 interface RightSectionProps {
     translations: DefaultTranslations,
@@ -16,12 +18,28 @@ interface RightSectionProps {
 const RightSection: React.FC<RightSectionProps> = (props) => {
     const { translations, filters, settings } = props;
 
+    const dispatch = useDispatch();
+    const indicatorsReducer = useSelector((state: any) => state.fetchIndicatorsByClassificationReducer);
+
     const [selectedClassification, setSelectedClassification] = React.useState<number | null>(null);
     const [numberOfIndicators, setNumberOfIndicators] = React.useState<number>(1);
+    const [indicators, setIndicators] = React.useState<IndicatorObjectType[]>([]);
 
     const handleAddIndicator = () => {
         setNumberOfIndicators(numberOfIndicators + 1);
     }
+
+    useEffect(() => {
+        if (selectedClassification) {
+            dispatch(fetchIndicatorsByClassification(selectedClassification));
+        }
+    }, [selectedClassification]);
+
+    useEffect(() => {
+        if (!indicatorsReducer.loading && indicatorsReducer.data && !indicatorsReducer.error) {
+            setIndicators(indicatorsReducer.data);
+        }
+    }, [indicatorsReducer]);
 
     return (
         <div>
@@ -44,7 +62,7 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
                             settings={settings}
                             key={index}
                             index={index}
-                            selectedClassification={selectedClassification} />
+                            indicators={indicators} />
                     );
                 })}
 

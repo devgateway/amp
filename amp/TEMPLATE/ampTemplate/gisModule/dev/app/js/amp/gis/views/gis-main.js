@@ -19,23 +19,41 @@ function loadResizeSensor() {
 	updateMapContainerSidebarPosition();
 }
 function fetchDataAndCheckLoginRequired() {
-    return new Promise((resolve, reject) => {
-        // Fetch settings data
-        fetch('/rest/amp/settings')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .catch(error => {
-                // Handle errors, such as network issues or errors returned by the API
-                console.error('Error fetching data:', error);
-                reject(error);
-            });
-    });
-}
+    return fetch('/rest/amp/settings')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Check for the login-required field
+            var loginRequired = data['login-required'];
 
+            // Perform actions based on the loginRequired value
+            alert(loginRequired);
+
+            if (loginRequired === true) {
+                // Return a new promise for the next asynchronous operation
+                return fetch('/rest/amp/user-logged-in')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(userData => {
+                        // Check if the user is logged in
+                        if (userData['userId']) {
+                            alert("User logged in");
+                        } else {
+                            alert("User not logged in");
+                        }
+                        return userData; // Resolve the promise with userData
+                    });
+            }
+        });
+}
 
 
 module.exports = Backbone.View.extend({
@@ -59,68 +77,16 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
-      fetchDataAndCheckLoginRequired().then(
-          result=>{
-              const loginRequired = result['login-required'];
-             console.log('Login required:', loginRequired);
-              if (loginRequired === true) {
-                  fetch('/rest/amp/user-logged-in').then(
-                                      response=>{
-                                          alert(response.json())
-                                          if (response.json()['userId']) {
-                                             alert("User logged in")
-                                          }
-                                          else
-                                          {
-                                              alert("User not logged in")
-
-                                          }
-                                      }
-                                  )
-              }
-
-
-          }
-      )
-    // fetchDataAndCheckLoginRequired()
-    //     .then(data => {
-    //         return new Promise((resolve, reject)=> {
-    //             // Extract the login-required field
-    //             const loginRequired = data['login-required'];
-    //
-    //             // Perform actions based on the loginRequired value
-    //             console.log('Login required:', loginRequired);
-    //
-    //             if (loginRequired === false) {
-    //                 // If login is required, fetch user login status
-    //                 return fetch('/rest/amp/user-logged-in').then(
-    //                     response=>{
-    //                         alert(response.json())
-    //                         if (response.json().userId) {
-    //                             resolve({isLoggedIn: true, message: 'Login is required.'});
-    //                         }
-    //                         else
-    //                         {
-    //                             resolve({isLoggedIn: false, message: 'Login is required.'});
-    //
-    //                         }
-    //                     }
-    //                 )
-    //             } else {
-    //                 // If login is not required, resolve with a message
-    //                 resolve({isLoggedIn: true, message: 'Login is not required.'});
-    //             }
-    //         })
-    //     })
-    //     .then(result => {
-    //         console.log("Result",result);
-    //         alert("is Logged in",result.isLoggedIn);
-    //       if (result.isLoggedIn===false) {
-    //         // User is not logged in, do something
-    //           Backbone.history.navigate('index.do', { trigger: true });
-    //       }
-    //       else
-    //       {
+      fetchDataAndCheckLoginRequired()
+          .then(result => {
+              // Handle the result if needed
+              console.log('Result:', result);
+              alert('Result:', result);
+          })
+          .catch(error => {
+              // Handle errors, such as network issues or errors returned by the API
+              console.error('Error:', error);
+          });
             this.$el.html(ModuleTemplate);
 
             this.mapView.setElement(this.$('#map-container')).render();

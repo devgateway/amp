@@ -33,6 +33,8 @@ const NDDDashboardHome = (props) => {
         noIndirectMapping,
         globalSettings,
         _getSharedData,
+        meGlobalSettings,
+        programConfiguration
     } = props;
 
     const location = useLocation();
@@ -51,8 +53,8 @@ const NDDDashboardHome = (props) => {
 
     const fetchFmReducer = useSelector(state => state.fetchFmReducer);
 
-    const nddDashboard = fetchFmReducer.data.find(d => d === NDDPath);
-    const meDashboard = fetchFmReducer.data.find(d => d === MEPath);
+    const nddDashboard = !!fetchFmReducer.data.find(d => d === NDDPath);
+    const meDashboard = !!fetchFmReducer.data.find(d => d === MEPath);
 
     const getSharedDataOrResolve = (id) => {
         if (id) {
@@ -237,8 +239,20 @@ const NDDDashboardHome = (props) => {
 
     return (
       <Container fluid className="main-container" id="ndd-main-container">
-          <div className="row header" style={{marginRight: '-30px', marginLeft: '-30px'}}>
+          <div className="row header">
               {mapping && settings && globalSettings && selectedPrograms && !embedded && (
+                <HeaderContainer
+                  onApplySettings={onApplySettings}
+                  onApplyFilters={onApplyFilters}
+                  filters={filters}
+                  globalSettings={globalSettings}
+                  settings={settings}
+                  fundingType={fundingType}
+                  selectedPrograms={selectedPrograms}
+                  dashboardId={dashboardId}/>
+              )}
+
+              {globalSettings && meDashboard && !nddDashboard && programConfiguration && (
                 <HeaderContainer
                   onApplySettings={onApplySettings}
                   onApplyFilters={onApplyFilters}
@@ -289,7 +303,9 @@ const
       globalSettings: state.dashboardSettingsReducer.globalSettings,
       translations: state.translationsReducer.translations,
       mapping: state.mappingsReducer.mapping,
-      noIndirectMapping: state.mappingsReducer.noIndirectMapping
+      noIndirectMapping: state.mappingsReducer.noIndirectMapping,
+      meGlobalSettings: state.fetchSettingsReducer.settings,
+      programConfiguration: state.programConfigurationReducer.data,
   });
 
 const
@@ -315,7 +331,9 @@ NDDDashboardHome.propTypes = {
     _clearTopReport: PropTypes.func.isRequired,
     noIndirectMapping: PropTypes.object,
     globalSettings: PropTypes.object,
-    _getSharedData: PropTypes.func.isRequired
+    _getSharedData: PropTypes.func.isRequired,
+    meGlobalSettings: PropTypes.object,
+    programConfiguration: PropTypes.bool.isRequired
 };
 
 NDDDashboardHome.defaultProps = {

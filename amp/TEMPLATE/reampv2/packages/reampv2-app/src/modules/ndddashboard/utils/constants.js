@@ -72,7 +72,8 @@ export const BASE_VALUE ='BaseLine'
 export const CURRENT_VALUE ='Current'
 export const TARGET_VALUE ='Target'
 
-export const PROGRESS_TRACKING_DASHBOARDS = 'PROGRESS TRACKING DASHBOARDS'
+export const PROGRESS_TRACKING_DASHBOARDS = 'PROGRESS TRACKING DASHBOARDS';
+export const DASHBOARDS = 'DASHBOARDS';
 
 export const REST_PROGRAM_CONFIGURATION = '/rest/dashboard/programConfiguration';
 export const REST_FM_SETTINGS = '/rest/common/fm/flat';
@@ -96,5 +97,5 @@ export const SECTOR_COLOR = [
   '#DA524B'
 ];
 
-export const NDDPath = '/Progress Tracking Dashboards[true]/NDD Dashboard[true]';
+export const NDDPath = '/Dashboards[true]/NDD Dashboard[true]';
 export const MEPath = '/Progress Tracking Dashboards[true]/M&E Dashboard[true]';

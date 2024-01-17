@@ -45,7 +45,10 @@ const NDDDashboardTabs = (props)  => {
             borderRadius: 5,
         }}>
             <Row sm={3}>
-                <Nav variant="pills">
+                <Nav variant="pills" style={{
+                    marginLeft: 0,
+                    marginRight: -40
+                }}>
                     { nddDashboard && (
                         <Nav.Item>
                             <Nav.Link eventKey="ndd" title={translations["amp.ndd.dashboard:ndd-dashboard"]}>{translations["amp.ndd.dashboard:ndd-dashboard"]}</Nav.Link>

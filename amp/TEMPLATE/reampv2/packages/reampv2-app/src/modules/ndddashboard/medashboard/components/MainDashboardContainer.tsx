@@ -8,7 +8,7 @@ const MainDashboardContainer = (props: any) => {
 
     return (
         <>
-            <Row style={{
+            <Row sm={12} style={{
                 display: 'flex',
                 borderTop: 'none'
             }}>

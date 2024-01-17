@@ -4,8 +4,6 @@ import {Col, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
 import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
 import {DefaultTranslations} from "../../types";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchIndicatorsByClassification } from "../../reducers/fetchIndicatorsByClassificationReducer";
 import IndicatorProgressChart from "../IndicatorProgressChart";
 
 interface IndicatorBySectorProps {

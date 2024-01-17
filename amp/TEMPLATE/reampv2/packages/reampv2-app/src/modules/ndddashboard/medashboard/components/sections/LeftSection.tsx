@@ -4,9 +4,11 @@ import ProgramGroupedByIndicator from './ProgramGroupedByIndicator';
 import { Button, Row } from 'react-bootstrap';
 import { DefaultTranslations, ProgramConfigChild } from '../../types';
 import { Dispatch, bindActionCreators } from 'redux';
-import { connect, useSelector } from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import styles from './css/Styles.module.css';
 import { findProgramConfig, extractLv1Children } from '../../utils/data';
+import {fetchIndicatorsByProgram} from "../../reducers/fetchIndicatorsByProgramReducer";
+import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
 
 interface LeftSectionProps {
     translations: DefaultTranslations,
@@ -17,12 +19,28 @@ interface LeftSectionProps {
 const LeftSection: React.FC<LeftSectionProps> = (props) => {
     const { translations, filters, settings } = props;
 
+    const dispatch = useDispatch();
+    const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
+
     const [level1Child, setLevel1Child] = useState<number | null>(null);
     const [numberOfIndicators, setNumberOfIndicators] = useState<number>(1);
+    const [indicators, setIndicators] = React.useState<IndicatorObjectType[]>([]);
 
     const handleAddIndicator = () => {
         setNumberOfIndicators(numberOfIndicators + 1);
     }
+
+    useEffect(() => {
+        if (level1Child) dispatch(fetchIndicatorsByProgram(level1Child));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [level1Child]);
+
+    useEffect(() => {
+        if (!indicatorsByProgramReducer.loading && !indicatorsByProgramReducer.error && indicatorsByProgramReducer.data) {
+            setIndicators(indicatorsByProgramReducer.data);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [indicatorsByProgramReducer]);
 
     // @ts-ignore
     return (
@@ -48,6 +66,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
                             settings={settings}
                             key={index}
                             index={index}
+                            indicators={indicators}
                             filters={filters}/>
                     )
                 })

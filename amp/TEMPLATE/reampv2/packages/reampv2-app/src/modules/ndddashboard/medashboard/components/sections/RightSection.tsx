@@ -8,6 +8,7 @@ import IndicatorBySector from "./IndicatorBySector";
 import styles from "./css/Styles.module.css";
 import {fetchIndicatorsByClassification} from "../../reducers/fetchIndicatorsByClassificationReducer";
 import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
+import {fetchIndicatorsByProgram} from "../../reducers/fetchIndicatorsByProgramReducer";
 
 interface RightSectionProps {
     translations: DefaultTranslations,

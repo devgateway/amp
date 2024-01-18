@@ -2,7 +2,6 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpTheme" table="AMP_THEME">
-		<cache usage="read-write" />
 		<id name="ampThemeId" column="amp_theme_id" type="java.lang.Long">
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
 				<param name="sequence_name">AMP_THEME_seq</param>
@@ -49,7 +48,6 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" />
 		</set>
 		<set name="siblings" table="AMP_THEME" lazy="true" inverse="true" cascade="none">
-			<cache usage="read-write" />
 			<key column="parent_theme_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpTheme"/>
 		</set>

@@ -2,17 +2,18 @@
 <!-- This mostly deals with Spring Security configuration for AMP -->
 <!-- Please do not put your http patterns here, use module-spring.xml files !! -->
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			 xmlns:beans="http://www.springframework.org/schema/beans"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:context="http://www.springframework.org/schema/context"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans
                     http://www.springframework.org/schema/beans/spring-beans.xsd
-                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security
                     http://www.springframework.org/schema/security/spring-security.xsd
 					http://www.springframework.org/schema/context
 					http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<beans:import resource="classpath:/applicationContext.xml" />
+	<context:component-scan base-package="org.digijava.kernel.util" />
 
 	<beans:bean id="customHttpFirewall" class="org.springframework.security.web.firewall.DefaultHttpFirewall"/>
 	<http-firewall ref="customHttpFirewall"/>
@@ -21,10 +22,10 @@
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 
-    <http pattern="/translation/switchLanguage.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+	<http pattern="/translation/switchLanguage.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<csrf disabled="true"/>
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
 
 	<http pattern="/robots.txt" security="none" />
 	<http pattern="/favicon.ico" security="none" />
@@ -32,43 +33,43 @@
 
 	<http pattern="/translation/ajaxTranslator.do**" security="none" />
 
-    <http pattern="/aim/confirmRegisteration.do**" security="none" />
+	<http pattern="/aim/confirmRegisteration.do**" security="none" />
 
 	<http pattern="/aim/showRegisterUser.do**" security="none" />
 
-    <http pattern="/aim/showChangePassword.do**" security="none" />
+	<http pattern="/aim/showChangePassword.do**" security="none" />
 
-    <http pattern="/aim/changePassword.do**" security="none" />
+	<http pattern="/aim/changePassword.do**" security="none" />
 
-    <http pattern="/aim/showEmailForm.do**" security="none" />
+	<http pattern="/aim/showEmailForm.do**" security="none" />
 
-    <http pattern="/aim/resetUserPassword.do**" security="none" />
+	<http pattern="/aim/resetUserPassword.do**" security="none" />
 
 	<http pattern="/aim/registerUser.do**" security="none" />
 
 	<http pattern="/aim/csvExport.do**" security="none" />
 
 	<http pattern="/viewNewAdvancedReport.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
- 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
 	<http pattern="/aim/viewNewAdvancedReport.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
- 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
 	<http pattern="/aim/xlsExport.do**" security="none" />
 
-    <http pattern="/aim/pdfExport.do**" security="none" />
+	<http pattern="/aim/pdfExport.do**" security="none" />
 
 
 
 	<http pattern="/aim/viewActivityHistory.do**" security="none" />
 	<http pattern="/exception/showExceptionReport.do**" security="none" />
 
-    <http pattern="/aim/viewActivityPreview.do**" security="none"  />
+	<http pattern="/aim/viewActivityPreview.do**" security="none"  />
 
 
-    <http pattern="/aim/exportActToPDF.do**" security="none"  />
+	<http pattern="/aim/exportActToPDF.do**" security="none"  />
 
 	<http pattern="/aim/exportActToWord.do**" security="none"  />
 
@@ -84,13 +85,32 @@
 	<http pattern="/esrigis/**" security="none" />
 	 -->
 	<http pattern="/rest/**" security="none" />
-    <http pattern="/api-docs/**" security="none" />
+	<http pattern="/api-docs/**" security="none" />
+
+	<beans:bean id="gisAuthenticationCheckService" class="org.digijava.kernel.util.GisSecurityUtilService"/>
+
+
+
 
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
-	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
-    <http pattern="/gis/boundaries/**" security="none" />
+
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/gis/boundaries/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
 
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
@@ -99,19 +119,19 @@
 	<http pattern="/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
 	<http pattern="/TEMPLATE/reampv2/**" security="none" />
 
-    <http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
+	<http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
 
 
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf|eot|woff|woff2|ttf)(\?)?.*$"
-		request-matcher="regex" security="none" />
+		  request-matcher="regex" security="none" />
 
 	<!-- alllow bypass for login page -->
 	<http pattern="/showLayout.do/?layout=login" request-matcher="regex"
-		security="none" />
+		  security="none" />
 
 	<http pattern="/showLayout.do/?layout=viewActivityHistory" request-matcher="regex"
-		security="none" />
+		  security="none" />
 
 	<!-- import digi module spring configuration files -->
 	<beans:import resource="classpath:../../repository/**/module-spring.xml" />
@@ -119,56 +139,56 @@
 	<!-- uncomment this to see debugging info about spring security -->
 	<!-- <debug/> -->
 
-    <!-- Pages with anonymous access -->
-  <!--   <http pattern="/aim/viewActivityPreview.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
-   -->
-    <http pattern="/calendar/showCalendarView.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<!-- Pages with anonymous access -->
+	<!--   <http pattern="/aim/viewActivityPreview.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+          <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+      </http>
+     -->
+	<http pattern="/calendar/showCalendarView.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
-    <http pattern="/calendar/default/showCalendarView.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<http pattern="/calendar/default/showCalendarView.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
-    <http pattern="/calendar/showCalendarEvent.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
-    </http>
-    <http pattern="/calendar/showEvents.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<http pattern="/calendar/showCalendarEvent.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
-    <http pattern="/gis/pdfExport.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+	<http pattern="/calendar/showEvents.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/gis/pdfExport.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
 
-    <http pattern="/aim/reportsFilterPicker.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-		<csrf disabled="true"/>
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
-    <http pattern="/reportsFilterPicker.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+	<http pattern="/aim/reportsFilterPicker.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<csrf disabled="true"/>
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+	</http>
+	<http pattern="/reportsFilterPicker.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<csrf disabled="true"/>
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
 	<http pattern="/translation/showNewAdvancedTranslation.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
 
-    <http pattern="/contentrepository/documentManager.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<http pattern="/contentrepository/documentManager.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
-    </http>
+	</http>
 
-    <http pattern="/viewTeamReports.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+	<http pattern="/viewTeamReports.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<csrf disabled="true"/>
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
 
-    <http pattern="/aim/viewTeamReports.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<http pattern="/aim/viewTeamReports.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
 	<http pattern="/aim/reportWizard.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
@@ -176,8 +196,8 @@
 		<csrf disabled="true"/>
 	</http>
 
-    <http pattern="/um/user/showResetForm.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<http pattern="/um/user/showResetForm.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
 
@@ -186,14 +206,14 @@
 		<csrf disabled="true"/>
 	</http>
 
-    <http pattern="/um/userResetPassword.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<http pattern="/um/userResetPassword.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
 
-    <http pattern="/index.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+	<http pattern="/index.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
 	<http pattern="/translation/showNewAdvancedTranslation.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
@@ -252,26 +272,27 @@
 
 	<!-- auth service used to query the database and get the user bean -->
 	<beans:bean id="digiUserDetailsService"
-		class="org.digijava.kernel.security.auth.DigiUserDetailsService">
+				class="org.digijava.kernel.security.auth.DigiUserDetailsService">
 		<beans:property name="populateGroupAuthorities" value="false"/>
 	</beans:bean>
 
-	<!-- digest filter - this will check the HTTP headers and perform authentication 
+	<!-- digest filter - this will check the HTTP headers and perform authentication
 		if an Authorization section is found -->
 	<beans:bean id="digestFilter"
-		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+				class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
 		<beans:property name="userDetailsService" ref="digiUserDetailsService" />
 		<beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
 	</beans:bean>
 
 	<!-- this will set the necessary headers to commence handshake -->
 	<beans:bean id="digestEntryPoint"
-		class="org.digijava.kernel.security.auth.AjaxDigestAuthenticationEntryPoint">
+				class="org.digijava.kernel.security.auth.AjaxDigestAuthenticationEntryPoint">
 		<beans:property name="realmName" value="AMP-Realm" />
 		<beans:property name="key" value="testNonce" />
 		<beans:property name="nonceValiditySeconds" value="10000" />
 	</beans:bean>
 
 	<context:component-scan base-package="org.digijava.kernel.services"/>
+
 
 </beans:beans>   

@@ -4,7 +4,10 @@
 package org.dgfoundation.amp.visibility.data;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,10 +62,14 @@ public class FMSettingsMediator {
         
         if (fmGroup != null) {
             Set<String> enabledSettings = fmGroup.getEnabledSettings(templateId);
-            if (Objects.equals(fmGroupName, FMGROUP_MENU)) {
-                if (!FeaturesUtil.isVisibleModule(MODULE_GIS)) {
+            if (Objects.equals(fmGroupName, FMGROUP_MENU) && (!FeaturesUtil.isVisibleModule(MODULE_GIS))) {
                     enabledSettings.remove(MODULE_MAP);
-                }
+
+            }
+            boolean loginRequired = FeaturesUtil.getGlobalSettingValueBoolean("Login Required For GIS");
+            if (loginRequired && TeamUtil.getCurrentUser()==null)
+            {
+                enabledSettings.remove(MODULE_MAP);
             }
 
             return enabledSettings;

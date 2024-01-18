@@ -1251,9 +1251,8 @@ public class TeamMemberUtil {
                     + " tm.deleted = false) and (tm.user=:user)";
             qry = session.createQuery(queryString);
             qry.setParameter("user", user.getId(), LongType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                AmpTeamMember member = (AmpTeamMember) itr.next();
+            for (Object o : qry.list()) {
+                AmpTeamMember member = (AmpTeamMember) o;
                 result.add(member.getAmpTeam());
             }
         } catch (Exception e) {

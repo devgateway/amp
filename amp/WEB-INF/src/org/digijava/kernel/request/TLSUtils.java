@@ -8,6 +8,7 @@ import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.util.TrnUtil;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
@@ -88,6 +89,9 @@ public class TLSUtils {
             return "en";
         }
     }
+
+
+
     
     public void setForcedSSCWorkspace(Boolean forcedSSCWorkspace) {
         this.forcedSSCWorkspace = forcedSSCWorkspace;

@@ -92,17 +92,17 @@
 
 
 
-<!--	http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />-->
+	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 <!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />-->
 <!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />-->
 <!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />-->
 <!--	<http pattern="/gis/boundaries/**" security="none" /><-->
 
 
-	<http pattern="/TEMPLATE/ampTEMPLATE**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
-		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
-		<csrf disabled="true"/>
-	</http>
+<!--	<http pattern="/TEMPLATE/ampTEMPLATE**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >-->
+<!--		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />-->
+<!--		<csrf disabled="true"/>-->
+<!--	</http>-->
 	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
 		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
 		<csrf disabled="true"/>

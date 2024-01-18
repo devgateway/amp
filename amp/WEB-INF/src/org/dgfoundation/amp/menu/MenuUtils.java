@@ -44,7 +44,6 @@ public class MenuUtils {
     public static AmpView getCurrentView() {
         HttpSession session =TLSUtils.getRequest().getSession();
         TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-        System.out.println(tm);
         if (tm == null) {
             return AmpView.PUBLIC;
         }
@@ -67,9 +66,9 @@ public class MenuUtils {
         // detect current view
         AmpView currentView = getCurrentView();
         // retrieve menu structure for the current view
-            System.out.println(currentView);
+            logger.info(currentView);
         List<MenuItem> items = MenuStructure.getMenuStructure(currentView);
-            System.out.println(items);
+            logger.info(items);
         // process menu structure for the current request, i.e. filter out anything hidden by FM or lack of user rights
         return MenuItemsProcessor.processForCurrentRequest(items, currentView);
         }catch (Throwable e)

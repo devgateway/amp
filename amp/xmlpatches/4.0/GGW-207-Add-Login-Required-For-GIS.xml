@@ -4,15 +4,12 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>GGW-207</jira>
     <author>bmokandu</author>
-    <description>Add Login For GIS.</description>
+    <description>Login Required for GIS.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-				INSERT INTO amp_features_visibility (id, name, haslevel, parent)
-				SELECT (select nextval('amp_features_visibility_seq')), 'Login Required', false,
-				(SELECT id FROM amp_modules_visibility WHERE name = '/GIS')
-				WHERE NOT EXISTS (SELECT id FROM amp_features_visibility  WHERE name  = 'Login Required');
-
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
+				VALUES (nextval('amp_global_settings_seq'), 'Login Required For GIS', 'true', 't_Boolean', 'Login Required For GIS', 'general', null, FALSE);
 			]]></lang>
         </script>
     </apply>

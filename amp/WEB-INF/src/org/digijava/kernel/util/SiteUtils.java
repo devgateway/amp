@@ -273,8 +273,8 @@ public class SiteUtils {
         }
         sb.append(domain);
 
-        if (! ( (scheme.equals("http") && port == 80) ||
-               (scheme.equals("https") && port == 443))) {
+        if (! ( (Objects.equals(scheme,"http") && port == 80) ||
+               (Objects.equals(scheme,"https") && port == 443))) {
             sb.append(":").append(port);
         }
 
@@ -299,9 +299,8 @@ public class SiteUtils {
      */
     public static SiteDomain getDefaultSiteDomain(Site site) {
         SiteDomain siteDomain = null;
-        Iterator iter = site.getSiteDomains().iterator();
-        while (iter.hasNext()) {
-            siteDomain = (SiteDomain) iter.next();
+        for (SiteDomain domain : site.getSiteDomains()) {
+            siteDomain = domain;
             if (siteDomain.isDefaultDomain()) {
                 break;
             }

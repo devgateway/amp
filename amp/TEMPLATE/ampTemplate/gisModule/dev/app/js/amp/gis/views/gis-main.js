@@ -84,58 +84,59 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
-      fetchDataAndCheckLoginRequired()
-          .then(result => {
-              // Handle the result if needed
-              console.log('Result:', result);
-              if (result && result.allowed===false)
-              {
-                  alert("You must be logged in to access this map.")
-                  // var MyApp = new Backbone.Router();
-                  window.location.href="/index.do";
-                  // MyApp.navigate('index.do', {trigger: true});
-              }
-              else
-              {
-                  this.$el.html(ModuleTemplate);
+      // fetchDataAndCheckLoginRequired()
+      //     .then(result => {
+      //         // Handle the result if needed
+      //         console.log('Result:', result);
+      //         if (result && result.allowed===false)
+      //         {
+      //             alert("You must be logged in to access this map.")
+      //             // var MyApp = new Backbone.Router();
+      //             window.location.href="/index.do";
+      //             // MyApp.navigate('index.do', {trigger: true});
+      //         }
+      //         else
+      //         {
+      //
+      //         }
+      //     })
+      //     .catch(error => {
+      //         // Handle errors, such as network issues or errors returned by the API
+      //         console.error('Error:', error);
+      //     });
+      this.$el.html(ModuleTemplate);
 
-                  this.mapView.setElement(this.$('#map-container')).render();
-                  /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
-                  this.sidebarView.setElement(this.$('#sidebar-tools')).render();
+      this.mapView.setElement(this.$('#map-container')).render();
+      /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
+      this.sidebarView.setElement(this.$('#sidebar-tools')).render();
 
-                  //auto-render the layout
-                  var headerWidget = new boilerplate.layout(
-                      {
-                          callingModule: 'GIS',
-                          showDGFooter: false,
-                          useSingleRowHeader: true
-                      });
-                  $.when(headerWidget.layoutFetched).then(function() {
-                      $('.dropdown-toggle').dropdown();
-
-                      $.when(headerWidget.header.menuRendered).then(function() {
-                          loadResizeSensor();
-                      });
-                  });
-
-                  // update translations
-                  this.translator.translateDOM(this.el);
-                  this.translationToggle();
-
-                  // Translate parts of leaflet UI.
-                  var leafletZoomIn = $('.leaflet-control-zoom-in');
-                  $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
-                  var leafletZoomOut = $('.leaflet-control-zoom-out');
-                  $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
-
-                  /* TODO(thadk): test without app here? this?*/
-                  app.translator.translateDOM('.leaflet-control-zoom');
-              }
-          })
-          .catch(error => {
-              // Handle errors, such as network issues or errors returned by the API
-              console.error('Error:', error);
+      //auto-render the layout
+      var headerWidget = new boilerplate.layout(
+          {
+              callingModule: 'GIS',
+              showDGFooter: false,
+              useSingleRowHeader: true
           });
+      $.when(headerWidget.layoutFetched).then(function() {
+          $('.dropdown-toggle').dropdown();
+
+          $.when(headerWidget.header.menuRendered).then(function() {
+              loadResizeSensor();
+          });
+      });
+
+      // update translations
+      this.translator.translateDOM(this.el);
+      this.translationToggle();
+
+      // Translate parts of leaflet UI.
+      var leafletZoomIn = $('.leaflet-control-zoom-in');
+      $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
+      var leafletZoomOut = $('.leaflet-control-zoom-out');
+      $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
+
+      /* TODO(thadk): test without app here? this?*/
+      app.translator.translateDOM('.leaflet-control-zoom');
 
 
 

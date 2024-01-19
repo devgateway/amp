@@ -551,7 +551,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_one_item} controlId="programs">
                         <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
                         {
-                          (programs.length > 0 && defaultProgram) ? (
+                          (programs.length > 0) ? (
                             <Select
                               name="programs"
                               options={programs}

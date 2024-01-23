@@ -10,7 +10,7 @@
             <lang delimiter=";" type="postgres"><![CDATA[
                 DELETE FROM amp_global_settings WHERE settingsname='Multicountry Enabled' AND section='general';
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES (nextval('amp_global_settings_seq'), 'Multicountry Enabled', 'false', 't_Boolean', 'Multicountry Enabled', 'GIS', null, FALSE);
+				VALUES (nextval('amp_global_settings_seq'), 'Multicountry Enabled', 'false', 't_Boolean', 'Multicountry Enabled', 'gis', null, FALSE);
 			]]></lang>
         </script>
     </apply>

@@ -1,22 +1,20 @@
 /* global app */
 var fs = require('fs');
 var _ = require('underscore');
-var Backbone = require('backbone');
-var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
-var SettingsUtils = require('../../../libs/local/settings-utils.js');
+const Backbone = require('backbone');
+const Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
+const SettingsUtils = require('../../../libs/local/settings-utils.js');
 var Constants = require('../../../libs/local/constants.js');
 
-var CommonListsApi=require("../../")
 
 
 
-function getGisSettings(): Promise {
+function getGisSettings() {
 	return new Promise((resolve, reject) => {
-		fetch('/rest/amp/settings/gis').then((response) => {
-			resolve(response);
-		}).catch((error) => {
-			reject(error);
-		});
+		fetch('/rest/amp/settings/gis')
+			.then(response => response.json())
+			.then(data => resolve(data))
+			.catch(error => reject(error));
 	});
 }
 

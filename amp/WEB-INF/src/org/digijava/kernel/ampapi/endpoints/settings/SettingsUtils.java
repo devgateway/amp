@@ -13,6 +13,7 @@ import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.AmpGeneralSettings;
+import org.digijava.kernel.ampapi.endpoints.common.AmpGisSettings;
 import org.digijava.kernel.ampapi.endpoints.common.CurrencySettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
@@ -483,6 +484,13 @@ public class SettingsUtils {
         settings.setIndicatorFilterByProgram(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM));
 
         return settings;
+    }
+    public static AmpGisSettings getGisSettings()
+    {
+        AmpGisSettings ampGisSettings = new AmpGisSettings();
+        ampGisSettings.setSectorsEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.GIS_SECTORS_ENABLED));
+        ampGisSettings.setMultiCountryEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.MULTICOUNTRY_ENABLED));
+        return ampGisSettings;
     }
 
     private static void addCalendarSettings(AmpGeneralSettings settings) {

@@ -4,7 +4,21 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
 var SettingsUtils = require('../../../libs/local/settings-utils.js');
-var Constants = require('../../../libs/local/constants.js'); 
+var Constants = require('../../../libs/local/constants.js');
+
+var CommonListsApi=require("../../")
+
+
+
+function getGisSettings(): Promise {
+	return new Promise((resolve, reject) => {
+		fetch('/rest/amp/settings/gis').then((response) => {
+			resolve(response);
+		}).catch((error) => {
+			reject(error);
+		});
+	});
+}
 
 module.exports = Backbone.View.extend({
 
@@ -16,14 +30,16 @@ module.exports = Backbone.View.extend({
   },
 
 
-  render: function() {
+  render: async function() {
 	  var self = this;
 	  //getStructuresWithActivities was null...
+	  const gisSettings = await getGisSettings();
+
 	  self.model.structuresCollection.getStructuresWithActivities().then(function() {
 			  var geoJSON = self.model.structuresCollection.toGeoJSON();
 			var customStructureColors = []
 			geoJSON.features.forEach(function(feature) {
-				if (feature.properties.color && feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER) != -1) {
+				if (feature.properties.color && feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER) !== -1) {
 					var splits = feature.properties.color.split(Constants.STRUCTURE_COLORS_DELIMITER);
 					if (customStructureColors.find(function(c) {
 						return c.color === splits[0]
@@ -40,6 +56,7 @@ module.exports = Backbone.View.extend({
 				  status: 'loaded',
 				  colourBuckets: self.model.structuresCollection.palette.colours,
 				  selectedVertical: self.model.get('filterVertical'),
+				  gisSettings: gisSettings,
 				  customStructureColors: customStructureColors
 		  };
 

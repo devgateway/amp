@@ -125,8 +125,10 @@ module.exports = Backbone.View.extend({
 				   });
 			   });
 
-	  }
-	   )
+	  })
+		   .catch(error => {
+			   console.error('Error rendering structures:', error);
+		   });
 
 
 

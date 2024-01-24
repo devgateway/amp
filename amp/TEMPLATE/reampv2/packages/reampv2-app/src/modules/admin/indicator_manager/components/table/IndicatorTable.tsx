@@ -235,6 +235,8 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
           setShow={setShowEditIndicatorModal}
           indicator={selectedRow}
           translations={translations}
+          filterBySector={globalSettings["indicator-filter-by-sector"]}
+          filterByProgram={globalSettings["indicator-filter-by-program"]}
         />
       }
 

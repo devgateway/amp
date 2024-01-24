@@ -266,6 +266,7 @@ public class IndicatorManagerService {
 
     public List<ProgramSchemeDTO> getProgramScheme() {
         return ProgramUtil.getAmpActivityProgramSettingsList(false).stream()
+                .filter(program -> program.getDefaultHierarchy() != null)
                 .map(ProgramSchemeDTO::new)
                 .collect(Collectors.toList());
     }

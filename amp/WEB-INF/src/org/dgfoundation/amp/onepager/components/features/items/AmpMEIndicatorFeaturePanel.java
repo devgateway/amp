@@ -69,19 +69,19 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
         add(riskSelect);
 
-        final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);
-        final AmpIndicatorValue targetVal = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+        final AmpIndicatorGlobalValue globalBaseVal = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.BASE);
+        final AmpIndicatorGlobalValue globalTargetVal = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.TARGET);
 
         final Model<Boolean> valuesSet = new Model<Boolean>(false);
 
-        for (AmpIndicatorValue val : values.getObject()){
+        for (AmpIndicatorGlobalValue val : indicator.getObject().getIndicatorValues()){
 
-            switch (val.getValueType()) {
+            switch (val.getType()) {
                 case AmpIndicatorValue.BASE:
-                    val.copyValuesTo(baseVal);
+                    val.copyValuesTo(globalBaseVal);
                     break;
                 case AmpIndicatorValue.TARGET:
-                    val.copyValuesTo(targetVal);
+                    val.copyValuesTo(globalTargetVal);
                     valuesSet.setObject(true);
                     break;
                 default:
@@ -89,16 +89,16 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             }
         }
 
-        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<>(baseVal, "value"));
+        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<>(globalBaseVal, "originalValue"));
         add(indicatorBaseValueLabel);
 
-        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<>(baseVal, "valueDate"));
+        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<>(globalBaseVal, "originalValueDate"));
         add(indicatorBaseDateLabel);
 
-        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<>(targetVal, "value"));
+        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<>(globalTargetVal, "originalValue"));
         add(indicatorTargetValueLabel);
 
-        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<>(targetVal, "valueDate"));
+        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<>(globalTargetVal, "originalValueDate"));
         add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);

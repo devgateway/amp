@@ -65,7 +65,7 @@
 	sections.add("funding");
 	sections.add("date");
 	sections.add("user");
-	sections.add("gis");
+	sections.add("GIS");
 %>
 
 

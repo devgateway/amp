@@ -7,17 +7,6 @@ const SettingsUtils = require('../../../libs/local/settings-utils.js');
 var Constants = require('../../../libs/local/constants.js');
 
 
-
-
-function getGisSettings() {
-	return new Promise((resolve, reject) => {
-		fetch('/rest/amp/settings/gis')
-			.then(response => response.json())
-			.then(data => resolve(data))
-			.catch(error => reject(error));
-	});
-}
-
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
@@ -31,8 +20,7 @@ module.exports = Backbone.View.extend({
   render:  function() {
 	  var self = this;
 	  //getStructuresWithActivities was null...
-	   getGisSettings().then(
-		   gisSettings=>{
+
 			   self.model.structuresCollection.getStructuresWithActivities().then(function() {
 				   var geoJSON = self.model.structuresCollection.toGeoJSON();
 				   var customStructureColors = []
@@ -54,7 +42,7 @@ module.exports = Backbone.View.extend({
 					   status: 'loaded',
 					   colourBuckets: self.model.structuresCollection.palette.colours,
 					   selectedVertical: self.model.get('filterVertical'),
-					   gisSettings: gisSettings,
+					   gisSettings: this.app.data.gisSettings,
 					   customStructureColors: customStructureColors
 				   };
 
@@ -124,12 +112,6 @@ module.exports = Backbone.View.extend({
 					   self.model.set('filterVertical', verticalID);
 				   });
 			   });
-
-	  })
-		   .catch(error => {
-			   console.error('Error rendering structures:', error);
-		   });
-
 
 
 	  return this;

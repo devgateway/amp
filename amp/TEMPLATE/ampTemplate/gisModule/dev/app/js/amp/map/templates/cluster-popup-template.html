@@ -2,7 +2,10 @@
   <h5><%= obj.properties.admName%> <span data-i18n="amp.gis:popup-word-has">has</span> <%= obj.properties.activityid.length %> <span data-i18n="amp.gis:popup-word-projects">projects</span></h5>
 
   <ul class="nav nav-tabs" role="tablist">
+    <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
     <li class="active"><a href="#charts-pane-sector" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-sectors">Sectors</a></li>
+    <% } %>
+
     <li>
         <a href="#charts-pane-donor" role="tab" data-toggle="tab">
           <span class="setting-donors" data-i18n="amp.gis:activities-donors">Funding Organizations</span>
@@ -14,6 +17,7 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
+    <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
     <div class="tab-pane active" id="charts-pane-sector">
       <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span> <small>(<span data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></span>)</small></h5>
       <div class="amp-chart">
@@ -21,6 +25,7 @@
           <svg></svg>
       </div>
     </div>
+    <% } %>
     <div class="tab-pane" id="charts-pane-donor">
       <h5>
         <span class="setting-donors" data-i18n="amp.gis:activities-donors">Funding Organizations</span>

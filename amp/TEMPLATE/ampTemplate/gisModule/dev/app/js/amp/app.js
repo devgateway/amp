@@ -75,15 +75,7 @@ function configureApp() {
 	data.initializeCollectionsAndModels();
 	data.addState(state);
 
-	// Ensure proper chaining by returning the promise from getGisSettings
-	getGisSettings()
-		.then(response => {
-			app.data.gisSettings = response;
-		})
-		.catch(error => {
-			console.log("Error when fetching GIS settings ", error);
-		})
-		.then(() => {
+
 			// The code inside this block will be executed after getGisSettings is resolved or rejected
 			app.translator = translator.init();
 			app.constants = constants;
@@ -99,7 +91,6 @@ function configureApp() {
 			// hook up the title
 			var windowTitle = new WindowTitle('Aid Management Platform - GIS');
 			// windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
-		});
 }
 
 

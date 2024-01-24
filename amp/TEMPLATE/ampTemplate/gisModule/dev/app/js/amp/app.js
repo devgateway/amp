@@ -83,7 +83,7 @@ function configureApp() {
 		$.ajax({
 			url: '/rest/amp/settings/gis'
 		}).done(function(data) {
-			app.gisSettings = data;
+			app.data.gisSettings = data;
 		});
 
 

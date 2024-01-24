@@ -42,7 +42,7 @@ module.exports = Backbone.View.extend({
 					   status: 'loaded',
 					   colourBuckets: self.model.structuresCollection.palette.colours,
 					   selectedVertical: self.model.get('filterVertical'),
-					   gisSettings: this.app.gisSettings,
+					   gisSettings: this.app.data.gisSettings,
 					   customStructureColors: customStructureColors
 				   };
 

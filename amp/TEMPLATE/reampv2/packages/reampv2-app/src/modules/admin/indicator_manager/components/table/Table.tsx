@@ -144,7 +144,12 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
   return (
     <>
-      <AddNewIndicatorModal show={showAddNewIndicatorModal} setShow={setShowAddNewIndicatorModal} translations={translations} />
+      <AddNewIndicatorModal
+          show={showAddNewIndicatorModal}
+          setShow={setShowAddNewIndicatorModal}
+          filterBySector={filterBySector}
+          filterByProgram={filterByProgram}
+          translations={translations} />
       <Col sm={12}>
         <ToolkitProvider
           keyField="id"

@@ -75,14 +75,19 @@ function configureApp() {
 	data.initializeCollectionsAndModels();
 	data.addState(state);
 
+		app.translator = translator.init();
+		app.constants = constants;
+		app.createViews();
+		app.data.load();
 
-			// The code inside this block will be executed after getGisSettings is resolved or rejected
-			app.translator = translator.init();
-			app.constants = constants;
-			app.createViews();
-			app.data.load();
+		$.ajax({
+			url: '/rest/amp/settings/gis'
+		}).done(function(data) {
+			app.gisSettings = data;
+		});
 
-			// initialize everything that doesn't need to touch the DOM
+
+	// initialize everything that doesn't need to touch the DOM
 			$(document).ready(function () {
 				// Attach to the DOM and do all the dom-y stuff
 				app.setElement($('#gis-plugin')).render();

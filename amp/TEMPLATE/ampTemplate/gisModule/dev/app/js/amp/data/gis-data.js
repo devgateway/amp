@@ -64,19 +64,13 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    //setup performance rule model
 	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: false, isPerformanceToggleSelected: null}});
 	    this.performanceToggleModel = new PerformanceToggleModel();
-		this.gisSettings = {};
 	    $.ajax({
 			  url: '/rest/gis/has-enabled-performance-rules'			 
 	      }).done(function(data) {	    	  
 	    	  self.performanceToggleModel.set('isPerformanceToggleAvailable', data);
 		});
-	  $.ajax({
-		  url: '/rest/amp/settings/gis'
-	  }).done(function(data) {
-		  self.gisSettings = data;
-	  });
 
-	  this.activities = new Activities([], {
+	    this.activities = new Activities([], {
 	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
 	      pageSize: 15,

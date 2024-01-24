@@ -39,7 +39,9 @@ if(state.loadPromise){
 function getGisSettings() {
 	return new Promise((resolve, reject) => {
 		fetch('/rest/amp/settings/gis')
-			.then(response => response.json())
+			.then(response => response.json()
+
+			)
 			.then(data => resolve(data))
 			.catch(error => reject(error));
 	});
@@ -75,27 +77,37 @@ function configureApp() {
 	data.initializeCollectionsAndModels();
 	data.addState(state);
 
-		app.translator = translator.init();
-		app.constants = constants;
-		app.createViews();
-		app.data.load();
+	// Ensure proper chaining by returning the promise from getGisSettings
+			// The code inside this block will be executed after getGisSettings is resolved or rejected
 
-		$.ajax({
-			url: '/rest/amp/settings/gis'
-		}).done(function(data) {
-			app.data.gisSettings = data;
-		});
+			app.translator = translator.init();
+			app.constants = constants;
+			app.createViews();
+			app.data.load();
 
-
-	// initialize everything that doesn't need to touch the DOM
+			// initialize everything that doesn't need to touch the DOM
 			$(document).ready(function () {
 				// Attach to the DOM and do all the dom-y stuff
+				loadGisSettings();
 				app.setElement($('#gis-plugin')).render();
 			});
 
 			// hook up the title
 			var windowTitle = new WindowTitle('Aid Management Platform - GIS');
 			// windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
+
+}
+function loadGisSettings() {
+	getGisSettings()
+		.then(response => {
+			app.data.gisSettings = response;
+			// Perform any additional actions after gisSettings are loaded
+			// This could include triggering events or updating other parts of your application
+			console.log('gisSettings loaded:', response);
+		})
+		.catch(error => {
+			console.error('Error when fetching GIS settings ', error);
+		});
 }
 
 

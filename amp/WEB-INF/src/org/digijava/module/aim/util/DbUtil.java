@@ -1434,7 +1434,9 @@ public class DbUtil {
     }
 
     public static void delete(Object object) throws JDBCException {
-        PersistenceManager.getSession().delete(object);
+        Session session = PersistenceManager.getSession();
+        session.delete(object);
+        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
     }
 
     public static void deleteOrg(AmpOrganisation org) throws JDBCException {

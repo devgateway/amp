@@ -1170,6 +1170,7 @@ public class ProgramUtil {
                     AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,ampTh.getAmpThemeId());
                     tempTheme.setDeleted(true);
                     sess.saveOrUpdate(tempTheme);
+                    sess.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
                 } catch (HibernateException e) {
                     logger.error(e.getMessage(), e);
                     throw new AimException("Cannot delete theme with id "+themeId,e);

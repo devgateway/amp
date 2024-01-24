@@ -7,6 +7,7 @@ require('@babel/polyfill');
 var GISData = require('./data/gis-data');
 var App = require('./gis/views/gis-main');
 
+var $ = require('jquery');
 var State = require('amp-state/index'); //require('./services/state');
 var translator = require('./services/translator');
 var WindowTitle = require('./services/title');
@@ -20,7 +21,8 @@ var constants = new Constants();
 var app = new App({
 	  url: url,
 	  data: data,
-	  state: state
+	  state: state,
+	  gisSettings: {}
 });
 
 
@@ -29,22 +31,45 @@ var app = new App({
 if(state.loadPromise){
 	state.loadPromise.always(function(){
 		setSavedLanguage().then(function(){
-			configureApp();
-		});		
+			return getGisSettings();
+		})
+			.then(function (gisSettings)
+			{
+				app.gisSettings = gisSettings;
+				configureApp();
+			})
 	});	
 } else {
 	configureApp();
 }
 
 function getGisSettings() {
-	return new Promise((resolve, reject) => {
-		fetch('/rest/amp/settings/gis')
-			.then(response => response.json()
+	// return new Promise((resolve, reject) => {
+	// 	fetch('/rest/amp/settings/gis')
+	// 		.then(response => response.json()
+	//
+	// 		)
+	// 		.then(data => resolve(data))
+	// 		.catch(error => reject(error));
+	// });
 
-			)
-			.then(data => resolve(data))
-			.catch(error => reject(error));
-	});
+	var deferred = $.Deferred();
+
+	// Construct the URL with the provided symbol
+
+	// Use $.getJSON for the asynchronous request
+	$.getJSON("/rest/amp/settings/gis")
+		.done(function(data) {
+			// Resolve the deferred with the JSON result
+			deferred.resolve(data);
+		})
+		.fail(function(error) {
+			// Reject the deferred with the error
+			deferred.reject(error);
+		});
+
+	// Return the promise
+	return deferred.promise();
 }
 
 //configure to use saved language
@@ -73,6 +98,8 @@ function getLanguageFromState(){
 	return lang;	
 }
 
+
+
 function configureApp() {
 	data.initializeCollectionsAndModels();
 	data.addState(state);
@@ -88,7 +115,6 @@ function configureApp() {
 			// initialize everything that doesn't need to touch the DOM
 			$(document).ready(function () {
 				// Attach to the DOM and do all the dom-y stuff
-				loadGisSettings();
 				app.setElement($('#gis-plugin')).render();
 			});
 
@@ -97,18 +123,7 @@ function configureApp() {
 			// windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
 
 }
-function loadGisSettings() {
-	getGisSettings()
-		.then(response => {
-			app.data.gisSettings = response;
-			// Perform any additional actions after gisSettings are loaded
-			// This could include triggering events or updating other parts of your application
-			console.log('gisSettings loaded:', response);
-		})
-		.catch(error => {
-			console.error('Error when fetching GIS settings ', error);
-		});
-}
+
 
 
 module.exports = window.app = app;

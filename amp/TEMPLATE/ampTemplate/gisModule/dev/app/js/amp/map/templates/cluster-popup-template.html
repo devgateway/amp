@@ -2,30 +2,60 @@
   <h5><%= obj.properties.admName%> <span data-i18n="amp.gis:popup-word-has">has</span> <%= obj.properties.activityid.length %> <span data-i18n="amp.gis:popup-word-projects">projects</span></h5>
 
   <ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#projects-pane" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-projectlist">Project List</a></li>
     <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
-    <li class="active"><a href="#charts-pane-sector" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-sectors">Sectors</a></li>
+    <li><a href="#charts-pane-sector" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-sectors">Sectors</a></li>
     <% } %>
-
     <li>
         <a href="#charts-pane-donor" role="tab" data-toggle="tab">
           <span class="setting-donors" data-i18n="amp.gis:activities-donors">Funding Organizations</span>
           <span class="setting-executings" data-i18n="amp.gis:activities-executings">Executing Agency</span>
         </a>
     </li>
-    <li><a href="#projects-pane" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-projectlist">Project List</a></li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
+
+    <div class="tab-pane" id="projects-pane">
+      <!-- this template is for adm clusters -->
+      <div class="scroll-container">
+        <table class="table table-striped table-condensed">
+          <thead>
+          <tr>
+            <th data-i18n="amp.gis:activities-project-title">Title</th>
+            <th>
+              <span class="text-right setting-actual" data-i18n="amp.gis:activities-commitments">Actual Commitments</span>
+              <span class="text-right setting-planned" data-i18n="amp.gis:activities-planned-commitments">Planned Commitments</span>
+              <span class="text-right setting-scc" data-i18n="amp.gis:activities-bilateral-commitments">Bilateral
+                  SSC Commitments</span>
+            </th>
+            <th>
+              <span class="text-right setting-actual" data-i18n="amp.gis:activities-disbursements">Actual Disbursements</span>
+              <span class="text-right setting-planned" data-i18n="amp.gis:activities-planned-disbursements">Planned Disbursements</span>
+              <span class="text-right setting-scc"
+                    data-i18n="amp.gis:activities-triangular-commitments">Triangular SSC Commitments</span>
+            </th>
+          </tr>
+          </thead>
+          <tbody class="project-list">
+          </tbody>
+        </table>
+        <img class="loading" src="img/loading-icon.gif" />
+      </div>
+      <div class="btn btn-sm btn-info load-more"><span data-i18n="amp.gis:popup-loadmore">load more</span>...</div>
+    </div>
+
     <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
     <div class="tab-pane active" id="charts-pane-sector">
       <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span> <small>(<span data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></span>)</small></h5>
       <div class="amp-chart">
-          <img class="loading" src="img/loading-icon.gif" />
-          <svg></svg>
+        <img class="loading" src="img/loading-icon.gif" />
+        <svg></svg>
       </div>
     </div>
     <% } %>
+
     <div class="tab-pane" id="charts-pane-donor">
       <h5>
         <span class="setting-donors" data-i18n="amp.gis:activities-donors">Funding Organizations</span>
@@ -37,33 +67,7 @@
         <svg class="dash-chart"></svg>
       </div>
     </div>
-    <div class="tab-pane" id="projects-pane">
-      <!-- this template is for adm clusters -->
-      <div class="scroll-container">
-        <table class="table table-striped table-condensed">
-          <thead>
-            <tr>
-              <th data-i18n="amp.gis:activities-project-title">Title</th>
-              <th>
-                <span class="text-right setting-actual" data-i18n="amp.gis:activities-commitments">Actual Commitments</span>
-                <span class="text-right setting-planned" data-i18n="amp.gis:activities-planned-commitments">Planned Commitments</span>
-                <span class="text-right setting-scc" data-i18n="amp.gis:activities-bilateral-commitments">Bilateral
-                  SSC Commitments</span>
-              </th>
-              <th>
-                <span class="text-right setting-actual" data-i18n="amp.gis:activities-disbursements">Actual Disbursements</span>
-                <span class="text-right setting-planned" data-i18n="amp.gis:activities-planned-disbursements">Planned Disbursements</span>
-                <span class="text-right setting-scc"
-                      data-i18n="amp.gis:activities-triangular-commitments">Triangular SSC Commitments</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="project-list">
-          </tbody>
-        </table>
-        <img class="loading" src="img/loading-icon.gif" />
-      </div>
-      <div class="btn btn-sm btn-info load-more"><span data-i18n="amp.gis:popup-loadmore">load more</span>...</div>
-    </div>
+
+
   </div>
 </div>

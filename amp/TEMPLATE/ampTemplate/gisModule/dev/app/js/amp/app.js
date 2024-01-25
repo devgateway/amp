@@ -13,7 +13,9 @@ var translator = require('./services/translator');
 var WindowTitle = require('./services/title');
 var URLService = require('./services/url');
 var Constants = require('./data/constants');
+const GisSettings = require("./services/gis_settings");
 var data = new GISData();
+var gisSettings = new GisSettings();
 var url = new URLService();
 var state = new State({ url: url, saved: data.savedMaps, autoinit: true, prefix: ['saved/', 'report/']});
 var constants = new Constants();
@@ -21,7 +23,8 @@ var constants = new Constants();
 var app = new App({
 	  url: url,
 	  data: data,
-	  state: state
+	  state: state,
+	gisSettings: gisSettings
 });
 
 

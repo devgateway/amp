@@ -19,13 +19,7 @@ module.exports = Backbone.View.extend({
   render:  function() {
 	  var self = this;
 	  //getStructuresWithActivities was null...
-	  new Promise((resolve, reject) => {
-		  fetch('/rest/amp/settings/gis')
-			  .then(response => response.json())
-			  .then(data => resolve(data))
-			  .catch(error => reject(error));
-	  }).then(
-		   gisSettings=>{
+
 			   self.model.structuresCollection.getStructuresWithActivities().then(function() {
 				   var geoJSON = self.model.structuresCollection.toGeoJSON();
 				   var customStructureColors = []
@@ -118,10 +112,10 @@ module.exports = Backbone.View.extend({
 				   });
 			   });
 
-	  })
-		   .catch(error => {
-			   console.error('Error rendering structures:', error);
-		   });
+	  // })
+		//    .catch(error => {
+		// 	   console.error('Error rendering structures:', error);
+		//    });
 
 
 

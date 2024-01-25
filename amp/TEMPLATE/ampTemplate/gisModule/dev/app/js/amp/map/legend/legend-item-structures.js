@@ -1,6 +1,6 @@
 /* global app */
 var fs = require('fs');
-const { getGisSettings } = require('../../app');
+const { getGisSettings } = require('../../services/gis_settings');
 
 var _ = require('underscore');
 const Backbone = require('backbone');

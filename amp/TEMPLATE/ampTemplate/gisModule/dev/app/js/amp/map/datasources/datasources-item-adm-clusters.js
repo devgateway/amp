@@ -2,7 +2,9 @@ var fs = require('fs');
 var _ = require('underscore');
 var chartUtils = require('../../../libs/local/chart-util');
 var Backbone = require('backbone');
+const GisSettings = require("../../../../compiled-js/app");
 var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html', 'utf8');
+var gisSettings = new GisSettings();
 
 
 module.exports = Backbone.View.extend({
@@ -57,12 +59,7 @@ module.exports = Backbone.View.extend({
                       var orgColumnName = activity[orgColumn];
 
                       // put them on the page.
-                      new Promise((resolve, reject) => {
-                          fetch('/rest/amp/settings/gis')
-                              .then(response => response.json())
-                              .then(data => resolve(data))
-                              .catch(error => reject(error));
-                      }).then(gisSettings=> {
+
                           self.$el.append(self.template({
                               gisSettings: gisSettings,
                               activity: activity,
@@ -70,7 +67,7 @@ module.exports = Backbone.View.extend({
                               formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
                               formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
                           }));
-                      });
+
 				 
 			  });
 

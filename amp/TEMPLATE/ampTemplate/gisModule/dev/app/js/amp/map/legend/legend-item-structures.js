@@ -5,6 +5,8 @@ const Backbone = require('backbone');
 const Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
 const SettingsUtils = require('../../../libs/local/settings-utils.js');
 var Constants = require('../../../libs/local/constants.js');
+const GisSettings = require("../../services/gis_settings");
+var gisSettings = new GisSettings();
 
 module.exports = Backbone.View.extend({
 

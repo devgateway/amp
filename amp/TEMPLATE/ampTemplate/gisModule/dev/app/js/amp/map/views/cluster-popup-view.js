@@ -6,10 +6,12 @@ var Backbone = require('backbone');
 var d3 = require('d3-browserify');
 var nvd3 = window.nv;
 var util = require('../../../libs/local/chart-util');
+const GisSettings = require("../../services/gis_settings");
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
+var gisSettings = new GisSettings();
 
 //TODO: put cluster popup code in own folder,
 // with seperate view for charts and table.
@@ -36,13 +38,7 @@ module.exports = Backbone.View.extend({
 
 
   generateInfoWindow: function(popup, admLayer) {
-      new Promise((resolve, reject) => {
-          fetch('/rest/amp/settings/gis')
-              .then(response => response.json())
-              .then(data => resolve(data))
-              .catch(error => reject(error));
-      })
-          .then(gisSettings=> {
+
               var featureCollection = admLayer.get('features');
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;
@@ -60,7 +56,7 @@ module.exports = Backbone.View.extend({
                   console.error('no matching cluster: ', admLayer, popup._source._clusterId);
                   this.popup.setContent('error finding cluster');
               }
-          });
+
   },
 
   _generateCharts: function() {

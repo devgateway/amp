@@ -2,7 +2,9 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var DatasourcesItem = require('./datasources-item-adm-clusters');
+const GisSettings = require("../../services/gis_settings");
 var Template = fs.readFileSync(__dirname + '/datasources-table-template.html', 'utf8');
+var gisSettings = new GisSettings();
 
 module.exports = Backbone.View.extend({
 
@@ -37,7 +39,8 @@ module.exports = Backbone.View.extend({
       // drs: moved to do this after collection load?
       var tableContent = new DatasourcesItem({
         collection: self.collection,
-        app: self.app
+        app: self.app,
+        gisSettings: gisSettings
       }).render().el;
 
       

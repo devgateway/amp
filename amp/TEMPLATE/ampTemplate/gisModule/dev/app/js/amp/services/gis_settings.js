@@ -28,4 +28,4 @@ function getGisSettings() {
     });
 }
 
-module.exports = getGisSettings();
+module.exports = getGisSettings;

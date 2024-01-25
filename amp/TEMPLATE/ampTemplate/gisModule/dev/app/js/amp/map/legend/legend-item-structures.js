@@ -19,7 +19,7 @@ module.exports = Backbone.View.extend({
   render:  function() {
 	  var self = this;
 	  //getStructuresWithActivities was null...
-	  Promise((resolve, reject) => {
+	  new Promise((resolve, reject) => {
 		  fetch('/rest/amp/settings/gis')
 			  .then(response => response.json())
 			  .then(data => resolve(data))

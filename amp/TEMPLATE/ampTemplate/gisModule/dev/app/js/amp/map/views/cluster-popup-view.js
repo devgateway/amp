@@ -36,7 +36,7 @@ module.exports = Backbone.View.extend({
 
 
   generateInfoWindow: function(popup, admLayer) {
-      Promise((resolve, reject) => {
+      new Promise((resolve, reject) => {
           fetch('/rest/amp/settings/gis')
               .then(response => response.json())
               .then(data => resolve(data))

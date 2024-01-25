@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var chartUtils = require('../../../libs/local/chart-util');
 var Backbone = require('backbone');
-const GisSettings = require("../../../../compiled-js/app");
+const GisSettings = require("../../services/gis_settings");
 var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html', 'utf8');
 var gisSettings = new GisSettings();
 

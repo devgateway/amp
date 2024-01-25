@@ -2,7 +2,7 @@
 // const fetch = require('node-fetch');
 
 // Define the function to fetch data from the endpoint
-function getGisSettings() {
+export function getGisSettings() {
     return new Promise((resolve, reject) => {
         fetch('/rest/amp/settings/gis')
             .then(response => response.json())
@@ -11,4 +11,4 @@ function getGisSettings() {
     });
 }
 
-module.exports = getGisSettings;
+// module.exports = getGisSettings;

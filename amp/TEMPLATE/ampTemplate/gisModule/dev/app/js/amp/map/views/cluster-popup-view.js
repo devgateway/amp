@@ -12,6 +12,14 @@ var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-lis
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 
+// function getGisSettings() {
+//     return new Promise((resolve, reject) => {
+//         fetch('/rest/amp/settings/gis')
+//             .then(response => response.json())
+//             .then(data => resolve(data))
+//             .catch(error => reject(error));
+//     });
+// }
 //TODO: put cluster popup code in own folder,
 // with seperate view for charts and table.
 // TODO: remove tempDOM and use this.$el

@@ -23,8 +23,7 @@ var constants = new Constants();
 var app = new App({
 	  url: url,
 	  data: data,
-	  state: state,
-	gisSettings: gisSettings
+	  state: state
 });
 
 

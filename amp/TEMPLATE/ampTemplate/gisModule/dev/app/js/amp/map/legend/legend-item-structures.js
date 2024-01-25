@@ -6,16 +6,6 @@ const Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'ut
 const SettingsUtils = require('../../../libs/local/settings-utils.js');
 var Constants = require('../../../libs/local/constants.js');
 
-
-function getGisSettings() {
-	return new Promise((resolve, reject) => {
-		fetch('/rest/amp/settings/gis')
-			.then(response => response.json())
-			.then(data => resolve(data))
-			.catch(error => reject(error));
-	});
-}
-
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
@@ -29,7 +19,12 @@ module.exports = Backbone.View.extend({
   render:  function() {
 	  var self = this;
 	  //getStructuresWithActivities was null...
-	   getGisSettings().then(
+	  Promise((resolve, reject) => {
+		  fetch('/rest/amp/settings/gis')
+			  .then(response => response.json())
+			  .then(data => resolve(data))
+			  .catch(error => reject(error));
+	  }).then(
 		   gisSettings=>{
 			   self.model.structuresCollection.getStructuresWithActivities().then(function() {
 				   var geoJSON = self.model.structuresCollection.toGeoJSON();

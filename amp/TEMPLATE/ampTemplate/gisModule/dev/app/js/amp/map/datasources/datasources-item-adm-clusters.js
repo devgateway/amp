@@ -57,12 +57,20 @@ module.exports = Backbone.View.extend({
                       var orgColumnName = activity[orgColumn];
 
                       // put them on the page.
-					  self.$el.append(self.template({
-						  activity: activity,
-                          orgColumnName: orgColumnName ? orgColumnName : '',
-                          formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
-                          formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
-					  }));
+                      Promise((resolve, reject) => {
+                          fetch('/rest/amp/settings/gis')
+                              .then(response => response.json())
+                              .then(data => resolve(data))
+                              .catch(error => reject(error));
+                      }).then(gisSettings=> {
+                          self.$el.append(self.template({
+                              gisSettings: gisSettings,
+                              activity: activity,
+                              orgColumnName: orgColumnName ? orgColumnName : '',
+                              formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
+                              formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
+                          }));
+                      });
 				 
 			  });
 

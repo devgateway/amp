@@ -6,6 +6,7 @@ var Backbone = require('backbone');
 var d3 = require('d3-browserify');
 var nvd3 = window.nv;
 var util = require('../../../libs/local/chart-util');
+const {getGisSettings} = require("../../app");
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
@@ -36,23 +37,26 @@ module.exports = Backbone.View.extend({
 
 
   generateInfoWindow: function(popup, admLayer) {
-    var featureCollection = admLayer.get('features');
-    this.cluster = _.find(featureCollection, function(feature) {
-      return feature.properties.admName === popup._source._clusterId;
-    });
-    this.cluster.gisSettings = this.app.gisSettings;
-    this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();    
-    // get appropriate cluster model:
-    if (this.cluster) {
-      popup.setContent(this.template(this.cluster));
-      this.tempDOM = $(popup._contentNode);
+      getGisSettings()
+          .then(function (gisSettings) {
+              var featureCollection = admLayer.get('features');
+              this.cluster = _.find(featureCollection, function (feature) {
+                  return feature.properties.admName === popup._source._clusterId;
+              });
+              this.cluster.gisSettings = gisSettings;
+              this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+              // get appropriate cluster model:
+              if (this.cluster) {
+                  popup.setContent(this.template(this.cluster));
+                  this.tempDOM = $(popup._contentNode);
 
-      this._generateCharts();
-      return this._generateProjectList(popup, this.cluster);
-    } else {
-      console.error('no matching cluster: ', admLayer, popup._source._clusterId);
-      this.popup.setContent('error finding cluster');
-    }
+                  this._generateCharts();
+                  return this._generateProjectList(popup, this.cluster);
+              } else {
+                  console.error('no matching cluster: ', admLayer, popup._source._clusterId);
+                  this.popup.setContent('error finding cluster');
+              }
+          });
   },
 
   _generateCharts: function() {

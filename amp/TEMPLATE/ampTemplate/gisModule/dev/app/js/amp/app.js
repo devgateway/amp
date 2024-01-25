@@ -21,8 +21,7 @@ var constants = new Constants();
 var app = new App({
 	  url: url,
 	  data: data,
-	  state: state,
-	  gisSettings: {}
+	  state: state
 });
 
 
@@ -31,45 +30,41 @@ var app = new App({
 if(state.loadPromise){
 	state.loadPromise.always(function(){
 		setSavedLanguage().then(function(){
-			return getGisSettings();
-		})
-			.then(function (gisSettings)
-			{
-				app.gisSettings = gisSettings;
-				configureApp();
-			})
+			configureApp();
+		});
 	});	
 } else {
 	configureApp();
 }
 
+let cachedGisSettings = null;
+
 function getGisSettings() {
-	// return new Promise((resolve, reject) => {
-	// 	fetch('/rest/amp/settings/gis')
-	// 		.then(response => response.json()
-	//
-	// 		)
-	// 		.then(data => resolve(data))
-	// 		.catch(error => reject(error));
-	// });
+	return new Promise((resolve, reject) => {
+		if (cachedGisSettings !== null) {
+			resolve(cachedGisSettings);
+			return;
+		}
 
-	var deferred = $.Deferred();
+		fetch('/rest/amp/settings/gis')
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				return response.json();
+			})
+			.then(data => {
+				// Cache the GIS settings
+				cachedGisSettings = data;
 
-	// Construct the URL with the provided symbol
-
-	// Use $.getJSON for the asynchronous request
-	$.getJSON("/rest/amp/settings/gis")
-		.done(function(data) {
-			// Resolve the deferred with the JSON result
-			deferred.resolve(data);
-		})
-		.fail(function(error) {
-			// Reject the deferred with the error
-			deferred.reject(error);
-		});
-
-	// Return the promise
-	return deferred.promise();
+				// Resolve the promise with the JSON response
+				resolve(data);
+			})
+			.catch(error => {
+				// Reject the promise with the error
+				reject(error);
+			});
+	});
 }
 
 //configure to use saved language
@@ -125,5 +120,9 @@ function configureApp() {
 }
 
 
+
+module.exports = {
+	getGisSettings,
+};
 
 module.exports = window.app = app;

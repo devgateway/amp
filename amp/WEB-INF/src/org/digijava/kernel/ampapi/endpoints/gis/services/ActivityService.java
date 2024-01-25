@@ -122,31 +122,43 @@ public class ActivityService {
                 String columnName = reportOutputColumn.originalColumnName;
                 if (columnsToProvide.contains(reportOutputColumn.originalColumnName)) {
                     String value = row.get(reportOutputColumn).value.toString();
-                    if (columnName.equals(ColumnConstants.PROJECT_TITLE)) {
-                        activity.setProjectTitle(value);
-                    } else if (columnName.equals(ColumnConstants.DONOR_AGENCY)) {
-                        activity.setDonorAgency(value);
-                    } else if (columnName.equals(ColumnConstants.EXECUTING_AGENCY)) {
-                        activity.setExecutingAgency(value);
-                    } else if (columnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
-                        activity.setPrimarySector(value);
-                    } else if (columnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
-                        activity.setActualCommitments(new Double(value));
-                    } else if (columnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                        activity.setActualDisbursements(new Double(value));
-                    } else if (columnName.equals(MeasureConstants.PLANNED_COMMITMENTS)) {
-                        activity.setPlannedCommitments(new Double(value));
-                    } else if (columnName.equals(MeasureConstants.PLANNED_DISBURSEMENTS)) {
-                        activity.setPlannedDisbursements(new Double(value));
-                    } else if (columnName.equals(MeasureConstants.BILATERAL_SSC_COMMITMENTS)) {
-                        activity.setBilateralSSCCommitments(new Double(value));
-                    } else if (columnName.equals(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS)) {
-                        activity.setTriangularSSCCommitments(new Double(value));
-                    } else if (columnName.equals(ColumnConstants.AMP_ID)) {
-                        activity.setAmpId(value);
-                        long activityId = ((IdentifiedReportCell) row.get(reportOutputColumn)).entityId;
-                        activity.setId(activityId);
-                        activity.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(activityId)));
+                    switch (columnName) {
+                        case ColumnConstants.PROJECT_TITLE:
+                            activity.setProjectTitle(value);
+                            break;
+                        case ColumnConstants.DONOR_AGENCY:
+                            activity.setDonorAgency(value);
+                            break;
+                        case ColumnConstants.EXECUTING_AGENCY:
+                            activity.setExecutingAgency(value);
+                            break;
+                        case ColumnConstants.PRIMARY_SECTOR:
+                            activity.setPrimarySector(value);
+                            break;
+                        case MeasureConstants.ACTUAL_COMMITMENTS:
+                            activity.setActualCommitments(new Double(value));
+                            break;
+                        case MeasureConstants.ACTUAL_DISBURSEMENTS:
+                            activity.setActualDisbursements(new Double(value));
+                            break;
+                        case MeasureConstants.PLANNED_COMMITMENTS:
+                            activity.setPlannedCommitments(new Double(value));
+                            break;
+                        case MeasureConstants.PLANNED_DISBURSEMENTS:
+                            activity.setPlannedDisbursements(new Double(value));
+                            break;
+                        case MeasureConstants.BILATERAL_SSC_COMMITMENTS:
+                            activity.setBilateralSSCCommitments(new Double(value));
+                            break;
+                        case MeasureConstants.TRIANGULAR_SSC_COMMITMENTS:
+                            activity.setTriangularSSCCommitments(new Double(value));
+                            break;
+                        case ColumnConstants.AMP_ID:
+                            activity.setAmpId(value);
+                            long activityId = ((IdentifiedReportCell) row.get(reportOutputColumn)).entityId;
+                            activity.setId(activityId);
+                            activity.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(activityId)));
+                            break;
                     }
                 } else {
                     IdentifiedReportCell idReportCell = (IdentifiedReportCell) row.get(reportOutputColumn);

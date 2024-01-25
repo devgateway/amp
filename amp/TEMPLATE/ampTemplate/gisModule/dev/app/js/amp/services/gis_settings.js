@@ -26,4 +26,4 @@ function getGisSettings() {
 }
 
 // Export the fetchData function
-export { getGisSettings };
+module.exports = getGisSettings;

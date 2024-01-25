@@ -1,7 +1,7 @@
 /* global app */
 var fs = require('fs');
-import {getGisSettings} from "../../services/gis_settings";
 
+const { getGisSettings } = require('../../services/gis_settings');
 
 var _ = require('underscore');
 const Backbone = require('backbone');

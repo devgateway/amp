@@ -17,7 +17,7 @@
   <!-- Tab panes -->
   <div class="tab-content">
 
-    <div class="tab-pane" id="projects-pane">
+    <div class="tab-pane active" id="projects-pane">
       <!-- this template is for adm clusters -->
       <div class="scroll-container">
         <table class="table table-striped table-condensed">
@@ -47,7 +47,7 @@
     </div>
 
     <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
-    <div class="tab-pane active" id="charts-pane-sector">
+    <div class="tab-pane" id="charts-pane-sector">
       <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span> <small>(<span data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></span>)</small></h5>
       <div class="amp-chart">
         <img class="loading" src="img/loading-icon.gif" />

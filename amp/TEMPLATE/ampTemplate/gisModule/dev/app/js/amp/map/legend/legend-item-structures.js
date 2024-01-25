@@ -41,7 +41,7 @@ module.exports = Backbone.View.extend({
 				   });
 
 				   getGisSettings()
-				      .then(function (gisSettings) {
+				      .then(gisSettings=> {
 
 				   var renderObject = {
 					   status: 'loaded',

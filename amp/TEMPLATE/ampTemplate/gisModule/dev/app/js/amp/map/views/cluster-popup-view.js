@@ -38,7 +38,7 @@ module.exports = Backbone.View.extend({
 
   generateInfoWindow: function(popup, admLayer) {
       getGisSettings()
-          .then(function (gisSettings) {
+          .then(gisSettings=> {
               var featureCollection = admLayer.get('features');
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;

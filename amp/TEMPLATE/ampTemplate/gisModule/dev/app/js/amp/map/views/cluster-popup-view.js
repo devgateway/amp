@@ -6,7 +6,7 @@ var Backbone = require('backbone');
 var d3 = require('d3-browserify');
 var nvd3 = window.nv;
 var util = require('../../../libs/local/chart-util');
-const { getGisSettings } = require('../../services/gis_settings');
+var { getGisSettings } = require('../../services/gis_settings');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');

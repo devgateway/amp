@@ -114,48 +114,6 @@ public class MeService {
     }
 
     public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
-        Map<String, Object> filters = params.getFilters();
-
-        List<AmpIndicator> indicatorsList = getAllAmpIndicators();
-        
-        Long pillarAsLong = (filters.get("pillar") != null) ? Long.valueOf(filters.get("pillar").toString()) : null;
-        Long locationId = (filters.get("country") != null) ? Long.valueOf(filters.get("country").toString()) : null;
-        // Filter indicators by objective(pillar)
-        if(filters.get("pillar") != null){
-            indicatorsList = indicatorsList.stream()
-                    .filter(indicator -> indicator.getProgram() != null)
-                    .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(pillarAsLong))
-                    .collect(Collectors.toList());
-        }
-
-        // Clone the indicators to avoid affecting original list when removing indicators in the list
-        List<AmpIndicator> existingIndicatorsList = new ArrayList<>();
-
-        // Filter indicator list by country
-        if(filters.get("country") != null){
-            for(AmpIndicator indicator: indicatorsList){
-                // In indicator you have a list of indicator connection linked to the location(COuntry)
-                Set<IndicatorActivity> indicatorConnections = indicator.getValuesActivity();
-                // Inside the indicator connection list get indicator with provided income, if no indicator
-                // with provided country remove the indicator from indicators list
-
-                for(IndicatorActivity indicatorActivity: indicatorConnections){
-                    if(indicatorActivity.getActivityLocation() != null){
-                        if(indicatorActivity.getActivityLocation().getLocation().getParentLocation() != null){
-                            boolean isLocationInIndicator = indicatorActivity.getActivityLocation().getLocation().getParentLocation().getId().equals(locationId);
-                            if(isLocationInIndicator){
-                                existingIndicatorsList.add(indicatorActivity.getIndicator());
-                            }
-                        } else if(indicatorActivity.getActivityLocation().getLocation().getId().equals(locationId)){
-                            existingIndicatorsList.add(indicatorActivity.getIndicator());
-                        }
-                    }
-                }
-            }
-        } else {
-            // if no country is passed assign indicatorList to this array for consistency of data
-            existingIndicatorsList = new ArrayList<>(indicatorsList);
-        }
         List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
 
         int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
@@ -166,10 +124,15 @@ public class MeService {
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
 
-        for(AmpIndicator indicator: existingIndicatorsList){
-            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(indicator, indicatorsWithYearValues, yearsCount);
-            singelIndicatorYearValues.setIndicatorName(indicator.getName());
+        for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
+            // Access the indicator ID (key)
+            Long indicatorId = entry.getKey();
+            AmpIndicator existingIndicator = getIndicatorById(indicatorId);
+            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+            // Include indicators name
+            singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
             indicatorValues.add(singelIndicatorYearValues);
+
         }
 
         return indicatorValues;
@@ -298,11 +261,11 @@ public class MeService {
         }
     }
 
-    private List<IndicatorConnection> getIndicatorConnectionByIndicator(AmpIndicator indicator){
+    private AmpIndicator getIndicatorById(Long indicatorId){
         try {
-            return IndicatorUtil.getAllConnectionsOfIndicator(indicator);
+            return IndicatorUtil.getIndicator(indicatorId);
         } catch (DgException e) {
-            throw new RuntimeException("Failed to load indicators");
+            throw new RuntimeException("Failed to load indicator");
         }
     }
 

@@ -43,9 +43,10 @@ module.exports = Backbone.View.extend({
         gisSettings: gisSettings
       }).render().el;
 
-      
+      var collection = self.collection.getPageDetails();
+      collection['gisSettings']= gisSettings;
       self.app.translator.translateDOM(
-        self.template(self.collection.getPageDetails())).then(
+        self.template(collection)).then(
         function(newEl) {
           self.$el.html(newEl);
           self.updatePlannedActualUI();

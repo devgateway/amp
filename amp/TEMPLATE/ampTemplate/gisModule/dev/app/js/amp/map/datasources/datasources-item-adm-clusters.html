@@ -6,6 +6,10 @@
   <td class="sectors" data-th="sectors"><%= activity.sectorNames %> </td>
   <% } %>
 
+  <% if (obj.gisSettings.gis_programs_enabled == true){ %>
+  <td class="programs" data-th="programs"><%= activity.programNames %> </td>
+  <% } %>
+
   <td class="commitments" data-th="commitments"><%= obj.formattedColumnName1 %></td>
   <td class="disbursements" data-th="disbursements"><%= obj.formattedColumnName2 %></td>
 </tr>

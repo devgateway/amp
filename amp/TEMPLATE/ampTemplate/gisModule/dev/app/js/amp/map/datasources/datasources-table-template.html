@@ -8,8 +8,11 @@
         <span class="setting-executings" data-i18n="amp.gis:activities-executings">Executing Agency</span>
       </th>
       <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
-
       <th data-i18n="amp.gis:activities-sectors">Sectors</th>
+      <% } %>
+
+      <% if (obj.gisSettings.gis_programs_enabled == true){ %>
+      <th data-i18n="amp.gis:activities-programs">Programs</th>
       <% } %>
 
       <!-- TODO: translation needs to handle actual and planned, may need some DOM work.. -->

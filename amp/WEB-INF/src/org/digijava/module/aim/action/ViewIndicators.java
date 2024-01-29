@@ -56,23 +56,23 @@ public class ViewIndicators
             
             
             if(indSector != null){
-                for(Iterator sectItr=indSector.iterator();sectItr.hasNext();){
-                    AmpSector sect=(AmpSector)sectItr.next();
+                for (Object o : indSector) {
+                    AmpSector sect = (AmpSector) o;
                     indbean.getSectorNames().add(sect.getName());
                     indbean.setSectorName(sect.getName());
-                    
-                    
-                 }
+
+
+                }
               }
             
             boolean addFlag = false;
               if(allIndForm.getSectorId()!=-1){
                 Collection indSectors=indbean.getSector();
                 if(indSectors!=null){
-                    for(Iterator sectItr=indSectors.iterator();sectItr.hasNext();){
-                        AmpSector sect=(AmpSector)sectItr.next();
-                        
-                        if(sect.getAmpSectorId().equals(allIndForm.getSectorId())){
+                    for (Object sector : indSectors) {
+                        AmpSector sect = (AmpSector) sector;
+
+                        if (sect.getAmpSectorId().equals(allIndForm.getSectorId())) {
                             addFlag = true;
                             break;
                         }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>GGW-204</jira>
+    <author>bmokandu</author>
+    <description>Enable/Disable Programs in GIS.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
+				VALUES (nextval('amp_global_settings_seq'), 'GIS Programs Enabled', 'true', 't_Boolean', 'GIS Programs Enabled', 'GIS', null, false);
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>
+

@@ -80,6 +80,7 @@ module.exports = Backbone.Model.extend({
     json.donorNames = this._getNames(Constants.DONOR_AGENCY);
     json.executingNames = this._getNames(Constants.EXECUTING_AGENCY);
     json.sectorNames = this._getNames(Constants.PRIMARY_SECTOR);
+    json.programNames = this._getNames(Constants.PROGRAM);
     return json;
   },
 

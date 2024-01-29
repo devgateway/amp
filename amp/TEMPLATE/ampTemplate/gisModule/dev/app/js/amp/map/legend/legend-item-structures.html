@@ -7,21 +7,36 @@
       </option>
       <% } %>
 
+       <% if (obj.gisSettings.gis_programs_enabled == true){ %>
+      <option data-i18n="amp.gis:legend-by-program" value="Program" <%= (obj.selectedVertical == "Program"? 'selected': '') %>>
+         By Program
+      </option>
+      <% } %>
+
       <option data-i18n="amp.gis:legend-by-donor" value="Donor Agency" <%= (obj.selectedVertical == "Donor Agency"? 'selected': '') %>>
         By Donor
       </option>
     </select>
 
-  <% if (obj.selectedVertical == "Primary Sector"){ %>
+<% if (obj.selectedVertical == "Primary Sector") { %>
+  <button class="info-icon"
+          data-toggle="popover"
+          data-container="body"
+          data-placement="left"
+          data-content="&nbsp;"
+          data-trigger="focus">
+    <span class="glyphicon glyphicon-info-sign"></span>
+  </button>
+<% } else if (obj.selectedVertical == "Program") { %>
     <button class="info-icon"
-      data-toggle="popover"
-      data-container="body"
-      data-placement="left"
-      data-content="&nbsp;"
-      data-trigger="focus">
-      <span class="glyphicon glyphicon-info-sign"></span>
-    </button>
-  <% } %>
+            data-toggle="popover"
+            data-container="body"
+            data-placement="left"
+            data-content="&nbsp;"
+            data-trigger="focus">
+    <span class="glyphicon glyphicon-info-sign"></span>
+  </button>
+<% } %>
 
   </h3>
 

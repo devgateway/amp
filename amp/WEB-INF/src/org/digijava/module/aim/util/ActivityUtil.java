@@ -35,6 +35,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
@@ -1625,20 +1626,44 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     public static void deleteAmpActivityWithVersions(Long ampActId) throws Exception {
         Session session = PersistenceManager.getSession();
-        AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
-        Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
-        if (activityversions != null && activityversions.size() > 0) {
-            for (AmpActivityVersion ampActivityVersion : activityversions) {
-                deleteFullActivityContent(ampActivityVersion, session);
 
-                session.delete(ampActivityVersion);
+        Transaction tx = null;
+        try {
+            // Only begin a new transaction if there isn't one already active
+            if (session.getTransaction() == null || !session.getTransaction().isActive()) {
+                tx = session.beginTransaction();
             }
-        } else {
-            AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
-            deleteFullActivityContent(ampAct, session);
-            session.delete(ampAct);
+
+            AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
+            Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
+
+            if (activityversions != null && activityversions.size() > 0) {
+                for (AmpActivityVersion ampActivityVersion : activityversions) {
+                    deleteFullActivityContent(ampActivityVersion, session);
+                    // Remove associations with AmpCategoryValue
+                    AmpTeam categories = ampActivityVersion.getTeam();
+
+                    System.out.println(categories);
+                    ampActivityVersion.getCategories().clear();
+                    ampActivityVersion.getTeam().getTeamLead().getDesktopTabSelections().clear();
+                    System.out.println(categories);
+
+                    session.delete(ampActivityVersion);
+                }
+            } else {
+                AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
+                deleteFullActivityContent(ampAct, session);
+                session.delete(ampAct);
+            }
+            session.delete(ampActivityGroup);
+    //        session.getTransaction().commit();
+            // Commit the transaction if it was started here
+            if (tx != null && tx.isActive()) {
+                tx.commit();
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
-        session.delete(ampActivityGroup);
     }
     
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

@@ -17,6 +17,8 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -24,6 +26,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -103,7 +106,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             @Override
             protected String load() {
                 if (globalBaseVal.getOriginalValueDate() != null) {
-                    SimpleDateFormat format = new SimpleDateFormat("M/dd/yy hh:mm a");
+                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)) + "hh:mm a");
                     return format.format(globalBaseVal.getOriginalValueDate());
                 } else {
                     return "N/A";
@@ -124,7 +127,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             @Override
             protected String load() {
                 if (globalTargetVal.getOriginalValueDate() != null) {
-                    SimpleDateFormat format = new SimpleDateFormat("M/dd/yy hh:mm a");
+                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)) + "hh:mm a");
                     return format.format(globalTargetVal.getOriginalValueDate());
                 } else {
                     return "N/A";

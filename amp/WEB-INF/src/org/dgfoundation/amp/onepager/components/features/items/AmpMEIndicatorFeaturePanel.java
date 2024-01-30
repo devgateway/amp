@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -89,17 +90,43 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             }
         }
 
-        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<>(globalBaseVal, "originalValue"));
+        final Label indicatorBaseValueLabel = new Label("base", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
+            }
+        });
         add(indicatorBaseValueLabel);
 
         final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<>(globalBaseVal, "originalValueDate"));
         add(indicatorBaseDateLabel);
 
-        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<>(globalTargetVal, "originalValue"));
+//        final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
+//            @Override
+//            protected String load() {
+//                return globalBaseVal.getOriginalValueDate() != null ? String.valueOf(globalBaseVal.getOriginalValueDate()) : "N/A";
+//            }
+//        });
+//        add(indicatorBaseDateLabel);
+
+        final Label indicatorTargetValueLabel = new Label("target", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return globalTargetVal.getOriginalValue() != null ? String.valueOf(globalTargetVal.getOriginalValue()) : "N/A";
+            }
+        });
         add(indicatorTargetValueLabel);
 
         final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<>(globalTargetVal, "originalValueDate"));
         add(indicatorTargetDateLabel);
+
+//        final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
+//            @Override
+//            protected String load() {
+//                return globalTargetVal.getOriginalValueDate() != null ? String.valueOf(globalTargetVal.getOriginalValueDate()) : "N/A";
+//            }
+//        });
+//        add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
         add(valuesTable);

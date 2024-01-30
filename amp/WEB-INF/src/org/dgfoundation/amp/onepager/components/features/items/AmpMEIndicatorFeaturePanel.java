@@ -106,7 +106,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             @Override
             protected String load() {
                 if (globalBaseVal.getOriginalValueDate() != null) {
-                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)) + "hh:mm a");
+                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
                     return format.format(globalBaseVal.getOriginalValueDate());
                 } else {
                     return "N/A";
@@ -127,7 +127,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             @Override
             protected String load() {
                 if (globalTargetVal.getOriginalValueDate() != null) {
-                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)) + "hh:mm a");
+                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
                     return format.format(globalTargetVal.getOriginalValueDate());
                 } else {
                     return "N/A";

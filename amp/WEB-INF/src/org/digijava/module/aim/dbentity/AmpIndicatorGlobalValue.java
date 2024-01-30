@@ -16,6 +16,10 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpIndicatorGlobalValue implements Serializable {
 
+    public static final int TARGET = 0;
+    public static final int ACTUAL = 1;
+    public static final int BASE = 2;
+    public static final int REVISED = 3;
     @JsonIgnore
     private Long id;
 
@@ -130,5 +134,15 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonIgnore
     public Date getValueDate() {
         return getRevisedValueDate() != null ? getRevisedValueDate() : getOriginalValueDate();
+    }
+
+    public void copyValuesTo(AmpIndicatorGlobalValue r) {
+        r.setType(type);
+        r.setIndicator(indicator);
+        r.setOriginalValue(originalValue);
+        r.setOriginalValueDate(originalValueDate);
+        r.setRevisedValue(revisedValue);
+        r.setRevisedValueDate(revisedValueDate);
+        r.setId(id);
     }
 }

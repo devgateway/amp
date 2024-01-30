@@ -17,12 +17,13 @@ var GisSettings = function() {
 _.extend(GisSettings.prototype, Backbone.Events, {
 
     initialize: function() {
-        // this.gisSettings = {}
+        var self = this;
+        this.gisSettings = {}
         $.ajax({
             url: '/rest/amp/settings/gis'
         }).done(function(data) {
             console.log("Gis Settings data", data)
-            self = data;
+            self.gisSettings = data;
         });
     },
 

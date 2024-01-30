@@ -38,8 +38,6 @@ module.exports = Backbone.View.extend({
 						   }
 					   }
 				   });
-				   console.log("Gis Settings", gisSettings)
-				   console.log("Gis Settings 2", gisSettings.gisSettings)
 
 				   var renderObject = {
 					   status: 'loaded',

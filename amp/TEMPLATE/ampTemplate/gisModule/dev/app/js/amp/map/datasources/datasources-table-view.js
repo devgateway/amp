@@ -39,12 +39,11 @@ module.exports = Backbone.View.extend({
       // drs: moved to do this after collection load?
       var tableContent = new DatasourcesItem({
         collection: self.collection,
-        app: self.app,
-        gisSettings: gisSettings.gisSettings
+        app: self.app
       }).render().el;
 
       var collection = self.collection.getPageDetails();
-      collection['gisSettings']= gisSettings;
+      collection['gisSettings']= gisSettings.gisSettings;
       self.app.translator.translateDOM(
         self.template(collection)).then(
         function(newEl) {

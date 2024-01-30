@@ -43,7 +43,7 @@ module.exports = Backbone.View.extend({
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;
               });
-              this.cluster.gisSettings = gisSettings;
+              this.cluster.gisSettings = gisSettings.gisSettings;
               this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
               // get appropriate cluster model:
               if (this.cluster) {

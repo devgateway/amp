@@ -21,14 +21,14 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <!-- dynamic tooltip -->
 <!-- JavaScript Dependencies for Tabview: -->
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
- 
- 
-<style type="text/css"> 
+
+
+<style type="text/css">
 	#demo .yui-nav li {
 		margin-right:0;
 		margin-top:2pt;
@@ -83,7 +83,7 @@ function validateChangeRangeDefaultValue(){
 	var startYear = $("#gfsv_Change_Range_Default_Start_Value").val();
 	var startYearTranslated = $("#gstv_Change_Range_Default_Start_Value").val();
 
-	
+
 
 	var endYear = $("#gfsv_Change_Range_Default_End_Value").val();
 	var endYearTranslated = $("#gstv_Change_Range_Default_End_Value").val();
@@ -95,10 +95,10 @@ function validateChangeRangeDefaultValue(){
     return true;
 }
 
-function validateCustomFields(form) {	
+function validateCustomFields(form) {
 	if (typeof form.gsfValue != "undefined") {
  		if (form.gsfValue.value=='' && isRequired(form)) {
- 	 		alert('<digi:trn jsFriendly="true" key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);        
+ 	 		alert('<digi:trn jsFriendly="true" key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);
  	 		return false;
  		}
  	} else {
@@ -141,45 +141,45 @@ function populateWithDays(monthId, targetId) {
 		case 4: ;
 		case 6: ;
 		case 9: ;
-		case 11: 
+		case 11:
 			maxDays = 30;
 			break;
-		case 2: 
+		case 2:
 			maxDays = 28;
 			break;
 	}
-	
+
 	selectElement = document.getElementById(targetId);
 	var numDays	= selectElement.length;
 	for (i=0; i< numDays; i++) {
 		selectElement.remove(0);
 	}
-	for (i=1; i<=maxDays; i++){ 
+	for (i=1; i<=maxDays; i++){
 		newOption		= document.createElement('option');
 		newOption.text	= i;
 		newOption.value	= i;
 		selectElement.add(newOption, null);
 	}
-	
+
 }
 function createHourString(hourId, minId, ampmId){
 	hourElement		= document.getElementById(hourId);
 	minElement		= document.getElementById(minId);
 	ampmElement		= document.getElementById(ampmId);
-	
+
 	hourValue		= hourElement.value;
 	if (hourValue.length == 1)
 		hourValue	= '' + 0 + hourValue;
-	
+
 	minValue		= minElement.value;
 	if (minValue.length == 1)
 		minValue	= '' + 0 + minValue;
-		
-	ampmValue       =ampmElement.value==0?"AM":"PM";	
+
+	ampmValue       =ampmElement.value==0?"AM":"PM";
 	var hour		= hourValue + ":" + minValue + " " + ampmValue ;
-	
+
 	els				= hourElement.form.elements;
-	
+
 	for (j=0; j<els.length; j++ ) {
 		if (els[j].name != null && els[j].name == 'gsfValue') {
 			els[j].value	= hour;
@@ -190,18 +190,18 @@ function createHourString(hourId, minId, ampmId){
 function createDateString(monthId, dayId) {
 	monthElement	= document.getElementById(monthId);
 	dayElement		= document.getElementById(dayId);
-	
+
 	monthValue		= monthElement.value;
 	if (monthValue.length == 1)
 		monthValue	= '' + 0 + monthValue;
-	
+
 	dayValue		= dayElement.value;
 	if (dayValue.length == 1)
 		dayValue	= '' + 0 + dayValue;
 	var date		= dayValue + "/" + monthValue;
-	
+
 	els				= monthElement.form.elements;
-	
+
 	for (j=0; j<els.length; j++ ) {
 		if (els[j].name != null && els[j].name == 'gsfValue') {
 			els[j].value	= date;
@@ -218,7 +218,7 @@ function saveAllSettings(){
    			var newValue = gsElement.gsfValue.value;
    			var oldValue = window.oldGsValues[gsElement.globalSettingsName.value];
    			if (newValue != oldValue) {
-   				if (!confirm('you are changing the Base Currency. You are going to lose all the inflation rate data if you enter the Currency Deflator window.\nAre you sure you want to change the base currency?')) 
+   				if (!confirm('you are changing the Base Currency. You are going to lose all the inflation rate data if you enter the Currency Deflator window.\nAre you sure you want to change the base currency?'))
    					return false;
    				}
    			}
@@ -268,7 +268,7 @@ function setIndex(index){
 		return false;
 	}
 }
-	
+
 var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 --></script>
 
@@ -304,19 +304,19 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 		<table cellPadding=5 cellspacing="0" width="100%" border="0">
 			<!-- <tr>
 				<td height=33>
-					<span class=crumb> 
+					<span class=crumb>
 					<c:set var="clickToViewAdmin">
 						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-					</c:set> 
+					</c:set>
 					<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}">
 						<digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn>
 					</digi:link>
-					&nbsp;&gt;&nbsp; 
-					<digi:trn key="aim:globalSettingsManager">Global Settings Manager</digi:trn> 
+					&nbsp;&gt;&nbsp;
+					<digi:trn key="aim:globalSettingsManager">Global Settings Manager</digi:trn>
 					</span>
 				</td>
 			</tr> -->
-				
+
 			<tr>
           		<td height=16 valign="center">
 			            <div id="demo" class="yui-navset" style="width:1000px;">
@@ -333,7 +333,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 								<c:set var="indexTab" value="${indexTab + 1}"/>
 								</logic:iterate>
 							</ul>
-			                <div class="yui-content" > 
+			                <div class="yui-content" >
 
 									<!-- Start - Sorting settings based on its name  -->
 									<jsp:useBean id="aimGlobalSettingsForm" class="org.digijava.module.aim.form.GlobalSettingsForm" scope="page"/>
@@ -355,7 +355,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 
 								<logic:iterate name="sections"  id="sectionName">
 								<div>
-									<font style="color:black;font-size:14pt;font-weight:bold">									
+									<font style="color:black;font-size:14pt;font-weight:bold">
 									<center><digi:trn key="aim:global:section:${sectionName}">${sectionName}</digi:trn></center>
 									</font>
 									<br />
@@ -371,7 +371,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 									<logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
 		                            <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
 		                            			   type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
-		 
+
 									<logic:equal name="globalSett" property="section" value="${sectionName}">
 									    <%
 									    	int g_range = 0, g_year = 0;
@@ -379,9 +379,9 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                            <tr style='display:<%= GlobalSettingsConstants.SETTINGS_TO_HIDE.contains(globalSett.getGlobalSettingsName()) ? "none" : "auto" %>' >
 			                               <td width="50%" class="inside" align=right>
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
-			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              
+			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">
 			                                 </logic:notEmpty>
-			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
+			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>
 										   </td>
 										<digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
 			                                <td width="50%" class="inside">
@@ -389,14 +389,14 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                                  <html:hidden property="globalSettingsName" name="globalSett"/>
 											<%String gfId=globalSett.getGlobalSettingsName().replace(' ', '_'); %>
 											 <input type="hidden" id="gstv_<%=gfId%>" name="globalSettingsNameTranslated" value='<digi:trn jsFriendly="true" key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
-										
+
 			                                  <%String possibleValues = "possibleValues("+ globalSett.getGlobalSettingsName()+ ")";
 												String gsType = globalSett.getGlobalSettingsPossibleValues();
 											  %>
-			
-			
+
+
 			                                  <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
-											
+
 			                                    <%if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Country".trim())) {%>
 			                                    <html:select property="gsfValue" styleClass="inp-text;width:100%" value='<%=globalSett.getGlobalSettingsValue()%>' >
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
@@ -406,13 +406,13 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                                    <%
 			                                    	} else if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Number Format".trim())) {
 			                                    %>
-			                                  	
-			                                  	<select name="options"  onchange="if(this.value!='noselection'){gsfValue.value=this.value}" styleClass="inp-text;width:100%" 
+
+			                                  	<select name="options"  onchange="if(this.value!='noselection'){gsfValue.value=this.value}" styleClass="inp-text;width:100%"
 			                                  	value='<%=globalSett.getGlobalSettingsValue()%>'>
 			                                      <option value="noselection"><digi:trn key="aim:gloablSetting:selectFormat">(Select Format)</digi:trn> </option>
 	                                                 <c:set var="selectedValue" value="<%=globalSett.getGlobalSettingsValue()%>"/>
 					                                  <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
-					                                 
+
 					                                  <c:choose>
 					                                      <c:when test="${global.value == selectedValue}">
 					                                          <option selected="selected" value="${global.key}">${global.value}</option>
@@ -420,21 +420,21 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                  <c:otherwise>
 					                                      <option value="${global.key}">${global.value}  </option>
 					                                  </c:otherwise>
-					                                  
+
 					                                  </c:choose>
-					                                  
+
 	 	 	 	                                      </logic:iterate>
-		
+
 			                                    </select>
 			                                    <digi:trn key="aim:gloablSetting:predefinedFormat">(Predefined Format)</digi:trn> <br>
-			                                    
-			                                    <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text> 
+
+			                                    <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text>
 			                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn>
 
 			                                    <%
 			                                        } else {
  				                                %>
-			                                    
+
 			                                    <html:select   property="gsfValue" alt="prueba" style="max-width: 750px;" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
 			                                      	<%
@@ -445,29 +445,45 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                                      				key2 = key2.substring(0, 50);
 			                                      		}
 			                                      	%>
-			                                     
+
 
 			                                      	<c:set var="newKey"><%=key2%></c:set>
-			                                        
-																				<html:option value="${global.key}">
-																					<c:choose>
-																						<c:when test="${globalSett.valueTranslatable}">
-																							<digi:trn>
-																								<c:out value="${global.value}" />
-																							</digi:trn>
-																						</c:when>
-																						<c:otherwise>
-																							<c:out value="${global.value}" />
-																						</c:otherwise>
-																					</c:choose>
-																				</html:option>
+
+													<html:option value="${global.key}">
+														<c:choose>
+															<c:when test="${globalSett.valueTranslatable}">
+																<digi:trn>
+																	<c:choose>
+																		<c:when test="${fn:length(global.value) > 50}">
+																			<c:out value="${fn:substring(global.value, 0, 50)}..." />
+																		</c:when>
+																		<c:otherwise>
+																			<c:out value="${global.value}"/>
+																		</c:otherwise>
+																	</c:choose>
+
+																</digi:trn>
+															</c:when>
+															<c:otherwise>
+																<c:choose>
+																	<c:when test="${fn:length(global.value) > 50}">
+																		<c:out value="${fn:substring(global.value, 0, 50)}..." />
+																	</c:when>
+																	<c:otherwise>
+																		<c:out value="${global.value}"/>
+																	</c:otherwise>
+																</c:choose>
+
+															</c:otherwise>
+														</c:choose>
+													</html:option>
 
 
-																			</logic:iterate>
+												</logic:iterate>
 			                                    </html:select>
 			                                    <%
 			                                    	}
-			                                    %>										
+			                                    %>
 			                                    </logic:notEmpty>
 			                                    <logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 			                                    	<c:set var="type" value="<%=gsType %>" />
@@ -480,7 +496,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    			int monthNum = Integer.parseInt(dateValues[1]);
 				                                    		%>
 				                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
-				                                    		<digi:trn key="aim:globalSettings:month">Month</digi:trn>: 
+				                                    		<digi:trn key="aim:globalSettings:month">Month</digi:trn>:
 				                                    		<select styleClass="inp-text" id="<%=monthId%>" onchange="populateWithDays('<%=monthId%>','<%=dayId%>');createDateString('<%=monthId%>','<%=dayId%>')">
 				                                    			<%
 				                                    				for (int k = 1; k <= 12; k++) {if (k == monthNum) {
@@ -495,7 +511,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    											}
 					                                    		%>
 				                                    		</select>
-				                                    		<digi:trn key="aim:globalSettings:day">Day</digi:trn>: 
+				                                    		<digi:trn key="aim:globalSettings:day">Day</digi:trn>:
 				                                    		<select styleClass="inp-text" id="<%=dayId%>" onchange="createDateString('<%=monthId%>','<%=dayId%>');">
 				                                    			<%
 				                                    				for (int k = 1; k <= org.digijava.module.aim.action.GlobalSettings
@@ -513,7 +529,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    											}
 					                                    		%>
 				                                    		</select>
-				                                    	</c:when>	
+				                                    	</c:when>
 				                                    	<c:when test='${type == "t_daily_currency_update_hour"}'>
 				                                    		<%
 				                                    			String hourId = "hour"
@@ -534,7 +550,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    											String ampmNum = timeValues[1];
 				                                    		%>
 				                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
-				                                    		<digi:trn key="aim:globalSettings:hour">Hour</digi:trn>: 
+				                                    		<digi:trn key="aim:globalSettings:hour">Hour</digi:trn>:
 				                                    		<select styleClass="inp-text" id="<%=hourId%>" onchange="createHourString('<%=hourId%>','<%=minId%>','<%=ampmId%>');">
 				                                    			<%
 				                                    				for (int k = 1; k <= 12; k++) {
@@ -552,7 +568,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    											}
 					                                    		%>
 				                                    		</select>
-				                                    		<digi:trn key="aim:globalSettings:min">Min</digi:trn>: 
+				                                    		<digi:trn key="aim:globalSettings:min">Min</digi:trn>:
 				                                    		<select styleClass="inp-text" id="<%=minId%>" onchange="createHourString('<%=hourId%>','<%=minId%>','<%=ampmId%>');">
 				                                    			<%
 				                                    				for (int k = 0; k < 60; k += 5) {
@@ -588,18 +604,18 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    		%>
 				                                    		</select>
 				                                    		<br/>
-				                                    		<digi:trn key="aim:globalSettings:ServerTime">Server Time</digi:trn>:&nbsp; 
+				                                    		<digi:trn key="aim:globalSettings:ServerTime">Server Time</digi:trn>:&nbsp;
 				                                    		<%
  				                                    			java.text.DateFormat formatter = new java.text.SimpleDateFormat(
  				                                    													"hh:mm:ss a");
  				                                    											String sdate = org.digijava.module.common.util.DateTimeUtil
  				                                    													.formatDate(new java.util.Date());
- 				                                    		%> 
+ 				                                    		%>
 						                                    <%=sdate
 															+ " "
 															+ formatter
-																	.format(new java.util.Date())%>  
-				                                    	
+																	.format(new java.util.Date())%>
+
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_timeout_currency_update"}'>
 				                                            <%
@@ -626,7 +642,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    			}
 					                                    											}
 					                                    		%>
-				                                    			
+
 				                                    		</select>
 				                                    	    <digi:trn key="aim:globalSettings:minutes">(Minutes)</digi:trn>
 				                                    	</c:when>
@@ -652,7 +668,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
-				                                    	
+
 				                                    	<c:when test='${type == "t_static_year"}'>
 				                                    		<%
 				                                    			String dateValues = globalSett
@@ -677,7 +693,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
-														
+
 														<c:when test='${type == "t_year_default_start" || type == "t_year_default_end"}'>
 				                                    		<%
 				                                    			g_year = Integer
@@ -723,16 +739,16 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																									if (k == selected) {
 															%>
 				                                    					<option value="<%=k%>" selected="selected"><%=k%>
-				                                    						<digi:trn key="aim:globalSettings:Days"> 
+				                                    						<digi:trn key="aim:globalSettings:Days">
 				                                    							Days
 				                                    						</digi:trn>
 				                                    					</option>
-				                                    						 
+
 				                                    			<%
 				                                    						 				                                    				} else {
 				                                    						 				                                    			%>
 					                                    				<option value="<%=k%>"><%=k%>
-					                                    					<digi:trn key="aim:globalSettings:Days"> 
+					                                    					<digi:trn key="aim:globalSettings:Days">
 				                                    							Days
 				                                    						</digi:trn>
 					                                    				</option>
@@ -757,7 +773,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																}
 															%>
 														</c:when>
-				                                    	
+
 														<c:when test='${type == "t_components_sort"}'>
 															<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 																<html:option value="default"><digi:trn key="aim:globalSettings:default">Default</digi:trn></html:option>
@@ -767,7 +783,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																<html:option value="type"><digi:trn key="aim:globalsettings:components_sort_order:by_type">Type</digi:trn></html:option>
 															</html:select>
 														</c:when>
-														
+
 				                                    	<c:when test='${type == "t_Boolean"}'>
 				                                    		<html:select property="gsfValue" styleClass="inp-text" onchange='boolean_field_changed(this);' value='<%= globalSett.getGlobalSettingsValue() %>'>
 				                                    			<html:option value="true"><digi:trn key="aim:globalsettings:true">true</digi:trn></html:option>
@@ -778,7 +794,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 				                                      	</c:otherwise>
 			                                      	</c:choose>
-			                                    </logic:empty>                                
+			                                    </logic:empty>
 			                                   </td>
 											</digi:form>
 			                            </tr>
@@ -789,7 +805,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 									<br /> <br />
 								</div>
 								</logic:iterate>
-									<digi:form  action="/GlobalSettings.do?" method="post" onsubmit="return saveAllSettings()" >	
+									<digi:form  action="/GlobalSettings.do?" method="post" onsubmit="return saveAllSettings()" >
 										<table width="100%" border="0">
 	  			                            <tr>
 				                              <td colspan="2" align="center" valign="bottom" >
@@ -797,15 +813,15 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                              	<html:hidden property="indexTab"/>
 					                              	<html:submit property="saveAll" styleClass="buttonx" styleId="gsSaveAllBtn">
 					                                    <digi:trn key="aim:saveAll">
-					                                    	Save All                                    
+					                                    	Save All
 					                                    </digi:trn>
-					                                </html:submit>			                                
-				                              </td>			                           
+					                                </html:submit>
+				                              </td>
 				                           </tr>
 										</table>
 									</digi:form>
 			                </div>
-			        	</div>	
+			        	</div>
 				</td>
 			</tr>
 		</table>
@@ -814,5 +830,5 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 </table>
 <script type="text/javascript">
 	var myTabs = new YAHOO.widget.TabView("demo");
-	myTabs.set('activeIndex',<%=aimGlobalSettingsForm.getIndexTab()%>);	
+	myTabs.set('activeIndex',<%=aimGlobalSettingsForm.getIndexTab()%>);
 </script>

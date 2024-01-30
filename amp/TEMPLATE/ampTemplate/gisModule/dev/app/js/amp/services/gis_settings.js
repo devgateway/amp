@@ -21,6 +21,7 @@ _.extend(GisSettings.prototype, Backbone.Events, {
         $.ajax({
             url: '/rest/amp/settings/gis'
         }).done(function(data) {
+            console.log("Gis Settings data", data)
             self.gisSettings = data;
         });
     },

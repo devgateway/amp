@@ -7,11 +7,11 @@
       </option>
       <% } %>
 
-<!--       <% if (obj.gisSettings.gis_programs_enabled == true){ %>-->
-<!--      <option data-i18n="amp.gis:legend-by-program" value="Program" <%= (obj.selectedVertical == "Program"? 'selected': '') %>>-->
-<!--         By Program-->
-<!--      </option>-->
-<!--      <% } %>-->
+       <% if (obj.gisSettings.gis_programs_enabled === true){ %>
+      <option data-i18n="amp.gis:legend-by-program" value="Program" <%= (obj.selectedVertical == "Program"? 'selected': '') %>>
+         By Program
+      </option>
+      <% } %>
 
       <option data-i18n="amp.gis:legend-by-donor" value="Donor Agency" <%= (obj.selectedVertical == "Donor Agency"? 'selected': '') %>>
         By Donor

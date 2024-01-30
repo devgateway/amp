@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend({
       var tableContent = new DatasourcesItem({
         collection: self.collection,
         app: self.app,
-        gisSettings: gisSettings
+        gisSettings: gisSettings.gisSettings
       }).render().el;
 
       var collection = self.collection.getPageDetails();

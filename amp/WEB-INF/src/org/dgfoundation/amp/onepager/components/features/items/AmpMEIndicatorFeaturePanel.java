@@ -21,6 +21,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -98,16 +99,18 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         });
         add(indicatorBaseValueLabel);
 
-        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<>(globalBaseVal, "originalValueDate"));
+        final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (globalBaseVal.getOriginalValueDate() != null) {
+                    SimpleDateFormat format = new SimpleDateFormat("M/dd/yy hh:mm a");
+                    return format.format(globalBaseVal.getOriginalValueDate());
+                } else {
+                    return "N/A";
+                }
+            }
+        });
         add(indicatorBaseDateLabel);
-
-//        final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
-//            @Override
-//            protected String load() {
-//                return globalBaseVal.getOriginalValueDate() != null ? String.valueOf(globalBaseVal.getOriginalValueDate()) : "N/A";
-//            }
-//        });
-//        add(indicatorBaseDateLabel);
 
         final Label indicatorTargetValueLabel = new Label("target", new LoadableDetachableModel<String>() {
             @Override
@@ -117,16 +120,18 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         });
         add(indicatorTargetValueLabel);
 
-        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<>(globalTargetVal, "originalValueDate"));
+        final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (globalTargetVal.getOriginalValueDate() != null) {
+                    SimpleDateFormat format = new SimpleDateFormat("M/dd/yy hh:mm a");
+                    return format.format(globalTargetVal.getOriginalValueDate());
+                } else {
+                    return "N/A";
+                }
+            }
+        });
         add(indicatorTargetDateLabel);
-
-//        final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
-//            @Override
-//            protected String load() {
-//                return globalTargetVal.getOriginalValueDate() != null ? String.valueOf(globalTargetVal.getOriginalValueDate()) : "N/A";
-//            }
-//        });
-//        add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
         add(valuesTable);

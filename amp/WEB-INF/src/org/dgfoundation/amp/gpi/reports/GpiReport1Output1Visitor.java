@@ -83,6 +83,9 @@ public class GpiReport1Output1Visitor implements ReportVisitor {
             if (e.getKey().originalColumnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
                 gpiItem.setPrimarySectors(((IdentifiedReportCell) e.getValue()).entitiesIdsValues);
             }
+            if (e.getKey().originalColumnName.equals(ColumnConstants.PRIMARY_PROGRAM)) {
+                gpiItem.setPrimaryPrograms(((IdentifiedReportCell) e.getValue()).entitiesIdsValues);
+            }
 
             if (e.getKey().originalColumnName.equals(ColumnConstants.FINANCING_INSTRUMENT)) {
                 gpiItem.setFinancingInstruments(((IdentifiedReportCell) e.getValue()).entitiesIdsValues);
@@ -149,6 +152,7 @@ class GPIOutput1Item {
     private Map<Long, String> financingInstruments = new HashMap<>();
     private Map<Long, String> implementingAgencies = new HashMap<>();
     private Map<Long, String> primarySectors = new HashMap<>();
+    private Map<Long, String> primaryPrograms = new HashMap<>();
     private Boolean q6;
     private String q6Description;
     private BigDecimal q7 = BigDecimal.ZERO;
@@ -306,5 +310,13 @@ class GPIOutput1Item {
     public String toString() {
         return "GPIIndicatator1Item [approvalDate=" + getApprovalDateAsString() + ", q6=" + q6 + ", q7=" + q7 + ", q8="
                 + q8 + ", q9=" + q9 + ", q10=" + q10 + "]";
+    }
+
+    public Map<Long, String> getPrimaryPrograms() {
+        return primaryPrograms;
+    }
+
+    public void setPrimaryPrograms(Map<Long, String> primaryPrograms) {
+        this.primaryPrograms = primaryPrograms;
     }
 }

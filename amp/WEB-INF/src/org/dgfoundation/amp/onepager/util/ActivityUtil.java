@@ -705,7 +705,7 @@ public class ActivityUtil {
         /**
          * try to use optimistic locking
          */
-        AmpActivityVersion act = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
+        AmpActivityVersion act = session.get(AmpActivityVersion.class, id);
 
         //check the activity group for the last version of an activity
         AmpActivityGroup group = act.getAmpActivityGroup();

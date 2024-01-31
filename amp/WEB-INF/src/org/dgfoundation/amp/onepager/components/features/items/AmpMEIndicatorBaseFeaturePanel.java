@@ -6,6 +6,7 @@ import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEBaseTargetValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -27,7 +28,7 @@ public class AmpMEIndicatorBaseFeaturePanel extends AmpFeaturePanel<IndicatorAct
 
 
         try {
-            baseActualValues = new AmpMEBaseTargetValuesFormTableFeaturePanel("addBaseValue", indicator, conn, location,"Base Target Value", false, 7);
+            baseActualValues = new AmpMEBaseTargetValuesFormTableFeaturePanel("addBaseValue", indicator, conn, location,"Base Target Value", false, 7, this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -76,7 +77,7 @@ public class AmpMEIndicatorBaseFeaturePanel extends AmpFeaturePanel<IndicatorAct
 
         updateButtonVisibility();
     }
-    private void updateButtonVisibility() {
+    public void updateButtonVisibility() {
         boolean baseValueExists = false;
         boolean targetValueExists = false;
 

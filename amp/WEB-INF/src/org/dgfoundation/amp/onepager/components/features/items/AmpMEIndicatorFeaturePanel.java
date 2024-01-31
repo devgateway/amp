@@ -157,24 +157,10 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
         add(addActualValue);
 
-//        AmpAjaxLinkField addBaseTargetValue = new AmpAjaxLinkField("addBaseTargetValue", "Add Base Target Value", "Add Base Target Value") {
-//            @Override
-//            public void onClick(AjaxRequestTarget target) {
-//                AmpIndicatorValue value = new AmpIndicatorValue();
-//                value.setIndicatorConnection(conn.getObject());
-//                value.setActivityLocation(location.getObject());
-//                value.setValueDate(new Date(System.currentTimeMillis()));
-//                value.setValueType(AmpIndicatorValue.ACTUAL);
-//                valuesTable.getEditorList().addItem(value);
-//                target.add(valuesTable);
-//                target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
-//            }
-//        };
-
         AmpMEIndicatorBaseFeaturePanel baseValues = null;
 
         try {
-            baseValues = new AmpMEIndicatorBaseFeaturePanel("addBaseTargetValue", "Add Base Target Value", conn, indicator, values, location);
+            baseValues = new AmpMEIndicatorBaseFeaturePanel("addBaseTargetValue", "Add Base Target Values", conn, indicator, values, location);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

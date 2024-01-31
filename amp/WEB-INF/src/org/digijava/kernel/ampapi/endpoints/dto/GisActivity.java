@@ -38,6 +38,9 @@ public class GisActivity {
     
     @JsonProperty(ColumnConstants.PRIMARY_SECTOR)
     private String primarySector;
+
+    @JsonProperty(ColumnConstants.PRIMARY_PROGRAM)
+    private String primaryProgram;
     
     @JsonProperty(MeasureConstants.ACTUAL_COMMITMENTS)
     private Double actualCommitments;
@@ -178,5 +181,13 @@ public class GisActivity {
     
     public void setTriangularSSCCommitments(Double triangularSSCCommitments) {
         this.triangularSSCCommitments = triangularSSCCommitments;
+    }
+
+    public String getPrimaryProgram() {
+        return primaryProgram;
+    }
+
+    public void setPrimaryProgram(String primaryProgram) {
+        this.primaryProgram = primaryProgram;
     }
 }

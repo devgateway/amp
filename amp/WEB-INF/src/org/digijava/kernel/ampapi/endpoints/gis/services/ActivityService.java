@@ -71,12 +71,14 @@ public class ActivityService {
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM));
 
         OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{
             add(ColumnConstants.AMP_ID);
             add(ColumnConstants.DONOR_AGENCY);
             add(ColumnConstants.EXECUTING_AGENCY);
             add(ColumnConstants.PRIMARY_SECTOR);
+            add(ColumnConstants.PRIMARY_PROGRAM);
         }});
 
         //for now we are going to return the donor_id as matchesfilters
@@ -134,6 +136,10 @@ public class ActivityService {
                             break;
                         case ColumnConstants.PRIMARY_SECTOR:
                             activity.setPrimarySector(value);
+                            break;
+
+                        case ColumnConstants.PRIMARY_PROGRAM:
+                            activity.setPrimaryProgram(value);
                             break;
                         case MeasureConstants.ACTUAL_COMMITMENTS:
                             activity.setActualCommitments(new Double(value));

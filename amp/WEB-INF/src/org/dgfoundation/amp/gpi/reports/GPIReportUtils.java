@@ -89,6 +89,7 @@ public class GPIReportUtils {
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS));
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM));
         spec.addColumn(new ReportColumn(ColumnConstants.FINANCING_INSTRUMENT));
         spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6));
         spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6_DESCRIPTION));

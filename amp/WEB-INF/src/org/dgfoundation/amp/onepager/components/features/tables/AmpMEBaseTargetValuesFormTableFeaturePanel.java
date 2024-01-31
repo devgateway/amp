@@ -39,6 +39,12 @@ public class AmpMEBaseTargetValuesFormTableFeaturePanel extends AmpMEValuesFormT
                                 return CustomDoubleConverter.INSTANCE;
                             }
                         };
+                    } else {
+                        valuefield = new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "value"), "Revised Value"){
+                            public IConverter getInternalConverter(java.lang.Class<?> type) {
+                                return CustomDoubleConverter.INSTANCE;
+                            }
+                        };
                     }
 
                     valuefield.getTextContainer().setType(Double.class);

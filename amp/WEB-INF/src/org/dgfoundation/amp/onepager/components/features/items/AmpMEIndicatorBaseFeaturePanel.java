@@ -32,7 +32,7 @@ public class AmpMEIndicatorBaseFeaturePanel extends AmpFeaturePanel<IndicatorAct
             throw new RuntimeException(e);
         }
 
-        add(baseActualValues);
+
         addBaseValue = new AmpAjaxLinkField("addBaseValueButton", "Add Base Value", "Add Base Value") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -43,9 +43,10 @@ public class AmpMEIndicatorBaseFeaturePanel extends AmpFeaturePanel<IndicatorAct
                 value.setValueType(AmpIndicatorValue.BASE);
                 baseActualValues.getEditorList().addItem(value);
 
-
                 target.add(baseActualValues);
-                updateButtonVisibility(target);
+                // Update the buttons visibility depending on weather it exists or not
+                updateButtonVisibility();
+                target.add(addBaseValue);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
@@ -61,23 +62,24 @@ public class AmpMEIndicatorBaseFeaturePanel extends AmpFeaturePanel<IndicatorAct
                 baseActualValues.getEditorList().addItem(value);
 
                 target.add(baseActualValues);
-                updateButtonVisibility(target);
+                // Update the buttons visibility depending on weather it exists or not
+                updateButtonVisibility();
+
+                target.add(addTargetValue);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
-//        addTargetValue.setVisible(false);
-//        addBaseValue.setVisible(false);
 
-//        updateButtonVisibility();
+        add(baseActualValues);
         add(addTargetValue);
         add(addBaseValue);
 
+        updateButtonVisibility();
     }
-    private void updateButtonVisibility(AjaxRequestTarget target) {
+    private void updateButtonVisibility() {
         boolean baseValueExists = false;
         boolean targetValueExists = false;
 
-        Set<AmpIndicatorValue> indicatorValues = baseActualValues.getEditorList().getModel().getObject();
         for (AmpIndicatorValue value : baseActualValues.getEditorList().getModel().getObject()) {
             if (value.getValueType() == AmpIndicatorValue.BASE) {
                 baseValueExists = true;
@@ -90,13 +92,7 @@ public class AmpMEIndicatorBaseFeaturePanel extends AmpFeaturePanel<IndicatorAct
             }
         }
 
-        addBaseValue.setVisible(!baseValueExists);
-        addTargetValue.setVisible(!targetValueExists);
-
-        // Add the components to the AjaxRequestTarget for UI update
-        if (target != null) {
-            target.add(addBaseValue);
-            target.add(addTargetValue);
-        }
+        addBaseValue.setVisibilityAllowed(!baseValueExists);
+        addTargetValue.setVisibilityAllowed(!targetValueExists);
     }
 }

@@ -178,7 +178,6 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
         add(baseValues);
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
             @Override

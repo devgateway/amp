@@ -168,6 +168,8 @@ module.exports = Backbone.View.extend({
   _getTops: function(type) {
     var tmpModel = new Backbone.Collection({});
     tmpModel.url = '/rest/dashboard/tops/' + type;
+      console.log("Settings here")
+      config.settings['program-settings'] = self.model.get('programType');
 
     var payload = { limit: 5};
     _.extend(payload, this.app.data.filter.serialize());

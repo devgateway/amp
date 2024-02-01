@@ -25,6 +25,8 @@ module.exports = BackboneDash.Model.extend({
   fetch: function(options) {
     var data = JSON.parse(options.data);
     data.settings = this.app.settingsWidget.toAPIFormat();
+    console.log("Settings", data.settings)
+    console.log("Settings 2", this.get('programType') , this.get('showProgramType'))
 
     if (this.get('adjtype')) {
       // TODO adjtype hard-coding key for now, should get from settings...

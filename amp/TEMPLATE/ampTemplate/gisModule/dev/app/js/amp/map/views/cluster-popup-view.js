@@ -71,7 +71,7 @@ module.exports = Backbone.View.extend({
   },
     _generateProgramChart: function() {
         var self = this;
-        this.set('showProgramType', true);
+        // this.set('showProgramType', true);
         this._getTops('pr').then(function(data) {
             self.tempDOM.find('#charts-pane-program .loading').remove();
             self._generateBaseChart(data, '#charts-pane-program .amp-chart svg');
@@ -166,7 +166,6 @@ module.exports = Backbone.View.extend({
   },
 
   _getTops: function(type) {
-      console.log("Program type show", this.get('showProgramType'));
     var tmpModel = new Backbone.Collection({});
     tmpModel.url = '/rest/dashboard/tops/' + type;
 

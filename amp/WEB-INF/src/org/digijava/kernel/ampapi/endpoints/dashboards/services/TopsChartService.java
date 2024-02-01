@@ -141,9 +141,9 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_DONOR_GROUPS;
                 break;
             case PR:
-//                String selectedProgramScheme = (String) config.getSettings().get("program-settings");
+                String selectedProgramScheme = (String) config.getSettings().get("program-settings");
                 String fundingType = (String) config.getSettings().get("funding-type");
-                setColumn(PRIMARY_PROGRAM);
+                setColumn(selectedProgramScheme);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(fundingType));
 
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_PROGRAMS);

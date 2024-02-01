@@ -43,6 +43,8 @@ module.exports = BackboneDash.View.extend({
         var config = self.app.filter.serialize();
         config.settings = self.app.settingsWidget.toAPIFormat();
         config.settings['funding-type'] = self.model.get('adjtype');
+        console.log("Settings here")
+        config.settings['program-settings'] = self.model.get('programType');
         config.offset = self._currentPage * self.PAGE_SIZE;
 
         if (this.model.get('chartType') == this.FRAGMENTATION) {

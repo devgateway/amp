@@ -21,6 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
@@ -114,8 +115,23 @@ public class MeService {
     }
 
     public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
+        List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<ProgramIndicatorValues>();
         List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
 
+        List<Integer> objectiveIds = (List<Integer>) params.getFilters().get("national-planning-objectives-level-2");
+
+        for (Integer objectiveId : objectiveIds) {
+            Long id = Long.valueOf(objectiveId);
+            AmpTheme objective = ProgramUtil.getThemeById(id);
+            ProgramIndicatorValues programValues = new ProgramIndicatorValues(objective.getAmpThemeId(), objective.getName());
+
+            // Clone or create a new instance of params for each objectiveId
+            SettingsAndFiltersParameters modifiedParams = cloneWithSingleObjective(params, id);
+
+//            Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
+
+            System.out.println(modifiedParams);
+        }
         int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
 
         if (yearsCount < 5) {
@@ -267,6 +283,23 @@ public class MeService {
         } catch (DgException e) {
             throw new RuntimeException("Failed to load indicator");
         }
+    }
+
+    // Helper method to clone the original params and update the "national-planning-objectives-level-2" filter
+    private SettingsAndFiltersParameters cloneWithSingleObjective(SettingsAndFiltersParameters originalParams, Long objectiveId) {
+        // Implement the cloning or creation of a new instance based on the original
+        // This could involve deep copying fields or creating a new instance and manually copying values
+        SettingsAndFiltersParameters modifiedParams = new SettingsAndFiltersParameters();
+
+        // Copy settings and other filters as needed
+        modifiedParams.setSettings(originalParams.getSettings());
+
+        // Update the "national-planning-objectives-level-2" filter with a single objectiveId
+        Map<String, Object> filters = new HashMap<>(originalParams.getFilters());
+        filters.put("national-planning-objectives-level-2", Arrays.asList(objectiveId.intValue())); // Convert back to Integer if necessary
+        modifiedParams.setFilters(filters);
+
+        return modifiedParams;
     }
 
 }

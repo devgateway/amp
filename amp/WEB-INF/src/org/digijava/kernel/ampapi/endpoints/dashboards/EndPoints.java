@@ -442,3 +442,5 @@ public class EndPoints {
         return new MeService().getIndicatorsBySector(sectorId);
     }
 }
+
+

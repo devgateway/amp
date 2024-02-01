@@ -428,7 +428,7 @@ public class EndPoints {
     @Path("/me/indicatorReportsByProgramCountry")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getValuesForIndicatorsCountryProgram")
-    @ApiOperation(value = "Returns indicator values for all indicators.")
+    @ApiOperation(value = "Returns indicator report values for all indicators.")
     public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
         return new MeService().getIndicatorYearValuesByIndicatorCountryProgramId(params);
     }

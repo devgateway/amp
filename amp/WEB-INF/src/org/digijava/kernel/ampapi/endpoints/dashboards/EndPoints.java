@@ -25,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopDescription;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
@@ -429,7 +430,7 @@ public class EndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getValuesForIndicatorsCountryProgram")
     @ApiOperation(value = "Returns indicator report values for all indicators.")
-    public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
+    public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
         return new MeService().getIndicatorYearValuesByIndicatorCountryProgramId(params);
     }
 

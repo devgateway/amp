@@ -114,10 +114,17 @@ public class MeService {
         return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
     }
 
-    public List<IndicatorYearValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
+    public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
         List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<ProgramIndicatorValues>();
         List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
 
+        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+
+        if (yearsCount < 5) {
+            yearsCount = 5;
+        }
+
+        // Getting params array of objectives
         List<Integer> objectiveIds = (List<Integer>) params.getFilters().get("national-planning-objectives-level-2");
 
         for (Integer objectiveId : objectiveIds) {
@@ -128,30 +135,23 @@ public class MeService {
             // Clone or create a new instance of params for each objectiveId
             SettingsAndFiltersParameters modifiedParams = cloneWithSingleObjective(params, id);
 
-//            Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
+            Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
 
-            System.out.println(modifiedParams);
-        }
-        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+            for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
+                // Access the indicator ID (key)
+                Long indicatorId = entry.getKey();
+                AmpIndicator existingIndicator = getIndicatorById(indicatorId);
+                IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+                // Include indicators name
+                singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
+                indicatorValues.add(singelIndicatorYearValues);
 
-        if (yearsCount < 5) {
-            yearsCount = 5;
-        }
-
-        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
-
-        for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
-            // Access the indicator ID (key)
-            Long indicatorId = entry.getKey();
-            AmpIndicator existingIndicator = getIndicatorById(indicatorId);
-            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
-            // Include indicators name
-            singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
-            indicatorValues.add(singelIndicatorYearValues);
-
+            }
+            programValues.setIndicators(indicatorValues);
+            programIndicatorValues.add(programValues);
         }
 
-        return indicatorValues;
+        return programIndicatorValues;
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,

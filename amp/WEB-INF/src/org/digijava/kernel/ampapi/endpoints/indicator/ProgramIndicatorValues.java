@@ -1,11 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import java.util.List;
 import java.util.Set;
 
 public class ProgramIndicatorValues {
     private Long id;
     private String name;
-    private Set<IndicatorYearValues> indicators;
+    private List<IndicatorYearValues> indicators;
 
     public ProgramIndicatorValues(Long id, String name) {
         this.id = id;
@@ -28,11 +29,11 @@ public class ProgramIndicatorValues {
         this.name = name;
     }
 
-    public Set<IndicatorYearValues> getIndicators() {
+    public List<IndicatorYearValues> getIndicators() {
         return indicators;
     }
 
-    public void setIndicators(Set<IndicatorYearValues> indicators) {
+    public void setIndicators(List<IndicatorYearValues> indicators) {
         this.indicators = indicators;
     }
 }

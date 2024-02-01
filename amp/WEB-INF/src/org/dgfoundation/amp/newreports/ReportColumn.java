@@ -12,7 +12,7 @@ public class ReportColumn extends NamedTypedEntity {
      * @param columnName - the name of the column
      */
     public ReportColumn(String columnName) {
-        super(columnName);
+            super(columnName);
     }
     
     public String getColumnName() {

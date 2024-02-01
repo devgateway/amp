@@ -7,5 +7,5 @@ module.exports = {
     DONOR_AGENCY: 'Donor Agency',
     EXECUTING_AGENCY: 'Executing Agency',
     PRIMARY_SECTOR: 'Primary Sector',
-    PROGRAM: 'Program'
+    PRIMARY_PROGRAM: 'Primary Program'
 }

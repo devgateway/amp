@@ -6,6 +6,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
+import org.digijava.kernel.Constants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
@@ -26,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.dgfoundation.amp.ar.ColumnConstants.PRIMARY_PROGRAM;
 
 /**
  * Tops Chart Dashboard Service
@@ -139,9 +141,9 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_DONOR_GROUPS;
                 break;
             case PR:
-                String selectedProgramScheme = (String) config.getSettings().get("program-settings");
+//                String selectedProgramScheme = (String) config.getSettings().get("program-settings");
                 String fundingType = (String) config.getSettings().get("funding-type");
-                setColumn(selectedProgramScheme);
+                setColumn(PRIMARY_PROGRAM);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(fundingType));
 
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_PROGRAMS);
@@ -256,8 +258,7 @@ public class TopsChartService {
         ReportCell totals;
         Double rawTotal;
 
-        if (report != null && report.reportContents != null && report.reportContents.getContents() != null
-                && report.reportContents.getContents().size() > 0) {
+        if (report != null && report.reportContents.getContents() != null && report.reportContents.getContents().size() > 0) {
             totals = report.reportContents.getContents().get(valueCol);
             rawTotal = ((BigDecimal) totals.value).doubleValue();
             DashboardsService.postProcess(this.report, this.spec, outSettings, this.type);

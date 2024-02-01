@@ -51,7 +51,7 @@
 
     <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
     <div class="tab-pane" id="charts-pane-sector">
-      <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span> <small>(<span data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></span>)</small></h5>
+      <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span></h5>
       <div class="amp-chart">
         <img class="loading" src="img/loading-icon.gif" />
         <svg></svg>
@@ -61,7 +61,7 @@
 
     <% if (obj.gisSettings.gis_programs_enabled == true){ %>
     <div class="tab-pane" id="charts-pane-program">
-      <h5><span data-i18n="amp.gis:activities-programs">Programs</span> <small>(<span data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></span>)</small></h5>
+      <h5><span data-i18n="amp.gis:activities-programs">Programs</span></h5>
       <div class="amp-chart">
         <img class="loading" src="img/loading-icon.gif" />
         <svg></svg>

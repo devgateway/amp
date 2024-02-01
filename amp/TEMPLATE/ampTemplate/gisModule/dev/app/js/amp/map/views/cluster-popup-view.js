@@ -61,6 +61,7 @@ module.exports = Backbone.View.extend({
 
   _generateCharts: function() {
     this._generateSectorChart();
+    this._generateProgramChart();
     var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
       if (selected.toLowerCase().indexOf('ssc') >= 0) {
           this._generateExecutingChart();
@@ -68,6 +69,13 @@ module.exports = Backbone.View.extend({
           this._generateDonorChart();
     }
   },
+    _generateProgramChart: function() {
+        var self = this;
+        this._getTops('pr').then(function(data) {
+            self.tempDOM.find('#charts-pane-program .loading').remove();
+            self._generateBaseChart(data, '#charts-pane-program .amp-chart svg');
+        });
+    },
 
   _generateSectorChart: function() {
     var self = this;

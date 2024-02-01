@@ -73,11 +73,10 @@ public class MailScheduler implements Job {
                 logger.info("Last " +
                             DigiConfigManager.getConfig().getSmtp().getCacheMinutes() +
                             " minutes old mail size: " + list.size());
-                Iterator iter = list.iterator();
-                while (iter.hasNext()) {
-                    MailSpool item = (MailSpool) iter.next();
+                for (Object o : list) {
+                    MailSpool item = (MailSpool) o;
                     item.setDateLastSend(new Date());
-                    if(!MailUtil.sendMail(item)) {
+                    if (!MailUtil.sendMail(item)) {
                         DbUtil.saveMail(item);
                         mailSend = false;
                         continue;

@@ -116,7 +116,6 @@ public class MeService {
 
     public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
         List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<ProgramIndicatorValues>();
-        List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
 
         int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
 
@@ -136,6 +135,8 @@ public class MeService {
             SettingsAndFiltersParameters modifiedParams = cloneWithSingleObjective(params, id);
 
             Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
+
+            List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
 
             for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
                 // Access the indicator ID (key)

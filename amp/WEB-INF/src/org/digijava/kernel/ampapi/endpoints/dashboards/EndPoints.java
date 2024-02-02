@@ -398,6 +398,15 @@ public class EndPoints {
         return new MeService().getIndicatorYearValuesByIndicatorId(id, params);
     }
 
+    @OPTIONS
+    @Path("/me/indicatorReportsByProgramCountry")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeIndicatorReportsByProgramCountry() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
     /**
      * Returns array of indicators values
      * [

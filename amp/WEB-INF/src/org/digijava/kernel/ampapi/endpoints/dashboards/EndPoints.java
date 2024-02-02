@@ -439,8 +439,9 @@ public class EndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getValuesForIndicatorsCountryProgram")
     @ApiOperation(value = "Returns indicator report values for all indicators.")
-    public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
-        return new MeService().getIndicatorYearValuesByIndicatorCountryProgramId(params);
+    public Response getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
+        List<ProgramIndicatorValues> resp = new MeService().getIndicatorYearValuesByIndicatorCountryProgramId(params);
+        return PublicServices.buildOkResponseWithOriginHeaders(resp);
     }
 
     @GET

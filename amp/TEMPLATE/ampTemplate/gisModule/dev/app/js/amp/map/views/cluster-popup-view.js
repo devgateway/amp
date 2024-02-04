@@ -12,7 +12,6 @@ var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-lis
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 var gisSettings = new GisSettings();
-var ChartModel = require('../../../../../../../dashboard/dev/app/js/app/models/chart-model-base')
 
 //TODO: put cluster popup code in own folder,
 // with seperate view for charts and table.
@@ -175,7 +174,7 @@ module.exports = Backbone.View.extend({
 
     // get funding type, ask for consistency form API, and at least put this function inside settings collection..
     var settings = this.app.data.settingsWidget.toAPIFormat();
-    settings['program-settings'] = ChartModel.get('programType');
+    settings['program-settings'] = 'National Plan Objective';
     console.log("Settings",settings)
     _.extend(payload, {settings: settings});
 

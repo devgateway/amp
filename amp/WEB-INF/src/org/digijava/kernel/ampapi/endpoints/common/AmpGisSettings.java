@@ -8,6 +8,9 @@ public class AmpGisSettings {
     @JsonProperty("gis_sectors_enabled")
     private Boolean sectorsEnabled;
 
+    @JsonProperty("gis_programs_enabled")
+    private Boolean programsEnabled;
+
 
     public Boolean getMultiCountryEnabled() {
         return multiCountryEnabled;
@@ -25,4 +28,11 @@ public class AmpGisSettings {
         this.sectorsEnabled = sectorsEnabled;
     }
 
+    public Boolean getProgramsEnabled() {
+        return programsEnabled;
+    }
+
+    public void setProgramsEnabled(Boolean programsEnabled) {
+        this.programsEnabled = programsEnabled;
+    }
 }

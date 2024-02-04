@@ -6,5 +6,6 @@ module.exports = {
     STRUCTURE_COLORS_DELIMITER: ':',
     DONOR_AGENCY: 'Donor Agency',
     EXECUTING_AGENCY: 'Executing Agency',
-    PRIMARY_SECTOR: 'Primary Sector'
+    PRIMARY_SECTOR: 'Primary Sector',
+    PRIMARY_PROGRAM: 'Primary Program'
 }

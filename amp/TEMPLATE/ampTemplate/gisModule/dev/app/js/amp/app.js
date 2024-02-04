@@ -7,11 +7,13 @@ require('@babel/polyfill');
 var GISData = require('./data/gis-data');
 var App = require('./gis/views/gis-main');
 
+var $ = require('jquery');
 var State = require('amp-state/index'); //require('./services/state');
 var translator = require('./services/translator');
 var WindowTitle = require('./services/title');
 var URLService = require('./services/url');
 var Constants = require('./data/constants');
+const GisSettings = require("./services/gis_settings");
 var data = new GISData();
 var url = new URLService();
 var state = new State({ url: url, saved: data.savedMaps, autoinit: true, prefix: ['saved/', 'report/']});
@@ -23,16 +25,20 @@ var app = new App({
 	  state: state
 });
 
+
+
 //if saved data is loading, wait till its ready
 if(state.loadPromise){
 	state.loadPromise.always(function(){
 		setSavedLanguage().then(function(){
 			configureApp();
-		});		
+		});
 	});	
 } else {
 	configureApp();
 }
+
+
 
 //configure to use saved language
 function setSavedLanguage(){
@@ -60,21 +66,31 @@ function getLanguageFromState(){
 	return lang;	
 }
 
-function configureApp(){
-	data.initializeCollectionsAndModels();	
-	data.addState(state);	
-	app.translator = translator.init();
-	app.constants = constants;
-	app.createViews();
-	app.data.load();
-	// initialize everything that doesn't need to touch the DOM
-	$(document).ready(function() {
-		// Attach to the DOM and do all the dom-y stuff
-		app.setElement($('#gis-plugin')).render();
-	});	
-	// hook up the title
-	var windowTitle = new WindowTitle('Aid Management Platform - GIS');
-	//windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
+
+
+function configureApp() {
+	data.initializeCollectionsAndModels();
+	data.addState(state);
+
+	// Ensure proper chaining by returning the promise from getGisSettings
+			// The code inside this block will be executed after getGisSettings is resolved or rejected
+
+			app.translator = translator.init();
+			app.constants = constants;
+			app.createViews();
+			app.data.load();
+
+			// initialize everything that doesn't need to touch the DOM
+			$(document).ready(function () {
+				// Attach to the DOM and do all the dom-y stuff
+				app.setElement($('#gis-plugin')).render();
+			});
+
+			// hook up the title
+			var windowTitle = new WindowTitle('Aid Management Platform - GIS');
+			// windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
+
 }
+
 
 module.exports = window.app = app;

@@ -489,6 +489,7 @@ public class SettingsUtils {
     {
         AmpGisSettings ampGisSettings = new AmpGisSettings();
         ampGisSettings.setSectorsEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.GIS_SECTORS_ENABLED));
+        ampGisSettings.setProgramsEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.GIS_PROGRAMS_ENABLED));
         ampGisSettings.setMultiCountryEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.MULTICOUNTRY_ENABLED));
         return ampGisSettings;
     }

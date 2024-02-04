@@ -4,12 +4,12 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>AMP-29996</jira>
     <author>bmokandu</author>
-    <description>Enable/Disable Sectors in GIS.</description>
+    <description>Enable/Disable Programs in GIS.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES (nextval('amp_global_settings_seq'), 'GIS Sectors Enabled', 'false', 't_Boolean', 'GIS Sectors Enabled', 'gis', null, FALSE);
+				VALUES (nextval('amp_global_settings_seq'), 'GIS Programs Enabled', 'false', 't_Boolean', 'GIS Programs Enabled', 'gis', null, FALSE);
 			]]></lang>
         </script>
     </apply>

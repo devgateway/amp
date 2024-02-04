@@ -171,7 +171,6 @@ module.exports = Backbone.View.extend({
 
     var payload = { limit: 5};
     _.extend(payload, this.app.data.filter.serialize());
-
     // get funding type, ask for consistency form API, and at least put this function inside settings collection..
     var settings = this.app.data.settingsWidget.toAPIFormat();
     settings['program-settings'] = 'National Plan Objective';

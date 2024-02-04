@@ -168,14 +168,15 @@ module.exports = Backbone.View.extend({
   _getTops: function(type) {
     var tmpModel = new Backbone.Collection({});
     tmpModel.url = '/rest/dashboard/tops/' + type;
-      console.log("Settings here")
-      config.settings['program-settings'] = self.model.get('programType');
+      // console.log("Settings here")
+      // config.settings['program-settings'] = self.model.get('programType');
 
     var payload = { limit: 5};
     _.extend(payload, this.app.data.filter.serialize());
 
     // get funding type, ask for consistancy form API, and at least put this function inside settings collection..
-    var settings = this.app.data.settingsWidget.toAPIFormat(); 	
+    var settings = this.app.data.settingsWidget.toAPIFormat();
+    settings['program-settings'] = self.model.get('programType');
 
     _.extend(payload, {settings: settings});
 

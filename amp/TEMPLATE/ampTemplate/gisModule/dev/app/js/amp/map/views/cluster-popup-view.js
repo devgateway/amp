@@ -12,7 +12,7 @@ var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-lis
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 var gisSettings = new GisSettings();
-var ChartModel = require('/../../../../dashboard/dev/app/js/app/models/chart-model-base')
+var ChartModel = require('../../../../../../../dashboard/dev/app/js/app/models/chart-model-base')
 
 //TODO: put cluster popup code in own folder,
 // with seperate view for charts and table.

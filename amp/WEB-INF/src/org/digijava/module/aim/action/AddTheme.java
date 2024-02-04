@@ -80,7 +80,7 @@ public class AddTheme extends Action {
         themeForm.setProgramCode(null);
         themeForm.setBudgetProgramCode(null);
         themeForm.setProgramDescription(null);
-        themeForm.setProgramTypeCategValId(new Long(0));
+        themeForm.setProgramTypeCategValId(0L);
         themeForm.setPrgLanguage(null);
         themeForm.setVersion(null);
         themeForm.setEvent("save");
@@ -235,7 +235,7 @@ public class AddTheme extends Action {
         themeForm.setProgramCode(null);
         themeForm.setBudgetProgramCode(null);
         themeForm.setProgramDescription(null);
-        themeForm.setProgramTypeCategValId(new Long(0));
+        themeForm.setProgramTypeCategValId(0L);
         themeForm.setPrgLanguage(null);
         themeForm.setVersion(null);
 
@@ -340,7 +340,7 @@ public class AddTheme extends Action {
         themeForm.setProgramCode(null);
         themeForm.setBudgetProgramCode(null);
         themeForm.setProgramDescription(null);
-        themeForm.setProgramTypeCategValId(new Long(0));
+        themeForm.setProgramTypeCategValId(0L);
         ampTheme.setExternalFinancing(themeForm.getProgramExternalFinancing());
         ampTheme.setInternalFinancing(themeForm.getProgramInernalFinancing());
         ampTheme.setTotalFinancing(themeForm.getProgramTotalFinancing());
@@ -370,7 +370,7 @@ public class AddTheme extends Action {
             themeForm.setProgramTypeCategValId(ampTheme.getTypeCategoryValue().getId());
         else {
             logger.error("AmpTheme " + ampTheme.getName() + " has Program Type null which should not be allowed.");
-            themeForm.setProgramTypeCategValId(new Long(0));
+            themeForm.setProgramTypeCategValId(0L);
         }
         themeForm.setProgramLeadAgency(ampTheme.getLeadAgency());
         themeForm.setProgramBackground(ampTheme.getBackground());

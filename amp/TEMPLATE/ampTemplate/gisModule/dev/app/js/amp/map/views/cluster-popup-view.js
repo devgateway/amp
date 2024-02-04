@@ -12,6 +12,7 @@ var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-lis
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 var gisSettings = new GisSettings();
+var ChartModel = require('../../../../../../../../ampTemplate/dashboard/dev/app/js/app/models/chart-model-base')
 
 //TODO: put cluster popup code in own folder,
 // with seperate view for charts and table.
@@ -172,16 +173,15 @@ module.exports = Backbone.View.extend({
     var payload = { limit: 5};
     _.extend(payload, this.app.data.filter.serialize());
 
-    // get funding type, ask for consistancy form API, and at least put this function inside settings collection..
+    // get funding type, ask for consistency form API, and at least put this function inside settings collection..
     var settings = this.app.data.settingsWidget.toAPIFormat();
-    settings['program-settings'] = self.model.get('programType');
-      console.log("Settings",settings)
-
+    settings['program-settings'] = ChartModel.get('programType');
+    console.log("Settings",settings)
     _.extend(payload, {settings: settings});
 
     //API wants these in the url, but other params go in post, strange but it's the way it is...
     tmpModel.url += '?limit=' + payload.limit;
-    payload.filters['activity-id'] = this.cluster.properties.activityid;    
+    payload.filters['activity-id'] = this.cluster.properties.activityid;
     if (this.cluster.properties.admLevel) {
        payload.filters[this.cluster.properties.admLevel.toLowerCase()] = [this.cluster.properties.admId];
     }

@@ -21,14 +21,14 @@ module.exports = BaseControlView.extend({
 
   initialize: function(options) {
     var self = this;
-      console.log("Settings",programSettings.programSettings)
-      if (programSettings.programSettings.listDefinitions)
+      console.log("Settings",programSettings)
+      if (programSettings.listDefinitions)
     {
         self.settingsObject.name="Program Type";
         self.settingsObject.id="program-setting";
         self.settingsObject.selected="National Planning Objective";
         self.settingsObject.options=[];
-        programSettings.programSettings.listDefinitions.forEach(function(listDef) {
+        programSettings.listDefinitions.forEach(function(listDef) {
             self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
         });
 

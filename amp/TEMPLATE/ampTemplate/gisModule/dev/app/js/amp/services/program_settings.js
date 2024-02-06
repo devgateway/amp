@@ -22,7 +22,7 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
         $.ajax({
             url: '/rest/filters/programs'
         }).done(function(data) {
-            console.log("Gis Settings data", data)
+            console.log("Programs Settings data", data)
             self.programSettings = data;
         });
     },

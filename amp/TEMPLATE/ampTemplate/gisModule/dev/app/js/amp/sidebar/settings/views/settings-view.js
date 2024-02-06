@@ -38,7 +38,7 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.render.apply(this);
       console.log("Programs Data",programsData)
-      var programs = JSON.parse(programsData.programs);
+      var programs = JSON.parse(JSON.stringify(programsData.programs));
       console.log("Settings",programs)
       var listDefs = programs.listDefinitions;
       console.log("Defs", listDefs)

@@ -18,12 +18,12 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
 
     initialize: function() {
         var self = this;
-        this.programSettings = {}
+        // this = {}
         $.ajax({
             url: '/rest/filters/programs'
         }).done(function(data) {
             console.log("Programs Settings data", data)
-            self.programSettings = data;
+            self = data;
         });
     },
 

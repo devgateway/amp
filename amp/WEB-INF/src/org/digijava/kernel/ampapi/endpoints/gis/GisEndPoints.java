@@ -99,7 +99,7 @@ public class GisEndPoints {
     @GET
     @Path(("program-settings"))
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiOperation("Get available filters")
+    @ApiOperation("Get available program settings")
     public List<AmpActivityProgramSettings> getProgramSettings() {
         return EndpointUtils.getProgramSettings();
     }

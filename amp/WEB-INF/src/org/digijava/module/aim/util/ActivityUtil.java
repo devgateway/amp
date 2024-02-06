@@ -1070,6 +1070,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         SQLUtils.executeQuery(con, deleteActivityTeam );
+
+//        String deleteActivity = "DELETE FROM amp_activity_version WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+//        SQLUtils.executeQuery(con, deleteActivity );
+
     }
     
     public static void removeMergeSources(Long ampActivityId,Session session){
@@ -1627,13 +1631,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static void deleteAmpActivityWithVersions(Long ampActId) throws Exception {
         Session session = PersistenceManager.getSession();
 
-        Transaction tx = null;
         try {
-            // Only begin a new transaction if there isn't one already active
-            if (session.getTransaction() == null || !session.getTransaction().isActive()) {
-                tx = session.beginTransaction();
-            }
-
             AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
             Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
 
@@ -1641,11 +1639,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 for (AmpActivityVersion ampActivityVersion : activityversions) {
                     deleteFullActivityContent(ampActivityVersion, session);
                     // Remove associations with AmpCategoryValue
-                    AmpTeam categories = ampActivityVersion.getTeam();
-
+                    Set<AmpCategoryValue> categories = ampActivityVersion.getCategories();
+//
                     System.out.println(categories);
-                    ampActivityVersion.getCategories().clear();
-                    ampActivityVersion.getTeam().getTeamLead().getDesktopTabSelections().clear();
+//                    ampActivityVersion.getCategories().clear();
+//                    ampActivityVersion.getIndicators().clear();
+//                    ampActivityVersion.getTeam().getTeamLead().getDesktopTabSelections().clear();
+//                    ampActivityVersion.getTeam().getTeamLead().getReports().clear();
+                    ampActivityVersion.setCategories(null);
+                    ampActivityVersion.setTeam(null);
+                    ampActivityVersion.setApprovedBy(null);
+                    ampActivityVersion.setActivityCreator(null);
+                    ampActivityVersion.setModifiedBy(null);
                     System.out.println(categories);
 
                     session.delete(ampActivityVersion);
@@ -1656,11 +1661,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 session.delete(ampAct);
             }
             session.delete(ampActivityGroup);
-    //        session.getTransaction().commit();
-            // Commit the transaction if it was started here
-            if (tx != null && tx.isActive()) {
-                tx.commit();
-            }
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
@@ -1671,7 +1671,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Long ampActId = ampAct.getAmpActivityId();
         //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
         ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
-    }
+//        ActivityUtil.deleteActivityContent(ampAct,session);
+        }
     
     public static void  deleteAllActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);

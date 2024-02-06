@@ -1,29 +1,34 @@
+/*/A
+ * The GIS Data Engine
+ * attaches to app.data
+ */
+
 var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
+
+
 
 var ProgramSettings = function() {
     this.initialize.apply(this, arguments);
 };
 
+
 _.extend(ProgramSettings.prototype, Backbone.Events, {
 
     initialize: function() {
         var self = this;
-        this.programSettings = {};
+        this.programs = {}
         $.ajax({
             url: '/rest/filters/programs'
         }).done(function(data) {
-            // Parse the data as JSON
-            try {
-                self.programSettings = JSON.stringify(data);
-                console.log("Programs Settings data", self.programSettings);
-            } catch (error) {
-                console.error("Error parsing JSON:", error);
-            }
+            console.log("Programs Settings data", data)
+            self.programs = data;
         });
     },
 
 });
 
+
 module.exports = ProgramSettings;
+

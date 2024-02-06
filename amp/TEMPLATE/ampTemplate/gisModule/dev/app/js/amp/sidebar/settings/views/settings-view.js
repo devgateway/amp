@@ -4,7 +4,7 @@ var $ = require('jquery');
 var BaseControlView = require('../../base-control/base-control-view');
 var Template = fs.readFileSync(__dirname + '/../templates/settings-template.html', 'utf8');
 const ProgramSettings = require('../../../services/program_settings')
-var programSettingsData = new ProgramSettings();
+var programsData = new ProgramSettings();
 
 
 module.exports = BaseControlView.extend({
@@ -37,24 +37,28 @@ module.exports = BaseControlView.extend({
   render: function() {
     var self = this;
     BaseControlView.prototype.render.apply(this);
-      console.log("Settings Data",programSettingsData)
-
-      var settings = programSettingsData.programSettings;
-
-      console.log("Settings",settings)
-      var listDefs = settings.listDefinitions;
-      console.log("Defs", listDefs)
-      if (listDefs)
+      console.log("Programs Data",programsData)
+      for (var key in programsData)
       {
-          self.settingsObject.name="Program Type";
-          self.settingsObject.id="program-setting";
-          self.settingsObject.selected="National Planning Objective";
-          self.settingsObject.options=[];
-          listDefs.forEach(function(listDef) {
-              self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
-          });
+          var programs = programsData[key];
 
+          console.log("Programs",programs)
+          var listDefs = programs.listDefinitions;
+          console.log("Defs", listDefs)
+          if (listDefs)
+          {
+              self.settingsObject.name="Program Type";
+              self.settingsObject.id="program-setting";
+              self.settingsObject.selected="National Planning Objective";
+              self.settingsObject.options=[];
+              listDefs.forEach(function(listDef) {
+                  self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
+              });
+
+          }
       }
+
+
       console.log(this.settingsObject)
 
     self.$('.content').html(this.template({title: this.title,settingsObject:this.settingsObject}));

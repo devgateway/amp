@@ -10,7 +10,6 @@ var programsData = new ProgramSettings();
 module.exports = BaseControlView.extend({
   id: 'tool-settings',
   title:  'Settings',
-  settingsObject:  {},
   iconClass:  'ampicon-settings',
   description:  '',
   selectedCurrency: null,
@@ -37,23 +36,10 @@ module.exports = BaseControlView.extend({
   render: function() {
     var self = this;
     BaseControlView.prototype.render.apply(this);
-      console.log("Programs Data",programsData)
-      var programs = programsData.programs;
-      console.log("Settings",programs)
-      if (programsData.programs)
-      {
-          self.settingsObject.name="Program Type";
-          self.settingsObject.id="program-setting";
-          self.settingsObject.selected="National Planning Objective";
-          self.settingsObject.options=[];
-          programsData.programs.forEach(function(lst) {
-              self.settingsObject.options.push({'id': lst.name, 'name': lst.name})
-          });
 
-      }
-      console.log(this.settingsObject)
+      console.log(programsData.settingsObject)
 
-    self.$('.content').html(this.template({title: this.title,settingsObject:this.settingsObject}));
+    self.$('.content').html(this.template({title: this.title,settingsObject:programsData.settingsObject}));
     // add content    
        
     this.app.data.settingsWidget.setElement(this.el.querySelector('#amp-settings'));

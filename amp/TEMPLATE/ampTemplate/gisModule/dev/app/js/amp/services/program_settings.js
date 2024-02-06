@@ -20,25 +20,22 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
         var self = this;
         this.settingsObject = {}
         $.ajax({
-            url: '/rest/gis/program-settings'
+            url: '/rest/filters/programs'
         }).done(function(data) {
             console.log("Programs Settings data", data)
-
-            // var programs = programsData.programs;
-            // console.log("Settings",programs)
-            if (data)
+            var listDefs = data.listDefinitions;
+            console.log("Defs", listDefs)
+            if (listDefs)
             {
                 self.settingsObject.name="Program Type";
                 self.settingsObject.id="program-setting";
-                self.settingsObject.selected="National Plan Objective";
+                self.settingsObject.selected="National Planning Objective";
                 self.settingsObject.options=[];
-                data.forEach(function(lst) {
-                    console.log(lst)
-                    self.settingsObject.options.push({'id': lst.name, 'name': lst.name})
+                listDefs.forEach(function(listDef) {
+                    self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
                 });
 
             }
-            // self.programs = data;
         });
     },
 

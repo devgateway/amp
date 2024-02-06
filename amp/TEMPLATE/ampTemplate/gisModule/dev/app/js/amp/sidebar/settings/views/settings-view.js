@@ -37,17 +37,20 @@ module.exports = BaseControlView.extend({
   render: function() {
     var self = this;
     BaseControlView.prototype.render.apply(this);
+      console.log("Settings Data",programSettingsData)
 
-      console.log("Settings",programSettingsData)
-      console.log("Settings",programSettingsData.programSettings)
-      console.log("Settings", programSettingsData.programSettings.listDefinitions)
-      if ( programSettingsData.programSettings.listDefinitions)
+      var settings = programSettingsData.programSettings;
+
+      console.log("Settings",settings)
+      var listDefs = settings.listDefinitions;
+      console.log("Defs", listDefs)
+      if (listDefs)
       {
           self.settingsObject.name="Program Type";
           self.settingsObject.id="program-setting";
           self.settingsObject.selected="National Planning Objective";
           self.settingsObject.options=[];
-          programSettingsData.programSettings.listDefinitions.forEach(function(listDef) {
+          listDefs.forEach(function(listDef) {
               self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
           });
 

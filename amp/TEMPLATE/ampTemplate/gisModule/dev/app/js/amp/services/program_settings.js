@@ -23,19 +23,19 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
             url: '/rest/filters/programs'
         }).done(function(data) {
             console.log("Programs Settings data", data)
-            var listDefs = data.listDefinitions;
-            console.log("Defs", listDefs)
-            if (listDefs)
-            {
-                self.settingsObject.name="Program Type";
-                self.settingsObject.id="program-setting";
-                self.settingsObject.selected="National Planning Objective";
-                self.settingsObject.options=[];
-                listDefs.forEach(function(listDef) {
-                    self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
-                });
-
-            }
+            // var listDefs = data.listDefinitions;
+            // console.log("Defs", listDefs)
+            // if (listDefs)
+            // {
+            //     self.settingsObject.name="Program Type";
+            //     self.settingsObject.id="program-setting";
+            //     self.settingsObject.selected="National Planning Objective";
+            //     self.settingsObject.options=[];
+            //     listDefs.forEach(function(listDef) {
+            //         self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
+            //     });
+            //
+            // }
         });
     },
 

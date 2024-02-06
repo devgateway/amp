@@ -87,6 +87,8 @@ public class AmpConfiguration {
         return PublicServices.buildOkResponseWithOriginHeaders(SettingsUtils.getGisSettings());
     }
 
+
+
     @OPTIONS
     @Path("/settings")
     @ApiOperation(

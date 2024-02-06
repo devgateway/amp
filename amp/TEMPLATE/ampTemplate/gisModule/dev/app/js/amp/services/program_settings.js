@@ -25,6 +25,7 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
             console.log("Programs Settings data", data)
             var listDefs = data.listDefinitions;
             console.log("Defs", listDefs)
+
             if (listDefs)
             {
                 self.settingsObject.name="Program Type";

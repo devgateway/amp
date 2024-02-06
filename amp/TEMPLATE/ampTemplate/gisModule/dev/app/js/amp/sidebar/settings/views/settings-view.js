@@ -4,7 +4,7 @@ var $ = require('jquery');
 var BaseControlView = require('../../base-control/base-control-view');
 var Template = fs.readFileSync(__dirname + '/../templates/settings-template.html', 'utf8');
 const ProgramSettings = require('../../../services/program_settings')
-var programSettings = new ProgramSettings();
+var programSettingsData = new ProgramSettings();
 
 
 module.exports = BaseControlView.extend({
@@ -21,14 +21,14 @@ module.exports = BaseControlView.extend({
 
   initialize: function(options) {
     var self = this;
-      console.log("Settings",programSettings)
-      if (programSettings.listDefinitions)
+      console.log("Settings",programSettingsData.programSettings)
+      if (programSettingsData.programSettings.listDefinitions)
     {
         self.settingsObject.name="Program Type";
         self.settingsObject.id="program-setting";
         self.settingsObject.selected="National Planning Objective";
         self.settingsObject.options=[];
-        programSettings.listDefinitions.forEach(function(listDef) {
+        programSettingsData.programSettings.listDefinitions.forEach(function(listDef) {
             self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
         });
 

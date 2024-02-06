@@ -1639,25 +1639,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 for (AmpActivityVersion ampActivityVersion : activityversions) {
                     deleteFullActivityContent(ampActivityVersion, session);
                     // Remove associations with AmpCategoryValue
-                    Set<AmpCategoryValue> categories = ampActivityVersion.getCategories();
-//
-                    System.out.println(categories);
-//                    ampActivityVersion.getCategories().clear();
-//                    ampActivityVersion.getIndicators().clear();
-//                    ampActivityVersion.getTeam().getTeamLead().getDesktopTabSelections().clear();
-//                    ampActivityVersion.getTeam().getTeamLead().getReports().clear();
-                    ampActivityVersion.setCategories(null);
-                    ampActivityVersion.setTeam(null);
-                    ampActivityVersion.setApprovedBy(null);
-                    ampActivityVersion.setActivityCreator(null);
-                    ampActivityVersion.setModifiedBy(null);
-                    System.out.println(categories);
+                    ampActivityVersion.getCategories().clear();
 
                     session.delete(ampActivityVersion);
                 }
             } else {
                 AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
                 deleteFullActivityContent(ampAct, session);
+                // Remove associations with AmpCategoryValue
+                ampAct.getCategories().clear();
+
                 session.delete(ampAct);
             }
             session.delete(ampActivityGroup);

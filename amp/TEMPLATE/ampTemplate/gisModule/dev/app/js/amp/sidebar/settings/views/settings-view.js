@@ -38,27 +38,21 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.render.apply(this);
       console.log("Programs Data",programsData)
-      for (var key in programsData)
+      var programs = JSON.parse(programsData.programs);
+      console.log("Settings",programs)
+      var listDefs = programs.listDefinitions;
+      console.log("Defs", listDefs)
+      if (listDefs)
       {
-          var programs = programsData[key];
+          self.settingsObject.name="Program Type";
+          self.settingsObject.id="program-setting";
+          self.settingsObject.selected="National Planning Objective";
+          self.settingsObject.options=[];
+          listDefs.forEach(function(listDef) {
+              self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
+          });
 
-          console.log("Programs",programs)
-          var listDefs = programs.listDefinitions;
-          console.log("Defs", listDefs)
-          if (listDefs)
-          {
-              self.settingsObject.name="Program Type";
-              self.settingsObject.id="program-setting";
-              self.settingsObject.selected="National Planning Objective";
-              self.settingsObject.options=[];
-              listDefs.forEach(function(listDef) {
-                  self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
-              });
-
-          }
       }
-
-
       console.log(this.settingsObject)
 
     self.$('.content').html(this.template({title: this.title,settingsObject:this.settingsObject}));

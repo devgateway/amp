@@ -16,7 +16,7 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
         }).done(function(data) {
             // Parse the data as JSON
             try {
-                self.programSettings = JSON.parse(data);
+                self.programSettings = JSON.stringify(data);
                 console.log("Programs Settings data", self.programSettings);
             } catch (error) {
                 console.error("Error parsing JSON:", error);

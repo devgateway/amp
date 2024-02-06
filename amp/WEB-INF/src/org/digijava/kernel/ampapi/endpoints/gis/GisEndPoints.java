@@ -47,6 +47,7 @@ import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -92,6 +93,15 @@ public class GisEndPoints {
     @ApiOperation("Get available filters")
     public List<AvailableMethod> getAvailableFilters() {
         return EndpointUtils.getAvailableMethods(GisEndPoints.class.getName());
+    }
+
+
+    @GET
+    @Path(("program-settings"))
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Get available filters")
+    public List<AmpActivityProgramSettings> getProgramSettings() {
+        return EndpointUtils.getProgramSettings();
     }
 
     @POST

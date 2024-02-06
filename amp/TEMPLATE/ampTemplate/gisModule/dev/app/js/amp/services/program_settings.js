@@ -20,7 +20,7 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
         var self = this;
         this.programs = {}
         $.ajax({
-            url: '/rest/filters/programs'
+            url: '/rest/gis/program-settings'
         }).done(function(data) {
             console.log("Programs Settings data", data)
             self.programs = data;

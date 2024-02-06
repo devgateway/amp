@@ -21,8 +21,10 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -34,6 +36,7 @@ import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotFoundException;
@@ -236,6 +239,15 @@ public class EndpointUtils {
 
     public static List<AvailableMethod> getAvailableMethods(String className) {
         return getAvailableMethods(className, false);
+    }
+
+
+    public static List<AmpActivityProgramSettings> getProgramSettings() {
+        Session
+        session = PersistenceManager.getSession();
+        String qryStr = "select f from " + AmpActivityProgramSettings.class.getName() + " f";
+        Query<AmpActivityProgramSettings> query = session.createQuery(qryStr,AmpActivityProgramSettings.class);
+        return query.list();
     }
 
     public static String getEndpointMethod(Method method) {

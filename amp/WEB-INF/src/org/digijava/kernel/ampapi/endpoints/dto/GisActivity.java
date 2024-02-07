@@ -38,6 +38,17 @@ public class GisActivity {
     
     @JsonProperty(ColumnConstants.PRIMARY_SECTOR)
     private String primarySector;
+
+    public String getPrograms() {
+        return programs;
+    }
+
+    public void setPrograms(String programs) {
+        this.programs = programs;
+    }
+
+    @JsonProperty("Programs")
+    private String programs;
     
     @JsonProperty(MeasureConstants.ACTUAL_COMMITMENTS)
     private Double actualCommitments;
@@ -56,6 +67,7 @@ public class GisActivity {
     
     @JsonProperty(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS)
     private Double triangularSSCCommitments;
+
 
     @ApiModelProperty("explains why activity was included")
     private Map<String, Object> matchesFilters;

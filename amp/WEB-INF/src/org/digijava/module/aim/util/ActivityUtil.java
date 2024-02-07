@@ -2103,4 +2103,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return null;
     }
+    public static AmpTheme getAmpProgram(Long id)
+    {
+        try
+        {
+            return PersistenceManager.getRequestDBSession().load(AmpTheme.class, id);
+        }
+        catch (Exception ex) {
+            logger.error("Error during program fetch",ex);
+        }
+        return null;
+    }
 }

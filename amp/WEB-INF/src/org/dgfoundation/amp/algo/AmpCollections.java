@@ -105,8 +105,7 @@ public class AmpCollections {
      * @return
      */
     public static<K> LinkedHashSet<K> union(Collection<K> s1, Collection<K> s2) {
-        LinkedHashSet<K> res = new LinkedHashSet<>();
-        res.addAll(s1);
+        LinkedHashSet<K> res = new LinkedHashSet<>(s1);
         for(K k:s2) {
             if (!res.contains(k))
                 res.add(k);

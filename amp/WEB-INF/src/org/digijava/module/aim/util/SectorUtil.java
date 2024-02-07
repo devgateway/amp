@@ -368,9 +368,9 @@ public class SectorUtil {
 
             qry = session.createQuery(queryString);
             qry.setParameter("themeIndicatorId", indicatorId, LongType.INSTANCE);
-            qry.setLong("sectorId", sectorId);
+            qry.setParameter("sectorId", sectorId, LongType.INSTANCE);
             indSectors = qry.list();
-            if (indSectors != null && indSectors.size() > 0) {
+            if (indSectors != null && !indSectors.isEmpty()) {
                 exist = true;
             }
 
@@ -386,7 +386,7 @@ public class SectorUtil {
     {
         try
         {
-            AmpSector s = (AmpSector) PersistenceManager.getRequestDBSession().load(AmpSector.class, id);
+            AmpSector s = PersistenceManager.getRequestDBSession().load(AmpSector.class, id);
             //if ((s.getDeleted()) != null && (s.getDeleted()))
                 return s;
             //return null; // deleted

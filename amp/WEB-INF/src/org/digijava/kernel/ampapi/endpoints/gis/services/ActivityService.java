@@ -17,10 +17,13 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 import java.util.*;
 
+import static java.lang.Math.abs;
 import static org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants.UNDEFINED_NAME;
 
 public class ActivityService {
@@ -71,12 +74,30 @@ public class ActivityService {
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8));
 
         OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{
             add(ColumnConstants.AMP_ID);
             add(ColumnConstants.DONOR_AGENCY);
             add(ColumnConstants.EXECUTING_AGENCY);
             add(ColumnConstants.PRIMARY_SECTOR);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7);
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8);
         }});
 
         //for now we are going to return the donor_id as matchesfilters
@@ -115,6 +136,7 @@ public class ActivityService {
         for (ReportArea reportArea : ll) {
             GisActivity activity = new GisActivity();
             Map<String, Object> matchesFilters = new HashMap<>();
+            List<Map<String, Object>> programs= new ArrayList<>();
             Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
             Set<ReportOutputColumn> col = row.keySet();
             for (ReportOutputColumn reportOutputColumn : col) {
@@ -135,6 +157,9 @@ public class ActivityService {
                         case ColumnConstants.PRIMARY_SECTOR:
                             activity.setPrimarySector(value);
                             break;
+//                        case ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0:
+//                            activity.setProgram(value);
+//                            break;
                         case MeasureConstants.ACTUAL_COMMITMENTS:
                             activity.setActualCommitments(new Double(value));
                             break;
@@ -179,15 +204,45 @@ public class ActivityService {
 
                         }
                         matchesFilters.put(columnName, sectors);
+                    } else if (columnName.contains("National Planning Objectives")) {
+                        getPrograms(programs,columnName,ids);
+
                     } else {
                         matchesFilters.put(columnName, ids);
                     }
                 }
             }
+            matchesFilters.put("Programs",programs);
             activity.setMatchesFilters(matchesFilters);
             activities.add(activity);
         }
         return new ActivityList(count, activities);
+    }
+
+    private static List<Map<String, Object>> getPrograms(List<Map<String, Object>> programs,String columnName,Set<Long> ids){
+        for (Long id: ids){
+            if (columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0)||
+            columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1)||
+             columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2)||
+             columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3)||
+             columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4)||
+            columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5)||
+            columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6)||
+             columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7)||
+             columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8)) {
+                Map<String, Object> value = new HashMap<>();
+                AmpTheme theme = ActivityUtil.getAmpProgram(abs(id));
+                if (theme!=null) {
+                    value.put("Level", theme.getIndlevel());
+                    value.put("Code", theme.getThemeCode());
+                    value.put("Name", theme.getName());
+                    programs.add(value);
+                }
+            }
+        }
+        return programs;
+
+
     }
 
     /**

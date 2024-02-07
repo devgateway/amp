@@ -7,12 +7,12 @@
     </option>
   <%}); %>
   </select>
-  <label class="control-label"><%= settingsObject.name %></label>
-  <select class="form-control" id="<%= settingsObject.id %>">
-    <% _.each(settingsObject.options, function(option){ %>
-    <option value="<%= option.id %>"  <% if(settingsObject.selected == option.id){ %> selected <% } %> >
-    <%= option.name %>
-    </option>
-    <%}); %>
-  </select>
+<!--  <label class="control-label"><%= settingsObject.name %></label>-->
+<!--  <select class="form-control" id="<%= settingsObject.id %>">-->
+<!--    <% _.each(settingsObject.options, function(option){ %>-->
+<!--    <option value="<%= option.id %>"  <% if(settingsObject.selected == option.id){ %> selected <% } %> >-->
+<!--    <%= option.name %>-->
+<!--    </option>-->
+<!--    <%}); %>-->
+<!--  </select>-->
 </div>

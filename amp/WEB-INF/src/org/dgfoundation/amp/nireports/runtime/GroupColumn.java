@@ -40,7 +40,7 @@ public class GroupColumn extends Column {
         
         super(name, label, parent, splitCell);
         if (subColumns != null) {
-            subColumns.forEach(z -> NiUtils.failIf(z.getParent() != this, String.format("trying to add a foreing child %s to %s", z.getHierName(), this.getHierName())));
+            subColumns.forEach(z -> NiUtils.failIf(z.getParent() != this, String.format("trying to add a foreign child %s to %s", z.getHierName(), this.getHierName())));
         }
         this.mutable = true;
         this.subColumns = subColumns == null ? new ArrayList<>() : new ArrayList<>(subColumns);

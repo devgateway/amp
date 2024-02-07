@@ -43,7 +43,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
         this.runResult = runResult;
         this.leafColumns = runResult.headers.leafColumns;
         this.spec = spec;
-        this.reportAreaSupplier = () -> new ReportAreaImpl();
+        this.reportAreaSupplier = ReportAreaImpl::new;
         this.cellFormatter = cellFormatter;
         buildHeaders();
     }

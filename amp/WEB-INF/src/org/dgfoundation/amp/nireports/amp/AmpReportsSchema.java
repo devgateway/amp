@@ -1043,7 +1043,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             Map<Long, String> dbColumns = SQLUtils.collectKeyValue(conn, "SELECT columnid, columnname FROM amp_columns");
             Set<String> columnNamestoBeMigrated = dbColumns.values().stream()
                     .filter(z -> this.measures.containsKey(z) && !this.columns.containsKey(z)).collect(Collectors.toSet());
-            if (columnNamestoBeMigrated.size() > 0) {
+            if (!columnNamestoBeMigrated.isEmpty()) {
                 List<String> columnNames = Arrays.asList("amp_report_id", "measureid", "order_id");
                 String columnNamesJoined = SQLUtils.generateCSV(columnNamestoBeMigrated.stream().map(z -> String.format("'%s'", z)).collect(Collectors.toList()));
                 String query = String.format("SELECT arc.amp_report_id, am.measureid, counts.order_id FROM amp_report_column arc " +
@@ -1131,11 +1131,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
             Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).filter(z -> !notSerializedMeasures.contains(z)).collect(Collectors.toSet());
             List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());
-            if (values.size() > 0) {
+            if (!values.isEmpty()) {
                 SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
                 MeasuresVisibility.resetMeasuresList();
             }
-            return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
+            return toBeAdded.stream().map(Object::toString).collect(Collectors.toSet());
         });
     }
 

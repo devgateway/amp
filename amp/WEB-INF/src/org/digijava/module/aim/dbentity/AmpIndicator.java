@@ -73,6 +73,7 @@ public class AmpIndicator implements Serializable, Identifiable
     @Interchangeable(fieldTitle="Risk")
     private AmpIndicatorRiskRatings risk;
 
+    private Set<AmpIndicatorLocation> indicatorLocation;
 
     public Long getIndicatorId() {
         return indicatorId;
@@ -211,5 +212,13 @@ public class AmpIndicator implements Serializable, Identifiable
                 .filter(AmpIndicatorGlobalValue::isTargetValue)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Set<AmpIndicatorLocation> getIndicatorLocation() {
+        return indicatorLocation;
+    }
+
+    public void setIndicatorLocation(Set<AmpIndicatorLocation> indicatorLocation) {
+        this.indicatorLocation = indicatorLocation;
     }
 }

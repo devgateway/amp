@@ -1071,8 +1071,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         SQLUtils.executeQuery(con, deleteActivityTeam );
 
-//        String deleteActivity = "DELETE FROM amp_activity_version WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-//        SQLUtils.executeQuery(con, deleteActivity );
+//        String deleteActivityLocation = "DELETE FROM amp_activity_location WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+//        SQLUtils.executeQuery(con, deleteActivityLocation );
 
     }
     
@@ -1640,7 +1640,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     deleteFullActivityContent(ampActivityVersion, session);
                     // Remove associations with AmpCategoryValue
                     ampActivityVersion.getCategories().clear();
-
                     session.delete(ampActivityVersion);
                 }
             } else {
@@ -1662,7 +1661,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Long ampActId = ampAct.getAmpActivityId();
         //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
         ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
-//        ActivityUtil.deleteActivityContent(ampAct,session);
         }
     
     public static void  deleteAllActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

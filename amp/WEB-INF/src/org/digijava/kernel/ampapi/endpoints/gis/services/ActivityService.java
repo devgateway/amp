@@ -136,7 +136,7 @@ public class ActivityService {
         for (ReportArea reportArea : ll) {
             GisActivity activity = new GisActivity();
             Map<String, Object> matchesFilters = new HashMap<>();
-            List<Map<String, Object>> programs= new ArrayList<>();
+            Set<Map<String, Object>> programs= new LinkedHashSet<>();
             Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
             Set<ReportOutputColumn> col = row.keySet();
             for (ReportOutputColumn reportOutputColumn : col) {
@@ -219,7 +219,7 @@ public class ActivityService {
         return new ActivityList(count, activities);
     }
 
-    private static List<Map<String, Object>> getPrograms(List<Map<String, Object>> programs,String columnName,Set<Long> ids){
+    private static Set<Map<String, Object>> getPrograms(Set<Map<String, Object>> programs,String columnName,Set<Long> ids){
         for (Long id: ids){
             if (columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0)||
             columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1)||
@@ -233,9 +233,9 @@ public class ActivityService {
                 Map<String, Object> value = new HashMap<>();
                 AmpTheme theme = ActivityUtil.getAmpProgram(abs(id));
                 if (theme!=null) {
-                    value.put("Level", theme.getIndlevel());
-                    value.put("Code", theme.getThemeCode());
-                    value.put("Name", theme.getName());
+                    value.put("level", theme.getIndlevel());
+                    value.put("code", theme.getThemeCode());
+                    value.put("name", theme.getName());
                     programs.add(value);
                 }
             }

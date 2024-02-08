@@ -130,9 +130,7 @@ public class ActivityService {
             ll = report.reportContents.getChildren();
         }
         Integer count = report.reportContents.getChildren().size();
-
         String undefinedName = TranslatorWorker.translateText(UNDEFINED_NAME);
-
         for (ReportArea reportArea : ll) {
             GisActivity activity = new GisActivity();
             Map<String, Object> matchesFilters = new HashMap<>();

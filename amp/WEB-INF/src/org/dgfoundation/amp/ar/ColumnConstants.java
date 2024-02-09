@@ -333,7 +333,6 @@ public class ColumnConstants {
     public static final String REGIONAL_OBSERVATIONS_ACTORS = "Regional Observations Actors";
     public static final String REGIONAL_OBSERVATIONS_DATE = "Regional Observations Date";
     public static final String REGIONAL_OBSERVATIONS_MEASURES = "Regional Observations Measures Taken";
-
     public static final String REPORTING_SYSTEM = "Reporting System";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";
     public static final String RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION = "Responsible Organization Department/Division";

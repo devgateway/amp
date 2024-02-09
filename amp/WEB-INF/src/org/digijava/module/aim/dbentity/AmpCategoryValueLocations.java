@@ -46,6 +46,8 @@ public class AmpCategoryValueLocations implements Identifiable,
 
     private AmpTemplatesVisibility template;
 
+    private Set<AmpIndicatorLocation> indicatorLocations;
+
     public AmpTemplatesVisibility getTemplate() {
         return template;
     }
@@ -309,5 +311,11 @@ public class AmpCategoryValueLocations implements Identifiable,
         return Objects.equals(id, that.id);
     }
 
+    public Set<AmpIndicatorLocation> getIndicatorLocations() {
+        return indicatorLocations;
+    }
 
+    public void setIndicatorLocations(Set<AmpIndicatorLocation> indicatorLocations) {
+        this.indicatorLocations = indicatorLocations;
+    }
 }

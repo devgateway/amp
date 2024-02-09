@@ -7,6 +7,8 @@ public class AmpIndicatorLocation implements Serializable {
     Long ampIndLocId;
     AmpIndicator indicator;
 
+    AmpCategoryValueLocations location;
+
     public AmpIndicatorLocation() {
     }
 
@@ -24,5 +26,13 @@ public class AmpIndicatorLocation implements Serializable {
 
     public void setIndicator(AmpIndicator indicator) {
         this.indicator = indicator;
+    }
+
+    public AmpCategoryValueLocations getLocation() {
+        return location;
+    }
+
+    public void setLocation(AmpCategoryValueLocations location) {
+        this.location = location;
     }
 }

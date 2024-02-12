@@ -150,8 +150,6 @@ public class IndicatorManagerService {
             indicator.setIndicatorsCategory(categoryValue);
         }
 
-
-
         session.save(indicator);
 
         if (program != null) {

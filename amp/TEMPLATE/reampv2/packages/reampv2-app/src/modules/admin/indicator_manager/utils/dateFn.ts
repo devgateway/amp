@@ -36,7 +36,8 @@ export class DateUtil {
 
         switch(dateFormat) {
             case 'dd/MM/yyyy':
-                date = DateUtil.backendDateToJavascriptDate(dateString);
+                const splitDate = dateString.split('/');
+                date = new Date(`${splitDate[2]}-${splitDate[1]}-${splitDate[0]}`).toISOString();
                 break;
             case 'yyyy-MM-dd':
                 date = dateString;

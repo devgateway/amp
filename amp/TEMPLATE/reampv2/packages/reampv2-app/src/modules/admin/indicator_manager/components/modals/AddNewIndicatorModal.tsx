@@ -53,6 +53,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     return DateUtil.dateToString(date, settingsReducer['default-date-format']);
   }
 
+  const convertDateToISO = (date?: string) => {
+    if (!date) {
+      return '';
+    }
+    return DateUtil.toISO8601(date, settingsReducer['default-date-format']);
+  };
+
   const handleClose = () => setShow(false);
   const createIndicatorState = useSelector((state: any) => state.createIndicatorReducer);
 
@@ -128,13 +135,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
         if (programScheme.startDate) {
           formikRef.current?.setFieldValue("base.originalValueDate", "");
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(programScheme.startDate || ''));
           setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef.current?.setFieldValue("target.originalValueDate", "");
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(programScheme.endDate || ''));
           setTargetOriginalValueDateDisabled(true);
         }
       }
@@ -196,12 +203,15 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       return;
     }
 
-    MySwal.fire({
-      title: 'Error',
-      text: createIndicatorState.loading ? 'Error creating indicator' : createIndicatorState.error,
-      icon: 'error',
-      confirmButtonText: 'Ok',
-    });
+    if (createIndicatorState.error && !createIndicatorState.loading && !createIndicatorState.createdIndicator) {
+      MySwal.fire({
+        title: 'Error',
+        text: createIndicatorState.loading ? 'Error creating indicator' : createIndicatorState.error,
+        icon: 'error',
+        confirmButtonText: 'Ok',
+      });
+    }
+
   }, [createIndicatorState])
 
   const initialValues: IndicatorFormValues = {

@@ -88,6 +88,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
   const [targetOriginalValueDateDisabled, setTargetOriginalValueDateDisabled] = useState(false);
 
+  const convertDateToISO = (date?: string) => {
+    if (!date) {
+      return '';
+    }
+    return DateUtil.toISO8601(date, globalSettings['default-date-format']);
+  };
 
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
@@ -142,12 +148,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         setProgramFieldVisible(true);
 
         if (programScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(programScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(programScheme.startDate));
           setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(programScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(programScheme.endDate));
           setTargetOriginalValueDateDisabled(true);
         }
       }
@@ -217,12 +223,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         })
 
         if (foundProgramScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(foundProgramScheme.startDate || ''));
           setBaseOriginalValueDateDisabled(true);
         }
 
         if (foundProgramScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(foundProgramScheme.endDate || ''));
           setTargetOriginalValueDateDisabled(true);
         }
       }
@@ -297,18 +303,18 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     sectors: indicator?.sectors || [],
     programId: '',
     ascending: indicator?.ascending || false,
-    creationDate: DateUtil.toISO8601(indicator?.creationDate || '', globalSettings['default-date-format']),
+    creationDate: indicator?.creationDate ? convertDateToISO(indicator?.creationDate) : '',
     base: {
       originalValue: indicator?.base?.originalValue,
-      originalValueDate: indicator?.base?.originalValueDate,
+      originalValueDate: indicator?.base?.originalValueDate ? convertDateToISO(indicator?.base?.originalValueDate) : '',
       revisedValue: indicator?.base?.revisedValue,
-      revisedValueDate: indicator?.base?.revisedValueDate,
+      revisedValueDate: indicator?.base?.revisedValueDate ? convertDateToISO(indicator?.base?.revisedValueDate) : '',
     },
     target: {
       originalValue: indicator?.target?.originalValue,
-      originalValueDate: indicator?.target?.originalValueDate,
+      originalValueDate: indicator?.target?.originalValueDate ? convertDateToISO(indicator?.target?.originalValueDate) : '',
       revisedValue: indicator?.target?.revisedValue,
-      revisedValueDate: indicator?.target?.revisedValueDate,
+      revisedValueDate: indicator?.target?.revisedValueDate ? convertDateToISO(indicator?.target?.revisedValueDate) : '',
     },
     indicatorsCategory: indicator?.indicatorsCategory?.toString() || ''
   };

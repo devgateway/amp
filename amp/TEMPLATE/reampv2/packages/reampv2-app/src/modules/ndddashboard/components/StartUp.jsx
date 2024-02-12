@@ -17,7 +17,15 @@ export const NDDTranslationContext = React.createContext({ translations: default
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
 const Startup = (props) => {
-  const { translationPending, translations, _fetchTranslations, programConfigurationPending, fmReducerPending, sectorClassificationPending, settingsPending } = props;
+  const {
+    translationPending,
+    translations,
+    _fetchTranslations,
+    programConfigurationPending,
+    fmReducerPending,
+    sectorClassificationPending,
+    settingsPending
+  } = props;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,7 +52,7 @@ const Startup = (props) => {
 const mapStateToProps = state => ({
   translationPending: state.translationsReducer.pending,
   translations: state.translationsReducer.translations,
-  programConfigurationPending: state.programConfigurationReducer.pending,
+  programConfigurationPending: state.programConfigurationReducer.loading,
   fmReducerPending: state.fetchFmReducer.loading,
   sectorClassificationPending: state.fetchSectorClassificationReducer.loading,
   settingsPending: state.fetchSettingsReducer.loading,

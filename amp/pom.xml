@@ -916,10 +916,7 @@
             <artifactId>wcf</artifactId>
             <version>1.8.0-070305</version>
         </dependency>
-        <!-- <dependency> <groupId>org.wicketstuff</groupId> <artifactId>tinymce</artifactId>
-            <version>${wicketVersion}</version> </dependency> -->
-        <!-- <dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId>
-            <version>1.12.6</version> <scope>provided</scope> </dependency> -->
+
         <dependency>
             <groupId>com.mockrunner</groupId>
             <artifactId>mockrunner</artifactId>
@@ -1179,22 +1176,13 @@
             <version>2.2.9</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>io.swagger</groupId>-->
-<!--            <artifactId>swagger-annotations</artifactId>-->
-<!--            <version>${swagger.version}</version>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>2.2.9</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>io.swagger</groupId>-->
-<!--            <artifactId>swagger-jersey-jaxrs</artifactId>-->
-<!--            <version>${swagger.version}</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jersey2-jaxrs</artifactId>
@@ -1547,15 +1535,6 @@
                                             <value>${antilock}</value>
                                         </parameter>
 
-<!--                                        <jdbc.user>${jdbc.user}</jdbc.user>-->
-<!--                                        <jdbc.password>${jdbc.password}</jdbc.password>-->
-<!--                                        <jdbc.db>${jdbc.db}</jdbc.db>-->
-<!--                                        <jdbc.host>${jdbc.host}</jdbc.host>-->
-<!--                                        <serverName>${serverName}</serverName>-->
-<!--                                        <jdbc.port>${jdbc.port}</jdbc.port>-->
-<!--                                        <dbName>${dbName}</dbName>-->
-<!--                                        <jdbc.driverClassName>${jdbc.driverClassName}</jdbc.driverClassName>-->
-<!--                                        <antilock>${antilock}</antilock>-->
                                     </parameters>
                                 </transformationSet>
                             </transformationSets>
@@ -1586,26 +1565,6 @@
                 </executions>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>exec-maven-plugin</artifactId>-->
-<!--                <version>2.2</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>fail-if-jdbc-db-missing</id>-->
-<!--                        <phase>validate</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>exec</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <executable>echo</executable>-->
-<!--                            <arguments>-->
-<!--                                <argument>${jdbc.db}</argument>-->
-<!--                            </arguments>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
 
             <!-- Maven Properties Plugin to create selected.properties file -->
 

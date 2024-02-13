@@ -6,7 +6,6 @@ import { DefaultTranslations, ProgramConfigChild } from '../../types';
 import { Dispatch, bindActionCreators } from 'redux';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import styles from './css/Styles.module.css';
-import { findProgramConfig, extractLv1Children } from '../../utils/data';
 import {fetchIndicatorsByProgram} from "../../reducers/fetchIndicatorsByProgramReducer";
 import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
 

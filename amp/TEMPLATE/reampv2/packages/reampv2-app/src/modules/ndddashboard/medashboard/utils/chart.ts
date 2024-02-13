@@ -69,6 +69,9 @@ class ChartUtils {
 
     public static computeAggregateValues = (data: YearValues []) => {
         return data.reduce((acc, curr) => {
+            if (!curr.actualValues || curr.actualValues.length === 0) {
+                acc.actualValue += curr.baseValue;
+            }
             acc.actualValue += ChartUtils.getActualValueForCurrentYear(curr.actualValues);
             acc.targetValue += curr.targetValue;
             acc.baseValue += curr.baseValue;

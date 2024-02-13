@@ -55,14 +55,14 @@ const programProgressReportSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchProgramReport.fulfilled, (state, action) => {
-            state.data = null;
             state.loading = false;
             state.data = action.payload;
+            state.error = null;
         });
         builder.addCase(fetchProgramReport.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
-
+            state.data = null;
         });
     }
 });

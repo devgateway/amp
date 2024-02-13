@@ -30,9 +30,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     const programConfigurationReducer = useSelector((state: any) => state.programConfigurationReducer);
     const programConfiguration: ProgramConfig[] = programConfigurationReducer.data;
 
-    let progressValue = 0;
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [report, setReport] = React.useState<YearValues[] | null>( programReportReducer.data);
+    const[progressValue, setProgressValue] = React.useState<number>(0);
     const [chartData, setChartData] = React.useState<DataType[] | null>(null);
     const [selectedConfiguration, setSelectedConfiguration] = React.useState<number | null>(null);
     const [level1Children, setLevel1Children] = React.useState<ProgramConfigChild[]>([]);
@@ -68,27 +66,28 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);
 
+
     useEffect(() => {
-        if (report) {
-            const aggregates = ChartUtils.computeAggregateValues(report);
-            progressValue = ChartUtils.generateGaugeValue({
+        setChartData(null);
+        setProgressValue(0)
+        if (programReportReducer?.data?.length > 0) {
+            const generateReport = ChartUtils.generateValuesDataset({
+                data: programReportReducer.data,
+                translations
+            });
+
+            setChartData(generateReport);
+
+            const aggregates = ChartUtils.computeAggregateValues(programReportReducer.data);
+            const calculatedProgressValue = ChartUtils.generateGaugeValue({
                 baseValue: aggregates.baseValue,
                 targetValue: aggregates.targetValue,
                 actualValue: aggregates.actualValue
             });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [level1Child]);
 
-    useEffect(() => {
-        if (programReportReducer.data && !programReportReducer.loading && !programReportReducer.error) {
-            const generateReport = ChartUtils.generateValuesDataset({
-                data: report,
-                translations
-            });
-            setChartData(generateReport);
+            setProgressValue(calculatedProgressValue);
         }
-    }, [programReportReducer]);
+    }, [level1Child, programReportReducer.data]);
 
     return (
         <div>
@@ -168,17 +167,17 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         </Col>
                     </Row>
 
-                    { (!programReportReducer.loading) &&
+                    { (!programReportReducer.loading) ?
                       <Row style={{
                           paddingLeft: -10
                       }}>
 
                         <Col md={6} style={{
                         }}>
+                            {console.log("progress value", progressValue)}
                           <Gauge innerValue={progressValue} suffix={'%'} />
                         </Col>
                         <Col md={6}>
-
                           <div style={{
                               height: 250
                           }}>
@@ -191,7 +190,9 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                           </div>
                         </Col>
                       </Row>
-                    }
+                    : (
+                            <div className="loading"></div>
+                        )}
                 </div>
             </Col>
         </div>

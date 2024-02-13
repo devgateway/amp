@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BarDatum, BarLegendProps, LabelFormatter, ResponsiveBar} from '@nivo/bar';
 import { ComponentProps, MarginProps } from '../../../types';
 import ChartUtils from "../../../utils/chart";
@@ -34,7 +34,14 @@ const BarChart: React.FC<BarChartProps> = (props) => {
     labelFormat,
     barComponent
   } = props;
-  const [displayDataSet, setDisplayDataSet] = React.useState<DataType[]>(data ? data : []);
+
+  const [displayDataSet, setDisplayDataSet] = React.useState<DataType[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setDisplayDataSet(data);
+    }
+  }, [data]);
 
   return (
     <div style={{
@@ -138,4 +145,4 @@ const BarChart: React.FC<BarChartProps> = (props) => {
   )
 }
 
-export default React.memo(BarChart);
+export default BarChart;

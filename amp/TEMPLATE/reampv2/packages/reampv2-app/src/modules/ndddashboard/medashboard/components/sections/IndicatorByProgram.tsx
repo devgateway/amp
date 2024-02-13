@@ -31,6 +31,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     const programConfiguration: ProgramConfig[] = programConfigurationReducer.data;
 
     const[progressValue, setProgressValue] = React.useState<number>(0);
+    const [progressValueLoading, setProgressValueLoading] = React.useState<boolean>(false)
     const [chartData, setChartData] = React.useState<DataType[] | null>(null);
     const [selectedConfiguration, setSelectedConfiguration] = React.useState<number | null>(null);
     const [level1Children, setLevel1Children] = React.useState<ProgramConfigChild[]>([]);
@@ -69,8 +70,8 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
 
     useEffect(() => {
         setChartData(null);
-        setProgressValue(0)
         if (programReportReducer?.data?.length > 0) {
+            setProgressValueLoading(true);
             const generateReport = ChartUtils.generateValuesDataset({
                 data: programReportReducer.data,
                 translations
@@ -79,6 +80,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
             setChartData(generateReport);
 
             const aggregates = ChartUtils.computeAggregateValues(programReportReducer.data);
+
             const calculatedProgressValue = ChartUtils.generateGaugeValue({
                 baseValue: aggregates.baseValue,
                 targetValue: aggregates.targetValue,
@@ -86,6 +88,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
             });
 
             setProgressValue(calculatedProgressValue);
+            setProgressValueLoading(false);
         }
     }, [level1Child, programReportReducer.data]);
 
@@ -167,15 +170,15 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         </Col>
                     </Row>
 
-                    { (!programReportReducer.loading) ?
+                    { (!programReportReducer.loading && programReportReducer.data) ?
                       <Row style={{
                           paddingLeft: -10
                       }}>
-
                         <Col md={6} style={{
                         }}>
-                            {console.log("progress value", progressValue)}
-                          <Gauge innerValue={progressValue} suffix={'%'} />
+                            {!progressValueLoading && (
+                                <Gauge innerValue={progressValue} suffix={'%'} />
+                            ) }
                         </Col>
                         <Col md={6}>
                           <div style={{
@@ -199,4 +202,4 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     )
 }
 
-export default React.memo(IndicatorByProgram);
+export default IndicatorByProgram;

@@ -1,5 +1,5 @@
 /** eslint-disable */
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ResponsiveRadialBar } from "@nivo/radial-bar";
 import { MarginProps } from "../../../types";
 
@@ -45,9 +45,8 @@ const CenteredMetric: React.FC<CenterTextProps> = (props) => {
 
 const Gauge: React.FC<GaugeProps> = (props) => {
   const { height, innerValue, suffix, margin } = props;
-  const [dataValues, setDataValues] = useState<Array<any>>([])
+  // const [dataValues, setDataValues] = useState<Array<any>>([])
 
-  useLayoutEffect(() => {
     const initialDataWithColours = Array.from({ length: 100 }, (_, i) => {
       if (i > Number(innerValue)) return { x: `grey${i}`, y: 0.9, color: "#cdcdcd" };
       let current = i + 1;
@@ -58,14 +57,16 @@ const Gauge: React.FC<GaugeProps> = (props) => {
       return { x: colorData.x + i, y: 0.9, color: colorData.color };
     })
 
+    const dataValues: Array<any> = []
     initialDataWithColours.forEach((item, i) => {
-      setDataValues((prev) => [...prev, item])
+      // setDataValues((prev) => [...prev, item])
+      dataValues.push(item)
 
       if (i < initialDataWithColours.length - 1) {
-        setDataValues((prev) => [...prev, { x: `white${i}`, y: 0.1, color: "#ffffff" }])
+        // setDataValues((prev) => [...prev, { x: `white${i}`, y: 0.1, color: "#ffffff" }])
+        dataValues.push({ x: `white${i}`, y: 0.1, color: "#ffffff" })
       }
     })
-  }, [innerValue]);
 
   const data = [
     {

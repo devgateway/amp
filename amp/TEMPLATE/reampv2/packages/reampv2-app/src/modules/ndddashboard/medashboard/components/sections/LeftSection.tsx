@@ -99,4 +99,4 @@ const mapStateToProps = (state: any) => ({
 });
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(LeftSection));
+export default connect(mapStateToProps, mapDispatchToProps)(LeftSection);

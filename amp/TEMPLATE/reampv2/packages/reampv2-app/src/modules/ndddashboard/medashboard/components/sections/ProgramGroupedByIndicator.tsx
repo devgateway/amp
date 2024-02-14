@@ -92,19 +92,13 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         </div>
                     </Col>
                 </Row>
-                {
-                    (selectedIndicator) ? (
                         <IndicatorProgressChart
                             section="left"
                             translations={translations}
                             filters={filters}
                             settings={settings}
                             index={index}
-                            indicator={selectedIndicator}/>
-                    ) : (
-                        <div className="loading"></div>
-                    )
-                }
+                            indicator={selectedIndicator ? selectedIndicator: {} as any}/>
             </Col>
         </div>
     )

@@ -1305,22 +1305,6 @@
                         </configuration>
                     </execution>
 
-                    <!-- JAXB generation for xmlpatcher.xsd -->
-                    <execution>
-                        <id>generate-xmlpatcher</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>
-                                    ./doc/xmlpatcher.xsd
-                                </source>
-                            </sources>
-                            <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/xmlpatcher</outputDirectory>
-                        </configuration>
-                    </execution>
 
                     <!-- JAXB generation for report.xsd -->
                     <execution>
@@ -1338,6 +1322,24 @@
                             <outputDirectory>${project.basedir}/gen-src/jaxb/report</outputDirectory>
                         </configuration>
                     </execution>
+
+                    <!-- JAXB generation for xmlpatcher.xsd -->
+                    <execution>
+                        <id>generate-xmlpatcher</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>
+                                    ./doc/xmlpatcher.xsd
+                                </source>
+                            </sources>
+                            <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
+                            <outputDirectory>${project.basedir}/gen-src/jaxb/xmlpatcher</outputDirectory>
+                        </configuration>
+                    </execution>
+
 
 
                 </executions>

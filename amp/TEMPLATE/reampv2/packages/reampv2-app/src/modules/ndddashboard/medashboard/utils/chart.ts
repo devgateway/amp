@@ -39,6 +39,15 @@ class ChartUtils {
         return tickValues;
     }
 
+    public static getMaxAndMinValueForAxis = (data: GaugeUtils) => {
+        const { baseValue, actualValue, targetValue } = data;
+        const values = [baseValue, actualValue, targetValue];
+        return {
+            min: Math.min(...values),
+            max: Math.max(...values)
+        }
+    }
+
     public static generateGaugeValue = (data : GaugeUtils) => {
         const { baseValue, actualValue, targetValue } = data;
         if (!targetValue || !baseValue) {

@@ -47,17 +47,15 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     }, []);
 
 
-    const calculateProgressValue = () => {
-        if (indicatorReportData) {
-            const actualValue = ChartUtils.getActualValueForCurrentYear(indicatorReportData.actualValues);
+    const calculateProgressValue = (apiData : any) => {
+            const actualValue = ChartUtils.getActualValueForCurrentYear(apiData.actualValues);
             const progress = ChartUtils.generateGaugeValue({
-                baseValue: indicatorReportData.baseValue,
-                targetValue: indicatorReportData.targetValue,
-                actualValue: actualValue === 0 ? indicatorReportData.baseValue : actualValue
+                baseValue: apiData.baseValue,
+                targetValue: apiData.targetValue,
+                actualValue: actualValue === 0 ? apiData.baseValue : actualValue
             });
 
             setProgressValue(progress);
-        }
     }
 
     const promiseFetchIndicatorReport = async (id: number, count: number) => {
@@ -68,8 +66,9 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                     data,
                     translations
                 });
+                calculateProgressValue(data);
                 setReportData(generatedReport);
-                calculateProgressValue();
+
             }).catch((error) => {
                 console.log(error);
             })
@@ -79,7 +78,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
         setSelectedIndicatorName(indicator.name);
         promiseFetchIndicatorReport(indicator.id, yearCount)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicator.id, index]);
+    }, [indicator.id, yearCount]);
 
     return (
         <div>

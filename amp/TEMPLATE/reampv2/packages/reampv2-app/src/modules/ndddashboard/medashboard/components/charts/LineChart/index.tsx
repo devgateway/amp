@@ -1,31 +1,49 @@
 import { LineSvgProps, ResponsiveLine } from '@nivo/line'
 import React, {useEffect, useState} from 'react';
 import ChartUtils from '../../../utils/chart';
-import {YearValues} from "../../../types";
+import {LineChartData, YearValues} from "../../../types";
 
+const STEP_SIZE = 100;
 
 //@ts-ignore
 export interface LineChartProps extends LineSvgProps {
     intervals?: number[];
     height?: number;
     width?: number;
-    data?: YearValues | undefined;
+    data: YearValues;
 }
 
 const LineChart: React.FC<LineChartProps> = (props) => {
     const { intervals, height, width, data } = props;
-    const tickValues = intervals || ChartUtils.generateTickValues(0, 150, 25);
 
-    const [displayDataSet, setDisplayDataSet] = useState<any>([]);
 
-    useEffect(() => {
-        if (data) {
-            setDisplayDataSet(ChartUtils.generateLineChartValues(data));
-        }
-    }, [data])
+    let displayDataSet: LineChartData [] = [];
+    let minMax: Record<any, any> = {
+        min: 0,
+        max: 150
+    };
+
+    if (data) {
+        displayDataSet = ChartUtils.generateLineChartValues(data);
+        const actualValue = ChartUtils.getActualValueForCurrentYear(data.actualValues);
+         const { min, max } = ChartUtils.getMaxAndMinValueForAxis({
+            actualValue,
+            baseValue: data.baseValue,
+            targetValue: data.targetValue
+        });
+         //round off the max value to the nearest 10
+        minMax = {
+            min: Math.floor(min / 10) * 10,
+            max: Math.ceil(max / 10) * 10
+        };
+    }
+
+    const tickValues = intervals || ChartUtils.generateTickValues(minMax.min, minMax.max, STEP_SIZE);
+
+
 
     return (
-        <div style={{ height: height || 260, width: width || 650 }}>
+        <div style={{ height: height || 360, width: width || 630 }}>
             <ResponsiveLine
                 {...props}
                 data={displayDataSet}
@@ -34,7 +52,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
                 yScale={{
                     type: 'linear',
                     min: 0,
-                    max: 150,
+                    max: minMax.max ? minMax.max + STEP_SIZE : 150,
                     clamp: true,
                     stacked: false,
                     reverse: false
@@ -51,6 +69,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
                 axisBottom={{
                     tickSize: 0,
                 }}
+
             />
         </div>
     )

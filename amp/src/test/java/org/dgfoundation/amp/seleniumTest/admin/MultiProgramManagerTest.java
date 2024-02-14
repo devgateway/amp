@@ -1,11 +1,10 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class MultiProgramManagerTest extends SeleneseTestCase {
     
@@ -14,7 +13,7 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testMultiProgramManager(LoggingSelenium selenium) throws Exception {
+    public static void testMultiProgramManager(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String progName ="Program Test " + testTime;
         String progName1 ="Program Test " + testTime + " Sub 1";
@@ -115,21 +114,21 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
                 Thread.sleep(10000);
                 if (selenium.isElementPresent("link="+progName)) {
                     logger.error("Program wasn't deleted");
-                    selenium.logAssertion("assertTrue", "Program wasn't deleted", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Program wasn't deleted", "condition=false");
                 }
             } else {
                 logger.error("Module \"National Planning Dashboard\" is active in Feature Manager but is not available.");
-                selenium.logAssertion("assertTrue", "Module \"National Planning Dashboard\" is active in Feature Manager but is not available.", "condition=false");
+                //selenium.logAssertion"assertTrue", "Module \"National Planning Dashboard\" is active in Feature Manager but is not available.", "condition=false");
             }
         } else {
             logger.info("Module \"National Planning Dashboard\" is not available.");
-            selenium.logComment("Module \"National Planning Dashboard\" is not available.");
+           //selenium.logComment("Module \"National Planning Dashboard\" is not available.");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Multi Program Manager Test Finished Successfully");
-        selenium.logComment("Multi Program Manager Test Finished Successfully");
+       //selenium.logComment("Multi Program Manager Test Finished Successfully");
     }
 }
 

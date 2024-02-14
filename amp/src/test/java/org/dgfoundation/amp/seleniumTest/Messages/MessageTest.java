@@ -1,19 +1,19 @@
-package dgfoundation.amp.seleniumTest.Messages;
-
-import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
+package org.dgfoundation.amp.seleniumTest.Messages;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
+import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MessageTest extends SeleneseTestCase {
-    
-    private static Logger logger = Logger.getLogger(MessageTest.class);
-    
+
+    private static Logger logger = LoggerFactory.getLogger(MessageTest.class);
+
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testMessages(LoggingSelenium selenium) throws Exception {
+    public static void testMessages(Selenium selenium) throws Exception {
         selenium.open("/");
         selenium.type("j_username", "UATtl@amp.org");
         selenium.type("j_password", "abc");
@@ -37,7 +37,7 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(1500);
             if (!selenium.isElementPresent("link=Test Message to myself")) {
                 logger.error("Error sending message to myself");
-                selenium.logAssertion("assertTrue", "Error sending message to myself", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending message to myself", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
             selenium.waitForPageToLoad("30000");
@@ -62,7 +62,7 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(1500);
             if (!selenium.isElementPresent("link=Test Message to my team")) {
                 logger.error("Error sending message to my team");
-                selenium.logAssertion("assertTrue", "Error sending message to my team", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending message to my team", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
             selenium.waitForPageToLoad("30000");
@@ -73,7 +73,7 @@ public class MessageTest extends SeleneseTestCase {
             selenium.addSelection("selreceivers", "label=UATtm UATtm");
             selenium.addSelection("selreceivers", "label=UATtl UATtl");
             selenium.click("//input[@onclick=\"MyremoveUserOrTeam()\"]");
-            
+
             selenium.click("//input[@onclick=\"save('send');\"]");
             selenium.waitForPageToLoad("30000");
             selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
@@ -116,11 +116,11 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(1500);
             if (!selenium.isElementPresent("link=Test Alert to myself")) {
                 logger.error("Error sending Alert to myself");
-                selenium.logAssertion("assertTrue", "Error sending Alert to myself", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending Alert to myself", "condition=false");
             }
             if (!selenium.isElementPresent("link=Test Alert to my team")) {
                 logger.error("Error sending Alert to my team");
-                selenium.logAssertion("assertTrue", "Error sending Alert to my team", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending Alert to my team", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
             selenium.waitForPageToLoad("30000");
@@ -135,9 +135,9 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(1500);
             if (!selenium.isTextPresent("Test Alert saved")) {
                 logger.error("Error on saved Alert");
-                selenium.logAssertion("assertTrue", "Error on saved Alert", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error on saved Alert", "condition=false");
             }
-            
+
             selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
             selenium.waitForPageToLoad("30000");
             selenium.type("titleMax", "Test Message saved");
@@ -147,15 +147,15 @@ public class MessageTest extends SeleneseTestCase {
             selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=1\")]")) {
-                selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=1\")]");   
+                selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=1\")]");
                 selenium.waitForPageToLoad("30000");
             }
             Thread.sleep(1500);
             if (!selenium.isTextPresent("Test Message saved")) {
                 logger.error("Error on saved Message");
-                selenium.logAssertion("assertTrue", "Error on saved Message", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error on saved Message", "condition=false");
             }
-            
+
             selenium.click("link=UAT Team Workspace - Computed");
             selenium.waitForPageToLoad("30000");
             selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
@@ -163,11 +163,11 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(1500);
             if (!selenium.isElementPresent("link=Test Message to another team")) {
                 logger.error("Error sending Message to another team");
-                selenium.logAssertion("assertTrue", "Error sending Message to another team", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending Message to another team", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             selenium.type("j_username", "uattm@amp.org");
             selenium.type("j_password", "abc");
             selenium.click("submitButton");
@@ -179,22 +179,22 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(1500);
             if (!selenium.isElementPresent("link=Test Message to my team")) {
                 logger.error("Error sending Message to my team");
-                selenium.logAssertion("assertTrue", "Error sending Message to my team", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending Message to my team", "condition=false");
             }
             if (!selenium.isElementPresent("link=Test Message to team partner")) {
                 logger.error("Error sending Message to a team partner");
-                selenium.logAssertion("assertTrue", "Error sending Message to a team partner", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending Message to a team partner", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2\")]");
             selenium.waitForPageToLoad("30000");
             Thread.sleep(1500);
             if (!selenium.isElementPresent("link=Test Alert to my team")) {
                 logger.error("Error sending Alert to my team");
-                selenium.logAssertion("assertTrue", "Error sending Alert to my team", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending Alert to my team", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             selenium.type("j_username", "uattmc@amp.org");
             selenium.type("j_password", "abc");
             selenium.click("submitButton");
@@ -206,14 +206,14 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(1500);
             if (!selenium.isElementPresent("link=Test Message to another team member")) {
                 logger.error("Error sending Message to another team member");
-                selenium.logAssertion("assertTrue", "Error sending Message to another team member", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error sending Message to another team member", "condition=false");
             }
             selenium.click("link=Test Message to another team member");
             SeleniumTestUtil.waitForElement(selenium, "//input[@onclick=\"closeWindow()\"]", 60);
             Thread.sleep(1500);
             if (!selenium.isTextPresent("Test 4")) {
                 logger.error("Error in message body");
-                selenium.logAssertion("assertTrue", "Error in message body", "condition=false");
+//                //selenium.logAssertion"assertTrue", "Error in message body", "condition=false");
             }
             selenium.click("//input[@onclick=\"closeWindow()\"]");
             String mId = selenium.getAttribute("link=Test Message to another team member@href");
@@ -223,9 +223,9 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(5000);
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             deleteAllMessages(selenium);
-            
+
             selenium.type("j_username", "admin@amp.org");
             selenium.type("j_password", "admin");
             selenium.click("submitButton");
@@ -238,7 +238,7 @@ public class MessageTest extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "UATtl@amp.org");
                 selenium.type("j_password", "abc");
                 selenium.click("submitButton");
@@ -251,11 +251,11 @@ public class MessageTest extends SeleneseTestCase {
                 Thread.sleep(1500);
                 if (!selenium.getText("adimSettings").contains("55")) {
                     logger.error("Error in Messages Settings");
-                    selenium.logAssertion("assertTrue", "Error in Messages Settings", "condition=false");
+//                    //selenium.logAssertion"assertTrue", "Error in Messages Settings", "condition=false");
                 }
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "admin@amp.org");
                 selenium.type("j_password", "admin");
                 selenium.click("submitButton");
@@ -268,14 +268,14 @@ public class MessageTest extends SeleneseTestCase {
             }
         } else {
             logger.info("Messages are not available");
-            selenium.logComment("Messages are not available");
+           //selenium.logComment("Messages are not available");
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Messages Test Finished Successfully");
-        selenium.logComment("Messages Test Finished Successfully");
+       //selenium.logComment("Messages Test Finished Successfully");
     }
-    
+
     private static void deleteAllMessages(Selenium selenium) throws InterruptedException {
         selenium.type("j_username", "UATtl@amp.org");
         selenium.type("j_password", "abc");
@@ -452,7 +452,7 @@ public class MessageTest extends SeleneseTestCase {
         deleteLoop(selenium);
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
     }
 
     private static void deleteLoop(Selenium selenium) {
@@ -464,7 +464,7 @@ public class MessageTest extends SeleneseTestCase {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            
+
         }
     }
 }

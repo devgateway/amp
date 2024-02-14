@@ -1,13 +1,12 @@
-package dgfoundation.amp.seleniumTest.activityForm;
+package org.dgfoundation.amp.seleniumTest.activityForm;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 
 public class CalendarTest2 extends SeleneseTestCase {
@@ -17,7 +16,7 @@ public class CalendarTest2 extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://generic.ampdev.net/", "*firefox");
     }
-    public static void testCalendar(LoggingSelenium selenium) throws Exception {
+    public static void testCalendar(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String eventTitle = "Test Event" + testTime;
         
@@ -42,11 +41,11 @@ public class CalendarTest2 extends SeleneseTestCase {
                             selenium.select("selectedEventTypeId", "index=1");
                         } else {
                             logger.error("Feature \"Event Type\" is enabled in Feature Manager but is not available.");
-                            selenium.logAssertion("assertTrue", "Feature \"Event Type\" is enabled in Feature Manager but is not available.", "condition=false");
+//                            //selenium.logAssertion"assertTrue", "Feature \"Event Type\" is enabled in Feature Manager but is not available.", "condition=false");
                         }
                     } else {
                         logger.info("Feature \"Event Type\" is not available.");
-                        selenium.logComment("Feature \"Event Type\" is not available.");
+//                       //selenium.logComment("Feature \"Event Type\" is not available.");
                     }
                     Date date = new Date(System.currentTimeMillis());
                     selenium.type("selectedStartDate", date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900));
@@ -68,15 +67,15 @@ public class CalendarTest2 extends SeleneseTestCase {
                                 selenium.waitForPageToLoad("30000");
                             } else {
                                 logger.error("Field \"Add Donor Button\" is enabled in Feature Manager but is not available.");
-                                selenium.logAssertion("assertTrue", "Field \"Add Donor Button\" is enabled in Feature Manager but is not available.", "condition=false");
+//                                //selenium.logAssertion"assertTrue", "Field \"Add Donor Button\" is enabled in Feature Manager but is not available.", "condition=false");
                             }
                         } else {
                             logger.info("Field \"Add Donor Button\" is not available.");
-                            selenium.logComment("Field \"Add Donor Button\" is not available.");
+//                           //selenium.logComment("Field \"Add Donor Button\" is not available.");
                         }
                     } else {
                         logger.info("Feature \"Donors\" is not available.");
-                        selenium.logComment("Feature \"Donors\" is not available.");
+//                       //selenium.logComment("Feature \"Donors\" is not available.");
                     }
                     //selenium.uncheck("privateEventCheckbox");
                     if (selenium.isChecked("privateEventCheckbox")) {
@@ -104,7 +103,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                             }
                             if (!attOk) {
                                 logger.error("Error on Attenders list on event preview");
-                                selenium.logAssertion("assertTrue", "Error on Attenders list on event preview", "condition=false");
+//                                //selenium.logAssertion"assertTrue", "Error on Attenders list on event preview", "condition=false");
                             }                           
                             selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
                             selenium.waitForPageToLoad("30000");
@@ -116,7 +115,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                             eventSent = true;
                         } else {
                             logger.error("Feature \"Preview Event button\" is enabled in Feature Manager but is not available.");
-                            selenium.logAssertion("assertTrue", "Feature \"Preview Event button\" is enabled in Feature Manager but is not available.", "condition=false");
+//                            //selenium.logAssertion"assertTrue", "Feature \"Preview Event button\" is enabled in Feature Manager but is not available.", "condition=false");
                             if (SeleniumFeaturesConfiguration.getFeatureState("Save and Send button")){
                                 if (selenium.isElementPresent("//input[@onclick=\"return sendEvent();\"]")){
                                     if (selenium.isChecked("privateEventCheckbox")) {
@@ -127,16 +126,16 @@ public class CalendarTest2 extends SeleneseTestCase {
                                     eventSent = true;
                                 } else {
                                     logger.error("Feature \"Save and Send button\" is enabled in Feature Manager but is not available.");
-                                    selenium.logAssertion("assertTrue", "Feature \"Save and Send button\" is enabled in Feature Manager but is not available.", "condition=false");
+//                                    //selenium.logAssertion"assertTrue", "Feature \"Save and Send button\" is enabled in Feature Manager but is not available.", "condition=false");
                                 }
                             } else {
                                 logger.info("Feature \"Save and Send button\" is not available.");
-                                selenium.logComment("Feature \"Save and Send button\" is not available.");
+//                               //selenium.logComment("Feature \"Save and Send button\" is not available.");
                             }
                         }
                     } else {
                         logger.info("Feature \"Preview Event button\" is not available.");
-                        selenium.logComment("Feature \"Preview Event button\" is not available.");
+//                       //selenium.logComment("Feature \"Preview Event button\" is not available.");
                         if (SeleniumFeaturesConfiguration.getFeatureState("Save and Send button")){
                             if (selenium.isElementPresent("//input[@onclick=\"return sendEvent();\"]")){
                                 if (selenium.isChecked("privateEventCheckbox")) {
@@ -147,11 +146,11 @@ public class CalendarTest2 extends SeleneseTestCase {
                                 eventSent = true;
                             } else {
                                 logger.error("Feature \"Save and Send button\" is enabled in Feature Manager but is not available.");
-                                selenium.logAssertion("assertTrue", "Feature \"Save and Send button\" is enabled in Feature Manager but is not available.", "condition=false");
+//                                //selenium.logAssertion"assertTrue", "Feature \"Save and Send button\" is enabled in Feature Manager but is not available.", "condition=false");
                             }
                         } else {
                             logger.info("Feature \"Save and Send button\" is not available.");
-                            selenium.logComment("Feature \"Save and Send button\" is not available.");
+//                           //selenium.logComment("Feature \"Save and Send button\" is not available.");
                         }
                     }
                     
@@ -196,7 +195,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                         selenium.waitForPageToLoad("30000");
                         if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+eventId+"~method=preview~resetForm=true\")]")) {
                             logger.error("Non Public Event is visible for an user who is not in the attender list.");
-                            selenium.logAssertion("assertTrue", "Non Public Event is visible for an user who is not in the attender list.", "condition=false");
+//                            //selenium.logAssertion"assertTrue", "Non Public Event is visible for an user who is not in the attender list.", "condition=false");
                         }
                         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                         selenium.waitForPageToLoad("30000");
@@ -279,24 +278,24 @@ public class CalendarTest2 extends SeleneseTestCase {
                         selenium.waitForPageToLoad("30000");
                         if (!selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+eventId+"~method=preview~resetForm=true\")]")) {
                             logger.error("Public Event is not visible for an user who is not in the attender list.");
-                            selenium.logAssertion("assertTrue", "Public Event is not visible for an user who is not in the attender list.", "condition=false");
+//                            //selenium.logAssertion"assertTrue", "Public Event is not visible for an user who is not in the attender list.", "condition=false");
                         }
                     }
                 } else {
                     logger.error("Feature \"Create Event\" is enabled in Feature Manager but is not available.");
-                    selenium.logAssertion("assertTrue", "Feature \"Create Event\" is enabled in Feature Manager but is not available.", "condition=false");
+//                    //selenium.logAssertion"assertTrue", "Feature \"Create Event\" is enabled in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 logger.info("Feature \"Create Event\" is not available.");
-                selenium.logComment("Feature \"Create Event\" is not available.");
+//               //selenium.logComment("Feature \"Create Event\" is not available.");
             }
         } else {
             logger.info("Module \"Calendar\" is not available.");
-            selenium.logComment("Module \"Calendar\" is not available.");
+//           //selenium.logComment("Module \"Calendar\" is not available.");
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Calendar Test Finished Successfully");
-        selenium.logComment("Calendar Test Finished Successfully");
+//       //selenium.logComment("Calendar Test Finished Successfully");
     }   
 }

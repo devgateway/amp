@@ -1,11 +1,10 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class RegionManagerTest extends SeleneseTestCase {
     
@@ -14,7 +13,7 @@ public class RegionManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testRegionManager(LoggingSelenium selenium) throws Exception {
+    public static void testRegionManager(Selenium selenium) throws Exception {
         String countryName = "Selenium Country";
         selenium.open("/");
         selenium.type("j_username", "admin@amp.org");
@@ -78,7 +77,7 @@ public class RegionManagerTest extends SeleneseTestCase {
                         selenium.waitForPageToLoad("30000");
                         if (selenium.isTextPresent(countryName)) {
                             logger.error("Region wasn't deleted");
-                            selenium.logAssertion("assertTrue", "Region wasn't deleted", "condition=false");
+                            //selenium.logAssertion"assertTrue", "Region wasn't deleted", "condition=false");
                         }
                     } 
                 } else {
@@ -102,22 +101,22 @@ public class RegionManagerTest extends SeleneseTestCase {
                     selenium.waitForPageToLoad("30000");
                     if (selenium.isTextPresent(countryName)) {
                         logger.error("Region wasn't deleted");
-                        selenium.logAssertion("assertTrue", "Region wasn't deleted", "condition=false");
+                        //selenium.logAssertion"assertTrue", "Region wasn't deleted", "condition=false");
                     }
                 }
             } else {
                 logger.error("Module \"Dynamic Region Manager\" is active in Feature Manager but is not available.");
-                selenium.logAssertion("assertTrue", "Module \"Dynamic Region Manager\" is active in Feature Manager but is not available.", "condition=false");
+                //selenium.logAssertion"assertTrue", "Module \"Dynamic Region Manager\" is active in Feature Manager but is not available.", "condition=false");
             }
         } else {
             logger.info("Module \"Dynamic Region Manager\" is not available.");
-            selenium.logComment("Module \"Dynamic Region Manager\" is not available.");
+           //selenium.logComment("Module \"Dynamic Region Manager\" is not available.");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Region Manager Test Finished Successfully");
-        selenium.logComment("Region Manager Test Finished Successfully");
+       //selenium.logComment("Region Manager Test Finished Successfully");
     }
 }
 

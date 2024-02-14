@@ -1,13 +1,12 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
-import org.dgfoundation.amp.seleniumTest.reports.TabTest;
+import org.apache.log4j.Logger;
+
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class ActivityManagerTest extends SeleneseTestCase {
     
@@ -16,7 +15,7 @@ public class ActivityManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testActivityManager(LoggingSelenium selenium) throws Exception {
+    public static void testActivityManager(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String actName = "Selenium Activity Manager Test " + testTime;
         selenium.open("/");
@@ -34,11 +33,11 @@ public class ActivityManagerTest extends SeleneseTestCase {
                     selenium.type("identification.title", actName);
                 } else {
                     logger.error("Field \"Project Title\" is active in Feature Manager but is not available.");
-                    selenium.logAssertion("assertTrue", "Field \"Project Title\" is active in Feature Manager but is not available.", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Field \"Project Title\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 logger.info("Field \"Project Title\" is not available.");
-                selenium.logComment("Field \"Project Title\" is not available.");
+               //selenium.logComment("Field \"Project Title\" is not available.");
             }
             if (SeleniumFeaturesConfiguration.getFieldState("Status")){
                 if (selenium.isElementPresent("planning.statusId")) {
@@ -46,11 +45,11 @@ public class ActivityManagerTest extends SeleneseTestCase {
                     selenium.type("planning.statusReason", "N/A");
                 } else {
                     logger.error("Field \"Status\" is active in Feature Manager but is not available.");
-                    selenium.logAssertion("assertTrue", "Field \"Status\" is active in Feature Manager but is not available.", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Field \"Status\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 logger.info("Field \"Status\" is not available.");
-                selenium.logComment("Field \"Status\" is not available.");
+               //selenium.logComment("Field \"Status\" is not available.");
             }
             
             selenium.click("//a[@href='javascript:gotoStep(2)']");
@@ -71,19 +70,19 @@ public class ActivityManagerTest extends SeleneseTestCase {
                                 selenium.type("activitySectors[0].sectorPercentage", "100");
                             } catch (Exception e) {
                                 logger.info("Add Primary Sector Fail ");
-                                selenium.logComment("Add Primary Sector Fail ");
+                               //selenium.logComment("Add Primary Sector Fail ");
                             }
                         } catch (Exception e) {
                             logger.info("Sectors no found for Primary Sector");
-                            selenium.logComment("Sectors no found for Primary Sector");
+                           //selenium.logComment("Sectors no found for Primary Sector");
                         }
                     } else {
                         logger.error("Field \"Primary Sector\" is active in Feature Manager but is not available.");
-                        selenium.logAssertion("assertTrue", "Field \"Primary Sector\" is active in Feature Manager but is not available.", "condition=false");
+                        //selenium.logAssertion"assertTrue", "Field \"Primary Sector\" is active in Feature Manager but is not available.", "condition=false");
                     }
                 } else {
                     logger.info("Field \"Primary Sector\" is not available.");
-                    selenium.logComment("Field \"Primary Sector\" is not available.");
+                   //selenium.logComment("Field \"Primary Sector\" is not available.");
                 }
                 //Add Secondary Sector
                 if (SeleniumFeaturesConfiguration.getFieldState("Secondary Sector")){
@@ -99,23 +98,23 @@ public class ActivityManagerTest extends SeleneseTestCase {
                                 selenium.type("activitySectors[1].sectorPercentage", "100");
                             } catch (Exception e) {
                                 logger.info("Add Secondary Sector Fail ");
-                                selenium.logComment("Add Secondary Sector Fail ");
+                               //selenium.logComment("Add Secondary Sector Fail ");
                             }
                         } catch (Exception e) {
                             logger.info("Sectors no found for Secondary Sector");
-                            selenium.logComment("Sectors no found for Secondary Sector");
+                           //selenium.logComment("Sectors no found for Secondary Sector");
                         }
                     } else {
                         logger.error("Field \"Current Completion Date\" is active in Feature Manager but is not available.");
-                        selenium.logAssertion("assertTrue", "Field \"Current Completion Date\" is active in Feature Manager but is not available.", "condition=false");
+                        //selenium.logAssertion"assertTrue", "Field \"Current Completion Date\" is active in Feature Manager but is not available.", "condition=false");
                     }
                 } else {
                     logger.info("Field \"Secondary Sector\" is not available.");
-                    selenium.logComment("Field \"Secondary Sector\" is not available.");
+                   //selenium.logComment("Field \"Secondary Sector\" is not available.");
                 }
             } else {
                 logger.info("Feature \"Sectors\" is not available.");
-                selenium.logComment("Feature \"Sectors\" is not available.");
+               //selenium.logComment("Feature \"Sectors\" is not available.");
             }
             
             selenium.click("//input[@onclick='saveClicked()']");
@@ -135,7 +134,7 @@ public class ActivityManagerTest extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 if (!selenium.isElementPresent("//a[@onclick=\"return deleteIndicator()\"]")) {
                     logger.error("Activity not found on Activity Manager");
-                    selenium.logAssertion("assertTrue", "Activity not found on Activity Manager", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Activity not found on Activity Manager", "condition=false");
                 } else {
                     selenium.click("//a[@onclick=\"return deleteIndicator()\"]");
                     selenium.getConfirmation();
@@ -145,18 +144,18 @@ public class ActivityManagerTest extends SeleneseTestCase {
                     selenium.waitForPageToLoad("30000");
                     if (selenium.isElementPresent("//a[@onclick=\"return deleteIndicator()\"]")) {
                         logger.error("Activity wasn't deleted");
-                        selenium.logAssertion("assertTrue", "Activity wasn't deleted", "condition=false");
+                        //selenium.logAssertion"assertTrue", "Activity wasn't deleted", "condition=false");
                     }
                 }               
             } else {
                 logger.error("Activity Manager is not available");
-                selenium.logAssertion("assertTrue", "Activity Manager is not available", "condition=false");
+                //selenium.logAssertion"assertTrue", "Activity Manager is not available", "condition=false");
             }
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Activity Manager Test Finished Successfully");
-        selenium.logComment("Activity Manager Test Finished Successfully");
+       //selenium.logComment("Activity Manager Test Finished Successfully");
     }
 }

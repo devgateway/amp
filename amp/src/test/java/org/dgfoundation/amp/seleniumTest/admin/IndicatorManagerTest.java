@@ -1,7 +1,7 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;

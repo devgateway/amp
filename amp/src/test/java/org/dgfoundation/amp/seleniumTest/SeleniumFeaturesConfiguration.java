@@ -1,12 +1,12 @@
-package dgfoundation.amp.seleniumTest;
+package org.dgfoundation.amp.seleniumTest;
 
 import java.util.Hashtable;
 
+import com.thoughtworks.selenium.SeleneseTestBase;
 import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class SeleniumFeaturesConfiguration extends SeleneseTestBase {
     
@@ -20,7 +20,7 @@ public class SeleniumFeaturesConfiguration extends SeleneseTestBase {
     private static Hashtable<String, String> featureIds = new Hashtable<String, String>();
     private static Hashtable<String, String> fieldIds = new Hashtable<String, String>();
 
-    public static void getConfigurationFromFM(LoggingSelenium selenium) throws Exception {
+    public static void getConfigurationFromFM(Selenium selenium) throws Exception {
         selenium.open("/");
         selenium.type("j_username", "admin@amp.org");
         selenium.type("j_password", "admin");
@@ -59,15 +59,15 @@ public class SeleniumFeaturesConfiguration extends SeleneseTestBase {
             }           
         }
         logger.info("Modules found: " + modulesCounter);
-        selenium.logComment("Modules found: " + modulesCounter);
+//       //selenium.logComment("Modules found: " + modulesCounter);
         logger.info("Features found: " + featuresCounter);
-        selenium.logComment("Features found: " + featuresCounter);
+//       //selenium.logComment("Features found: " + featuresCounter);
         logger.info("Fields found: " + fieldsCounter);
-        selenium.logComment("Fields found: " + fieldsCounter);
+//       //selenium.logComment("Fields found: " + fieldsCounter);
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Get Features Configuration Finished Successfully");
-        selenium.logComment("Get Features Configuration Finished Successfully");
+//       //selenium.logComment("Get Features Configuration Finished Successfully");
     }
     
     public static boolean getModuleState(String key) throws Exception {

@@ -1,9 +1,10 @@
-package dgfoundation.amp.seleniumTest;
-
-import org.apache.log4j.Logger;
+package org.dgfoundation.amp.seleniumTest;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import org.apache.log4j.Logger;
+
+
 
 public class SeleniumTestUtil extends SeleneseTestCase {
     

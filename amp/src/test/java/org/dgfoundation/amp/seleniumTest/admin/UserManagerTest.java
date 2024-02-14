@@ -1,11 +1,9 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.seleniumTest.reports.TabTest;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class UserManagerTest extends SeleneseTestCase {
     
@@ -14,7 +12,7 @@ public class UserManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testUserManager(LoggingSelenium selenium) throws Exception {
+    public static void testUserManager(Selenium selenium) throws Exception {
         selenium.open("/");
         selenium.type("j_username", "admin@amp.org");
         selenium.type("j_password", "admin");
@@ -59,13 +57,13 @@ public class UserManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
         } else {
             logger.error("Module \"User Manager\" is not available.");
-            selenium.logAssertion("assertTrue", "Module \"User Manager\" is not available.", "condition=false");
+            //selenium.logAssertion"assertTrue", "Module \"User Manager\" is not available.", "condition=false");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("User Manager Test Finished Successfully");
-        selenium.logComment("User Manager Test Finished Successfully");
+       //selenium.logComment("User Manager Test Finished Successfully");
     }
 }
 

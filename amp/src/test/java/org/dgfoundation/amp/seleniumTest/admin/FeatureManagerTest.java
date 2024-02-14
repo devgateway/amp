@@ -1,11 +1,9 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.seleniumTest.publicView.PublicViewTest;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class FeatureManagerTest extends SeleneseTestCase {
         
@@ -14,7 +12,7 @@ public class FeatureManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testFeatureManager(LoggingSelenium selenium) throws Exception {
+    public static void testFeatureManager(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String templateName ="Test Template " + testTime;
         String actualTemplate = "";
@@ -77,13 +75,13 @@ public class FeatureManagerTest extends SeleneseTestCase {
         if (selenium.isElementPresent("//a[contains(@href, "
                 + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
             logger.error("Add Tab option is disabled from Feature Manager but is available");
-            selenium.logAssertion("assertTrue", "Add Tab option is disabled from Feature Manager but is available", "condition=false");
+            //selenium.logAssertion"assertTrue", "Add Tab option is disabled from Feature Manager but is available", "condition=false");
         }
         selenium.click("//a[contains(@href, \"javascript:addActivity()\")]");
         selenium.waitForPageToLoad("120000");
         if (selenium.getAttribute("identification.title@disabled").equalsIgnoreCase("disabled")) {
             logger.error("Field Title is disabled Feature Manager but is available on Activity form");
-            selenium.logAssertion("assertTrue", "Field Title is disabled Feature Manager but is available on Activity form", "condition=false");
+            //selenium.logAssertion"assertTrue", "Field Title is disabled Feature Manager but is available on Activity form", "condition=false");
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
@@ -118,11 +116,11 @@ public class FeatureManagerTest extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         if (selenium.isElementPresent("link="+templateName)) {
             logger.error("Template wasn�t deleted");
-            selenium.logAssertion("assertTrue", "Template wasn�t deleted", "condition=false");
+            //selenium.logAssertion"assertTrue", "Template wasn�t deleted", "condition=false");
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Feature Manager Test Finished Successfully");
-        selenium.logComment("Feature Manager Test Finished Successfully");
+       //selenium.logComment("Feature Manager Test Finished Successfully");
     }
 }

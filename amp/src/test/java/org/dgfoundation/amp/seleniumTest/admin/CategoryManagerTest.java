@@ -1,11 +1,9 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.seleniumTest.reports.TabTest;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class CategoryManagerTest extends SeleneseTestCase {
     
@@ -14,7 +12,7 @@ public class CategoryManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testCategoryManager(LoggingSelenium selenium) throws Exception {
+    public static void testCategoryManager(Selenium selenium) throws Exception {
         selenium.open("/");
         selenium.type("j_username", "admin@amp.org");
         selenium.type("j_password", "admin");
@@ -62,11 +60,11 @@ public class CategoryManagerTest extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         if (!selenium.isTextPresent(catName+" Selenium")) {
             logger.error("Category Name wasn't changed");
-            selenium.logAssertion("assertTrue", "Category Name wasn't changed", "condition=false");
+            //selenium.logAssertion"assertTrue", "Category Name wasn't changed", "condition=false");
         }
         if (!selenium.isTextPresent("SeleniumType")) {
             logger.error("Category Type wasn't added");
-            selenium.logAssertion("assertTrue", "Category Type wasn't added", "condition=false");
+            //selenium.logAssertion"assertTrue", "Category Type wasn't added", "condition=false");
         }
         selenium.click("//a[contains(@href, \"/categorymanager/categoryManager.do~edit="+catId+"\")]");
         selenium.waitForPageToLoad("30000");
@@ -77,16 +75,16 @@ public class CategoryManagerTest extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         if (selenium.isTextPresent(catName+" Selenium")) {
             logger.error("Category Name wasn't changed");
-            selenium.logAssertion("assertTrue", "Category Name wasn't changed", "condition=false");
+            //selenium.logAssertion"assertTrue", "Category Name wasn't changed", "condition=false");
         }
         if (selenium.isTextPresent("SeleniumType")) {
             logger.error("Category Type wasn't deleted");
-            selenium.logAssertion("assertTrue", "Category Type wasn't deleted", "condition=false");
+            //selenium.logAssertion"assertTrue", "Category Type wasn't deleted", "condition=false");
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Category Manager Test Finished Successfully");
-        selenium.logComment("Category Manager Test Finished Successfully");
+       //selenium.logComment("Category Manager Test Finished Successfully");
     }
 }
 

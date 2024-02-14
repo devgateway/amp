@@ -37,12 +37,12 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                 } else {
                     checkable = false;
                     logger.error("Field \"Admin - Component Type Name\" is active in Feature Manager but is not available.");
-                    selenium.logAssertion("assertTrue", "Field \"Admin - Component Type Name\" is active in Feature Manager but is not available.", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Field \"Admin - Component Type Name\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 checkable = false;
                 logger.info("Field \"Admin - Component Type Name\" is not available.");
-                selenium.logComment("Field \"Admin - Component Type Name\" is not available.");
+               //selenium.logComment("Field \"Admin - Component Type Name\" is not available.");
             }
             if (SeleniumFeaturesConfiguration.getFieldState("Admin - Component Type Code")){
                 if (selenium.isElementPresent("code")) {
@@ -50,12 +50,12 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                 } else {
                     checkable = false;
                     logger.error("Field \"Admin - Component Type Code\" is active in Feature Manager but is not available.");
-                    selenium.logAssertion("assertTrue", "Field \"Admin - Component Type Code\" is active in Feature Manager but is not available.", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Field \"Admin - Component Type Code\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 checkable = false;
                 logger.info("Field \"Admin - Component Type Code\" is not available.");
-                selenium.logComment("Field \"Admin - Component Type Code\" is not available.");
+               //selenium.logComment("Field \"Admin - Component Type Code\" is not available.");
             }
             if (SeleniumFeaturesConfiguration.getFieldState("Admin - Component Type Save Button")){
                 if (selenium.isElementPresent("addBtn")) {
@@ -67,12 +67,12 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                     selenium.close();
                     selenium.selectWindow("null");
                     logger.error("Field \"Admin - Component Type Save Button\" is active in Feature Manager but is not available.");
-                    selenium.logAssertion("assertTrue", "Field \"Admin - Component Type Save Button\" is active in Feature Manager but is not available.", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Field \"Admin - Component Type Save Button\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 checkable = false;
                 logger.info("Field \"Admin - Component Type Save Button\" is not available.");
-                selenium.logComment("Field \"Admin - Component Type Save Button\" is not available.");
+               //selenium.logComment("Field \"Admin - Component Type Save Button\" is not available.");
             }
             if (checkable) {
                 int tId = 0;
@@ -113,25 +113,25 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                                     selenium.select("selectedType", typeName+" mod");
                                 } catch (Exception e) {
                                     logger.error("Component type added is not available on Activity Form");
-                                    selenium.logAssertion("assertTrue", "Component type added is not available on Activity Form", "condition=false");
+                                    //selenium.logAssertion"assertTrue", "Component type added is not available on Activity Form", "condition=false");
                                 }
                             } else {
                                 logger.error("Feature \"Admin - Component Type\" is active in Feature Manager but is not available.");
-                                selenium.logAssertion("assertTrue", "Feature \"Admin - Component Type\" is active in Feature Manager but is not available.", "condition=false");
+                                //selenium.logAssertion"assertTrue", "Feature \"Admin - Component Type\" is active in Feature Manager but is not available.", "condition=false");
                             }
                         } else {
                             logger.info("Feature \"Admin - Component Type\" is not available.");
-                            selenium.logComment("Feature \"Admin - Component Type\" is not available.");
+                           //selenium.logComment("Feature \"Admin - Component Type\" is not available.");
                         }
                         selenium.type("newCompoenentName", "Selenium Component");
                         selenium.click("//div[@id='new']/div[3]");              
                     } else {
                         logger.error("Feature \"Components\" is active in Feature Manager but is not available.");
-                        selenium.logAssertion("assertTrue", "Feature \"Components\" is active in Feature Manager but is not available.", "condition=false");
+                        //selenium.logAssertion"assertTrue", "Feature \"Components\" is active in Feature Manager but is not available.", "condition=false");
                     }
                 } else {
                     logger.info("Feature \"Components\" is not available.");
-                    selenium.logComment("Feature \"Components\" is not available.");
+                   //selenium.logComment("Feature \"Components\" is not available.");
                 }
                 
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
@@ -149,22 +149,22 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                     selenium.waitForPageToLoad("30000");
                     if (selenium.isTextPresent(typeName)) {
                         logger.error("Component Type wasn't deleted");
-                        selenium.logAssertion("assertTrue", "Component Type wasn't deleted", "condition=false");
+                        //selenium.logAssertion"assertTrue", "Component Type wasn't deleted", "condition=false");
                     }
                 } catch (Exception e) {
                     logger.error("Component Type is not available to be deleted");
-                    selenium.logAssertion("assertTrue", "Component Type is not available to be deleted", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Component Type is not available to be deleted", "condition=false");
                 }
             }           
         } else {
             logger.error("Component Type Manager is not available");
-            selenium.logAssertion("assertTrue", "Component Type Manager is not available", "condition=false");
+            //selenium.logAssertion"assertTrue", "Component Type Manager is not available", "condition=false");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Component Type Manager Test Finished Successfully");
-        selenium.logComment("Component Type Manager Test Finished Successfully");
+       //selenium.logComment("Component Type Manager Test Finished Successfully");
     }
 }
 

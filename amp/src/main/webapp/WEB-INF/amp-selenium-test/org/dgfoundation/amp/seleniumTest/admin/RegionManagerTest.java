@@ -78,7 +78,7 @@ public class RegionManagerTest extends SeleneseTestCase {
                         selenium.waitForPageToLoad("30000");
                         if (selenium.isTextPresent(countryName)) {
                             logger.error("Region wasn't deleted");
-                            selenium.logAssertion("assertTrue", "Region wasn't deleted", "condition=false");
+                            //selenium.logAssertion"assertTrue", "Region wasn't deleted", "condition=false");
                         }
                     } 
                 } else {
@@ -102,22 +102,22 @@ public class RegionManagerTest extends SeleneseTestCase {
                     selenium.waitForPageToLoad("30000");
                     if (selenium.isTextPresent(countryName)) {
                         logger.error("Region wasn't deleted");
-                        selenium.logAssertion("assertTrue", "Region wasn't deleted", "condition=false");
+                        //selenium.logAssertion"assertTrue", "Region wasn't deleted", "condition=false");
                     }
                 }
             } else {
                 logger.error("Module \"Dynamic Region Manager\" is active in Feature Manager but is not available.");
-                selenium.logAssertion("assertTrue", "Module \"Dynamic Region Manager\" is active in Feature Manager but is not available.", "condition=false");
+                //selenium.logAssertion"assertTrue", "Module \"Dynamic Region Manager\" is active in Feature Manager but is not available.", "condition=false");
             }
         } else {
             logger.info("Module \"Dynamic Region Manager\" is not available.");
-            selenium.logComment("Module \"Dynamic Region Manager\" is not available.");
+           //selenium.logComment("Module \"Dynamic Region Manager\" is not available.");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Region Manager Test Finished Successfully");
-        selenium.logComment("Region Manager Test Finished Successfully");
+       //selenium.logComment("Region Manager Test Finished Successfully");
     }
 }
 

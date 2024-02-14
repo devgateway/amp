@@ -1,12 +1,11 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
-import org.dgfoundation.amp.seleniumTest.reports.TabTest;
+import org.apache.log4j.Logger;
+
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class CurrencyManagerTest extends SeleneseTestCase {
     
@@ -15,7 +14,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testCurrencyManager(LoggingSelenium selenium) throws Exception {
+    public static void testCurrencyManager(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String currencyName = "Currency Test Selenium";
         String currencyCode = "STC";
@@ -84,7 +83,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
             } else {
                 logger.error("Currency Rate Manager is not available");
-                selenium.logComment("Currency Rate Manager is not available");
+               //selenium.logComment("Currency Rate Manager is not available");
             }
             
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
@@ -124,7 +123,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
                     selenium.select("fundingDetail[0].currencyCode", currencyName);
                 } catch (Exception e) {
                     logger.error("Currency added is not available on Activity Form");
-                    selenium.logComment("Currency added is not available on Activity Form");
+                   //selenium.logComment("Currency added is not available on Activity Form");
                 }
                 selenium.click("//input[@onclick=\"closeWindow()\"]");
                 selenium.selectWindow("null");
@@ -185,7 +184,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
                 }
                 if (inList) {
                     logger.error("Inactive Currency is available on Activity Form");
-                    selenium.logComment("Inactive Currency is available on Activity Form");
+                   //selenium.logComment("Inactive Currency is available on Activity Form");
                 }
                 selenium.click("//input[@onclick=\"closeWindow()\"]");
                 selenium.selectWindow("null");
@@ -210,16 +209,16 @@ public class CurrencyManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("link="+currencyCode)) {
                 logger.error("Currency wasn't deleted");
-                selenium.logComment("Currency wasn't deleted");
+               //selenium.logComment("Currency wasn't deleted");
             }
         } else {
             logger.error("Currency Manager is not available");
-            selenium.logComment("Currency Manager is not available");
+           //selenium.logComment("Currency Manager is not available");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Currency Manager Test Finished Successfully");
-        selenium.logComment("Currency Manager Test Finished Successfully");
+       //selenium.logComment("Currency Manager Test Finished Successfully");
     }
 }

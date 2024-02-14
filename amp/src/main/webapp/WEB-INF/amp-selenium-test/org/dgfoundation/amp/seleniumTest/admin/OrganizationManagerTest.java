@@ -108,7 +108,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("link="+organizationName)) {
                 logger.error("Organization wasn't deleted");
-                selenium.logAssertion("assertTrue", "Organization wasn't deleted", "condition=false");
+                //selenium.logAssertion"assertTrue", "Organization wasn't deleted", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/aim/orgGroupManager.do\")]");
             selenium.waitForPageToLoad("30000");
@@ -122,7 +122,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("link="+orgGroupName)) {
                 logger.error("Organization Group wasn't deleted");
-                selenium.logAssertion("assertTrue", "Organization Group wasn't deleted", "condition=false");
+                //selenium.logAssertion"assertTrue", "Organization Group wasn't deleted", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/aim/organisationManager.do\")]");
             selenium.waitForPageToLoad("30000");
@@ -135,17 +135,17 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("link="+orgTypeName)) {
                 logger.error("Organization Type wasn't deleted");
-                selenium.logAssertion("assertTrue", "Organization Type wasn't deleted", "condition=false");
+                //selenium.logAssertion"assertTrue", "Organization Type wasn't deleted", "condition=false");
             }
         } else {
             logger.error("Organization Manager is not available.");
-            selenium.logAssertion("assertTrue", "Organization Manager is not available.", "condition=false");
+            //selenium.logAssertion"assertTrue", "Organization Manager is not available.", "condition=false");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Organization Manager Test Finished Successfully");
-        selenium.logComment("Organization Manager Test Finished Successfully");
+       //selenium.logComment("Organization Manager Test Finished Successfully");
     }
 }
 

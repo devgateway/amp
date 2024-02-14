@@ -115,21 +115,21 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
                 Thread.sleep(10000);
                 if (selenium.isElementPresent("link="+progName)) {
                     logger.error("Program wasn't deleted");
-                    selenium.logAssertion("assertTrue", "Program wasn't deleted", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Program wasn't deleted", "condition=false");
                 }
             } else {
                 logger.error("Module \"National Planning Dashboard\" is active in Feature Manager but is not available.");
-                selenium.logAssertion("assertTrue", "Module \"National Planning Dashboard\" is active in Feature Manager but is not available.", "condition=false");
+                //selenium.logAssertion"assertTrue", "Module \"National Planning Dashboard\" is active in Feature Manager but is not available.", "condition=false");
             }
         } else {
             logger.info("Module \"National Planning Dashboard\" is not available.");
-            selenium.logComment("Module \"National Planning Dashboard\" is not available.");
+           //selenium.logComment("Module \"National Planning Dashboard\" is not available.");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Multi Program Manager Test Finished Successfully");
-        selenium.logComment("Multi Program Manager Test Finished Successfully");
+       //selenium.logComment("Multi Program Manager Test Finished Successfully");
     }
 }
 

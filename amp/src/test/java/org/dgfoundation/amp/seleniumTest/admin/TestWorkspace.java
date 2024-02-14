@@ -1,4 +1,4 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.apache.log4j.Logger;
 

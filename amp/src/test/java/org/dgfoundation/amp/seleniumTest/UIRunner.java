@@ -1,4 +1,4 @@
-package dgfoundation.amp.seleniumTest;
+package org.dgfoundation.amp.seleniumTest;
 import java.awt.Rectangle;
 
 import javax.swing.JApplet;

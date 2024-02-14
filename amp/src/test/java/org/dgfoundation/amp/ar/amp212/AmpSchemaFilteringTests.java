@@ -8,7 +8,6 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -23,7 +22,7 @@ import java.util.List;
  * @author Constantin Dolghier
  *
  */
-@Category(DatabaseTests.class)
+@Category(org.dgfoundation.amp.test.categories.DatabaseTests.class)
 public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
     final List<String> flowsActs = Arrays.asList(

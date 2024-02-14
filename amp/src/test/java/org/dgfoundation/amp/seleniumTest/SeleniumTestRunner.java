@@ -1,28 +1,15 @@
-package dgfoundation.amp.seleniumTest;
+package org.dgfoundation.amp.seleniumTest;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.activityForm.ActivityFormTest;
-import org.dgfoundation.amp.seleniumTest.admin.ActivityManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.CalendarManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.CategoryManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.ComponentTypeManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.CurrencyManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.EventTypeManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.FeatureManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.GlobalSettingsTest;
-import org.dgfoundation.amp.seleniumTest.admin.IndicatorManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.MultiProgramManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.OrganizationManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.RegionManagerTest;
-import org.dgfoundation.amp.seleniumTest.resources.ResourcesTest;
-import org.dgfoundation.amp.seleniumTest.admin.SectorManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.UserManagerTest;
-import org.dgfoundation.amp.seleniumTest.admin.WorkspaceManagerTest;
+import org.dgfoundation.amp.seleniumTest.admin.*;
 import org.dgfoundation.amp.seleniumTest.permissionsAndValidations.PermissionsAndValidationsTest;
 import org.dgfoundation.amp.seleniumTest.publicView.PublicViewTest;
 import org.dgfoundation.amp.seleniumTest.reports.ReportTest;
 import org.dgfoundation.amp.seleniumTest.reports.TabTest;
+import org.dgfoundation.amp.seleniumTest.resources.ResourcesTest;
 import org.dgfoundation.amp.seleniumTest.workspaceInfo.TeamWorkspaceInfoTest;
+import org.apache.log4j.Logger;
+
 import org.digijava.module.aim.action.OrganisationManager;
 
 import com.thoughtworks.selenium.DefaultSelenium;

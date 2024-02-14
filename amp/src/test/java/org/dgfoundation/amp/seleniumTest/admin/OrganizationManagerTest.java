@@ -1,11 +1,10 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class OrganizationManagerTest extends SeleneseTestCase {
     
@@ -14,7 +13,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testOrganizationManager(LoggingSelenium selenium) throws Exception {
+    public static void testOrganizationManager(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String organizationName = "Selenium Organization " + testTime;
         String orgTypeName = "Selenium Type Org " + testTime;
@@ -108,7 +107,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("link="+organizationName)) {
                 logger.error("Organization wasn't deleted");
-                selenium.logAssertion("assertTrue", "Organization wasn't deleted", "condition=false");
+                //selenium.logAssertion"assertTrue", "Organization wasn't deleted", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/aim/orgGroupManager.do\")]");
             selenium.waitForPageToLoad("30000");
@@ -122,7 +121,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("link="+orgGroupName)) {
                 logger.error("Organization Group wasn't deleted");
-                selenium.logAssertion("assertTrue", "Organization Group wasn't deleted", "condition=false");
+                //selenium.logAssertion"assertTrue", "Organization Group wasn't deleted", "condition=false");
             }
             selenium.click("//a[contains(@href, \"/aim/organisationManager.do\")]");
             selenium.waitForPageToLoad("30000");
@@ -135,17 +134,17 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("link="+orgTypeName)) {
                 logger.error("Organization Type wasn't deleted");
-                selenium.logAssertion("assertTrue", "Organization Type wasn't deleted", "condition=false");
+                //selenium.logAssertion"assertTrue", "Organization Type wasn't deleted", "condition=false");
             }
         } else {
             logger.error("Organization Manager is not available.");
-            selenium.logAssertion("assertTrue", "Organization Manager is not available.", "condition=false");
+            //selenium.logAssertion"assertTrue", "Organization Manager is not available.", "condition=false");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Organization Manager Test Finished Successfully");
-        selenium.logComment("Organization Manager Test Finished Successfully");
+       //selenium.logComment("Organization Manager Test Finished Successfully");
     }
 }
 

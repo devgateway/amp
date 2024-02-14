@@ -62,11 +62,11 @@ public class ResourcesTest extends SeleneseTestCase {
             selenium.click("//li[@id='tab2']/a/div");
             if (selenium.isElementPresent("//button[@type='button' and @onclick=\"setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');\"]")) {
                 logger.error("Error on resources shown");
-                selenium.logAssertion("assertTrue", "Error on resources shown", "condition=false");
+                //selenium.logAssertion"assertTrue", "Error on resources shown", "condition=false");
             }
             if (!selenium.isElementPresent("link=exact:http://www.yahoo.com")) {
                 logger.error("Link added is not available");
-                selenium.logAssertion("assertTrue", "Link added is not available", "condition=false");
+                //selenium.logAssertion"assertTrue", "Link added is not available", "condition=false");
             }
             selenium.click("//li[@id='tab1']/a/div");
             String rId = selenium.getAttribute("//a[@onclick=\"window.open('http://docs.ampdev.net')\" and @style=\"cursor: pointer; text-decoration: underline; color: blue;\"]@id");
@@ -81,7 +81,7 @@ public class ResourcesTest extends SeleneseTestCase {
             Thread.sleep(3000);
             if (!selenium.isElementPresent("link=exact:http://docs.ampdev.net")) {
                 logger.error("Link added is not available");
-                selenium.logAssertion("assertTrue", "Link added is not available", "condition=false");
+                //selenium.logAssertion"assertTrue", "Link added is not available", "condition=false");
             }
             selenium.click("//a[@id='a"+rId+"']/img");
             selenium.getConfirmation();
@@ -111,12 +111,12 @@ public class ResourcesTest extends SeleneseTestCase {
             Thread.sleep(5000);
         } else {
             logger.error("Option 'RESOURCES' is not available.");
-            selenium.logAssertion("assertTrue", "Option 'RESOURCES' is not available.", "condition=false");
+            //selenium.logAssertion"assertTrue", "Option 'RESOURCES' is not available.", "condition=false");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Resources Test Finished Successfully");
-        selenium.logComment("Resources Test Finished Successfully");
+       //selenium.logComment("Resources Test Finished Successfully");
     }
 }

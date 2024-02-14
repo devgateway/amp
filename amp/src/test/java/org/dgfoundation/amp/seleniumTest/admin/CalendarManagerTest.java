@@ -1,11 +1,10 @@
-package dgfoundation.amp.seleniumTest.admin;
+package org.dgfoundation.amp.seleniumTest.admin;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class CalendarManagerTest extends SeleneseTestCase {
     
@@ -14,7 +13,7 @@ public class CalendarManagerTest extends SeleneseTestCase {
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
-    public static void testCalendarManager(LoggingSelenium selenium) throws Exception {
+    public static void testCalendarManager(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String calendarName ="Calendar Test " + testTime;
         selenium.open("/");
@@ -48,7 +47,7 @@ public class CalendarManagerTest extends SeleneseTestCase {
                             selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", calendarName);
                         } catch (Exception e) {
                             logger.error("Calendar just added is not present in Default Calendar options on Global Settings");
-                            selenium.logAssertion("assertTrue", "Calendar just added is not present in Default Calendar options on Global Settings", "condition=false");
+                            //selenium.logAssertion"assertTrue", "Calendar just added is not present in Default Calendar options on Global Settings", "condition=false");
                         }
                         done = true;
                     }
@@ -68,21 +67,21 @@ public class CalendarManagerTest extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 if (selenium.isElementPresent("link="+calendarName)) {
                     logger.error("Calendar wasn't deleted from Calendar Manager");
-                    selenium.logAssertion("assertTrue", "Calendar wasn't deleted from Calendar Manager", "condition=false");
+                    //selenium.logAssertion"assertTrue", "Calendar wasn't deleted from Calendar Manager", "condition=false");
                 }
                 
             } else {
                 logger.error("Module \"Fiscal Calendar Manager\" is active in Feature Manager but is not available.");
-                selenium.logAssertion("assertTrue", "Module \"Fiscal Calendar Manager\" is active in Feature Manager but is not available.", "condition=false");
+                //selenium.logAssertion"assertTrue", "Module \"Fiscal Calendar Manager\" is active in Feature Manager but is not available.", "condition=false");
             }
         } else {
             logger.info("Module \"Fiscal Calendar Manager\" is not available.");
-            selenium.logComment("Module \"Fiscal Calendar Manager\" is not available.");
+           //selenium.logComment("Module \"Fiscal Calendar Manager\" is not available.");
         }
         
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Calendar Manager Test Finished Successfully");
-        selenium.logComment("Calendar Manager Test Finished Successfully");
+       //selenium.logComment("Calendar Manager Test Finished Successfully");
     }
 }

@@ -1451,9 +1451,17 @@ public class ActivityUtil {
         for (IndicatorActivity indicator : indicators) {
             AmpIndicator ind = PersistenceManager.getSession()
                     .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+
             Long programId = ind.getProgram().getAmpThemeId();
             if (programId.equals(program.getProgram().getAmpThemeId())) {
                 return true;
+            }
+            // Also check if the indicators have the parent theme/program that is being deleted
+            AmpTheme getParentTheme = ind.getProgram().getParentThemeId();
+            if(getParentTheme != null){
+                if(getParentTheme.getAmpThemeId().equals(program.getProgram().getAmpThemeId())){
+                    return true;
+                }
             }
         }
 

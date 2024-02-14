@@ -1071,8 +1071,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         SQLUtils.executeQuery(con, deleteActivityTeam );
 
-//        String deleteActivityLocation = "DELETE FROM amp_activity_location WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-//        SQLUtils.executeQuery(con, deleteActivityLocation );
+        List<String> locationIds = ampAct.getLocations().stream()
+                .map(location -> String.valueOf(location.getId()))
+                .collect(Collectors.toList());
+
+        // Join IDs into a comma-separated string
+        String joinedIds = String.join(",", locationIds);
+
+        // Construct SQL query
+        String deleteActivityLocation = "DELETE FROM amp_activity_location WHERE amp_activity_location_id IN (" + joinedIds + ")";
+        SQLUtils.executeQuery(con, deleteActivityLocation );
 
     }
     
@@ -1640,6 +1648,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     deleteFullActivityContent(ampActivityVersion, session);
                     // Remove associations with AmpCategoryValue
                     ampActivityVersion.getCategories().clear();
+                    Set<AmpActivitySector> sectors = ampActivityVersion.getSectors();// query to fetch related sectors by amp_activity_id
+                    for (AmpActivitySector sector : sectors) {
+                        session.delete(sector);
+                    }
+
+//                    Set<AmpActivityLocation> locations = ampActivityVersion.getLocations();// query to fetch related sectors by amp_activity_id
+//                    for (AmpActivityLocation location : locations) {
+//                        session.delete(location);
+//                    }
+//                    ampActivityVersion.getLocations().clear();
                     session.delete(ampActivityVersion);
                 }
             } else {
@@ -1651,6 +1669,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 session.delete(ampAct);
             }
             session.delete(ampActivityGroup);
+            session.getTransaction().commit();
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }

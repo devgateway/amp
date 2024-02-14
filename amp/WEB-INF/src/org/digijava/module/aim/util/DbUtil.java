@@ -50,8 +50,7 @@ public class DbUtil {
      * Used in the AMP-23713.xml patch. Can be reused for other tables, but
      * highly inadvisable to be edited itself.
      *
-     * @param tableName
-     *            the tablename
+     * @param tableName the tablename
      */
     public static void removeReferencedConstraints(String tableName) {
         for (String query : generateFkeyConRemovalQueries(tableName)) {
@@ -65,8 +64,7 @@ public class DbUtil {
      * Generates queries that would drop all foreign key constraints pointing to
      * specified table. Used in AMP-23713.xml, reuse, but do not edit
      *
-     * @param tableName
-     *            the table name to have foreign keys stripped
+     * @param tableName the table name to have foreign keys stripped
      * @return
      */
     private static List<String> generateFkeyConRemovalQueries(String tableName) {
@@ -121,14 +119,12 @@ public class DbUtil {
 
     /**
      * Removes the team-reports and member-reports association table.
-     * 
-     * @param reportId
-     *            A Long array of the reports to be updated
-     * @param teamId
-     *            The teamId of the team whose association with the specified
-     *            reports must be removed. When the teams are dissociated with
-     *            the reports, the association from the members of that team
-     *            also gets removed.
+     *
+     * @param reportId A Long array of the reports to be updated
+     * @param teamId   The teamId of the team whose association with the specified
+     *                 reports must be removed. When the teams are dissociated with
+     *                 the reports, the association from the members of that team
+     *                 also gets removed.
      */
     public static void removeTeamReports(Long reportId[], Long teamId) {
         Session session = null;
@@ -203,15 +199,12 @@ public class DbUtil {
 
     /**
      * Associated the reports with the given team
-     * 
-     * @param reportId
-     *            The Long array of reportIds which are to be associated with
-     *            the given team
-     * @param teamId
-     *            The team id of the team to which the reports are to be
-     *            assigned
-     * @param teamMemberId
-     *            the teamMemer
+     *
+     * @param reportId     The Long array of reportIds which are to be associated with
+     *                     the given team
+     * @param teamId       The team id of the team to which the reports are to be
+     *                     assigned
+     * @param teamMemberId the teamMemer
      */
     public static void addTeamReports(Long reportId[], Long teamId, Long ampMemberId) {
         Session session = null;
@@ -532,10 +525,9 @@ public class DbUtil {
     }
 
     /**
+     * @param reportId Sets the the defaultTeamReport to null for all the AppSettings
+     *                 that were referencing the
      * @author Arty
-     * @param reportId
-     *            Sets the the defaultTeamReport to null for all the AppSettings
-     *            that were referencing the
      */
     public static void updateAppSettingsReportDeleted(Long reportId) {
         Session session = null;
@@ -675,7 +667,7 @@ public class DbUtil {
     /**
      * Loads all objects of T from database, using request session. TODO there
      * are several methods like this, let's refactor to one.
-     * 
+     *
      * @param <T>
      * @param object
      * @return
@@ -688,12 +680,11 @@ public class DbUtil {
     /**
      * Loads all objects of T from database. Client should care about opening
      * and releasing session which is passed as parameter to this method.
-     * 
+     *
      * @param <T>
      * @param object
-     * @param session
-     *            database session. Client should handle session - opening and
-     *            releasing, including transactions if required.
+     * @param session database session. Client should handle session - opening and
+     *                releasing, including transactions if required.
      * @return
      * @throws DgException
      */
@@ -840,7 +831,7 @@ public class DbUtil {
     /**
      * This function gets all organizations whose names begin with
      * namesFirstLetter and name or acronym contain keyword
-     * 
+     *
      * @author Dare
      */
     public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter, String keyword) {
@@ -861,7 +852,7 @@ public class DbUtil {
      * This function gets all organizations whose names begin with
      * namesFirstLetter and name or acronym contain keyword and organisation
      * type is orgType
-     * 
+     *
      * @author Mouhamad
      */
     public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter, String keyword, Long orgType) {
@@ -939,9 +930,8 @@ public class DbUtil {
     /**
      * Returns list of amp organizations, excluding the <code>excludeIds</code>
      *
-     * @param excludeIds
-     *            if not null, the organizations with these ids will be excluded
-     *            from the search result
+     * @param excludeIds if not null, the organizations with these ids will be excluded
+     *                   from the search result
      * @return
      */
     public static ArrayList<AmpOrganisation> getAmpOrganisations(long[] excludeIds) {
@@ -1077,8 +1067,7 @@ public class DbUtil {
     /**
      * returns a sorted-by-name list of @link {@link OrganizationSkeleton}
      *
-     * @param orgGroupId
-     *            - orgGroupId to filter by. If equals null -> no filtering
+     * @param orgGroupId - orgGroupId to filter by. If equals null -> no filtering
      * @return
      */
     public static List<OrganizationSkeleton> getOrgSkeletonByGroupId(Long orgGroupId) {
@@ -1144,7 +1133,6 @@ public class DbUtil {
     }
 
     /**
-     * 
      * @return List of Mul and Bil organization groups
      */
 
@@ -1225,7 +1213,7 @@ public class DbUtil {
             String queryString = "select f from " + AmpOrgType.class.getName()
                     + " f where (f.orgTypeCode=:ampOrgTypeCode)";
             qry = session.createQuery(queryString);
-            qry.setParameter("ampOrgTypeCode", ampOrgTypeCode,StringType.INSTANCE);
+            qry.setParameter("ampOrgTypeCode", ampOrgTypeCode, StringType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 ampOrgType = (AmpOrgType) itr.next();
@@ -1260,16 +1248,29 @@ public class DbUtil {
         return qry.list();
     }
 
+    public static void addTheme(AmpTheme theme) {
+        add(theme);
+        evictCache();
+    }
+    private static void evictCache(){
+        Session session = PersistenceManager.getSession();
+        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
+        session.getSessionFactory().getCache().evictEntityData(AmpActivityProgramSettings.class);
+        session.getSessionFactory().getCache().evictCollectionRegion("org.digijava.module.aim.dbentity.AmpTheme.siblings");
+
+    }
     public static void add(Object object) {
         Session session = PersistenceManager.getSession();
         session.save(object);
-        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
-    }
 
+    }
+    public static void updateTheme(Object theme) {
+        update(theme);
+        evictCache();
+    }
     public static void update(Object object) {
         Session session = PersistenceManager.getSession();
         session.update(object);
-        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
     }
 
     public static void updateField(String className, Long id, String fieldName, Object newValue) {
@@ -1293,7 +1294,7 @@ public class DbUtil {
 
     /**
      * general function to save/update object
-     * 
+     *
      * @param object
      * @throws Exception
      */
@@ -1306,8 +1307,8 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             // beginTransaction();
             Set<AmpOrganisationContact> organisationContacts = org.getOrganizationContacts(); // form
-                                                                                                // org
-                                                                                                // contacts
+            // org
+            // contacts
             /**
              * contact information
              */
@@ -1330,8 +1331,8 @@ public class DbUtil {
                             }
                         }
                         if (count == 0) { // if organization contains
-                                            // contact,which is not in contact
-                                            // list, we should remove it
+                            // contact,which is not in contact
+                            // list, we should remove it
                             AmpOrganisationContact orgCont = (AmpOrganisationContact) sess
                                     .get(AmpOrganisationContact.class, dbOrgContact.getId());
                             AmpContact cont = orgCont.getContact();
@@ -1352,15 +1353,15 @@ public class DbUtil {
                 while (organisationContactIterator.hasNext()) {
                     AmpOrganisationContact ampOrganisationContact = organisationContactIterator.next();
 
-                    if(org.getAmpOrgId() != null) {
-                        if(ampOrganisationContact.getId() != null) {
+                    if (org.getAmpOrgId() != null) {
+                        if (ampOrganisationContact.getId() != null) {
                             // AmpContact
                             // cont=ampOrganisationContact.getContact();
                             AmpOrganisationContact contToBeRemoved =
                                     (AmpOrganisationContact) sess
                                             .get(AmpOrganisationContact.class,
                                                     ampOrganisationContact.getId());
-                            if(contToBeRemoved != null) {
+                            if (contToBeRemoved != null) {
                                 AmpContact ampContact = contToBeRemoved.getContact();
                                 sess.delete(contToBeRemoved);
                                 organisationContactIterator.remove();
@@ -1432,11 +1433,13 @@ public class DbUtil {
             throw new DgException(e);
         }
     }
-
+    public static void deleteTheme(AmpTheme theme){
+        delete(theme);
+        evictCache();
+    }
     public static void delete(Object object) throws JDBCException {
         Session session = PersistenceManager.getSession();
         session.delete(object);
-        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
     }
 
     public static void deleteOrg(AmpOrganisation org) throws JDBCException {
@@ -1543,8 +1546,8 @@ public class DbUtil {
     public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
         return getAllVisibleOrgGroups(null);
     }
+
     /**
-     *
      * generates a list of all AmpOrgGroup elements which have deleted =null or
      * deleted = false
      *
@@ -1749,10 +1752,8 @@ public class DbUtil {
     /**
      * Gets the deleted amp org group with specified name, if it exists
      *
-     * @param name
-     *            name of the amp org group
-     * @param id
-     *            not sure we need this
+     * @param name name of the amp org group
+     * @param id   not sure we need this
      * @return the amp org group if it exists, null otherwise
      */
     public static AmpOrgGroup getDeletedAmpOrgGroups(String name, Long id) {
@@ -1796,7 +1797,7 @@ public class DbUtil {
             Query qry = session.createQuery(queryString);
             qry.setParameter("name", name, StringType.INSTANCE);
             Long longValue = (Long) qry.uniqueResult();
-            Integer amount= longValue.intValue();
+            Integer amount = longValue.intValue();
             if (amount > 0) {
                 duplicateName = true;
             }
@@ -2449,9 +2450,8 @@ public class DbUtil {
 
     /**
      * //for sorting users by Email
-     * 
+     *
      * @author dare
-     * 
      */
     public static class HelperEmailComparator implements Comparator {
         private Order order;
@@ -2539,9 +2539,8 @@ public class DbUtil {
 
     /**
      * This class is used for sorting AmpOrgGroup by code.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
      */
     public static class HelperAmpOrgGroupCodeComparator implements Comparator<AmpOrgGroup> {
         Locale locale;
@@ -2567,9 +2566,8 @@ public class DbUtil {
 
     /**
      * This class is used for sorting AmpOrgGroup by Type.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
      */
     public static class HelperAmpOrgGroupTypeComparator implements Comparator<AmpOrgGroup> {
         public int compare(AmpOrgGroup o1, AmpOrgGroup o2) {
@@ -2601,9 +2599,8 @@ public class DbUtil {
 
     /**
      * This class is used for sorting organisations by name.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
      */
     public static class HelperAmpOrganisationNameComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2612,6 +2609,7 @@ public class DbUtil {
         public HelperAmpOrganisationNameComparator() {
             this.locale = new Locale("en", "EN");
         }
+
         public HelperAmpOrganisationNameComparator(Locale locale) {
             this.locale = locale;
         }
@@ -2632,9 +2630,8 @@ public class DbUtil {
 
     /**
      * This class is used for sorting organisations by acronym.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
      */
     public static class HelperAmpOrganisatonAcronymComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2672,9 +2669,8 @@ public class DbUtil {
      * This class is used for sorting organisation by group. such long and
      * complicated case is necessary because orgGroup maybe empty for
      * organisation
-     * 
+     *
      * @author Dare Roinishvili
-     * 
      */
     public static class HelperAmpOrganisationGroupComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2728,9 +2724,8 @@ public class DbUtil {
      * This class is used for sorting organisation by Type. such long and
      * complicated case is necessary because orgType maybe empty for
      * organisation
-     * 
+     *
      * @author Dare Roinisvili
-     * 
      */
     public static class HelperAmpOrganisationTypeComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2776,7 +2771,7 @@ public class DbUtil {
             queryString = "select o from " + AmpOrganisation.class.getName() + " o where (TRIM(" + orgName
                     + ")=:orgName) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
-            qry.setParameter("orgName", name,StringType.INSTANCE);
+            qry.setParameter("orgName", name, StringType.INSTANCE);
 
             List result = qry.list();
             if (result.size() > 0) {
@@ -2794,9 +2789,8 @@ public class DbUtil {
     /**
      * Compares Values by type(actual,base,target) Used in Multi Program Manager
      * to sort them in order: base,actual,target of the same year
-     * 
+     *
      * @author dare
-     * 
      */
     public static class IndicatorValuesComparatorByTypeAndYear implements Comparator<AmpPrgIndicatorValue> {
         public int compare(AmpPrgIndicatorValue o1, AmpPrgIndicatorValue o2) {
@@ -2816,13 +2810,13 @@ public class DbUtil {
             if (o1Year.compareTo(o2Year) == 1) {
                 retValue = 1;
             } else if (o1Year.compareTo(o2Year) == -1) {// creation year of o1
-                                                        // is less than o2's
+                // is less than o2's
                 retValue = -1;
             } else if (o1Year.compareTo(o2Year) == 0) { // creation years are
-                                                        // equal. So we have to
-                                                        // sort them in
-                                                        // order:base actual
-                                                        // target
+                // equal. So we have to
+                // sort them in
+                // order:base actual
+                // target
                 retValue = -(new Integer(o1.getValueType()).compareTo(new Integer(o2.getValueType())));
             }
             return retValue;
@@ -2859,7 +2853,7 @@ public class DbUtil {
             }
             qry = sess.createQuery(queryString);
             Long longValue = (Long) qry.uniqueResult();
-            count= longValue.intValue();
+            count = longValue.intValue();
         } catch (Exception e) {
             logger.error("Exception while getting org types amount:" + e.getMessage());
         }
@@ -2879,7 +2873,7 @@ public class DbUtil {
             }
             qry = sess.createQuery(queryString);
             Long longValue = (Long) qry.uniqueResult();
-            count= longValue.intValue();
+            count = longValue.intValue();
         } catch (Exception e) {
             logger.error("Exception while getting org types by code:" + e.getMessage());
         }
@@ -2926,9 +2920,8 @@ public class DbUtil {
 
     /**
      * //for sorting users by Email
-     * 
+     *
      * @author dare
-     * 
      */
     public static class HelperEmailComparatorAsc implements Comparator {
         public int compare(Object obj1, Object obj2) {
@@ -2957,18 +2950,18 @@ public class DbUtil {
     public static Comparator sortUsers(UserManagerSorting criteria) {
         Comparator comparator = null;
         switch (criteria) {
-        case NAMEASCENDING:
-            comparator = new HelperUserNameComparator(Order.ASC);
-            break;
-        case NAMEDESCENDING:
-            comparator = new HelperUserNameComparator(Order.DESC);
-            break;
-        case EMAILASCENDING:
-            comparator = new HelperEmailComparator(Order.ASC);
-            break;
-        case EMAILDESCENDING:
-            comparator = new HelperEmailComparator(Order.DESC);
-            break;
+            case NAMEASCENDING:
+                comparator = new HelperUserNameComparator(Order.ASC);
+                break;
+            case NAMEDESCENDING:
+                comparator = new HelperUserNameComparator(Order.DESC);
+                break;
+            case EMAILASCENDING:
+                comparator = new HelperEmailComparator(Order.ASC);
+                break;
+            case EMAILDESCENDING:
+                comparator = new HelperEmailComparator(Order.DESC);
+                break;
         }
         return comparator;
 
@@ -3054,14 +3047,14 @@ public class DbUtil {
                 .add(Restrictions.sqlRestriction("trim({alias}.code) = ?", agreementCode, StringType.INSTANCE))
                 .uniqueResult()).intValue();
     }
-    
-    public static boolean hasDonorRole(Long id){
+
+    public static boolean hasDonorRole(Long id) {
         Session session = null;
         Query query = null;
         boolean result = false;
         try {
-            session = PersistenceManager.getRequestDBSession();         
-            String queryString = "select count(*) from "    + AmpOrgRole.class.getName()
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select count(*) from " + AmpOrgRole.class.getName()
                     + " r where (r.organisation.id = :orgId) and r.role.roleCode = :code";
             query = session.createQuery(queryString);
             query.setParameter("orgId", id, LongType.INSTANCE);
@@ -3072,7 +3065,7 @@ public class DbUtil {
         } catch (Exception e) {
             logger.error("Exception from hasDonorRole()", e);
         }
-        
-        return result;  
+
+        return result;
     }
 }

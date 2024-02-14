@@ -45,7 +45,6 @@ const CenteredMetric: React.FC<CenterTextProps> = (props) => {
 
 const Gauge: React.FC<GaugeProps> = (props) => {
   const { height, innerValue, suffix, margin } = props;
-  // const [dataValues, setDataValues] = useState<Array<any>>([])
 
     const initialDataWithColours = Array.from({ length: 100 }, (_, i) => {
       if (i > Number(innerValue)) return { x: `grey${i}`, y: 0.9, color: "#cdcdcd" };
@@ -59,11 +58,9 @@ const Gauge: React.FC<GaugeProps> = (props) => {
 
     const dataValues: Array<any> = []
     initialDataWithColours.forEach((item, i) => {
-      // setDataValues((prev) => [...prev, item])
       dataValues.push(item)
 
       if (i < initialDataWithColours.length - 1) {
-        // setDataValues((prev) => [...prev, { x: `white${i}`, y: 0.1, color: "#ffffff" }])
         dataValues.push({ x: `white${i}`, y: 0.1, color: "#ffffff" })
       }
     })

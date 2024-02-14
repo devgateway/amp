@@ -38,7 +38,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
         };
     }
 
-    const tickValues = intervals || ChartUtils.generateTickValues(minMax.min, minMax.max, STEP_SIZE);
+    const tickValues = intervals || ChartUtils.generateTickValues(minMax.min, minMax.max, minMax.max > 10_000 ? 1000 : STEP_SIZE);
 
 
 

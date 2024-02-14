@@ -101,14 +101,14 @@ class ChartUtils {
                 x: (new Date().getFullYear() - index).toString(),
                 y: value as number
             };
-        });
+        }).sort((a, b) => parseInt(a.x) - parseInt(b.x));
 
         const targetValueArrayWithYear = new Array(reportlength).fill(targetValue).map((value, index) => {
             return {
                 x: (new Date().getFullYear() - index).toString(),
                 y: value as number
             };
-        });
+        }).sort((a, b) => parseInt(a.x) - parseInt(b.x));
 
         const actualValueArrayWithYear = new Array(reportlength).fill(0).map((value, index) => {
             const actualValue = actualValues.find((actual) => actual.year === (new Date().getFullYear() - index));
@@ -117,7 +117,7 @@ class ChartUtils {
                 x: (new Date().getFullYear() - index).toString(),
                 y: actualValue ? actualValue.value : (findBaseValue ? findBaseValue.y : 0)
             };
-        });
+        }).sort((a, b) => parseInt(a.x) - parseInt(b.x));
 
         return [
             {

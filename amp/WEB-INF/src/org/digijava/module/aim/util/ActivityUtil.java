@@ -1079,8 +1079,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String joinedIds = String.join(",", locationIds);
 
         // Construct SQL query
-        String deleteActivityLocation = "DELETE FROM amp_activity_location WHERE amp_activity_location_id IN (" + joinedIds + ")";
-        SQLUtils.executeQuery(con, deleteActivityLocation );
+//        String deleteActivityLocation = "DELETE FROM amp_activity_location WHERE amp_activity_location_id IN (" + joinedIds + ")";
+//        SQLUtils.executeQuery(con, deleteActivityLocation );
 
     }
     

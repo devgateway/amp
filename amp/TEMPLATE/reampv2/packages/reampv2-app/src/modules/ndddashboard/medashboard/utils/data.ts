@@ -9,7 +9,7 @@ export const extractLv1Children = (program: ProgramConfig) => {
     const lv1Children = children.map((child) => {
         const { children: lv2Children, ...rest } = child;
         return rest;
-    });
+    }).sort((a, b) =>  a.name.localeCompare(b.name));
 
     return lv1Children as ProgramConfigChild[];
 };

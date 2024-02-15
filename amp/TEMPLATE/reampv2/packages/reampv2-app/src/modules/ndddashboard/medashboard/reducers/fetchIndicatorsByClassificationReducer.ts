@@ -25,7 +25,7 @@ export const fetchIndicatorsByClassification = createAsyncThunk(
         if (response.status !== 200) {
             return rejectWithValue(data);
         }
-        return data;
+        return data.sort((a: any, b: any) => a.name.localeCompare(b.name));
     }
 );
 

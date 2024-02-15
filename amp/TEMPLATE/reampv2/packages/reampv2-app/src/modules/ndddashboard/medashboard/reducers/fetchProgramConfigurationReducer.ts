@@ -16,7 +16,7 @@ export const fetchProgramConfiguration = createAsyncThunk(
             return rejectWithValue(data);
         }
 
-        return data;
+        return data.sort((a, b) => a.name.localeCompare(b.name));
     }
 );
 

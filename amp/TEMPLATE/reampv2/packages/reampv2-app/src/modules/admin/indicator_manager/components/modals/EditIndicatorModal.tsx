@@ -137,7 +137,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
       const programScheme: ProgramSchemeType = programsReducer.programSchemes.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
-        const children = extractChildrenFromProgramScheme(programScheme);
+        const children = extractChildrenFromProgramScheme(programScheme)
         const programData = children.map((program: any) => ({
           value: program.id.toString(),
           label: program.name

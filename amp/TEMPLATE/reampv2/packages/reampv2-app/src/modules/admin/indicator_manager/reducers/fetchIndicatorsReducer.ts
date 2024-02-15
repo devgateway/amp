@@ -26,7 +26,7 @@ export const getIndicators = createAsyncThunk(
             return rejectWithValue(data);
         }
 
-        return data;
+        return data.sort((a, b) => a.id - b.id);
     }
 );
 
@@ -67,17 +67,17 @@ const fetchIndicatorSlice = createSlice({
         builder.addCase(getIndicators.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
-    
+
         });
     }
 });
 
-export const { 
+export const {
     addIndicator,
     removeIndicator,
     updateIndicator,
     setSizePerPage,
-    resetSizePerPage 
+    resetSizePerPage
 } = fetchIndicatorSlice.actions;
 
 export default fetchIndicatorSlice.reducer;

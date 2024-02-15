@@ -24,7 +24,7 @@ export const getAmpCategories = createAsyncThunk(
             return rejectWithValue(data);
         }
 
-        return data;
+        return data.sort((a, b) => a.value.localeCompare(b.value));
     }
 );
 

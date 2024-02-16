@@ -1322,9 +1322,7 @@ public class ProgramUtil {
                 tempAmpTheme.setTotalFinancing(editeTheme.getTotalFinancing());
                 tempAmpTheme.setShowInRMFilters(editeTheme.getShowInRMFilters());
 
-//beginTransaction();
-                session.update(tempAmpTheme);
-                //tx.commit();
+                DbUtil.updateTheme(tempAmpTheme);
             }
             catch(Exception ex)
             {

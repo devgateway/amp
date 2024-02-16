@@ -38,6 +38,10 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [indicators]);
 
+    useEffect(() => {
+        handleIndicatorChange(selectedIndicatorId as number)
+    }, [selectedIndicatorId]);
+
     return (
         <div>
             <Col md={12} id="program-grouped-by-indicators" style={{

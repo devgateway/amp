@@ -92,7 +92,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
         if (selectedSectorClassification) {
             handleSectorClassificationChange();
         }
-    }, []);
+    }, [selectedSectorClassification]);
 
     useEffect(() => {
         extractFundingType();
@@ -160,7 +160,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                     onChange={(e) => {
                                         setSelectedSectorClassification(parseInt(e.target.value));
                                         setSelectedClassification(parseInt(e.target.value));
-                                        handleSectorClassificationChange();
+                                        // handleSectorClassificationChange();
                                     }
                                     }
                                     style={{

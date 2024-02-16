@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
 import { TRN_PREFIX } from '../utils/constants';
+import '@devgateway/amp-filter/dist/amp-filter.css';
 
 const Filter = require('@devgateway/amp-filter/dist/amp-filter')
 

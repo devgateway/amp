@@ -74,7 +74,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                     }}
                                     className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                    {indicators.map((item: any, index: number) => (<option key={index} value={item.id}>{item.name}</option>))}
+                                    {indicators.map((item, index: number) => (<option key={index} value={item.id}>{item.name.length > 80 ? item.name.slice(0, 80) + '...' : item.name}</option>))}
                                 </select>
                             )}
                             <span className="cheat-lineheight" />

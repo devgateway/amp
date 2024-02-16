@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Col, Row } from 'react-bootstrap';
 import LeftSection from './sections/LeftSection';
 import RightSection from './sections/RightSection';
+
 
 const MainDashboardContainer = (props: any) => {
     const { filters, settings } = props;

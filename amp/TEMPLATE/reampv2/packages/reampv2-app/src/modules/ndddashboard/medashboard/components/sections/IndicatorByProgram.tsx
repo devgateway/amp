@@ -131,7 +131,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                     }}
                                     className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                    {programConfiguration.map((item: any, index: number) => (<option key={index} value={item.ampProgramSettingsId}>{item.name}</option>))}
+                                    {programConfiguration.map((item, index: number) => (<option key={index} value={item.ampProgramSettingsId}>{item.name}</option>))}
                                 </select>
                             )}
                             <span className="cheat-lineheight" />

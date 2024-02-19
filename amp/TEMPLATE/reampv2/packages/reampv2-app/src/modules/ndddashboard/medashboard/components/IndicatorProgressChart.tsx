@@ -140,13 +140,24 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                              paddingRight: 5,
                          }}>
                         <Row md={12} style={{
+                            display: 'flex',
                             alignItems: 'center',
+                            justifyItems: 'center',
                         }}>
-                            <Col md={6}>
+                            <Col md={6} style={{
+                                display: "flex"
+                            }}>
                                 <Form.Check
                                     type="radio"
-                                    label="Indicator Progress"
+                                    label={translations["amp.ndd.dashboard:me-indicator-progress"]}
                                 />
+                                <p style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    paddingLeft: 10
+                                }}>
+                                    ({yearCount + ' ' + translations["amp.ndd.dashboard:years"]})
+                                </p>
                             </Col>
                             <Col md={6}>
                                 { yearOptions.length > 0  && (

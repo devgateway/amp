@@ -34,7 +34,7 @@ const MeDashboardHome: React.FC<MeDashboardHomeProps> = (props) => {
             </span>
           </Col>
         </Row>
-        <MainDashboardContainer filters={filters} settings={settings} />
+        <MainDashboardContainer filters={filters} settings={settings} translations={translations} />
         <PrintDummy/>
       </Container>
 

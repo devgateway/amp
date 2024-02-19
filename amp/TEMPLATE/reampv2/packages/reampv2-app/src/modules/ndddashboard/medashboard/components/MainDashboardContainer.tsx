@@ -13,7 +13,7 @@ const MainDashboardContainer = (props: any) => {
                 display: 'flex',
                 borderTop: 'none'
             }}>
-                <Col md={6} style={{ paddingRight: 0, paddingLeft: 0,  paddingTop: 20, borderRight: '1px solid #ddd' }}>
+                <Col md={6} style={{paddingRight: 0, paddingLeft: 0, paddingTop: 20, borderRight: '1px solid #ddd'}}>
                     <LeftSection filters={filters} settings={settings}/>
                 </Col>
                 <Col md={6} style={{ paddingRight: 0, paddingLeft: 0,  paddingTop: 20, borderRight: '1px solid #ddd' }}>

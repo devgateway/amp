@@ -61,19 +61,22 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     }
 
     const promiseFetchIndicatorReport = async (id: number, count: number) => {
-        await fetchIndicatorReportData(id, { setLoading: setReportLoading, filters, yearCount: count, settings })
-            .then((data) => {
-                setIndicatorReportData(data);
-                const generatedReport = ChartUtils.generateValuesDataset({
-                    data,
-                    translations
-                });
-                calculateProgressValue(data);
-                setReportData(generatedReport);
+        if (id) {
+            await fetchIndicatorReportData(id, { setLoading: setReportLoading, filters, yearCount: count, settings })
+                .then((data) => {
+                    setIndicatorReportData(data);
+                    const generatedReport = ChartUtils.generateValuesDataset({
+                        data,
+                        translations
+                    });
+                    calculateProgressValue(data);
+                    setReportData(generatedReport);
 
-            }).catch((error) => {
-                console.log(error);
-            })
+                }).catch((error) => {
+                    console.log(error);
+                });
+        }
+
     }
 
     useEffect(() => {

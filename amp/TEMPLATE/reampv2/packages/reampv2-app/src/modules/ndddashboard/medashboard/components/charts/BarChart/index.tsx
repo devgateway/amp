@@ -122,7 +122,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
             borderRadius={3}
             padding={0.2}
             enableLabel={false}
-            valueScale={{ type: 'linear' }}
+            valueScale={{ type: 'symlog' }}
             theme={{
               tooltip: {
                 container: {

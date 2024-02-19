@@ -10,6 +10,7 @@ import {fetchSectorReport} from "../../reducers/fetchSectorsReportReducer";
 import {FUNDING_TYPE} from "../../../utils/constants";
 import EllipsisText from "react-ellipsis-text";
 import { Tooltip }  from "react-tooltip";
+import NoData from "../NoData";
 
 const CustomLegend = ({ data }) => (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
@@ -229,7 +230,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                     paddingTop: 20,
                                 }}>
                                     {
-                                        sectorReport && (
+                                        sectorReport ? (
                                             <>
                                                 <Row style={{
                                                     paddingTop: 10,
@@ -273,6 +274,8 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                                     legendProps={[]}
                                                 />
                                             </>
+                                        ) : (
+                                            <NoData translations={translations} />
                                         )
                                     }
 

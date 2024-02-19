@@ -9,6 +9,7 @@ import { ComponentProps } from '../types';
 import { IndicatorObjectType } from '../../../admin/indicator_manager/types';
 import ChartUtils from '../utils/chart';
 import {fetchIndicatorReportData} from "../utils/fetchIndicatorReport";
+import NoData from "./NoData";
 
 interface IndicatorProgressChartProps extends ComponentProps {
     filters: any;
@@ -16,10 +17,11 @@ interface IndicatorProgressChartProps extends ComponentProps {
     indicator: IndicatorObjectType;
     section: 'right' | 'left';
     index: number;
+    title?: string;
 }
 
 const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: IndicatorProgressChartProps) => {
-    const { translations, filters, settings, indicator, section, index } = props;
+    const { translations, filters, settings, indicator, section, title } = props;
     const dispatch = useDispatch();
 
     // @ts-ignore
@@ -75,8 +77,10 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     }
 
     useEffect(() => {
-        setSelectedIndicatorName(indicator.name);
-        promiseFetchIndicatorReport(indicator.id, yearCount)
+        if (indicator) {
+            setSelectedIndicatorName(indicator.name);
+            promiseFetchIndicatorReport(indicator.id, yearCount)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [indicator.id, yearCount]);
 
@@ -104,114 +108,128 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                         }}>{selectedIndicatorName || translations["amp.ndd.dashboard:me-no-data"]}</div>
                     </Col>
                 </Row>
-                { !reportLoading && (
-                    <Row style={{
-                        paddingLeft: -10
-                    }}>
-
-                        <Col md={6} style={{
+                { !reportLoading ? (
+                    <>
+                        <Row style={{
+                            paddingLeft: -10
                         }}>
-                            <Gauge innerValue={progressValue} suffix={'%'} />
-                        </Col>
-                        <Col md={6}>
+                            {reportData && reportData.length > 0 ? (
+                                <>
+                                    <Col md={6} style={{
+                                    }}>
+                                        <Gauge innerValue={progressValue} suffix={'%'} />
+                                    </Col>
+                                    <Col md={6}>
 
-                            <div style={{
-                                height: 250
-                            }}>
-                                {reportData && reportData.length > 0 && (
-                                    <BarChart
-                                        translations={translations}
-                                        data={reportData}
-                                        title={translations["amp.ndd.dashboard:me-indicator-report"]}/>
-                                )}
+                                        <div style={{
+                                            height: 250
+                                        }}>
 
-                            </div>
-                        </Col>
-                    </Row>
-                )}
-                <Row style={{
-                    padding: '15px',
-                    borderTop: '1px solid #ddd',
-                    borderBottom: '1px solid #ddd'
-                }}>
-                    <Col md={12}
-                         style={{
-                             paddingLeft: 15,
-                             paddingRight: 5,
-                         }}>
-                        <Row md={12} style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyItems: 'center',
-                        }}>
-                            <Col md={6} style={{
-                                display: "flex"
-                            }}>
-                                <Form.Check
-                                    type="radio"
-                                    label={translations["amp.ndd.dashboard:me-indicator-progress"]}
-                                />
-                                <p style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    paddingLeft: 10
-                                }}>
-                                    ({yearCount + ' ' + translations["amp.ndd.dashboard:years"]})
-                                </p>
-                            </Col>
-                            <Col md={6}>
-                                { yearOptions.length > 0  && (
-                                    <Select
-                                        options={yearOptions}
-                                        defaultValue={yearOptions[0]}
-                                        isSearchable={false}
-                                        onChange={(option) => {
-                                            if  (option) {
-                                                setYearCount(option.value as any);
-                                                promiseFetchIndicatorReport(indicator.id, option.value as any);
+                                            <BarChart
+                                                translations={translations}
+                                                data={reportData}
+                                                title={title ?? translations["amp.ndd.dashboard:me-indicator-report"]}/>
 
-
-                                            }
-                                        }}
-                                        components={{
-                                            IndicatorSeparator: () => null,
-                                        }}
-                                        styles={{
-                                            //@ts-ignore
-                                            control: (base) => ({
-                                                ...base,
-                                                boxShadow: 'none',
-                                                border: 'none',
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                            }),
-                                            // @ts-ignore
-                                            valueContainer: (base) => ({
-                                                ...base,
-                                                paddingLeft: 20,
-                                                justifyContent: 'flex-end',
-                                            }),
-                                            // @ts-ignore
-                                            singleValue: (base) => ({
-                                                ...base,
-                                                color: '#116282',
-                                                fontWeight: 600,
-                                                border: 'none',
-                                                tetAlign: 'right',
-                                                order: 1
-                                            })
-                                        }}
-                                    />
-                                )}
-                            </Col>
+                                        </div>
+                                    </Col>
+                                </>
+                            ) : (
+                                <NoData translations={translations} />
+                            )}
                         </Row>
-                    </Col>
-                    <Col md={12}>
-                        {!reportLoading && (
-                            <LineChart data={indicatorReportData}/>
+
+                        {reportData && reportData.length > 0 && (
+                            <Row style={{
+                                padding: '15px',
+                                borderTop: '1px solid #ddd',
+                                borderBottom: '1px solid #ddd'
+                            }}>
+                                <Col md={12}
+                                     style={{
+                                         paddingLeft: 15,
+                                         paddingRight: 5,
+                                     }}>
+                                    <Row md={12} style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyItems: 'center',
+                                    }}>
+                                        <Col md={6} style={{
+                                            display: "flex"
+                                        }}>
+                                            <Form.Check
+                                                type="radio"
+                                                label={translations["amp.ndd.dashboard:me-indicator-progress"]}
+                                            />
+                                            <p style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                paddingLeft: 10
+                                            }}>
+                                                ({yearCount + ' ' + translations["amp.ndd.dashboard:years"]})
+                                            </p>
+                                        </Col>
+                                        <Col md={6}>
+                                            { yearOptions.length > 0  && (
+                                                <Select
+                                                    options={yearOptions}
+                                                    defaultValue={yearOptions[0]}
+                                                    isSearchable={false}
+                                                    onChange={(option) => {
+                                                        if  (option) {
+                                                            setYearCount(option.value as any);
+                                                            promiseFetchIndicatorReport(indicator.id, option.value as any);
+
+
+                                                        }
+                                                    }}
+                                                    components={{
+                                                        IndicatorSeparator: () => null,
+                                                    }}
+                                                    styles={{
+                                                        //@ts-ignore
+                                                        control: (base) => ({
+                                                            ...base,
+                                                            boxShadow: 'none',
+                                                            border: 'none',
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                        }),
+                                                        // @ts-ignore
+                                                        valueContainer: (base) => ({
+                                                            ...base,
+                                                            paddingLeft: 20,
+                                                            justifyContent: 'flex-end',
+                                                        }),
+                                                        // @ts-ignore
+                                                        singleValue: (base) => ({
+                                                            ...base,
+                                                            color: '#116282',
+                                                            fontWeight: 600,
+                                                            border: 'none',
+                                                            tetAlign: 'right',
+                                                            order: 1
+                                                        })
+                                                    }}
+                                                />
+                                            )}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col md={12}>
+                                    {reportData && (
+                                        <LineChart data={indicatorReportData}/>
+                                    )}
+                                </Col>
+                            </Row>
                         )}
-                    </Col>
-                </Row>
+
+                    </>
+
+                ) : (
+                    <div className="loading"></div>
+                )}
+
             </Col>
         </div>
     )

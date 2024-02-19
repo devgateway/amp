@@ -85,7 +85,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
             promiseFetchIndicatorReport(indicator.id, yearCount)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicator.id, yearCount]);
+    }, [indicator.id, yearCount, filters, settings]);
 
     return (
         <div>

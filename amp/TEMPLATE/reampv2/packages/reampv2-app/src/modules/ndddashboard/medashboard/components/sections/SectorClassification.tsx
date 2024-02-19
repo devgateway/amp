@@ -226,92 +226,102 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                     }}>
                         <Col md={12}>
                             { (sectorReport && dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
-                                <div style={{
-                                    paddingTop: 20,
-                                }}>
-                                    {
-                                        sectorReport ? (
-                                            <>
-                                                <Row style={{
-                                                    paddingTop: 10,
-                                                    paddingLeft: 30
-                                                }} className="align-items-center justify-content-between" md={12}>
-                                                    <Col md={8}>
+
+                                <>
+                                    {sectorReportReducer.loading ? (
+                                        <div className="loading"></div>
+                                    ) : (
+                                        <div style={{
+                                            paddingTop: 20,
+                                        }}>
+                                            {
+                                                sectorReport ? (
+                                                    <>
+                                                        <Row style={{
+                                                            paddingTop: 10,
+                                                            paddingLeft: 30
+                                                        }} className="align-items-center justify-content-between"
+                                                             md={12}>
+                                                            <Col md={8}>
                                                     <span style={{
                                                         fontSize: 14,
                                                     }}>{translations['amp.ndd.dashboard:sector-progress']}</span>
-                                                    </Col>
-                                                    <Col md={4}>
+                                                            </Col>
+                                                            <Col md={4}>
                                                     <span style={{
                                                         fontWeight: 'bold',
                                                         fontSize: 20
                                                     }}>{sectorReportReducer.data.sumarizedTotal}</span>
-                                                        <span style={{
-                                                            color: '#6f6f6f',
-                                                            fontWeight: 'bold',
-                                                            fontSize: 20,
-                                                            paddingLeft: 5
-                                                        }}>{sectorReportReducer.data.currency}</span>
-                                                    </Col>
+                                                                <span style={{
+                                                                    color: '#6f6f6f',
+                                                                    fontWeight: 'bold',
+                                                                    fontSize: 20,
+                                                                    paddingLeft: 5
+                                                                }}>{sectorReportReducer.data.currency}</span>
+                                                            </Col>
 
 
-                                                </Row>
+                                                        </Row>
 
-                                                <CustomLegend data={sectorReport}/>
-                                                <Tooltip id="my-tooltip"/>
-                                                <BarChart
-                                                    translations={translations}
-                                                    data={sectorReport}
-                                                    width={400}
-                                                    height={250}
-                                                    margin={{top: 40, right: 30, left: 20}}
-                                                    tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
-                                                    labelFormat={
-                                                        labelValue => (
-                                                            (<tspan y={0}>{labelValue}</tspan>) as unknown
-                                                        ) as string
-                                                    }
-                                                    legendProps={[]}
-                                                />
-                                            </>
-                                        ) : (
-                                            <NoData translations={translations} />
-                                        )
-                                    }
+                                                        <CustomLegend data={sectorReport}/>
+                                                        <Tooltip id="my-tooltip"/>
+                                                        <BarChart
+                                                            translations={translations}
+                                                            data={sectorReport}
+                                                            width={400}
+                                                            height={250}
+                                                            margin={{top: 40, right: 30, left: 20}}
+                                                            tooltipSuffix={settings && settings["currency-code"] ? settings["currency-code"] : undefined}
+                                                            labelFormat={
+                                                                labelValue => (
+                                                                    (<tspan y={0}>{labelValue}</tspan>) as unknown
+                                                                ) as string
+                                                            }
+                                                            legendProps={[]}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <NoData translations={translations}/>
+                                                )
+                                            }
 
-                                    <Col md={12} style={{
-                                        marginTop: 10,
-                                        marginBottom: 10
-                                    }}>
-                                        {(dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
-                                            <select
-                                                defaultValue={defaultFundingType}
-                                                onChange={(e) => setDefaultFundingType(e.target.value)}
-                                                style={{
-                                                    backgroundColor: '#f3f5f8',
-                                                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
-                                                }}
-                                                className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                                {
-                                                    fundingTypeList.map((item: FundingType) => (
-                                                        <option key={item.id} value={item.id}>{item.name}</option>
-                                                    ))
-                                                }
-                                            </select>
-                                        ) : (
-                                            <select
-                                                style={{
-                                                    backgroundColor: '#f3f5f8',
-                                                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
-                                                }}
-                                                className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                                <option>{translations['amp.ndd.dashboard:me-no-data']}</option>
-                                            </select>
-                                        )}
-                                    </Col>
+                                            <Col md={12} style={{
+                                                marginTop: 10,
+                                                marginBottom: 10
+                                            }}>
+                                                {(dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
+                                                    <select
+                                                        defaultValue={defaultFundingType}
+                                                        onChange={(e) => setDefaultFundingType(e.target.value)}
+                                                        style={{
+                                                            backgroundColor: '#f3f5f8',
+                                                            boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                                                        }}
+                                                        className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
+                                                        {
+                                                            fundingTypeList.map((item: FundingType) => (
+                                                                <option key={item.id}
+                                                                        value={item.id}>{item.name}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                ) : (
+                                                    <select
+                                                        style={{
+                                                            backgroundColor: '#f3f5f8',
+                                                            boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                                                        }}
+                                                        className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
+                                                        <option>{translations['amp.ndd.dashboard:me-no-data']}</option>
+                                                    </select>
+                                                )}
+                                            </Col>
 
-                                </div>
-                            ): (
+                                        </div>
+                                    )}
+                                </>
+
+                            ) : (
                                 <div className="loading"></div>
                             )}
 

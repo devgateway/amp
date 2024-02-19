@@ -68,7 +68,7 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
             dispatch(fetchProgramReport({ filters, id: level1Child, settings }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [level1Child]);
+    }, [level1Child, filters, settings]);
 
 
     useEffect(() => {

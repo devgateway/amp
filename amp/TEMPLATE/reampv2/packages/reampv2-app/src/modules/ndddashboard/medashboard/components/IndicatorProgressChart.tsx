@@ -160,10 +160,10 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                         <Col md={6} style={{
                                             display: "flex"
                                         }}>
-                                            <Form.Check
-                                                type="radio"
-                                                label={translations["amp.ndd.dashboard:me-indicator-progress"]}
-                                            />
+                                            <p
+                                                style={{
+                                                    fontWeight: 700
+                                                }}>{translations["amp.ndd.dashboard:me-indicator-progress"]}</p>
                                             <p style={{
                                                 display: "flex",
                                                 alignItems: "center",

@@ -419,7 +419,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);
         degenerate_dimension(ColumnConstants.STATUS, "v_status", catsDimension, true);
         degenerate_dimension(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", catsDimension, true);
-        //no_entity(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", true);
         no_dimension(ColumnConstants.STRUCTURES_COLUMN, "v_structures");
         degenerate_dimension(ColumnConstants.TYPE_OF_ASSISTANCE, "v_terms_assist", catsDimension);
         degenerate_dimension(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation", catsDimension);

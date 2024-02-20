@@ -418,6 +418,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
         degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);
         degenerate_dimension(ColumnConstants.STATUS, "v_status", catsDimension, true);
+        degenerate_dimension(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", catsDimension, true);
+        //no_entity(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", true);
         no_dimension(ColumnConstants.STRUCTURES_COLUMN, "v_structures");
         degenerate_dimension(ColumnConstants.TYPE_OF_ASSISTANCE, "v_terms_assist", catsDimension);
         degenerate_dimension(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation", catsDimension);
@@ -485,7 +487,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_PHONE, "v_proj_coordr_cont_phone");
         no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_TITLE, "v_proj_coordr_cont_title");
         no_entity(ColumnConstants.PROPOSED_PROJECT_LIFE, "v_proposed_project_life");
-        no_entity(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", true);
+
         no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_EMAIL, "v_sect_min_cont_email");
         no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_FAX, "v_sect_min_cont_fax");
         no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_NAME, "v_sect_min_cont_name");

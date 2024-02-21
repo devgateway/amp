@@ -21,6 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
@@ -29,12 +30,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -42,14 +38,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -123,6 +112,47 @@ public class MeService {
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
         return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+    }
+
+    public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
+        List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<ProgramIndicatorValues>();
+
+        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+
+        if (yearsCount < 5) {
+            yearsCount = 5;
+        }
+
+        // Getting params array of objectives
+        List<Integer> objectiveIds = (List<Integer>) params.getFilters().get("national-planning-objectives-level-2");
+
+        for (Integer objectiveId : objectiveIds) {
+            Long id = Long.valueOf(objectiveId);
+            AmpTheme objective = ProgramUtil.getThemeById(id);
+            ProgramIndicatorValues programValues = new ProgramIndicatorValues(objective.getAmpThemeId(), objective.getName());
+
+            // Clone or create a new instance of params for each objectiveId
+            SettingsAndFiltersParameters modifiedParams = cloneWithSingleObjective(params, id);
+
+            Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
+
+            List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
+
+            for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
+                // Access the indicator ID (key)
+                Long indicatorId = entry.getKey();
+                AmpIndicator existingIndicator = getIndicatorById(indicatorId);
+                IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+                // Include indicators name
+                singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
+                indicatorValues.add(singelIndicatorYearValues);
+
+            }
+            programValues.setIndicators(indicatorValues);
+            programIndicatorValues.add(programValues);
+        }
+
+        return programIndicatorValues;
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
@@ -247,4 +277,30 @@ public class MeService {
             throw new RuntimeException("Failed to load indicators");
         }
     }
+
+    private AmpIndicator getIndicatorById(Long indicatorId){
+        try {
+            return IndicatorUtil.getIndicator(indicatorId);
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicator");
+        }
+    }
+
+    // Helper method to clone the original params and update the "national-planning-objectives-level-2" filter
+    private SettingsAndFiltersParameters cloneWithSingleObjective(SettingsAndFiltersParameters originalParams, Long objectiveId) {
+        // Implement the cloning or creation of a new instance based on the original
+        // This could involve deep copying fields or creating a new instance and manually copying values
+        SettingsAndFiltersParameters modifiedParams = new SettingsAndFiltersParameters();
+
+        // Copy settings and other filters as needed
+        modifiedParams.setSettings(originalParams.getSettings());
+
+        // Update the "national-planning-objectives-level-2" filter with a single objectiveId
+        Map<String, Object> filters = new HashMap<>(originalParams.getFilters());
+        filters.put("national-planning-objectives-level-2", Arrays.asList(objectiveId.intValue())); // Convert back to Integer if necessary
+        modifiedParams.setFilters(filters);
+
+        return modifiedParams;
+    }
+
 }

@@ -25,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopDescription;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
@@ -397,6 +398,52 @@ public class EndPoints {
         return new MeService().getIndicatorYearValuesByIndicatorId(id, params);
     }
 
+    @OPTIONS
+    @Path("/me/indicatorReportsByProgramCountry")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeIndicatorReportsByProgramCountry() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    /**
+     * Returns array of indicators values
+     * [
+     * {
+     *         "baseValue": 1000,
+     *         "actualValues": [
+     *             {
+     *                 "year": 2021,
+     *                 "value": 0
+     *             },
+     *             {
+     *                 "year": 2022,
+     *                 "value": 3000.000000000000
+     *             },
+     *             {
+     *                 "year": 2023,
+     *                 "value": 553.000000000000
+     *             }
+     *         ],
+     *         "targetValue": 3000,
+     *         "indicatorId": 11,
+     *         "indicatorName": ""
+     *     }
+     * ]
+     * @param params
+     * @return
+     */
+    @POST
+    @Path("/me/indicatorReportsByProgramCountry")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getValuesForIndicatorsCountryProgram")
+    @ApiOperation(value = "Returns indicator report values for all indicators.")
+    public Response getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
+        List<ProgramIndicatorValues> resp = new MeService().getIndicatorYearValuesByIndicatorCountryProgramId(params);
+        return PublicServices.buildOkResponseWithOriginHeaders(resp);
+    }
+
     @GET
     @Path("/me/indicatorsBySector/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -406,3 +453,5 @@ public class EndPoints {
         return new MeService().getIndicatorsBySector(sectorId);
     }
 }
+
+

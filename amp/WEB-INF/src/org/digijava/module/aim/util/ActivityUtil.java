@@ -1648,46 +1648,21 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     deleteFullActivityContent(ampActivityVersion, session);
                     // Remove associations with AmpCategoryValue
                     ampActivityVersion.getCategories().clear();
-//                    Set<AmpActivitySector> sectors = ampActivityVersion.getSectors();// query to fetch related sectors by amp_activity_id
-//                    for (AmpActivitySector sector : sectors) {
-//                        session.delete(sector);
-//                    }
-
+                    Set<AmpActivitySector> sectors = ampActivityVersion.getSectors();// query to fetch related sectors by amp_activity_id
+                    for (AmpActivitySector sector : sectors) {
+                        session.delete(sector);
+                    }
+                    ampActivityVersion.getSectors().clear();
                     Set<AmpActivityLocation> locations = ampActivityVersion.getLocations();// query to fetch related sectors by amp_activity_id
                     for (AmpActivityLocation location : locations) {
                         session.delete(location);
                     }
                     ampActivityVersion.getLocations().clear();
-
-                    String deleteActivityLocation = "DELETE FROM amp_activity_location" +
-                            " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
-                    session.doWork(connection -> {
-                        SQLUtils.executeQuery(connection, deleteActivityLocation);
-                    });
-
-                    ampActivityVersion.getSectors().clear();
-
-                    String deleteActivitySector = "DELETE FROM amp_activity_sector" +
-                            " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
-                    session.doWork(connection -> {
-                        SQLUtils.executeQuery(connection, deleteActivitySector);
-                    });
-
                     ampActivityVersion.getActPrograms().clear();
-                    String deleteActivityProgram = "DELETE FROM amp_activity_program" +
-                            " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
-                    session.doWork(connection -> {
-                        SQLUtils.executeQuery(connection, deleteActivityProgram);
-                    });
-
                     ampActivityVersion.getOrgrole().clear();
-//                    String deleteActivityOrgRole = "DELETE FROM amp_org_role" +
-//                            " WHERE activity = " + ampActivityVersion.getAmpActivityId();
-//                    session.doWork(connection -> {
-//                        SQLUtils.executeQuery(connection, deleteActivityOrgRole);
-//                    });
-
                     ampActivityVersion.getIndicators().clear();
+                    // Delete duplicate fields if any separately
+                    deleteDuplicateContent(ampActivityVersion, session);
 
                     session.delete(ampActivityVersion);
                 }
@@ -1705,6 +1680,34 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
+    }
+
+    public static void deleteDuplicateContent(AmpActivityVersion ampActivityVersion, Session session){
+        List<AmpActivityLocation> existingActivityLocation = getActivityLocations(ampActivityVersion.getAmpActivityId());
+
+        String deleteActivityLocation = "DELETE FROM amp_activity_location" +
+                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivityLocation);
+        });
+
+        String deleteActivitySector = "DELETE FROM amp_activity_sector" +
+                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivitySector);
+        });
+
+        String deleteActivityProgram = "DELETE FROM amp_activity_program" +
+                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivityProgram);
+        });
+
+        String deleteActivityOrgRole = "DELETE FROM amp_org_role" +
+                " WHERE activity = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivityOrgRole);
+        });
     }
     
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

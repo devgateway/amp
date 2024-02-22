@@ -50,9 +50,9 @@ class ChartUtils {
 
     public static generateGaugeValue = (data : GaugeUtils) => {
         const { baseValue, actualValue, targetValue } = data;
-        if (!targetValue || !baseValue) {
-            return 0;
-        }
+        if (!targetValue || !baseValue) return 0;
+        if (actualValue < baseValue) return 0;
+        if (targetValue === baseValue) return 0;
 
         const actual = actualValue ? actualValue : baseValue;
 

@@ -35,12 +35,12 @@ interface SectorProgressProps {
     translations?: any,
     filters: any,
     settings: any,
-    selectedClassification?: number | null,
-    setSelectedClassification: React.Dispatch<React.SetStateAction<number | null>>
+    selectedSector: number | null,
+    setSelectedSector: React.Dispatch<React.SetStateAction<number | null>>,
 }
 
 const SectorClassification: React.FC<SectorProgressProps> = (props) => {
-    const { translations, filters, settings, setSelectedClassification } = props;
+    const { translations, filters, settings, setSelectedSector } = props;
 
     const dispatch = useDispatch();
 
@@ -63,7 +63,9 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
 
         if (classification) {
             setSectorScheme(classification.sectorScheme);
-            setSectors(classification.sectorScheme.children);
+            const sectorData = classification.sectorScheme.children;
+            setSectors(sectorData);
+            setSelectedSector(sectorData[0].id)
         }
     }
 
@@ -106,7 +108,6 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     useEffect(() => {
         if (sectorClassification.length > 0) {
             setSelectedSectorClassification(sectorClassification[0].id);
-            setSelectedClassification(sectorClassification[0].id);
         }
     }, []);
 
@@ -160,8 +161,6 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                     defaultValue={sectorClassification[0].id}
                                     onChange={(e) => {
                                         setSelectedSectorClassification(parseInt(e.target.value));
-                                        setSelectedClassification(parseInt(e.target.value));
-                                        // handleSectorClassificationChange();
                                     }
                                     }
                                     style={{
@@ -195,7 +194,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                         <Col md={11} style={{
                             paddingRight: 10
                         }}>
-                            {!sectorScheme ? (
+                            {sectors.length === 0 ? (
                                 <select
                                     style={{
                                         backgroundColor: '#f3f5f8',
@@ -206,14 +205,18 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                 </select>
                             ) : (
                                 <select
-                                    defaultValue={sectorScheme.ampSecSchemeId}
-                                    onChange={(e) => setSelectedSectorScheme(parseInt(e.target.value))}
+                                    defaultValue={sectors[0].id}
+                                    onChange={(e) => setSelectedSector(parseInt(e.target.value))}
                                     style={{
                                         backgroundColor: '#f3f5f8',
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                     }}
                                     className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                    <option key={sectorScheme.ampSecSchemeId} value={sectorScheme.ampSecSchemeId}>{sectorScheme.secSchemeName}</option>
+                                    {
+                                        sectors.map((item: SectorObjectType) => (
+                                            <option key={item.id} value={item.id}>{item.name}</option>
+                                        ))
+                                    }
                                 </select>
                             )}
 

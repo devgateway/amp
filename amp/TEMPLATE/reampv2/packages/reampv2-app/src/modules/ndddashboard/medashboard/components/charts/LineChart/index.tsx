@@ -34,11 +34,29 @@ const LineChart: React.FC<LineChartProps> = (props) => {
          //round off the max value to the nearest 10
         minMax = {
             min: Math.floor(min / 10) * 10,
-            max: Math.ceil(max / 10) * 10
+            max: Math.ceil(max / 10) * 10 + (min > 1000 ? 500 : 50)
         };
     }
 
-    const tickValues = intervals || ChartUtils.generateTickValues(minMax.min, minMax.max, minMax.max > 10_000 ? 1000 : STEP_SIZE);
+    const generateSteps = (max:number) => {
+        let steps = 50;
+
+        if (minMax.max < 100) {
+            steps = 10;
+        } else if (minMax.max < 500) {
+            steps = 50
+        } else if (minMax.max < 1000) {
+            steps = 100;
+        }else if (minMax.max < 10_000) {
+            steps = 1000;
+        }else {
+            steps = 10_000;
+        }
+
+        return steps;
+    }
+
+    const tickValues = intervals || ChartUtils.generateTickValues(minMax.min, minMax.max, generateSteps(minMax.max));
 
 
 

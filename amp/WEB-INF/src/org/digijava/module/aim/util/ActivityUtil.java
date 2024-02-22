@@ -1653,11 +1653,32 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         session.delete(sector);
                     }
 
-//                    Set<AmpActivityLocation> locations = ampActivityVersion.getLocations();// query to fetch related sectors by amp_activity_id
-//                    for (AmpActivityLocation location : locations) {
-//                        session.delete(location);
-//                    }
-//                    ampActivityVersion.getLocations().clear();
+                    Set<AmpActivityLocation> locations = ampActivityVersion.getLocations();// query to fetch related sectors by amp_activity_id
+                    for (AmpActivityLocation location : locations) {
+                        session.delete(location);
+                    }
+
+//                    String hqlDelete = "DELETE FROM " + AmpActivityLocation.class.getName() + " al WHERE al.activity.ampActivityId = :ampActId";
+//                    logger.info("hqlDelete " + hqlDelete);
+//                    Query query = session.createQuery(hqlDelete);
+//                    query.setParameter("ampActId", ampActivityVersion.getAmpActivityId());
+//                    int result = query.executeUpdate();
+//                    logger.info("AmpActivityLocation deleted count: " + result);
+//
+//                    String hqlDeleteSector = "DELETE FROM " + AmpActivitySector.class.getName() + " al WHERE al.activityId.ampActivityId = :ampActId";
+//                    logger.info("hqlDelete " + hqlDeleteSector);
+//                    Query querySector = session.createQuery(hqlDelete);
+//                    querySector.setParameter("ampActId", ampActivityVersion.getAmpActivityId());
+//                    int resultSector = querySector.executeUpdate();
+//                    logger.info("AmpActivityLocation deleted count: " + resultSector);
+                    List<AmpActivityLocation> existingActivityLoc = getActivityLocations(ampActivityVersion.getAmpActivityId());
+                    logger.info(existingActivityLoc);
+//                    String deleteActivityLocation = "DELETE FROM amp_activity_location" +
+//                            " WHERE amp_activity_id = " + ampActId;
+//                    session.doWork(connection -> {
+//                        SQLUtils.executeQuery(connection, deleteActivityLocation);
+//                    });
+//                    logger.info(deleteActivityLocation);
                     session.delete(ampActivityVersion);
                 }
             } else {
@@ -1668,6 +1689,53 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
                 session.delete(ampAct);
             }
+
+//            String deleteActivityLocation = "DELETE FROM amp_activity_location" +
+//                    " WHERE amp_activity_id = " + ampActId;
+//            session.doWork(connection -> {
+//                SQLUtils.executeQuery(connection, deleteActivityLocation);
+//            });
+
+//            String hqlDelete = "DELETE FROM " + AmpActivityLocation.class.getName() + " al WHERE al.activity.ampActivityId = :ampActId";
+//            System.out.println("hqlDelete " + hqlDelete);
+//            Query query = session.createQuery(hqlDelete);
+//            query.setParameter("ampActId", ampActId);
+//            int result = query.executeUpdate();
+//            System.out.println("AmpActivityLocation deleted count: " + result);
+
+//            String deleteActivityProgram = "DELETE FROM amp_activity_program" +
+//                    " WHERE amp_activity_id = " + ampActId;
+//            session.doWork(connection -> {
+//                SQLUtils.executeQuery(connection, deleteActivityProgram);
+//
+//            });
+
+//            List<AmpActivitySector> sectors = session.createQuery("FROM " + AmpActivitySector.class.getName() + " s WHERE s.activityId.ampActivityId = :ampActId", AmpActivitySector.class)
+//                    .setParameter("ampActId", ampActId)
+//                    .getResultList();
+//
+//            System.out.println(sectors);
+//            String deleteActivitySector = "DELETE FROM amp_activity_sector" +
+//                    " WHERE amp_activity_id = " + ampActId;
+//            session.doWork(connection -> {
+//                SQLUtils.executeQuery(connection, deleteActivitySector);
+//
+//            });
+
+//            String deleteOrgRole = "DELETE FROM amp_org_role" +
+//                    " WHERE activity = " + ampActId;
+//            session.doWork(connection -> {
+//                SQLUtils.executeQuery(connection, deleteOrgRole);
+//
+//            });
+
+
+//            // Now, delete duplicate records in amp_activity_location
+//            String hqlDelete = "delete from" + AmpActivityLocation.class.getName() + " a where a.ampActivityVersion.ampActivityId = :ampActId";
+//            session.createQuery(hqlDelete)
+//                    .setParameter("ampActId", ampActId)
+//                    .executeUpdate();
+
             session.delete(ampActivityGroup);
             session.getTransaction().commit();
         } catch (Exception ex) {

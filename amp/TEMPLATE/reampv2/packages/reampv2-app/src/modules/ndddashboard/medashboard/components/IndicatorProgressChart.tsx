@@ -34,6 +34,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const [reportData, setReportData] = useState<DataType[]>();
 
     const [reportLoading, setReportLoading] = useState<boolean>(false);
+    const [defaultYearOption, setDefaultYearOption] = useState<{label: string, value: number}>();
     const [yearOptions, setYearOptions] = useState<{label: string, value: number}[]>([]);
 
     const handleGetYearOptions = () => {
@@ -42,6 +43,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
         const dateFormat = globalSettings["default-date-format"];
         const options = ChartUtils.getYearOptions(startDate, endDate, dateFormat, translations);
         setYearOptions(options);
+        setDefaultYearOption(options[0]);
     }
 
     useEffect(() => {
@@ -176,11 +178,12 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                             { yearOptions.length > 0  && (
                                                 <Select
                                                     options={yearOptions}
-                                                    defaultValue={yearOptions[0]}
+                                                    defaultValue={defaultYearOption}
                                                     isSearchable={false}
                                                     onChange={(option) => {
                                                         if  (option) {
                                                             setYearCount(option.value as any);
+                                                            setDefaultYearOption(option);
                                                             promiseFetchIndicatorReport(indicator.id, option.value as any);
 
 

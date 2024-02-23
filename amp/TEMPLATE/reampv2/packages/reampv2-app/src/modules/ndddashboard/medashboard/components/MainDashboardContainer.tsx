@@ -1,7 +1,5 @@
 import React, { Suspense } from 'react'
 import { Col, Row } from 'react-bootstrap';
-import LeftSection from './sections/LeftSection';
-import RightSection from './sections/RightSection';
 
 const LazyLeftSection = React.lazy(() => import('./sections/LeftSection'));
 const LazyRightSection = React.lazy(() => import('./sections/RightSection'));

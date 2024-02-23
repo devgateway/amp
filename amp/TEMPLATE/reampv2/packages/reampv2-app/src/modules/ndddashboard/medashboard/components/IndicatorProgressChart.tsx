@@ -10,6 +10,7 @@ import { IndicatorObjectType } from '../../../admin/indicator_manager/types';
 import ChartUtils from '../utils/chart';
 import {fetchIndicatorReportData} from "../utils/fetchIndicatorReport";
 import NoData from "./NoData";
+import styles from './sections/css/Styles.module.css';
 
 interface IndicatorProgressChartProps extends ComponentProps {
     filters: any;
@@ -154,14 +155,8 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                          paddingLeft: 15,
                                          paddingRight: 5,
                                      }}>
-                                    <Row md={12} style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyItems: 'center',
-                                    }}>
-                                        <Col md={6} style={{
-                                            display: "flex"
-                                        }}>
+                                    <Row md={12} className={styles.line_chart_header}>
+                                        <Col md={6} className={styles.line_chart_header_text}>
                                             <p
                                                 style={{
                                                     fontWeight: 700
@@ -197,6 +192,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                                             border: 'none',
                                                             display: 'flex',
                                                             justifyContent: 'space-between',
+                                                            padding: 0
                                                         }),
                                                         // @ts-ignore
                                                         valueContainer: (base) => ({

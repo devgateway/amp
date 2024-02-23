@@ -31,6 +31,7 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
     }
 
     useEffect(() => {
+            setSelectedIndicator(null);
             if (indicators.length > 0) {
                 setSelectedIndicatorId(indicators[0].id);
                 setSelectedIndicator(indicators[0]);

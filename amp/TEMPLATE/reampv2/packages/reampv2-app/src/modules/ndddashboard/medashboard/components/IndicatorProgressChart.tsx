@@ -32,7 +32,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);
     const [yearCount, setYearCount] = useState<number>(5);
-    const [reportData, setReportData] = useState<DataType[]>();
+    const [reportData, setReportData] = useState<DataType[] | null>(null);
 
     const [reportLoading, setReportLoading] = useState<boolean>(false);
     const [defaultYearOption, setDefaultYearOption] = useState<{label: string, value: number}>();
@@ -49,6 +49,8 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
 
     useEffect(() => {
         handleGetYearOptions();
+        setReportData(null);
+        setProgressValue(0);
     }, []);
 
 
@@ -116,10 +118,12 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                 </Row>
                 { !reportLoading ? (
                     <>
-                        <Row style={{
-                            paddingLeft: -10
-                        }}>
-                            {reportData && reportData.length > 0 ? (
+                    {reportData && reportData.length > 0 ? (
+                        <>
+                            <Row style={{
+                                paddingLeft: -10
+                            }}>
+
                                 <>
                                     <Col md={6} style={{
                                     }}>
@@ -139,12 +143,8 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                         </div>
                                     </Col>
                                 </>
-                            ) : (
-                                <NoData translations={translations} />
-                            )}
-                        </Row>
+                            </Row>
 
-                        {reportData && reportData.length > 0 && (
                             <Row style={{
                                 padding: '15px',
                                 borderTop: '1px solid #ddd',
@@ -221,6 +221,9 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                     )}
                                 </Col>
                             </Row>
+                        </>
+                        ): (
+                            <NoData translations={translations} />
                         )}
 
                     </>

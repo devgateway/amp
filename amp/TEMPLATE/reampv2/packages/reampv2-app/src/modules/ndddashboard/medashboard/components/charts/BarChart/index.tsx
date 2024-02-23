@@ -35,13 +35,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
     barComponent
   } = props;
 
-  const [displayDataSet, setDisplayDataSet] = React.useState<DataType[]>([]);
-
-  useEffect(() => {
-    if (data) {
-      setDisplayDataSet(data);
-    }
-  }, [data]);
+  const displayDataSet = data && data.length > 0 ? data : null;
 
   return (
     <div style={{
@@ -112,6 +106,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
               }
             ]}
             animate={true}
+            motionConfig={'wobbly'}
             enableGridX={false}
             enableGridY={false}
             axisTop={null}

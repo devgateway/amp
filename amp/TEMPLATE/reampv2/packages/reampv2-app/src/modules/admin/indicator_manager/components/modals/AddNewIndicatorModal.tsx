@@ -136,13 +136,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         if (programScheme.startDate) {
           formikRef.current?.setFieldValue("base.originalValueDate", "");
           formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(programScheme.startDate || ''));
-          setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef.current?.setFieldValue("target.originalValueDate", "");
           formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(programScheme.endDate || ''));
-          setTargetOriginalValueDateDisabled(true);
         }
       }
 
@@ -259,6 +257,16 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         validationSchema={translatedIndicatorValidationSchema(translations)}
         onSubmit={(values) => {
           const { name, description, code, sectors, programId, ascending, creationDate, base, target, indicatorsCategory } = values;
+          if (selectedProgramSchemeId && !programId) {
+            MySwal.fire({
+              title: 'Error',
+              text: translations['amp.indicatormanager:errors-program-is-required'],
+              icon: 'error',
+              confirmButtonText: 'Ok',
+            })
+
+            return;
+          }
 
           const indicatorData = {
             name,
@@ -282,6 +290,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             },
             indicatorsCategory
           };
+
+
 
           dispatch(createIndicator(indicatorData));
         }}
@@ -450,6 +460,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             // set the formik value with the selected values and remove the label
                             if (selectedValue) {
                               handleProgramSchemeChange(selectedValue.value, props);
+                            }else {
+                              handleProgramSchemeChange(null, props);
+                              setProgramFieldVisible(false);
                             }
                           }}
                           isClearable
@@ -480,13 +493,14 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             options={programs}
                             onChange={(selectedValue) => {
                               // set the formik value with the selected values and remove the label
-                              props.setFieldValue('programId', selectedValue?.value);
+                              if (selectedValue) props.setFieldValue('programId', parseInt(selectedValue?.value) );
                             }}
                             isClearable
                             getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+
                           />
                         ) :
                           <Select

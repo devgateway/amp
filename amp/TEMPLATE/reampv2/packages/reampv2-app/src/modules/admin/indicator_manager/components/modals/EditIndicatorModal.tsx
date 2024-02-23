@@ -41,7 +41,7 @@ interface IndicatorFormValues {
   sectors: any[];
   ascending: boolean;
   creationDate?: string;
-  programId: string | any;
+  programId: string;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
   indicatorsCategory?: string;
@@ -149,12 +149,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
         if (programScheme.startDate) {
           formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(programScheme.startDate));
-          setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(programScheme.endDate));
-          setTargetOriginalValueDateDisabled(true);
         }
       }
 
@@ -164,7 +162,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const handleProgramSchemeChange = (selectedOption: any, props: FormikProps<IndicatorFormValues>) => {
     setSelectedProgramSchemeId(selectedOption);
-    props.setFieldValue("programId", null);
+    props.setFieldValue("programId", '');
     setProgramFieldVisible(false);
   };
 
@@ -221,16 +219,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
           value: foundProgramScheme.ampProgramSettingsId.toString(),
           label: foundProgramScheme.name
         })
-
-        if (foundProgramScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(foundProgramScheme.startDate || ''));
-          setBaseOriginalValueDateDisabled(true);
-        }
-
-        if (foundProgramScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(foundProgramScheme.endDate || ''));
-          setTargetOriginalValueDateDisabled(true);
-        }
       }
     }
   }
@@ -340,7 +328,30 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         validationSchema={translatedIndicatorValidationSchema(translations)}
         innerRef={formikRef}
         onSubmit={(values) => {
-          const { name, description, code, sectors, ascending, programId, creationDate, base, target, indicatorsCategory } = values;
+          const {
+            name,
+            description,
+            code,
+            sectors,
+            ascending,
+            programId,
+            creationDate,
+            base,
+            target,
+            indicatorsCategory
+          } = values;
+
+          if (selectedProgramSchemeId && !programId) {
+            MySwal.fire({
+              title: 'Error',
+              text: translations['amp.indicatormanager:errors-program-is-required'],
+              icon: 'error',
+              confirmButtonText: 'Ok',
+            })
+
+            return;
+          }
+
           const updatedIndicatorData = {
             id: indicator.id,
             name,
@@ -525,7 +536,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_one_item} controlId="programScheme">
                       <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
                       {
-                        programSchemes.length > 0 ? (
+                        !programsReducer.loading && programSchemes.length > 0 ? (
                           <Select
                             name="programScheme"
                             options={programSchemes}
@@ -534,20 +545,28 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               if (selectedValue) {
                                 setDefaultProgramScheme(selectedValue);
                                 handleProgramSchemeChange(selectedValue.value, props);
+                              }else {
+                                setDefaultProgramScheme(null);
+                                setSelectedProgramSchemeId(null);
+                                handleProgramSchemeChange(null, props);
+                                setProgramFieldVisible(false);
                               }
                             }}
                             isClearable
-                            getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${styles.input_field}`}
                             classNamePrefix="select"
-                            value={defaultProgramScheme}
+                            defaultValue={defaultProgramScheme}
                           />
                         ) : (
-                            <Select
-                                isDisabled={true}
-                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                            />
+                        <>
+                      {!programsReducer.loading && (
+                        <Select
+                        isDisabled={true}
+                      defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                    />
+                    )}
+                  </>
                         )
                       }
                     </Form.Group>
@@ -564,7 +583,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               options={programs}
                               onChange={(selectedValue) => {
                                 // set the formik value with the selected values and remove the label
-                                props.setFieldValue("programId", selectedValue?.value);
+                                if (selectedValue) props.setFieldValue('programId', parseInt(selectedValue?.value) );
                               }}
                               isClearable
                               getOptionValue={(option) => option.value}
@@ -580,6 +599,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         }
+
                       </Form.Group>
                     </Row>
 
@@ -767,7 +787,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                   {translations["amp.indicatormanager:close"]}
                 </Button>
-                <Button type="submit" variant="success">
+                <Button type="submit" variant="success" >
                   {translations["amp.indicatormanager:save"]}
                 </Button>
               </Modal.Footer>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ProgramConfiguration from './ProgramConfiguration';
-import ProgramGroupedByIndicator from './IndicatorByProgram';
+import IndicatorByProgram from './IndicatorByProgram';
 import { Button, Row } from 'react-bootstrap';
 import { DefaultTranslations, ProgramConfigChild } from '../../types';
 import { Dispatch, bindActionCreators } from 'redux';
@@ -39,7 +39,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
             setIndicators(indicatorsByProgramReducer.data);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicatorsByProgramReducer]);
+    }, [indicatorsByProgramReducer.data]);
 
     // @ts-ignore
     return (
@@ -68,9 +68,9 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
             </div>
 
             <div>
-                {level1Child && new Array(numberOfIndicators).fill(0).map((_, index) => {
+                {(level1Child && indicators.length > 0) && new Array(numberOfIndicators).fill(0).map((_, index) => {
                     return (
-                        <ProgramGroupedByIndicator
+                        <IndicatorByProgram
                             translations={translations}
                             level1Child={level1Child}
                             settings={settings}
@@ -115,4 +115,4 @@ const mapStateToProps = (state: any) => ({
 });
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(LeftSection);
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(LeftSection));

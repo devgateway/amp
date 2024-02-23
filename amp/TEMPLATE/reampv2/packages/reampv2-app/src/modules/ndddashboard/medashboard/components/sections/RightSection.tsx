@@ -13,11 +13,14 @@ import NoData from "../NoData";
 interface RightSectionProps {
     translations: DefaultTranslations,
     filters: any,
-    settings: any
+    settings: any,
+    indicatorsLoading: boolean,
+    indicatorsError: any,
+    indicatorsData: any
 }
 
 const RightSection: React.FC<RightSectionProps> = (props) => {
-    const { translations, filters, settings } = props;
+    const { translations, filters, settings, indicatorsLoading,  indicatorsError, indicatorsData } = props;
 
     const dispatch = useDispatch();
     const indicatorsReducer = useSelector((state: any) => state.fetchIndicatorsBySectorReducer);
@@ -37,13 +40,13 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
     }, [selectedSector]);
 
     useEffect(() => {
-        if (indicatorsReducer.error || indicatorsReducer.loading) {
+        if (indicatorsLoading && indicatorsError) {
             setIndicators([]);
         }
-        if (!indicatorsReducer.loading && indicatorsReducer.data && !indicatorsReducer.error) {
-            setIndicators(indicatorsReducer.data);
+        if (!indicatorsLoading && !indicatorsError && indicatorsData) {
+            setIndicators(indicatorsData);
         }
-    }, [indicatorsReducer]);
+    }, [indicatorsLoading, indicatorsError, indicatorsData]);
 
     return (
         <div>
@@ -125,8 +128,10 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
 
 const mapStateToProps = (state: any) => ({
     translations: state.translationsReducer.translations,
+    indicatorsLoading: state.fetchIndicatorsBySectorReducer.loading,
+    indicatorsError: state.fetchIndicatorsBySectorReducer.error,
+    indicatorsData: state.fetchIndicatorsBySectorReducer.data
 });
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(RightSection));
-
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(React.memo(RightSection)));

@@ -184,9 +184,6 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                                         if  (option) {
                                                             setYearCount(option.value as any);
                                                             setDefaultYearOption(option);
-                                                            promiseFetchIndicatorReport(indicator.id, option.value as any);
-
-
                                                         }
                                                     }}
                                                     components={{

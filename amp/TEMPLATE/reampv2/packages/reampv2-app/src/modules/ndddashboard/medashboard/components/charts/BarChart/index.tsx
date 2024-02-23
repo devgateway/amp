@@ -145,4 +145,4 @@ const BarChart: React.FC<BarChartProps> = (props) => {
   )
 }
 
-export default BarChart;
+export default React.memo(BarChart);

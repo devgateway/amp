@@ -1,7 +1,10 @@
-import React, {useEffect} from 'react'
+import React, { Suspense } from 'react'
 import { Col, Row } from 'react-bootstrap';
 import LeftSection from './sections/LeftSection';
 import RightSection from './sections/RightSection';
+
+const LazyLeftSection = React.lazy(() => import('./sections/LeftSection'));
+const LazyRightSection = React.lazy(() => import('./sections/RightSection'));
 
 
 const MainDashboardContainer = (props: any) => {
@@ -14,10 +17,14 @@ const MainDashboardContainer = (props: any) => {
                 borderTop: 'none'
             }}>
                 <Col md={12} lg={6} style={{paddingRight: 0, paddingLeft: 0, paddingTop: 20, borderRight: '1px solid #ddd'}}>
-                    <LeftSection filters={filters} settings={settings}/>
+                    <Suspense fallback={<div className="loading" />}>
+                        <LazyLeftSection filters={filters} settings={settings}/>
+                    </Suspense>
                 </Col>
                 <Col md={12} lg={6} style={{ paddingRight: 0, paddingLeft: 0,  paddingTop: 20, borderRight: '1px solid #ddd' }}>
-                    <RightSection filters={filters} settings={settings}/>
+                    <Suspense fallback={<div className="loading" />}>
+                        <LazyRightSection filters={filters} settings={settings}/>
+                    </Suspense>
                 </Col>
             </Row>
         </>

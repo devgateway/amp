@@ -55,6 +55,8 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
     const sectorClassification: SectorClassifcation [] = useSelector((state: any) => state.fetchSectorClassificationReducer.data);
     const [sectors, setSectors] = React.useState<SectorObjectType[]>([]);
     const [sectorReport, setSectorReport] = React.useState<DataType[]>();
+
+    //memoization
     const [defaultFundingType, setDefaultFundingType] = React.useState<string | undefined>(undefined);
     const [fundingTypeList, setFundingTypeList] = React.useState<FundingType[]>([]);
 
@@ -161,8 +163,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                     defaultValue={sectorClassification[0].id}
                                     onChange={(e) => {
                                         setSelectedSectorClassification(parseInt(e.target.value));
-                                    }
-                                    }
+                                    }}
                                     style={{
                                         backgroundColor: '#f3f5f8',
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'

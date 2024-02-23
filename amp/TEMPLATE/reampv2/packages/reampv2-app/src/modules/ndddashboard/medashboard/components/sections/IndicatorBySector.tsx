@@ -31,8 +31,13 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
             setSelectedIndicatorId(indicators[0].id);
             setSelectedIndicator(indicators[0])
         }
-
     }, [indicators]);
+
+    useEffect(() => {
+        if (selectedIndicatorId) {
+            handleIndicatorChange(selectedIndicatorId);
+        }
+    }, [selectedIndicatorId]);
 
     return (
         <div>
@@ -67,7 +72,6 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                                     onChange={(e) => {
                                         setSelectedIndicator(null);
                                         setSelectedIndicatorId(parseInt(e.target.value))
-                                        handleIndicatorChange(parseInt(e.target.value))
                                     }}
                                     style={{
                                         backgroundColor: '#f3f5f8',

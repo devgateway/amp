@@ -44,7 +44,7 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
             const defaultConfig = programConfiguration[0].ampProgramSettingsId;
             setSelectedConfiguration(defaultConfig);
         }
-    }, []);
+    }, [programConfigurationReducer.data]);
 
     const handleConfigurationChange = () => {
         if (selectedConfiguration) {
@@ -93,7 +93,7 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
             setProgressValue(calculatedProgressValue);
             setProgressValueLoading(false);
         }
-    }, [level1Child, programReportReducer.data]);
+    }, [programReportReducer.data]);
 
     return (
         <div>
@@ -127,7 +127,6 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
                                     defaultValue={programConfiguration[0].ampProgramSettingsId}
                                     onChange={(e) => {
                                         setSelectedConfiguration(Number(e.target.value));
-                                        handleConfigurationChange();
                                     }}
                                     style={{
                                         backgroundColor: '#f3f5f8',

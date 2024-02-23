@@ -74,28 +74,31 @@ const Gauge: React.FC<GaugeProps> = (props) => {
 
   return (
     <div style={{ height: height || 350, width: 350 }}>
-      <ResponsiveRadialBar
-        data={data}
-        startAngle={-90}
-        endAngle={90}
-        colors={(item) => item.data.color}
-        maxValue={100}
-        layers={["bars", ({ center  }) => CenteredMetric({ center, innerValue, suffix })]}
-        innerRadius={0.8}
-        animate={true}
-        margin={margin || {
-          top: 40, right: 70, bottom: 0
-        }}
-        theme={{
-          tooltip: {
-            container: {
-              display: 'none'
-            }
-          }
-        }}
-      />
+      {dataValues.length > 0 && (
+          <ResponsiveRadialBar
+              data={data}
+              startAngle={-90}
+              endAngle={90}
+              colors={(item) => item.data.color}
+              maxValue={100}
+              layers={["bars", ({ center  }) => CenteredMetric({ center, innerValue, suffix })]}
+              innerRadius={0.8}
+              animate={false}
+              transitionMode={"startAngle"}
+              margin={margin || {
+                top: 40, right: 70, bottom: 0
+              }}
+              theme={{
+                tooltip: {
+                  container: {
+                    display: 'none'
+                  }
+                }
+              }}
+          />
+      )}
     </div>
   );
 }
 
-export default Gauge;
+export default React.memo(Gauge);

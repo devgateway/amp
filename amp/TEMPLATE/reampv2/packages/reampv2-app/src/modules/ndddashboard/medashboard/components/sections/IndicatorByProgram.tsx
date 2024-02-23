@@ -22,7 +22,7 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
 
 
     const handleIndicatorChange = (value: number) => {
-        if (indicators) {
+        if (indicators && indicators.length > 0) {
             const findIndicator = indicators.find((item: any) => item.id ===  value);
             if (findIndicator) {
                 setSelectedIndicator(findIndicator);
@@ -38,9 +38,9 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [indicators]);
 
-    useEffect(() => {
-        handleIndicatorChange(selectedIndicatorId as number)
-    }, [selectedIndicatorId]);
+    // useEffect(() => {
+    //     handleIndicatorChange(selectedIndicatorId as number)
+    // }, [selectedIndicatorId]);
 
     return (
         <div>

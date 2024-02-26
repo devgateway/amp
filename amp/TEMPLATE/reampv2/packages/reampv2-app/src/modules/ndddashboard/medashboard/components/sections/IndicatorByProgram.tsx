@@ -109,7 +109,7 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
                         filters={filters}
                         settings={settings}
                         index={index}
-                        indicator={selectedIndicator ? selectedIndicator: {} as any}
+                        indicator={selectedIndicator}
                         globalSettings={globalSettings}
                     />
                 )}

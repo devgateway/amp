@@ -24,8 +24,6 @@ interface IndicatorProgressChartProps extends ComponentProps {
 
 const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: IndicatorProgressChartProps) => {
     const { translations, filters, settings, indicator, section, title, globalSettings } = props;
-    const dispatch = useDispatch();
-
 
     const [indicatorReportData, setIndicatorReportData] = useState<any>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
@@ -65,7 +63,6 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
     }
 
     const promiseFetchIndicatorReport = async (id: number, count: number) => {
-        if (id) {
             await fetchIndicatorReportData(id, { setLoading: setReportLoading, filters, yearCount: count, settings })
                 .then((data) => {
                     setIndicatorReportData(data);
@@ -79,17 +76,13 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                 }).catch((error) => {
                     console.log(error);
                 });
-        }
-
     }
 
     useEffect(() => {
-        if (indicator) {
             setSelectedIndicatorName(indicator.name);
             promiseFetchIndicatorReport(indicator.id, yearCount)
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicator.id, yearCount, filters, settings]);
+    }, [indicator, yearCount, filters, settings]);
 
     return (
         <div>
@@ -137,6 +130,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                             <BarChart
                                                 translations={translations}
                                                 data={reportData}
+                                                symlog={false}
                                                 title={title ?? translations["amp.ndd.dashboard:me-indicator-report"]}/>
 
                                         </div>

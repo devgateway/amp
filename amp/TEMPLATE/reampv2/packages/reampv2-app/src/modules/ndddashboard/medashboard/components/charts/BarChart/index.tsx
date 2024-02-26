@@ -21,6 +21,7 @@ export interface BarChartProps extends ComponentProps {
   tooltipSuffix?: string;
   labelFormat?: string | LabelFormatter;
   barComponent?: React.FC<any>;
+  symlog?: boolean;
 }
 
 const BarChart: React.FC<BarChartProps> = (props) => {
@@ -32,7 +33,8 @@ const BarChart: React.FC<BarChartProps> = (props) => {
     legendProps,
     tooltipSuffix,
     labelFormat,
-    barComponent
+    barComponent,
+    symlog = true
   } = props;
 
   const displayDataSet = data && data.length > 0 ? data : null;
@@ -117,7 +119,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
             borderRadius={3}
             padding={0.2}
             enableLabel={false}
-            valueScale={{ type: 'symlog' }}
+            valueScale={{ type: symlog ? 'symlog' : 'linear' }}
             theme={{
               tooltip: {
                 container: {

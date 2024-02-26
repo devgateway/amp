@@ -220,6 +220,7 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
                                               <BarChart
                                                   translations={translations}
                                                   data={chartData}
+                                                  symlog={false}
                                                   title={translations['amp.ndd.dashboard:me-program-progress']} />
                                           )}
 

@@ -104,7 +104,7 @@ public class AddTheme extends Action {
         AmpTheme ampTheme = new AmpTheme();
         fillTheme(ampTheme, themeForm);
         ARUtil.clearDimension(NPODimension.class);
-        DbUtil.add(ampTheme);
+        DbUtil.addTheme(ampTheme);
         themeForm.setEvent("close");
         return mapping.findForward("addEditForm");
     }
@@ -260,7 +260,7 @@ public class AddTheme extends Action {
         AmpTheme ampTheme = new AmpTheme();
         fillTheme(ampTheme, themeForm);
         ARUtil.clearDimension(NPODimension.class);
-        DbUtil.add(ampTheme);
+        DbUtil.addTheme(ampTheme);
 
         themeForm.setEvent("");
         return mapping.findForward("saved");

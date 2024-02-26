@@ -5,6 +5,7 @@ import ChartUtils from "../../utils/chart";
 import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
 import {DefaultTranslations} from "../../types";
 import IndicatorProgressChart from "../IndicatorProgressChart";
+import {useSelector} from "react-redux";
 
 interface IndicatorBySectorProps {
     translations: DefaultTranslations;
@@ -16,6 +17,9 @@ interface IndicatorBySectorProps {
 
 const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     const { translations, filters, settings, index, indicators } = props;
+
+    // @ts-ignore
+    const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
 
     const [selectedIndicatorId, setSelectedIndicatorId] = React.useState<number | null>(null);
     const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorObjectType | null>(null);
@@ -102,7 +106,9 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                                 filters={filters}
                                 settings={settings}
                                 index={index}
-                                indicator={selectedIndicator}/>
+                                indicator={selectedIndicator}
+                                globalSettings={globalSettings}
+                            />
                         ) : (
                             <div className="loading"></div>
                         )

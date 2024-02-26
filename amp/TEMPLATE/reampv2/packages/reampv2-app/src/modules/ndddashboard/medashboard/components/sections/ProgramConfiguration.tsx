@@ -73,26 +73,31 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
 
     useEffect(() => {
         setChartData(null);
-        if (programReportReducer?.data?.length > 0) {
-            setProgressValueLoading(true);
-            const generateReport = ChartUtils.generateValuesDataset({
-                data: programReportReducer.data,
-                translations
-            });
 
-            setChartData(generateReport);
+        const timeOutHandler = setTimeout(() => {
+            if (programReportReducer?.data?.length > 0) {
+                setProgressValueLoading(true);
+                const generateReport = ChartUtils.generateValuesDataset({
+                    data: programReportReducer.data,
+                    translations
+                });
 
-            const aggregates = ChartUtils.computeAggregateValues(programReportReducer.data);
+                setChartData(generateReport);
 
-            const calculatedProgressValue = ChartUtils.generateGaugeValue({
-                baseValue: aggregates.baseValue,
-                targetValue: aggregates.targetValue,
-                actualValue: aggregates.actualValue
-            });
+                const aggregates = ChartUtils.computeAggregateValues(programReportReducer.data);
 
-            setProgressValue(calculatedProgressValue);
-            setProgressValueLoading(false);
-        }
+                const calculatedProgressValue = ChartUtils.generateGaugeValue({
+                    baseValue: aggregates.baseValue,
+                    targetValue: aggregates.targetValue,
+                    actualValue: aggregates.actualValue
+                });
+
+                setProgressValue(calculatedProgressValue);
+                setProgressValueLoading(false);
+            }
+        }, 500);
+
+        return () => clearTimeout(timeOutHandler);
     }, [programReportReducer.data]);
 
     return (
@@ -195,7 +200,7 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
                         </Col>
                     </Row>
 
-                    { (!programReportReducer.loading && programReportReducer.data) ?
+                    { (!programReportReducer.loading && programReportReducer.data && !progressValueLoading) ?
                       <Row style={{
                           paddingLeft: -10
                       }}>
@@ -211,16 +216,23 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
                                       <div style={{
                                           height: 250
                                       }}>
+                                          {chartData && (
+                                              <BarChart
+                                                  translations={translations}
+                                                  data={chartData}
+                                                  title={translations['amp.ndd.dashboard:me-program-progress']} />
+                                          )}
 
-                                          <BarChart
-                                              translations={translations}
-                                              data={chartData}
-                                              title={translations['amp.ndd.dashboard:me-program-progress']} />
                                       </div>
                                   </Col></>
 
                               ) : (
-                                  <NoData translations={translations} />
+                                  <>
+                                      {!programReportReducer.loading && !progressValueLoading && !programReportReducer.data && (
+                                          <NoData translations={translations} />
+                                      )}
+                                  </>
+
                               )}
 
                       </Row>

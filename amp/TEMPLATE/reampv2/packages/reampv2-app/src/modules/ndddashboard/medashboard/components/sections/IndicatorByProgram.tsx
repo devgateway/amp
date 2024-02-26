@@ -5,6 +5,7 @@ import { ComponentProps } from '../../types';
 import { IndicatorObjectType } from '../../../../admin/indicator_manager/types';
 import ChartUtils from '../../utils/chart';
 import IndicatorProgressChart from "../IndicatorProgressChart";
+import {useSelector} from "react-redux";
 
 interface ProgramGroupedByIndicatorProps extends ComponentProps {
     level1Child: number | null;
@@ -17,12 +18,16 @@ interface ProgramGroupedByIndicatorProps extends ComponentProps {
 const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => {
     const { translations, level1Child, filters, settings, index, indicators } = props;
 
+    // @ts-ignore
+    const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
+
     const [selectedIndicator, setSelectedIndicator] = useState<IndicatorObjectType | null>(null);
     const [selectedIndicatorId, setSelectedIndicatorId] = useState<number | null>(null);
 
 
     const handleIndicatorChange = (value: number) => {
         if (indicators && indicators.length > 0) {
+            setSelectedIndicator(null);
             const findIndicator = indicators.find((item: any) => item.id ===  value);
             if (findIndicator) {
                 setSelectedIndicator(findIndicator);
@@ -39,9 +44,9 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [indicators]);
 
-    // useEffect(() => {
-    //     handleIndicatorChange(selectedIndicatorId as number)
-    // }, [selectedIndicatorId]);
+    useEffect(() => {
+        handleIndicatorChange(selectedIndicatorId as number)
+    }, [selectedIndicatorId]);
 
     return (
         <div>
@@ -68,7 +73,6 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
                                 }}
                                 onChange={(e) => {
                                     setSelectedIndicatorId(e.target.value as unknown as number);
-                                    handleIndicatorChange(parseInt(e.target.value));
                                 }}
                                 className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
                                 {indicators.map((item: any, index: number) => (<option key={index} value={item.id}>{item.name}</option>))}
@@ -97,14 +101,19 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
                         </div>
                     </Col>
                 </Row>
-                        <IndicatorProgressChart
-                            title={translations['amp.ndd.dashboard:me-program-progress']}
-                            section="left"
-                            translations={translations}
-                            filters={filters}
-                            settings={settings}
-                            index={index}
-                            indicator={selectedIndicator ? selectedIndicator: {} as any}/>
+                {selectedIndicator && (
+                    <IndicatorProgressChart
+                        title={translations['amp.ndd.dashboard:me-program-progress']}
+                        section="left"
+                        translations={translations}
+                        filters={filters}
+                        settings={settings}
+                        index={index}
+                        indicator={selectedIndicator ? selectedIndicator: {} as any}
+                        globalSettings={globalSettings}
+                    />
+                )}
+
             </Col>
         </div>
     )

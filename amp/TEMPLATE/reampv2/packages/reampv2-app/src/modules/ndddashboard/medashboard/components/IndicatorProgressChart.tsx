@@ -19,14 +19,13 @@ interface IndicatorProgressChartProps extends ComponentProps {
     section: 'right' | 'left';
     index: number;
     title?: string;
+    globalSettings: any;
 }
 
 const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: IndicatorProgressChartProps) => {
-    const { translations, filters, settings, indicator, section, title } = props;
+    const { translations, filters, settings, indicator, section, title, globalSettings } = props;
     const dispatch = useDispatch();
 
-    // @ts-ignore
-    const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
 
     const [indicatorReportData, setIndicatorReportData] = useState<any>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
@@ -118,7 +117,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                 </Row>
                 { !reportLoading ? (
                     <>
-                    {reportData && reportData.length > 0 ? (
+                    {!reportLoading && reportData && reportData.length > 0 ? (
                         <>
                             <Row style={{
                                 paddingLeft: -10

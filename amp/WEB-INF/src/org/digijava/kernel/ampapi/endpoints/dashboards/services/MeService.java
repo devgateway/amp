@@ -44,6 +44,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static org.digijava.module.aim.util.IndicatorUtil.findIndicatorConnectionByLocationCategoryValue;
 
 public class MeService {
     protected static final Logger logger = Logger.getLogger(MeService.class);
@@ -148,11 +149,49 @@ public class MeService {
                 indicatorValues.add(singelIndicatorYearValues);
 
             }
+            // As an update we need to return indicators with also no values and give them values of 0
+            addIndicatorsWithNoValues(params, id, indicatorValues, yearsCount);
             programValues.setIndicators(indicatorValues);
             programIndicatorValues.add(programValues);
         }
 
         return programIndicatorValues;
+    }
+
+    private void addIndicatorsWithNoValues(SettingsAndFiltersParameters params, Long id, List<IndicatorYearValues> indicatorValues, int yearsCount){
+        // Get the first element of the location category value id, NOTE here we are taking the first element
+        // since the api sends one location id in the array at a time
+        List<Integer> locationIds = (List<Integer>) params.getFilters().get("administrative-level-0");
+        if (locationIds != null && !locationIds.isEmpty()) {
+            Long locationId = Long.valueOf(locationIds.get(0));
+            List<IndicatorActivity> locationIndicatorConnections = new ArrayList<>();
+            try {
+                locationIndicatorConnections = findIndicatorConnectionByLocationCategoryValue(locationId);
+            } catch (DgException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Filter indicators that contains the same objective
+            List<IndicatorActivity> filteredIndicatorsList = locationIndicatorConnections.stream()
+                    // Filter the list based on the nested ampThemeId matching the objectiveId
+                    .filter(indicatorActivity -> indicatorActivity.getActivity() != null && indicatorActivity.getActivity().getActPrograms() != null)
+                    .filter(indicatorActivity -> indicatorActivity.getActivity().getActPrograms().stream()
+                            .anyMatch(ampActivityProgram -> ampActivityProgram.getProgram() != null && id.equals(ampActivityProgram.getProgram().getAmpThemeId())))
+                    .collect(Collectors.toList());
+
+            for(IndicatorActivity filteredIndicator :filteredIndicatorsList){
+                if(!indicatorValues.stream()
+                        .anyMatch(indicator -> indicator.getIndicator().equals(filteredIndicator.getIndicator()))) {
+
+                    Map<Long, List<YearValue>> indicatorsWithYearValuesDummy = new HashMap<>();
+
+                    IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(filteredIndicator.getIndicator(), indicatorsWithYearValuesDummy, yearsCount);
+                    // Include indicators name
+                    singelIndicatorYearValues.setIndicatorName(filteredIndicator.getIndicator().getName());
+                    indicatorValues.add(singelIndicatorYearValues);
+                }
+            }
+        }
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,

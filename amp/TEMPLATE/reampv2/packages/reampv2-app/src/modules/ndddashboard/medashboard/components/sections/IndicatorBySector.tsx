@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import styles from './css/Styles.module.css';
 import {Col, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
-import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
+import {IndicatorObjectType, SectorObjectType} from "../../../../admin/indicator_manager/types";
 import {DefaultTranslations} from "../../types";
 import IndicatorProgressChart from "../IndicatorProgressChart";
 import {useSelector} from "react-redux";
@@ -20,6 +20,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
 
     // @ts-ignore
     const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
+    const selectedSector: SectorObjectType = useSelector((state: any) => state.fetchSectorClassificationReducer.selectedSector);
 
     const [selectedIndicatorId, setSelectedIndicatorId] = React.useState<number | null>(null);
     const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorObjectType | null>(null);
@@ -108,6 +109,8 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                                 index={index}
                                 indicator={selectedIndicator}
                                 globalSettings={globalSettings}
+                                sectorName={selectedSector.name}
+                                showSectorName={true}
                             />
                         ) : (
                             <div className="loading"></div>

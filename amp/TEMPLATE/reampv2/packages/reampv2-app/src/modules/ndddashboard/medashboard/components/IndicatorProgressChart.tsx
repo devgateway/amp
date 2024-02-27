@@ -11,6 +11,8 @@ import ChartUtils from '../utils/chart';
 import {fetchIndicatorReportData} from "../utils/fetchIndicatorReport";
 import NoData from "./NoData";
 import styles from './sections/css/Styles.module.css';
+import EllipsisText from "react-ellipsis-text";
+import { Tooltip }  from "react-tooltip";
 
 interface IndicatorProgressChartProps extends ComponentProps {
     filters: any;
@@ -20,10 +22,31 @@ interface IndicatorProgressChartProps extends ComponentProps {
     index: number;
     title?: string;
     globalSettings: any;
+    showSectorName?: boolean;
+    sectorName?: string;
+}
+
+const CustomTooltip = ({ sectorName }) => {
+    return (
+        <div>
+            <div style={{ cursor: 'pointer', marginTop: -12}} data-tooltip-id="sector-tooltip"
+                 data-tooltip-content={sectorName}>
+                <span style={{
+                    width: '20px',
+                    height: '20px',
+                    display: 'inline-block',
+                    marginRight: '5px'
+                }}></span>
+                <EllipsisText style={{
+                    fontWeight: 700
+                }} text={sectorName} length={16}/>
+            </div>
+        </div>
+    );
 }
 
 const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: IndicatorProgressChartProps) => {
-    const { translations, filters, settings, indicator, section, title, globalSettings } = props;
+    const { translations, filters, settings, indicator, section, title, globalSettings, sectorName, showSectorName } = props;
 
     const [indicatorReportData, setIndicatorReportData] = useState<any>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
@@ -100,20 +123,20 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                     <Col md={11} style={{
                         paddingRight: 10
                     }}>
-
                         <div style={{
                             fontSize: 14,
                             fontWeight: 600,
                             color: 'rgba(0, 0, 0, 0.5)',
                         }}>{selectedIndicatorName || translations["amp.ndd.dashboard:me-no-data"]}</div>
+
                     </Col>
                 </Row>
-                { !reportLoading ? (
+                {!reportLoading ? (
                     <>
-                    {!reportLoading && reportData && reportData.length > 0 ? (
-                        <>
-                            <Row style={{
-                                paddingLeft: -10
+                        {!reportLoading && reportData && reportData.length > 0 ? (
+                            <>
+                                <Row style={{
+                                    paddingLeft: -10
                             }}>
 
                                 <>
@@ -149,11 +172,24 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                          paddingRight: 5,
                                      }}>
                                     <Row md={12} className={styles.line_chart_header}>
-                                        <Col md={6} className={styles.line_chart_header_text}>
-                                            <p
-                                                style={{
-                                                    fontWeight: 700
-                                                }}>{translations["amp.ndd.dashboard:me-indicator-progress"]}</p>
+                                        <Col md={8} className={styles.line_chart_header_text}>
+                                            {showSectorName && sectorName ? (
+                                                <>
+                                                    <CustomTooltip sectorName={sectorName}/>
+                                                    <Tooltip id="sector-tooltip"  />
+                                                    {/*<p*/}
+                                                    {/*    style={{*/}
+                                                    {/*        fontWeight: 700*/}
+                                                    {/*    }}>{sectorName.length > 10 ? sectorName.slice(0, 10) + '...': sectorName}</p>*/}
+                                                </>
+
+                                            ): (
+                                                <p
+                                                    style={{
+                                                        fontWeight: 700
+                                                    }}>{translations["amp.ndd.dashboard:me-indicator-progress"]}</p>
+                                            )}
+
                                             <p style={{
                                                 display: "flex",
                                                 alignItems: "center",
@@ -162,7 +198,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                                 ({yearCount + ' ' + translations["amp.ndd.dashboard:years"]})
                                             </p>
                                         </Col>
-                                        <Col md={6}>
+                                        <Col md={4}>
                                             { yearOptions.length > 0  && (
                                                 <Select
                                                     options={yearOptions}

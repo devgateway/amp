@@ -1,14 +1,15 @@
 import React, {useEffect} from 'react';
-import {DefaultTranslations} from "../../types";
+import {DefaultTranslations, SectorClassifcation} from "../../types";
 import {Button, Col, Row} from "react-bootstrap";
 import SectorClassification from "./SectorClassification";
 import {bindActionCreators, Dispatch} from "redux";
 import {connect, useDispatch, useSelector} from "react-redux";
 import IndicatorBySector from "./IndicatorBySector";
 import styles from "./css/Styles.module.css";
-import {IndicatorObjectType} from "../../../../admin/indicator_manager/types";
+import {IndicatorObjectType, SectorObjectType} from "../../../../admin/indicator_manager/types";
 import {fetchIndicatorsBySector} from "../../reducers/fetchIndicatorsBySectorReducer";
 import NoData from "../NoData";
+import {setSelectedSectorState} from "../../reducers/fetchSectorClassificationReducer";
 
 interface RightSectionProps {
     translations: DefaultTranslations,
@@ -24,6 +25,7 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
 
     const dispatch = useDispatch();
     const indicatorsReducer = useSelector((state: any) => state.fetchIndicatorsBySectorReducer);
+    const sectors: SectorObjectType [] = useSelector((state: any) => state.fetchSectorClassificationReducer.sectors);
 
     const [selectedSector, setSelectedSector] = React.useState<number | null>(null);
     const [numberOfIndicators, setNumberOfIndicators] = React.useState<number>(1);
@@ -33,8 +35,11 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
         setNumberOfIndicators(numberOfIndicators + 1);
     }
 
+
     useEffect(() => {
         if (selectedSector) {
+            const findSector = sectors.find((sector: SectorObjectType) => sector.id === selectedSector);
+            if (findSector) dispatch(setSelectedSectorState(findSector));
             dispatch(fetchIndicatorsBySector(selectedSector));
         }
     }, [selectedSector]);

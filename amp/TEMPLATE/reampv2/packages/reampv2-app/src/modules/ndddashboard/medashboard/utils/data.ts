@@ -1,4 +1,5 @@
-import {FmSettings, ProgramConfig, ProgramConfigChild} from '../types';
+import {FmSettings, ProgramConfig, ProgramConfigChild, SectorClassifcation} from '../types';
+import {SectorObjectType} from "../../../admin/indicator_manager/types";
 
 export const extractLv1Children = (program: ProgramConfig) => {
     const { children } = program;
@@ -35,4 +36,14 @@ export const extractFmColumnsData = (data: FmSettings, columnName: string | stri
     }
 
     return fmSettings[columnName];
+}
+
+export const extractSectors = (data: SectorClassifcation[]) => {
+    const sectors: SectorObjectType [] = [];
+    data.forEach((sectorClassification) =>{
+        const childrenSector = sectorClassification.sectorScheme.children;
+        sectors.push(...childrenSector);
+    })
+
+    return sectors;
 }

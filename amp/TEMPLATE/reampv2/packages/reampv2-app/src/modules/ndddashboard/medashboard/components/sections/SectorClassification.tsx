@@ -11,6 +11,7 @@ import {FUNDING_TYPE} from "../../../utils/constants";
 import EllipsisText from "react-ellipsis-text";
 import { Tooltip }  from "react-tooltip";
 import NoData from "../NoData";
+import {setSelectedSectorState} from "../../reducers/fetchSectorClassificationReducer";
 
 const CustomLegend = ({ data }) => (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
@@ -40,7 +41,7 @@ interface SectorProgressProps {
 }
 
 const SectorClassification: React.FC<SectorProgressProps> = (props) => {
-    const { translations, filters, settings, setSelectedSector } = props;
+    const {translations, filters, settings, setSelectedSector} = props;
 
     const dispatch = useDispatch();
 
@@ -68,6 +69,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
             const sectorData = classification.sectorScheme.children;
             setSectors(sectorData);
             setSelectedSector(sectorData[0].id)
+            dispatch(setSelectedSectorState(sectorData[0]));
         }
     }
 

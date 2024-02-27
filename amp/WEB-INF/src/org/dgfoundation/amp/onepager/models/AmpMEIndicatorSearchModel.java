@@ -66,6 +66,8 @@ public class AmpMEIndicatorSearchModel extends
                 crit.setMaxResults(maxResults);
             ret = crit.list();
 
+            // Re assign all indicators as filtered
+            filterAmpIndicators = ret;
             // Check if the indicator filter by program is active
             boolean filterByProgram = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM);
             if(filterByProgram) {
@@ -88,19 +90,21 @@ public class AmpMEIndicatorSearchModel extends
                             .collect(Collectors.toList());
                 }
             }
+
             // Check if the indicator filter by location is active
             boolean filterByLocation = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION);
             if(filterByLocation) {
                 // Filter indicators by the activity locations
                 if (ampActivityLocations != null && !ampActivityLocations.isEmpty()) {
-                    for (AmpActivityLocation location : ampActivityLocations) {
-                        AmpCategoryValueLocations categoryLocation = location.getLocation();
-                        
-                        filterAmpIndicators = filterAmpIndicators.stream()
-                                .filter(indicator -> indicator.getIndicatorLocations().stream()
-                                        .anyMatch(indicatorLocation -> indicatorLocation.getLocation().equals(categoryLocation))
-                                ).collect(Collectors.toList());
-                    }
+                    // Get a list of the countries
+                    Set<AmpCategoryValueLocations> locations = ampActivityLocations.stream()
+                            .map(AmpActivityLocation::getLocation)
+                            .collect(Collectors.toSet());
+
+                    filterAmpIndicators = filterAmpIndicators.stream()
+                            .filter(indicator -> indicator.getIndicatorLocations().stream()
+                                    .anyMatch(indicatorLocation -> locations.contains(indicatorLocation.getLocation()))
+                            ).collect(Collectors.toList());
                 }
             }
 

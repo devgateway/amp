@@ -234,9 +234,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                             { (sectorReport && dashboardSettingsReducer.dashboardSettingsLoaded && fundingTypeList && defaultFundingType) ? (
 
                                 <>
-                                    {sectorReportReducer.loading ? (
-                                        <div className="loading"></div>
-                                    ) : (
+                                    {!sectorReportReducer.loading && (
                                         <div style={{
                                             paddingTop: 20,
                                         }}>

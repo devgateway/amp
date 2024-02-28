@@ -107,8 +107,8 @@ public class SettingsConstants {
         put(YEAR_TO, "To:");
         put(YEAR_ALL, "All");
         put(PROGRAM_SETTINGS, "Program Settings");
-        put(INDICATOR_FILTER_BY_SECTOR, "Filter by Sector");
-        put(INDICATOR_FILTER_BY_PROGRAM, "Filter by Program");
+        put(INDICATOR_FILTER_BY_SECTOR, "Filter By Sector");
+        put(INDICATOR_FILTER_BY_PROGRAM, "Filter By Program");
         put(SORT_COLUMN, GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN);
         put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
         put(LIMIT_FILE_TO_UPLOAD, GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);

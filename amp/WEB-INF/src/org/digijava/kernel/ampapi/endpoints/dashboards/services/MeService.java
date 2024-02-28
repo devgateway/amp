@@ -197,7 +197,7 @@ public class MeService {
             }
 
             // If filter indicator by location is active also include all other indicators by the country
-//            if(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION)){
+            if(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION)){
                 List<AmpIndicatorLocation> indicatorLocations = new ArrayList<>();
                 try {
                     indicatorLocations = IndicatorUtil.findIndicatorLocationByLocationId(locationId);
@@ -227,8 +227,7 @@ public class MeService {
                         }
                     }
                 }
-//            }
-
+            }
         }
     }
 

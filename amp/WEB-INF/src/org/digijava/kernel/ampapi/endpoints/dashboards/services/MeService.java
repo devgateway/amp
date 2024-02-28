@@ -198,13 +198,35 @@ public class MeService {
 
             // If filter indicator by location is active also include all other indicators by the country
 //            if(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION)){
-            List<AmpIndicatorLocation> indicatorLocations = new ArrayList<>();
-            try {
-                indicatorLocations = IndicatorUtil.findIndicatorLocationByLocationId(locationId);
-            } catch (DgException e) {
-                throw new RuntimeException(e);
-            }
-//            System.out.println(indicatorLocations);
+                List<AmpIndicatorLocation> indicatorLocations = new ArrayList<>();
+                try {
+                    indicatorLocations = IndicatorUtil.findIndicatorLocationByLocationId(locationId);
+                } catch (DgException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Check if the indicators in this indicator locations are associated with the objective
+                List<AmpIndicator> objectiveIndicators = indicatorLocations.stream()
+                        .filter(indicator -> indicator.getIndicator() != null && indicator.getIndicator().getProgram() != null)
+                        .map(AmpIndicatorLocation::getIndicator)
+                        .filter(indicator -> id.equals(indicator.getProgram().getAmpThemeId()))
+                        .collect(Collectors.toList());
+
+                // Check if the indicators in objecitve indicators are present in indicatorValues
+                if(objectiveIndicators != null && !objectiveIndicators.isEmpty()){
+                    for (AmpIndicator objIndicator: objectiveIndicators){
+                        if(!indicatorValues.stream()
+                                .anyMatch(indicator -> indicator.getIndicator().equals(objIndicator))) {
+
+                            Map<Long, List<YearValue>> indicatorsWithYearValuesDummy = new HashMap<>();
+
+                            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(objIndicator, indicatorsWithYearValuesDummy, yearsCount);
+                            // Include indicators name
+                            singelIndicatorYearValues.setIndicatorName(objIndicator.getName());
+                            indicatorValues.add(singelIndicatorYearValues);
+                        }
+                    }
+                }
 //            }
 
         }

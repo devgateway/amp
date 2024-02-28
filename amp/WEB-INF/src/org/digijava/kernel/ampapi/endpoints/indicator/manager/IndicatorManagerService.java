@@ -52,6 +52,8 @@ public class IndicatorManagerService {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static final String FILTER_BY_PROGRAM = "Filter By Program";
+
+    public static final String FILTER_BY_INDICATOR_LOCATION = "Filter By Indicator Location";
     public static final String FILTER_BY_SECTOR = "Filter By Sector";
 
     public static String INDICATOR_CATEGORY_KEY = "core_indicator_type";

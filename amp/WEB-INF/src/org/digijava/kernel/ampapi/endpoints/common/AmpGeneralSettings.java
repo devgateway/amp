@@ -150,6 +150,9 @@ public class AmpGeneralSettings {
     @JsonProperty(SettingsConstants.INDICATOR_FILTER_BY_PROGRAM)
     private Boolean indicatorFilterByProgram;
 
+    @JsonProperty(SettingsConstants.INDICATOR_FILTER_BY_LOCATION)
+    private Boolean indicatorFilterByLocation;
+
     public Boolean getUseIconsForSectorsInProjectList() {
         return useIconsForSectorsInProjectList;
     }
@@ -541,5 +544,13 @@ public class AmpGeneralSettings {
 
     public void setIndicatorFilterByProgram(Boolean indicatorFilterByProgram) {
         this.indicatorFilterByProgram = indicatorFilterByProgram;
+    }
+
+    public Boolean getIndicatorFilterByLocation() {
+        return indicatorFilterByLocation;
+    }
+
+    public void setIndicatorFilterByLocation(Boolean indicatorFilterByLocation) {
+        this.indicatorFilterByLocation = indicatorFilterByLocation;
     }
 }

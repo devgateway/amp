@@ -51,5 +51,4 @@ public abstract class Trigger {
             e1.printStackTrace();
         }
     }
-
 }

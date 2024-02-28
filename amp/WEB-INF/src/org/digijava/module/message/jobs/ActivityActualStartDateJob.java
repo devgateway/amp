@@ -17,25 +17,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 public class ActivityActualStartDateJob extends ConnectionCleaningJob implements StatefulJob {
-    
-    @Override 
-    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        Date curDate = new Date();
-        Date dateAfterDays = null;
-        try {
-            AmpMessageSettings as = AmpMessageUtil.getMessageSettings();
-            if (as != null &&
-               as.getDaysForAdvanceAlertsWarnings() != null &&
-               as.getDaysForAdvanceAlertsWarnings().intValue() > 0){
-                dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,as.getDaysForAdvanceAlertsWarnings().intValue());
-            }else{
-                dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
-            }
-        }catch(Exception ex){
-            dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
-        }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    @Override
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        Date dateAfterDays = ActivityDateJobUtil.getDateAfterDays();
+
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("actualStartDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {
             new ActivityActualStartDateTrigger(act);

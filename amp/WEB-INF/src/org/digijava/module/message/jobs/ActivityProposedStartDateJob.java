@@ -23,20 +23,7 @@ public class ActivityProposedStartDateJob extends ConnectionCleaningJob implemen
     @Override 
     public void executeInternal(JobExecutionContext context) throws JobExecutionException{      
 
-        Date curDate=new Date();
-        Date dateAfterDays=null;
-        try{
-            AmpMessageSettings as=AmpMessageUtil.getMessageSettings();
-            if(as!=null &&
-               as.getDaysForAdvanceAlertsWarnings()!=null &&
-               as.getDaysForAdvanceAlertsWarnings().intValue()>0){
-                dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,as.getDaysForAdvanceAlertsWarnings().intValue());
-            }else{
-                dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
-            }
-        }catch(Exception ex){
-            dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
-        }
+        Date dateAfterDays = ActivityDateJobUtil.getDateAfterDays();
 
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("proposedStartDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {

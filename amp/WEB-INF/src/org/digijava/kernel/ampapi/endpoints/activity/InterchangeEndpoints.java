@@ -20,11 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityServ
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
-import org.digijava.kernel.ampapi.endpoints.async.AsyncActivityIndirectProgramUpdaterService;
-import org.digijava.kernel.ampapi.endpoints.async.AsyncApiService;
-import org.digijava.kernel.ampapi.endpoints.async.AsyncResult;
-import org.digijava.kernel.ampapi.endpoints.async.AsyncResultCacher;
-import org.digijava.kernel.ampapi.endpoints.async.AsyncStatus;
+import org.digijava.kernel.ampapi.endpoints.async.*;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;

@@ -9,6 +9,7 @@ const AdminNDDApp = lazy(() => import('./modules/admin/ndd'));
 const NDDDashboardApp = lazy(() => import('./modules/ndddashboard'));
 const ReportGeneratorApp = lazy(() => import('./modules/report_generator'));
 const GeocoderApp = lazy(() => import('./modules/geocoder'));
+const AdminSectorMappingApp = lazy(() => import('./modules/admin/sectorMapping'));
 
 class AppRoute extends Component {
   render() {
@@ -21,6 +22,7 @@ class AppRoute extends Component {
           <Route path="/ndddashboard" component={NDDDashboardApp} />
           <Route path="/report_generator" component={ReportGeneratorApp} />
           <Route path="/geocoder" component={GeocoderApp}/>
+          <Route path="/sector-mapping" component={AdminSectorMappingApp}/>
         </Suspense>
       </Router>
     );

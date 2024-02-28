@@ -107,6 +107,7 @@
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Filter By Sector" parentModule="Indicator Manager"></module:display>
 <module:display name="Filter By Program" parentModule="Indicator Manager"></module:display>
+<module:display name="Filter By Indicator Location" parentModule="Indicator Manager"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>

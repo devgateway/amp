@@ -133,7 +133,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                 </Row>
                 {!reportLoading ? (
                     <>
-                        {!reportLoading && reportData && reportData.length > 0 ? (
+                        {reportData && reportData.length > 0 ? (
                             <>
                                 <Row style={{
                                     paddingLeft: -10

@@ -98,6 +98,7 @@ module.exports = Backbone.Model.extend({
           //         joinedValues += ", ";
           //     }
           // }
+          //We could use the joined values but it might be confusing for individual values that have commas in them
         return "Multiple";
       } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {    	 
         return matchesFilters[name][0].get('name');

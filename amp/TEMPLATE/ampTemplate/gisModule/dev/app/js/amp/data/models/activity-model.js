@@ -88,17 +88,17 @@ module.exports = Backbone.Model.extend({
 	var matchesFilters = this.attributes.matchesFilters;
     if (matchesFilters && matchesFilters[name]) {
       if (matchesFilters[name].length > 1) {
-          let joinedValues = "";
-          for (let i = 0; i < matchesFilters[name].length; i++) {
-              // Add the current item to the joined string
-              joinedValues += matchesFilters[name][i]['name'];
-
-              // Add a comma if it's not the last element
-              if (i < matchesFilters[name].length - 1) {
-                  joinedValues += ", ";
-              }
-          }
-        return joinedValues;
+          // let joinedValues = "";
+          // for (let i = 0; i < matchesFilters[name].length; i++) {
+          //     // Add the current item to the joined string
+          //     joinedValues += matchesFilters[name][i]['name'];
+          //
+          //     // Add a comma if it's not the last element
+          //     if (i < matchesFilters[name].length - 1) {
+          //         joinedValues += ", ";
+          //     }
+          // }
+        return "Multiple";
       } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {    	 
         return matchesFilters[name][0].get('name');
       }

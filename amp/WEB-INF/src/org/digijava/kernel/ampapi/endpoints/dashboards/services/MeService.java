@@ -58,24 +58,17 @@ public class MeService {
 
 
     public List<MEIndicatorDTO> getIndicatorsByProgram (Long programId) {
-        List<AmpIndicator> indicators = new ArrayList<>();
-        AmpTheme program = ProgramUtil.getThemeById(programId);
-
-        Set<IndicatorTheme> programIndicators = null;
+        Set<AmpIndicator> programIndicators = null;
 
         try {
-            programIndicators = IndicatorUtil.getIndicators(program, true);
+            programIndicators = IndicatorUtil.getThemeIndicators(programId);
         } catch (Exception e) {
             throw new ApiRuntimeException(NOT_FOUND,
                     ApiError.toError("Program with id " + programId + " does not exist"));
         }
 
 
-        programIndicators.forEach(indicator -> {
-            indicators.add(indicator.getIndicator());
-        });
-
-        return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
+        return programIndicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
     }
 
     public List<MEIndicatorDTO> getIndicatorsBySector (Long sectorId) {

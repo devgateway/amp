@@ -43,7 +43,10 @@ const LineChart: React.FC<LineChartProps> = (props) => {
 
         if (minMax.max < 100) {
             steps = 10;
-        } else if (minMax.max < 500) {
+        } else if (minMax.max < 400) {
+            steps = 40;
+        }
+        else if (minMax.max < 500) {
             steps = 50
         } else if (minMax.max < 1000) {
             steps = 100;
@@ -84,6 +87,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
                     tickValues: tickValues,
                     tickSize: 0,
                 }}
+                enableGridY
                 axisBottom={{
                     tickSize: 0,
                 }}

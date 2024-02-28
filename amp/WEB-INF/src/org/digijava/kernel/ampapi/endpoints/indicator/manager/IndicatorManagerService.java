@@ -111,7 +111,7 @@ public class IndicatorManagerService {
         if (indicatorRequest.getProgramId() != null) {
             program = ProgramUtil.getTheme(indicatorRequest.getProgramId());
             indicator.setProgram(program);
-            validateProgramSettingsAndGlobalValues(indicatorRequest, indicator);
+//            validateProgramSettingsAndGlobalValues(indicatorRequest, indicator);
         }
 
         if (indicatorRequest.getBaseValue() != null) {

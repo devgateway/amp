@@ -305,7 +305,7 @@ public class IndicatorManagerService {
             if (indRequest.getProgramId() != null) {
                 program = ProgramUtil.getTheme(indRequest.getProgramId());
                 indicator.setProgram(program);
-                validateProgramSettingsAndGlobalValues(indRequest, indicator);
+//                validateProgramSettingsAndGlobalValues(indRequest, indicator);
             }
 
             Set <AmpIndicatorGlobalValue> updatedValues = new HashSet<>();

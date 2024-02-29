@@ -24,16 +24,23 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
         }).done(function(data) {
             console.log("Programs Settings data", data)
             var listDefs = data.listDefinitions;
-            console.log("Defs", listDefs)
 
-            if (listDefs)
-            {
-                self.settingsObject.name="Program Type";
-                self.settingsObject.id="program-setting";
-                self.settingsObject.selected="National Planning Objective";
-                self.settingsObject.options=[];
-                listDefs.forEach(function(listDef) {
-                    self.settingsObject.options.push({'id': listDef.name, 'name': listDef.name})
+            if (listDefs) {
+                self.settingsObject.name = "Program Type";
+                self.settingsObject.id = "program-setting";
+                self.settingsObject.selected = "National Planning Objective Level 1";
+                self.settingsObject.options = [];
+                listDefs.forEach( function (def)  {
+                    const ids = def.filterIds;
+                    console.log("IDS", ids)
+
+                    if (ids) {
+
+                        ids.forEach(function (id) {
+                            self.settingsObject.options.push({'id': id, 'name': capitalizeSentence(id)})
+                        });
+
+                    }
                 });
 
             }
@@ -42,6 +49,12 @@ _.extend(ProgramSettings.prototype, Backbone.Events, {
 
 });
 
+
+function capitalizeSentence(sentence) {
+    return sentence.toLowerCase().split('-').map(word => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
+}
 
 module.exports = ProgramSettings;
 

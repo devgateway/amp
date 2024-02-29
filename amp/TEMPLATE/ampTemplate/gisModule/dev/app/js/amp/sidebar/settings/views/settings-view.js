@@ -22,24 +22,23 @@ module.exports = BaseControlView.extend({
     var self = this;
 
     BaseControlView.prototype.initialize.apply(this, arguments);
-
     this.app = options.app;
     self.app.data.state.register(this, 'settings', {
           get: self.app.data.settingsWidget.toAPIFormat,
           set: self.app.data.settingsWidget.restoreFromSaved,
           empty: null
         });
-   
-    
+
+
+
+
   },
 
   render: function() {
     var self = this;
     BaseControlView.prototype.render.apply(this);
 
-      console.log(programsData.settingsObject)
-
-    self.$('.content').html(this.template({title: this.title,settingsObject:programsData.settingsObject}));
+      self.$('.content').html(this.template({title: this.title}));
     // add content    
        
     this.app.data.settingsWidget.setElement(this.el.querySelector('#amp-settings'));

@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {BarDatum, BarLegendProps, LabelFormatter, ResponsiveBar} from '@nivo/bar';
 import { ComponentProps, MarginProps } from '../../../types';
 import ChartUtils from "../../../utils/chart";
-import {BarItemProps} from "@nivo/bar/dist/types/types";
 
 export interface DataType {
   id: string;

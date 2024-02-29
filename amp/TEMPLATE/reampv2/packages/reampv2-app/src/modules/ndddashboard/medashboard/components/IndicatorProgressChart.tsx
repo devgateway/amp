@@ -28,20 +28,17 @@ interface IndicatorProgressChartProps extends ComponentProps {
 
 const CustomTooltip = ({ sectorName }) => {
     return (
-        <div>
-            <div style={{ cursor: 'pointer', marginTop: -12}} data-tooltip-id="sector-tooltip"
+            <span style={{ cursor: 'pointer' }} data-tooltip-id="sector-tooltip"
                  data-tooltip-content={sectorName}>
                 <span style={{
                     width: '20px',
                     height: '20px',
-                    display: 'inline-block',
                     marginRight: '5px'
                 }}></span>
                 <EllipsisText style={{
                     fontWeight: 700
                 }} text={sectorName} length={16}/>
-            </div>
-        </div>
+            </span>
     );
 }
 
@@ -184,10 +181,10 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                                                 </>
 
                                             ): (
-                                                <p
+                                                <span
                                                     style={{
                                                         fontWeight: 700
-                                                    }}>{translations["amp.ndd.dashboard:me-indicator-progress"]}</p>
+                                                    }}>{translations["amp.ndd.dashboard:me-indicator-progress"]}</span>
                                             )}
 
                                             <p style={{

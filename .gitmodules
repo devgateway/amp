@@ -1,3 +1,9 @@
 [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-filter"]
 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-filter
 	url = https://github.com/example/amp-filter.git
+[submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-settings"]
+	path = amp/TEMPLATE/ampTemplate/node_modules/amp-settings
+	url = https://github.com/example/amp-settings.git
+[submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate"]
+	path = amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
+	url = https://github.com/example/amp-boilerplate.git

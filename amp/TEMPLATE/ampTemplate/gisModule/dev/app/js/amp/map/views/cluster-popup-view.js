@@ -174,6 +174,11 @@ module.exports = Backbone.View.extend({
     // get funding type, ask for consistency form API, and at least put this function inside settings collection..
     var settings = this.app.data.settingsWidget.toAPIFormat();
     // settings['program-settings'] = 'National Plan Objective';
+      console.log("Settings",settings)
+      if (!settings['program-settings'])
+      {
+          _.extend(settings,{'program-settings':"National Planning Objectives Level 1"})
+      }
     _.extend(payload, {settings: settings});
 
     //API wants these in the url, but other params go in post, strange but it's the way it is...

@@ -1,9 +1,9 @@
-; [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate"]
-; 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
-; 	url = https://github.com/devgateway/amp-boilerplate.git
-; [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-translate"]
-; 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-translate
-; 	url = https://github.com/devgateway/amp-translate.git
-; [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-filter"]
-; 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-filter
-; 	url = https://github.com/devgateway/amp-filter.git
+[submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate"]
+	path = amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
+	url = https://github.com/devgateway/amp-boilerplate.git
+[submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-translate"]
+	path = amp/TEMPLATE/ampTemplate/node_modules/amp-translate
+	url = https://github.com/devgateway/amp-translate.git
+[submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-filter"]
+	path = amp/TEMPLATE/ampTemplate/node_modules/amp-filter
+	url = https://github.com/devgateway/amp-filter.git

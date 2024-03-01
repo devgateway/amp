@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import java.util.Arrays;
 import java.util.List;
-
 /**
  * basic sanity checks common between both the offdb schema and the AmpReportsSchema-using one.
  * These are not supposed to be exhaustive tests; instead they are concerned about "no stupid or weird things happening"

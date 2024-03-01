@@ -13,7 +13,6 @@ import org.dgfoundation.amp.test.categories.SlowTests;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-
 import java.util.Arrays;
 import java.util.List;
 

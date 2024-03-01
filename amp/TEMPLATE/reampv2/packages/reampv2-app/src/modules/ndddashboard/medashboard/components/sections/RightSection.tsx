@@ -76,6 +76,9 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
                 />
             </div>
 
+            { console.log('indicatorsReducer.loading', indicatorsReducer.loading)}
+            { console.log('indicators.length', indicators.length)}
+
 
             {!indicatorsReducer.loading && indicators.length > 0 ? (
                 <>
@@ -118,7 +121,11 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
                     </Row>
                 </>
             ): (
-                <NoData translations={translations} />
+                <>
+                    {!indicatorsReducer.loading && indicators.length === 0 && (
+                        <NoData translations={translations} />
+                    )}
+                </>
             )}
 
         </div>

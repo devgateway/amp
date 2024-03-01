@@ -39,7 +39,7 @@ const routes = [
             {
                 path: "ndddashboard/*",
                 element: (
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<div className="loading"></div>}>
                         <NDDDashboardApp />
                     </Suspense>
                 )

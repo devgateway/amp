@@ -20,7 +20,7 @@ const MainDashboardContainer = (props: any) => {
                     </Suspense>
                 </Col>
                 <Col md={12} lg={6} style={{ paddingRight: 0, paddingLeft: 0,  paddingTop: 20, borderRight: '1px solid #ddd' }}>
-                    <Suspense fallback={<div className="loading" />}>
+                    <Suspense fallback={<div />}>
                         <LazyRightSection filters={filters} settings={settings}/>
                     </Suspense>
                 </Col>

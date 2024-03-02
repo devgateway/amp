@@ -102,10 +102,10 @@
 
 
 		<many-to-one name="team" column="amp_team_id"
-			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="delete" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" />
 
 		<many-to-one name="activityCreator" column="activity_creator"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember"/>
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
 
 		<property name="approvalStatus" column="approval_status">
 		    <type name="org.digijava.module.aim.dbentity.NamedEnumType">
@@ -124,7 +124,7 @@
 
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
 		<many-to-one name="modifiedBy" column="modified_by"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="delete" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
 		<set name="selectedEffectivenessIndicatorOptions" table="AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS" lazy="false" cascade="all">
 			<cache usage="read-write" />

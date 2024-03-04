@@ -101,8 +101,8 @@ WORKDIR /tmp/amp/TEMPLATE/reamp
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
 COPY TEMPLATE/reamp .
 RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=ssh \
-    npm ci \
+    --mount=type=ssh  \
+    npm ci --legacy-peer-deps \
     && npm run build \
     && rm -rf node_modules
 

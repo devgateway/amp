@@ -38,7 +38,7 @@ COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
 RUN --mount=type=cache,target=/root/.npm \
     npm cache clean --force \
-    npm ci \
+    && npm ci \
     && npm run build
 
 FROM node as compile-gis-layers-manager

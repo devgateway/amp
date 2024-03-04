@@ -43,7 +43,9 @@ module.exports = Backbone.View.extend({
       }).render().el;
 
       var collection = self.collection.getPageDetails();
-      collection['gisSettings']= gisSettings.gisSettings;
+      // collection['gisSettings']= gisSettings.gisSettings;
+      _.extend(collection,{gisSettings:gisSettings.gisSettings});
+      console.log('Collection',collection);
       self.app.translator.translateDOM(
         self.template(collection)).then(
         function(newEl) {

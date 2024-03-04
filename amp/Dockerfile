@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-translate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
-COPY TEMPLATE/ampTemplate/node_modules/amp-translate./.git .
+COPY TEMPLATE/ampTemplate/node_modules/amp-translate/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-translate .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci && npm run build

@@ -59,9 +59,8 @@ public class ModuleUtils {
         ModuleConfig moduleConfig = DigiConfigManager.getModuleConfig(
             moduleName);
         if (moduleConfig != null && moduleConfig.getActions() != null) {
-            Iterator iter = moduleConfig.getActions().iterator();
-            while (iter.hasNext()) {
-                Action item = (Action)iter.next();
+            for (Object o : moduleConfig.getActions()) {
+                Action item = (Action) o;
                 if (item.getIdentityType() != null) {
                     itemIdentityTypes.add(item.getIdentityType());
                 }
@@ -194,6 +193,11 @@ public class ModuleUtils {
                                                  ModuleInstance moduleInstance) {
         return DgSecurityManager.permitted(subject, currentSite, moduleInstance,
                                            ResourcePermission.INT_ADMIN);
+    }
+
+    public static boolean isLoginRequiredForGis()
+    {
+        return false;
     }
 
 }

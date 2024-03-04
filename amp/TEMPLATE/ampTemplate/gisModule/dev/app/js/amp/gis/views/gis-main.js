@@ -18,6 +18,50 @@ function loadResizeSensor() {
 	new ResizeSensor($('#amp-header-menu'), updateMapContainerSidebarPosition);
 	updateMapContainerSidebarPosition();
 }
+function fetchDataAndCheckLoginRequired() {
+    var res ={allowed:false}
+    return fetch('/rest/amp/settings')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Check for the login-required field
+            var loginRequired = data['login-required'];
+
+            // Perform actions based on the loginRequired value
+            if (loginRequired === true) {
+                // Return a new promise for the next asynchronous operation
+                return fetch('/rest/amp/user-logged-in')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(userData => {
+                        // Check if the user is logged in
+                        if (userData) {
+                            console.log("User logged in");
+                            res['allowed']=true;
+                        }
+                        else
+                        {
+                            res['allowed']=false;
+                        }
+                        return res; // Resolve the promise with userData
+                    });
+            }
+            else
+            {
+                res['allowed']=true;
+
+            }
+        });
+}
+
 
 module.exports = Backbone.View.extend({
 
@@ -32,9 +76,6 @@ module.exports = Backbone.View.extend({
     this.url = options.url;
     this.data = options.data;
     this.state = options.state;
-
-    
-
   },
   createViews: function(){
 	  this.mapView = new MapView({app: this});
@@ -43,39 +84,62 @@ module.exports = Backbone.View.extend({
   },
   // Render entire geocoding view.
   render: function() {
-    this.$el.html(ModuleTemplate);
+      // fetchDataAndCheckLoginRequired()
+      //     .then(result => {
+      //         // Handle the result if needed
+      //         console.log('Result:', result);
+      //         if (result && result.allowed===false)
+      //         {
+      //             alert("You must be logged in to access this map.")
+      //             // var MyApp = new Backbone.Router();
+      //             window.location.href="/index.do";
+      //             // MyApp.navigate('index.do', {trigger: true});
+      //         }
+      //         else
+      //         {
+      //
+      //         }
+      //     })
+      //     .catch(error => {
+      //         // Handle errors, such as network issues or errors returned by the API
+      //         console.error('Error:', error);
+      //     });
+      this.$el.html(ModuleTemplate);
 
-    this.mapView.setElement(this.$('#map-container')).render();
-    /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
-    this.sidebarView.setElement(this.$('#sidebar-tools')).render();
+      this.mapView.setElement(this.$('#map-container')).render();
+      /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
+      this.sidebarView.setElement(this.$('#sidebar-tools')).render();
 
-    //auto-render the layout
-    var headerWidget = new boilerplate.layout(
-      {
-        callingModule: 'GIS',
-        showDGFooter: false,
-        useSingleRowHeader: true
+      //auto-render the layout
+      var headerWidget = new boilerplate.layout(
+          {
+              callingModule: 'GIS',
+              showDGFooter: false,
+              useSingleRowHeader: true
+          });
+      $.when(headerWidget.layoutFetched).then(function() {
+          $('.dropdown-toggle').dropdown();
+
+          $.when(headerWidget.header.menuRendered).then(function() {
+              loadResizeSensor();
+          });
       });
-    $.when(headerWidget.layoutFetched).then(function() {
-      $('.dropdown-toggle').dropdown();
 
-      $.when(headerWidget.header.menuRendered).then(function() {
-          loadResizeSensor();
-        });
-    });
+      // update translations
+      this.translator.translateDOM(this.el);
+      this.translationToggle();
 
-    // update translations
-    this.translator.translateDOM(this.el);
-    this.translationToggle();
+      // Translate parts of leaflet UI.
+      var leafletZoomIn = $('.leaflet-control-zoom-in');
+      $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
+      var leafletZoomOut = $('.leaflet-control-zoom-out');
+      $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
 
-    // Translate parts of leaflet UI.
-    var leafletZoomIn = $('.leaflet-control-zoom-in');
-    $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
-    var leafletZoomOut = $('.leaflet-control-zoom-out');
-    $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
+      /* TODO(thadk): test without app here? this?*/
+      app.translator.translateDOM('.leaflet-control-zoom');
 
-    /* TODO(thadk): test without app here? this?*/
-    app.translator.translateDOM('.leaflet-control-zoom');
+
+
   },
 
   translationToggle: function() {

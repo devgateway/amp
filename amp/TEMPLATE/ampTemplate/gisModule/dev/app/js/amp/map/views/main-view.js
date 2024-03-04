@@ -109,7 +109,7 @@ module.exports = Backbone.View.extend({
           }
         };
 
-        for (var i = 0; i < arguments.length; i++) {
+        for (let i = 0; i < arguments.length; i++) {
           var topoboundaries = arguments[i].toJSON();
 
           //retrieve the TopoJSON index key
@@ -119,6 +119,7 @@ module.exports = Backbone.View.extend({
 
           self.countryBoundary = L.geoJson(boundary, {
             onEachFeature: updateOuterBounds,
+            // style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
             style: function (feature) {
               // Check if the "NAME" attribute is "extra"
               if (feature.properties['BELT'] === true) {

@@ -5,14 +5,15 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
                     http://www.springframework.org/schema/beans/spring-beans.xsd
-                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security
                     http://www.springframework.org/schema/security/spring-security.xsd
 					http://www.springframework.org/schema/context
 					http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<beans:import resource="classpath:/applicationContext.xml" />
+	<context:component-scan base-package="org.digijava.kernel.util" />
 
 	<beans:bean id="customHttpFirewall" class="org.springframework.security.web.firewall.DefaultHttpFirewall"/>
 	<http-firewall ref="customHttpFirewall"/>
@@ -86,11 +87,39 @@
 	<http pattern="/rest/**" security="none" />
     <http pattern="/api-docs/**" security="none" />
 
-	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
-	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
-    <http pattern="/gis/boundaries/**" security="none" />
+	<beans:bean id="gisAuthenticationCheckService" class="org.digijava.kernel.util.GisSecurityUtilService"/>
+
+
+
+
+<!--	http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />-->
+<!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />-->
+<!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />-->
+<!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />-->
+<!--	<http pattern="/gis/boundaries/**" security="none" /><-->
+
+
+	<http pattern="/TEMPLATE/ampTEMPLATE**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/gis/boundaries/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
 
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
@@ -273,5 +302,6 @@
 	</beans:bean>
 
 	<context:component-scan base-package="org.digijava.kernel.services"/>
+
 
 </beans:beans>   

@@ -798,6 +798,7 @@
 
 <feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
 <feature:display name="Gap Analysis Map" module="/GIS"></feature:display>
+<feature:display name="Login Required" module="/GIS"></feature:display>
 
 <!-- create entries for each and every available measure -->
 <%

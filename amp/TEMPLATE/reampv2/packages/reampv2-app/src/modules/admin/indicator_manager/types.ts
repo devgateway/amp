@@ -71,6 +71,7 @@ export interface SettingsType {
     "hide-contacts-public-view":                boolean;
     "download-map-selector":                    boolean;
     "gap-analysis-map":                         boolean;
+    "login-required":                           boolean;
     "has-ssc-workspaces":                       boolean;
     "public-version-history":                   boolean;
     "public-change-summary":                    boolean;

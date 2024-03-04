@@ -8,7 +8,9 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-translate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
-COPY TEMPLATE/ampTemplate/node_modules/amp-translate/!node_modules .
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci \
+COPY TEMPLATE/ampTemplate/node_modules/amp-translate .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
 

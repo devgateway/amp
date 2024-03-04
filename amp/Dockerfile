@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM node as compile-amp-translate
 
 # Create a directory for the app within the Docker image
-WORKDIR /app
+WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
 
 # Copy only the package.json and package-lock.json files
 COPY TEMPLATE/ampTemplate/node_modules/amp-translate/package*.json ./

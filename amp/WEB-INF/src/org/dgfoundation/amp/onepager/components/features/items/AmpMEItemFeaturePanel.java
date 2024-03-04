@@ -71,7 +71,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         if (location.getObject().getLocation().getParentLocation() != null) {
             locationName = location.getObject().getLocation().getParentLocation().getName() + "[" + location.getObject().getLocation().getName() + "]";
         }
-
         add(new Label("countryLocation", locationName));
 
         final IModel<List<IndicatorActivity>> listModel = OnePagerUtil
@@ -177,7 +176,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
                 };
         searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
-        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_LOCATION, am.getObject().getLocations());
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_LOCATION, location.getObject());
         add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
         add(searchIndicators);
     }

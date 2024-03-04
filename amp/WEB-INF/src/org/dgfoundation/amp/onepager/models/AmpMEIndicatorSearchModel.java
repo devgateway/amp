@@ -52,8 +52,8 @@ public class AmpMEIndicatorSearchModel extends
 
             Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
 
-            // Get activity locations
-            Set<AmpActivityLocation> ampActivityLocations = (Set<AmpActivityLocation>) getParam(PARAM.ACTIVITY_LOCATION);
+            // Get activity location
+            AmpActivityLocation ampActivityLocation = (AmpActivityLocation) getParam(PARAM.ACTIVITY_LOCATION);
 
             crit.setCacheable(false);
             if (input.trim().length() > 0) {
@@ -94,16 +94,11 @@ public class AmpMEIndicatorSearchModel extends
             // Check if the indicator filter by location is active
             boolean filterByLocation = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION);
             if(filterByLocation) {
-                // Filter indicators by the activity locations
-                if (ampActivityLocations != null && !ampActivityLocations.isEmpty()) {
-                    // Get a list of the countries
-                    Set<AmpCategoryValueLocations> locations = ampActivityLocations.stream()
-                            .map(AmpActivityLocation::getLocation)
-                            .collect(Collectors.toSet());
-
+                // Filter indicators by the activity location
+                if (ampActivityLocation != null) {
                     filterAmpIndicators = filterAmpIndicators.stream()
                             .filter(indicator -> indicator.getIndicatorLocations().stream()
-                                    .anyMatch(indicatorLocation -> locations.contains(indicatorLocation.getLocation()))
+                                    .anyMatch(indicatorLocation -> ampActivityLocation.getLocation().equals(indicatorLocation.getLocation()))
                             ).collect(Collectors.toList());
                 }
             }

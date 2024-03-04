@@ -113,8 +113,8 @@ COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-fi
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
 COPY TEMPLATE/reampv2 .
 RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=ssh \
-    npm ci \
+    --mount=type=ssh  \
+    npm ci --legacy-peer-deps \
     && npm run build \
     && rm -rf node_modules
 

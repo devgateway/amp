@@ -55,7 +55,7 @@ module.exports = Backbone.View.extend({
 					  var formattedColumnName2 = ampFormatter.format(project.attributes[columnName2]);
 					  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
 
-                      var activity = project.toJSON()
+                      var activity = project.toJSON();
                       var orgColumnName = activity[orgColumn];
 
                       // put them on the page.

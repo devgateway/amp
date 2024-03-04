@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var DatasourcesItem = require('./datasources-item-adm-clusters');
-const GisSettings = require('../../services/gis_settings');
+const GisSettings = require("../../services/gis_settings");
 var Template = fs.readFileSync(__dirname + '/datasources-table-template.html', 'utf8');
 var gisSettings = new GisSettings();
 
@@ -43,11 +43,9 @@ module.exports = Backbone.View.extend({
       }).render().el;
 
       var collection = self.collection.getPageDetails();
-      // collection['gisSettings']= gisSettings.gisSettings;
-      var gissSettings = gisSettings.gisSettings;
-
+      collection.gisSettings = gisSettings.gisSettings;
       self.app.translator.translateDOM(
-        self.template(collection,gissSettings)).then(
+        self.template(collection)).then(
         function(newEl) {
           self.$el.html(newEl);
           self.updatePlannedActualUI();

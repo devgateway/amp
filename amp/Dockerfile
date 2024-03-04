@@ -35,7 +35,7 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM node as compile-amp-settings
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings/.git .
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+#COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \

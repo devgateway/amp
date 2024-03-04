@@ -102,7 +102,7 @@ COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/a
 COPY TEMPLATE/reamp .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh  \
-    npm ci --legacy-peer-deps \
+    npm ci \
     && npm run build \
     && rm -rf node_modules
 

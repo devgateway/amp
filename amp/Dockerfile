@@ -12,7 +12,6 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-translate .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
 
-
 FROM node as compile-amp-boilerplate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/.git .

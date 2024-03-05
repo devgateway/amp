@@ -481,6 +481,7 @@ public class SettingsUtils {
 
         settings.setIndicatorFilterBySector(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR));
         settings.setIndicatorFilterByProgram(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM));
+        settings.setIndicatorFilterByLocation(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION));
 
         return settings;
     }

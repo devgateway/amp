@@ -80,6 +80,7 @@ public class SettingsConstants {
     public static final String PROGRAM_SETTINGS = "program-settings";
     public static final String INDICATOR_FILTER_BY_SECTOR = "indicator-filter-by-sector";
     public static final String INDICATOR_FILTER_BY_PROGRAM = "indicator-filter-by-program";
+    public static final String INDICATOR_FILTER_BY_LOCATION = "indicator-filter-by-location";
 
 
     /** {id, value} map for settings fields ID-NAME map */

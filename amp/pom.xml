@@ -1398,7 +1398,7 @@
                             <exclude>.idea/**</exclude>
                             <exclude>.settings/**</exclude>
                             <exclude>.externalToolBuilders/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
+<!--                            <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>-->
                             <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
                             <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
                             <exclude>TEMPLATE/ampTemplate/dashboard/dev/node/**</exclude>
@@ -1419,7 +1419,7 @@
                             <exclude>TEMPLATE/reamp/node_modules/**</exclude>
                             <exclude>TEMPLATE/reampv2/node/**</exclude>
                             <exclude>TEMPLATE/reampv2/node_modules/**</exclude>
-                            <exclude>src/**</exclude>
+<!--                            <exclude>src/**</exclude>-->
                             <exclude>target/**</exclude>
                         </excludes>
                         </resource>
@@ -1573,7 +1573,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.basedir}/gen-src</source>
+                                <source>${gen-src}</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -1639,7 +1639,7 @@
                         <filesets>
                             <fileset>
                                 <directory>${metainf}</directory>
-                                <directory>${project.basedir}/gen-src</directory>
+                                <directory>${gen-src}</directory>
                                 <directory>${doc.path}</directory>
                                 <directory>${classes}</directory>
 

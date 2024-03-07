@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30007</jira>
+    <keyword>NDD Dashboard - HIDE ettings</keyword>
+    <author>jdeanquin</author>
+    <description>Hide settings</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                update amp_global_settings
+                set section = null
+                where settingsname in( 'Mapping Destination Program','Mapping Source Program',
+                'NPD Default Primary Program','NPD Default Program');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

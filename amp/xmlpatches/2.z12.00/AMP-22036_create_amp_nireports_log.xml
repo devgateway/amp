@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22036</jira>
+	<keyword>nireports log</keyword>
+	<author>acartaleanu</author>
+	<description>Create NiReports log table</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+					CREATE TABLE amp_nireports_log (id SERIAL PRIMARY KEY, 
+													run_date timestamp NOT NULL DEFAULT statement_timestamp(), 
+													name VARCHAR(255) NOT NULL, 
+													totaltime INT NOT NULL, 
+													wallclocktime INT NOT NULL, 
+													data JSONB NOT NULL); 			
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

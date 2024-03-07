@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-23079</jira>
+	<keyword>views</keyword>
+	<author>gmutuhu</author>
+	<description>Delete the v_credit_donation view</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+		DELETE FROM amp_report_column WHERE columnid in (SELECT columnid FROM amp_columns WHERE extractorview = 'v_credit_donation');
+		DELETE FROM amp_report_hierarchy  WHERE columnid in (SELECT columnid FROM amp_columns WHERE extractorview = 'v_credit_donation');
+		DELETE FROM amp_columns WHERE extractorview = 'v_credit_donation';
+		DROP VIEW IF EXISTS v_credit_donation;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

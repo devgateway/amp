@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-28264</jira>
+    <keyword>update 'remove empty rows' global settings</keyword>
+    <author>vchihai</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            
+				UPDATE amp_global_settings
+                SET settingsname = 'Remove empty rows from Reports',
+                description = 'If the setting is set to true empty rows are removed when date filters are applied or hierarchies are used'
+                WHERE settingsname = 'Filter by date hides projects';
+
+                DELETE from dg_message where message_key = '1177288538'; <!-- 'Filter by date hides projects' -->
+                DELETE from dg_message where message_key = '-261836529'; <!-- 'When using the date filter in reports/tabs, the projects that do not hold funding within the specified filter will not be displayed in the report' -->
+				
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

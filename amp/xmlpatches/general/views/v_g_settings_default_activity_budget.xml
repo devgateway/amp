@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-21506</jira>
+	<keyword>Views</keyword>
+	<author>jdeanquin</author>
+	<description>Default value for activity budget field</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where
+					settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+					<lang delimiter=";" type="postgres">
+						CREATE OR REPLACE VIEW v_g_settings_default_activity_budget AS
+						select -1 as id, 'None' as value
+						union
+						select id as
+						id,category_value as value from amp_category_value where
+						amp_category_class_id = (select id from amp_category_class where
+						keyname='activity_budget' )
+						order by id
+			</lang>
+		</script>
+	</apply>
+</tns:patch>
+	

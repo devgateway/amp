@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>BOAD-26</jira>
+	<author>Octavian Ciubotaru</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)
+				VALUES (nextval('amp_category_class_seq'), 'Idicator Category', 'indicator_category', '', false, false);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

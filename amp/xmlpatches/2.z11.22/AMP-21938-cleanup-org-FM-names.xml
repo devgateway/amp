@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-21938</jira>
+	<keyword>Cleanup organizations FM names</keyword>
+	<author>vchihai</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DELETE FROM amp_fields_templates WHERE field IN (
+												SELECT id FROM amp_fields_visibility where name like '%Button%' and parent in (
+												SELECT id FROM amp_features_visibility WHERE parent IN (
+												SELECT id FROM amp_modules_visibility WHERE name = 'Organizations' AND parent IN (
+												SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT'))));
+	
+				DELETE FROM perm_map WHERE permissible_category = 'AmpFieldsVisibility' AND object_identifier IN (
+												SELECT id FROM amp_fields_visibility where name like '%Button%' and parent in (
+												SELECT id FROM amp_features_visibility WHERE parent IN (
+												SELECT id FROM amp_modules_visibility WHERE name = 'Organizations' AND parent IN (
+												SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT'))));
+					
+				DELETE FROM amp_fields_visibility WHERE name like '%Button%' and parent in (
+												SELECT id FROM amp_features_visibility WHERE parent IN (
+												SELECT id FROM amp_modules_visibility WHERE name = 'Organizations' AND parent IN (
+												SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT')));
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

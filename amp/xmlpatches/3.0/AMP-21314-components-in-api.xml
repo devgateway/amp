@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-21314</jira>
+    <keyword>Adding triggers to record changes to component types.</keyword>
+    <author>ociubotaru</author>
+    <apply>
+        <script>
+            <lang delimiter="@@@" type="postgres">
+
+                CREATE OR REPLACE FUNCTION update_offline_changelog_component_type()
+                RETURNS TRIGGER AS
+                $BODY$
+                DECLARE
+                    v_operation_name VARCHAR;
+                    v_entity_name VARCHAR;
+                BEGIN
+                    v_entity_name := 'component type';
+                    v_operation_name := 'updated';
+
+                    UPDATE amp_offline_changelog SET operation_time=now(), operation_name=v_operation_name WHERE entity_name=v_entity_name AND entity_id IS NULL;
+                    IF NOT FOUND THEN
+                        INSERT INTO amp_offline_changelog(entity_name, operation_name, operation_time) VALUES(v_entity_name, v_operation_name, now());
+                    END IF;
+
+                    RETURN NULL;
+                END;
+                $BODY$
+                LANGUAGE plpgsql VOLATILE; @@@
+
+                CREATE TRIGGER update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON amp_component_type FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog_component_type(); @@@
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

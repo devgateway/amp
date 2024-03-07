@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+<jira>BOAD-86</jira>
+<keyword>Locations</keyword>
+<author>jdeanquin</author>
+<description>Admin 1 lat and long</description>
+<apply>
+    <script>
+        <lang delimiter=";" type="postgres"><![CDATA[
+UPDATE amp_category_value_location SET gs_lat = '12.609345228780398', gs_long = '-7.974061340412176' WHERE location_name = 'Bamako' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '16.74248728740405', gs_long = '1.0486662307172925' WHERE location_name = 'Gao' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '13.705918067012526', gs_long = '-10.302372029611671' WHERE location_name = 'Kayes' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '19.709367741426707', gs_long = '1.4628069872124825' WHERE location_name = 'Kidal' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '13.028724932538282', gs_long = '-7.679006078153201' WHERE location_name = 'Koulikoro' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '14.630644496570751', gs_long = '-3.6842721887968217' WHERE location_name = 'Mopti' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '13.613925840035773', gs_long = '-5.446153529810962' WHERE location_name = 'Ségou' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '11.470756701169709', gs_long = '-6.580694081885736' WHERE location_name = 'Sikasso' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+UPDATE amp_category_value_location SET gs_lat = '18.325462372673535', gs_long = '-2.8398043955325134' WHERE location_name = 'Timbuktu' and parent_location=(select id from amp_category_value_location where location_name = 'Mali');
+
+
+
+
+UPDATE amp_category_value_location SET gs_lat = '12.609345228780398', gs_long = '-7.974061340412176' WHERE location_name = 'Bamako' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '16.74248728740405', gs_long = '1.0486662307172925' WHERE location_name = 'Gao' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '13.705918067012526', gs_long = '-10.302372029611671' WHERE location_name = 'Kayes' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '19.709367741426707', gs_long = '1.4628069872124825' WHERE location_name = 'Kidal' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '13.028724932538282', gs_long = '-7.679006078153201' WHERE location_name = 'Koulikoro' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '14.630644496570751', gs_long = '-3.6842721887968217' WHERE location_name = 'Mopti' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '13.613925840035773', gs_long = '-5.446153529810962' WHERE location_name = 'Ségou' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '11.470756701169709', gs_long = '-6.580694081885736' WHERE location_name = 'Sikasso' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '18.325462372673535', gs_long = '-2.8398043955325134' WHERE location_name = 'Timbuktu' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+
+
+update amp_category_value_location set location_name='Haut-Bassins' where location_name='Hauts-Bassins';
+
+
+UPDATE amp_category_value_location SET gs_lat = '12.424704905364086', gs_long = '-3.444934440805479' WHERE location_name = 'Boucle du Mouhoun' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '10.342604716153012', gs_long = '-4.552067551632279' WHERE location_name = 'Cascades' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '12.345190319561425', gs_long = '-1.4803261239830914' WHERE location_name = 'Centre' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '11.708850940089691', gs_long = '-0.30153376900089585' WHERE location_name = 'Centre-Est' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '13.238351750511244', gs_long = '-0.9416655467503652' WHERE location_name = 'Centre-Nord' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '11.867784302793961', gs_long = '-2.196174246403255' WHERE location_name = 'Centre-Ouest' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '11.607133685701115', gs_long = '-1.2381405300861903' WHERE location_name = 'Centre-Sud' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '12.16793734975524', gs_long = '0.8056988429035994' WHERE location_name = 'Est' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '11.39759576182759', gs_long = '-4.223700890093415' WHERE location_name = 'Haut-Bassins' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '13.241065319804074', gs_long = '-2.206651520723117' WHERE location_name = 'Nord' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '12.47409431195154', gs_long = '-1.2368121281883033' WHERE location_name = 'Plateau-Central' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '13.831647082283872', gs_long = '-0.06513350364894009' WHERE location_name = 'Sahel' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+UPDATE amp_category_value_location SET gs_lat = '10.473419210999285', gs_long = '-3.2260936691561537' WHERE location_name = 'Sud-Ouest' and parent_location=(select id from amp_category_value_location where location_name = 'Burkina Faso');
+
+
+
+
+
+UPDATE amp_category_value_location SET gs_lat = '14.730348446817327', gs_long = '-17.310512245305905' WHERE location_name = 'Dakar' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '14.772888748201574', gs_long = '-16.088300582930046' WHERE location_name = 'Diourbel' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '14.233063450220095', gs_long = '-16.249302326666697' WHERE location_name = 'Fatick' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '14.159289224102885', gs_long = '-15.285901397663208' WHERE location_name = 'Kaffrine' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '14.076348264208399', gs_long = '-15.930972562841404' WHERE location_name = 'Kaolack' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '12.866882227708572', gs_long = '-12.226228044790039' WHERE location_name = 'Kédougou' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '13.131376279778513', gs_long = '-14.100144983948447' WHERE location_name = 'Kolda' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '15.410055086382334', gs_long = '-15.706656822515491' WHERE location_name = 'Louga' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '15.381140361236428', gs_long = '-13.713794106035875' WHERE location_name = 'Matam' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '16.27218867157457', gs_long = '-15.101087821470305' WHERE location_name = 'Saint-Louis' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '12.920347396872197', gs_long = '-15.642512487675305' WHERE location_name = 'Sédhiou' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '13.57596407347357', gs_long = '-13.087573438581046' WHERE location_name = 'Tambacounda' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '14.775943633961035', gs_long = '-16.67984810254136' WHERE location_name = 'Thiès' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+UPDATE amp_category_value_location SET gs_lat = '12.802056198371389', gs_long = '-16.334064946398215' WHERE location_name = 'Ziguinchor' and parent_location=(select id from amp_category_value_location where location_name = 'Senegal');
+
+
+
+UPDATE amp_category_value_location SET gs_lat = '11.552474410951394', gs_long = '2.9239907446969524' WHERE location_name = 'Alibori' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '10.847551479681188', gs_long = '1.5174239030656795' WHERE location_name = 'Atakora' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '6.587808125485365', gs_long = '2.1795137531110713' WHERE location_name = 'Atlantique' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '9.821620828884903', gs_long = '2.8489156095092962' WHERE location_name = 'Borgou' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '8.150743172696627', gs_long = '2.251666814969328' WHERE location_name = 'Collines' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '9.272567569897108', gs_long = '1.8397688724442776' WHERE location_name = 'Donga' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '7.011322755852187', gs_long = '1.7914290997979443' WHERE location_name = 'Kouffo' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '6.365376074907251', gs_long = '2.4184924466842213' WHERE location_name = 'Littoral' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '6.513160488888834', gs_long = '1.811802178503374' WHERE location_name = 'Mono' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '6.646824589339984', gs_long = '2.5463426454527864' WHERE location_name = 'Ouémé' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '7.0612985829498225', gs_long = '2.6380710954726383' WHERE location_name = 'Plateau' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+UPDATE amp_category_value_location SET gs_lat = '7.3071460892770626', gs_long = '2.0610707344307855' WHERE location_name = 'Zou' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
+
+
+update amp_category_value_location set location_name='Tillabéry' where location_name='Tillabéri' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+
+UPDATE amp_category_value_location SET gs_lat = '18.809063214750452', gs_long = '9.771532844682959' WHERE location_name = 'Agadez' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '14.665690254728792', gs_long = '12.781022629972393' WHERE location_name = 'Diffa' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '13.039695486055335', gs_long = '3.373545276977803' WHERE location_name = 'Dosso' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '14.113562098398612', gs_long = '7.466411747171108' WHERE location_name = 'Maradi' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '13.534492498966346', gs_long = '2.14117053151034' WHERE location_name = 'Niamey' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '15.739987256079367', gs_long = '5.261963373137503' WHERE location_name = 'Tahoua' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '13.677897767104003', gs_long = '2.124509868472689' WHERE location_name = 'Tillabéry' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '14.47049761502478', gs_long = '9.290271564943371' WHERE location_name = 'Zinder' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+
+update amp_category_value_location set location_name='Gabú' where location_name='Gabu' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+
+UPDATE amp_category_value_location SET gs_lat = '12.193088309319405', gs_long = '-14.65549874534291' WHERE location_name = 'Bafatá' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '11.851445360450045', gs_long = '-15.847322004092034' WHERE location_name = 'Biombo' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '11.868985584839235', gs_long = '-15.606370889128272' WHERE location_name = 'Bissau' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '11.314941106742076', gs_long = '-15.96342538301806' WHERE location_name = 'Bolama' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '12.046907674352118', gs_long = '-16.104402203233498' WHERE location_name = 'Cacheu' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '12.17250017456865', gs_long = '-14.19706065117461' WHERE location_name = 'Gabú' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '12.258106913624843', gs_long = '-15.314309908152287' WHERE location_name = 'Oio' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '11.607143612849983', gs_long = '-15.260494938213446' WHERE location_name = 'Quinara' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
+UPDATE amp_category_value_location SET gs_lat = '11.191927791027235', gs_long = '-15.104555512845238' WHERE location_name = 'Tombali' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');        ]]></lang>
+    </script>
+</apply>
+</tns:patch>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>BOAD-26</jira>
+	<author>Octavian Ciubotaru</author>
+	<description>Register the job with quartz</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'BOAD API URL', 'http://localhost/', null, 'URL of the BOAD API', 'boad', null);
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'BOAD Team', 'Team 1', null, 'Team of the BOAD activities', 'boad', null);
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'BOAD Admin Email', '-', null, 'Email of the user responsible for the BOAD sync', 'boad', null);
+
+				INSERT INTO amp_quartz_job_class (jc_id,jc_name, jc_class_fullname) VALUES(nextval('amp_quartz_job_class_seq'),'BOAD Sync Job', 'org.dgfoundation.boad.SyncJob');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

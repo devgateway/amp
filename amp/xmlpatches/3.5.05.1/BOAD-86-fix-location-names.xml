@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+<jira>BOAD-86</jira>
+<keyword>Locations</keyword>
+<author>jdeanquin</author>
+<description>Admin 1 lat and long</description>
+<apply>
+    <script>
+        <lang delimiter=";" type="postgres"><![CDATA[
+        update amp_category_value_location set location_name='Tillabéri' where location_name= 'Tillabéry';
+        update amp_category_value_location set location_name=trim(location_name) where location_name ='Abidjan ';
+        UPDATE amp_category_value_location SET gs_lat = '8.592194101799015', gs_long = '0.9402141651546879' WHERE location_name = 'Centre' and parent_location=(select id from amp_category_value_location where location_name = 'Togo');
+UPDATE amp_category_value_location SET gs_lat = '9.523600894595845', gs_long = '0.6756235448425267' WHERE location_name = 'Kara' and parent_location=(select id from amp_category_value_location where location_name = 'Togo');
+UPDATE amp_category_value_location SET gs_lat = '6.539456197447919', gs_long = '1.3190060059335529' WHERE location_name = 'Maritime' and parent_location=(select id from amp_category_value_location where location_name = 'Togo');
+UPDATE amp_category_value_location SET gs_lat = '7.333123449877126', gs_long = '0.9657203786841534' WHERE location_name = 'Plateaux' and parent_location=(select id from amp_category_value_location where location_name = 'Togo');
+UPDATE amp_category_value_location SET gs_lat = '10.48323760988076', gs_long = '0.4426001220885896' WHERE location_name = 'Savanes' and parent_location=(select id from amp_category_value_location where location_name = 'Togo');
+        ]]></lang>
+    </script>
+</apply>
+</tns:patch>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-23741</jira>
+    <keyword>FM editable exports</keyword>
+    <author>vchihai</author>
+    <description>Remove 'Hide Editable Export Formats' FM path</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            	DELETE FROM amp_features_templates WHERE feature IN (
+						SELECT id from amp_features_visibility WHERE name = 'Hide Editable Export Formats');
+
+				DELETE FROM amp_features_visibility WHERE name = 'Hide Editable Export Formats';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

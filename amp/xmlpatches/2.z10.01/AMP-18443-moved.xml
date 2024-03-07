@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18443</jira>
+	<keyword>RunTimeException on Job manager page</keyword>
+	<author>jdeanquin</author>
+	<description>Fix mondrian cache package change </description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			update QRTZ_JOB_DETAILS set job_class_name='org.digijava.kernel.job.cachedtables.RefreshMondrianCacheJob' 
+ 			WHERE JOB_NAME = 'Refresh Mondrian Cache' AND JOB_GROUP = 'DEFAULT';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

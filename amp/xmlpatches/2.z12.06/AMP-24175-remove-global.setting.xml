@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-24175</jira>
+	<keyword>Remove global setting with phantom JS url</keyword>
+	<author>jdeanquin</author>
+	<description>Add global setting to be able to customize from where phantom JS will be downloaded</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			delete from amp_global_settings where settingsname ='PhantomJS URL';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

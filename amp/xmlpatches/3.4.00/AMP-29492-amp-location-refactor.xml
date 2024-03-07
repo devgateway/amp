@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29492</jira>
+    <keyword>constraints fk</keyword>
+    <author>Octavian Ciubotaru</author>
+    <description>
+        Activity location now references AmpCategoryValueLocations instead of AmpLocation.
+    </description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                UPDATE amp_global_settings
+                SET settingsvalue = 'true'
+                WHERE settingsname='Recreate the views on the next server restart';
+
+                -- unused view
+                DROP VIEW IF EXISTS v_act_pp_regions;
+
+                -- link amp_activity_location to amp_category_value_location
+                alter table amp_activity_location
+                  add location_id bigint
+                    constraint fk_acvlocation REFERENCES amp_category_value_location(id);
+
+                update amp_activity_location aal
+                set location_id=acvl.id
+                from amp_location al
+                  join amp_category_value_location acvl on acvl.id=al.location_id
+                where aal.amp_location_id=al.amp_location_id;
+
+                alter table amp_activity_location
+                  alter location_id set not null;
+
+                alter table amp_activity_location
+                  drop column amp_location_id CASCADE;
+
+                -- remove amp_location.amp_location_id from reporting views
+                DROP VIEW v_ni_all_locations_with_levels;
+                DROP VIEW v_amp_location_cache;
+
+                CREATE VIEW v_amp_location_cache AS
+                SELECT
+                    acvl.id AS acvl_id, acvl.location_name AS acvl_name,
+                    acvl.parent_location,
+                    getlocationidbyimplloc(acvl.id, 'Region'::character varying) AS region_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Region'::character varying)) as region_name,
+                    getlocationidbyimplloc(acvl.id, 'Zone'::character varying) AS zone_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Zone'::character varying)) as zone_name,
+                    getlocationidbyimplloc(acvl.id, 'District'::character varying) AS district_id, getlocationname(getlocationidbyimplloc(acvl.id, 'District'::character varying)) as district_name,
+                    getlocationidbyimplloc(acvl.id, 'Communal section'::character varying) AS communal_section_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Communal section'::character varying)) as communal_section_name,
+                    getlocationidbyimplloc(acvl.id, 'Country'::character varying) AS country_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Country'::character varying)) as country_name
+                FROM amp_category_value_location acvl
+                ORDER BY acvl.id;
+
+                CREATE VIEW v_ni_all_locations_with_levels AS
+                SELECT acvl_id, acvl_name, parent_location, getlocationdepth(acvl_id) AS location_depth,
+                       COALESCE(country_id, - acvl_id) AS country_id, COALESCE(country_name, 'Undefined') AS country_name,
+                       COALESCE(region_id, - acvl_id) AS region_id, COALESCE(region_name, 'Undefined') AS region_name,
+                       COALESCE(zone_id, - acvl_id) AS zone_id, COALESCE(zone_name, 'Undefined') AS zone_name,
+                       COALESCE(district_id, - acvl_id) AS district_id, COALESCE(district_name, 'Undefined') AS district_name,
+                       COALESCE(communal_section_id, - acvl_id) AS communal_section_id, COALESCE(communal_section_name, 'Undefined') AS communal_section_name
+                FROM v_amp_location_cache;
+
+                alter table ni_all_locations_with_levels drop COLUMN amp_location_id;
+
+                -- drop amp_location triggers
+                drop TRIGGER update_location_level_caches_trg_location on amp_location;
+
+                drop TRIGGER update_offline_changelog_trg on amp_location;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

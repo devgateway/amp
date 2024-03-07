@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-27081</jira>
+	<keyword>organization roles filters view</keyword>
+	<author>vchihai</author>
+	<description>Create organization with roles view</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			
+                DROP VIEW IF EXISTS v_all_organizations_with_roles CASCADE;
+				
+				CREATE VIEW v_all_organizations_with_roles AS
+				SELECT o.amp_org_id orgId, o.name orgName, o.acronym orgAcronym, o.org_grp_id grpId, b.roleId roles 
+				FROM amp_organisation o
+				JOIN (
+				    SELECT DISTINCT a.orgId, array_to_string(array_agg(distinct roleId), ', ') roleId FROM
+				    (
+				            SELECT DISTINCT aor.organisation orgId, aor.role roleId FROM amp_org_role aor
+				        UNION 
+				            SELECT DISTINCT af.amp_donor_org_id orgId, af.source_role_id roleId FROM amp_funding af
+				        UNION
+					        SELECT DISTINCT org.amp_org_id orgId, (SELECT amp_role_id FROM amp_role WHERE role_code = 'CS') roleId 
+                            FROM amp_components c 
+                            JOIN amp_component_funding f ON (c.amp_component_id = f.amp_component_id) 
+                            JOIN amp_organisation org ON org.amp_org_id = f.component_second_rep_org_id
+				        UNION
+					        SELECT DISTINCT org.amp_org_id orgId, (SELECT amp_role_id FROM amp_role WHERE role_code = 'CS') roleId 
+                            FROM amp_components c 
+                            JOIN amp_component_funding f ON (c.amp_component_id = f.amp_component_id) 
+                            JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id
+				        ) a
+				    GROUP by a.orgId
+				    ) b
+				ON o.amp_org_id = b.orgId
+				WHERE o.deleted IS NOT TRUE AND roleId IS NOT NULL
+				ORDER BY orgId;
+				
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

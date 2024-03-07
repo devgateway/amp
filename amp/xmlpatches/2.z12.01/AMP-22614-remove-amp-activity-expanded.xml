@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22614</jira>
+	<keyword>cleanup</keyword>
+	<author>vchihai</author>
+	<description>clean up not-used-anymore amp_activity_expanded structure from DB</description>
+	<apply>
+		<script returnVar="dummy">
+			<lang delimiter=";" type="postgres">
+					SELECT drop_view('v_amp_activity_expanded');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

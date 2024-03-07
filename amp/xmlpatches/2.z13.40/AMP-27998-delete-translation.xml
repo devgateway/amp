@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-27998</jira>
+  <keyword>Category value</keyword>
+  <author>jdeanquin</author>
+  <author>jdeanquin</author>
+  <description>Delete changed translation</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+            delete from  dg_message where message_key ='-1734948093';
+         </lang>
+    </script>
+  </apply>
+</tns:patch>

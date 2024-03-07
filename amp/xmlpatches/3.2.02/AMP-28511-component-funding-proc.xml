@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-28511</jira>
+	<keyword>Views</keyword>
+	<author>vchihai</author>
+	<description>update component funding proc for ETL</description>
+	<apply>
+		<script>
+			<lang delimiter="@" type="postgres"><![CDATA[
+
+				CREATE OR REPLACE FUNCTION component_funding_modified_proc() RETURNS trigger AS $BODY$
+				    BEGIN
+						IF (NEW.amp_component_id IS NOT NULL) THEN
+				        	INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('component', NEW.amp_component_id);
+
+				        	INSERT INTO amp_etl_changelog(entity_name, entity_id)
+				        		SELECT 'activity', ac.amp_activity_id
+				        		FROM amp_component_funding aaf
+				        		JOIN amp_components ac
+				        		ON ac.amp_component_id = aaf.amp_component_id
+				        		AND aaf.amp_component_id = NEW.amp_component_id;
+				        END IF;
+						RETURN NEW;
+					END;
+				$BODY$ LANGUAGE plpgsql@@@
+
+				CREATE OR REPLACE FUNCTION component_funding_deleted_proc() RETURNS trigger AS $BODY$
+				    BEGIN
+				    	IF (OLD.amp_component_id IS NOT NULL) THEN
+				        	INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('component', OLD.amp_component_id);
+
+				        	INSERT INTO amp_etl_changelog(entity_name, entity_id)
+				        		SELECT 'activity', aac.amp_activity_id
+				        		FROM amp_component_funding aaf
+				        		JOIN amp_components ac
+				        		ON ac.amp_component_id = aaf.amp_component_id
+				        		AND aaf.amp_component_id = OLD.amp_component_id;
+				        END IF;
+				        RETURN OLD;
+				    END;
+				$BODY$ LANGUAGE plpgsql@@@
+    
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

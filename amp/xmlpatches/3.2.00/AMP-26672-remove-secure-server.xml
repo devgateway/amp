@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-26672</jira>
+	<keyword>gs</keyword>
+	<author>Octavian Ciubotaru</author>
+	<description>Remove secure server gs and translations</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				
+				DELETE FROM dg_message WHERE message_key='401590963'; <!-- everything -->
+				DELETE FROM dg_message WHERE message_key='-1793946736'; <!-- login-only -->
+				DELETE FROM dg_message WHERE message_key='109935'; <!-- off -->
+
+				DELETE FROM amp_global_settings WHERE settingsname = 'Secure Server';
+
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

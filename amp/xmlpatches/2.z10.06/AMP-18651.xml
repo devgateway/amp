@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18651</jira>
+	<keyword>Drop table amp_map_state in favor of amp_api_state</keyword>
+	<author>jdeanquin</author>
+	<description>Drop table amp_map_state in favor of amp_api_state
+	</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+
+				drop table IF EXISTS  AMP_MAP_STATE  ;
+				drop sequence IF EXISTS amp_map_state_seq  ;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

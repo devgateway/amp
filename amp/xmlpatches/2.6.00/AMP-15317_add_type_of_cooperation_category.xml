@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-15317</jira>
+  <keyword>Type of Cooperation category</keyword>
+  <author>Arty</author>
+  <description>Create the Type of Cooperation category</description>
+  
+  <trigger type="all">
+		<condition type="custom">
+			<script returnVar="cnt">
+				<lang type="postgres">SELECT count(*) from amp_category_class where keyname='type_of_cooperation'</lang>
+			</script>
+			<test>cnt == 0</test>
+		</condition>
+	</trigger>
+	
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+		    INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)
+		    VALUES (nextval('amp_category_class_seq'), 'Type of Cooperation' , 'type_of_cooperation', '', 'f', 'f');
+		    
+		    INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)
+		    VALUES (nextval('amp_category_value_seq'), 'Official Development Aid (ODA)',
+		    		    (select id from amp_category_class where keyname='type_of_cooperation'), 0),
+                    (nextval('amp_category_value_seq'), 'Bilateral South South Cooperation',
+                        (select id from amp_category_class where keyname='type_of_cooperation'), 1),
+                    (nextval('amp_category_value_seq'), 'Triangular South South Cooperation',
+                        (select id from amp_category_class where keyname='type_of_cooperation'), 2),
+                    (nextval('amp_category_value_seq'), 'Regional South South Cooperation',
+                        (select id from amp_category_class where keyname='type_of_cooperation'), 3);
+    	 </lang>
+    </script>
+  </apply>
+
+</tns:patch>

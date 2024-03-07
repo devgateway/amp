@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-25071</jira>
+    <keyword>Change last_imported_by from team member to user</keyword>
+    <author>ociubotaru</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+
+				alter table amp_activity_version add last_imported_by_new bigint references dg_user(id);
+
+				update amp_activity_version
+				set last_imported_by_new = (select user_ from amp_team_member where amp_team_mem_id=amp_activity_version.last_imported_by)
+				where last_imported_by is not null;
+
+				alter table amp_activity_version drop column last_imported_by cascade;
+
+				alter table amp_activity_version rename column last_imported_by_new to last_imported_by;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18629</jira>
+	<keyword>update dashboard title</keyword>
+	<author>gmutuhu</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				update dg_message set message_utf8='Aid Management Platform - Dashboards',orig_message='Aid Management Platform - Dashboards' where message_key ='-1930148805' and lang_iso='en';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

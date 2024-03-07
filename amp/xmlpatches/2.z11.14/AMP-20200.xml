@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-20200</jira>
+	<keyword>Dashboard chart name translations are not done</keyword>
+	<author>apicca</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+
+				update amp_features_visibility set name = 'Top Sectors' where name = '/Top Sectors';
+				update amp_features_visibility set name = 'Top Regions' where name = '/Top Regions';
+				update amp_features_visibility set name = 'Top Donor Group' where name = '/Top Donor Group';
+				update amp_features_visibility set name = 'Aid Predictability' where name = '/Aid Predictability';
+				update amp_features_visibility set name = 'Funding Type' where name = '/Funding Type';
+				update amp_features_visibility set name = 'Responsible Organizations' where name = '/Responsible Organizations';
+				update amp_features_visibility set name = 'Beneficiary Agencies' where name = '/Beneficiary Agencies';
+				update amp_features_visibility set name = 'Executing Agencies' where name = '/Executing Agencies';
+				update amp_features_visibility set name = 'Implementing Agencies' where name = '/Implementing Agencies';
+				update amp_features_visibility set name = 'Peace-building and State-building Goals' where name = '/Peace-building and State-building Goals';
+				update amp_features_visibility set name = 'Top Donors' where name = '/Top Donors';
+				update amp_fields_visibility set name = 'Show Names As Acronyms', description = 'Show Names As Acronyms' where name = '/Show Names As Acronyms';
+			
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

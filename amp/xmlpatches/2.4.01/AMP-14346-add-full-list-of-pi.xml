@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-14346</jira>
+	<keyword>pi</keyword>
+	<keyword>paris indicators</keyword>
+	<author>mihai</author>
+	<description>Add a sublevel of questions for 5a and 5b, those answers 
+	are calculated based on sub-questions, not directly filled in</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+ALTER TABLE amp_ahsurvey_question ALTER COLUMN question_text TYPE varchar(512);			
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (14, 'Are these funds included in the annual budget approved by country legislature?', 3, 14, 1, NULL, 5);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (15, 'Are these funds subject to established country budget execution procedures?', 3, 15, 1, NULL, 5);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (16, 'Are these funds processed (e.g. deposited &amp; disbursed) through the established country treasury system?', 3, 16, 1, NULL, 5);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (17, 'Does the project/activity NOT require the opening of separate bank accounts for these funds?', 3, 17, 1, NULL, 5);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (18, 'The project/activity does NOT require maintenance of a separate accounting system to satisfy the DP''s own reporting requirements', 3, 18, 1, NULL, 6);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (19, 'The project activity ONLY requires financial reports prepared using country''s established financial reporting arrangements', 3, 19, 1, NULL, 6);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (20, 'Are these funds subject to audit carried out under the responsibility of the Supreme Audit Institution?', 3, 20, 1, NULL, 7);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (21, 'The project/activity does NOT under normal circumstances request additional audit arrangements?', 3, 21, 1, NULL, 7);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (22, 'The project/activity does NOT require audit standards different from those adopted by the Supreme Audit Institution?', 3, 22, 1, NULL, 7);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (23, 'The project/activity does NOT require the SAI to change its audit cycle to audit these funds?', 3, 23, 1, NULL, 7);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (24, 'Donors use national procurement systems when the funds they provide for the implementation of projects and programs are managed according to the national procurement procedures as they were established in the general legislation and implemented by government.  Is this true for this activity?', 4, 24, 1, NULL, 8);
+INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status, parent_question_id) VALUES (25, 'This project/activity does NOT make additional, or special, requirements on governments for the procurement of works, goods and services.', 4, 24, 1, NULL, 8);
+UPDATE amp_ahsurvey_question SET amp_type_id=2 WHERE amp_question_id IN (5,6,7,8);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

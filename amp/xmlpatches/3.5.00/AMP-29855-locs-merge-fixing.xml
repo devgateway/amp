@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29855</jira>
+    <keyword>location views fix</keyword>
+    <author>Viorel Chihai</author>
+    <description>
+        Fix location views after merging
+    </description>
+    <apply>
+        <script>
+            <lang delimiter="@@@" type="postgres"><![CDATA[
+
+                DROP VIEW IF EXISTS v_amp_location_cache CASCADE@@@
+
+                CREATE VIEW v_amp_location_cache AS
+                SELECT
+                  acvl.id AS acvl_id, acvl.location_name AS acvl_name,
+                  acvl.parent_location,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 0'::character varying) AS adm_level_0_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 0'::character varying)) as adm_level_0_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 1'::character varying) AS adm_level_1_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 1'::character varying)) as adm_level_1_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 2'::character varying) AS adm_level_2_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 2'::character varying)) as adm_level_2_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 3'::character varying) AS adm_level_3_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 3'::character varying)) as adm_level_3_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 4'::character varying) AS adm_level_4_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 4'::character varying)) as adm_level_4_name
+                FROM amp_category_value_location acvl
+                ORDER BY acvl.id@@@
+
+                CREATE VIEW v_ni_all_locations_with_levels AS
+					SELECT acvl_id, acvl_name, parent_location, getlocationdepth(acvl_id) AS location_depth,
+						COALESCE(adm_level_0_id, - acvl_id) AS adm_level_0_id, COALESCE(adm_level_0_name, 'Undefined') AS adm_level_0_name,
+						COALESCE(adm_level_1_id, - acvl_id) AS adm_level_1_id, COALESCE(adm_level_1_name, 'Undefined') AS adm_level_1_name,
+						COALESCE(adm_level_2_id, - acvl_id) AS adm_level_2_id, COALESCE(adm_level_2_name, 'Undefined') AS adm_level_2_name,
+						COALESCE(adm_level_3_id, - acvl_id) AS adm_level_3_id, COALESCE(adm_level_3_name, 'Undefined') AS adm_level_3_name,
+						COALESCE(adm_level_4_id, - acvl_id) AS adm_level_4_id, COALESCE(adm_level_4_name, 'Undefined') AS adm_level_4_name
+					FROM v_amp_location_cache@@@
+
+				DROP TABLE IF EXISTS ni_all_locations_with_levels CASCADE@@@
+				CREATE TABLE ni_all_locations_with_levels AS
+					SELECT * FROM v_ni_all_locations_with_levels@@@
+
+				CREATE INDEX ni_alwl_acvl_id ON ni_all_locations_with_levels(acvl_id)@@@
+				CREATE INDEX ni_alwl_parent_id ON ni_all_locations_with_levels(parent_location)@@@
+				CREATE INDEX ni_alwl_depth ON ni_all_locations_with_levels(location_depth)@@@
+				CREATE INDEX ni_alwl_adm_level_0_id ON ni_all_locations_with_levels(adm_level_0_id)@@@
+				CREATE INDEX ni_alwl_adm_level_1_id ON ni_all_locations_with_levels(adm_level_1_id)@@@
+				CREATE INDEX ni_alwl_adm_level_2_id ON ni_all_locations_with_levels(adm_level_2_id)@@@
+				CREATE INDEX ni_alwl_adm_level_3_id ON ni_all_locations_with_levels(adm_level_3_id)@@@
+				CREATE INDEX ni_alwl_adm_level_4_id ON ni_all_locations_with_levels(adm_level_4_id)@@@
+
+                CREATE TRIGGER ni_locations_changed
+                    AFTER INSERT OR UPDATE OR DELETE ON ni_all_locations_with_levels
+                    FOR EACH STATEMENT
+                        EXECUTE PROCEDURE dimension_updated_proc()@@@
+
+                DROP TABLE IF EXISTS ni_all_locations_with_levels CASCADE@@@
+
+				CREATE TABLE ni_all_locations_with_levels AS
+					SELECT * FROM v_ni_all_locations_with_levels@@@
+
+					CREATE TRIGGER ni_locations_changed
+                    AFTER INSERT OR UPDATE OR DELETE ON ni_all_locations_with_levels
+                    FOR EACH STATEMENT
+                        EXECUTE PROCEDURE dimension_updated_proc()@@@
+
+                CREATE OR REPLACE FUNCTION update_location_level_caches_internal()
+                    RETURNS bigint AS
+                    $BODY$
+                        BEGIN
+                            TRUNCATE ni_all_locations_with_levels;
+                            INSERT INTO ni_all_locations_with_levels
+                                SELECT * FROM v_ni_all_locations_with_levels;
+
+                            RETURN 1;
+                            end;
+                        $BODY$
+                LANGUAGE plpgsql VOLATILE@@@
+
+                CREATE TEMPORARY TABLE DUMMY_TABLE AS
+                SELECT update_location_level_caches_internal() FROM (select 1) AS dual @@@
+
+                DROP TABLE DUMMY_TABLE @@@
+
+                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart' @@@
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

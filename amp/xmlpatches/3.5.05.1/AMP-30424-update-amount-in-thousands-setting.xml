@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30424</jira>
+    <keyword>Update amount in thousands possible value to v_g_settings_amount_units view</keyword>
+    <author>timothymugo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                INSERT INTO util_global_settings_possible_ (setting_name, value_id, value_shown)
+                SELECT 'Amounts in Thousands', '0', 'Amounts in Units'
+                WHERE NOT EXISTS (SELECT 1 FROM util_global_settings_possible_ WHERE setting_name = 'Amounts in Thousands' AND value_id = '0' AND value_shown = 'Amounts in Units')
+                UNION
+                SELECT 'Amounts in Thousands', '1', 'Amounts in Thousands'
+                WHERE NOT EXISTS (SELECT 1 FROM util_global_settings_possible_ WHERE setting_name = 'Amounts in Thousands' AND value_id = '1' AND value_shown = 'Amounts in Thousands')
+                UNION
+                SELECT 'Amounts in Thousands', '2', 'Amounts in Millions'
+                WHERE NOT EXISTS (SELECT 1 FROM util_global_settings_possible_ WHERE setting_name = 'Amounts in Thousands' AND value_id = '2' AND value_shown = 'Amounts in Millions');
+
+                CREATE OR REPLACE VIEW v_g_settings_amount_units AS
+                SELECT util_global_settings_possible_.value_id AS id,
+                util_global_settings_possible_.value_shown AS value
+                FROM util_global_settings_possible_
+                WHERE util_global_settings_possible_.setting_name::text = 'Amounts in Thousands'::text;
+
+                UPDATE amp_global_settings
+                SET
+                description='Specifies whether, by default, money amounts will be specified in units, thousands or millions',
+                possiblevalues = 'v_g_settings_amount_units',
+                value_translatable = TRUE
+                WHERE settingsname = 'Amounts in Thousands';
+
+                UPDATE amp_global_settings
+                SET settingsvalue = '0'
+                WHERE settingsname = 'Amounts in Thousands' AND settingsvalue='false';
+
+                UPDATE amp_global_settings
+                SET settingsvalue = '1'
+                WHERE settingsname = 'Amounts in Thousands' AND settingsvalue='true';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

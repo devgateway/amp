@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-17288</jira>
+  <keyword>multi-country</keyword>
+  <author>jdeanquin</author> 
+  <description>Add multi-country where is not present</description>
+   <trigger type="all">
+      <condition  type="entryInTableExists" tablename="amp_category_value_location" columnname="code" columnvalue="98975" inverted="true" />
+ 	</trigger>
+  <apply>
+    <script>
+      <lang delimiter=";" type="sql">
+		insert into amp_category_value_location (id,parent_category_value,location_name,code) values(nextval('amp_category_value_location_seq'),
+		(select acv.id 
+		from amp_category_value acv where acv.category_value='Country'),'Multi-country','98975');
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

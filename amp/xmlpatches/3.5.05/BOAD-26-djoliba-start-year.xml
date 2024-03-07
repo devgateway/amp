@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>BOAD-26</jira>
+	<author>Octavian Ciubotaru</author>
+	<description>Djoliba start year</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'Djoliba Start Year', '2021', 't_Integer', 'Start year of the Djoliba Plan/Program', 'boad', null);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

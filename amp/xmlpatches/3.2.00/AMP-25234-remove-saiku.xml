@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-25234</jira>
+    <keyword>menu fm saiku</keyword>
+    <author>Octavian Ciubotaru</author>
+    <description>Remove saiku from menus and FM.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="bsh"><![CDATA[
+                org.digijava.kernel.xmlpatches.MenuRemover.remove(new String[] {"Reports Menu", "Saiku"});
+                org.digijava.kernel.xmlpatches.FMRemover.removeModuleOld("/REPORTING/Saiku");
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

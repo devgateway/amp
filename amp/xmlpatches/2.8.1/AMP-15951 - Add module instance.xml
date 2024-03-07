@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15951</jira>
+	<keyword>GPI</keyword>
+	<author>ginchauspe</author>
+	<description>Add Module Instance for GPI.</description>
+	<trigger type="all">
+		<condition type="entryInTableMissing" tablename="dg_module_instance"
+			columnname="module_name" columnvalue="gpi" />
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO dg_module_instance
+				(module_instance_id, module_name,
+				module_instance, permitted,
+				num_of_items_in_teaser, site_id,
+				real_instance_id)
+				SELECT
+				nextval('dg_module_instance_seq'), 'gpi', 'default', true, 1, s.id,
+				null from dg_site s where inherit_security = true and invisible =
+				false;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

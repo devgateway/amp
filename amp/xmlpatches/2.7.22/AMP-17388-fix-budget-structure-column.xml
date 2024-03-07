@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-17388</jira>
+    <keyword>Views</keyword>
+    <author>Dolghier Constantin</author>
+    <description>recreate view, this will always be the last version of the view</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+				UPDATE amp_columns SET relatedcontentpersisterclass = null, description = NULL WHERE columnname = 'Budget Structure';
+				<!-- relatedcontentpersisterclass SHOULD be null -->
+				<!-- if description is not null, there is a bug in the reports wizard which makes no sense to fix months before scrapping SHOULD be null -->
+			</lang>
+        </script>
+    </apply>
+</tns:patch>

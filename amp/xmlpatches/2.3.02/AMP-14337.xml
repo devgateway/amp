@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-14337</jira>
+  <keyword>Dashboard</keyword>
+  <author>Mauricio</author> 
+  <description>Add Beneficiary Agency graph to the table - Fix others graphs</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'Beneficiary Agency Profile', 'getBeneficiaryAgencyProfileGraphData', 'BeneficiaryAgencyProfile', false, true, true, true, true, false);
+
+		UPDATE amp_dashboard SET pivot=0 WHERE pivot IS NULL;
+		UPDATE amp_graph SET bar_graph_enabled = false WHERE container_id = 'OrganizationProfile';
+		UPDATE amp_graph SET bar_profile_graph_enabled = true WHERE container_id = 'OrganizationProfile';
+		UPDATE amp_graph SET bar_graph_enabled = false WHERE container_id = 'SectorProfile';
+		UPDATE amp_graph SET bar_profile_graph_enabled = true WHERE container_id = 'SectorProfile';
+		UPDATE amp_graph SET bar_graph_enabled = false WHERE container_id = 'RegionProfile';
+		UPDATE amp_graph SET bar_profile_graph_enabled = true WHERE container_id = 'RegionProfile';
+		
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

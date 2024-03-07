@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17260</jira>
+	<keyword>add a new column for reports, programDescription</keyword>
+	<author>Jdeanquin</author>
+	<description>Improvement for honduras to add a new column on program section for free text(theres already a column so we will use that)</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+			INSERT INTO amp_columns (columnId,columnName,aliasName,cellType,extractorView) VALUES 
+			(setval('"amp_columns_seq"'::regclass, (select coalesce(max(columnId),0)+1 FROM "amp_columns")),'Program Description','Program Description','org.dgfoundation.amp.ar.cell.TextCell','v_program_description');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

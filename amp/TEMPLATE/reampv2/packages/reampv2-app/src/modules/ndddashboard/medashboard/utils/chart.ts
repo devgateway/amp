@@ -111,13 +111,28 @@ class ChartUtils {
         }).sort((a, b) => parseInt(a.x) - parseInt(b.x));
 
         const actualValueArrayWithYear = new Array(reportlength).fill(0).map((value, index) => {
-            const actualValue = actualValues.find((actual) => actual.year === (new Date().getFullYear() - index));
+            let actualValue = actualValues.find((actual) => actual.year === (new Date().getFullYear() - index));
+
             const findBaseValue = baseValueArrayWithYear.find((base) => base.x === (new Date().getFullYear() - index).toString());
             return {
                 x: (new Date().getFullYear() - index).toString(),
                 y: actualValue ? actualValue.value : (findBaseValue ? findBaseValue.y : 0)
             };
-        }).sort((a, b) => parseInt(a.x) - parseInt(b.x));
+        }).sort((a, b) => parseInt(a.x) - parseInt(b.x))
+            .map((value, index, array) => {
+                if (value.y === 0) {
+                    const previousValue = array[index - 1];
+
+                    if (previousValue) {
+                        return {
+                            x: value.x,
+                            y: previousValue.y
+                        }
+                    }
+                }
+
+                return value;
+            })
 
         return [
             {

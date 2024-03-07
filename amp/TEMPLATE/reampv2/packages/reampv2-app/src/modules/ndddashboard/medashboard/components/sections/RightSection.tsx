@@ -76,10 +76,6 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
                 />
             </div>
 
-            { console.log('indicatorsReducer.loading', indicatorsReducer.loading)}
-            { console.log('indicators.length', indicators.length)}
-
-
             {!indicatorsReducer.loading && indicators.length > 0 ? (
                 <>
 

@@ -141,7 +141,6 @@ class Filters extends Component {
             ) : null}
           </div>
         </div>
-        { console.log('Filters.jsx: render: show=', show) }
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </Col>

@@ -34,7 +34,7 @@
         <test>${project.basedir}/test</test>
         <etc>${project.basedir}/etc</etc>
         <deployConfigs>deployConfigs</deployConfigs>
-        <repository>${project.basedir}/repository</repository>
+        <repository>${project.basedir}/src/main/webapp/repository</repository>
         <jackrabbit>${project.basedir}/jackrabbit</jackrabbit>
         <ampTest>${project.basedir}/src/main/webapp/WEB-INF/amp-test</ampTest>
         <ampSelenium>${project.basedir}/src/main/webapp/WEB-INF/amp-selenium-test</ampSelenium>
@@ -218,11 +218,11 @@
             <artifactId>axis</artifactId>
             <version>1.4</version>
         </dependency>
-        <dependency>
-            <groupId>batik</groupId>
-            <artifactId>batik</artifactId>
-            <version>1.5</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>batik</groupId>-->
+<!--            <artifactId>batik</artifactId>-->
+<!--            <version>1.5</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.apache-extras.beanshell</groupId>
@@ -1277,6 +1277,8 @@
         </resources>
 
         <plugins>
+
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
@@ -1296,7 +1298,8 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/translation</outputDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1313,8 +1316,8 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/help</outputDirectory>
-
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
 
@@ -1332,7 +1335,8 @@
                                 </source>
                             </sources>
                             <packageName>org.dgfoundation.amp.reports.xml</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/report</outputDirectory>
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
 
@@ -1349,7 +1353,8 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/gen-src/jaxb/xmlpatcher</outputDirectory>
+                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
 
@@ -1370,7 +1375,6 @@
                 <version>2.3</version>
 
                 <configuration>
-                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1427,7 +1431,17 @@
                         </resource>
                     </webResources>
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <warName>${project.distname}</warName>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
 
@@ -1436,6 +1450,29 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.2.0</version>
                 <executions>
+                    <execution>
+                        <id>copy-war-to-deployment-dir</id>
+                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${digijava.deploy}/${project.distname}.war</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>*.war</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/*.jpx</exclude>
+                                        <exclude>**/*.library</exclude>
+                                        <exclude>**/.*</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>copy-resources</id>
                         <phase>process-resources</phase>
@@ -1607,6 +1644,33 @@
                         </replacement>
                     </replacements>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version> <!-- or latest version -->
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!-- Add your manifest entries here if needed -->
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <finalName>ecs-client</finalName> <!-- Adjust as needed -->
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>ecs-jar</id>
+                        <phase>package</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -2096,7 +2160,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>Generate API Errors documentation</id>
@@ -2111,6 +2175,113 @@
                                 <argument>apierrors.adoc</argument>
                             </arguments>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-db-model</id>
+                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>
+                            <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-permissions</id>
+                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.digijava.kernel.security.util.PermissionConverter</mainClass>
+                            <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>export-table-names</id>
+                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>
+                            <arguments>
+                                <argument>-names</argument>
+                            </arguments>
+                            <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </execution>
+
+
+                    <execution>
+                        <id>populate-initial-data</id>
+                        <phase>install</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.digijava.kernel.util.DigiSchemaPopulate</mainClass>
+                            <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </execution>
+
+
+                    <execution>
+                        <id>execute-standalone</id>
+                        <phase>package</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.dgfoundation.amp.StandaloneAMPStartup</mainClass>
+                            <fork>true</fork>
+                            <classpathScope>runtime</classpathScope>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>compile-selenium</id>
+                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <source>1.8</source> <!-- Adjust as needed -->
+                            <target>1.8</target> <!-- Adjust as needed -->
+                            <debug>true</debug>
+                            <deprecation>false</deprecation>
+                            <includes>
+                                <include>/src/main/webapp/WEB-INF/amp-selenium-test/*.java</include>
+                            </includes>
+                            <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version> <!-- or latest version -->
+                <configuration>
+                    <sourcepath>${project.build.sourceDirectory}</sourcepath>
+                    <destDir>${project.reporting.outputDirectory}/javadoc</destDir>
+                    <author>true</author>
+                    <version>true</version>
+                    <windowtitle>${project.name} API Documentation</windowtitle>
+                    <doctitle>&lt;h1&gt;${project.name} Documentation (Version ${project.version})&lt;/h1&gt;</doctitle>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-javadoc</id>
+                        <phase>prepare-package</phase> <!-- Or specify another appropriate phase -->
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -2150,6 +2321,7 @@
                         <target>1.8</target>
                         <compilerArgument>-XDignore.symbol.file</compilerArgument>
                         <maxmem>1024m</maxmem>
+                        <fork>true</fork>
                         <useIncrementalCompilation>false</useIncrementalCompilation>
                     </configuration>
                 </plugin>

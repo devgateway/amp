@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-
+import org.digijava.kernel.siteconfig.Module;
 public final class SiteConfigParser {
     private static Logger log =
         Logger.getLogger(SiteConfigParser.class);

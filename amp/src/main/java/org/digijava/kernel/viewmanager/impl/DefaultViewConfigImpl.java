@@ -33,7 +33,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import org.digijava.kernel.siteconfig.Module;
 public class DefaultViewConfigImpl
     extends DefaultViewConfigUtil {
     protected static Logger logger =

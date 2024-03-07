@@ -42,7 +42,7 @@ import java.util.Iterator;
 import java.util.Map;
 //import org.digijava.kernel.config.ServiceDependencyConfig;
 
-
+import  org.digijava.kernel.config.Module;
 public class DigiConfigManager {
 
     private static final String ENV_SMTP_HOST = "SMTP_HOST";
@@ -157,35 +157,33 @@ public class DigiConfigManager {
         }
 
         // Parse old-format modules
-        Iterator iter = digiConfig.getModules().values().iterator();
-        while (iter.hasNext()) {
-            Module module = (Module) iter.next();
+        for (Object o : digiConfig.getModules().values()) {
+            Module module = (Module) o;
             if (moduleConfigs.containsKey(module.getName())) {
                 logger.warn("Configuration for module " + module.getName() +
-                            " is already defined in " + configDirFile.getAbsolutePath() +
-                            " skipping <module> definition");
+                        " is already defined in " + configDirFile.getAbsolutePath() +
+                        " skipping <module> definition");
                 continue;
             }
             logger.debug("Parsing configuration file from <module> definition: " + module.getConfig());
 
             InputStream is =
-                DigiConfigManager.class.getClassLoader().
-                getResourceAsStream(
-                module.getConfig());
+                    DigiConfigManager.class.getClassLoader().
+                            getResourceAsStream(
+                                    module.getConfig());
             if (is == null) {
                 logger.debug("File not found");
             }
             ModuleConfig moduleConfig = null;
             try {
                 moduleConfig = (ModuleConfig) digester.parse(is);
-            }
-            catch (Exception ex1) {
+            } catch (Exception ex1) {
                 logger.debug(
-                    "Error while parsing configuration file for module " +
-                    module.getName(), ex1);
+                        "Error while parsing configuration file for module " +
+                                module.getName(), ex1);
                 throw new DgException(
-                    "Error while parsing configuration file for module " +
-                    module.getName(), ex1);
+                        "Error while parsing configuration file for module " +
+                                module.getName(), ex1);
             }
             moduleConfigs.put(module.getName(), moduleConfig);
         }

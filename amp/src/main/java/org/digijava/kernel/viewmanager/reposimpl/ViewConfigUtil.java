@@ -33,7 +33,7 @@ import org.digijava.kernel.viewmanager.ViewConfigException;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.util.*;
-
+import org.digijava.kernel.siteconfig.Module;
 public abstract class ViewConfigUtil
     extends AbstractViewConfig {
 

@@ -23,10 +23,10 @@
 package org.digijava.kernel.entity;
 
 import java.security.Principal;
-import java.security.acl.Group;
+
 import java.util.Enumeration;
 
-public class GeoRegion implements Group {
+public class GeoRegion implements Principal {
 
     private String id;
     private String name;

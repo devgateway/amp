@@ -61,6 +61,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
@@ -533,10 +534,12 @@ public class DgUtil {
      */
     public static String encodeBase64(String string) {
         try {
-            return URLEncoder.encode(new sun.misc.BASE64Encoder().encodeBuffer(
-                string.getBytes()), "UTF-8");
-        }
-        catch (UnsupportedEncodingException ex) {
+            // Encode the string to Base64
+            byte[] encodedBytes = Base64.getEncoder().encode(string.getBytes(StandardCharsets.UTF_8));
+            // URL encode the Base64 encoded bytes
+            return URLEncoder.encode(new String(encodedBytes), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            // Handle encoding errors
             logger.error("Could not encode Base64", ex);
             throw new RuntimeException(ex);
         }
@@ -549,16 +552,13 @@ public class DgUtil {
      */
     public static String decodeBase64(String string) {
         try {
-            try {
-                return new String(new sun.misc.BASE64Decoder().decodeBuffer(
-                    URLDecoder.decode(string, "UTF-8")));
-            }
-            catch (UnsupportedEncodingException ex) {
-                logger.error("Could not decode Base64", ex);
-                throw new RuntimeException(ex);
-            }
-        }
-        catch (IOException ex) {
+            // Decode the URL encoded string
+            String decodedString = URLDecoder.decode(string, "UTF-8");
+            // Decode the Base64 encoded string
+            byte[] decodedBytes = Base64.getDecoder().decode(decodedString.getBytes(StandardCharsets.UTF_8));
+            return new String(decodedBytes, StandardCharsets.UTF_8);
+        } catch (UnsupportedEncodingException ex) {
+            // Handle encoding errors
             logger.error("Could not decode Base64", ex);
             throw new RuntimeException(ex);
         }

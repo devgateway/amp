@@ -50,7 +50,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import org.digijava.kernel.siteconfig.Module;
 public class ViewConfigImpl extends ViewConfigUtil  {
     protected static Logger logger =
         Logger.getLogger(ViewConfigImpl.class);

@@ -1,4 +1,4 @@
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
 <script type="text/javascript">
 	var contentLocal;
 

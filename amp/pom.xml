@@ -1419,7 +1419,8 @@
                             <exclude>TEMPLATE/reamp/node_modules/**</exclude>
                             <exclude>TEMPLATE/reampv2/node/**</exclude>
                             <exclude>TEMPLATE/reampv2/node_modules/**</exclude>
-<!--                            <exclude>src/**</exclude>-->
+                            <exclude>src/main/java/*</exclude>
+                            <exclude>src/test/java/*</exclude>
                             <exclude>target/**</exclude>
                         </excludes>
                         </resource>

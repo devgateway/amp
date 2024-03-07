@@ -1,7 +1,7 @@
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>

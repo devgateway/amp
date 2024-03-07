@@ -1,5 +1,5 @@
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
 <!-- <b>T/SITEDOMAIN LEFT</b>&nbsp; -->
 
 <table border="0" width="100%" cellpadding="0" cellspacing="5">

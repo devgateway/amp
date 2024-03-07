@@ -1,9 +1,9 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/fieldVisibility.tld" prefix="field"%>
 
 <bean:define name="largeTextFeature" id="largeTextFeature"
 	scope="request" />

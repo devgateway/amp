@@ -1,5 +1,5 @@
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
 <html>
 <link href="/digijava/TEMPLATE/demoSite/css/global.css" rel="stylesheet" type="text/css">
 <head>

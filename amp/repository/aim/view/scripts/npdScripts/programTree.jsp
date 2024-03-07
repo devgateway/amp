@@ -1,8 +1,8 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
-<%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/fn.tld" prefix="fn"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/globalsettings.tld" prefix="gs"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
 
 <style type="text/css">
 	#infoPanel .hd {

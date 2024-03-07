@@ -1,13 +1,13 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
-<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/globalsettings.tld" prefix="gs" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 

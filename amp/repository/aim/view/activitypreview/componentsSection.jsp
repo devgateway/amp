@@ -1,11 +1,11 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/moduleVisibility.tld" prefix="module"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/taglib/fmt" prefix="fmt"%>
-<%@ taglib uri="/taglib/aim" prefix="aim"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/aim.tld" prefix="aim"%>
 
 <digi:instance property="aimEditActivityForm" />
 <%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>

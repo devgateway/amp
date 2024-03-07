@@ -556,17 +556,17 @@ public class VisibilityManager extends MultiAction {
             BufferedWriter out = new BufferedWriter(fstream);
             String outHeader="";
             outHeader="<%@ page pageEncoding=\"UTF-8\" %>\n"+
-            "<%@ taglib uri=\"/taglib/struts-bean\" prefix=\"bean\" %>\n"+
-            "<%@ taglib uri=\"/taglib/struts-logic\" prefix=\"logic\" %>\n"+
-            "<%@ taglib uri=\"/taglib/struts-tiles\" prefix=\"tiles\" %>\n"+
-            "<%@ taglib uri=\"/taglib/struts-html\" prefix=\"html\" %>\n"+
-            "<%@ taglib uri=\"/taglib/digijava\" prefix=\"digi\" %>\n"+
-            "<%@ taglib uri=\"/taglib/jstl-core\" prefix=\"c\" %>\n"+
-            "<%@ taglib uri=\"/taglib/category\" prefix=\"category\" %>\n"+
-            "<%@ taglib uri=\"/taglib/fieldVisibility\" prefix=\"field\" %>\n"+
-            "<%@ taglib uri=\"/taglib/featureVisibility\" prefix=\"feature\" %>\n"+
-            "<%@ taglib uri=\"/taglib/moduleVisibility\" prefix=\"module\" %>\n"+
-            "<%@ taglib uri=\"/taglib/jstl-functions\" prefix=\"fn\" %>\n";
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-bean.tld\" prefix=\"bean\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-logic.tld\" prefix=\"logic\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-tiles.tld\" prefix=\"tiles\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-html.tld\" prefix=\"html\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/digijava.tld\" prefix=\"digi\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/c.tld\" prefix=\"c\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/category.tld\" prefix=\"category\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/fieldVisibility.tld\" prefix=\"field\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/featureVisibility.tld\" prefix=\"feature\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/moduleVisibility.tld\" prefix=\"module\" %>\n"+
+            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/fn.tld\" prefix=\"fn\" %>\n";
 
 
 

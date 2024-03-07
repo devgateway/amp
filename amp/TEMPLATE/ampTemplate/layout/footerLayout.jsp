@@ -1,5 +1,5 @@
 <%@ page language="java"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
 
 <jsp:include page="/TEMPLATE/ampTemplate/layout/baseFooterLayout.jsp"></jsp:include>
 

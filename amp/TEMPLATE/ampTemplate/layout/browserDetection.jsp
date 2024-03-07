@@ -1,5 +1,5 @@
-    <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-    <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+    <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+    <%@ taglib uri="/src/main/webapp/WEB-INF/featureVisibility.tld" prefix="feature" %>
 
 	<feature:display name="Detect browser" module="Login - User Management">
 	<div class="modal fade" id="browserIncompatibleModal">

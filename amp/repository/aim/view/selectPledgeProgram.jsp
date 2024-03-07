@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
 
 <c:set var="act">${param.extraAction}</c:set>
 <%--<c:set var="rll_ajax">render_locations_list</c:set>  --%>

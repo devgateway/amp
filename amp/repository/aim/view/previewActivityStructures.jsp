@@ -1,8 +1,8 @@
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/moduleVisibility.tld" prefix="module"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/fn.tld" prefix="fn" %>
 
 <module:display name="/Activity Form/Structures" parentModule="/Activity Form">
 <c:set var="maxImagesCount" value="6"></c:set>

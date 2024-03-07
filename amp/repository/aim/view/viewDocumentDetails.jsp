@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
 
 <script language="JavaScript">
 

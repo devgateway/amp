@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
 
 
 <li id="config_${item.value.ampThemeId}"><input type="checkbox"

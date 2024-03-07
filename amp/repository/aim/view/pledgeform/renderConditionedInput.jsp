@@ -1,7 +1,7 @@
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/fieldVisibility.tld" prefix="field" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 <%--
 	renders a single input field guarded by Feature. Parameters:

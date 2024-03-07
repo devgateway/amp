@@ -1,4 +1,4 @@
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
 
 <%--
 	renders a ajax-file-upload-with-progress (progress only works according to about.txt)

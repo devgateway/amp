@@ -1,19 +1,19 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
-<%@ taglib uri="/taglib/struts-html" prefix="html"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/category" prefix="category"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/category.tld" prefix="category"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/fn.tld" prefix="fn" %>
 <%@ page import="java.util.List"%>
 <%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
-<%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/category.tld" prefix="category" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/fieldVisibility.tld" prefix="field" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/featureVisibility.tld" prefix="feature" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/moduleVisibility.tld" prefix="module" %>
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />

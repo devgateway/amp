@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
-<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
 
 <bean:define id="trnTextCell" name="viewable" type="org.dgfoundation.amp.ar.cell.TrnTextCell" scope="request" toScope="page" />
 <bean:define id="caller" name="caller" scope="request" toScope="page" />

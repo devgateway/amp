@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
 
 <table border="0" align="center" bgcolor="#f2f2f2" width=100%>
 	<tr>

@@ -102,6 +102,7 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                     {
                         (selectedIndicator) ? (
                             <IndicatorProgressChart
+                                title={translations['amp.ndd.dashboard:sector-progress']}
                                 section="right"
                                 translations={translations}
                                 filters={filters}

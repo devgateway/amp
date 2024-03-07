@@ -4,10 +4,10 @@
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/taglib/struts-nested" prefix="nested"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-nested.tld" prefix="nested"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/aim.tld" prefix="aim" %>
-<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fmt.tld" prefix="fmt" %>
 
 <digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 

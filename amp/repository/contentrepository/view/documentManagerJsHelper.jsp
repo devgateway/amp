@@ -2,7 +2,7 @@
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/globalsettings.tld" prefix="gs" %>
-<%@ taglib uri="/taglib/resourcesettings" prefix="rs" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/resourcesettings.tld" prefix="rs" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/fieldVisibility.tld" prefix="field" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/featureVisibility.tld" prefix="feature" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/moduleVisibility.tld" prefix="module" %>

@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
-<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fmt.tld" prefix="fmt"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/category.tld" prefix="category"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/fieldVisibility.tld" prefix="field"%>

@@ -4,10 +4,10 @@
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/taglib/struts-nested" prefix="nested"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-nested.tld" prefix="nested"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/aim.tld" prefix="aim" %>
-<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fmt.tld" prefix="fmt" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" href="<digi:file src="/repository/gpi/view/css/gpi_styles.css"/>">

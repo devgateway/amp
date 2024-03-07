@@ -3,7 +3,7 @@
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@taglib uri="/taglib/editlivejava" prefix="elj" %>
+<%@taglib uri="/src/main/webapp/WEB-INF/taglib.tld" prefix="elj" %>
 
 <digi:errors />
 <digi:instance property="sdmForm"/>

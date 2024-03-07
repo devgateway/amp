@@ -4,7 +4,7 @@
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/taglib/displaytag" prefix="display" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/displaytag-11.tld" prefix="display" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
 
 

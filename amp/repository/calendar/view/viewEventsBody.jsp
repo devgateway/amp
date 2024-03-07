@@ -7,8 +7,8 @@
 <%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/fieldVisibility.tld" prefix="field" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/taglib/struts-nested" prefix="nested"%>
-<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/struts-nested.tld" prefix="nested"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fmt.tld" prefix="fmt"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/category.tld" prefix="category"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/fieldVisibility.tld" prefix="field"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/featureVisibility.tld" prefix="feature"%>

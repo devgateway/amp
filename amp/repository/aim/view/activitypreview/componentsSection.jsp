@@ -4,7 +4,7 @@
 <%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fmt.tld" prefix="fmt"%>
 <%@ taglib uri="/src/main/webapp/WEB-INF/aim.tld" prefix="aim"%>
 
 <digi:instance property="aimEditActivityForm" />

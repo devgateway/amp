@@ -18,7 +18,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
 
 
     let displayDataSet: LineChartData [] = [];
-    let minMax: Record<any, any> = {
+    let minMax: Record<any, number> = {
         min: 0,
         max: 150
     };
@@ -34,7 +34,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
          //round off the max value to the nearest 10
         minMax = {
             min: Math.floor(min / 10) * 10,
-            max: Math.ceil(max / 10) * 10 + (min > 1000 ? 500 : 50)
+            max: Math.ceil(max / 10) * 10 + (min > 1000 ? 500 : 100)
         };
     }
 
@@ -71,7 +71,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
                 margin={{ top: 10, right: 130, bottom: 50, left: 25 }}
                 xScale={{ type: 'point' }}
                 yScale={{
-                    type: 'linear',
+                    type: "linear",
                     min: 0,
                     max: minMax.max ? minMax.max + STEP_SIZE : 150,
                     clamp: true,

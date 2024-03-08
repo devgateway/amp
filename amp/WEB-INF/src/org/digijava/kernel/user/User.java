@@ -88,7 +88,7 @@ public class User
     private Date passwordChangedAt;
 
     public User() {
-        logger.info("Hola")
+        logger.info("Hola");
     }
 
     public User(String email, String firstNames, String lastName) {

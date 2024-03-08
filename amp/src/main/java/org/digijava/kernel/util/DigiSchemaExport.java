@@ -78,7 +78,6 @@ public class DigiSchemaExport {
             Metadata metaData = new MetadataSources(standardRegistry).getMetadataBuilder().build();
             Collection<PersistentClass> entityBindings = metaData.getEntityBindings();
             Iterator<PersistentClass> classIter = entityBindings.iterator();
-            System.out.println(classIter);
             if (commandLineParams.containsKey("-names")) {
                 logger.info("Generating comma-separated table names");
 
@@ -86,7 +85,7 @@ public class DigiSchemaExport {
                 boolean first = true;
                 StringBuffer tables = new StringBuffer();
                 while (classIter.hasNext()) {
-                    PersistentClass item = (PersistentClass)classIter.next();
+                    PersistentClass item = classIter.next();
                     String tableName = item.getTable().getName();
                     if (first) {
                         first = false;
@@ -124,20 +123,18 @@ public class DigiSchemaExport {
     private static Map getCommandLineParameters(String[] parameters) {
         HashMap result = new HashMap();
         String key = null;
-        for (int i = 0; i < parameters.length; i++) {
-            logger.info(parameters[i]);
-            if (parameters[i].startsWith("-")) {
+        for (String parameter : parameters) {
+            logger.info(parameter);
+            if (parameter.startsWith("-")) {
                 if (key != null) {
                     result.put(key, "########");
                 }
-                key = parameters[i];
-            }
-            else {
+                key = parameter;
+            } else {
                 if (key == null) {
-                    logger.error("Unknown switch: " + parameters[i]);
-                }
-                else {
-                    result.put(key, parameters[i]);
+                    logger.error("Unknown switch: " + parameter);
+                } else {
+                    result.put(key, parameter);
                     key = null;
                 }
             }

@@ -1451,29 +1451,6 @@
                 <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <id>copy-war-to-deployment-dir</id>
-                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${digijava.deploy}/${project.distname}.war</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>*.war</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/*.jpx</exclude>
-                                        <exclude>**/*.library</exclude>
-                                        <exclude>**/.*</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-resources</id>
                         <phase>process-resources</phase>
                         <goals>
@@ -2176,21 +2153,21 @@
                             </arguments>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>create-db-model</id>
-                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>
-                            <classpathScope>compile</classpathScope>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>create-db-model</id>-->
+<!--                        <phase>compile</phase> &lt;!&ndash; Or specify another appropriate phase &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>-->
+<!--                            <classpathScope>compile</classpathScope>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
 
                     <execution>
                         <id>create-permissions</id>
-                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
+                        <phase>install</phase> <!-- Or specify another appropriate phase -->
                         <goals>
                             <goal>java</goal>
                         </goals>
@@ -2200,20 +2177,20 @@
                         </configuration>
                     </execution>
 
-                    <execution>
-                        <id>export-table-names</id>
-                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>
-                            <arguments>
-                                <argument>-names</argument>
-                            </arguments>
-                            <classpathScope>compile</classpathScope>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>export-table-names</id>-->
+<!--                        <phase>compile</phase> &lt;!&ndash; Or specify another appropriate phase &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>-->
+<!--                            <arguments>-->
+<!--                                <argument>-names</argument>-->
+<!--                            </arguments>-->
+<!--                            <classpathScope>compile</classpathScope>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
 
 
                     <execution>
@@ -2237,28 +2214,27 @@
                         </goals>
                         <configuration>
                             <mainClass>org.dgfoundation.amp.StandaloneAMPStartup</mainClass>
-                            <fork>true</fork>
                             <classpathScope>runtime</classpathScope>
                         </configuration>
                     </execution>
 
-                    <execution>
-                        <id>compile-selenium</id>
-                        <phase>compile</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <source>1.8</source> <!-- Adjust as needed -->
-                            <target>1.8</target> <!-- Adjust as needed -->
-                            <debug>true</debug>
-                            <deprecation>false</deprecation>
-                            <includes>
-                                <include>/src/main/webapp/WEB-INF/amp-selenium-test/*.java</include>
-                            </includes>
-                            <classpathScope>compile</classpathScope>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>compile-selenium</id>-->
+<!--                        <phase>compile</phase> &lt;!&ndash; Or specify another appropriate phase &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <source>1.8</source> &lt;!&ndash; Adjust as needed &ndash;&gt;-->
+<!--                            <target>1.8</target> &lt;!&ndash; Adjust as needed &ndash;&gt;-->
+<!--                            <debug>true</debug>-->
+<!--                            <deprecation>false</deprecation>-->
+<!--                            <includes>-->
+<!--                                <include>/src/main/webapp/WEB-INF/amp-selenium-test/*.java</include>-->
+<!--                            </includes>-->
+<!--                            <classpathScope>compile</classpathScope>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
 
                 </executions>
             </plugin>

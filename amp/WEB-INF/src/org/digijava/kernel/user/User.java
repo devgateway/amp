@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
 public class User
     extends Entity implements Serializable, Comparable, Identifiable {
     private static final long serialVersionUID = 4467118985120179660L;
-    public static Logger logger = Logger.getLogger(User.class);
+    private static Logger logger = Logger.getLogger(User.class);
 
     private Subject subject;
     private String firstNames;

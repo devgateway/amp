@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.module.calendar.dbentity.Calendar" table="DG_CALENDAR">
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_calendar_seq</param>
+			</generator>
+		</id>
+
+		<property name="siteId" column="SITE_ID" type="java.lang.String" />
+		<property name="instanceId" column="MODULE_INSTANCE_ID" type="java.lang.String" />
+		<many-to-one name="status" column="STATUS"
+			class="org.digijava.module.common.dbentity.ItemStatus" cascade="none" />
+		<property name="location" column="LOCATION" type="java.lang.String" />
+		<property name="mailTo" column="MAIL_TO" type="java.lang.String" />
+		<property name="country" column="COUNTRY_ISO" type="java.lang.String" />
+		<property name="sourceName" column="SOURCE_NAME" type="java.lang.String" />
+		<property name="sourceUrl" column="SOURCE_URL" type="java.lang.String" />
+		<property name="startDate" column="START_DATE" type="java.util.Date" />
+		<property name="endDate" column="END_DATE" type="java.util.Date" />
+		<property name="enableHTML" column="ENABLE_HTML" type="boolean" />
+		<property name="startTBD" column="start_tbd" not-null="false">
+			<type name="org.digijava.module.common.dbentity.IntegerPersistentEnum">
+				<param name="targetClass">org.digijava.module.calendar.dbentity.Calendar$TBD</param>
+			</type>
+		</property>
+		<property name="endTBD" column="end_tbd" not-null="false">
+			<type name="org.digijava.module.common.dbentity.IntegerPersistentEnum">
+				<param name="targetClass">org.digijava.module.calendar.dbentity.Calendar$TBD</param>
+			</type>
+		</property>
+
+
+		<property name="enableSmiles" column="ENABLE_SMILES" type="boolean" />
+		<set name="calendarItem" cascade="all" inverse="true">
+			<key column="CALENDAR_ID" />
+			<one-to-many class="org.digijava.module.calendar.dbentity.CalendarItem" />
+		</set>
+
+		<set name="recurrCalEvent" cascade="all" inverse="true">
+			<key column="CALENDAR_ID" />
+			<one-to-many class="org.digijava.module.calendar.dbentity.RecurrCalEvent" />
+		</set>
+	</class>
+
+</hibernate-mapping>

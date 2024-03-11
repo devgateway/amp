@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpTeamMemberRoles"
+		table="AMP_TEAM_MEMBER_ROLES" lazy="false">
+		<cache usage="read-write" />
+		<id name="ampTeamMemRoleId" column="amp_team_mem_role_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_TEAM_MEMBER_ROLES_seq</param>
+			</generator>
+		</id>
+
+		<property name="role" column="role" type="java.lang.String" />
+		<property name="description" column="description" type="text" />
+		<property name="teamHead" column="team_head" type="java.lang.Boolean" />
+		<property name="approver" column="approver" type="boolean" />
+
+	</class>
+</hibernate-mapping>

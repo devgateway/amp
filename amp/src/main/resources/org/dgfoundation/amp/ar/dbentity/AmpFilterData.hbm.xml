@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.dgfoundation.amp.ar.dbentity.AmpFilterData" table="AMP_FILTER_DATA">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+<!--			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">-->
+<!--				<param name="sequence_name">AMP_FILTER_DATA_seq</param>-->
+<!--				<param name="allocationSize">1</param>-->
+<!--			</generator>-->
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="optimizer">none</param>
+				<param name="increment_size">1</param>
+				<param name="sequence_name">AMP_FILTER_DATA_seq</param>
+			</generator>
+		</id>
+		<property name="propertyName" column="property_name"  type="java.lang.String"/>
+		<property name="propertyClassName" column="property_class_name"  type="java.lang.String"/>
+		<property name="elementClassName" column="element_class_name"  type="java.lang.String"/>
+		<property name="value" column="value"  type="java.lang.String"/>
+		<many-to-one name="filterRelObj" column="amp_report_id" class="org.digijava.module.aim.dbentity.AmpReports" not-null="true"/>
+	</class>
+</hibernate-mapping>

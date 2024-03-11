@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpFiscalCalendar" table="AMP_FISCAL_CALENDAR"  lazy="false">
+		<cache usage="read-write" />
+		<id name="ampFiscalCalId" column="amp_fiscal_cal_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_CURRENCY_seq</param>
+			</generator>
+		</id>
+
+		<property name="startMonthNum" column="start_month_num" type="java.lang.Integer" />
+		<property name="yearOffset" column="year_offset" type="java.lang.Integer" />
+		<property name="startDayNum" column="start_day_num" type="java.lang.Integer" />
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="description" column="description" type="text" />
+		<property name="baseCal" column="base_cal" type="java.lang.String" />
+		<property name="isFiscal" column="is_fiscal" type="java.lang.Boolean" />
+		
+		<set name="constantCurrencies" cascade="all" inverse="true" lazy="true">
+			<key column="amp_fiscal_cal_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpCurrency" />
+		</set>
+	</class>
+</hibernate-mapping>

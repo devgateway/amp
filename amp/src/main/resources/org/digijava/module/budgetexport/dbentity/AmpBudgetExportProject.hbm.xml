@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" table="amp_budget_export_project">
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_budget_export_project_seq</param>
+			</generator>
+		</id>
+		<property name="name" column="name" type="java.lang.String"/>
+        <property name="description" column="description" type="java.lang.String"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="ampReportId" column="report_id" type="java.lang.Long"/>
+        <property name="mappingImportServiceURL" column="mapping_service_url" type="java.lang.String"/>
+        <property name="serviceActionURL" column="service_action_url" type="java.lang.String"/>
+        <property name="dataSource" column="data_source" type="int"/>
+
+
+
+        <bag lazy="true" name="rules" cascade="all" inverse="true">
+            <key column="project"/>
+            <one-to-many class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule" />
+        </bag>
+
+	</class>
+
+</hibernate-mapping>

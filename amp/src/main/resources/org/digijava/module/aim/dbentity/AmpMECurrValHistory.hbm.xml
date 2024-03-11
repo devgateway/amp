@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpMECurrValHistory"
+		table="AMP_ME_CURR_VAL_HISTORY">
+		<cache usage="read-write" />
+		<id name="ampMECurrValHistoryId" column="amp_me_curr_val_history_id"
+			type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ME_CURR_VAL_HIST_seq</param>
+			</generator>
+		</id>
+
+		<property name="currValue" column="curr_val" type="java.lang.Float" />
+		<property name="currValueDate" column="curr_val_date" type="java.util.Date" />
+		<property name="comments" column="comments" type="java.lang.String" />
+
+		<many-to-one name="meIndValue" column="me_ind_value"
+			class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" />
+
+	</class>
+</hibernate-mapping>

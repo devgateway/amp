@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpColumnsFilters" table="AMP_COLUMNS_FILTERS">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COLUMNS_FILTERS_seq</param>
+			</generator>
+		</id>
+
+		<many-to-one name="column" column="column_id" class="org.digijava.module.aim.dbentity.AmpColumns" />
+		<property name="beanFieldName" column="bean_field_name" type="java.lang.String"  />
+		<property name="viewFieldName" column="view_field_name" type="java.lang.String"  />
+	</class>
+</hibernate-mapping>

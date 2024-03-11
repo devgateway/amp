@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.contentrepository.dbentity.filter.DocumentFilter" table="CR_DOCUMENT_FILTER">
+
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">CR_DOCUMENT_FILTER_seq</param>
+			</generator>
+		</id>
+
+		
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="source" column="source" type="java.lang.String" />
+		
+		<property name="baseUsername" column="base_username" type="java.lang.String" />
+		<property name="baseTeamId" column="base_team_id" type="java.lang.Long" />
+		<property name="publicViewPosition" column="public_view_position" type="java.lang.Long" />
+		<property name="filterFromDate" column="filter_from_date" type="java.lang.String" />
+		<property name="filterToDate" column="filter_to_date" type="java.lang.String" />
+		
+		<list name="filterLabelsUUID" table="cr_document_filter_labels_uuid" cascade="all" lazy="false">
+			<cache usage="read-write"/>
+			<key column="cr_document_filter_id" />
+			<list-index column="index_column" />
+			<element column="label_uuid" type="java.lang.String" />
+		</list>
+		<list name="filterDocTypeIds" table="cr_document_filter_doc_type" cascade="all" lazy="false">
+			<cache usage="read-write"/>
+			<key column="cr_document_filter_id" />
+			<list-index column="index_column" />
+			<element column="doc_type" type="java.lang.Long" />
+		</list>
+		<list name="filterFileType" table="cr_document_filter_file_type" cascade="all" lazy="false">
+			<cache usage="read-write"/>
+			<key column="cr_document_filter_id" />
+			<list-index column="index_column" />
+			<element column="doc_type" type="java.lang.String" />
+		</list>
+		<list name="filterTeamIds" table="cr_document_filter_team_ids" cascade="all" lazy="false">
+			<cache usage="read-write"/>
+			<key column="cr_document_filter_id" />
+			<list-index column="index_column" />
+			<element column="team_ids" type="java.lang.Long" />
+		</list>
+		<list name="filterOwners" table="cr_document_filter_owners" cascade="all" lazy="false">
+			<cache usage="read-write"/>
+			<key column="cr_document_filter_id" />
+			<list-index column="index_column" />
+			<element column="filter_owners" type="java.lang.String" />
+		</list>
+		<many-to-one name="user" column="user_" 
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+	</class>
+</hibernate-mapping>

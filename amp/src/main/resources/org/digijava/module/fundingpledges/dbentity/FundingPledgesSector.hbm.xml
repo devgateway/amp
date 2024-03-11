@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledgesSector" table="AMP_FUNDING_PLEDGES_SECTOR">
+		<id name="id" column="id" type="java.lang.Long"
+			unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_PLEDGES_SECTOR_seq</param>
+			</generator>
+		</id>
+		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges"></many-to-one>
+		<many-to-one name="sector" column="amp_sector_id" class="org.digijava.module.aim.dbentity.AmpSector" cascade="none" not-null="true" />
+		<property name="sectorpercentage" column="sector_percentage" type="java.lang.Float" />
+	</class>
+</hibernate-mapping>

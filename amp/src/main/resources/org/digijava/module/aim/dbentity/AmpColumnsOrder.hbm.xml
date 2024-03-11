@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpColumnsOrder" table="AMP_COLUMNS_ORDER">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COLUMNS_ORDER_seq</param>
+			</generator>
+		</id>
+		<property column="columnName" name="columnName" type="java.lang.String" />
+		<property column="indexOrder" name="indexOrder" type="java.lang.Long" />
+	</class>
+</hibernate-mapping>

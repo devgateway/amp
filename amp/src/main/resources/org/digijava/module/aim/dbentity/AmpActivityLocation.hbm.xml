@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.module.aim.dbentity.AmpActivityLocation"
+		table="AMP_ACTIVITY_LOCATION">
+		<cache usage="read-write" />
+		<id name="id" column="amp_activity_location_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_LOCATION_seq</param>
+			</generator>
+		</id>
+
+		<many-to-one name="activity" column="amp_activity_id"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+
+		<many-to-one name="location" column="location_id"
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" not-null="true" />
+
+		<property name="locationPercentage" column="location_percentage" type="java.lang.Float" />
+		<property name="latitude" column="location_latitude" type="java.lang.String" />
+		<property name="longitude" column="location_longitude" type="java.lang.String" />
+		
+
+
+	</class>
+
+</hibernate-mapping>

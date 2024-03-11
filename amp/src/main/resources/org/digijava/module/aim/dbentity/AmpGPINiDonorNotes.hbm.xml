@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpGPINiDonorNotes"
+		table="AMP_GPI_NI_DONOR_NOTES">
+		<cache usage="read-write" />
+		<id name="ampGPINiDonorNotesId" column="amp_gpi_ni_donor_notes_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_NI_DONOR_NOTES_seq</param>
+			</generator>
+		</id>
+			
+		<property name="notes" column="notes" type="text" />	
+		<property name="notesDate" column="notes_date" type="java.util.Date" />	
+		<property name="indicatorCode" column="indicator_code" type="java.lang.String" />	
+		<many-to-one name="donor" column="donor_id"
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"
+			not-null="true"  index="idx_amp_gpi_ni_donor_notes_donor_id"/>			
+
+	</class>
+</hibernate-mapping>

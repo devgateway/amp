@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.IPAContractAmendment" table="IPA_CONTRACT_AMENDMENT">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">IPA_CONTRACT_AMENDMENT_seq</param>
+			</generator>
+		</id>
+		<property access="field" name="amount" column="amount" type="java.lang.Double" />
+		<many-to-one name="currency" column="currency"
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+		<many-to-one name="contract" column="ipa_contract_id"
+			class="org.digijava.module.aim.dbentity.IPAContract" cascade="save-update" />
+		<property name="date" column="date_" type="java.util.Date" />
+		<property name="reference" column="reference" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

@@ -1,6 +1,6 @@
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <!-- Dependencies -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>

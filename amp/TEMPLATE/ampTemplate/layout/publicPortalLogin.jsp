@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

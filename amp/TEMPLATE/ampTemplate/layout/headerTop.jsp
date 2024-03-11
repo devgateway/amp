@@ -1,8 +1,8 @@
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
 
 <script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"/>"></script>

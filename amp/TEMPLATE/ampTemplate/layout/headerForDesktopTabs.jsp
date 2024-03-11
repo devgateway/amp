@@ -1,13 +1,13 @@
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
 <!-- Stylesheet of AMP -->
 <!--[if IE 6]><link href='/TEMPLATE/ampTemplate/css_2/amp_ie_hacks_6.css' rel='stylesheet' type='text/css'><![endif]-->

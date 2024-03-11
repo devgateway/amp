@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>esrigis</name>
+	<security>
+		<action login-required="true" pattern="/structureTypeManager">ADMIN</action>
+		<action login-required="true" pattern="/StructuresImporter">ADMIN</action>
+		<action login-required="true" pattern="/MapsConfiguration">ADMIN</action>
+		<action login-required="false" pattern="/mainmap" />
+	</security>
+	
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.esrigis.dbentity.AmpMapConfig</hibernate-class>
+		<hibernate-class>org.digijava.module.esrigis.dbentity.AmpApiState</hibernate-class>
+	</hibernate-classes>
+</module-config>

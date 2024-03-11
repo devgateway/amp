@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+ 
+  
+  <action-mappings>
+ 	<action path="/xmlpatcher/xmlpatchesjson" scope="request"
+			type="org.digijava.module.xmlpatcher.action.XmlPatchesJSON">
+	</action>
+	
+	 	<action path="/xmlpatcher/xmlpatches" scope="request"
+			type="org.digijava.module.xmlpatcher.action.XmlPatchesAction">
+			<forward name="listPatches" path="/showLayout.do?layout=xmlPatcherListPatches"/>
+			<forward name="listPatchLogs" path="/repository/xmlpatcher/view/listPatchLogs.jsp"/>
+			<forward name="patchContents" path="/repository/xmlpatcher/view/patchContents.jsp"/>
+			<forward name="logContents" path="/repository/xmlpatcher/view/logContents.jsp"/>
+	</action>
+	
+		 
+
+  </action-mappings>
+  
+</struts-config>

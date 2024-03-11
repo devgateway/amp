@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<config>
+
+<secondary-pages>
+	<page page="userChangePassword" name="userChangePassword" title="Blank Site page title with user change password body" />
+	<page page="userProfile" name="userProfile" title="Blank Site page title with user profile" />
+	<page page="userUnSubscribe" name="userUnSubscribe" title="Blank Site page title with  user unsibscribe body" />
+	<page page="userUnSubscrTmpSuccess" name="userUnSubscrTmpSuccess" title="Blank Site page title with successfull user unsubscribtion body" />
+	<page page="userUnSubscrPermSuccess" name="userUnSubscrPermSuccess" title="Blank Site page title with successfull user unsubscribtion body" />
+	<page page="userUpdate" name="userUpdate" title="Blank site page title with user Update" />
+	<page page="userReset" name="userReset" title="Blank site page title with user Reset" />
+	<page page="bio" name="userBio" title="Blank site page title with user Bio" />
+	<page page="bio" name="um_popupLayout" title="Blank site Popup page title with user Bio" />
+
+	<page page="userContact" name="um_popupLayoutContact" title="Blank site Popup page title with user Contact" />
+	<page page="userTell" name="um_popupLayoutTell" title="Blank site Popup page title with user Tell" />
+	<page page="userContactSuccess" name="um_popupLayoutContactSuccess" title="Blank site Popup page title with user Contact success" />
+	<page page="userTellSuccess" name="um_popupLayoutTellSuccess" title="Blank site Popup page title with user Tell success" />
+	<page page="userUnSubscribe" name="userUnSubscribe" title="Blank Site page title with  user unsibscribe body" />
+	<page page="userUnSubscrTmpSuccess" name="userUnSubscrTmpSuccess" title="Blank Site page title with successfull user unsubscribtion body" />
+	<page page="userUnSubscrPermSuccess" name="userUnSubscrPermSuccess" title="Blank Site page title with successfull user unsubscribtion body" />
+	<page page="userContact" name="userContact" title="Blank site page title with user Contact" />
+	<page page="email" name="userEmail" title="Blank site page title with user Email" />
+	<page page="userUnSubscribe" name="userUnSubscribe" title="Blank Site page title with  user unsibscribe body" />
+
+	<page page="emailExists" name="um_emailExists" title="It was not possible to create a new user" />
+
+    <page page="viewEditUser" name="umViewEditUser" title=" - View/Edit User" />
+    <page page="viewAllUsers" name="umViewAllUsers" title=" - All Users" />
+    <page page="addUser" name="umAddUser" title=" - Register User" />
+    <page name="waitingUserConfirmation" title=" - Successfully registered user" />
+    <page name="addWorkSpaceUser" title=" - Add user to workspace" />
+    <page name="assignWorkspaceToUser" title=" - Add user to workspace" />
+    <page page="suspendLoginManager" name="suspendLoginManager" title="Suspend Log in Manager" />
+    <page page="addEditSuspendLogin" name="addEditSuspendLogin" title="Add/Edit Suspend Login" />
+    <page page="suspendLoginUserManager" name="suspendLoginUserManager" title="Suspend Login User Manager" />
+
+</secondary-pages>
+
+<module>
+	<teaser-file>logon.jsp</teaser-file>
+	<page name="userUpdate">update.jsp</page>
+	<page name="userReset">reset.jsp</page>
+	<page name="updateUserProfile">updateUserProfile.jsp</page>
+	<page name="userProfile">userProfile.jsp</page>
+	<page name="usrProfilePublic">usrProfilePublic.jsp</page>
+	<page name="userContact">userContact.jsp</page>
+	<page name="userContactSuccess">userContactSuccess.jsp</page>
+	<teaser name="userAccount" action="showUserAccountBlank.do">userAccount.jsp</teaser>
+	<teaser name="userRegister" action="showUserRegisterBlank.do">userRegisterBlank.jsp</teaser>
+	<teaser name="userRegisterSuccess" action="showUserSuccessMarket.do">successRegister.jsp</teaser>
+	<teaser name="updateUserProfile" action="showUserUpdateBlank.do">updateUserProfile.jsp</teaser>
+
+	<page name="emailExists">emailExists.jsp</page>
+
+</module>
+
+</config>

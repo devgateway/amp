@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<config>
+<secondary-pages>
+	<page page="listView" name="allEvents_ListView" title="Blank site page title with All events body" />
+	<page page="monthView" name="allEvents_MonthView" title="Blank site page title with All events body" />
+	<page page="yearView" name="allEvents_YearView" title="Blank site page title with All events body" />
+	<page page="addEvent" name="createCalendarItem" title="Blank site page title with create Calendar body" />
+	<page page="addEvent" name="previewCalendarItem" title="Blank site page title with preview Calendar body" />
+	<page page="editEvent" name="editCalendarItem" title="Blank site page title with edit Calendar body" />
+	<page page="editEvent" name="previewEditCalendarItem" title="Blank site page title with preview body" />
+	<page page="eventDetails" name="calendarItemDetails" title="Blank site page title with calendar item details body" />
+	<page page="confirmation" name="confirmCalendarItems" title="Blank site page title with reject confirmation body" />
+	<page page="adminEvents" name="calendarAdmin" title="Blank site page title with administer calendar body" />
+	<page page="settings" name="calendarItemsSettings" title="Blank site page title with calendar settings body" />
+
+    <page page="viewEvents" name="viewEvents" title=" - View Events" />
+    <page page="noEvents" name="noEvents" title=" - No Events" />
+    <page page="calendarOrgPopupLayout" name="calendarOrgPopupLayout" title=" - Calendar Organisation Popup" />
+    <page page="showAmpEvent" name="showAmpEvent" title=" - Show Amp Event" />
+    <page page="previewAmpEvent" name="previewAmpEvent" title=" - Preview Amp Event" />   
+    <page page="recurringEventPopupLayout" name="recurringEventPopupLayout" title=" - Recurring Event" />
+    <page page="printViewPopupLayout" name="printViewPopupLayout" title=" - Print Preview" />
+    <page page="printPreviewPopupLayout" name="printPreviewPopupLayout" title=" - Print Preview" />
+</secondary-pages>
+
+<module>
+	<teaser-file>teaser.jsp</teaser-file>
+	<page name="addEvent">addEvent.jsp</page>
+	<page name="editEvent">editEvent.jsp</page>
+	<page name="listView">listView.jsp</page>
+	<page name="monthView">monthView.jsp</page>
+	<page name="yearView">yearView.jsp</page>
+	<page name="calendarItemDetails">calendarItemDetails.jsp</page>
+	<page name="confirmation">confirmation.jsp</page>
+	<page name="calendarAdmin">adminEvents.jsp</page>
+	<page name="settings">settings.jsp</page>
+
+    <page name="viewEvents">viewEvents.jsp</page>
+    <page name="noEvents">noEventTypes.jsp</page>
+    <page name="showAmpEvent">showAmpEvent.jsp</page>
+    <page name="previewAmpEvent">previewAmpEvent.jsp</page>
+        
+    <page name="calendarOrgPopupLayout">selectOrganisation.jsp</page>
+    <page name="recurringEventPopupLayout">recurringEvent.jsp</page>
+    <page name="printViewPopupLayout">showCalendarPrintView.jsp</page>
+    <page name="printPreviewPopupLayout">showPrintPreview.jsp</page>
+    
+    
+</module>
+
+</config>

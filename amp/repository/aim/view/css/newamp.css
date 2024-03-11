@@ -1,0 +1,1521 @@
+A {
+
+	FONT-SIZE:10px; COLOR: #376091; 
+
+}
+
+TD {
+
+	COLOR: black;
+	padding: 0;
+	margin: 0;
+
+}
+TH {
+	COLOR: black;
+	padding: 0;
+	margin: 0;
+}
+
+TABLE {
+	border-spacing: 0;
+	padding: 0;
+	margin: 0;
+}
+
+
+.clsReportTitle {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: bold 10pt "Verdana"; BORDER-LEFT: medium none; CURSOR: default; COLOR: white; BORDER-BOTTOM: medium none; BACKGROUND-COLOR: #205386; TEXT-ALIGN: center
+
+}
+
+.clsReportSubtitle {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: 8pt "Verdana"; BORDER-LEFT: medium none; COLOR: black; BORDER-BOTTOM: medium none; TEXT-ALIGN: left
+
+}
+
+.clsTable {
+
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px
+
+}
+
+.clsInnerTable {
+
+	BORDER-RIGHT: #336699 1px solid; BORDER-TOP: #336699 1px solid; BORDER-LEFT: #336699 1px solid; BORDER-BOTTOM: #336699 1px solid; BACKGROUND-COLOR: transparent ; PADDING:0; LINE-HEIGHT: small ; SPACING: 0; BORDER-WIDTH:1px; MARGIN:0;
+
+}
+
+
+.clsHelp {
+
+	FONT: 8pt "Verdana"; COLOR: black; TEXT-ALIGN: right
+
+}
+
+.clsTableRowDialog {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 8pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: left
+
+}
+
+.clsTabParent {
+
+	BORDER-RIGHT: #6699cc 1px solid; BORDER-TOP: #003366 2px solid; BORDER-LEFT: #6699cc 1px solid; CURSOR: hand; COLOR: white; BORDER-BOTTOM: #99ccff 2px inset; BACKGROUND-COLOR: #205386
+
+}
+
+.clsTabParentSelected {
+
+	BORDER-RIGHT: #99ccff 1px outset; BORDER-TOP: #99ccff 2px outset; FONT-WEIGHT: bold; BORDER-LEFT: #99ccff 1px outset; CURSOR: default; COLOR: white
+
+}
+
+.clsTabTable {
+
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-SIZE: 8pt; PADDING-BOTTOM: 5px; COLOR: white; PADDING-TOP: 5px; FONT-FAMILY: ARIAL; BACKGROUND-COLOR: #336699
+
+}
+
+.clsMainTabTable {
+
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px
+
+}
+
+.clsMainTabRow {
+
+	BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid; BORDER-LEFT: 0px solid; BORDER-BOTTOM: 0px solid
+
+}
+
+.clsMainTabItemRow {
+
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px
+
+}
+
+.clsParentTabTable {
+
+	BACKGROUND-COLOR: #336699
+
+}
+
+.clsToolBarTitle {
+
+	BORDER-RIGHT: #c0c0c0 1px solid; BORDER-TOP: #c0c0c0 1px solid; FONT-SIZE: 8pt; VERTICAL-ALIGN: middle; BORDER-LEFT: #c0c0c0 1px solid; CURSOR: hand; COLOR: #000000; BORDER-BOTTOM: #c0c0c0 1px solid; FONT-FAMILY: verdana,arial,helvetica; TEXT-DECORATION: none
+
+}
+
+.clsReportTitle1 {
+
+	FONT-SIZE: 10pt; CURSOR: default; COLOR: white; LINE-HEIGHT: normal; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #205386; TEXT-ALIGN: center; FONT-VARIANT: normal
+
+}
+
+.clsReportTitle2 {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT-SIZE: 8pt; BORDER-LEFT: medium none; CURSOR: default; COLOR: white; LINE-HEIGHT: normal; BORDER-BOTTOM: medium none; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #205386; TEXT-ALIGN: center; FONT-VARIANT: normal
+
+}
+
+.clsReportTitle3 {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: bold 10pt "Verdana"; BORDER-LEFT: medium none; COLOR: white; BORDER-BOTTOM: medium none; BACKGROUND-COLOR: #205386; TEXT-ALIGN: center
+
+}
+
+.clsReportFooter {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT-SIZE: 8pt; BORDER-LEFT: medium none; CURSOR: default; LINE-HEIGHT: normal; BORDER-BOTTOM: medium none; FONT-STYLE: normal; FONT-FAMILY: Verdana; FONT-VARIANT: normal
+
+}
+
+.clsReportFooterPrint {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT-SIZE: 6pt; BORDER-LEFT: medium none; CURSOR: default; LINE-HEIGHT: normal; BORDER-BOTTOM: medium none; FONT-STYLE: normal; FONT-FAMILY: Verdana; FONT-VARIANT: normal
+
+}
+
+.clsExcel {
+
+	FONT-SIZE: 8pt; CURSOR: default; LINE-HEIGHT: normal; FONT-STYLE: normal; FONT-FAMILY: Verdana; FONT-VARIANT: normal
+
+}
+
+.clsExcelPrint {
+
+	DISPLAY: none; FONT-SIZE: 8pt; CURSOR: default; COLOR: white; LINE-HEIGHT: normal; FONT-STYLE: normal; FONT-FAMILY: Verdana; FONT-VARIANT: normal
+
+}
+
+.clsTableTitleColHtml {
+
+	BORDER-RIGHT: white 1px solid; FONT: bold 11px "Arial"; CURSOR: default; COLOR: black; TEXT-ALIGN: center
+
+}
+.clsTableTitleCol {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold 7.5pt "Verdana"; CURSOR: default; COLOR: white; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #336699; TEXT-ALIGN: center
+
+}
+
+.clsTableTitle {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold 8.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: center
+
+}
+
+.clsTableTitlePrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold 6.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: center
+
+}
+
+.toolbar {
+
+	FONT-SIZE: 7pt; COLOR: #000000; FONT-FAMILY: verdana; TEXT-DECORATION: none
+
+}
+
+TABLE.toolbar {
+
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #ffffff 1px solid; BORDER-LEFT: #ffffff 1px solid; BORDER-BOTTOM: #000000 1px solid
+
+}
+
+.clsReportTitlePrint {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: bold 8pt "Verdana"; BORDER-LEFT: medium none; CURSOR: default; COLOR: black; BORDER-BOTTOM: medium none; TEXT-ALIGN: center
+
+}
+
+.clsReportTitle1Print {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: bold 6pt "Verdana"; BORDER-LEFT: medium none; CURSOR: default; COLOR: black; BORDER-BOTTOM: medium none; TEXT-ALIGN: center
+
+}
+
+.clsReportTitle2Print {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: bold 6pt "Verdana"; BORDER-LEFT: medium none; CURSOR: default; COLOR: black; BORDER-BOTTOM: medium none; TEXT-ALIGN: center
+
+}
+
+.clsReportTitle3Print {
+
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: bold 8pt "Verdana"; BORDER-LEFT: medium none; CURSOR: default; COLOR: black; BORDER-BOTTOM: medium none; TEXT-ALIGN: center
+
+}
+
+.clsTableTitleColPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold 6pt "Verdana"; CURSOR: default; COLOR: white; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #336699; TEXT-ALIGN: center
+
+}
+
+DIV.mn {
+
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; DISPLAY: none; LEFT: 0px; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; POSITION: absolute; TOP: 0px; BACKGROUND-COLOR: #eeeeee
+
+}
+
+SPAN.mn {
+
+	BORDER-RIGHT: 1px outset; BORDER-TOP: 1px outset; DISPLAY: none; LEFT: 0px; BORDER-LEFT: 1px outset; BORDER-BOTTOM: 1px outset; POSITION: absolute; TOP: 0px; BACKGROUND-COLOR: #eeeeee
+
+}
+
+SPAN.Dialog {
+
+	BORDER-RIGHT: 1px outset; BORDER-TOP: 1px outset; BORDER-LEFT: 1px outset; BORDER-BOTTOM: 1px outset; BACKGROUND-COLOR: #eeeeee
+
+}
+
+.clsDBoxTitle {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold 8pt "Verdana"; CURSOR: default; COLOR: white; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #336699; TEXT-ALIGN: center
+
+}
+
+.clsEditText {
+
+	FONT: 7.5pt "Verdana"; CURSOR: hand; COLOR: red; TEXT-ALIGN: right; TEXT-DECORATION: none
+
+}
+
+DIV.page {
+
+	PAGE-BREAK-BEFORE: always
+
+}
+
+.clsToolBarTitleOver {
+
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #f0fcf0 1px solid; FONT-SIZE: 8pt; VERTICAL-ALIGN: middle; BORDER-LEFT: #f0fcf0 1px solid; CURSOR: default; COLOR: #000000; BORDER-BOTTOM: #000000 1px solid; FONT-FAMILY: verdana,arial,helvetica; TEXT-DECORATION: none
+
+}
+
+.clsToolBarTitleDown {
+
+	BORDER-RIGHT: #f0fcf0 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 8pt; VERTICAL-ALIGN: middle; BORDER-LEFT: #000000 1px solid; CURSOR: default; COLOR: #000000; BORDER-BOTTOM: #f0fcf0 1px solid; FONT-FAMILY: verdana,arial,helvetica; TEXT-DECORATION: none
+
+}
+.clsTableCellDataHtml {
+
+	BORDER-RIGHT: #E0E0E0 1px solid; FONT: 10px "Arial"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #E0E0E0 1px solid;
+
+}
+.clsTableCellData {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataGRY {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #c0c0c0; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataGRYPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #c0c0c0; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL0SubLineGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 0px double; FONT-SIZE: 7.5pt; BORDER-LEFT: black 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableCellDataGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL0SubLineGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 0px double; FONT-SIZE: 6pt; BORDER-LEFT: black 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL0 {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0Print {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotal {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0SubTotalEndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL0EndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal; TEXT-DECORATION: underline
+
+}
+
+.clsTableL1 {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.clsTableL1Print {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotal {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+.newClsTableL1SubTotalEndSectionHtml {
+
+	border-bottom:#E2E2E2; BORDER-RIGHT: #E2E2E2 1px solid; CURSOR: default; COLOR: black; FONT-STYLE: normal; FONT-FAMILY: Arial; FONT-VARIANT: normal
+
+}
+
+
+.newClsTableL1SubTotalEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; FONT-VARIANT: normal
+
+}
+
+
+.clsTableL1SubTotalEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.newClsTableL1SubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BORDER-TOP: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.clsTableL1EndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.clsTableL2 {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL2Print {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL2SubTotal {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL2SubTotalEndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL2EndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2EndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2EndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2EndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2EndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2EndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL2EndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL2EndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL3 {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL3Print {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL3SubTotal {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalEndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalEndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalEndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalEndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL3SubTotalEndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL3EndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3EndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3EndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3EndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3EndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3EndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL3EndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL3EndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL4 {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL4Print {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL4SubTotal {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalEndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalEndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalEndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalEndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4SubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL4SubTotalEndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL4EndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL4EndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL4EndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4EndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4EndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4EndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableL4EndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL4EndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: bold italic 6pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableNA {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableNAPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableNAEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableNAEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableNAEndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNAEndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNAEndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNAEndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotal {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalEndSection {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalEndSectionYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalEndSectionYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalEndSectionGHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalEndSectionGHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #ccffcc; TEXT-ALIGN: right
+
+}
+
+.clsTableNASubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableNASubTotalEndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableNAEndSectionLabel {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableNAEndSectionLabelPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 6pt "Verdana"; CURSOR: default; COLOR: gray; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+INPUT.Edit {
+
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT: xx-small "Verdana"; BORDER-LEFT: red 1px solid; BORDER-BOTTOM: red 1px solid; TEXT-ALIGN: right
+
+}
+
+INPUT.mnbutton {
+
+	FONT-SIZE: xx-small
+
+}
+
+.clsTabTableFooter {
+
+	FONT-SIZE: 8pt; COLOR: white; FONT-FAMILY: Arial; BACKGROUND-COLOR: #336699
+
+}
+
+INPUT.NoEdit {
+
+	BORDER-RIGHT: white 1px solid; BORDER-TOP: white 1px solid; FONT: xx-small Verdana; BORDER-LEFT: white 1px solid; BORDER-BOTTOM: white 1px solid; TEXT-ALIGN: right
+
+}
+
+INPUT.Bold {
+
+	BORDER-RIGHT: white 1px solid; BORDER-TOP: white 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BORDER-LEFT: white 1px solid; COLOR: black; BORDER-BOTTOM: white 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+INPUT.Italic {
+
+	BORDER-RIGHT: white 1px solid; BORDER-TOP: white 1px solid; FONT: italic 7.5pt Verdana; BORDER-LEFT: white 1px solid; COLOR: black; BORDER-BOTTOM: white 1px solid; TEXT-ALIGN: right
+
+}
+
+INPUT.NoEditBold {
+
+	BORDER-RIGHT: white 1px solid; BORDER-TOP: white 1px solid; FONT: bold xx-small Verdana; BORDER-LEFT: white 1px solid; BORDER-BOTTOM: white 1px solid; TEXT-ALIGN: right
+
+}
+
+INPUT.EditBold {
+
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT: bold xx-small Verdana; BORDER-LEFT: red 1px solid; BORDER-BOTTOM: red 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataInputNonEdit {
+
+	BORDER-RIGHT: white thin solid; BORDER-TOP: white thin solid; FONT: 7.5pt Verdana; BORDER-LEFT: white thin solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: white thin solid; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataInputEdit {
+
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT: 7.5pt Verdana; BORDER-LEFT: red 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: red 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalInputNonEdit {
+
+	BORDER-RIGHT: white thin solid; BORDER-TOP: white thin solid; FONT: italic 7.5pt "Verdana"; BORDER-LEFT: white thin solid; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: white thin solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalInputEdit {
+
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT: italic 7.5pt "Verdana"; BORDER-LEFT: red 1px solid; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: red 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL1SubTotalInputNonEdit {
+
+	BORDER-RIGHT: white thin solid; BORDER-TOP: white thin solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BORDER-LEFT: white thin solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: white thin solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalInputEdit {
+
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BORDER-LEFT: red 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: red 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL2SubTotalEndSectionInputNonEdit {
+
+	BORDER-RIGHT: white thin solid; BORDER-TOP: white thin solid; FONT: 7.5pt "Verdana"; BORDER-LEFT: white thin solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: white thin solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionInputEdit {
+
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT: 7.5pt "Verdana"; BORDER-LEFT: red 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: red 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL1SubTotalEndSectionInputNonEdit {
+
+	BORDER-RIGHT: white thin solid; BORDER-TOP: white thin solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BORDER-LEFT: white thin solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: white thin solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionInputEdit {
+
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BORDER-LEFT: red 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: red 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL3Brown {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT: italic 7.5pt "Verdana"; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #ffcc99
+
+}
+
+.clsTableL3SubTotalInputNonEditBrown {
+
+	BORDER-RIGHT: #ffcc99 thin solid; BORDER-TOP: #ffcc99 thin solid; BACKGROUND: #ffcc99; FONT: italic 7.5pt "Verdana"; BORDER-LEFT: #ffcc99 thin solid; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #ffcc99 thin solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL3SubTotalInputEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; BACKGROUND: #ffcc99; FONT: italic 7.5pt "Verdana"; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; TEXT-INDENT: 10px; BORDER-BOTTOM: #ffcc99 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL1Brown {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffcc99; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalInputNonEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #ffcc99; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalInputNonEditGrey {
+
+	BORDER-RIGHT: #d8d8d8 1px solid; BORDER-TOP: #d8d8d8 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #d8d8d8; BORDER-LEFT: #d8d8d8 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #d8d8d8 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalInputEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #ffcc99; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalInputEditGrey {
+
+	BORDER-RIGHT: #d8d8d8 1px solid; BORDER-TOP: #d8d8d8 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #d8d8d8; BORDER-LEFT: #d8d8d8 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #d8d8d8 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionLabelBrown {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffcc99; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionBrown {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableCellDataInputNonEditGrey {
+
+	BORDER-RIGHT: #d8d8d8 1px solid; BORDER-TOP: #d8d8d8 1px solid; BACKGROUND: #d8d8d8; FONT: 7.5pt Verdana; BORDER-LEFT: #d8d8d8 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #d8d8d8 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataInputNonEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; BACKGROUND: #ffcc99; FONT: 7.5pt Verdana; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableCellDataInputEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; BACKGROUND: #ffcc99; FONT: 7.5pt Verdana; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionInputNonEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; BACKGROUND: #ffcc99; FONT: 7.5pt "Verdana"; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionInputNonEditGrey {
+
+	BORDER-RIGHT: #d8d8d8 1px solid; BORDER-TOP: #d8d8d8 1px solid; BACKGROUND: #d8d8d8; FONT: 7.5pt "Verdana"; BORDER-LEFT: #d8d8d8 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #d8d8d8 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2SubTotalEndSectionInputEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; BACKGROUND: #ffcc99; FONT: 7.5pt "Verdana"; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL1SubTotalEndSectionInputNonEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #ffcc99; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionInputNonEditGrey {
+
+	BORDER-RIGHT: #d8d8d8 1px solid; BORDER-TOP: #d8d8d8 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #d8d8d8; BORDER-LEFT: #d8d8d8 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #d8d8d8 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL1SubTotalEndSectionInputEditBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #ffcc99; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsLabelTotalBrown {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffcc99; FONT-VARIANT: normal
+
+}
+
+.clsLabelBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; BACKGROUND: #ffcc99; FONT: 7.5pt Verdana; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid
+
+}
+
+.clsTableCellDataTotal {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; LINE-HEIGHT: normal; BORDER-BOTTOM: #cccccc 1px solid; FONT-STYLE: normal; FONT-FAMILY: "Verdana"; FONT-VARIANT: normal
+
+}
+
+.clsTableCellDataInputNonEditTotalBrown {
+
+	BORDER-RIGHT: #ffcc99 1px solid; BORDER-TOP: #ffcc99 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; BACKGROUND: #ffcc99; BORDER-LEFT: #ffcc99 1px solid; CURSOR: default; COLOR: black; BORDER-BOTTOM: #ffcc99 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableCellDataUnderline {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; TEXT-ALIGN: right
+
+}
+
+.clsTableL2EndSectionLabelIndent {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"
+
+    TEXT-INDENT: 5px; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL2Indent {
+
+	BORDER-RIGHT: #cccccc 1px solid; FONT: 7.5pt "Verdana"
+
+    TEXT-INDENT: 5px; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL0SubLine {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 0px double; FONT-SIZE: 7.5pt; BORDER-LEFT: black 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL0SubLineYHLT {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 0px double; FONT-SIZE: 7.5pt; BORDER-LEFT: black 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL0SubLineYHLTPrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 0px double; FONT-SIZE: 6pt; BORDER-LEFT: black 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffcc; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+.clsTableL0SubLineEndSection {
+
+	BORDER-RIGHT: #cccccc 1px double; BORDER-TOP: 0px double; FONT: 7.5pt "Verdana"; BORDER-LEFT: 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL0SublineEndSectionPrint {
+
+	BORDER-RIGHT: #cccccc 1px double; BORDER-TOP: 0px double; FONT: 6pt "Verdana"; BORDER-LEFT: 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; BACKGROUND-COLOR: #e9f4ff
+
+}
+
+.clsTableL0SubLinePrint {
+
+	BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: black 0px double; FONT-SIZE: 6pt; BORDER-LEFT: black 0px double; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 3px double; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
+
+}
+
+
+div#amp-header nav ul#AmpMenus.nav > li > a {
+	font-size: 12px;
+}

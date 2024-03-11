@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>um</name>
+	<default-instance>user</default-instance>
+	<security>
+		<action login-required="true" pattern="/viewAllUsers">ADMIN</action>
+		<action login-required="true" pattern="/addUser">ADMIN</action>
+		<action login-required="true" pattern="/suspendLoginManager">ADMIN</action>
+  		<action login-required="true" pattern="/userChangePassword" />
+		<action login-required="true" pattern="/showUserUpdateGateway" />
+		<action login-required="true" pattern="/showUserAccount" />
+		<action login-required="true" pattern="/showUserAccountBlank" />
+		<action login-required="true" pattern="/showUserAccountGateway" />
+		<action login-required="true" pattern="/showUserAccountMarket" />
+		<action login-required="true" pattern="/showUserBio" />
+		<action login-required="true" pattern="/showUserChangePassword" />
+		<action login-required="true" pattern="/showUserContact" />
+		<action login-required="true" pattern="/showUserProfile" />
+		<action login-required="true" pattern="/showUserUnSubscribe" />
+		<action login-required="true" pattern="/showUserUpdate" />
+		<action login-required="true" pattern="/showUserUpdateBlank" />
+		<action login-required="true" pattern="/showUserUpdateGateway" />
+		<action login-required="true" pattern="/showUserUpdateMarket" />
+		<action login-required="true" pattern="/unSubscribePermanently" />
+		<action login-required="true" pattern="/unSubscribeTemporarly" />
+		<action login-required="true" pattern="/userUpdate" />
+		<action login-required="true" pattern="/userUpdateBlank" />
+		<action login-required="true" pattern="/userUpdateGateway" />
+		<action login-required="true" pattern="/userUpdateMarket" />
+		<action login-required="true" pattern="/showUserRegisterSuccess" />
+		<action login-required="true" pattern="/suspendLoginManager" />
+
+	</security>
+
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.um.dbentity.ResetPassword</hibernate-class>
+		<hibernate-class>org.digijava.module.um.dbentity.SuspendLogin</hibernate-class>
+	</hibernate-classes>
+
+</module-config>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>sdm</name>
+	<security>
+		<action pattern="/createDocument">ADMIN</action>
+		<action pattern="/showEditDocument">ADMIN</action>
+		<action pattern="/deleteDocument">ADMIN</action>
+		<action pattern="/deleteItem">ADMIN</action>
+		<action pattern="/moveUpItem">ADMIN</action>
+		<action pattern="/moveDownItem">ADMIN</action>
+		<action pattern="/saveFile">ADMIN</action>
+		<action pattern="/savePicture">ADMIN</action>
+		<action pattern="/saveHTMLCode">ADMIN</action>
+		<action pattern="/saveHyperLink">ADMIN</action>
+		<action pattern="/saveText">ADMIN</action>
+		<action pattern="/showCreateItem">ADMIN</action>
+		<action pattern="/showEditFile">ADMIN</action>
+		<action pattern="/showEditPicture">ADMIN</action>
+		<action pattern="/showEditHTMLCode">ADMIN</action>
+		<action pattern="/showEditLink">ADMIN</action>
+		<action pattern="/showEditText">ADMIN</action>
+	<action pattern="/showEditDocument">
+	  <param name="activeDocumentId" />
+	</action>
+	<action pattern="/deleteItem">
+	  <param name="activeParagraphOrder" />
+	</action>
+	<action pattern="/moveUpItem">
+	  <param name="activeParagraphOrder" />
+	</action>
+	<action pattern="/moveDownItem">
+	  <param name="activeParagraphOrder" />
+	</action>
+	<action pattern="/showEditFile">
+	  <param name="activeParagraphOrder" />
+	</action>
+	<action pattern="/showEditPicture">
+	  <param name="activeParagraphOrder" />
+	</action>
+	<action pattern="/showEditHTMLCode">
+	  <param name="activeParagraphOrder" />
+	</action>
+	<action pattern="/showEditLink">
+	  <param name="activeParagraphOrder" />
+	</action>
+	<action pattern="/showEditText">
+	  <param name="activeParagraphOrder" />
+	</action>
+	</security>
+
+
+        <!-- sdm classes Begin-->
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.sdm.dbentity.Sdm</hibernate-class>
+		<hibernate-class>org.digijava.module.sdm.dbentity.SdmItem</hibernate-class>
+	</hibernate-classes>
+        <!-- sdm classes End-->
+
+</module-config>

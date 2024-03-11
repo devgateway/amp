@@ -1,0 +1,86 @@
+
+div.grayBorder {
+	margin: 10px; 
+	padding: 8px; 
+	border: 1px solid #cccccc; 
+	height: 97%;
+
+
+}
+div.otherCriteriaBigTable{
+	padding: 0px; 
+	height: 65%;
+}
+
+div.otherCriteriaBigTable div.grouping_selector_wrapper_body {
+	overflow: auto;
+}
+
+.grouping_selector_wrapper {
+	float: left;
+	width: 40%;
+	padding: 0px;
+	height: 98%;
+}
+
+.member_selector_wrapper {
+	float: right;
+	width: 60%;
+	padding: 0px;
+	height: 98%;
+	background: white;
+}
+
+.memberSelectorHeader {
+	font-weight: bold; 
+	font-size: small;
+	margin: 5px;
+}
+
+div.memberSelectorInputWrapper {
+	margin: 4px;
+}
+
+input.memberSelectorTextbox {
+	height: 18px; 
+	vertical-align: top;
+	font-size: 10px;
+}
+
+.memberSelectorButton  {
+	padding-left:1px;
+	padding-right: 1px;
+	padding-bottom: 2px; 
+	font-size: 9px; 
+	height: 17px;
+}
+
+
+.clrfix:before,
+.clrfix:after {
+  content: "";
+  display: table;
+}
+.clrfix:after {
+  clear: both;
+}
+.clrfix {
+  *zoom: 1;
+}
+
+.yui-panel {
+    border-collapse: separate;
+	font-size:12px !important;
+}
+
+.search-panel-title {
+	padding: 10px 5px;
+}
+
+.filter-just-search {
+	display: block;
+	overflow: hidden;
+	width: 40%;
+	float: left;
+	font-size: 12px
+}

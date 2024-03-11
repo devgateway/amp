@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="contentList" page="list" title=" - Admin Public View Content" />
+		<page name="contentEdit" page="edit" title=" - Admin Public View Content" />
+	</secondary-pages>
+</config>

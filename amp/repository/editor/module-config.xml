@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>editor</name>
+	<security>
+		<action pattern="/showInEnglish">ADMIN</action>
+		<action pattern="/showEditText">
+			<param name="id"/>
+			<param name="body"/>
+			<param name="referrer"/>
+			<param name="langCode"/>
+		</action>
+		<action pattern="/admin">ADMIN</action>
+		<action pattern="/moveEditor">ADMIN</action>
+		<action pattern="/addEditor">ADMIN</action>		
+	</security>
+	<!-- editor classes Begin-->
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.editor.dbentity.Editor</hibernate-class>
+	</hibernate-classes>
+	<!-- editor classes End-->
+</module-config>

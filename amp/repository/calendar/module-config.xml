@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>calendar</name>
+	<security>
+		<action login-required="true" pattern="/showCreateCalendarItem" />
+		<action login-required="true" pattern="/createCalendarItem" />
+		<action login-required="true" pattern="/showEditCalendarItem" />
+		<action login-required="true" pattern="/editCalendarItem" />
+		<action login-required="true" pattern="/previewCalendarItem" />
+		<action pattern="/confirmCalendarItems">ADMIN</action>
+		<action pattern="/updateConfirmCalendarItems">ADMIN</action>
+		<action pattern="/showCalendarItemsSettings">ADMIN</action>
+		<action pattern="/updateCalendarItemSettings">ADMIN</action>
+		<action pattern="/showCalendarItems">ADMIN</action>
+		<action pattern="/eventTypes">ADMIN</action>
+		<action pattern="/showColorPalete">ADMIN</action>
+		
+		<action pattern="/translateSpecial">WRITE,TRANSLATE</action>
+        <action login-required="false" pattern="/showCalendarEvent" />
+        <action login-required="false" pattern="/showCalendarView" />
+        <action login-required="true" pattern="/previewCalendarEvent" />
+        <action login-required="true" pattern="/previewCalendarEventDone" />
+	</security>
+	<action pattern="/confirmCalendarItems">
+	  <param name="activeCalendarItem" />
+	</action>
+	<action pattern="/showEditCalendarItem">
+	  <param name="activeCalendarItem" />
+	</action>
+	<action pattern="/editCalendarItem">
+	  <param name="activeCalendarItem" />
+	</action>
+	<action pattern="/previewCalendarItem">
+	  <param name="activeCalendarItem" />
+	</action>
+	<action pattern="/showCalendarItems">
+	  <param name="status" />
+	</action>
+
+
+	<!-- calendar classes Begin -->
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.calendar.dbentity.Calendar</hibernate-class>
+		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarItem</hibernate-class>
+		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarSettings</hibernate-class>
+        <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendar</hibernate-class>
+        <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendarAttendee</hibernate-class>
+		<hibernate-class>org.digijava.module.calendar.dbentity.RecurrCalEvent</hibernate-class>
+	</hibernate-classes>
+	<!-- calendar classes End -->
+
+</module-config>

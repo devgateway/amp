@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>budgetexport</name>
+
+	<security login-required="true" default="READ">
+		<action pattern="/budgetExport" />
+		<action login-required="false" pattern="/budgetExportService" />
+	</security>
+
+	<hibernate-classes required="true">
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject</hibernate-class>
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem</hibernate-class>
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule</hibernate-class>
+		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem</hibernate-class>
+	</hibernate-classes>
+</module-config>

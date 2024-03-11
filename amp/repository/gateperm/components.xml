@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page page="editPermission" name="gateperm_editPermission"
+			title=" - Edit Permission Object"
+		/>
+		<page page="listPermissions" name="gateperm_listPermissions"
+			title=" - Permission Objects List"
+		/>
+		<page page="editPermissionMap" name="gateperm_editPermissionMap"
+			title=" - Edit Permission Mapping"
+		/>
+		<page page="listPermissionsMap"
+			name="gateperm_listPermissionsMap" title=" - Permission Mapings"
+		/>
+		<page page="exportPermission" name="gateperm_exportPermission"
+			title=" - Permission Exchange"
+		/>
+		<page page="option" name="gateperm_exchangeOption"
+			title=" - Permission Exchange Option"
+		/>
+		<page page="importResult" name="gateperm_importResult"
+			title=" - Import Results"
+		/>
+
+		<page page="importPermission"
+			name="gateperm_exchangeImportPermission"
+			title=" - Permission Exchange Import"
+		/>
+	</secondary-pages>
+</config>

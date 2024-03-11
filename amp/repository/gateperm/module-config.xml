@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>gateperm</name>
+
+<security>
+		<!-- GatePerm administration -->
+		<action login-required="true" pattern="/managePerm">ADMIN</action>
+		<action login-required="true" pattern="/managePermMap">ADMIN</action>
+		<action login-required="true" pattern="/exchangePermission">ADMIN</action>		
+</security>		
+
+	<hibernate-classes required="true">
+		<hibernate-class>
+			org.digijava.module.gateperm.core.Permission
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.gateperm.core.PermissionMap
+		</hibernate-class>
+	</hibernate-classes>	
+</module-config>

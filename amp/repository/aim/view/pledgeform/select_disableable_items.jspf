@@ -1,0 +1,18 @@
+<%-- before including this:
+	<c:set var="select_id">id</c:set>
+	<c:set var="extra_tags">tags like multiple or on change
+	<c:set var="select_values" value="${form.property}". These should be of type DisableableKeyValue/>
+	<c:set var="select_init_value" value="key" />
+--%>
+		
+<select id="${select_id}" ${extra_tags} size="5" data-live-search="true">
+	<c:forEach var="ch" items="${select_values}">
+		<option value="${ch.keyValue.key}"
+			<c:if test="${not ch.enabled}">disabled="disabled"</c:if>
+			<c:if test="${ch.keyValue.key eq select_init_value}">selected="selected"></c:if>
+			>
+		<c:out value="${ch.keyValue.value}" />
+		</option> <%-- c:out does automatic escaping, unlike ${} --%>
+	</c:forEach>
+</select>
+

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>content</name>
+	<security login-required="true" default="READ">
+		<action login-required="false" pattern="/displayThumbnail" />
+		<action login-required="false" pattern="/downloadFile" />
+		<action login-required="false" pattern="/contentView" />
+		<action login-required="true" pattern="/publicDocTabManager">ADMIN</action>
+		<action login-required="true" pattern="/contentManager">ADMIN</action>
+		
+	</security>
+	
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.content.dbentity.AmpContentItem</hibernate-class>
+		<hibernate-class>org.digijava.module.content.dbentity.AmpContentItemThumbnail</hibernate-class>
+	</hibernate-classes>
+</module-config>

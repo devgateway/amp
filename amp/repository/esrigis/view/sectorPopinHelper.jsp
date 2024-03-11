@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 
 <li id="config_${item.mainEntity.id}"><input type="checkbox"

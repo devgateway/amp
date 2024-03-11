@@ -1,13 +1,13 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fmt.tld" prefix="fmt"%>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
-<%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim"%>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
     <c:if test="${not empty aimEditActivityForm.indicators}">
         <table width="100%">

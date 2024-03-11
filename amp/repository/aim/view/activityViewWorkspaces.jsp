@@ -1,4 +1,4 @@
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <div id="viewWorkspaces" class="invisible-item">
     <div id="viewWorkspacesContent" class="content">

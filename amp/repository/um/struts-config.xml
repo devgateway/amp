@@ -16,8 +16,8 @@
     <form-bean name="userUnSubscribeForm" type="org.digijava.module.um.form.UserUnSubscribeForm" />
     <form-bean name="umViewAllUsersForm" type="org.digijava.module.um.form.ViewAllUsersForm" />
     <form-bean name="umViewEditUserForm" type="org.digijava.module.um.form.ViewEditUserForm" />
-    <form-bean name="umAddUserForm" type="org.digijava.module.um.form.AddUserForm" />
-    <form-bean name="suspendLoginManagerForm" type="org.digijava.module.um.form.SuspendLoginManagerForm" />
+    <form-bean name="umAddUserForm" type="org.digijava.module.um.form.AddUserForm" />    
+    <form-bean name="suspendLoginManagerForm" type="org.digijava.module.um.form.SuspendLoginManagerForm" />    
 
   </form-beans>
   <action-mappings>

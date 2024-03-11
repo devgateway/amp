@@ -116,7 +116,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReports</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLog</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSectorScheme</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>				
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponent</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentsIndicators</hibernate-class>
@@ -140,7 +140,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentFunding</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalFunding</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalFunding</hibernate-class>		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportsOptions</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurvey</hibernate-class>
@@ -152,14 +152,14 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyIndicator</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestion</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyResponse</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestionType</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestionType</hibernate-class>		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiIndicator</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiQuestion</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiQuestionOption</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurvey</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument</hibernate-class>		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiDonorNotes</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFeature</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSiteFlag</hibernate-class>
@@ -180,6 +180,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractDisbursement</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractAmendment</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorValue</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorTaggedValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IndicatorConnection</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpClassificationConfiguration</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCategoryValueLocations</hibernate-class>
@@ -196,7 +197,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpImputation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColorThreshold</hibernate-class>
 		
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroup</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroup</hibernate-class>		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityVersion</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAnnualProjectBudget</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingAmount</hibernate-class>
@@ -206,7 +207,7 @@
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesSector</hibernate-class>
-		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument</hibernate-class>
+		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument</hibernate-class>		
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails</hibernate-class>
 		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>
@@ -225,13 +226,16 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructure</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureImg</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureCoordinate</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureCoordinate</hibernate-class>	
 
         <hibernate-class>org.digijava.module.aim.dbentity.OnepagerSection</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.AmpContentTranslation</hibernate-class>
         
         <hibernate-class>org.digijava.module.aim.dbentity.GPISetup</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.GPIDefaultFilters</hibernate-class>
+
+		<!-- Saiku Reports Classes -->
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpAnalyticalReport</hibernate-class>
 
         <!-- Aid Effectiveness Indicators -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>
@@ -270,6 +274,8 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndirectTheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityIndirectProgram</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpThemeMapping</hibernate-class>
+
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpDjolibaTargetValue</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

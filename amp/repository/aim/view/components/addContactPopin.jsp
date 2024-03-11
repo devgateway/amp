@@ -1,15 +1,15 @@
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category"%>
-<%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim"%>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <div class="admin-content contact-form">
@@ -133,11 +133,11 @@
 							<c:forEach var="phone" items="${contact.properties}">
 									<c:if test="${phone.name=='contact phone'}">
 									<c:choose>
-									<c:when test="${fn:length(phone.value)>13}">
-										<li title="${phone.value}"><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${fn:substring(phone.value,0,10)}...</li>
+									<c:when test="${fn:length(phone.actualPhoneNumber)>13}">
+										<li title="${phone.actualPhoneNumber}"><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${fn:substring(phone.actualPhoneNumber,0,10)}...</li> 	
 									</c:when>
 									<c:otherwise>
-										<li><digi:trn><c:out value="${phone.phoneCategory}"/></digi:trn>&nbsp;<c:out value="${phone.value}"/></li>
+										<li><digi:trn><c:out value="${phone.phoneCategory}"/></digi:trn>&nbsp;<c:out value="${phone.actualPhoneNumber}"/></li>
 									</c:otherwise>
 									</c:choose>
 										

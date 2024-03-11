@@ -1,14 +1,21 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
+
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+
+<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <digi:instance property="aimNewIndicatorForm" />
 <script language="javascript">
@@ -50,8 +57,8 @@ function removeActivity(id) {
 
 
 function saveIndicator(){
-
- if(document.getElementById("txtName").value==""){
+    var nameEntered = check_multilingual_value_entered('AmpIndicator_name');
+ if(!nameEntered){
     <c:set var="translation">
 		<digi:trn key="admin:enterName">Please enter name</digi:trn>
 	</c:set>
@@ -83,13 +90,7 @@ function saveIndicator(){
 		var length = document.aimNewIndicatorForm.selActivitySector.length;		
 		var Sector;
 		
-		if(!length){
-			<c:set var="translation">
-				<digi:trn key="admin:addSector">Please add Sectors</digi:trn>
-			</c:set>
-			alert("${translation}");
-			return false;
-		}else{
+		if(length){
 			for(i = 0; i<length; i++){
 				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
 				document.getElementById("hdnselActivitySectors").value = Sector;
@@ -229,7 +230,9 @@ function closeWindow() {
             <b style="color: red;">*</b> <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
             </td>
             <td>
-              <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;"/>
+                <jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+                    <jsp:param name="attr_name" value="multilingual_indicator_name" />
+                </jsp:include>
             </td>
           </tr>
           <tr id="trDescription">
@@ -237,7 +240,10 @@ function closeWindow() {
             <digi:trn>Indicator Description</digi:trn>:
             </td>
             <td>
-              <html:textarea property="description" styleId="txtDescription" style="font-family:verdana;font-size:11px;width:200px;"></html:textarea>
+                <jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+                    <jsp:param name="attr_name" value="multilingual_indicator_desc" />
+                    <jsp:param name="input_type" value="textarea" />
+                </jsp:include>
             </td>
           </tr>
           <tr>
@@ -245,27 +251,63 @@ function closeWindow() {
             <b style="color: red;">*</b> <digi:trn key="admin:indicatorcode">Indicator code:</digi:trn>
             </td>
             <td>
-               <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:100px;"/>
+               <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:200px;" disabled="true"/>
             </td>
           </tr>
           <tr>
           	<td><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>:</td>
-          	<td><html:select name="aimNewIndicatorForm" property="type">          		
+          	<td><html:select name="aimNewIndicatorForm" property="type" style="font-family:verdana;font-size:11px;width:200px;">
           		<html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
           		<html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>
           	</html:select>
           	</td>
           </tr>
+          <tr>
+            <td>
+              <label for="monetaryAmount">
+                <digi:trn key="admin:indicator:monetaryAmount">Monetary Amount</digi:trn>
+              </label>
+            </td>
+          	<td>
+              <html:checkbox styleId="monetaryAmount" property="monetaryAmount" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="showInDashboard">
+                <digi:trn key="admin:indicator:showInDashboard">Show in dashboard</digi:trn>
+              </label>
+            </td>
+          	<td>
+              <html:checkbox styleId="showInDashboard" property="showInDashboard" />
+            </td>
+          </tr>
           <tr id="trType">
           </tr>
           <tr id="trCategory">
+              <td>
+                  <digi:trn key="admin:indicatorCategory">Indicator category:</digi:trn>
+              </td>
+              <td>
+                  <html:text property="categoryName" style="font-family:verdana;font-size:11px;width:200px;" disabled="true"/>
+              </td>
           </tr>
           <tr>
-            <td><b style="color: red;">*</b> <digi:trn key="admin:sectors">Sectors</digi:trn></td>
-             <td>
-              <jsp:include page="addIndicatorSector.jsp"/>
-            </td>
-          </tr>  
+              <td>
+                  <digi:trn key="admin:indicatorUnit">Indicator unit:</digi:trn>
+              </td>
+              <td>
+                  <html:text property="unit" style="font-family:verdana;font-size:11px;width:200px;" disabled="true"/>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <digi:trn key="admin:indicatorProgram">Indicator program:</digi:trn>
+              </td>
+              <td>
+                  <html:text property="programName" style="font-family:verdana;font-size:11px;width:200px;" disabled="true"/>
+              </td>
+          </tr>
           <tr id="trCreationDate">
             <td>
             <digi:trn key="admin:creationdate">
@@ -273,8 +315,7 @@ function closeWindow() {
             </digi:trn>
             </td>
             <td>
-               <html:text property="date" styleId="date" disabled="true" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
-            </a>
+               <html:text property="date" styleId="date" disabled="true" readonly="true" style="font-family:verdana;font-size:11px;width:200px;"/>
             </td>
           </tr>
           <!-- 

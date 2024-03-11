@@ -1,10 +1,10 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script type="javascript">
 function login()
@@ -19,7 +19,7 @@ function login()
 <digi:errors/>
 <digi:instance property="aimKnowledgeForm" />
 <logic:equal name="aimKnowledgeForm" property="validLogin" value="false">
-<digi:form action="/login.do" name="aimKnowledgeForm" type="org.digijava.module.aim.form.KnowledgeForm"
+<digi:form action="/login.do" name="aimKnowledgeForm" type="org.digijava.module.aim.form.KnowledgeForm" 
 method="post">
 <h3 align="center"> Invalid Login. Please Login Again. </h3><p align="center"><html:submit styleClass="dr-menu" value="Log In" onclick="login()" /></p>
 </digi:form>

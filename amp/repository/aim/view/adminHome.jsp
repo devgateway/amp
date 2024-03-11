@@ -1,13 +1,13 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="teamPagesHeader.jsp"  />
 <jsp:include page="allVisibilityTags.jsp" />
@@ -67,7 +67,7 @@
                           <module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                         <tr>
                           <td>
-                            <img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif" alt="arrow-image">
+                            <img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif">
                           </td>
                           <td class="admin_box_label">
                             <c:set var="trnFeatureManager">
@@ -119,7 +119,7 @@
                               </a>
                             </td>
                           </tr>
-                        </module:display>
+                        </module:display>                        
                         
                         <module:display name="Project Performance Alerts Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
@@ -128,7 +128,7 @@
                                 <c:set var="trnProjectPerformanceAlertsManager">
                                     <digi:trn invisibleLinks="true">Click here to access Project Performance Alerts Manager</digi:trn>
                                 </c:set>
-                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html"
+                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html" 
                                 title="${trnProjectPerformanceAlertsManager}">
                                     <digi:trn>Project Performance Alerts Manager</digi:trn>
                                 </a>

@@ -1,4 +1,4 @@
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <c:if test="${not empty contactInformation}">
 	<c:forEach var="donorContact" items="${contactInformation}">

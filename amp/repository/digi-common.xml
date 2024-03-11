@@ -47,7 +47,6 @@
 		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorTaggedValue</hibernate-class>
         <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
     </hibernate-classes>
 

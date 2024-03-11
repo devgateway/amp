@@ -1,13 +1,13 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
 <script language="JavaScript">
@@ -47,7 +47,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 <c:if test="${not empty aimUserDetailForm.mailingAddress}">
 					<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<tr>
-							<td colspan="2" background="${pageContext.request.contextPath}/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:userProfile">User Profile</digi:trn>
 							</td>
 						</tr>

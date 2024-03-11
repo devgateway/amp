@@ -148,6 +148,7 @@ YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"]= new Array(
     , 'Risk'
     , 'Indicator Sector'
     , 'Indicator Type'
+	, 'Indicator Category'
 );
 
 function insertColInfo (id, name) {

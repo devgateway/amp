@@ -396,7 +396,7 @@
     <action input="/aim/viewYearlyDiscrepancyFilter" name="aimYearlyDiscrepancyForm" path="/aim/yearlyDiscrepancyFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyFilter" validate="true" />
     <action name="aimQuarterlyDiscrepancyAllForm" path="/aim/quarterlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyDiscrepancyAll" validate="false" />
     <action name="aimQuarterlyDiscrepancyAllForm" path="/aim/quarterlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyDiscrepancyAllFilter" validate="false" />
-    <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll" validate="false" />
+    <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll" validate="false" />   
     
     <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyAllFilter" validate="false" />
     <action name="aimViewIndicatorForm" path="/aim/meIndicatorValues" scope="request" type="org.digijava.module.aim.action.ViewIndicatorValues" validate="false" />
@@ -1204,9 +1204,6 @@
       <forward name="forward" path="/showLayout.do?layout=viewNewAdvancedReport" />
     </action>
 
-    <action name="aimAdvancedReportForm" path="/aim/pdfExport" scope="session" type="org.digijava.module.aim.action.PDFExportAction" validate="false" />
-    <action name="aimAdvancedReportForm" path="/aim/xlsExport" scope="session" type="org.digijava.module.aim.action.XLSExportAction" validate="false" />
-    <action name="aimAdvancedReportForm" path="/aim/csvExport" scope="session" type="org.digijava.module.aim.action.CSVExportAction" validate="false" />
     <action forward="/showLayout.do?layout=addActivity" path="/aim/viewAddEdit" />
     <action path="/aim/printableActivityChart" scope="request" type="org.digijava.module.aim.action.ViewPrintableActivityChart">
       <forward name="actPerformance" path="/showLayout.do?layout=aim_printActPerf" />
@@ -1319,7 +1316,7 @@
      <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
      <forward name="added" path="/aim/viewIndicators.do" redirect="true"/>
     </action>
-    <action name="aimViewIndicatorsForm" path="/aim/removeIndicator" scope="session" type="org.digijava.module.aim.action.RemoveIndicator" validate="false">
+    <action name="aimViewIndicatorsForm" path="/aim/removeIndicator" scope="session" type="org.digijava.module.aim.action.RemoveIndicator" validate="false">     
      <forward name="viewAll" path="/aim/viewIndicators.do" redirect="true"/>
     </action>
     <action name="aimNewIndicatorForm" path="/aim/selectProgramForIndicator" scope="session" type="org.digijava.module.aim.action.SelectProgramForIndicator" validate="false">

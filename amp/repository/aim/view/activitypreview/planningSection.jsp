@@ -1,12 +1,12 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 
 <digi:instance property="aimEditActivityForm" />
 <%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>
@@ -153,6 +153,32 @@
                     </div>
                 </c:if>
             </field:display>
+
+            <hr>
+            <div class="planning-line"><digi:trn>Date approbation RFE</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateApprobRfe}"/></b></div>
+            <hr>
+            <div class="planning-line"><digi:trn>Methodological note date</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateNoteMethode}"/></b></div>
+            <hr>
+            <div class="planning-line"><digi:trn>Start date of retrospective evaluation mission</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateDebMissEval}"/></b></div>
+            <hr>
+            <div class="planning-line"><digi:trn>End date of retrospective evaluation mission</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateFinMissEval}"/></b></div>
+            <hr>
+            <div class="planning-line"><digi:trn>Date of transmission to the D.O</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateTransmisDo}"/></b></div>
+            <hr>
+            <div class="planning-line"><digi:trn>Date of transmission of the interim report to the Borrower</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateTransmisEmpr}"/></b></div>
+            <hr>
+            <div class="planning-line"><digi:trn>Final report date</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateRapportDef}"/></b></div>
+            <hr>
+            <div class="planning-line"><digi:trn>Final archiving date</digi:trn>:&nbsp;</div>
+            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateArchivDef}"/></b></div>
+
         </div>
     </fieldset>
 </module:display>

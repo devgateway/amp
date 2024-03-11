@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
  
 <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
    <tr>

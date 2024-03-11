@@ -1,7 +1,7 @@
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/WEB-INF/digijava.tld" prefix="digi"%>
 
 <table width="20"0 cellpadding="0" cellspacing="0" border="0">
 <tr>

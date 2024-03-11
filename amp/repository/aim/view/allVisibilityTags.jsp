@@ -1,40 +1,40 @@
 <%@page import="org.dgfoundation.amp.visibility.data.MeasuresVisibility"%>
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<module:display name="ADMIN" parentModule="Messaging System"></module:display>
-<module:display name="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="ADMIN" parentModule="Messaging System"></module:display> 
+<module:display name="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Applied Patches" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
-<module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display>
-<module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
-<module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
+<module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 
+<module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
 
 <module:display name="Content Repository" parentModule="Resources"></module:display>
 
-<module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
@@ -44,6 +44,7 @@
 <field:display name="Show Names As Acronyms" feature="Top Donors"/>
 <feature:display name="Top Regions" module="/Dashboards"/>
 <feature:display name="Top Sectors" module="/Dashboards"/>
+<feature:display name="Top Sub Sectors" module="/Dashboards"/>
 <feature:display name="Top Donor Group" module="/Dashboards"/>
 <feature:display name="Aid Predictability" module="/Dashboards"/>
 <feature:display name="Funding Type" module="/Dashboards"/>
@@ -58,32 +59,32 @@
 <feature:display name="NDD Dashboard" module="/Dashboards"/>
 <feature:display name="Source" module="/Dashboards"/>
 
-<module:display name="HELP"></module:display>
-<module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="HELP"></module:display> 
+<module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Line Ministry Observations" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
-<module:display name="MONITORING AND EVALUATING"></module:display>
-<module:display name="Measures" parentModule="REPORTING"></module:display>
-<module:display name="Messages" parentModule="Messaging System"></module:display>
-<module:display name="Messaging System"></module:display>
+<module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
+<module:display name="MONITORING AND EVALUATING"></module:display> 
+<module:display name="Measures" parentModule="REPORTING"></module:display> 
+<module:display name="Messages" parentModule="Messaging System"></module:display> 
+<module:display name="Messaging System"></module:display> 
 <module:display name="My Desktop" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="NATIONAL PLAN DASHBOARD"></module:display>
-<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
-<module:display name="PARIS INDICATORS"></module:display>
-<module:display name="PI Reports" parentModule="REPORTING"></module:display>
+<module:display name="NATIONAL PLAN DASHBOARD"></module:display> 
+<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display> 
+<module:display name="PARIS INDICATORS"></module:display> 
+<module:display name="PI Reports" parentModule="REPORTING"></module:display> 
 <module:display name="PROJECT MANAGEMENT"></module:display>
-<module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
-<module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display>  
+<module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
+<module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Public View Content" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="REPORTING"></module:display>
-<module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION"></module:display> 
+<module:display name="REPORTING"></module:display> 
+<module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -93,8 +94,8 @@
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Filter Widget" parentModule="REPORTING"></module:display>
-<module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="TREND ANALYSIS"></module:display>
+<module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display>
 <feature:display name="Enable Saiku icon in Tab Manager" module="Tab Generator"></feature:display>
 <module:display name="Tools" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -129,7 +130,7 @@
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
-<feature:display name="My Resources" module="Content Repository"></feature:display>
+<feature:display name="My Resources" module="Content Repository"></feature:display> 
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
 <feature:display name="Public Resources" module="Content Repository"></feature:display>
 <feature:display name="Shared Resources" module="Content Repository"></feature:display>
@@ -144,33 +145,33 @@
 <field:display name="Resource Organisations" feature="Resource Columns"></field:display>
 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display>
-<feature:display module="Contracting" name="Contracting"></feature:display>
+<feature:display module="Contracting" name="Contracting"></feature:display> 
 <feature:display module="Funding" name="Activity Pledges"></feature:display>
-<feature:display module="Funding" name="Commitments"></feature:display>
-<feature:display module="Funding" name="Disbursement Orders"></feature:display>
-<feature:display module="Funding" name="Disbursement"></feature:display>
-<feature:display module="Funding" name="Expenditures"></feature:display>
-<feature:display module="Funding" name="Funding Information"></feature:display>
-<feature:display module="Funding" name="MTEF Projections"></feature:display>
-<feature:display module="Funding" name="Undisbursed Balance"></feature:display>
+<feature:display module="Funding" name="Commitments"></feature:display> 
+<feature:display module="Funding" name="Disbursement Orders"></feature:display> 
+<feature:display module="Funding" name="Disbursement"></feature:display> 
+<feature:display module="Funding" name="Expenditures"></feature:display> 
+<feature:display module="Funding" name="Funding Information"></feature:display> 
+<feature:display module="Funding" name="MTEF Projections"></feature:display> 
+<feature:display module="Funding" name="Undisbursed Balance"></feature:display> 
 <feature:display name="Change Workspace" module="My Desktop"></feature:display>
 
-<feature:display name="Beneficiary Agency" module="Organizations"></feature:display>
-<feature:display name="Contracting Agency" module="Organizations"></feature:display>
+<feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
+<feature:display name="Contracting Agency" module="Organizations"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display>
-<feature:display name="Implementing Agency" module="Organizations"></feature:display>
-<feature:display name="Regional Group" module="Organizations"></feature:display>
-<feature:display name="Responsible Organization" module="Organizations"></feature:display>
-<feature:display name="Sector Group" module="Organizations"></feature:display>
+<feature:display name="Implementing Agency" module="Organizations"></feature:display> 
+<feature:display name="Regional Group" module="Organizations"></feature:display> 
+<feature:display name="Responsible Organization" module="Organizations"></feature:display> 
+<feature:display name="Sector Group" module="Organizations"></feature:display> 
 
-<feature:display module="Project ID and Planning" name="Identification"></feature:display>
-<feature:display module="Project ID and Planning" name="Location"></feature:display>
-<feature:display module="Project ID and Planning" name="Planning"></feature:display>
-<feature:display module="Project ID and Planning" name="Sectors"></feature:display>
+<feature:display module="Project ID and Planning" name="Identification"></feature:display> 
+<feature:display module="Project ID and Planning" name="Location"></feature:display> 
+<feature:display module="Project ID and Planning" name="Planning"></feature:display> 
+<feature:display module="Project ID and Planning" name="Sectors"></feature:display> 
 <feature:display module="Project ID and Planning" name="Budget"></feature:display>
 <feature:display module="Report Generator" name="Reports classification"></feature:display>
-<feature:display name="About AMP" module="HELP"></feature:display>
-<feature:display name="Activity - Component Step" module="Components"></feature:display>
+<feature:display name="About AMP" module="HELP"></feature:display> 
+<feature:display name="Activity - Component Step" module="Components"></feature:display> 
 <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Workspace Info" module="Tools"></feature:display>
 <feature:display name="IATI Importer" module="Tools"></feature:display>
@@ -182,93 +183,93 @@
 <feature:display name="Language Option" module="Tools"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display>
 <feature:display name="Reports" module="M & E"></feature:display>
-<feature:display name="AddMessageButton" module="Messages"></feature:display>
-<feature:display name="Admin - Component Type" module="Components"></feature:display>
-<feature:display name="Admin - Component" module="Components"></feature:display>
-<feature:display name="Admin Help" module="HELP"></feature:display>
-<feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>
-<feature:display name="Admin Topics Help" module="HELP"></feature:display>
-<feature:display name="Admin" module="M & E"></feature:display>
-<feature:display name="Alert tab" module="Messages"></feature:display>
-<feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display>
+<feature:display name="AddMessageButton" module="Messages"></feature:display> 
+<feature:display name="Admin - Component Type" module="Components"></feature:display> 
+<feature:display name="Admin - Component" module="Components"></feature:display> 
+<feature:display name="Admin Help" module="HELP"></feature:display> 
+<feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display> 
+<feature:display name="Admin Topics Help" module="HELP"></feature:display> 
+<feature:display name="Admin" module="M & E"></feature:display> 
+<feature:display name="Alert tab" module="Messages"></feature:display> 
+<feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Computed Year" module="Filter Widget"></feature:display>
-<feature:display name="Component Report" module="Report Types"></feature:display>
-<feature:display name="Components" module="Components"></feature:display>
+<feature:display name="Component Report" module="Report Types"></feature:display> 
+<feature:display name="Components" module="Components"></feature:display> 
 
-<feature:display name="Contracting" module="Contracting"></feature:display>
+<feature:display name="Contracting" module="Contracting"></feature:display> 
 <feature:display name="Create Message Form" module="Messages"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
 <feature:display name="Step1" module="Custom Fields"></feature:display>
-<feature:display name="Disbursement Orders" module="Funding"></feature:display>
-<feature:display name="Documents Tab" module="Document"></feature:display>
-<feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
-<feature:display name="Donor Report" module="Report Types"></feature:display>
-<feature:display name="Edit Activity" module="Previews"></feature:display>
-<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display>
-<feature:display name="Event Tab" module="Messages"></feature:display>
-<feature:display name="Filter Button" module="Report and Tab Options"></feature:display>
+<feature:display name="Disbursement Orders" module="Funding"></feature:display> 
+<feature:display name="Documents Tab" module="Document"></feature:display> 
+<feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
+<feature:display name="Donor Report" module="Report Types"></feature:display> 
+<feature:display name="Edit Activity" module="Previews"></feature:display> 
+<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
+<feature:display name="Event Tab" module="Messages"></feature:display> 
+<feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Page Size" module="Report and Tab Options"></feature:display>
-<feature:display name="Financial Progress Tab" module="Funding"></feature:display>
-<feature:display name="Funding Information" module="Funding"></feature:display>
+<feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
+<feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Regional Observations" module="Regional Observations"></feature:display>
 <feature:display name="Line Ministry Observations" module="Line Ministry Observations"></feature:display>
-<feature:display name="Logframe" module="Previews"></feature:display>
-<feature:display name="Message Manager" module="ADMIN"></feature:display>
+<feature:display name="Logframe" module="Previews"></feature:display> 
+<feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display>
-<feature:display name="My Messages" module="Messages"></feature:display>
-<feature:display name="Messages" module="Messaging System"></feature:display>
-<feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display>
-<feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display>
-<feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display>
+<feature:display name="My Messages" module="Messages"></feature:display> 
+<feature:display name="Messages" module="Messaging System"></feature:display> 
+<feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
+<feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
+<feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Dynamic Region Manager" module="ADMINISTRATIVE SECTION"></feature:display>
-<feature:display name="PI report 10a" module="PI Reports"></feature:display>
-<feature:display name="PI report 3" module="PI Reports"></feature:display>
-<feature:display name="PI report 4" module="PI Reports"></feature:display>
-<feature:display name="PI report 5a" module="PI Reports"></feature:display>
-<feature:display name="PI report 5b" module="PI Reports"></feature:display>
-<feature:display name="PI report 6" module="PI Reports"></feature:display>
-<feature:display name="PI report 7" module="PI Reports"></feature:display>
-<feature:display name="PI report 9" module="PI Reports"></feature:display>
-<feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display>
-<feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display>
-<feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>
-<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
-<feature:display name="Physical Progress" module="Components"></feature:display>
+<feature:display name="PI report 10a" module="PI Reports"></feature:display> 
+<feature:display name="PI report 3" module="PI Reports"></feature:display> 
+<feature:display name="PI report 4" module="PI Reports"></feature:display> 
+<feature:display name="PI report 5a" module="PI Reports"></feature:display> 
+<feature:display name="PI report 5b" module="PI Reports"></feature:display> 
+<feature:display name="PI report 6" module="PI Reports"></feature:display> 
+<feature:display name="PI report 7" module="PI Reports"></feature:display> 
+<feature:display name="PI report 9" module="PI Reports"></feature:display> 
+<feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display> 
+<feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display> 
+<feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 
+<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
+<feature:display name="Physical Progress" module="Components"></feature:display> 
 
 
-<feature:display name="Portfolio Dashboard" module="M & E"></feature:display>
+<feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Add Pledge Button" module="Pledges"></feature:display>
 <feature:display name="Limit Pledge Edition" module="Pledges"></feature:display>
 <feature:display name="Pledge Donor Information" module="Pledges"></feature:display>
 <feature:display name="Pledge Sector and Location" module="Pledges"></feature:display>
 <feature:display name="Pledge Status" module="Pledges"></feature:display>
-<feature:display name="Pledge Contact 1" module="Pledges"></feature:display>
-<feature:display name="Pledge Contact 2" module="Pledges"></feature:display>
-<feature:display name="Pledge Funding" module="Pledges"></feature:display>
+<feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
+<feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
+<feature:display name="Pledge Funding" module="Pledges"></feature:display> 
 <feature:display name="Pledge Additional Information" module="Pledges"></feature:display>
 <feature:display name="Pledge Attached Files" module="Pledges"></feature:display>
-<feature:display name="Preview Activity" module="Previews"></feature:display>
-<feature:display name="Program" module="Program"></feature:display>
-<feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display>
-<feature:display name="Project Fiche" module="Previews"></feature:display>
-<feature:display name="Proposed Project Cost" module="Funding"></feature:display>
+<feature:display name="Preview Activity" module="Previews"></feature:display> 
+<feature:display name="Program" module="Program"></feature:display> 
+<feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 
+<feature:display name="Project Fiche" module="Previews"></feature:display> 
+<feature:display name="Proposed Project Cost" module="Funding"></feature:display> 
 <feature:display name="Revised Project Cost" module="Funding"></feature:display>
-<feature:display name="Regional Funding" module="Funding"></feature:display>
-<feature:display name="Regional Report" module="Report Types"></feature:display>
-<feature:display name="Related Documents" module="Document"></feature:display>
-<feature:display name="Reports Contact Information" module="Contact Information"></feature:display>
-<feature:display name="Save Report/Tab with Filters" module="Report and Tab Options"></feature:display>
-<feature:display name="Show Options on Export" module="Report and Tab Options"></feature:display>
-<feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display>
+<feature:display name="Regional Funding" module="Funding"></feature:display> 
+<feature:display name="Regional Report" module="Report Types"></feature:display> 
+<feature:display name="Related Documents" module="Document"></feature:display> 
+<feature:display name="Reports Contact Information" module="Contact Information"></feature:display> 
+<feature:display name="Save Report/Tab with Filters" module="Report and Tab Options"></feature:display> 
+<feature:display name="Show Options on Export" module="Report and Tab Options"></feature:display> 
+<feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Search Feature" module="Tools"></feature:display>
-<feature:display name="Target Value" module="PI Reports"></feature:display>
+<feature:display name="Target Value" module="PI Reports"></feature:display> 
 
-<feature:display name="User Help" module="HELP"></feature:display>
+<feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display>
 
 <feature:display name="Yearly View" module="Calendar"></feature:display>
@@ -358,8 +359,27 @@
 <field:display feature="Issues" name="Issue Date"></field:display>
 <field:display feature="Issues" name="Measures Taken"></field:display> 
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display> 
-<field:display feature="Planning" name="Line Ministry Rank"></field:display> 
-<field:display feature="Preview Activity" name="Preview Button"></field:display> 
+<field:display feature="Planning" name="Line Ministry Rank"></field:display>
+<field:display feature="Planning" name="Date approbation RFE"></field:display>
+<field:display feature="Planning" name="Methodological note date"></field:display>
+<field:display feature="Planning" name="Start date of retrospective evaluation mission"></field:display>
+<field:display feature="Planning" name="End date of retrospective evaluation mission"></field:display>
+<field:display feature="Planning" name="Date of transmission to the DO"></field:display>
+<field:display feature="Planning" name="Date of transmission of the interim report to the Borrower"></field:display>
+<field:display feature="Planning" name="Final report date"></field:display>
+<field:display feature="Planning" name="Final archiving date"></field:display>
+<field:display feature="Planning" name="Agreement Signature Date"></field:display>
+<module:display name="/Activity Form/Planning/Date approbation RFE" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Methodological note date" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Start date of retrospective evaluation mission" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/End date of retrospective evaluation mission" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Date of transmission to the DO" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Date of transmission of the interim report to the Borrower" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Final report date" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Final archiving date" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Agreement Signature Date" parentModule="/Activity Form/Planning"></module:display>
+<module:display name="/Activity Form/Planning/Ref Decision CA" parentModule="/Activity Form/Planning"></module:display>
+<field:display feature="Preview Activity" name="Preview Button"></field:display>
 <field:display feature="Project Coordinator Contact Information" name="Project Coordinator Email"></field:display> 
 <field:display feature="Project Coordinator Contact Information" name="Project Coordinator First Name"></field:display> 
 <field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact Email"></field:display> 
@@ -708,7 +728,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Line Ministry Rank" feature="Planning"></field:display> 
 <field:display name="Link to Disbursement Order ID" feature="Disbursement"></field:display> 
 <field:display name="Logframe Category" feature="Reports"></field:display>
-<field:display name="Logframe Preview Button" feature="Logframe" ></field:display> 
+<field:display name="Indicator Category" feature="Reports"></field:display>
+<field:display name="Logframe Preview Button" feature="Logframe" ></field:display>
 <field:display name="Logframe Preview Button" feature="Logframe"></field:display> 
 <field:display name="Measures Taken" feature="Issues"></field:display> 
 <field:display name="Ministry Code" feature="Budget"></field:display>
@@ -1145,3 +1166,8 @@ deleted 6 fields, do not reinsert
 <feature:display name="Indicator 5b" module="GPI"></feature:display>
 <feature:display name="Indicator 6" module="GPI"></feature:display>
 <feature:display name="Indicator 9b" module="GPI"></feature:display>
+
+<field:display name="National Planning Objectives Percentage Level 0" feature="NPD Programs"></field:display>
+<field:display name="National Planning Objectives Percentage Level 1" feature="NPD Programs"></field:display>
+<field:display name="National Planning Objectives Percentage Level 2" feature="NPD Programs"></field:display>
+<field:display name="National Planning Objectives Percentage Level 3" feature="NPD Programs"></field:display>

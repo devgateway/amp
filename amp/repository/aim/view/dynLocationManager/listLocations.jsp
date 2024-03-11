@@ -1,17 +1,17 @@
 <%@ page pageEncoding="UTF-8" %>
 
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <logic:notEmpty scope="request" name="locCollection">
 	<ul>
@@ -29,13 +29,13 @@
 					<span style="display: none;">${locCV.index}</span> 
 					<span class="spantree">[<digi:trn><c:out value="${locCV.value }"/></digi:trn>]</span>
 					<c:if test="${lvlIndex < fn:length(locationLevels)}">
-						<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;"
+						<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 							title="Add <digi:trn><c:out value="${locationLevels[lvlIndex].value}"/></digi:trn>" 
 							onclick="addLocation(${loc.id}, ${locationLevels[lvlIndex].id})" />
 					</c:if>
-					<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;"
+					<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;" 
 							onclick="editLocation(${loc.id})" title="Edit" />
-					<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;"
+					<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;" 
 							onclick="deleteLocation(${loc.id})" title="Delete"/>
 					<c:if test="${not empty loc.gsLat||not empty loc.gsLong||not empty loc.geoCode}"><span class="geostyle"><digi:trn>Lat</digi:trn>:${loc.gsLat}&nbsp;<digi:trn>Long</digi:trn>:${loc.gsLong}&nbsp;<digi:trn>GeoId</digi:trn>:${loc.geoCode}&nbsp;</span></c:if>
 					<span class="spantree" style="display: none; color: red;"><digi:trn>ERROR</digi:trn></span>

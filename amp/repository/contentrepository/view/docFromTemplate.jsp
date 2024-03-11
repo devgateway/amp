@@ -1,12 +1,12 @@
 <%@page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:instance property="docFromTemplateForm"/>
 
@@ -36,7 +36,6 @@
 		</td>
 	  	<td>
 	  		<html:select property="docType" styleClass="dropdwn_sm">
-				<html:option value=""><digi:trn>Select Document Format</digi:trn></html:option>
 				<html:option value="pdf"><digi:trn>Pdf</digi:trn></html:option>
 				<html:option value="doc"><digi:trn>Word Document</digi:trn></html:option>
 			</html:select>

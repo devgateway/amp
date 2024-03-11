@@ -1,11 +1,11 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 <%
@@ -336,7 +336,7 @@ function toggleSettings(){
 <ul id="MyTabs" class="yui-nav"">
 <c:set var="counter" value="0"/> 
 <logic:present name="myTabs" scope="session">
-		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
+		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
 					<logic:equal name="report" property="drilldownTab" value="true">
 	                    <c:set var="counter" value="${counter+1}" />
 	                    <%-- <c:set var="reportNameTrn">
@@ -397,7 +397,7 @@ DIV.panelList {
         <c:set var="showMoreTab" value="false"/>
 		<logic:iterate name="myActiveTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
           	<c:set var="showTab" value="true"/>
-			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
+			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
             	<c:if test="${tab.id == report.id}">
                 	<c:set var="showTab" value="false"/>
                 </c:if>

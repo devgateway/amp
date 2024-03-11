@@ -129,8 +129,8 @@ DHTMLSuite.config.prototype = {
 //		this.imagePath = '../images_dhtmlsuite/';	// Path to images		
 //		this.cssPath = '../css_dhtmlsuite/';	// Path to images	
 		
-		this.imagePath = '/repository/aim/view/images/images_dhtmlsuite/';	// Path to images
-		this.cssPath = '/repository/aim/view/css/css_dhtmlsuite/';	// Path to images
+		this.imagePath = '/repository/aim/view/images/images_dhtmlsuite/';	// Path to images		
+		this.cssPath = '/repository/aim/view/css/css_dhtmlsuite/';	// Path to images	
 		
 		this.defaultCssPath = this.cssPath;
 		this.defaultImagePath = this.imagePath;

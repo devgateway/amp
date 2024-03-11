@@ -1,16 +1,16 @@
 <%@ page pageEncoding="UTF-8" %>
 
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
 
@@ -51,8 +51,8 @@
 	<jsp:useBean id="urlParams10" type="java.util.Map" class="java.util.HashMap"/>
 	<jsp:useBean id="urlParams11" type="java.util.Map" class="java.util.HashMap"/>
 	
-	<logic:iterate name="aimVisibilityManagerForm" property="modules" id="module"
-		type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
+	<logic:iterate name="aimVisibilityManagerForm" property="modules" id="module"	
+		type="org.digijava.module.aim.dbentity.AmpModulesVisibility">	
 		<tr bgcolor="#ffffff">
 		<c:set target="${urlParams10}" property="action" value="editModule"/>
 		<c:set target="${urlParams10}" property="moduleId" value="<%=module.getId() %>"/>
@@ -60,7 +60,7 @@
 				<digi:trn key="aim:clickToEditModule">Click here to Edit Module</digi:trn>
 			</c:set>	
 			<td width="70%"> <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="${translation}" ><bean:write name="module" property="name"/></digi:link> &nbsp;&nbsp;&nbsp;
+				title="${translation}" ><bean:write name="module" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
 			</td>
 
 			<td width="30%" align="center">

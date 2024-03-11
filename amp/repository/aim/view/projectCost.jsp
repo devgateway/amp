@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -45,7 +45,7 @@
 
 	
 	<c:if test = '${costName.equals("Proposed Project Cost")}' >
-		<module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost"
+		<module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost" 
 		parentModule="/Activity Form/Funding/Overview Section/Proposed Project Cost">
 		
 		<c:if test="${not empty yearBudget}">

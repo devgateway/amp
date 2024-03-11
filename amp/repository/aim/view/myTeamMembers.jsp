@@ -1,14 +1,14 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript">
 	function addActivity() {
@@ -39,7 +39,7 @@
 							title='<digi:trn jsFriendly="true" key="aim:WorkspaceMemberListAssocWithTeam">List of Workspace Members associated with Workspace</digi:trn>'>
 								<digi:trn key="aim:workspaceMembers">Workspace Members</digi:trn>
 							</TD>
-                    	<TD background="module/aim/images/corner-r.gif"
+                    	<TD background="module/aim/images/corner-r.gif" 
 							height=17 width=17></TD>
 						</TR>
 					</TABLE>
@@ -51,7 +51,7 @@
 				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<TABLE border="0" cellpadding="1" cellspacing="1" width="100%" >
 					<logic:iterate name="myTeamMembers" id="tm" scope="session" 
-					type="org.digijava.module.aim.helper.TeamMember">
+					type="org.digijava.module.aim.helper.TeamMember"> 
 						<TR><TD title="${trnclickToViewMemberDetails}">
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width="10">
 							<A href="javascript:showUserProfile(<c:out value="${tm.memberId}"/>)">

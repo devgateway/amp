@@ -1,9 +1,9 @@
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -323,7 +323,7 @@ function selectPageSectors(pagedata){
     YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 
 }
-
+    
 function checkSectorEmpty() {
     var sectorFlag = true;
     if(document.aimSelectSectorForm.sector.value == -1)
@@ -410,7 +410,7 @@ function myAddLocation(params) {
 }
 
 function locationChanged( selectId ) {
-	var selectEl		= document.getElementById(selectId).value;
+	var selectEl		= document.getElementById(selectId).value;   
     if ( selectEl != "-1" ) {
         //document.selectLocationForm.parentLocId.value=selectEl.value;
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />

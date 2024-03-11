@@ -1,11 +1,11 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
@@ -565,7 +565,7 @@
     function showPanelLoading(msg){
         myPanel.setHeader(msg);	
         var bodymsg='<div style="text-align: center">' + 
-        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
         '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>'
         myPanel.setBody(bodymsg);
         showContent();
@@ -574,7 +574,7 @@
     function addNewUser()	{
         var msg='\n<digi:trn jsFriendly="true">AMP View Settings</digi:trn>';
         showPanelLoading(msg);
-            <digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>
+            <digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>  
             var url = "<%=commentUrl %>";
         YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
     }
@@ -610,7 +610,7 @@
             oldKeyword=document.getElementsByName('keyword')[0].value;
             oldWorkspaceType=document.getElementsByName('workspaceType')[0].value;
             oldWorkspaceGroup=document.getElementsByName('workspaceGroup')[0].value;
-                <digi:context name="commentUrl" property="context/module/moduleinstance/workspaceManager.do"/>
+                <digi:context name="commentUrl" property="context/module/moduleinstance/workspaceManager.do"/>  
                 var url = "<%=commentUrl %>";
             url += "?"+getParams();
             var async=new Asynchronous();
@@ -715,7 +715,7 @@
         myPanel.cfg.setProperty("width","400px");
         myPanel.cfg.setProperty("height","350px"); 
         showPanelLoading(msg);	
-            <digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;
+            <digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;  
         var url = "<%=commentUrl %>";
         url += "?action="+action+"&id="+id;
         YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
@@ -725,7 +725,7 @@
         if(validateAction()){
             checkAndClose=true;
             lastFunction="showDetails";
-                <digi:context name="commentUrl" property="context/module/moduleinstance/updateTeamMemberJSON.do"/>
+                <digi:context name="commentUrl" property="context/module/moduleinstance/updateTeamMemberJSON.do"/>  
                 var url = "<%=commentUrl %>";
             url += "?teamId="+document.getElementsByName('teamId')[0].value+
                 "&teamMemberId="+document.getElementsByName('teamMemberId')[0].value+
@@ -861,7 +861,7 @@
     	YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
         YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
         YAHOO.util.Dom.replaceClass('addNew','visibleTable','invisibleTable');
-            <digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>
+            <digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>  
             var url = "<%=commentUrl %>";
         url += "?selActivities="+id+"&teamId="+ document.getElementsByName('teamId')[0].value;
         YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
@@ -1018,7 +1018,7 @@
         myPanel.cfg.setProperty("height","400px"); 
         showPanelLoading(msg);
 
-            <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>
+            <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>  
             var url = "<%=commentUrl %>";
         url += "~id="+id;
 	
@@ -1029,15 +1029,12 @@
     function showDetails() {
         id = document.getElementsByName('teamId')[0].value;
         desc = document.getElementsByName('teamName')[0].value;
-        console.log("id: "+id);
         if(id===""||desc===""){
             alert("<digi:trn jsFriendly='true'>Select a Team First</digi:trn>");
             return;
         }
-
-
-        value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;;
-        console.log(value)
+	
+        value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
         if(value==0){
             showTeamMembers(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);			
         }
@@ -1130,11 +1127,11 @@
         if(validate()){
             checkAndClose=true;
             lastFunction="showDetails";
-                <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;
+                <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;  
             var url = "<%=commentUrl %>";
             url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
             var bodymsg='<div style="text-align: center">' + 
-            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
             '<digi:trn jsFriendly="true">Saving, please wait ...</digi:trn><br/><br/></div>'
             myPanel.setBody(bodymsg);
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
@@ -1302,13 +1299,10 @@
                         <td>&nbsp;</td>
                         <td align="right">
                     <digi:trn>Select</digi:trn>:&nbsp;
-                            <html:select name="aimWorkspaceForm" property="workspaceDataSelections" styleId="showdataWs" styleClass="inp-text">
-                                <html:optionsCollection name="aimWorkspaceForm" property="workspaceDataSelections" label="label" value="value" />
-                            </html:select>
-<%--                    <select id="showdataWs" class="inp-text" value="0">--%>
-<%--                        <option selected aria-selected="true" value="0"><digi:trn>Members</digi:trn></option>--%>
-<%--                        <option value="1"><digi:trn>Activities</digi:trn></option>--%>
-<%--                    </select>--%>
+                    <select id="showdataWs" class="inp-text"> 
+                        <option value="0"><digi:trn>Members</digi:trn></option> 
+                        <option value="1"><digi:trn>Activities</digi:trn></option> 
+                    </select> &nbsp;&nbsp;&nbsp;
 					<input type="button" id="ws_go" class="buttonx" value='<digi:trn jsFriendly="true">Show</digi:trn>' onclick="showDetails()">
                     </td>
                     </tr>
@@ -1330,7 +1324,7 @@
                     <table width="100%" class="visibleTable" id="loadedDetails" cellspacing="0" cellpadding="0" valign="top" align="left" border="0" >
                         <tr>
                             <td align=center>
-                                <input type="hidden" name="teamId" />
+                                <input type="hidden" name="teamId" value=""/>
                                 <input type="hidden" name="teamName" value=""/>
                                 <table  cellspacing="1" cellpadding="2" align="left" width="100%" style="font-size:12px;">
                                     <tr><td>

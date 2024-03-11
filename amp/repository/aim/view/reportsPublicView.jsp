@@ -1,12 +1,12 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil,org.digijava.module.aim.helper.Constants" %>
 
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <digi:context name="digiContext" property="context" />
 <style type="text/css">
 
@@ -22,7 +22,7 @@ border: none;
 
 <bean:define id="firstReportFound"  value="false" toScope="page"/>
 
-<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position">
+<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
 	<logic:equal name="report" property="publicReport" value="true"> 
 		<logic:equal name="report" property="drilldownTab" value="true">
 			<logic:equal name="firstReportFound" value="false">
@@ -93,7 +93,7 @@ function preventTabClickEvent(e){
 
 <logic:present name="firstReportName">
 <ul id="PublicTabs" class="yui-nav">
-<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position">
+<logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
 			<logic:equal name="report" property="publicReport" value="true">
 				<logic:equal name="report" property="drilldownTab" value="true">
                         <li><a id='Tab-<bean:write name="report" property="id"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><div><bean:write name="report" property="name"/></div></a></li> 

@@ -25,7 +25,7 @@
      	<forward name="addOrEditPage" path="/showLayout.do?layout=addOrEditTemplate" />
      	<forward name="templatesManager" path="/showLayout.do?layout=templateAlertsManager"/>
      </action>
-     <action path="/message/exportImportTemplates" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.ExportAndImportTemplates">
+     <action path="/message/exportImportTemplates" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.ExportAndImportTemplates">     	
      	<forward name="gotoPage" path="/showLayout.do?layout=exportImportTemplatesPage" />
      	<forward name="viewTemplates" path="/message/templatesManager.do?actionType=viewTemplates" />
      </action>

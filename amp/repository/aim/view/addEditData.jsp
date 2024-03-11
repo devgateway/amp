@@ -1,10 +1,10 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <style>
 body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
 .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
@@ -20,7 +20,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
 
 <jsp:include page="scripts/newCalendar.jsp"  />
 
@@ -59,7 +59,7 @@ function saveIndicator(id){
 	if (!validation()){
         return false;
 	}
-  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" />
+  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" /> 
   aimThemeForm.action = "<%=addEditIndicator%>";
   aimThemeForm.target=window.opener.name;
   aimThemeForm.submit();
@@ -71,7 +71,7 @@ function selectLocation(index){
     <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" />
   	document.aimThemeForm.action = "<%=justSubmit%>&index="+index;
   	document.aimThemeForm.submit();
-  <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>
+  <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>  
   openURLinWindow("<%=selLoc%>&index="+index,700,500);
 
 

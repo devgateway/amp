@@ -1,21 +1,21 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
-<%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim"%>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/organization-manager.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/organization-manager.css"> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%>
@@ -1979,13 +1979,11 @@ border-right: 1px solid rgb(208, 208, 208);
 													</c:forEach>
 	                                            </td>
 	                                            <td class="tdClass">
-                                                    <c:if test="${orgCont.contact.properties.size()>0}">
-                                                        <c:forEach var="phone" items="${orgCont.contact.properties}">
-                                                            <c:if test="${phone.name=='contact phone'}">
-                                                                <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if><c:if test="${not empty phone.value}"> <c:out value="${phone.value}"></c:out> </c:if></div>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </c:if>
+	                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
+														<c:if test="${phone.name=='contact phone'}">                                                                                     
+                                                                                 <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.actualPhoneNumber}"></c:out></div>
+														</c:if>
+													</c:forEach>
 	                                            </td>
 	                                            <td class="tdClass">
 	                                                <c:forEach var="phone" items="${orgCont.contact.properties}">
@@ -2101,7 +2099,7 @@ border-right: 1px solid rgb(208, 208, 208);
     <tr>
         <td colspan="2" align="center">
         	<c:set var="showTheFollowingDocuments" value="PUBLIC" /> 
-        	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
+        	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>        	
             <html:button styleClass="buttonx_sm" property="submitButton" onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
                 <digi:trn>Add Documents From Repository</digi:trn>
             </html:button> <br />

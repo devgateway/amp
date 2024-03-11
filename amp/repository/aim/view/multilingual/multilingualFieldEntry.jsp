@@ -9,9 +9,9 @@
 			onkeyup, onkeypress 
  --%>
  
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%
 	MultilingualInputFieldValues dta = (MultilingualInputFieldValues) request.getAttribute(request.getParameter("attr_name"));
@@ -20,9 +20,9 @@
 
 <%--
 	required files to be included by the including page:
-		<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+		<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 		
 	see more documentation here: http://yui.github.io/yui2/docs/yui_2.9.0_full/tabview/
@@ -65,17 +65,28 @@
 						<c:set var="placeholder" value="${cur_locale}" />
 					</c:if>
 					<div>
-						<input type="text" name="${dta.prefix}_${cur_locale}" 
-							value="<c:out value="${dta.translations[cur_locale]}"/>"
-							placeholder="(${placeholder})"
-							<c:if test="${not empty param.onkeyup}">
-								onkeyup="${param.onkeyup}"							
-							</c:if> 
-							<c:if test="${not empty param.onkeypress}">
-								onkeypress="${param.onkeypress}"
-							</c:if>
-							style="font-size: 8pt; font-weight: bolder;" 
-							class="inp-text multilingual_input_element" />
+						<c:choose>
+							<c:when test="${'textarea'.equals(param.input_type)}">
+								<textarea
+										name="${dta.prefix}_${cur_locale}"
+										placeholder="(${placeholder})"
+										style="font-size: 8pt; font-weight: bolder;"
+										class="inp-text multilingual_input_element"><c:out value="${dta.translations[cur_locale]}"/></textarea>
+							</c:when>
+							<c:otherwise>
+								<input type="text" name="${dta.prefix}_${cur_locale}"
+									   value="<c:out value="${dta.translations[cur_locale]}"/>"
+									   placeholder="(${placeholder})"
+										<c:if test="${not empty param.onkeyup}">
+											onkeyup="${param.onkeyup}"
+										</c:if>
+										<c:if test="${not empty param.onkeypress}">
+											onkeypress="${param.onkeypress}"
+										</c:if>
+									   style="font-size: 8pt; font-weight: bolder;"
+									   class="inp-text multilingual_input_element" />
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</c:forEach>	
 			</div>

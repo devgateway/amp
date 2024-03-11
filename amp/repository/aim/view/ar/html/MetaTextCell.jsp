@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <bean:define id="metaTextCell" name="viewable"
 	type="org.dgfoundation.amp.ar.cell.MetaTextCell" scope="request"
 	toScope="page" />

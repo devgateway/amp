@@ -2,20 +2,20 @@
 <%@ page import="org.digijava.module.aim.helper.*" %>
 <%@ page import = "org.digijava.module.aim.helper.ChartGenerator" %>
 <%@ page import = "java.io.PrintWriter, java.util.*" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/fmt.tld" prefix="fmt" %>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category" %>
-<%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim" %>
-<%@ taglib uri="/src/main/resources/tld/globalsettings.tld" prefix="gs" %>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript">
 	function load() {
@@ -114,7 +114,7 @@ body {background:none;}
 											<b><digi:trn key="aim:activityDetail">Activity Details</digi:trn></b>
 										</td>
 									</tr>
-								<feature:display name="Identification" module="Project ID and Planning">
+								<feature:display name="Identification" module="Project ID and Planning">   
 									<field:display name="AMP ID" feature="Identification">
 									<tr>
 										<td class="field_name">
@@ -249,7 +249,7 @@ body {background:none;}
 										</c:if>
 									</module:display>
 
-                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
+                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -325,7 +325,7 @@ body {background:none;}
 									</tr>
 									</module:display>
 
-								<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">
+								<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">    	
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -427,8 +427,8 @@ body {background:none;}
                                         </c:if>
                                         </td>
 									</tr>
-									</module:display>
-                                       <feature:display name="Identification" module="Project ID and Planning">
+									</module:display>									 
+                                       <feature:display name="Identification" module="Project ID and Planning">   
 									<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="field_name" >
@@ -1745,7 +1745,7 @@ body {background:none;}
 
 																		<jsp:include page="activitypreview/previewMtefProjections.jsp" />
 
-																		<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
+																		<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
 																		parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                                        		<jsp:include page="activitypreview/previewActivityFundingArrears.jsp" />
                                                                         </module:display>
@@ -1892,7 +1892,7 @@ body {background:none;}
 	                       </td>
                       	</tr>
                         </feature:display>
-                        <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
+                        <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedArrears">
                         		<tr>

@@ -1,14 +1,14 @@
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>	
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 
 
 <c:set var="reportStatement">
@@ -374,7 +374,7 @@ function openPrinter(){
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tr>
 			<td align="center"> 
-				<digi:img hspace="2" vspace="2" src="module/aim/images/dgf_logo.jpg" border="0" />
+				<digi:img hspace="2" vspace="2" src="module/aim/images/dgf_logo.jpg" border="0" />						
 			</td>
 		</tr>
 		<tr>

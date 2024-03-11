@@ -1,13 +1,13 @@
 <%@ page pageEncoding="UTF-8"
 	import="org.digijava.module.aim.dbentity.AmpOrganisation,java.util.*"%>
 <%@page import="org.digijava.kernel.util.SiteUtils"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="fn"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="fn"%>
 
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
@@ -335,7 +335,7 @@
 								<tr>
 									<td align="left" vAlign="top">
 										<table width="100%" cellPadding="3" id="searchResults">
-											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">
+											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">		
 												<tr>
 													<td bgcolor=#F8F8F8 width="1%">&nbsp;</td>		
                                                         <logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">

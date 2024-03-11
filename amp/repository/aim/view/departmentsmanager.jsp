@@ -1,16 +1,16 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category"%>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
-<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn"%>
-<%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -190,7 +190,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" />
+													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" /> 
 													<c:set var="OrgLink">
 														<digi:trn>Click here to view Organization Manager</digi:trn>
 													</c:set>
@@ -203,7 +203,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 											</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" />
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" /> 
 												<c:set var="trnViewAdmin">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set> 

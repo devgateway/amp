@@ -2,20 +2,20 @@
 <%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
 <%@ page import="java.io.PrintWriter, java.util.*"%>
 
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fmt.tld" prefix="fmt"%>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
-<%@ taglib uri="/src/main/resources/tld/globalsettings.tld" prefix="gs" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-<%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim"%>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
 <div id="donor_fund">
 	<table width="95%" cellspacing="1" cellpadding="0" border="0" align="center">
 				<tr>
@@ -29,7 +29,7 @@
 										<tr>
 											<td>
 											<table cellspacing="1" cellpadding="0" border="0" width="100%">
-												<%--<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification"
+												<%--<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification" 
 													     parentModule="/Activity Form/Funding/Funding Group/Funding Item">  --%>
 												<tr>
 													<td>
@@ -54,7 +54,7 @@
 																	</tr>
 																</logic:notEmpty>
 																<%-- </module:display>  --%>
-																<%-- <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation"
+																<%-- <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation" 
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item"> --%>
 																<tr>
 																	<td width="150">
@@ -326,12 +326,12 @@
 													<bean:define id="funding" name="funding" scope="page" toScope="request"
 														type="org.digijava.module.aim.helper.Funding">
 														</bean:define>
-													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<bean:define id="transaction" value="Commitments" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingCommitments.jsp" />
 													</module:display>
-													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
 							 							parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<bean:define id="transaction" value="Disbursements" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
@@ -353,7 +353,7 @@
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingEDD.jsp" />
 													</module:display>
-													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<bean:define id="transaction" value="Arrears" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingArrears.jsp" />
@@ -397,7 +397,7 @@
                     <tr>
                         <td>
                         <table cellspacing="1" cellpadding="0" border="0" style="font-size:11px;" width="100%">
-                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
+                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 									parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplannedcommittment'>Total Planned Commitments</digi:trn></c:set>
@@ -418,7 +418,7 @@
                         		</c:if></c:if>                        	
                         	</module:display>
                         
-                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
+                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
 											parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplanneddisbursement'>Total Planned Disbursements</digi:trn></c:set>
@@ -439,7 +439,7 @@
                         		</c:if></c:if> --%>
                         	</module:display>
                         
-							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplannedexpenditure'>Total Planned Expenditures</digi:trn></c:set>
@@ -461,7 +461,7 @@
                         	</module:display>
 
 
-							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears"
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedArrears}">
 									<c:set var="activity_funding_text"><digi:trn key='aim:totalplannedarrears'>Total Planned Arrears</digi:trn></c:set>

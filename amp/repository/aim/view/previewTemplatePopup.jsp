@@ -1,15 +1,15 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <bean:define id="ampFeatures" name="selectedFeatures"
 	type="java.util.Collection" scope="request" toScope="page" />
 
 <logic:iterate name="aimFeatureManagerForm" property="templates" id="template"
-		type="org.digijava.module.aim.dbentity.FeatureTemplates">
+		type="org.digijava.module.aim.dbentity.FeatureTemplates">	
 	
 <div style='position:relative;display:none;' id='org-<bean:write name="org" property="organisation.ampOrgId"/>'> 
 <ul>

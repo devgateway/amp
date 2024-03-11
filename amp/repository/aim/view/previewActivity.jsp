@@ -4,19 +4,19 @@
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="org.digijava.module.aim.util.TeamMemberUtil"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/fmt.tld" prefix="fmt"%>
-<%@ taglib uri="/src/main/resources/tld/category.tld" prefix="category"%>
-<%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field"%>
-<%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
-<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
-<%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim"%>
-<%@ taglib uri="/src/main/resources/tld/globalsettings.tld" prefix="gs"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
@@ -405,7 +405,7 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
-			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments"
+			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Commitments</digi:trn>:<br/> 
@@ -441,7 +441,7 @@ function collapseAll() {
 		         <hr/>
 		         </c:if>
 		       </module:display>
-			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
+			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Disbursements</digi:trn>:<br/>
@@ -477,7 +477,7 @@ function collapseAll() {
 			<hr/>
 			</c:if>
 			</module:display>
-			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
+			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
@@ -849,7 +849,7 @@ function collapseAll() {
 						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if> 
-				</module:display>
+				</module:display>	
 				<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
 						<digi:trn>MOFED contact information</digi:trn>:&nbsp;

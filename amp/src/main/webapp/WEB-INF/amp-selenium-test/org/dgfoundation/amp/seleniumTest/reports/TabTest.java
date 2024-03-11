@@ -282,7 +282,7 @@ public class TabTest extends SeleneseTestCase{
                 }
             }
             selenium.click("//a[contains(@href, \"/aim/reportWizard.do~editReportId=" + lastId + "\")]");*/
-            selenium.click("//img[@src=\"/repository/message/view/images/edit.gif\"]");
+            selenium.click("//img[@src=\"/src/main/webapp/repository/message/view/images/edit.gif\"]");
             selenium.waitForPageToLoad("50000");
             selenium.click("//li[@id='measures_tab_label']/a/div");
             if (selenium.isElementPresent("//li[@id='measure_1']/input")) {

@@ -1403,7 +1403,7 @@ public class AmpMessageActions extends DispatchAction {
             String partialURL = config.getSiteDomain().getContent() ;
             String links="";
             for (SdmItem attachedFile : attachedDocs.getItems()) {              
-                links += "<img src=\""+"/repository/message/view/images/attachment.png"+"\" border=\""+"0\" />";
+                links += "<img src=\""+"/src/main/webapp/repository/message/view/images/attachment.png"+"\" border=\""+"0\" />";
                 links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
                 links += attachedFile.getContentTitle();
                 links += "</a>";

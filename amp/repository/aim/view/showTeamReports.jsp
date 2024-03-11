@@ -9,7 +9,7 @@
 <%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
 <%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/struts-tiles.tld" prefix="tiles" %>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
 <%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
 <%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>

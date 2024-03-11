@@ -558,7 +558,7 @@ public class VisibilityManager extends MultiAction {
             outHeader="<%@ page pageEncoding=\"UTF-8\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/struts-bean.tld\" prefix=\"bean\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/struts-logic.tld\" prefix=\"logic\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/struts-tiles.tld\" prefix=\"tiles\" %>\n"+
+            "<%@ taglib uri=\"http://struts.apache.org/tags-tiles\" prefix=\"tiles\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/struts-html.tld\" prefix=\"html\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/digijava.tld\" prefix=\"digi\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/c.tld\" prefix=\"c\" %>\n"+

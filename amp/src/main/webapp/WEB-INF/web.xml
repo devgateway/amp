@@ -345,10 +345,10 @@
 <!--			<taglib-uri>/src/main/resources/tld/struts-nested.tld</taglib-uri>-->
 <!--			<taglib-location>/src/main/resources/tld/struts-nested.tld</taglib-location>-->
 <!--		</taglib>-->
-<!--		<taglib>-->
-<!--			<taglib-uri>/src/main/resources/tld/struts-tiles.tld</taglib-uri>-->
-<!--			<taglib-location>/src/main/resources/tld/struts-tiles.tld</taglib-location>-->
-<!--		</taglib>-->
+		<taglib>
+			<taglib-uri>http://struts.apache.org/tags-tiles</taglib-uri>
+			<taglib-location>/src/main/resources/tld/struts-tiles.tld</taglib-location>
+		</taglib>
 <!--		<taglib>-->
 <!--			<taglib-uri>/src/main/resources/tld/digijava.tld</taglib-uri>-->
 <!--			<taglib-location>/src/main/resources/tld/digijava.tld</taglib-location>-->

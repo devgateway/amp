@@ -89,7 +89,7 @@
     
     <!-- Repository wide search index -->
     <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
-        <param name="path" value="${rep.home}/src/main/webapp/WEB-INF/repository/index" />
+        <param name="path" value="${rep.home}/repository/index" />
     </SearchIndex>
     
 </Repository>

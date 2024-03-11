@@ -80,7 +80,7 @@
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
-<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
+<jsp:include page="/WEB-INF/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 
 <c:set var="showCurrSettings">
 	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 

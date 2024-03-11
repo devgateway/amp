@@ -262,7 +262,7 @@
 					<tr>
 						<td align="left">
 						<jsp:include
-									page="/src/main/webapp/WEB-INF/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
+									page="/WEB-INF/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
 					</tr>
 				<tr>
 					<td height="16" vAlign="center" width="571">

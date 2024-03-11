@@ -54,8 +54,8 @@
 				<jsp:include page="pledgeFundingView.jsp"></jsp:include>
 			</aim:renderFormSubsection>
 		</feature:display>
-		<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/pledgeform/pledgeContactsView.jsp"></jsp:include>
-		<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/repository/aim/view/pledgeform/pledgeContactsView.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
 	
 	</div><br/>
 	<div class="big-form-buttons">

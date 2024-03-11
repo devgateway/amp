@@ -68,7 +68,7 @@
 		${plsEnterTitle}
 	</div>
 	<div class="bd search-panel-title" id="titlePanelBody">
-		<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+		<jsp:include page="/WEB-INF/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
 			<jsp:param name="attr_name" value="multilingual_tab_title" />
 			<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
 		</jsp:include>

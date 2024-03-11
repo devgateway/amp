@@ -93,8 +93,8 @@
 			</aim:renderFormSubsection>
 		</feature:display>
 	
-		<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
-		<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
 	
 		<div class="big-form-buttons">
 			<button type="button" onclick="pledge_form_submit('#pledge_form_big_div');" class="btn btn-primary" id='pledgeForm_submit'><digi:trn>Submit</digi:trn></button>

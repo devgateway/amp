@@ -350,63 +350,63 @@
 			<taglib-location>/src/main/resources/tld/struts-tiles.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/digijava</taglib-uri>
+			<taglib-uri>http://digijava.org</taglib-uri>
 			<taglib-location>/src/main/resources/tld/digijava.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/gateperm</taglib-uri>
+			<taglib-uri>http://digijava.org/gate</taglib-uri>
 			<taglib-location>/repository/gateperm/gateperm.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/category</taglib-uri>
+			<taglib-uri>http://digijava.org/CategoryManager</taglib-uri>
 			<taglib-location>/src/main/resources/tld/category.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/globalsettings</taglib-uri>
+			<taglib-uri>http://digijava.org/GlobalSettings</taglib-uri>
 			<taglib-location>/src/main/resources/tld/globalsettings.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/resourcesettings</taglib-uri>
+			<taglib-uri>http://digijava.org/ResourceSettings</taglib-uri>
 			<taglib-location>/src/main/resources/tld/resourcesettings.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/aim</taglib-uri>
+			<taglib-uri>http://digijava.org/aim</taglib-uri>
 			<taglib-location>/src/main/resources/tld/aim.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/moduleVisibility</taglib-uri>
+			<taglib-uri>http://digijava.org/modules</taglib-uri>
 			<taglib-location>/src/main/resources/tld/moduleVisibility.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/featureVisibility</taglib-uri>
+			<taglib-uri>http://digijava.org/features</taglib-uri>
 			<taglib-location>
 				/src/main/resources/tld/featureVisibility.tld
 			</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/fieldVisibility</taglib-uri>
+			<taglib-uri>http://digijava.org/fields</taglib-uri>
 			<taglib-location>/src/main/resources/tld/fieldVisibility.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/editlivejava</taglib-uri>
+			<taglib-uri>http://digijava.org/eljTagLibrary</taglib-uri>
 			<taglib-location>/src/main/resources/tld/taglib.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/jstl-core</taglib-uri>
+			<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
 			<taglib-location>/src/main/resources/tld/c.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/fmt</taglib-uri>
+			<taglib-uri>http://java.sun.com/jsp/jstl/fmt</taglib-uri>
 			<taglib-location>/src/main/resources/tld/fmt.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/displaytag</taglib-uri>
+			<taglib-uri>http://displaytag.sf.net/display</taglib-uri>
 			<taglib-location>
 				/src/main/resources/tld/displaytag-11.tld
 			</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/jstl-functions</taglib-uri>
+			<taglib-uri>http://java.sun.com/jsp/jstl/functions</taglib-uri>
 			<taglib-location>/src/main/resources/tld/fn.tld</taglib-location>
 		</taglib>
 	</jsp-config>

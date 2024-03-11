@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="http://digijava.org/modules" prefix="module"%>
+<%@ taglib uri="http://digijava.org" prefix="digi"%>
 <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
 

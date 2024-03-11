@@ -1,6 +1,6 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <digi:base />

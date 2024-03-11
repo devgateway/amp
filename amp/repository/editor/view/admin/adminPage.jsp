@@ -2,7 +2,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
 
 <%@ page import="org.digijava.module.editor.dbentity.Editor" %>
 <%@ page import="org.digijava.module.editor.util.Constants" %>

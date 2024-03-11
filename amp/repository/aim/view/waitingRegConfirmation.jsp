@@ -3,8 +3,8 @@
 <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/GlobalSettings" prefix="gs" %>
 
 <html:javascript formName="aimUserRegisterForm"/>
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %> 
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
 <html>
 <link href="css/global.css" rel="stylesheet" type="text/css">
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />

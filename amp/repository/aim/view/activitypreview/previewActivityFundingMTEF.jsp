@@ -3,14 +3,14 @@
 <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
-<%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="http://digijava.org" prefix="digi"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://digijava.org/CategoryManager" prefix="category"%>
 
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="http://digijava.org/fields" prefix="field"%>
+<%@ taglib uri="http://digijava.org/features" prefix="feature"%>
+<%@ taglib uri="http://digijava.org/modules" prefix="module"%>
 
 <digi:instance property="aimEditActivityForm" />
 <c:set var="transaction" value="MTEF Projections/MTEF Projections Table" scope="page"/>

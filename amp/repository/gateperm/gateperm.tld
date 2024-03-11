@@ -4,7 +4,7 @@
 	<tlibversion>2.3</tlibversion>
 	<jspversion>1.1</jspversion>
 	<shortname>gateperm</shortname>
-	<uri>http://digijava.org</uri>
+	<uri>http://digijava.org/gate</uri>
 	<tag>
 		<name>putInScope</name>
 		<tagclass>org.digijava.module.gateperm.core.GatePermScopeTag</tagclass>

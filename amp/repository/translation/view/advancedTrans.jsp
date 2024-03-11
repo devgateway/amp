@@ -3,9 +3,9 @@
 <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/displaytag" prefix="display" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://displaytag.sf.net/display" prefix="display" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <script language=JavaScript type=text/javascript>
 <digi:context name="updateMsg" property="context/module/moduleinstance/updateMessage.do" />

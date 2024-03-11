@@ -8,10 +8,10 @@
 
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
 <%@ taglib uri="/taglib/feature" prefix="feature" %>
 
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
  
 

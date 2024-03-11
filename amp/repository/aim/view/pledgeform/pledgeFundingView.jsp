@@ -1,9 +1,9 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%-- renders the funding part of the Pledge Form --%>
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />

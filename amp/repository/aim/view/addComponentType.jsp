@@ -3,10 +3,10 @@
 <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="http://digijava.org" prefix="digi"%>
+<%@ taglib uri="http://digijava.org/fields" prefix="field"%>
+<%@ taglib uri="http://digijava.org/features" prefix="feature"%>
+<%@ taglib uri="http://digijava.org/modules" prefix="module"%>
 <script language="JavaScript">
 
 function onDelete() {

@@ -1,4 +1,4 @@
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="act">${param.extraAction}</c:set>
 <%
 	if ("add_locations_refresh_data".equals(request.getParameter("extraAction"))) // ajax?

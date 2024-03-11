@@ -5,9 +5,9 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 <%@ taglib uri="http://struts.apache.org/tags-nested" prefix="nested"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="http://digijava.org" prefix="digi"%>
+<%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" href="<digi:file src="/repository/gpi/view/css/gpi_styles.css"/>">

@@ -1,5 +1,5 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
 <html>
 <link href="/digijava/TEMPLATE/demoSite/css/global.css" rel="stylesheet" type="text/css">
 <head>

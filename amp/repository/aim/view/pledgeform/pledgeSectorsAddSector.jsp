@@ -1,11 +1,11 @@
 <%-- renders the "add a sector" part of a page --%>
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
 <%@page trimDirectiveWhitespaces="true"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/CategoryManager" prefix="category" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
 <!-- <form class="form-group">  -->

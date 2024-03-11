@@ -1,11 +1,11 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants"%>
-<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-<%@ taglib uri="/taglib/resourcesettings" prefix="rs" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="http://digijava.org/GlobalSettings" prefix="gs" %>
+<%@ taglib uri="http://digijava.org/ResourceSettings" prefix="rs" %>
+<%@ taglib uri="http://digijava.org/fields" prefix="field" %>
+<%@ taglib uri="http://digijava.org/features" prefix="feature" %>
+<%@ taglib uri="http://digijava.org/modules" prefix="module" %>
 
 <!-- Individual YUI CSS files -->
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">

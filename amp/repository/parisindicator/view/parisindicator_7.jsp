@@ -5,10 +5,10 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 <%@ taglib uri="http://struts.apache.org/tags-nested" prefix="nested"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
-<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="http://digijava.org" prefix="digi"%>
+<%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://digijava.org/GlobalSettings" prefix="gs" %>
 
 <digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 

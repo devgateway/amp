@@ -60,7 +60,7 @@ public abstract class ViewConfigUtil
 
         String templateName = null;
         if (currentConfig.getTemplate() != null &&
-            currentConfig.getTemplate().trim().length() != 0) {
+                !currentConfig.getTemplate().trim().isEmpty()) {
             templateName = currentConfig.getTemplate().trim();
         }
 
@@ -88,9 +88,8 @@ public abstract class ViewConfigUtil
     protected void addComponentsFiles() throws
         ViewConfigException {
         this.repository = new HashMap();
-        Iterator iter = DigiConfigManager.getModulesConfig().keySet().iterator();
-        while (iter.hasNext()) {
-            String moduleName = (String) iter.next();
+        for (Object o : DigiConfigManager.getModulesConfig().keySet()) {
+            String moduleName = (String) o;
             addComponentsFile(moduleName);
         }
     }
@@ -98,8 +97,8 @@ public abstract class ViewConfigUtil
     protected RepositoryLayout addComponentsFile(String moduleName) throws
         ViewConfigException {
         File configFile;
-        configFile = new File(servletContext.getRealPath("/src/main/webapp/WEB-INF/repository/" +
-            moduleName + "/components.xml"));
+        configFile = new File("./src/main/webapp/WEB-INF/repository/" +
+            moduleName + "/components.xml");
 
         RepositoryLayout componentsFile = null;
         if (configFile.exists()) {
@@ -120,18 +119,15 @@ public abstract class ViewConfigUtil
         HashMap layouts = siteConfig.getSiteLayout().getLayout();
 
         HashMap layoutOwners = new HashMap();
-        Iterator repositoryIter = repository.entrySet().iterator();
-        while (repositoryIter.hasNext()) {
-            Map.Entry entry = (Map.Entry) repositoryIter.next();
+        for (Object o : repository.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
 
             RepositoryLayout components = (RepositoryLayout) entry.getValue();
             String moduleName = (String) entry.getKey();
 
             HashMap secondaryPages = new HashMap();
-            Iterator secondaryPageIter = components.getSecondaryPages().values().
-                iterator();
-            while (secondaryPageIter.hasNext()) {
-                SecondaryPage sPage = (SecondaryPage) secondaryPageIter.next();
+            for (Object object : components.getSecondaryPages().values()) {
+                SecondaryPage sPage = (SecondaryPage) object;
                 if (!layouts.containsKey(sPage.getName())) {
                     secondaryPages.put(sPage.getName(), sPage);
                 }
@@ -146,59 +142,50 @@ public abstract class ViewConfigUtil
         boolean systemWideDefaultDefined = false;
         for (int i = 0; i < 3; i++) {
             Collection pageGroups = siteConfig.getSiteLayout().getPageGroups();
-            Iterator pageGrpIter = pageGroups.iterator();
-            while (pageGrpIter.hasNext()) {
-                PageGroup pageGroup = (PageGroup) pageGrpIter.next();
+            for (Object group : pageGroups) {
+                PageGroup pageGroup = (PageGroup) group;
                 // durind the third step, process system-wide page groups
                 if (pageGroup.getModulePageGroups().size() == 0 && i == 2) {
                     if (systemWideDefaultDefined) {
                         logger.error(
-                            "two or more system-wide page groups are defined in site-config.xml!");
-                    }
-                    else {
-                        Iterator layoutOwnerIter = layoutOwners.keySet().
-                            iterator();
-                        while (layoutOwnerIter.hasNext()) {
-                            String moduleName = (String) layoutOwnerIter.next();
+                                "two or more system-wide page groups are defined in site-config.xml!");
+                    } else {
+                        for (Object o : layoutOwners.keySet()) {
+                            String moduleName = (String) o;
                             HashMap sPages = (HashMap) layoutOwners.get(
-                                moduleName);
+                                    moduleName);
                             layouts.putAll(generateLayouts(pageGroup,
-                                moduleName, sPages.values()));
+                                    moduleName, sPages.values()));
                         }
                         layoutOwners.clear();
                     }
-                }
-                else {
-                    Iterator modPageGrpIter = pageGroup.getModulePageGroups().
-                        values().iterator();
-                    while (modPageGrpIter.hasNext()) {
+                } else {
+                    for (Object o : pageGroup.getModulePageGroups().
+                            values()) {
                         ModulePageGroup modPageGrp = (ModulePageGroup)
-                            modPageGrpIter.next();
+                                o;
                         String moduleName = modPageGrp.getModuleName();
                         HashMap sPages = (HashMap) layoutOwners.get(
-                            moduleName);
+                                moduleName);
                         if (modPageGrp.getPages().size() == 0 && i == 1) {
                             if (sPages != null) {
                                 layouts.putAll(generateLayouts(pageGroup,
-                                    moduleName, sPages.values()));
+                                        moduleName, sPages.values()));
                             }
                             layoutOwners.remove(moduleName);
 
-                        }
-                        else {
-                            Iterator secPagesIter = modPageGrp.getPages().
-                                values().iterator();
-                            while (secPagesIter.hasNext()) {
-                                GroupedPage gPage = (GroupedPage) secPagesIter.
-                                    next();
+                        } else {
+                            for (Object object : modPageGrp.getPages().
+                                    values()) {
+                                GroupedPage gPage = (GroupedPage) object;
                                 if (sPages != null) {
                                     SecondaryPage sPage = (SecondaryPage)
-                                        sPages.get(gPage.getName());
+                                            sPages.get(gPage.getName());
 
                                     if (sPage != null) {
                                         Layout layout = generateLayout(
-                                            pageGroup,
-                                            moduleName, sPage);
+                                                pageGroup,
+                                                moduleName, sPage);
                                         layouts.put(layout.getName(), layout);
                                     }
                                     sPages.remove(gPage.getName());
@@ -213,14 +200,12 @@ public abstract class ViewConfigUtil
 
         // generate single-page layouts
         if (!systemWideDefaultDefined) {
-            Iterator layoutOwnerIter = layoutOwners.keySet().
-                iterator();
-            while (layoutOwnerIter.hasNext()) {
-                String moduleName = (String) layoutOwnerIter.next();
+            for (Object o : layoutOwners.keySet()) {
+                String moduleName = (String) o;
                 HashMap sPages = (HashMap) layoutOwners.get(
-                    moduleName);
+                        moduleName);
                 layouts.putAll(generateLayouts(null,
-                                               moduleName, sPages.values()));
+                        moduleName, sPages.values()));
             }
 
         }
@@ -230,9 +215,8 @@ public abstract class ViewConfigUtil
     private Map generateLayouts(PageGroup pageGroup, String moduleName,
                                 Collection secondaryPages) {
         HashMap layouts = new HashMap();
-        Iterator sPagesIter = secondaryPages.iterator();
-        while (sPagesIter.hasNext()) {
-            SecondaryPage sPage = (SecondaryPage) sPagesIter.next();
+        for (Object secondaryPage : secondaryPages) {
+            SecondaryPage sPage = (SecondaryPage) secondaryPage;
             Layout layout = generateLayout(pageGroup, moduleName, sPage);
             if (layout != null) {
                 layouts.put(layout.getName(), layout);
@@ -273,7 +257,7 @@ public abstract class ViewConfigUtil
                 secondaryPage.getName() : secondaryPage.getPage();
             if (pageGroup == null) {
                 layout.setFileBlank(false);
-                layout.setFile("module/" + moduleName + "/" + pageName + ".jsp");
+                layout.setFile("/WEB-INF/repository/" + moduleName + "/" + pageName + ".jsp");
             }
             else {
                 layout.setExtendsLayout(pageGroup.getMasterLayout());
@@ -295,9 +279,8 @@ public abstract class ViewConfigUtil
             siteConfig.setModuleLayout(new ModuleLayout());
         }
         HashMap modules = siteConfig.getModuleLayout().getModule();
-        Iterator repositoryIter = repository.entrySet().iterator();
-        while (repositoryIter.hasNext()) {
-            Map.Entry entry = (Map.Entry) repositoryIter.next();
+        for (Object o : repository.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
 
             RepositoryLayout components = (RepositoryLayout) entry.getValue();
             String moduleName = (String) entry.getKey();
@@ -311,7 +294,7 @@ public abstract class ViewConfigUtil
                     newModule.setTeaserFile(repositoryModule.getTeaserFile());
 
                     Iterator reposModIter = repositoryModule.getTeaser().values().
-                        iterator();
+                            iterator();
                     while (reposModIter.hasNext()) {
                         Teaser item = (Teaser) reposModIter.next();
                         newModule.addTeaser(item);
@@ -324,8 +307,7 @@ public abstract class ViewConfigUtil
                     }
 
                     siteConfig.getModuleLayout().addModule(newModule);
-                }
-                else {
+                } else {
                     siteConfModule.merge(repositoryModule);
                 }
             }

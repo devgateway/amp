@@ -30,7 +30,7 @@ public class ActivityEraser {
         ResourceStreamHandlerFactory.installIfNeeded();
         try {
             DigiConfigManager
-                    .initialize("/home/mihai/workspace/amp/repository");
+                    .initialize("/home/mihai/workspace/amp/src/main/webapp/WEB-INF/repository");
             PersistenceManager.initialize(false);
         } catch (DgException e) {
             // TODO Auto-generated catch block

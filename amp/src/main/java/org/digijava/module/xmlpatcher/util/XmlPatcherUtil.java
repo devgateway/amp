@@ -163,7 +163,7 @@ public final class XmlPatcherUtil {
      * Seeks the application directories in search of patch directories. The
      * usual location is inside the modules dir
      * (repository/modulename/xmlpatches). However this is not hardcoded. One
-     * usual location that is outside /repository/ is the generic patches dir
+     * usual location that is outside /src/main/webapp/WEB-INF/repository/ is the generic patches dir
      * (that do not belong to one specific module)
      * 
      * @param root

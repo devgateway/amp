@@ -17,7 +17,7 @@
 /**
  * Repository query
  */
-var RepositoryUrl = "api/src/main/webapp/WEB-INF/repository";
+var RepositoryUrl = "api/repository";
 var repoPathUrl = function() {   
     return  RepositoryUrl;
 }

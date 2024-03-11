@@ -28,7 +28,7 @@
 	function detectBrowser(){
 		$.ajax({
 		async: false,
-		url: "/src/main/webapp/WEB-INF/repository/aim/view/scripts/browserDetection/browser.js",
+		url: "/repository/aim/view/scripts/browserDetection/browser.js",
 		dataType: "script"
 		});
 		var browserInfo = get_browser();

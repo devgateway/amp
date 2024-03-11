@@ -920,7 +920,7 @@ public class ActivityFormTest extends SeleneseTestCase{
             */
             //selenium.click("//a[@onclick=\"javascript:fnEditProject(document.getElementById('tempActivity').value); return false;\"]");
             if (SeleniumFeaturesConfiguration.getFeatureState("Edit Activity")){
-                selenium.click("//img[@src=\"/src/main/webapp/WEB-INF/repository/aim/images/tangopack_edit.png\"]");
+                selenium.click("//img[@src=\"/repository/aim/images/tangopack_edit.png\"]");
                 selenium.waitForPageToLoad("30000");
                 selenium.type("identification.title", activityName + " modified");
                 selenium.click("//input[@onclick='saveClicked()']");

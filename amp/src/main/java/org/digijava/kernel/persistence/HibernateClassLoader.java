@@ -120,7 +120,7 @@ public class HibernateClassLoader {
         /*
          * only register classes within package
          * org.digijava.kernel.ampapi.postgis.entity need to take the
-         * configuration file /src/main/webapp/WEB-INF/repository/hibernate-annotated.xml
+         * configuration file /repository/hibernate-annotated.xml
          */
 
         for (BeanDefinition bd : scanner

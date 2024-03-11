@@ -5,7 +5,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
 
 
-<script language="JavaScript" type="text/javascript" src="/src/main/webapp/WEB-INF/repository/aim/view/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"/>"></script>
 <script type="text/javascript">
 (function(){
 	 var newscript = document.createElement('script');
@@ -82,7 +82,7 @@ table tr td {font-size:11px;}
 <c:set var="msg">
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
-<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/>
 
 

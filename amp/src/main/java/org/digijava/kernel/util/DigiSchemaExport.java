@@ -63,7 +63,7 @@ public class DigiSchemaExport {
             logger.info("Working for the whole database");
         }
 
-        DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
+        DigiConfigManager.initialize("./repository");
         PersistenceManager.initialize(false, moduleName);
         try {
             Configuration cfg = null;

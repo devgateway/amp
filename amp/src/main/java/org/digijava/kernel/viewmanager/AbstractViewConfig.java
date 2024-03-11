@@ -111,13 +111,13 @@ public abstract class AbstractViewConfig implements ViewConfig{
         ViewConfigException {
         File configFile;
         if (isTemplate) {
-            configFile = new File(servletContext.getRealPath("/" +
+            configFile = new File(servletContext.getRealPath(
                 TEMPLATE_DIR + "/" +
                 folderName + "/site-config.xml"));
         }
         else {
-            configFile = new File(servletContext.getRealPath("/" +
-                SITE_DIR + "/" + folderName + "/site-config.xml"));
+            configFile = new File(
+                "/WEB-INF"+SITE_DIR + "/" + folderName + "/site-config.xml");
         }
 
         SiteConfig siteConfig = null;

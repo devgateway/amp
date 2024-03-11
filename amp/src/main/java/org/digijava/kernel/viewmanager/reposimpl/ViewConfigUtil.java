@@ -257,7 +257,7 @@ public abstract class ViewConfigUtil
                 secondaryPage.getName() : secondaryPage.getPage();
             if (pageGroup == null) {
                 layout.setFileBlank(false);
-                layout.setFile("/WEB-INF/repository/" + moduleName + "/" + pageName + ".jsp");
+                layout.setFile("module/" + moduleName + "/" + pageName + ".jsp");
             }
             else {
                 layout.setExtendsLayout(pageGroup.getMasterLayout());

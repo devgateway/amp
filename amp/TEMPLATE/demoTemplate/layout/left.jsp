@@ -1,4 +1,4 @@
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <!-- <b>T/SITEDOMAIN LEFT</b>&nbsp; -->
 

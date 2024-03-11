@@ -346,7 +346,7 @@
 			<taglib-location>/src/main/resources/tld/struts-nested.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/struts-tiles</taglib-uri>
+			<taglib-uri>http://struts.apache.org/tags-tiles</taglib-uri>
 			<taglib-location>/src/main/resources/tld/struts-tiles.tld</taglib-location>
 		</taglib>
 		<taglib>

@@ -11,19 +11,9 @@
 			<lang delimiter=";" type="postgres">
 
 				INSERT INTO amp_measures (measureid, measurename, aliasname, type, expression, description)
-				SELECT
-				nextval('amp_measures_seq'),
-				'Unexpenditured Balance',
-				'Unexpenditured Balance',
-				'A',
-				'unexpendituredBalance',
-				'Total Actual Disbursement - Total Actual Expenditures'
-				FROM
-				dual
-				LEFT JOIN
-				amp_measures ON amp_measures.measurename = 'Unexpenditured Balance'
-				WHERE
-				amp_measures.measurename IS NULL;
+				VALUES (nextval('amp_measures_seq'), 'Unexpenditured Balance', 'Unexpenditured Balance', 'A',
+				'unexpendituredBalance', 'Total Actual Disbursement - Total Actual Expenditures')
+				ON CONFLICT (measurename) DO NOTHING;
 
 			</lang>
 		</script>

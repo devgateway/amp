@@ -1591,7 +1591,7 @@
         }, widgetFilter));
     });
 </script>
-<%@ include file="/src/main/webapp/WEB-INF/repository/aim/view/scripts/newCalendar.jsp" %>
+<%@ include file="/WEB-INF/repository/aim/view/scripts/newCalendar.jsp" %>
 
 <script language="JavaScript" type="text/javascript">
     addLoadEvent(initOrganizationScript);

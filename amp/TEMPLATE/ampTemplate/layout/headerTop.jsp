@@ -82,7 +82,7 @@ table tr td {font-size:11px;}
 <c:set var="msg">
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
-<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/>
 
 

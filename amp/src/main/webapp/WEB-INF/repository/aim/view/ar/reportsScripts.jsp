@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
-<%@ include file="/src/main/webapp/WEB-INF/repository/aim/view/scripts/newCalendar.jsp"  %>
+<%@ include file="/WEB-INF/repository/aim/view/scripts/newCalendar.jsp"  %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTableReports.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>

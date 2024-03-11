@@ -157,7 +157,7 @@
     }
 </script>
 
-<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
 
 
 <c:set var="showCurrSettings">

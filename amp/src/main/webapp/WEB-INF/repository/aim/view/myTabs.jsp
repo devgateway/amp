@@ -326,7 +326,7 @@ function toggleSettings(){
 
 
 
-<jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/ar/reportsScripts.jsp">
+<jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp">
 	<jsp:param name="is_a_tab" value="true" />
 </jsp:include>
 

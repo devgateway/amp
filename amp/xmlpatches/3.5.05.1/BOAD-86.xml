@@ -85,16 +85,16 @@ UPDATE amp_category_value_location SET gs_lat = '7.0612985829498225', gs_long = 
 UPDATE amp_category_value_location SET gs_lat = '7.3071460892770626', gs_long = '2.0610707344307855' WHERE location_name = 'Zou' and parent_location=(select id from amp_category_value_location where location_name = 'Benin');
 
 
-update amp_category_value_location set location_name='Tillabéry' where location_name='Tillabéri' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+update amp_category_value_location set location_name='Tillabéry' where location_name='Tillabéri' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
 
-UPDATE amp_category_value_location SET gs_lat = '18.809063214750452', gs_long = '9.771532844682959' WHERE location_name = 'Agadez' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
-UPDATE amp_category_value_location SET gs_lat = '14.665690254728792', gs_long = '12.781022629972393' WHERE location_name = 'Diffa' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
-UPDATE amp_category_value_location SET gs_lat = '13.039695486055335', gs_long = '3.373545276977803' WHERE location_name = 'Dosso' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
-UPDATE amp_category_value_location SET gs_lat = '14.113562098398612', gs_long = '7.466411747171108' WHERE location_name = 'Maradi' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
-UPDATE amp_category_value_location SET gs_lat = '13.534492498966346', gs_long = '2.14117053151034' WHERE location_name = 'Niamey' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
-UPDATE amp_category_value_location SET gs_lat = '15.739987256079367', gs_long = '5.261963373137503' WHERE location_name = 'Tahoua' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
-UPDATE amp_category_value_location SET gs_lat = '13.677897767104003', gs_long = '2.124509868472689' WHERE location_name = 'Tillabéry' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
-UPDATE amp_category_value_location SET gs_lat = '14.47049761502478', gs_long = '9.290271564943371' WHERE location_name = 'Zinder' and parent_location=(select id from amp_category_value_location where location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '18.809063214750452', gs_long = '9.771532844682959' WHERE location_name = 'Agadez' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '14.665690254728792', gs_long = '12.781022629972393' WHERE location_name = 'Diffa' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '13.039695486055335', gs_long = '3.373545276977803' WHERE location_name = 'Dosso' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '14.113562098398612', gs_long = '7.466411747171108' WHERE location_name = 'Maradi' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '13.534492498966346', gs_long = '2.14117053151034' WHERE location_name = 'Niamey' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '15.739987256079367', gs_long = '5.261963373137503' WHERE location_name = 'Tahoua' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '13.677897767104003', gs_long = '2.124509868472689' WHERE location_name = 'Tillabéry' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
+UPDATE amp_category_value_location SET gs_lat = '14.47049761502478', gs_long = '9.290271564943371' WHERE location_name = 'Zinder' and parent_location=(SELECT MAX(id) FROM amp_category_value_location WHERE location_name = 'Niger');
 
 update amp_category_value_location set location_name='Gabú' where location_name='Gabu' and parent_location=(select id from amp_category_value_location where location_name = 'Guinea-Bissau');
 

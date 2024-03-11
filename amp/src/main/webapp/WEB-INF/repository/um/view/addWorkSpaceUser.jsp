@@ -54,7 +54,7 @@
 -->
 </style>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/arFunctions.js"/>"></script>
 
 <script language="JavaScript">
 	function deleteWS(id){

@@ -63,10 +63,10 @@
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
 <link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>"></script>
+<script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/prefilters.js'/>"></script>
 <script type="text/javascript"
-        src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>"></script>
+        src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/filters.js'/>?version=fantastic_15"></script>
+<script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/searchManager.js'/>"></script>
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
@@ -74,7 +74,7 @@
 <script src="/src/main/webapp/WEB-INF/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript"
         src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
+<script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <c:set var="filterPanelName">
     <digi:trn key="rep:filter:filters">Filters</digi:trn>
@@ -276,7 +276,7 @@
            type="org.digijava.module.aim.form.UpdateWorkspaceForm"
            onsubmit="return validateAimUpdateWorkspaceForm(this);">
 
-    <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+    <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
     <script language="JavaScript">
         <!--
 
@@ -1521,7 +1521,7 @@
                                                                                 <digi:trn
                                                                                         key="aim:otherLinks">Other links</digi:trn></b>
                                                                         </td>
-                                                                        <td background="module/aim/images/corner-r.gif"
+                                                                        <td background="/WEB-INF/repository/aim/images/corner-r.gif"
                                                                             height="17" width=17>&nbsp;
                                                                         </td>
                                                                     </tr>
@@ -1535,7 +1535,7 @@
                                                                     <tr>
                                                                         <td class="inside">
                                                                             <digi:img
-                                                                                    src="module/aim/images/arrow-014E86.gif"
+                                                                                    src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
                                                                                     width="15" height="10"/>
                                                                             <digi:link href="/workspaceManager.do">
                                                                                 <digi:trn key="aim:teams">
@@ -1549,7 +1549,7 @@
                                                                     <tr>
                                                                         <td class="inside">
                                                                             <digi:img
-                                                                                    src="module/aim/images/arrow-014E86.gif"
+                                                                                    src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
                                                                                     width="15" height="10"/>
                                                                             <digi:link href="/admin.do">
                                                                                 <digi:trn key="aim:AmpAdminHome">

@@ -217,7 +217,7 @@ A.sub-navGov
 	PADDING-TOP: 3px;
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
-	BACKGROUND-IMAGE: url(../module/aim/images/tab-right.gif);
+	BACKGROUND-IMAGE: url(..//WEB-INF/repository/aim/images/tab-right.gif);
 	HEIGHT: 20px; 
 	WIDTH: 200px;
 	TEXT-DECORATION: none;
@@ -236,7 +236,7 @@ A.sub-navGovSelected
 	PADDING-TOP: 3px; 
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px;
- 	BACKGROUND-IMAGE: url(../module/aim/images/tab-rightselected.gif);
+ 	BACKGROUND-IMAGE: url(..//WEB-INF/repository/aim/images/tab-rightselected.gif);
 	HEIGHT: 20px; 
 	TEXT-DECORATION: none;
 }
@@ -253,7 +253,7 @@ A.sub-navGovSelected:hover
 	PADDING-TOP: 3px; 
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px;
- 	BACKGROUND-IMAGE: url(../module/aim/images/tab-righthover.gif);
+ 	BACKGROUND-IMAGE: url(..//WEB-INF/repository/aim/images/tab-righthover.gif);
 	HEIGHT: 20px; 
 	TEXT-DECORATION: none;
 }

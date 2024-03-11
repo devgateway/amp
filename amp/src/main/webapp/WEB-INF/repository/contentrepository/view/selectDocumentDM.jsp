@@ -15,7 +15,7 @@
 <bean:define id="meTeamMember" name="teamForm" property="meTeamMember" />
 <bean:define id="tMembers" name="teamForm" property="myTeamMembers" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 

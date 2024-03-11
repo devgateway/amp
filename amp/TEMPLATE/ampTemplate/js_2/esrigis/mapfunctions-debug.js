@@ -878,7 +878,7 @@ function showStInfoWindow() {
 	}
 	content = content
 			+ "<tr><td colspan='3'>"
-			+ "<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
+			+ "<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
 			+ "</td></tr></table>";
 	if (foundstr.length > 0) {
 		map.infoWindow.setContent(content);

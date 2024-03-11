@@ -191,7 +191,7 @@ function deleteComponent(id){
               Other links
               </digi:trn>
             </td>
-            <td background="module/aim/images/corner-r.gif" height="17" width="17">&nbsp;
+            <td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width="17">&nbsp;
             
             </td>
           </tr>
@@ -204,7 +204,7 @@ function deleteComponent(id){
 <!--        the following comments will be removed further-->
 <!--          <tr>-->
 <!--            <td nowrap>-->
-<!--              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>-->
+<!--              <digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>-->
 <!--              <c:set var="toCompIndicatorManager">-->
 <!--                <digi:trn key="aim:clickforCompIndManager">Click here to goto Component Indicator Manager</digi:trn>-->
 <!--              </c:set>-->
@@ -217,7 +217,7 @@ function deleteComponent(id){
 <!--          </tr>-->
           <tr>
             <td class="inside">
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+              <digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>

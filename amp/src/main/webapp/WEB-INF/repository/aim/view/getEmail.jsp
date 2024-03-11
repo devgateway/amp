@@ -54,7 +54,7 @@ function checkEmptyEmail(){
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap valign=top>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="/WEB-INF/repository/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:email">Email</digi:trn>
 					</td>
 					<td align="left">

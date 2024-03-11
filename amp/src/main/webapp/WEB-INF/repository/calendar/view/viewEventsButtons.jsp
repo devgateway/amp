@@ -8,7 +8,7 @@
 <%@ taglib uri="http://digijava.org/fields" prefix="field" %>
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+<link rel="stylesheet" type="text/css" href="<digi:file src="/WEB-INF/repository/aim/css/amptabs.css"/>"/>
 
 
 

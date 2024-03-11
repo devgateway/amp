@@ -11,8 +11,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <!--<logic:present name="addButton" scope="request">-->
 <!--	<script language="JavaScript">-->

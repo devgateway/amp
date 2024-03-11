@@ -174,7 +174,7 @@
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 								<tr>
 									<td class="inside"><digi:img
-											src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
+											src="/WEB-INF/repository/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
 											height="10" /> <c:set var="trnViewAdmin">
 											<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 										</c:set> <digi:link href="/admin.do" title="${trnViewAdmin}">
@@ -186,7 +186,7 @@
 								<field:display name="Add Scheme Link" feature="Sectors">
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+												<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
 												<c:set var="trnAddScheme">
 													<digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
 												</c:set>
@@ -201,7 +201,7 @@
                                                                              	<field:display name="Multi Sector Configuration" feature="Sectors">
                                                                                      <tr>
                                                                                          <td class="inside">
-                                                                                             <digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+                                                                                             <digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                                                              <c:set var="trnViewConfigurations">
                                                                                                  <digi:trn key="aim:ClickToConfigureClassifications">Click here to see the Configuration of Classifications</digi:trn>
                                                                                              </c:set>

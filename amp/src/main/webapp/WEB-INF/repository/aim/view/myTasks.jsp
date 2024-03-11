@@ -20,7 +20,7 @@
 <!--							title='<digi:trn key="aim:myTaskListOfTeamLeader">List of activities pending for approval</digi:trn>'>-->
 <!--								<digi:trn key="aim:myTaskList">My Tasks</digi:trn>-->
 <!--							</TD>-->
-<!--                    	<TD background="module/aim/images/corner-r.gif" -->
+<!--                    	<TD background="/WEB-INF/repository/aim/images/corner-r.gif" -->
 <!--							height=17 width=17></TD>-->
 <!--						</TR>-->
 <!--					</TABLE>-->
@@ -69,7 +69,7 @@
 <!--							title='<digi:trn key="aim:myMessageListOfTeamLeader">List of activities to be closed</digi:trn>'>-->
 <!--								<digi:trn key="aim:myMessageList">My Messages</digi:trn>-->
 <!--							</TD>-->
-<!--                    	<TD background="module/aim/images/corner-r.gif" -->
+<!--                    	<TD background="/WEB-INF/repository/aim/images/corner-r.gif" -->
 <!--							height=17 width=17></TD>-->
 <!--						</TR>-->
 <!--					</TABLE>-->

@@ -8,9 +8,9 @@
 <%@ page import="java.util.Map"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -219,7 +219,7 @@ div.fakefile2 input {
 										</tr>
 										<tr>
 											<!--<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
+													<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
 											<td class="inside"><digi:link href="/admin.do"
 													module="aim">
 													<digi:trn key="aim:AmpAdminHome">
@@ -238,7 +238,7 @@ div.fakefile2 input {
 		</td>
 	</tr>
 </table>
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/fileUpload.js"/>"></script>
    	
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');

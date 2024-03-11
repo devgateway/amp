@@ -180,7 +180,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 													</digi:trn>
 												</b>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+											<td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 									</td>
@@ -190,7 +190,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" /> 
+													<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10" />
 													<c:set var="OrgLink">
 														<digi:trn>Click here to view Organization Manager</digi:trn>
 													</c:set>
@@ -203,7 +203,7 @@ var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 											</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" /> 
+												<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10" />
 												<c:set var="trnViewAdmin">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set> 

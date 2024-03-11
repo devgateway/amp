@@ -65,7 +65,7 @@
 													Other links
 													</digi:trn>
 												</b></td>
-									<td background="module/aim/images/corner-r.gif" height="17"
+									<td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17"
 										width=17></td>
 								</tr>
 							</table>

@@ -193,7 +193,7 @@
 															<b style="padding-left:5px;">
 																<digi:trn key="aim:otherLinks">Other links</digi:trn></b>
 														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
+														<td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width="17"></td>
 													</tr>
 												</table>
 											</td>
@@ -203,7 +203,7 @@
 												<table cellPadding="5" cellSpacing="1" width="100%" class="inside">
 													<tr>
 														<td class="inside">
-															<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+															<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToAddTemplate">Click here to Add New Template</digi:trn>
 															</c:set>
@@ -216,7 +216,7 @@
 													</tr>
 													<tr>
 														<td class="inside">
-															<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+															<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
 															<c:set var="translation">
 																<digi:trn key="message:clickToGoToExportImport">Click here to goto Templates Export/Import Manager</digi:trn>
 															</c:set>
@@ -227,7 +227,7 @@
 													</tr>
 													<tr>
 														<td class="inside">
-															<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+															<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 															</c:set>

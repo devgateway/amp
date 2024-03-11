@@ -14,8 +14,8 @@
 
 <%@page import="org.digijava.module.contentrepository.jcrentity.Label"%>
 <%@page import="org.digijava.module.contentrepository.helper.CrConstants"%><digi:instance property="crLabelManagerForm" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/slider/assets/skins/sam/slider.css"> 
@@ -26,8 +26,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/colorpicker-min.js"></script> 
 
 
-<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
-<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
+<link rel="stylesheet" href="<digi:file src="/WEB-INF/repository/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
+<link rel="stylesheet" href="<digi:file src="/WEB-INF/repository/aim/css/css_dhtmlsuite/context-menu.css" />" />
 
 <style type="text/css">
 	a.atree {

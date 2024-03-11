@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" href="<digi:file src="module/admin/css/admin.css"/>">
 
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
+<script type="text/javascript" src='<digi:file src="/WEB-INF/repository/aim/scripts/table_utils.js"/>'>.</script>
 
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager</digi:trn></h1>
 <digi:errors/>
@@ -173,7 +173,7 @@
                                 </digi:trn>
                             </b>
                         </td>
-                        <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+                        <td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 
                         </td>
                     </tr>
@@ -185,7 +185,7 @@
                 <table cellPadding=5 cellspacing="1" width="100%">
                     <tr>
                         <td class="inside">
-                            <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                            <digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
                             <c:set var="translation">
                                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                             </c:set>

@@ -7,9 +7,9 @@
 <%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <bean:define id="ampTeam" name="teamWrk"
 	type="org.digijava.module.aim.dbentity.AmpTeam" scope="request"

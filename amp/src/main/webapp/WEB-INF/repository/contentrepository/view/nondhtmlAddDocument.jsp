@@ -14,7 +14,7 @@
 
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <c:set var="translation_validation_title_chars">
 			<digi:trn key="contentrepository:plsTitleChars">Please only use letters, digits, '_' and space !</digi:trn>
@@ -254,7 +254,7 @@ div.fakefile2 input{
 }
 -->
 </style>
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/fileUpload.js"/>"></script>
 
 <digi:instance property="crDocumentManagerForm" />
 <digi:form action="/addTemporaryDocument.do" method="post" enctype="multipart/form-data" onsubmit="return false;">

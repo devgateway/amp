@@ -115,9 +115,9 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript"
-        src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+        src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 <script type="text/javascript">
     /*---snippet rafy---*/
@@ -180,7 +180,7 @@
     }
 
 </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/util.js"/>"></script>
 
 <div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto; display: none;">
     <jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/ar/levelSorterPicker.jsp"/>

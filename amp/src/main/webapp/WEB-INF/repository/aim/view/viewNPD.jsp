@@ -15,7 +15,7 @@
 
 
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
 <digi:ref
 	href="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/treeview.css"
 	type="text/css" rel="stylesheet" />
@@ -38,14 +38,14 @@ background-color:#FFFFFF;
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>"></script><jsp:include
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/tree/jktreeview.js"/>"></script><jsp:include
 	page="scripts/npdScripts/programTree.jsp" flush="true" />
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/npdScripts/npdGraph.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/npdScripts/npdGraph.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/npdScripts/npdGrid.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/npdScripts/npdGrid.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/npdScripts/changeOptions.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/npdScripts/changeOptions.js"/>"></script>
 <jsp:include page="scripts/npdScripts/activityList.jsp" flush="true" />
 
 

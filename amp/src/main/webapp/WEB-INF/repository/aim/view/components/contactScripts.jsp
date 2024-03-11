@@ -11,7 +11,7 @@
     <div id="popinContactContent" class="content">
     </div>
 </div>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
 
 <style type="text/css">
    .mask {

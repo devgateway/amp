@@ -124,7 +124,7 @@ function fnGetSurvey() {
 
 <table width="209" cellspacing="0" cellpadding="0" vAlign="top" align="left" border="0">
 
-<tr><td width="209" height="10" background="module/aim/images/top.gif">
+<tr><td width="209" height="10" background="/WEB-INF/repository/aim/images/top.gif">
 
 </td></tr>
 
@@ -170,7 +170,7 @@ bgcolor="#006699">
 
 				<tr>
 
-					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					<td width="10" height="19" background="/WEB-INF/repository/aim/images/left-arc.gif">
 
 					</td>
 
@@ -188,7 +188,7 @@ bgcolor="#006699">
 
 					</td>
 
-					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					<td width="10" height="19"  background="/WEB-INF/repository/aim/images/right-arc.gif">
 
 					</td>
 
@@ -230,7 +230,7 @@ bgcolor="#006699">
 
 				<tr>
 
-					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					<td width="10" height="19" background="/WEB-INF/repository/aim/images/left-arc.gif">
 
 					</td>
 
@@ -246,7 +246,7 @@ bgcolor="#006699">
 
 					</td>
 
-					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					<td width="10" height="19"  background="/WEB-INF/repository/aim/images/right-arc.gif">
 
 					</td>
 
@@ -298,7 +298,7 @@ bgcolor="#006699">
 
 </td></tr>
 
-<tr><td width="209" height="10" background="module/aim/images/bottom.gif">
+<tr><td width="209" height="10" background="/WEB-INF/repository/aim/images/bottom.gif">
 
 </td></tr>
 

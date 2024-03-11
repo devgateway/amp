@@ -10,7 +10,7 @@
 
 <%@page import="org.digijava.module.aim.action.SelectFilteredCurrencyRates"%>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" />
 	function deleteSelection () {
@@ -198,7 +198,7 @@
 															Other Links
 														</digi:trn></b></b>
 															</td>
-															<td width="17" height="17" background="module/aim/images/corner-r.gif"></td>
+															<td width="17" height="17" background="/WEB-INF/repository/aim/images/corner-r.gif"></td>
 														</tr>
 													</tbody></table>
 													
@@ -215,7 +215,7 @@
 													<td bgColor="#ffffff" class="box-border">
 													<table cellPadding=5 cellSpacing=1 width="100%" class="inside">
 														<tr>
-															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td class="inside"><digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -224,7 +224,7 @@
 															</digi:link></td>
 														</tr>
 														<tr>
-															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td class="inside"><digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> 
 															<c:set var="translation">
 																<digi:trn>Click here to go to the Currency Manager</digi:trn>
@@ -234,7 +234,7 @@
 															</digi:link></td>
 														</tr>
 														<tr>
-															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td class="inside"><digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> 
 															<c:set var="translation">
 																<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>

@@ -10,7 +10,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://digijava.org/CategoryManager" prefix="category" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 function saveFormula(){
@@ -166,7 +166,7 @@ function resetFormula(){
 																	key="aim:otherLinks">
 																	<b style="font-weight: bold; font-size: 12px; padding-left:5px; color:#000000;"><digi:trn>Other links</digi:trn></b>
 																</digi:trn></td>
-															<td background="module/aim/images/corner-r.gif"
+															<td background="/WEB-INF/repository/aim/images/corner-r.gif"
 																height="17" width="17">&nbsp;</td>
 														</tr>
 													</table></td>
@@ -177,7 +177,7 @@ function resetFormula(){
 														
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <digi:link module="aim" href="/admin.do">
 																	<digi:trn key="aim:AmpAdminHome">
 																Admin Home
@@ -194,7 +194,7 @@ function resetFormula(){
 														
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <digi:link module="aim" href="/viewAhSurveis.do">
 																	<digi:trn>
 																Paris Indicator Reports

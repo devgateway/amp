@@ -20,7 +20,7 @@
 %>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <digi:context name="digiContext" property="context" />
 
@@ -120,7 +120,7 @@
 
 						</TD>
 
-                 	<TD background="module/aim/images/corner-r.gif"
+                 	<TD background="/WEB-INF/repository/aim/images/corner-r.gif"
 
 						height=17 width=17></TD>
 

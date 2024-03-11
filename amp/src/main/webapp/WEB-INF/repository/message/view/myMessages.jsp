@@ -20,8 +20,8 @@
     <c:set var="teamType">${sessionScope.currentMember.teamAccessType}</c:set>
 
 
-    <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-    <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+    <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
+    <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
     <script type="text/javascript">
     var inboxFull='<digi:trn key="message:fullMailBox" jsFriendly="true">Your MailBox Is Full</digi:trn>';
     var deleteData='<digi:trn key="message:plzDeleteData" jsFriendly="true">Please delete messages or you will not get newer ones</digi:trn>';

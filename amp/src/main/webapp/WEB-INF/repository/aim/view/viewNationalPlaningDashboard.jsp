@@ -8,15 +8,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
 
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/tree.css"/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/yahoo.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/event.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/treeview.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="<digi:file src="/WEB-INF/repository/aim/css/tree.css"/>">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/tree/yahoo.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/tree/event.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/tree/treeview.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/tree/jktreeview.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <style type="text/css">
 	a { text-decoration: underline; color: #46546C; }
 	a:hover { text-decoration: underline; color: #4d77c3; }
@@ -335,11 +335,11 @@ function doFilter() {
                       <digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
                     </digi:link>
                   </TD>
-                  <TD background="module/aim/images/corner-r.gif" height="17" width="17">                  </TD>
+                  <TD background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width="17">                  </TD>
                   <TD bgColor="#c9c9c7" class="box-title" width="220" >                    &nbsp;
                     <digi:trn key="aim:nplDashboard">National Planning Dashboard</digi:trn>
                   </TD>
-                  <TD background="module/aim/images/corner-r.gif" height="17" width="17">                  </TD>
+                  <TD background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width="17">                  </TD>
                 </TR>
               </TABLE>
             </TD>
@@ -373,7 +373,7 @@ function doFilter() {
                             <digi:trn key="aim:npData">Data</digi:trn>
                           </c:if>
                         </td>                        
-                        <td background="module/aim/images/corner-r.gif" style="background-repeat: no-repeat" height="17" width="17"></td>
+                        <td background="/WEB-INF/repository/aim/images/corner-r.gif" style="background-repeat: no-repeat" height="17" width="17"></td>
                         <td bgColor="#c9c9c7" class="box-title" width="40">
                           <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
                             <a href="JavaScript:showChart(true);">
@@ -384,7 +384,7 @@ function doFilter() {
                             <digi:trn key="aim:npChart">Chart</digi:trn>
                           </c:if>
                         </td>
-                        <td background="module/aim/images/corner-r.gif" style="background-repeat: no-repeat"  height="17">&nbsp;</td>
+                        <td background="/WEB-INF/repository/aim/images/corner-r.gif" style="background-repeat: no-repeat"  height="17">&nbsp;</td>
                       </tr>
                     <!-- Sub tabs End -->
 

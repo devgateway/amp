@@ -209,7 +209,7 @@ div.fakefile2 input{
 	</digi:form>
 </table>
 
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/fileUpload.js"/>"></script>
    	
 
 <script type="text/javascript">

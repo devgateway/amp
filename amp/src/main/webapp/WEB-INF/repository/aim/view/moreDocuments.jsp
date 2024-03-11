@@ -315,7 +315,7 @@
 
 																<td bgColor=#f4f4f2>	
 
-																	<digi:img src="module/aim/images/web-page.gif"/>
+																	<digi:img src="/WEB-INF/repository/aim/images/web-page.gif"/>
 
 																	<a target="_blank" href="<bean:write name="relatedLink" property="url" />">
 

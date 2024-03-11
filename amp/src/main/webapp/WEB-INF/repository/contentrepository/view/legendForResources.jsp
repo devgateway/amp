@@ -9,9 +9,9 @@
 <%@ taglib uri="http://digijava.org/features" prefix="feature"%>
 <%@ taglib uri="http://digijava.org/modules" prefix="module"%>
 
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <%--
 <c:choose>
 	<c:when test="${param.queryEngine!='true' }">

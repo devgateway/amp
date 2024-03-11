@@ -97,7 +97,7 @@
 					<table width="100%" class="box-border-nopadding">
 						<tr>
 							<td width="2">
-								<digi:img src="module/aim/images/web-page.gif"/>							</td>
+								<digi:img src="/WEB-INF/repository/aim/images/web-page.gif"/>							</td>
 							<td align="left" vAlign="center">&nbsp; <b>
 								<c:out value="${links.title}"/></b> - &nbsp;&nbsp;&nbsp;
 								<i> <a href="<c:out value="${links.url}"/>">

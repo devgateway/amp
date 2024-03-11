@@ -64,11 +64,11 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript"
-		src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+		src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/searchManager.js'/>" ></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
@@ -76,8 +76,8 @@
 <script src="/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min.js" type="text/javascript"></script>
 <script type="text/javascript"
 		src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
+<script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/prefilters.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/WEB-INF/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />

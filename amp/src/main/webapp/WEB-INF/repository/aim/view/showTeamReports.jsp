@@ -24,9 +24,9 @@
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- CSS -->
 <link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">

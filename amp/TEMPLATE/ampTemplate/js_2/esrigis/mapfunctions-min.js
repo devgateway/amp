@@ -30,7 +30,7 @@ map.infoWindow.setTitle("Structures");for(var int=0;int<foundstr.length;int+=2){
 +foundstr[int].attributes["Activity"]+"</td></tr>";}
 content=content
 +"<tr><td colspan='3'>"
-+"<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
++"<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
 +"</td></tr></table>";if(foundstr.length>0){map.infoWindow.setContent(content);map.infoWindow.resize(600,200);map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));}else{map.infoWindow.setContent("<b>"+translate("There are no structures around this area")+"</b>");
 map.infoWindow.resize(200, 100);map.infoWindow.show(searchpoint.screenPoint, map.getInfoWindowAnchor(searchpoint.screenPoint));}
 dojo.connect(map.infoWindow,"onHide",clearbuffer);hideLoading();}

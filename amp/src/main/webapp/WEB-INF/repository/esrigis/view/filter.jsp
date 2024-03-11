@@ -12,7 +12,7 @@
 <%@ taglib uri="http://digijava.org/modules" prefix="module"%>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
 <script type="text/javascript">
@@ -45,7 +45,7 @@ function initializeTranslations(){
 }
 </script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script> 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>

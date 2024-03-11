@@ -14,7 +14,7 @@
 	<digi:context name="digiContext" property="context"/>
 	<digi:instance property="messageForm"/>
 		
-	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
 	<br><br>
 	

@@ -47,18 +47,18 @@ a.itr:hover {
 }
 </style>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script language="javascript">
 
 
 
 
    function setOverImg(index){
-	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-righthover1.gif"
 	}
 	
    function setOutImg(index){
-	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif"
 	}
 	
 	function sortByVal(value){

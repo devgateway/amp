@@ -71,12 +71,12 @@
                 }
                 window.onload=showOrgProfileToolbar;
         </script>
-        <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+        <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
 	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-        <script type="text/javascript" src='<digi:file src="module/aim/scripts/panel/connection-min.js"/>' ></script>
-        <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+        <script type="text/javascript" src='<digi:file src="/WEB-INF/repository/aim/scripts/panel/connection-min.js"/>' ></script>
+        <link rel="stylesheet" type="text/css" href="<digi:file src="/WEB-INF/repository/aim/css/amptabs.css"/>"/>
 
         <style type="text/css">
             .tableHeaderCls {

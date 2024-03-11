@@ -89,19 +89,19 @@
 						<tr>
 							<td noWrap align="center" valign="middle">		
 								<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-									<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+									<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
 								</a>
 							</td>
 					
 							<td noWrap align="center" valign="middle">
 								<a href="#" target="_blank" onclick="toggleActionForm('doc'); return false;">
-									<digi:img hspace="2" vspace="2" src="module/aim/images/word_icon.gif" border="0" alt="Export to Word" />
+									<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/word_icon.gif" border="0" alt="Export to Word" />
 								</a>
 							</td>
 					
 							<td noWrap align="center" valign="middle">
 								<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
-									<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
+									<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
 								</a>
 							</td>
 						</tr>

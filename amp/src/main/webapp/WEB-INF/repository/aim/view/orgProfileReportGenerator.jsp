@@ -13,13 +13,13 @@
 
 
 <script type="text/javascript"
-	src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>"></script>
+	src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/myDragAndDropObjects.js'/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script type="text/javascript"
-	src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 <link rel="stylesheet" type="text/css"
-	href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
+	href="<digi:file src='/WEB-INF/repository/aim/css/reportWizard/reportWizard.css'/>">
 	<digi:instance property="aimOrgProfileReport" />
 <script type="text/javascript">
 	function initializeDragAndDrop() {

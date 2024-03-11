@@ -41,7 +41,7 @@
 			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
-			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+			<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/parisindicator/script/pi_scripts.js"/>"></script>
 			
 			<digi:errors />
@@ -83,7 +83,7 @@
 												<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
 													<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;
 													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer;" title="<digi:trn>Export to PDF</digi:trn>">
-												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
+												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
 												    	<digi:trn>Export to PDF</digi:trn>
 													</a>|&nbsp;
 												    <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">

@@ -513,7 +513,7 @@ function deleteFlag(id) {
 
 
 </table>
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/fileUpload.js"/>"></script>
    	
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');

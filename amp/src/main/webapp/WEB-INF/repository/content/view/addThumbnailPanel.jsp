@@ -4,7 +4,7 @@
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
 
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src='/WEB-INF/repository/aim/scripts/tab/assets/tabview.css'/>">
 
 
 <script type="text/javascript">

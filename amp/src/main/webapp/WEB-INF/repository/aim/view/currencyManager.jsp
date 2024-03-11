@@ -9,7 +9,7 @@
 
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -172,7 +172,7 @@ function exportXSL(){
 																	key="aim:otherLinks">Other
 																		links</digi:trn></b>
 															</td>
-															<td background="module/aim/images/corner-r.gif"
+															<td background="/WEB-INF/repository/aim/images/corner-r.gif"
 																height="17" width=17></td>
 														</tr>
 													</table></td>
@@ -183,7 +183,7 @@ function exportXSL(){
 														class="inside">
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <c:set var="translation">
 																	<digi:trn>Click here to go back to admin home page</digi:trn>
 																</c:set> <digi:link href="/admin.do" title="${translation}">
@@ -193,7 +193,7 @@ function exportXSL(){
 														</tr>
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <c:set var="translation">
 																	<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>
 																</c:set> <digi:link
@@ -205,7 +205,7 @@ function exportXSL(){
 														</tr>
 														<tr>
 															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15"
 																	height="10" /> <c:set var="translation">
 																	<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
 																</c:set> <digi:link href="/selectFilteredRates.do"
@@ -375,7 +375,7 @@ function exportXSL(){
 																					<digi:trn>Click here to make the currency inactive</digi:trn>
 																				</c:set>
 																				<a	href="javascript:makeInactive('${curr.currencyCode}')" title="${translation}">
-																					<digi:img src="module/aim/images/bullet_green.gif" border="0" />
+																					<digi:img src="/WEB-INF/repository/aim/images/bullet_green.gif" border="0" />
 																				</a>
 																				<span class="invisible-item"><digi:trn>Active currencies</digi:trn>
 																				</span>
@@ -385,7 +385,7 @@ function exportXSL(){
 																					<digi:trn>Click here to make the currency Active</digi:trn>
 																				</c:set>
 																				<a href="javascript:makeActive('${curr.currencyCode}')" title="${translation}">
-																					<digi:img src="module/aim/images/bullet_grey.gif" border="0" />
+																					<digi:img src="/WEB-INF/repository/aim/images/bullet_grey.gif" border="0" />
 																				</a>
 																				<span class="invisible-item"><digi:trn>Inactive currencies</digi:trn></span>
 																			</c:if>
@@ -424,7 +424,7 @@ function exportXSL(){
 																	align="left">
 																	<tr>
 																		<td align="left" bgcolor="#ffffff" width="3"><digi:img
-																				src="module/aim/images/bullet_green.gif" />
+																				src="/WEB-INF/repository/aim/images/bullet_green.gif" />
 																		</td>
 																		<td align="left" bgcolor="#ffffff"
 																			style="font-size: 12px;"><digi:trn
@@ -436,7 +436,7 @@ function exportXSL(){
 																				align="left">
 																				<tr>
 																					<td align="left" bgcolor="#ffffff" width="3"><digi:img
-																							src="module/aim/images/bullet_grey.gif" />
+																							src="/WEB-INF/repository/aim/images/bullet_grey.gif" />
 																					</td>
 																					<td align="left" bgcolor="#ffffff"
 																						style="font-size: 12px;"><digi:trn

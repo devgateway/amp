@@ -14,7 +14,7 @@
 
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 
@@ -340,7 +340,7 @@
 
 																		<td align="left" noWrap>
 
-																			<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+																			<digi:img src="/WEB-INF/repository/aim/images/arrow-th-BABAB9.gif" width="16"/>
 
 																			<%--<bean:write name="quest" property="questionNumber"/>--%>
 
@@ -424,7 +424,7 @@
 
 											</td>
 
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+											<td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 
 												
 
@@ -450,7 +450,7 @@
 
 											<td>
 
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<digi:link href="/updateRole.do">
 
@@ -470,7 +470,7 @@
 
 											<td class="inside">
 
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 												<digi:link href="/admin.do">
 

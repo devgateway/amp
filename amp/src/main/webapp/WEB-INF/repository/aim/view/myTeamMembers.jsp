@@ -39,7 +39,7 @@
 							title='<digi:trn jsFriendly="true" key="aim:WorkspaceMemberListAssocWithTeam">List of Workspace Members associated with Workspace</digi:trn>'>
 								<digi:trn key="aim:workspaceMembers">Workspace Members</digi:trn>
 							</TD>
-                    	<TD background="module/aim/images/corner-r.gif" 
+                    	<TD background="/WEB-INF/repository/aim/images/corner-r.gif"
 							height=17 width=17></TD>
 						</TR>
 					</TABLE>

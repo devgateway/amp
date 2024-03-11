@@ -6,7 +6,7 @@
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <script language=javascript>
 function showUserProfile(id){
@@ -14,10 +14,10 @@ function showUserProfile(id){
 	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
 }
 </script>
-<table cellpadding="0" cellspacing="0" width="100%" style="background-image:url(module/aim/images/bg-header-1.gif);vertical-align:top;height:37px;" border="0">
+<table cellpadding="0" cellspacing="0" width="100%" style="background-image:url(/WEB-INF/repository/aim/images/bg-header-1.gif);vertical-align:top;height:37px;" border="0">
   <tr>
     <td valign="top">
-      <table cellpadding="0" cellSpacing="0" width="757" style="background-image:url(module/aim/images/my-desktop.gif);vertical-align:top;height:33px;" class=r-dotted>
+      <table cellpadding="0" cellSpacing="0" width="757" style="background-image:url(/WEB-INF/repository/aim/images/my-desktop.gif);vertical-align:top;height:33px;" class=r-dotted>
         <tr>
           <td width="10">
           &nbsp;&nbsp;&nbsp;

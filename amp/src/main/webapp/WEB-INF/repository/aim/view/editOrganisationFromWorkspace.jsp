@@ -16,7 +16,7 @@
 <%@page
 	import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%><script
 	language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <style type="text/css">

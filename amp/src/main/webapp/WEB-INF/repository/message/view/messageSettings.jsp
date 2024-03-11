@@ -12,11 +12,11 @@
 <digi:form action="/msgSettings.do" >
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -191,7 +191,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 																<b style="padding-left:5px;">
 																<digi:trn>Other links</digi:trn></b>
 															</td>
-															<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+															<td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 																
 															</td>
 														</tr>
@@ -203,7 +203,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 													<table cellPadding=3 cellspacing="1" width="100%" class="inside" >
 														<tr>
 															<td class="inside">
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="translation">
 																	<digi:trn>Click here to goto Admin Home</digi:trn>
 																</c:set>
@@ -214,7 +214,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 														</tr>
 														<tr>
 															<td class="inside">
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="trn">
 								                                  <digi:trn>Click here to view TemplateAlerts Manager</digi:trn>
 								                                </c:set>

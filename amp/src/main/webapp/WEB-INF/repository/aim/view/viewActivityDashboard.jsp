@@ -21,7 +21,7 @@
 <%@ taglib uri="http://digijava.org/fields" prefix="field" %>
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <div id="myContent" style="display: none;">
 	<div id="myContentContent" class="content" style="overflow: scroll; height: 500px;">

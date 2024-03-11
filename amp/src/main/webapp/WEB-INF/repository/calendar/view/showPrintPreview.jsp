@@ -50,7 +50,7 @@ function deleteEvent(){
                       <img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"/>
                   </a>
                   <a target="_blank"   title="Printing" onclick="window.close();" style="cursor: pointer;" >
-                      <digi:img src="module/aim/images/close.gif" border="0" alt="Close" height="30"/>
+                      <digi:img src="/WEB-INF/repository/aim/images/close.gif" border="0" alt="Close" height="30"/>
                   </a>
               </div>
           </td>

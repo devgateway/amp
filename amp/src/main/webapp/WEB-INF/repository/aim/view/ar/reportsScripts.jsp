@@ -8,10 +8,10 @@
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
 <%@ include file="/WEB-INF/repository/aim/view/scripts/newCalendar.jsp"  %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTableReports.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/scrollableTable.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/scrollableTableReports.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/util.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 	<!-- Jquery Base Library -->
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
@@ -22,25 +22,25 @@
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <!-- script for tree-like view (drilldown reports) -->
 
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- dynamic drive ajax tabs -->
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
+	src="<digi:file src="/WEB-INF/repository/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
 
 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/ajax.js"/>"></script>
 
 <!-- dynamic tooltip -->
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
 <link rel="stylesheet" href="/WEB-INF/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 
@@ -83,7 +83,7 @@ function closeMessage()
 
 <!-- virtual pagination -->
 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/virtualpaginate.js"/>">
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/virtualpaginate.js"/>">
 
 /***********************************************
 * Virtual Pagination script- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
@@ -152,9 +152,9 @@ background-color: yellow;css
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/searchManager.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/saveReports.js'/>" ></script>
 
 <!-- END - For DHTML Tab View of Filters -->
 

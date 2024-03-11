@@ -238,11 +238,11 @@ addLoadEvent(addpanel);
 	<tr>
 		<!-- 
 			<td noWrap align=left valign="center">	
-				<digi:img src="module/aim/images/close.gif" border="0" alt="Close Report"/>
+				<digi:img src="/WEB-INF/repository/aim/images/close.gif" border="0" alt="Close Report"/>
 					<a href="javascript:window.close();"><digi:trn key="rep:tool:CloseReport">Close Report</digi:trn></a>
 				</td>					
 			<td noWrap align=left valign="center">	
-				<digi:img src="module/aim/images/reload.gif" border="0" alt="Reload Report"/>
+				<digi:img src="/WEB-INF/repository/aim/images/reload.gif" border="0" alt="Reload Report"/>
 			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
 		-->
 
@@ -250,12 +250,12 @@ addLoadEvent(addpanel);
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
 				<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;" title="<digi:trn>Download as PDF</digi:trn>">
 				    <c:set var="title"><digi:trn>Export to PDF</digi:trn></c:set>
-					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="${title}" />
+					<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/pdf_icon.gif" border="0" alt="${title}" />
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">
 			    <c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
-				<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon_gray.gif" border="0" title="${title}" />
+				<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/pdf_icon_gray.gif" border="0" title="${title}" />
 			</logic:equal>
 		</td>
 
@@ -263,12 +263,12 @@ addLoadEvent(addpanel);
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">			
 				<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
 				    <c:set var="title"><digi:trn>Export to Excel</digi:trn></c:set>
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" title="${title}" />
+					<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/xls_icon.jpg" border="0" title="${title}" />
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">
 				<c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
-				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" title="${title}" />
+				<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/xls_icon_gray.gif" border="0" title="${title}" />
 			</logic:equal>
 		</td>
 
@@ -276,19 +276,19 @@ addLoadEvent(addpanel);
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
 				<a href="#" target="_blank" onclick="toggleActionForm('plainXls'); return false;" title="<digi:trn>Download as Plain XLS</digi:trn>">
 				    <c:set var="title"><digi:trn>Export to Excel as Plain Report</digi:trn></c:set>
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="${title}" />
+					<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/xls_plain_icon.jpg" border="0" alt="${title}" />
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">
 				<c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
-				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" title="${title}" />
+				<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/xls_plain_icon_gray.gif" border="0" title="${title}" />
 			</logic:equal>
 		</td>
 
 		<%--<td noWrap align=left valign="middle" style="background-color: #CFCFCF">		
 			<a href="#" target="_blank" onclick="toggleActionForm('richXls'); return false;" title="<digi:trn>Download as Rich XLS</digi:trn>">
 			    <c:set var="title"><digi:trn>Export to Excel</digi:trn></c:set>
-				<img src="/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg" border="0" hspace="2" vspace="2" alt="Export as Rich Excel" />
+				<img src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg" border="0" hspace="2" vspace="2" alt="Export as Rich Excel" />
 			</a>
 		</td> --%>
 				
@@ -311,12 +311,12 @@ addLoadEvent(addpanel);
 		<td noWrap align=left valign="center">
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">
 				<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" title="${downloadAsCsv}">
-					<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="${exportToCsv}" />
+					<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/csv_icon.png" border="0" alt="${exportToCsv}" />
 				</digi:link>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">
 			    <c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
-				<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon_gray.png" border="0" title="${title}"/>
+				<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/csv_icon_gray.png" border="0" title="${title}"/>
 			</logic:equal>
 		</td>
 		
@@ -374,7 +374,7 @@ function openPrinter(){
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tr>
 			<td align="center"> 
-				<digi:img hspace="2" vspace="2" src="module/aim/images/dgf_logo.jpg" border="0" />						
+				<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/dgf_logo.jpg" border="0" />
 			</td>
 		</tr>
 		<tr>
@@ -402,7 +402,7 @@ function openPrinter(){
 				<table cellpadding="5" cellspacing="5" border="0" width="100%">
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(1, 'statementPopup');" title="${displayampstatement}"  />
+							<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(1, 'statementPopup');" title="${displayampstatement}"  />
 							<digi:trn key="rep:pop:StatementOptions">Statement Options</digi:trn>
 						</td>
 						<td>
@@ -414,7 +414,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/WEB-INF/repository/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:StatementPositionOptions">Statement Position Options</digi:trn>														
 						</td>
 						<td>
@@ -426,7 +426,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td>
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/WEB-INF/repository/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:DateOptions">Date Options</digi:trn>
 						</td>
 						<td>
@@ -438,7 +438,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td>
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(2, 'logoPopup');" title="${displayofficialamplogo}" />
+							<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(2, 'logoPopup');" title="${displayofficialamplogo}" />
 							<digi:trn key="rep:pop:LogoOptions">Logo Options</digi:trn>
 						</td>
 						<td>
@@ -450,7 +450,7 @@ function openPrinter(){
 					</tr>
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/WEB-INF/repository/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:LogoPositionOptions">Logo Position Options</digi:trn>														
 						</td>
 						<td>
@@ -462,7 +462,7 @@ function openPrinter(){
 					</tr>
 					<tr id="publicPortalModeOptionRow">
 						<td>
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" title="${publicPortalModeHelp}" />
+							<digi:img hspace="2" vspace="2" src="/WEB-INF/repository/aim/images/help.gif" border="0" title="${publicPortalModeHelp}" />
 							<digi:trn key="rep:pop:publicPortalMode">Public Portal Mode</digi:trn>
 						</td>
 						<td>
@@ -475,7 +475,7 @@ function openPrinter(){
 								
 					<tr id="richExportRow">
 						<td>
-							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="/WEB-INF/repository/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:publicPortalMode">Rich Export Format</digi:trn>
 						</td>
 						<td>

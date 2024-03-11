@@ -77,7 +77,7 @@ function validate(){
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap width="40%" valign=top>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="/WEB-INF/repository/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span>
 						<digi:trn key="aim:email">
 							UserId
@@ -95,7 +95,7 @@ function validate(){
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="/WEB-INF/repository/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:oldPassword">Old Password</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">
@@ -105,7 +105,7 @@ function validate(){
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" valign="top" noWrap>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="/WEB-INF/repository/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:newPassword">New Password</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">
@@ -119,7 +119,7 @@ function validate(){
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap>
-<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+<!--						<digi:img src="/WEB-INF/repository/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:confirmNewPassword">Confirm new
 						Password</digi:trn>
 					</td>

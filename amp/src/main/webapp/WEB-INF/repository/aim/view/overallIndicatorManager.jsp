@@ -66,10 +66,10 @@
 		}
 		
         function setOverImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-righthover1.gif"
         }
         function setOutImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif"
         }
 	-->
 </script>
@@ -142,7 +142,7 @@
 																		</td>
 																		<td>
 																			<img id="img1" alt=""
-																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif"
+																				src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-right1.gif"
 																				width="20" height="19" />
 																		</td>
 																		<feature:display name="NPD Dashboard" module="National Planning Dashboard">
@@ -164,7 +164,7 @@
 																		</feature:display>
 																		<td>
 																			<img id="img2" alt=""
-																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+																				src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif"
 																				width="20" height="19" />
 																		</td>
 																		<td noWrap height=17>
@@ -186,7 +186,7 @@
 																		</td>
 																		<td>
 																			<img id="img3" alt=""
-																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+																				src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif"
 																				width="20" height="19" />
 																		</td>
 																	</tr>

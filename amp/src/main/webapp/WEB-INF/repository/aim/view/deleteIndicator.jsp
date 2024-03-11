@@ -6,7 +6,7 @@
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
   
 <script language="JavaScript">
 	<!--

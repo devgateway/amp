@@ -339,7 +339,7 @@ function unload() {
 									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+												<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>
@@ -350,7 +350,7 @@ function unload() {
 										</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
+												<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
 												</c:set>

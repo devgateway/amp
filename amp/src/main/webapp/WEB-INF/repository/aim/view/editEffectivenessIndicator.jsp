@@ -13,7 +13,7 @@
 <%@ page import="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" %>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
+<script type="text/javascript" src='<digi:file src="/WEB-INF/repository/aim/scripts/table_utils.js"/>'>.</script>
 <script type="text/javascript" src="/src/main/webapp/WEB-INF/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 <script type="text/javascript">
@@ -118,7 +118,7 @@
                                     </digi:trn>
                                 </b>
                             </td>
-                            <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+                            <td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 
                             </td>
                         </tr>
@@ -130,7 +130,7 @@
                     <table cellPadding=5 cellspacing="1" width="100%">
                         <tr>
                             <td class="inside">
-                                <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                <digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
                                 <c:set var="translation">
                                     <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                                 </c:set>
@@ -143,7 +143,7 @@
                         </tr>
                         <tr>
                             <td class="inside">
-                                <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                <digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif" width="15" height="10"/>
                                 <c:set var="translation">
                                     <digi:trn key="aim:clickToViewIndicators">Click here to view indicators list</digi:trn>
                                 </c:set>

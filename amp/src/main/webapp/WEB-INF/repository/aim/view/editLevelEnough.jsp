@@ -252,7 +252,7 @@
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<field:display name="View Schemes Link" feature="Sectors">
 											<tr>
-												<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+												<td class="inside"><digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 													width="15" height="10" styleClass="list-item-image" /> <c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 												</c:set> <digi:link href="/getSectorSchemes.do"
@@ -264,7 +264,7 @@
 											</tr>
 										</field:display>
 										<tr>
-											<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+											<td class="inside"><digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 												width="15" height="10" styleClass="list-item-image"/> <c:set var="translation">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 											</c:set> <digi:link href="/admin.do" title="${translation}">

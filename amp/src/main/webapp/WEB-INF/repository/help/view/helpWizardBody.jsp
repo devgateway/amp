@@ -74,11 +74,11 @@
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
 														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
+															<td width="13" height="20" background="/WEB-INF/repository/aim/images/left-side.gif"/>
 															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
 																Help Topic Wizard: Step 1 of 2
 															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
+															<td width="13" height="20" background="/WEB-INF/repository/aim/images/right-side.gif"/>
 														</tr>
 													</table>
 												</td>
@@ -186,11 +186,11 @@
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
 														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
+															<td width="13" height="20" background="/WEB-INF/repository/aim/images/left-side.gif"/>
 															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
 																Help Topic Wizard: Step 2 of 2
 															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
+															<td width="13" height="20" background="/WEB-INF/repository/aim/images/right-side.gif"/>
 														</tr>
 													</table>
 												</td>
@@ -284,11 +284,11 @@
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
 														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
+															<td width="13" height="20" background="/WEB-INF/repository/aim/images/left-side.gif"/>
 															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
 																Help Topic Wizard: Step 1 of 2
 															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
+															<td width="13" height="20" background="/WEB-INF/repository/aim/images/right-side.gif"/>
 														</tr>
 													</table>
 												</td>

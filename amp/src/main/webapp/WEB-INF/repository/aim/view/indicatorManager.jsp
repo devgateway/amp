@@ -34,10 +34,10 @@
 			document.aimIndicatorForm.submit();
 		}
     function setOverImg(index){
-       document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+       document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-righthover1.gif"
     }
     function setOutImg(index){
-      document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+      document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif"
     }
 	-->
 </script>
@@ -102,7 +102,7 @@
 																																</digi:link>
 																											 			</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img1" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                          <img id="img1" alt="" src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
 																														<c:set var="MultiProgramIndicators">
@@ -115,7 +115,7 @@
 																																</digi:link>
 																														</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                          <img id="img2" alt="" src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
 																														<c:set var="EProjectIndicators">
@@ -129,7 +129,7 @@
 																																</digi:link>
 																														</td>
                                                                                                                         <td>
-                                                                                                                          <img id="img3" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif" width="20" height="19" />
+                                                                                                                          <img id="img3" alt="" src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-right1.gif" width="20" height="19" />
                                                                                                                         </td>
 																												</tr>
 																										</table>

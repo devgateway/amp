@@ -26,13 +26,13 @@
 	.legend_label a.trnClass { color:yellow;}
 </style>
 
-<script language="JavaScript1.2" type="text/javascript"src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"> </script>
+<script language="JavaScript1.2" type="text/javascript"src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/dscript120_ar_style.js"/>"> </script>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/yui/yahoo/yahoo-min.js"/>" ></script>
 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"> </script>
+<script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"> </script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/yahoo-dom-event/yahoo-dom-event.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/container/container-min.js'/>" ></script>
@@ -53,12 +53,12 @@
 	//Quick fix AMP-6573 please check it
 	if (request.getParameter("currentlyEditing") != null) {
 %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/addActivity.js"/>"></script>
 <%
 	}
 %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<link rel="stylesheet" type="text/css" href="<digi:file src= 'module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="<digi:file src= '/WEB-INF/repository/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
 
 <script language="JavaScript">
 

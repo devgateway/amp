@@ -80,7 +80,7 @@
 		<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 		
 		
-		<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+		<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
 		
 		<script language="javascript" type="text/javascript">
 			//setting timer to check for new messages after specified time	

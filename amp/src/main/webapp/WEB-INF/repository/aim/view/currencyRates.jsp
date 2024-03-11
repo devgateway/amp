@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp"  />
@@ -482,7 +482,7 @@ function fnSubmit() {
 															<td bgColor=#c9c9c7 class=box-title>
 															<b style="padding-left:5px;"><digi:trn
 																key="aim:otherLinks">Other links</digi:trn></b></td>
-															<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+															<td background="/WEB-INF/repository/aim/images/corner-r.gif" height="17" width=17></td>
 														</tr>
 													</table>
 													</td>
@@ -491,7 +491,7 @@ function fnSubmit() {
 													<td bgColor="#ffffff" class="box-border">
 													<table cellPadding=5 cellspacing="1" width="100%" style="font-size:12px;" class="inside">
 														<tr>
-															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td class="inside"><digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -501,7 +501,7 @@ function fnSubmit() {
 														</tr>
 														<tr>
 															<td class="inside">
-																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																	<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to the Currency Manager</digi:trn>
@@ -513,7 +513,7 @@ function fnSubmit() {
 														</tr>
 														<tr>
 															<td class="inside">
-																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																	<digi:img src="/WEB-INF/repository/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
 																		<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
@@ -540,7 +540,7 @@ function fnSubmit() {
 </table>
 </digi:form>
 
-<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+<script  type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/fileUpload.js"/>"></script>
    	
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');

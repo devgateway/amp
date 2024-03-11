@@ -410,7 +410,6 @@
 			<taglib-location>/src/main/resources/tld/fn.tld</taglib-location>
 		</taglib>
 	</jsp-config>
-
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Restricted Resources</web-resource-name>

@@ -93,11 +93,11 @@ public abstract class AbstractViewConfig implements ViewConfig{
             }
             else {
                 if( !groupType.equalsIgnoreCase("") ) {
-                    expandedPath = "/WEB-INF/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
+                    expandedPath = "/src/main/webapp/WEB-INF/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
                         "/" +
                         path;
                 } else {
-                    expandedPath = "/WEB-INF/" + SITE_DIR + "/" + folderName + groupDir +
+                    expandedPath = "/src/main/webapp/WEB-INF/" + SITE_DIR + "/" + folderName + groupDir +
                         "/" +
                         path;
                 }
@@ -117,7 +117,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
         }
         else {
             configFile = new File(
-                "/WEB-INF/"+SITE_DIR + "/" + folderName + "/site-config.xml");
+                "/src/main/webapp/WEB-INF/"+SITE_DIR + "/" + folderName + "/site-config.xml");
         }
 
         SiteConfig siteConfig = null;

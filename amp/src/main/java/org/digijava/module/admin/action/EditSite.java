@@ -291,7 +291,7 @@ public class EditSite
             }
 
             SiteManager.createSiteFolder(this.getServlet().getServletContext().
-                                         getRealPath("/WEB-INF/"+SiteConfigUtils.SITE_DIR +
+                                         getRealPath("/src/main/webapp/WEB-INF/"+SiteConfigUtils.SITE_DIR +
                 "/" +
                 realSite.getFolder())
                                          , templateName);

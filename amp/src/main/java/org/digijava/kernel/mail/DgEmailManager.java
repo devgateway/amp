@@ -87,7 +87,7 @@ public class DgEmailManager {
         locale2encoding = new HashMap();
 
         InputStream inStream = DgEmailManager.class.getClassLoader().
-            getResourceAsStream("org/digijava/kernel/mail/locales.properties");
+            getResourceAsStream("mail/locales.properties");
         Properties props = new Properties();
         try {
             props.load(inStream);

@@ -463,12 +463,12 @@ public class DgEmailManager {
         logger.info("Start Getting Config");
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
 
-        //If the from address is the default we will use the one configured in amp/src/main/webapp/repository/digi.xml
+        //If the from address is the default we will use the one configured in amp/repository/digi.xml
         if (from.equals(EmailConstants.DEFAULT_EMAIL_SENDER) && smtp.getFrom() != null) {
             if (EmailValidator.getInstance().isValid(smtp.getFrom())) {
                 from = smtp.getFrom();
             } else {
-                logger.error("Email Address configured in amp/src/main/webapp/repository/digi.xml is not valid");
+                logger.error("Email Address configured in amp/repository/digi.xml is not valid");
             }
         }
 

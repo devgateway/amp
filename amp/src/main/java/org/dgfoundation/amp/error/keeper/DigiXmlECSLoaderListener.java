@@ -22,7 +22,7 @@ public class DigiXmlECSLoaderListener implements ServletContextListener {
             
             ServletContext servletContext = contextEvent.getServletContext();
             
-            String warPath = servletContext.getRealPath("src/main/webapp/repository");
+            String warPath = servletContext.getRealPath("repository");
     
             String configDirectory = warPath;
             

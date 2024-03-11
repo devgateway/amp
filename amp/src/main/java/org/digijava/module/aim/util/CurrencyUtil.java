@@ -481,12 +481,13 @@ public class CurrencyUtil {
     }
 
     private static AmpCurrency doFetchCurrency(String currCode) {
+        System.out.println("Currency"+currCode);
         try {
             String queryString = "select c from " + AmpCurrency.class.getName()
-                    + " c " + "where (c.currencyCode=:id)";
+                    + " c " + "where (c.currencyCode= :currCode)";
             Query qry = PersistenceManager.getSession().createQuery(queryString);
             qry.setCacheable(true);
-            qry.setParameter("id", currCode, StringType.INSTANCE);
+            qry.setParameter("currCode", currCode, StringType.INSTANCE);
             return (AmpCurrency) qry.uniqueResult();
         } catch (Exception ex) {
             throw new RuntimeException(ex);

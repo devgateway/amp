@@ -1,5 +1,5 @@
 <%@ page language="java"%>
-<%@ taglib uri="http://digijava.org" prefix="digi"%>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
 
 <div id="amp-footer" style="footer"></div>
 

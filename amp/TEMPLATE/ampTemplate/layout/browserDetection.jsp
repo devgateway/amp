@@ -1,4 +1,4 @@
-    <%@ taglib uri="http://digijava.org" prefix="digi" %>
+    <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
     <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 
 	<feature:display name="Detect browser" module="Login - User Management">

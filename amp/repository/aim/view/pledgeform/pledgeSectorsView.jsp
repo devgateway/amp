@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />

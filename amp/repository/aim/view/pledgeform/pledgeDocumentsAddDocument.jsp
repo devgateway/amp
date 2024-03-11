@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://digijava.org/CategoryManager" prefix="category" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 <div class="container-fluid" id="pledge_form_documents_change">

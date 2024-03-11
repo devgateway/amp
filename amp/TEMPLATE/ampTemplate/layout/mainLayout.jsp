@@ -3,7 +3,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -51,7 +51,7 @@
 	
 <% if(org.digijava.kernel.util.SiteUtils.isEffectiveLangRTL() == true) {%>
      <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css">
-	 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css"> 
+	 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
 <% } %>	
 </head>
 

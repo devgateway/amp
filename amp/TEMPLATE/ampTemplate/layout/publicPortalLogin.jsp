@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://digijava.org/fields" prefix="field" %>
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>

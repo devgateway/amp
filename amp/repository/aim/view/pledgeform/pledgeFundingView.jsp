@@ -2,7 +2,7 @@
 <%-- renders the funding part of the Pledge Form --%>
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 

@@ -4,7 +4,7 @@
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.1</jspversion>
 	<shortname>digijava</shortname>
-	<uri>http://digijava.org</uri>
+	<uri>http://digijava.org/digi</uri>
 	<tag>
 		<name>show</name>
 		<tagclass>org.digijava.kernel.taglib.TeaserViewTag</tagclass>

@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://digijava.org/GlobalSettings" prefix="gs" %>
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="1" onTrueEvalBody="true">

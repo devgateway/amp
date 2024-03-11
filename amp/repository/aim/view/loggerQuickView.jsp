@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 
 <style>
 

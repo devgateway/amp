@@ -1,4 +1,4 @@
-<%@ taglib uri="http://digijava.org" prefix="digi"%>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
 <digi:insert attribute="search" /><br />
 <digi:insert attribute="create_Edit" />
 	

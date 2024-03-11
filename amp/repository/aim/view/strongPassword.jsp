@@ -1,6 +1,6 @@
 <%@ page import="org.digijava.kernel.security.PasswordPolicyValidator" %>
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://digijava.org/GlobalSettings" prefix="globalsettings"%>
 
 <script type="text/javascript"

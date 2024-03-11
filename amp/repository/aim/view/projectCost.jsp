@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://digijava.org" prefix="digi"%>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
 <%@ taglib uri="http://digijava.org/modules" prefix="module"%>
 
 <digi:instance property="aimEditActivityForm" />

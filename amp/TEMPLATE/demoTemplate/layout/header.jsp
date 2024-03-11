@@ -1,4 +1,4 @@
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 
 <digi:ref href="css/demoUI.css" rel="stylesheet" type="text/css" />
 <digi:context name="digiContext" property="context" />

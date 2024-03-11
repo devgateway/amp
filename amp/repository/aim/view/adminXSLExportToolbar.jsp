@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://digijava.org" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <table border="0" align="center" bgcolor="#f2f2f2" width=100%>

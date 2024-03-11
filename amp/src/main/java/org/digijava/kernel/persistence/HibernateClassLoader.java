@@ -179,10 +179,10 @@ public class HibernateClassLoader {
                 cfg.addClass(Class.forName(hibernateClass.getContent()));
             } catch (Exception ex) {
                 if (required) {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                     break;
                 } else {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                 }
             }
 

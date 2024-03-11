@@ -330,19 +330,19 @@
 	</error-page>
 	<jsp-config>
 		<taglib>
-			<taglib-uri>/taglib/struts-bean</taglib-uri>
+			<taglib-uri>http://struts.apache.org/tags-bean</taglib-uri>
 			<taglib-location>/src/main/resources/tld/struts-bean.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/struts-html</taglib-uri>
+			<taglib-uri>http://struts.apache.org/tags-html</taglib-uri>
 			<taglib-location>/src/main/resources/tld/struts-html.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/struts-logic</taglib-uri>
+			<taglib-uri>http://struts.apache.org/tags-logic</taglib-uri>
 			<taglib-location>/src/main/resources/tld/struts-logic.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>/taglib/struts-nested</taglib-uri>
+			<taglib-uri>http://struts.apache.org/tags-nested</taglib-uri>
 			<taglib-location>/src/main/resources/tld/struts-nested.tld</taglib-location>
 		</taglib>
 		<taglib>

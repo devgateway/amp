@@ -1,8 +1,8 @@
 <%@page import="org.digijava.module.contentrepository.helper.FilterValues"%>
 <%@page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ page pageEncoding="UTF-8"%> 
-<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 
 <bean:define id="myKeywordModeDivId" toScope="page" scope="request" name="keywordModeDivId"/>
 

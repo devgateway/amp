@@ -3,7 +3,7 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>

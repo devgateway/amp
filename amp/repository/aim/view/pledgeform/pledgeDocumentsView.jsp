@@ -2,7 +2,7 @@
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 <%@ page import="org.digijava.kernel.util.SiteUtils"%>

@@ -1,6 +1,6 @@
 
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 

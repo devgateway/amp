@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
 
 
 <bean:define id="groupColumn" name="viewable" type="org.dgfoundation.amp.ar.GroupColumn" scope="request" toScope="page"/>

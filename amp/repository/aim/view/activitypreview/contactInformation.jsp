@@ -1,4 +1,4 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
 
 <c:if test="${not empty contactInformation}">
 	<c:forEach var="donorContact" items="${contactInformation}">

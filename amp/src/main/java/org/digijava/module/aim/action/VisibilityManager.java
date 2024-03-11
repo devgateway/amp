@@ -556,17 +556,17 @@ public class VisibilityManager extends MultiAction {
             BufferedWriter out = new BufferedWriter(fstream);
             String outHeader="";
             outHeader="<%@ page pageEncoding=\"UTF-8\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-bean.tld\" prefix=\"bean\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-logic.tld\" prefix=\"logic\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-tiles.tld\" prefix=\"tiles\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/struts-html.tld\" prefix=\"html\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/digijava.tld\" prefix=\"digi\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/c.tld\" prefix=\"c\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/category.tld\" prefix=\"category\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/fieldVisibility.tld\" prefix=\"field\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/featureVisibility.tld\" prefix=\"feature\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/moduleVisibility.tld\" prefix=\"module\" %>\n"+
-            "<%@ taglib uri=\"/src/main/webapp/WEB-INF/fn.tld\" prefix=\"fn\" %>\n";
+            "<%@ taglib uri=\"/src/main/resources/tld/struts-bean.tld\" prefix=\"bean\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/struts-logic.tld\" prefix=\"logic\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/struts-tiles.tld\" prefix=\"tiles\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/struts-html.tld\" prefix=\"html\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/digijava.tld\" prefix=\"digi\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/c.tld\" prefix=\"c\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/category.tld\" prefix=\"category\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/fieldVisibility.tld\" prefix=\"field\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/featureVisibility.tld\" prefix=\"feature\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/moduleVisibility.tld\" prefix=\"module\" %>\n"+
+            "<%@ taglib uri=\"/src/main/resources/tld/fn.tld\" prefix=\"fn\" %>\n";
 
 
 

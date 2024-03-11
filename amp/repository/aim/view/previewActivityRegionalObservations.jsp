@@ -1,9 +1,9 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/moduleVisibility.tld" prefix="module"%>
+<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
 
 
 <module:display name="/Activity Form/Regional Observations" parentModule="/Activity Form">

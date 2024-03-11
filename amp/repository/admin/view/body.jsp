@@ -1,8 +1,8 @@
 <%@ page pageEncoding="UTF-8" %>
 
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/resources/tld/struts-tiles.tld" prefix="tiles" %>
+<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">

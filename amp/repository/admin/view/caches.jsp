@@ -1,11 +1,11 @@
 <%@ page pageEncoding="UTF-8" %>
 
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/src/main/resources/tld/struts-tiles.tld" prefix="tiles" %>
+<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
 
 <digi:instance property="cacheForm" />
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">

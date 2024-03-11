@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/moduleVisibility.tld" prefix="module"%>
+<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
 
 <digi:instance property="aimEditActivityForm" />
 

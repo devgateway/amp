@@ -1,6 +1,6 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/fn.tld" prefix="fn" %>
+<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
 
 <digi:context name="displayThumbnail" property="/content/displayThumbnail.do" />
 <digi:secure authenticated="false">

@@ -1,11 +1,11 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/fn.tld" prefix="fn" %>
+<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/src/main/resources/tld/struts-tiles.tld" prefix="tiles" %>
+<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
 <bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="request" toScope="page"/>
 <bean:define id="moduleAux" name="moduleAux" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="request" toScope="page"/>
 <bean:define id="moduleAux2" name="moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>

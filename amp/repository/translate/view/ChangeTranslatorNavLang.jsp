@@ -37,9 +37,9 @@
 %>
 
 
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/dgcs.tld" prefix="dgcs" %>
 
 <link href="css/global.css" rel="stylesheet" type="text/css">

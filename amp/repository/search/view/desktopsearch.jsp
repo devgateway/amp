@@ -1,5 +1,5 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
 
 <script type="text/javascript">
 

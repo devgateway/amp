@@ -64,6 +64,15 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     
     private AmpCategoryValue indicatorSource;
     private AmpIndicatorSubgroup subgroup;
+    private Boolean history;
+
+    public Boolean getHistory() {
+        return history;
+    }
+
+    public void setHistory(Boolean history) {
+        this.history = history;
+    }
     /*
      * NOTICE
      * 

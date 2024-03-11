@@ -27,13 +27,15 @@
 				join amp_indicator_connection ic ON i.indicator_id = ic.indicator_id and ic.sub_clazz='a'
 				join amp_indicator_values iv ON ic.id = iv.ind_connect_id
 				join amp_activity_version a ON ic.activity_id = a.amp_activity_id
+				where not iv.history
 				union
 				select ic.activity_id as amp_activity_id, itv.value, iv.value_type, a.actual_start_date as value_date, ic.indicator_id as me_indicator_id, itv.tag as me_tag
 				from amp_indicator i
 				join amp_indicator_connection ic ON i.indicator_id = ic.indicator_id and ic.sub_clazz='a'
 				join amp_indicator_values iv ON ic.id = iv.ind_connect_id
-<!--				join amp_indicator_tagged_values itv on iv.ind_val_id = itv.ind_val_id-->
-				join amp_activity_version a ON ic.activity_id = a.amp_activity_id ;
+				join amp_indicator_tagged_values itv on iv.ind_val_id = itv.ind_val_id
+				join amp_activity_version a ON ic.activity_id = a.amp_activity_id
+				where not iv.history;
         	</lang>
 		</script>
 	</apply>

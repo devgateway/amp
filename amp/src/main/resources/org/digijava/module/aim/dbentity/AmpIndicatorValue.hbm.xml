@@ -25,6 +25,7 @@
 
 		<many-to-one name="subgroup" column="subgroup"
 			class="org.digijava.module.aim.dbentity.AmpIndicatorSubgroup" cascade="none" />
+		<property name="history" type="java.lang.Boolean" />
 
 
 		<many-to-one name="indicatorSource" column="indicator_source"

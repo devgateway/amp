@@ -1406,7 +1406,6 @@
 
                         <resource>
                             <directory>src/main/webapp</directory>
-                            <filtering>true</filtering>
                             <includes>
                                 <include>**/*</include>
                             </includes>

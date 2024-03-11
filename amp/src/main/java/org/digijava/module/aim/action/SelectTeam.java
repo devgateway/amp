@@ -59,7 +59,7 @@ public class SelectTeam extends Action {
 
         try {
             User user = RequestUtils.getUser(request);
-            Long id = new Long(Long.parseLong(temp));
+            Long id = Long.parseLong(temp);
             AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(id);
             
             //AMP Security Issues - AMP-12638
@@ -78,9 +78,9 @@ public class SelectTeam extends Action {
             boolean badmin = DgSecurityManager.permitted(subject, site,
                     ResourcePermission.INT_ADMIN);
             if (badmin == true) {
-                session.setAttribute("ampAdmin", new String("yes"));
+                session.setAttribute("ampAdmin", "yes");
             } else {
-                session.setAttribute("ampAdmin", new String("no"));
+                session.setAttribute("ampAdmin", "no");
             }
             // -----------------------------
 

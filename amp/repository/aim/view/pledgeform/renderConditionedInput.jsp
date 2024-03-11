@@ -1,5 +1,5 @@
 <%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
 <%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>

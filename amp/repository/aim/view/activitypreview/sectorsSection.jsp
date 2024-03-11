@@ -3,7 +3,7 @@
 <%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
 <%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
 
 <digi:instance property="aimEditActivityForm" />
 <%--@elvariable id="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm"--%>

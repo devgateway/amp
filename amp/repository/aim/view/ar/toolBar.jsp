@@ -1,14 +1,14 @@
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature"%>
 <%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
-<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 
 
 <c:set var="reportStatement">

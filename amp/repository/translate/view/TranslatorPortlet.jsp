@@ -2,8 +2,8 @@
 <%@ page import="org.digijava.kernel.user.User"%>
 <%@ page import="org.digijava.kernel.util.DgUtil"%>
 <%@ page import="org.digijava.kernel.translator.form.TranslatorForm"%>
-<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="dgcs"%>
 

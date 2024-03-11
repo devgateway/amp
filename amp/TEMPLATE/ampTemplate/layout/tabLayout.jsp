@@ -2,7 +2,7 @@
 
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 
-<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
 

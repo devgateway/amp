@@ -3,7 +3,7 @@
 <%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module"%>
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi"%>
 <%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 <%@ taglib uri="/src/main/resources/tld/fmt.tld" prefix="fmt"%>
 <%@ taglib uri="/src/main/resources/tld/aim.tld" prefix="aim"%>
 

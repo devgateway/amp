@@ -1,8 +1,8 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@page trimDirectiveWhitespaces="true"%>
-<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 
 
 <bean:define id="groupColumn" name="viewable" type="org.dgfoundation.amp.ar.GroupColumn" scope="request" toScope="page"/>

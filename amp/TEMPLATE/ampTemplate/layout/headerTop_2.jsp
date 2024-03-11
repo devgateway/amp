@@ -1,13 +1,13 @@
 <%@ taglib uri="/src/main/resources/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/resources/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
 <%@ taglib uri="/src/main/resources/tld/c.tld" prefix="c"%>
 <%@ taglib uri="/src/main/resources/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="/src/main/resources/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
 <%@ taglib uri="/src/main/resources/tld/fieldVisibility.tld" prefix="field" %>
 <%@ taglib uri="/src/main/resources/tld/featureVisibility.tld" prefix="feature" %>
 <%@ taglib uri="/src/main/resources/tld/moduleVisibility.tld" prefix="module" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
-<%@ taglib uri="/src/main/resources/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>

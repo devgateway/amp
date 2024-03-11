@@ -78,7 +78,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
                                         boolean isTemplate, String groupType,
                                         String groupName) {
         String expandedPath = null;
-        if ( (path != null) && (path.trim().length() != 0) &&
+        if ( (path != null) && (!path.trim().isEmpty()) &&
             !path.startsWith("/")) {
 
             String groupDir = groupName == null ? "" : "/" + groupName;
@@ -93,11 +93,11 @@ public abstract class AbstractViewConfig implements ViewConfig{
             }
             else {
                 if( !groupType.equalsIgnoreCase("") ) {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
+                    expandedPath = "/WEB-INF/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
                         "/" +
                         path;
                 } else {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + groupDir +
+                    expandedPath = "/WEB-INF/" + SITE_DIR + "/" + folderName + groupDir +
                         "/" +
                         path;
                 }

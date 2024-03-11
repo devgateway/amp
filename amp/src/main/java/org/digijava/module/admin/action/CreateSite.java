@@ -169,7 +169,7 @@ public class CreateSite extends Action {
         site.setModuleInstances(moduleInstances);
 
         SiteManager.createSiteFolder(this.getServlet().getServletContext().
-                         getRealPath(SiteConfigUtils.SITE_DIR +"/" +
+                         getRealPath("/WEB-INF/"+SiteConfigUtils.SITE_DIR +"/" +
                                      site.getFolder())
                          , siteForm.getTemplate());
 

@@ -287,11 +287,11 @@ public class EditSite
                 realSite.setSendAlertsToAdmin(null);
             }
             else {
-                realSite.setSendAlertsToAdmin(new Boolean(false));
+                realSite.setSendAlertsToAdmin(Boolean.FALSE);
             }
 
             SiteManager.createSiteFolder(this.getServlet().getServletContext().
-                                         getRealPath(SiteConfigUtils.SITE_DIR +
+                                         getRealPath("/WEB-INF/"+SiteConfigUtils.SITE_DIR +
                 "/" +
                 realSite.getFolder())
                                          , templateName);

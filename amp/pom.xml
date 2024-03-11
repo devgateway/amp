@@ -1382,6 +1382,7 @@
                 <version>2.3</version>
 
                 <configuration>
+
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1390,6 +1391,7 @@
                             <Implementation-Vendor>Development Gateway</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
+
 
                     <webResources>
                         <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
@@ -1400,6 +1402,11 @@
                             </includes>
                             <filtering>true</filtering>
                             <targetPath>/TEMPLATE/ampTemplate</targetPath>
+                        </resource>
+
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                            <filtering>true</filtering>
                         </resource>
                         <resource>
                         <directory>${project.basedir}</directory>

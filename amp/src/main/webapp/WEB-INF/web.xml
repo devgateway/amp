@@ -331,27 +331,27 @@
 	<jsp-config>
 		<taglib>
 			<taglib-uri>http://struts.apache.org/tags-bean</taglib-uri>
-			<taglib-location>/src/main/resources/tld/struts-bean.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/struts-bean.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://struts.apache.org/tags-html</taglib-uri>
-			<taglib-location>/src/main/resources/tld/struts-html.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/struts-html.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://struts.apache.org/tags-logic</taglib-uri>
-			<taglib-location>/src/main/resources/tld/struts-logic.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/struts-logic.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://struts.apache.org/tags-nested</taglib-uri>
-			<taglib-location>/src/main/resources/tld/struts-nested.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/struts-nested.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://struts.apache.org/tags-tiles</taglib-uri>
-			<taglib-location>/src/main/resources/tld/struts-tiles.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/struts-tiles.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/digi</taglib-uri>
-			<taglib-location>/src/main/resources/tld/digijava.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/digijava.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/gate</taglib-uri>
@@ -359,57 +359,58 @@
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/CategoryManager</taglib-uri>
-			<taglib-location>/src/main/resources/tld/category.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/category.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/GlobalSettings</taglib-uri>
-			<taglib-location>/src/main/resources/tld/globalsettings.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/globalsettings.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/ResourceSettings</taglib-uri>
-			<taglib-location>/src/main/resources/tld/resourcesettings.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/resourcesettings.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/aim</taglib-uri>
-			<taglib-location>/src/main/resources/tld/aim.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/aim.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/modules</taglib-uri>
-			<taglib-location>/src/main/resources/tld/moduleVisibility.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/moduleVisibility.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/features</taglib-uri>
 			<taglib-location>
-				/src/main/resources/tld/featureVisibility.tld
+				/WEB-INF/tld/featureVisibility.tld
 			</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/fields</taglib-uri>
-			<taglib-location>/src/main/resources/tld/fieldVisibility.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/fieldVisibility.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/eljTagLibrary</taglib-uri>
-			<taglib-location>/src/main/resources/tld/taglib.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/taglib.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
-			<taglib-location>/src/main/resources/tld/c.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/c.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://java.sun.com/jsp/jstl/fmt</taglib-uri>
-			<taglib-location>/src/main/resources/tld/fmt.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://displaytag.sf.net/display</taglib-uri>
 			<taglib-location>
-				/src/main/resources/tld/displaytag-11.tld
+				/WEB-INF/tld/displaytag-11.tld
 			</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://java.sun.com/jsp/jstl/functions</taglib-uri>
-			<taglib-location>/src/main/resources/tld/fn.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/fn.tld</taglib-location>
 		</taglib>
 	</jsp-config>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Restricted Resources</web-resource-name>

@@ -1274,6 +1274,13 @@
                     <include>**/*</include>
                 </includes>
             </resource>
+
+            <resource>
+                <directory>${project.basedir}/src/main/webapp</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
         </resources>
 
         <plugins>

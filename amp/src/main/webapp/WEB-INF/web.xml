@@ -350,7 +350,7 @@
 			<taglib-location>/src/main/resources/tld/struts-tiles.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>http://digijava.org</taglib-uri>
+			<taglib-uri>http://digijava.org/digi</taglib-uri>
 			<taglib-location>/src/main/resources/tld/digijava.tld</taglib-location>
 		</taglib>
 		<taglib>

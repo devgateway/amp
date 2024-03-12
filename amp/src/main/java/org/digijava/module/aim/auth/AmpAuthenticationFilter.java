@@ -201,8 +201,8 @@ public class AmpAuthenticationFilter
          * registered user but has not yet been assigned a team
          */
         Collection members = TeamMemberUtil.getTeamMembers(usr.getId());
-        if(members == null || members.size() == 0) {
-            if(siteAdmin == true) { // user is a site admin
+        if(members.isEmpty()) {
+            if(siteAdmin) { // user is a site admin
                 // set the session variable 'ampAdmin' to the value 'yes'
                 session.setAttribute("ampAdmin", new String("yes"));
                 // create a TeamMember object and set it to a session variabe 'currentMember'

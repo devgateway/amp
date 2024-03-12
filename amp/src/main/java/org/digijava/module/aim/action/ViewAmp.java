@@ -71,7 +71,7 @@ public class ViewAmp
         session.setAttribute(Constants.CURRENT_USER, user);
         
         if (tm != null && tm.getTeamId() != null &&
-            tm.getTeamId().longValue() > 0) {
+                tm.getTeamId() > 0) {
             String fwdUrl = "showDesktop.do";
             response.sendRedirect(fwdUrl);
             return null;
@@ -111,7 +111,7 @@ public class ViewAmp
     public static void initializeTeamMembership(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 User usr, Site site) throws
-            NotTeamMemberException, DgException {
+            NotTeamMemberException {
 
         HttpSession session = request.getSession();
         if (session.getAttribute(Constants.TEAM_ID) != null) {
@@ -181,10 +181,9 @@ public class ViewAmp
                     HashMap<String, Long> editActMap = (HashMap<String, Long>) ampContext.getAttribute(Constants.EDIT_ACT_LIST);
                     String sessId = null;
                     if (editActMap != null) {
-                        Iterator<String> itr1 = editActMap.keySet().iterator();
-                        while (itr1.hasNext()) {
-                            sessId = itr1.next();
-                            Long tempActId = (Long) editActMap.get(sessId);
+                        for (String s : editActMap.keySet()) {
+                            sessId = s;
+                            Long tempActId = editActMap.get(sessId);
 
                             //logger.info("tempActId = " + tempActId + " actId = " + actId);
                             if (tempActId.longValue() == actId.longValue()) {

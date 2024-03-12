@@ -1,10 +1,10 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/featureVisibility.tld" prefix="feature"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-tiles.tld" prefix="tiles"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/featureVisibility.tld" prefix="feature"%>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%
 	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());

@@ -9,9 +9,9 @@
 			onkeyup, onkeypress 
  --%>
  
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/fn.tld" prefix="fn" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fn.tld" prefix="fn" %>
 
 <%
 	MultilingualInputFieldValues dta = (MultilingualInputFieldValues) request.getAttribute(request.getParameter("attr_name"));

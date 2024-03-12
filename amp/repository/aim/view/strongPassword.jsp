@@ -1,7 +1,7 @@
 <%@ page import="org.digijava.kernel.security.PasswordPolicyValidator" %>
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/globalsettings.tld" prefix="globalsettings"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/globalsettings.tld" prefix="globalsettings"%>
 
 <script type="text/javascript"
 		src="/TEMPLATE/ampTemplate/js_2/pwstrength/pwstrength-bootstrap.min.js"></script>

@@ -1,4 +1,4 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi"%>
 
 
 <script type="text/javascript" src="<digi:file src='js_2/yui/yahoo/yahoo-min.js'/>">.</script>

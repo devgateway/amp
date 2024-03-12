@@ -1,14 +1,14 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-tiles.tld" prefix="tiles"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-nested.tld" prefix="nested"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/aim.tld" prefix="aim" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-tiles.tld" prefix="tiles"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-nested.tld" prefix="nested"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/aim.tld" prefix="aim" %>
 <%@ taglib uri="/src/main/webapp/WEB-INF/tld/fmt.tld" prefix="fmt" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/globalsettings.tld" prefix="gs" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/globalsettings.tld" prefix="gs" %>
 
 <digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 

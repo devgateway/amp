@@ -1,4 +1,4 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c" %>
 <c:set var="act">${param.extraAction}</c:set>
 <%
 	if ("add_locations_refresh_data".equals(request.getParameter("extraAction"))) // ajax?

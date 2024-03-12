@@ -1,9 +1,9 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%-- renders the funding part of the Pledge Form --%>
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/aim.tld" prefix="aim" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/aim.tld" prefix="aim" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 <%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>

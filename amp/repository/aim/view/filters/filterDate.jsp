@@ -1,8 +1,8 @@
 
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi"%>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c"%>
 
 <tr>
 	<td><span style="font-family: Arial; font-size: 12px;"> <c:if

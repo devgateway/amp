@@ -3,7 +3,7 @@
 	you should put "report" in context before calling
 --%>
 
-<%@ taglib uri="/src/main/webapp/WEB-INF/c.tld" prefix="c" %>
+<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c" %>
 <c:choose>
 	<c:when test="${!report.hasAvailableMeasures()}">
 		<c:set var="measurestooltip"><digi:trn>The requested report only includes unimplemented measures</digi:trn></c:set>

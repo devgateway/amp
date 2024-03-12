@@ -37,7 +37,7 @@ public class DependencyWalker {
     }
 
     public void addFile(File file) {
-        files.put(file.getAbsolutePath(), new Long(file.lastModified()));
+        files.put(file.getAbsolutePath(), file.lastModified());
     }
 
     public void addFile(String fileName) {

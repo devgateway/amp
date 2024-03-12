@@ -3,7 +3,7 @@
 which means many other redo etl request will fllow -->
 <tns:patch closeOnSuccess="true" retryOnFail="false"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
 	<jira>AMP-18110</jira>
 	<keyword>Views</keyword>
 	<author>cdolghier</author>

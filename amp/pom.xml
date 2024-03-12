@@ -1301,7 +1301,7 @@
                             <sources>
 
                                 <source>
-                                    doc/translation.xsd
+                                    ./src/main/resources/schemas/translation.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
@@ -1319,7 +1319,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./doc/help.xsd
+                                    ./src/main/resources/schemas/help.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
@@ -1356,7 +1356,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./doc/xmlpatcher.xsd
+                                    ./src/main/resources/schemas/xmlpatcher.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>

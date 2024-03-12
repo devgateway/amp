@@ -2,7 +2,7 @@
 <!-- will not retry on fail, since if something goes wrong from the beginning, later we can accidently remove valid constant currencies -->
 <tns:patch closeOnSuccess="true" retryOnFail="false"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
     <jira>AMP-21763</jira>
     <keyword>deflator</keyword>
     <author>nmandrescu</author>

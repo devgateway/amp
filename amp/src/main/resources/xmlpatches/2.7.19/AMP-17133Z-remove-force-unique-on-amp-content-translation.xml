@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true" 
 xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
         <jira>AMP-17133</jira>
         <keyword>content translation constraint</keyword>
         <author>cdolghier</author>

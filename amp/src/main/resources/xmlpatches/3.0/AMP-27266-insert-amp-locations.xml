@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../schemas/xmlpatcher.xsd ">
 	<jira>AMP-27266</jira>
 	<author>vchihai</author>
 	<description>Add missing amp_location objects for amp_category_value_location</description>

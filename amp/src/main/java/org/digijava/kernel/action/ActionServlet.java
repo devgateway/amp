@@ -30,7 +30,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
 
     private static final String STRUTS_CONFIG_FILE = "struts-config.xml";
-    private static final String MODULE_DIRECTORY = "/repository";
+    private static final String MODULE_DIRECTORY = "/WEB-INF/repository";
 
     public void init() {
 
@@ -58,7 +58,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
         StringBuffer retVal = new StringBuffer();
 
         if (!configDir.exists() || !configDir.isDirectory()) {
-            throw new DgException("Configuration directory " + MODULE_DIRECTORY + " does not exist or is not directory");
+            throw new DgException("Configuration directory " + configDir + " does not exist or is not directory");
         }
 
         String[] dirList = configDir.list();

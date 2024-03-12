@@ -114,7 +114,7 @@
 		security="none" />
 
 	<!-- import digi module spring configuration files -->
-	<beans:import resource="classpath:../../repository/**/module-spring.xml" />
+	<beans:import resource="/WEB-INF/repository/**/module-spring.xml" />
 
 	<!-- uncomment this to see debugging info about spring security -->
 	<!-- <debug/> -->

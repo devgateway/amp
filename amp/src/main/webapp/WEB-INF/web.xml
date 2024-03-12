@@ -253,27 +253,27 @@
 		<init-param>
 			<param-name>config</param-name>
 			<param-value>
-				/repository/struts-config.xml,
-				/repository/admin/struts-config.xml,
-				/repository/calendar/struts-config.xml,
-				/repository/aim/struts-config.xml,
-				/repository/editor/struts-config.xml,
-				/repository/translation/struts-config.xml,
-				/repository/um/struts-config.xml,
-				/repository/exception/struts-config.xml,
-				/repository/digifeed/struts-config.xml,
-				/repository/gateperm/struts-config.xml,
-				/repository/help/struts-config.xml,
-				/repository/contentrepository/struts-config.xml, /repository/categorymanager/struts-config.xml,
-				/repository/sdm/struts-config.xml,
-				/repository/message/struts-config.xml,
-				/repository/parisindicator/struts-config.xml,
-				/repository/search/struts-config.xml,
-				/repository/content/struts-config.xml,
-				/repository/xmlpatcher/struts-config.xml,
-				/repository/esrigis/struts-config.xml,
-				/repository/budgetexport/struts-config.xml,
-				/repository/gpi/struts-config.xml
+				/src/main/resources/repository/struts-config.xml,
+				/src/main/resources/repository/admin/struts-config.xml,
+				/src/main/resources/repository/calendar/struts-config.xml,
+				/src/main/resources/repository/aim/struts-config.xml,
+				/src/main/resources/repository/editor/struts-config.xml,
+				/src/main/resources/repository/translation/struts-config.xml,
+				/src/main/resources/repository/um/struts-config.xml,
+				/src/main/resources/repository/exception/struts-config.xml,
+				/src/main/resources/repository/digifeed/struts-config.xml,
+				/src/main/resources/repository/gateperm/struts-config.xml,
+				/src/main/resources/repository/help/struts-config.xml,
+				/src/main/resources/repository/contentrepository/struts-config.xml, /src/main/resources/repository/categorymanager/struts-config.xml,
+				/src/main/resources/repository/sdm/struts-config.xml,
+				/src/main/resources/repository/message/struts-config.xml,
+				/src/main/resources/repository/parisindicator/struts-config.xml,
+				/src/main/resources/repository/search/struts-config.xml,
+				/src/main/resources/repository/content/struts-config.xml,
+				/src/main/resources/repository/xmlpatcher/struts-config.xml,
+				/src/main/resources/repository/esrigis/struts-config.xml,
+				/src/main/resources/repository/budgetexport/struts-config.xml,
+				/src/main/resources/repository/gpi/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>
@@ -355,7 +355,7 @@
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/gate</taglib-uri>
-			<taglib-location>/repository/gateperm/gateperm.tld</taglib-location>
+			<taglib-location>/src/main/resources/repository/gateperm/gateperm.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/CategoryManager</taglib-uri>

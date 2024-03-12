@@ -42,7 +42,7 @@ public class PermissionConverter {
 
     public static void main(String[] args) throws Exception {
         ViewConfigFactory.initialize(new DummyServletContext("."));
-        DigiConfigManager.initialize("./repository");
+        DigiConfigManager.initialize("./src/main/resources/repository");
         PersistenceManager.initialize(false);
         DigiPolicy digiPolicy = new DigiPolicy();
         try {

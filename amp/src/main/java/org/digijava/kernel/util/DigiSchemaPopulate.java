@@ -58,7 +58,7 @@ public class DigiSchemaPopulate {
         ResourceStreamHandlerFactory.installIfNeeded();
 
         ViewConfigFactory.initialize(new DummyServletContext("."));
-        DigiConfigManager.initialize("./repository");
+        DigiConfigManager.initialize("./src/main/resources/repository");
         PersistenceManager.initialize(false);
         ServiceContext serviceContext = new StandaloneServiceContext(".");
         ServiceManager.getInstance().init(serviceContext, 0);

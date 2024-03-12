@@ -97,7 +97,7 @@ public abstract class ViewConfigUtil
     protected RepositoryLayout addComponentsFile(String moduleName) throws
         ViewConfigException {
         File configFile;
-        configFile = new File(servletContext.getRealPath("/repository/" +
+        configFile = new File(servletContext.getRealPath("src/main/resources/repository/" +
             moduleName + "/components.xml"));
 
         RepositoryLayout componentsFile = null;
@@ -388,7 +388,7 @@ public abstract class ViewConfigUtil
                 if (groupType.equals(MODULE_DIR)) {
                     String groupDir = groupName == null ? "" : "/" + groupName;
 
-                    fileName = "/repository" + groupDir + "/view/" +
+                    fileName = "src/main/resources/repository" + groupDir + "/view/" +
                         path;
                     file = new File(servletContext.getRealPath(fileName));
 

@@ -2159,7 +2159,12 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            this.contracts = contracts;
+            if (this.contracts == null) {
+                this.contracts = contracts;
+            } else {
+                this.contracts.clear();
+                this.contracts.addAll(contracts);
+            }
         }
 
 

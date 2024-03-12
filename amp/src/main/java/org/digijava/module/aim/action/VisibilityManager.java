@@ -560,7 +560,7 @@ public class VisibilityManager extends MultiAction {
             "<%@ taglib uri=\"http://struts.apache.org/tags-logic\" prefix=\"logic\" %>\n"+
             "<%@ taglib uri=\"http://struts.apache.org/tags-tiles\" prefix=\"tiles\" %>\n"+
             "<%@ taglib uri=\"http://struts.apache.org/tags-html\" prefix=\"html\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/digijava.tld\" prefix=\"digi\" %>\n"+
+            "<%@ taglib uri=\"http://digijava.org/digi\" prefix=\"digi\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/c.tld\" prefix=\"c\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/category.tld\" prefix=\"category\" %>\n"+
             "<%@ taglib uri=\"/src/main/resources/tld/fieldVisibility.tld\" prefix=\"field\" %>\n"+

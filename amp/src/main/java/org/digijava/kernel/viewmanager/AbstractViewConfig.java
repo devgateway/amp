@@ -28,6 +28,7 @@ import org.digijava.kernel.siteconfig.Layout;
 import org.digijava.kernel.siteconfig.PutItem;
 import org.digijava.kernel.siteconfig.SiteConfig;
 import org.digijava.kernel.siteconfig.SiteLayout;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteCache;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -56,7 +57,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
     public static final String MODULE_DIR = "module";
     public static final String LAYOUT_DIR = "layout";
     public static final String TEMPLATE_DIR = "TEMPLATE";
-    public static final String SITE_DIR = "SITE";
+    public static final String SITE_DIR = DgUtil.getWebInfPath("SITE");
     public static final String BLANK_TEMPLATE_NAME = "blank";
 
 

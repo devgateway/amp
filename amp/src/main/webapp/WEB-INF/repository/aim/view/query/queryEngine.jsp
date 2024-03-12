@@ -12,11 +12,11 @@
 <%@ taglib uri="http://digijava.org/modules" prefix="module"%>
 
 <!-- Individual YUI CSS files -->
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/repository/aim/view/css/filters/filters2.css">
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
+<link rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
 <link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" />
@@ -49,33 +49,33 @@
 </style>
 
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
 <script type="text/javascript" src="/src/main/webapp/WEB-INF/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <!-- Individual YUI JS files -->
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 <script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript"
 		src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 <script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/searchManager.js'/>" ></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
-<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
-<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
-<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
-<script src="/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min.js" type="text/javascript"></script>
 <script type="text/javascript"
-		src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
+		src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
 <script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 

@@ -57,7 +57,7 @@ $(document).ready(function () {
     });
     events.listenTo(widgetFilter, 'apply', function () {
         // Save just applied filters in case the user hits "reset" button.
-        $('#queryLabelsDiv').html('<div><img class="loading-spinner" src="/TEMPLATE/ampTemplate/img_2/loading-icon.gif" /></div>');
+        $('#queryLabelsDiv').html('<div><img class="loading-spinner" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/loading-icon.gif" /></div>');
         var serializedFilters = widgetFilter.serialize() || {};
         var url = '/aim/reportsFilterPicker.do?apply=true&cacheBuster=';
         if (advancedFilters) {
@@ -92,7 +92,7 @@ $(document).ready(function () {
 
 var showSpinner = function () {
     loadingreport.setHeader('');
-    loadingreport.setBody("<div align='center' style='padding-bottom: 15px;'>" + '' + "<br>" + '<img src="/TEMPLATE/ampTemplate/img_2/loading-icon.gif" />' + "</div>");
+    loadingreport.setBody("<div align='center' style='padding-bottom: 15px;'>" + '' + "<br>" + '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/loading-icon.gif" />' + "</div>");
     loadingreport.render(document.body);
     loadingreport.show();
 };

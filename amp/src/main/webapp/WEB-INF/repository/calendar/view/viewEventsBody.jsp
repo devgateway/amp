@@ -96,7 +96,7 @@ read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
 
 <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" type="text/javascript"></script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">
@@ -136,7 +136,7 @@ read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
 	  		<td>	
 	 	
 		 	<a target="_blank" title="Printing" onClick="window.print();" style="cursor: pointer">
-		 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"/>
+		 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"/>
 		 	</a>
 	 		<input type="button" value="close" onClick="window.close()" width="20" height="30"/>
 	 		</td>
@@ -262,7 +262,7 @@ read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
 				var shortText = evName;
 			}
 		    var text = evName;
-	        var img = '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
+	        var img = '<digi:img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
 	        var trnLbelTitle 		= '<digi:trn jsFriendly="true">Title</digi:trn>:';
 	        var trnLabelStartDate 	= '<digi:trn jsFriendly="true">StartDate:</digi:trn>';
 	        var trnLabelEndDate 	= '<digi:trn jsFriendly="true">EndDate:</digi:trn>';

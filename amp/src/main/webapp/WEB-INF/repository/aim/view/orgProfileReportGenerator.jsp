@@ -100,12 +100,12 @@
 										<button type="button"
 											onClick="MyDragAndDropObject.selectObjs('source_col_ul', 'dest_col_ul')"
 											style="border: none;">
-											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" />
+											<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" />
 										</button> <br /> <br />
 										<button type="button"
 											onClick="MyDragAndDropObject.deselectObjs('dest_col_ul','source_col_ul')"
 											style="border: none;">
-											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" />
+											<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" />
 										</button>
 									</td>
 									<td width="340px" align="center">

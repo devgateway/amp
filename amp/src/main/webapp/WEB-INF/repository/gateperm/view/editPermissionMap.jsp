@@ -51,8 +51,8 @@ function submitForm(mode) {
 								<table class="inside" width="712" cellpadding="0" cellspacing="0" border="1">
 						
 									<tr>
-	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></b></td>
-	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn>Assign a global permission to the entire class</digi:trn></b>
+	    								<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></b></td>
+	    								<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn>Assign a global permission to the entire class</digi:trn></b>
 	    								</td>
 	    							</tr>
 	    					    				

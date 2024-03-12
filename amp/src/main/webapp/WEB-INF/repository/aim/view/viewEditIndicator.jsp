@@ -10,10 +10,10 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/calendar.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <script type="text/javascript" src="/src/main/webapp/WEB-INF/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 

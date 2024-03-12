@@ -70,7 +70,7 @@
 	background: #ededed;
 	border: 0px;
 	font-weight: normal;
-	background: #ededed url('/TEMPLATE/ampTemplate/tabs/css/images/new-admin-sprite.png') no-repeat; 
+	background: #ededed url('/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/css/images/new-admin-sprite.png') no-repeat;
 	background-position: 0 -20px;
 }
 
@@ -111,6 +111,6 @@
 	background: #ededed;
 	border: 1px solid #ededed;
 	font-weight: normal;
-	background: #ededed url('/TEMPLATE/ampTemplate/tabs/css/images/new-admin-sprite.png') no-repeat;
+	background: #ededed url('/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/css/images/new-admin-sprite.png') no-repeat;
 	background-position: 0 -20px;
 }

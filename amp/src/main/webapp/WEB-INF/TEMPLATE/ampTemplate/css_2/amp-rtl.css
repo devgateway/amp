@@ -558,7 +558,7 @@ a.last_page {
 }
 
 .tri-desktop {
-    background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px 1px !important;
+    background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px 1px !important;
 }
 
 .ui-widget-content {

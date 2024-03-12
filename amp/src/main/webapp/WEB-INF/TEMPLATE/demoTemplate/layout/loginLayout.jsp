@@ -2,7 +2,7 @@
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <html>
 <head>
-<link href="/digijava/TEMPLATE/demoSite/css/global.css" rel="stylesheet" type="text/css">
+<link href="/digijava/src/main/webapp/WEB-INF/TEMPLATE/demoSite/css/global.css" rel="stylesheet" type="text/css">
 <title><tiles:getAsString name="title"/></title>
 </head>
 <body bgcolor="#ffffff">

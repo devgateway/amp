@@ -136,11 +136,11 @@
                 </td>
                 <td width="17%" align="center">
                     <digi:link href="/aidEffectivenessIndicatorsManager.do?actionParam=edit&ampIndicatorId=${indicator.ampIndicatorId}">
-                        <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
+                        <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
                     </digi:link>
                     <c:set var="deleteAction">/aidEffectivenessIndicatorsManager.do?actionParam=delete&ampIndicatorId=${indicator.ampIndicatorId}</c:set>
                     <a onclick="return confirmDelete('${deleteAction}'); return false;">
-                        <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
+                        <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
                     </a>
                 </td>
             </tr>

@@ -87,7 +87,7 @@
 			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
 			        </a>
 			        <a id="clear1" href="javascript:clearDate('filterFromDate')">
-                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
+                    <digi:img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
                    	</a>
 				</td>
 			</tr>
@@ -99,7 +99,7 @@
 			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
 			        </a>
 			        <a id="clear2" href='javascript:clearDate("filterToDate")'>
-                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
+                    <digi:img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
                    	</a>
 				</td>
 			</tr>

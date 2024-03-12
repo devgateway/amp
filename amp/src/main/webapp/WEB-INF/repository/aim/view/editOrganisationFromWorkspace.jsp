@@ -18,7 +18,7 @@
 	language="JavaScript" type="text/javascript"
 	src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+	src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <style type="text/css">
 .selectStyle {
 	Font-size: 11px;
@@ -614,10 +614,10 @@ initContactScript();
 														<digi:trn>General Information</digi:trn>
 													</legend>
 													<img id="img_general" alt=""
-														src="/TEMPLATE/ampTemplate/images/arrow_right.gif"
+														src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_right.gif"
 														style="display: none;" onclick="expand('general')" /> <img
 														id="imgh_general" alt=""
-														src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
+														src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif"
 														onclick="collapse('general')" />
 													<div id="div_container_general" >
 														<table width="100%" cellpadding="5" cellspacing="5">
@@ -784,10 +784,10 @@ initContactScript();
 														<digi:trn>Staff Information</digi:trn>
 													</legend>
 													<img id="img_staff" alt=""
-														src="/TEMPLATE/ampTemplate/images/arrow_right.gif"
+														src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_right.gif"
 														style="display: none;" onclick="expand('staff')" /> <img
 														id="imgh_staff" alt=""
-														src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
+														src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif"
 														onclick="collapse('staff')" />
 													<div id="div_container_staff">
 														<table cellpadding="2" cellspacing="0" border="0" width=100%>
@@ -816,13 +816,13 @@ initContactScript();
 																						style="width: 35px; text-align: center;"><a
 																						href="javascript:editStaffInfo('${staffInfoIndex.index}')"><img
 																							alt="edit"
-																							src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png"
+																							src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png"
 																							border="0" /></a></td>
 																					<td class="tdClass"
 																						style="width: 35px; text-align: center;"><a
 																						href="javascript:deleteStaff('${info.id}')"> <img
 																							alt="delete"
-																							src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
+																							src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
 																							border="0"></a></td>
 																				</tr>
 																			</c:forEach>
@@ -908,10 +908,10 @@ initContactScript();
 														<digi:trn>Contact Information</digi:trn>
 													</legend>
 													<img id="img_contact" alt=""
-														src="/TEMPLATE/ampTemplate/images/arrow_right.gif"
+														src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_right.gif"
 														style="display: none;" onclick="expand('contact')" /> <img
 														id="imgh_contact" alt=""
-														src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
+														src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif"
 														onclick="collapse('contact')" />
 													<div id="div_container_contact">
 														<table cellpadding="2" cellspacing="0" border="0"
@@ -1012,13 +1012,13 @@ initContactScript();
 																							collection="orgContacts" form="${aimAddOrgForm}"
 																							contactId="${ampContactId}" addOrgBtn="hidden">
 																							<img alt="edit"
-																								src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png"
+																								src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png"
 																								border="0" />
 																						</aim:editContactLink></td>
 																					<td><a
 																						href="javascript:removeContact('${ampContactId}')">
 																							<img alt="delete"
-																							src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
+																							src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
 																							border="0" />
 																					</a></td>
 																				</tr>

@@ -1,4 +1,4 @@
-$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+$.getScript("/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
 
 function createPreview () {
 	var divElWrapper	= document.getElementById("previewSectionDiv");
@@ -78,13 +78,13 @@ function togglePreview () {
 		divElWrapper.style.height	= "220px";
 		fakeDivEl.style.height		= "50px";
 		divEl.style.display			= "";
-		headerImgEl.src				= "/TEMPLATE/ampTemplate/images/preview_open.gif";
+		headerImgEl.src				= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/preview_open.gif";
 	}
 	else {
 		divElWrapper.style.height	= "45px";
 		fakeDivEl.style.height		= "50px";
 		divEl.style.display	= "none";
-		headerImgEl.src		= "/TEMPLATE/ampTemplate/images/preview_close.gif";
+		headerImgEl.src		= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/preview_close.gif";
 	}
 }
 

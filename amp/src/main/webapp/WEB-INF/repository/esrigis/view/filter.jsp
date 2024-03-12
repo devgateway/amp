@@ -13,7 +13,7 @@
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
 <script type="text/javascript">
 //Global declaration
@@ -44,11 +44,11 @@ function initializeTranslations(){
 	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 }
 </script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script> 
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>
 <digi:instance property="datadispatcherform" />
 <digi:form action="/mainmap.do" styleId = "datadispatcherform_real_one">
 	<table>
@@ -61,7 +61,7 @@ function initializeTranslations(){
 								<div id="generalTab" style="height: 91%;">
 										<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
 											<div
-												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside">
 													<b class="ins_header"><digi:trn>Grouping Selector</digi:trn>
 													</b>
@@ -135,7 +135,7 @@ function initializeTranslations(){
 											</div>
 										</div>
 										<div class="member_selector_wrapper" style="margin-left: 40%; padding: 0px; height: 98%;" id="generalInfoId">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Options Selector</digi:trn>
 													</b>
@@ -151,7 +151,7 @@ function initializeTranslations(){
 													<c:set var="translation">
 														<digi:trn>Dashboards will show only data from activities of current workspace.</digi:trn>
 													</c:set>
-													<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/>
+													<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/>
 													<br />
 												</c:if>
 												 -->
@@ -161,7 +161,7 @@ function initializeTranslations(){
 												<c:set var="translation">
 													<digi:trn>What type of funding the map should use.</digi:trn>
 												</c:set>
-												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/><br />
+												<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/><br />
 												<html:radio property="filter.transactionType" styleId="transaction_type_0" value="0">
 													<digi:trn>Commitments</digi:trn>
 												</html:radio>
@@ -185,7 +185,7 @@ function initializeTranslations(){
 										</div>
 										<div class="member_selector_wrapper" id="orgGrpContent"
 											style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -232,7 +232,7 @@ function initializeTranslations(){
 											</div>
 										</div>
 										<div class="member_selector_wrapper" id="regionDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -275,7 +275,7 @@ function initializeTranslations(){
 											</div>
 										</div>
 										<div class="member_selector_wrapper" id="sectorDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-												<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 													<div class="inside" style="float: left">
 														&nbsp;<b class="ins_header"> <digi:trn>Member Selector</digi:trn></b>
 													</div>
@@ -313,7 +313,7 @@ function initializeTranslations(){
 											</div>
 										<div>
 											<div class="member_selector_wrapper" id="programDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-												<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 													<div class="inside" style="float: left">
 														&nbsp;<b class="ins_header"> <digi:trn>Member Selector</digi:trn></b>
 													</div>
@@ -336,7 +336,7 @@ function initializeTranslations(){
 										<div>
 							
 										<div class="member_selector_wrapper" id="structuresDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -370,7 +370,7 @@ function initializeTranslations(){
 											</div>
 										</div>
 										<div class="member_selector_wrapper" id="aidmodalityDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -404,7 +404,7 @@ function initializeTranslations(){
 											</div>
 										</div>
 										<div class="member_selector_wrapper" id="typeofassisDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -438,7 +438,7 @@ function initializeTranslations(){
 											</div>
 										</div>
 										<div class="member_selector_wrapper" id="projectstatusDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -472,7 +472,7 @@ function initializeTranslations(){
 											</div>
 										</div>
 										<div class="member_selector_wrapper" id="orgtypeDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+											<div style="background-image: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>

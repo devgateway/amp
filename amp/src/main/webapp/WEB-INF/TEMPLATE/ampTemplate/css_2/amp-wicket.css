@@ -65,7 +65,7 @@ td.inside {margin: 0; padding: 4px; background-color: #FFF;border:1px solid #b8b
 .min_max_info {font-size:11px; width:500px; margin-left:auto; margin-right:auto; text-align:left;}
 
 /* HEADER */
-.header {background-image:url(/TEMPLATE/ampTemplate/img_2/top_bg.gif); height:51px;}
+.header {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/top_bg.gif); height:51px;}
 .centering {width:1000px; margin-left:auto; margin-right:auto;}
 .logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;}
 .amp_label {padding-top:5px;float:left;font-size:14px;}
@@ -88,7 +88,7 @@ td.inside {margin: 0; padding: 4px; background-color: #FFF;border:1px solid #b8b
 
 
 /* BREADCRUMP */
-.breadcrump {background-image:url(/TEMPLATE/ampTemplate/img_2/bread_bg.gif); height:40px;}
+.breadcrump {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/bread_bg.gif); height:40px;}
 .breadcrump_cont {padding-top:11px; padding-bottom:10px;}
 .sec_name {font-size:12px; font-weight:bold;}
 .breadcrump_sep {color:#CCCCCC; margin-left:7px; margin-right:7px; font-size:11px;}
@@ -105,20 +105,20 @@ td.inside {margin: 0; padding: 4px; background-color: #FFF;border:1px solid #b8b
 .step_num_sel {background-color:#FF6000; margin-right:3px; padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:2px; font-size:11px; color:#FFFFFF; font-weight:bold;}
 .tab_sel {margin-left:-1px; background-color:#EFEFEF; border-left:1px solid #EFEFEF; border-top:1px solid #BEBDB6; border-right: 1px solid #BEBDB6; border-bottom:1px solid #BEBDB6; margin-bottom:7px;}
 .tab_cont_sel {padding-top:7px; padding-bottom:7px; padding-left:7px; font-size:14px; color:#FF6000; font-weight:bold;}
-.step_head {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head.gif);}
-.step_head_lng {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head_lng.gif);}
+.step_head {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/step_head.gif);}
+.step_head_lng {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/step_head_lng.gif);}
 .step_head_cont {padding-left:10px; padding-top:5px; padding-bottom:5px;color:#FFFFFF; font-size:12px; font-weight:bold;}
 .cont_search {background-color:#F7F7F7; border:1px solid #E0E0DC; min-height:320px;}
 .cont_search_cont {padding:10px;}
 .right_menu {margin-bottom:20px;}
-.right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif); width:222px; height:27px;}
+.right_menu_header {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/blue_header.gif); width:222px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:12px; font-weight:bold;}
 .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; margin-top:0px;background:#fff;}
 .right_menu_cont {padding:10px; font-size:11px;margin-top:10px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
-.tri {background:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:148px;}
-html.ie .tri {background:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:160px;}
+.tri {background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:148px;}
+html.ie .tri {background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:160px;}
 .tri_adv {background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px; margin-top:7px;}
 .desktop_tab_base {border-bottom:1px solid #D0D0D0;}
 .filter_tab_base {height:29px; border-bottom:1px solid #D0D0D0; background-color:#FFFFFF;}
@@ -158,8 +158,8 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .opt_item {background-color:#F3F2F1; border:1px solid #C2C1C0; margin-top:10px; }
 .opt_item_tree_1 {background-color:#F3F2F1; border:1px solid #C2C1C0;  margin-top:10px;}
 .opt_item_cont {padding:5px;}
-.tree_1 {background-image:url(/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:25px;}
-.tree_2 {background-image:url(/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:75px;}
+.tree_1 {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:25px;}
+.tree_2 {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:75px;}
 .issue_act {float:right; color:#999999;}
 .rep_tree_item_1 {background-color:#E1E1E1;  border:1px solid #CECECE; padding:1px; font-size:11px; margin-left:17px; margin-top:5px; margin-bottom:5px;}
 .rep_tree_item {background-color:#E1E1E1;  border:1px solid #CECECE; padding:1px; font-size:11px; margin-top:5px; margin-bottom:5px;}
@@ -217,7 +217,7 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .dialog {display:none;}
 
 /* ADMIN */
-.permission {width:1000px; height:35px; background-image:url(/TEMPLATE/ampTemplate/img_2/perm_bg.gif);border:1px solid #C4C2BD; margin-left:auto; margin-right:auto; margin-bottom:10px;}
+.permission {width:1000px; height:35px; background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/perm_bg.gif);border:1px solid #C4C2BD; margin-left:auto; margin-right:auto; margin-bottom:10px;}
 .permission_sel {width:1000px; background-color:#FAFAFA; border:1px solid #C4C2BD; margin-left:auto; margin-right:auto; margin-bottom:10px;}
 .permission_cont {padding:10px;}
 .perm_user_info {background-color:#FAF6D3; border:1px solid #F5EEA8; margin-left:20px; margin-top:7px; margin-right:5px; margin-bottom:5px; padding:7px; font-size:11px; line-height:16px;}
@@ -248,7 +248,7 @@ ul.wks_menu_vertical {width: 300px;}
 ul.wks_menu_vertical li {float: none;}
 
 /* -- Sub-Menus -- */
-ul.wks_menu ul,ul.wks_menu_vertical ul {position: absolute;display: none;list-style-type: none;margin: 0px;padding: 0px;z-index: 10000;width: auto;background-image:url(/TEMPLATE/ampTemplate/img_2/blue_back.gif);}
+ul.wks_menu ul,ul.wks_menu_vertical ul {position: absolute;display: none;list-style-type: none;margin: 0px;padding: 0px;z-index: 10000;width: auto;background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/blue_back.gif);}
 ul.wks_menu ul li,ul.wks_menu_vertical ul li {float: none;margin: 0px;}
 ul.wks_menu,ul.wks_menu ul,ul.wks_menu_vertical,ul.wks_menu_vertical ul {height: 20px;}
 ul.wks_menu_vertical {height: auto;}
@@ -402,8 +402,8 @@ div.trnpanel div.trn-row a:hover {
 .opt_item {background-color:#F3F2F1; border:1px solid #C2C1C0; margin-top:10px; }
 .opt_item_tree_1 {background-color:#F3F2F1; border:1px solid #C2C1C0;  margin-top:10px;}
 .opt_item_cont {padding:5px;}
-.tree_1 {background-image:url(/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:25px;}
-.tree_2 {background-image:url(/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:75px;}
+.tree_1 {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:25px;}
+.tree_2 {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:75px;}
 
 .issue_act {float:right; color:#999999;}
 

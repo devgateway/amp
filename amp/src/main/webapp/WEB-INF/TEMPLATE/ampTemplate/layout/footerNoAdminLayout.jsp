@@ -11,7 +11,7 @@
 <div id="amp-footer"></div>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
 <script language="JavaScript">
 var boilerplate = new window.boilerplate(
      	 {

@@ -151,11 +151,11 @@ function addTeamMember(id) {
 										
 										<table class="inside members normal" width="970" cellpadding="0" cellspacing="0">
 											<tr>
-											  	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;</td>
-											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Name</digi:trn></b></td>
-											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>User ID</digi:trn></b></td>
+											  	<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;</td>
+											    <td width=50% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Name</digi:trn></b></td>
+											    <td width=50% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>User ID</digi:trn></b></td>
 											    <%--
-											    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Role</b></td>
+											    <td width=30% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Role</b></td>
 											    --%>
 											</tr>
 											<logic:empty name="aimTeamMemberForm" property="teamMembers">

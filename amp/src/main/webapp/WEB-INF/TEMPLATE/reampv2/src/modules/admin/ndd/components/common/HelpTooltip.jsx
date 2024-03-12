@@ -21,7 +21,7 @@ class HelpTooltip extends Component {
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <img
           className="info-icon"
-          src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+          src="/src/main/webapp/WEB-INF/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
       </OverlayTrigger>
     );
   }

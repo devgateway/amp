@@ -12,7 +12,7 @@
 	      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
 	      <% if (model.get('chartType') === 'fragmentation') { %>
 	      	<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>
-	      	<img src="/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png" class="question_mark nv-series" data-title="<%= help_icon_text %>">
+	      	<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png" class="question_mark nv-series" data-title="<%= help_icon_text %>">
 	      <% } %>
       </div>
     </div>

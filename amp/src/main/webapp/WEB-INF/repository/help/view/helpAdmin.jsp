@@ -5,7 +5,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />

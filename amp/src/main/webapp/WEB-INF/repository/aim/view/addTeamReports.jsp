@@ -12,7 +12,7 @@
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>			
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script type="text/javascript">
 <!--
 	function validate() {

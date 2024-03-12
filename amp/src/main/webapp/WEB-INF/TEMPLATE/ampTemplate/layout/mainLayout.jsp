@@ -47,11 +47,11 @@
 	<digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
 	<link rel="stylesheet" href="tabs/css/bootstrap.css">
 	<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
-	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+	<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
 	
 <% if(org.digijava.kernel.util.SiteUtils.isEffectiveLangRTL() == true) {%>
-     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css">
-	 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+     <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css">
+	 <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
 <% } %>	
 </head>
 

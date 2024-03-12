@@ -114,7 +114,7 @@ function optionChanged(flag) {
 									<tr>
 										<td><span
 											style="font-size: 16px; font-weight: normal; display: block; margin-left: 10px; margin-right: 10px; color: #C6C6C6;">|</span></td>
-										<td><digi:img hspace="2" vspace="2"	src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"	border="0" alt="Export to Excel" /> </td>
+										<td><digi:img hspace="2" vspace="2"	src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_exc.gif"	border="0" alt="Export to Excel" /> </td>
 
 										<td><a href=# onclick="exportToExcel();return false;"><digi:trn>Export to Excel</digi:trn></a></td>
 
@@ -134,11 +134,11 @@ function optionChanged(flag) {
 									<a href=#
 										onclick="expandCollapse(${record.orgId});return false;" style="display:block; float:left;"><b><c:out value="${record.organizationName}"/></b></a><span
 										style="margin-top: 3px; margin-right: 3px; float: right; cursor:pointer;">
-										<img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"
+										<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"
 										border="0" id="img_exp_${record.orgId}"
 										onclick="expandCollapse(${record.orgId});return false;"><img
 										style="display: none"
-										src="/TEMPLATE/ampTemplate/img_2/ico_perm_close.gif"
+										src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_perm_close.gif"
 										border="0" id="img_col_${record.orgId}"
 										onclick="expandCollapse(${record.orgId});return false;">
 									</span>

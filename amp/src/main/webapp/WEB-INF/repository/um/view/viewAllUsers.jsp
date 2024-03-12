@@ -225,7 +225,7 @@ function banUser(txt) {
 																				<c:if
 																					test="${not empty umViewAllUsersForm.pagedUsers}">
 																					<thead
-																						background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+																						background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
 																						<tr>
 																							<td height="30" width="220"><c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='nameAscending'}">

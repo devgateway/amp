@@ -56,7 +56,7 @@
 		var content = document.getElementById("myHistoryContent");
 		var element6 = document.getElementById("myHistory");
         var loading='\n<digi:trn jsFriendly="true">Loading...</digi:trn>';
-		content.innerHTML = '<p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>'+loading+'</b></font></p>';
+		content.innerHTML = '<p align="center"><img align="top" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>'+loading+'</b></font></p>';
 		//if (panelFirstShow == 1){
 			myPanelHistory.setBody(element6.innerHTML);
 			panelFirstShow = 0;

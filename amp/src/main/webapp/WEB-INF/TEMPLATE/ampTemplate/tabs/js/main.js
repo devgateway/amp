@@ -1,12 +1,12 @@
 require.config({
 	'waitSeconds' : 0,
-	baseUrl : '/TEMPLATE/ampTemplate/tabs/js',
+	baseUrl : '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/js',
 	paths : {
 		backbone : 'lib/backbone.marionette/backbone',
 		underscore : 'lib/backbone.marionette/underscore',
 		jquery : 'lib/jquery_1.10.2',
 		jqueryui : 'lib/jquery-ui.min_1.11.0',
-		jqueryuii18n : '/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min',
+		jqueryuii18n : '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min',
 		marionette : 'lib/backbone.marionette/backbone.marionette.min',
 		text : 'lib/text_2.0.12',
 		localStorage : 'lib/Backbone.localStorage-master/backbone.localStorage-min',
@@ -17,8 +17,8 @@ require.config({
 		 * 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src',
 		 */
 		jqgrid : 'lib/one_place/jqgrid-all',		
-		translationManager: '/TEMPLATE/ampTemplate/script/common/TranslationManager',
-		commonFilterUtils : '/TEMPLATE/ampTemplate/script/common/CommonFilterUtils', 
+		translationManager: '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/TranslationManager',
+		commonFilterUtils : '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/CommonFilterUtils', 
 		i18next : 'lib/i18next_1.6.3.min',
 		numeral : 'lib/numeral_1.4.5.min'		
 	},

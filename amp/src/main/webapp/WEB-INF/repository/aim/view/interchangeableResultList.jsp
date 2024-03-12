@@ -172,7 +172,7 @@
                                                                                 </tr>
                                                                             </c:if>
                                                                             <c:if test="${not empty interchangeResultForm.results}">
-                                                                                <thead background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+                                                                                <thead background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
                                                                                 <tr>
                                                                                     <td height="30" width="90">
                                                                                         <input type="checkbox" id="select-all-ckb" onclick="selectAll()">

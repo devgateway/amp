@@ -164,10 +164,10 @@ $(document).ready(function(){
                           <td align="left" class="inside"> ${mapConfig.mapUrl} </td>
                           <td align="center" class="inside">
                           	<digi:link href="/MapsConfiguration.do?action=edit&id=${mapConfig.id}">
-                              <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
                             </digi:link>
                           	<digi:link href="/MapsConfiguration.do?action=delete&id=${mapConfig.id}" onclick="return confirm('${confirmationTrn}');">
-                              <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
                             </digi:link>
                           </td>
                         </tr>

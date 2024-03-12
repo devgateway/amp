@@ -20,7 +20,7 @@
 <c:set target="${urlParamsChild}" property="subtab" value="2"/>			
 
 
-<link type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/css_2/tabs.css"/>" rel="stylesheet" />
+<link type="text/css" href="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/tabs.css"/>" rel="stylesheet" />
 
 
 <c:set var="loadstatustext">

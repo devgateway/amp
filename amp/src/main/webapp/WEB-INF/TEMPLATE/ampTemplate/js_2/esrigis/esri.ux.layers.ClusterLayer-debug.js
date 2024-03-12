@@ -172,7 +172,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         } else { 
             if (graphic.attributes.baseGraphic) { //cluster flare
                 if (graphic.attributes.id) {
-                	var spinner = '<img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:200;" />';
+                	var spinner = '<img id="loadingImg" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:200;" />';
                 	map.infoWindow.setContent(spinner);
                 	var graphicCenterSP = esri.geometry.toScreenGeometry(this._map.extent, this._map.width, this._map.height, graphic.geometry);
                     map.infoWindow.show(graphicCenterSP, map.getInfoWindowAnchor(graphicCenterSP));

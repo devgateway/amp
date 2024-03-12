@@ -194,12 +194,12 @@ class ReportGeneratorHome extends Component {
       return null;
     }
     if (response.payload.id < 0) {
-      window.open(`/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/run/${response.payload.id}`);
+      window.open(`/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/run/${response.payload.id}`);
     } else if (uiReducer.profile === PROFILE_TAB) {
       window.location.href = '/viewTeamReports.do?tabs=true&reset=true';
     } else {
       if (open) {
-        window.open(`/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/open/${response.payload.id}`);
+        window.open(`/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/open/${response.payload.id}`);
       }
       window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
     }

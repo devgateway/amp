@@ -68,11 +68,11 @@ Installing a [livereload browser extension](http://feedback.livereload.com/knowl
 2.
 
 ```bash
-$ cd [amp-folder]/TEMPLATE/ampTemplate/gisModule/dev/
+$ cd [amp-folder]/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dev/
 $ gulp dev
 ```
 
-3. [//localhost:8080/TEMPLATE/ampTemplate/gisModule/dev/app/index.html](http://localhost:8080/TEMPLATE/ampTemplate/gisModule/dev/app/index.html)
+3. [//localhost:8080/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dev/app/index.html](http://localhost:8080/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dev/app/index.html)
 
 
 #### Run tests

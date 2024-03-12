@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!-- Dependencies -->
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <script type="text/javascript">
     //'${msg}'

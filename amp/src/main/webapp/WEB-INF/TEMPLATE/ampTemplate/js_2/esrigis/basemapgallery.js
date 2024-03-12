@@ -26,38 +26,38 @@ function createBasemapGallery() {
 	var worldphysicalmap = new esri.dijit.Basemap({
 		layers : [ worldphysicallayer ],
 		title : "World Physical Map",
-		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_physical_map_thumb.png"
+		thumbnailUrl : "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/world_physical_map_thumb.png"
 	});
 	*/
 	var worldtopodmap = new esri.dijit.Basemap({
 		layers : [ WorldTopolayer ],
 		title : "World Topo Map",
-		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_topo_map_thumb.png"
+		thumbnailUrl : "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/world_topo_map_thumb.png"
 	});
 	
 	var worldimagery = new esri.dijit.Basemap({
 		layers : [ WorldImagery ],
 		title : "World_Imagery",
-		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_imagery_map_thumb.png"
+		thumbnailUrl : "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/world_imagery_map_thumb.png"
 	});
 	/*
 	var worldterrain = new esri.dijit.Basemap({
 		layers : [ WorldTerrain ],
 		title : "World Terrain",
-		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_terrain_map_thumb.png"
+		thumbnailUrl : "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/world_terrain_map_thumb.png"
 	});
 	*/
 	/*
 	var worldshaded = new esri.dijit.Basemap({
 		layers : [ WorldShaded ],
 		title : "World Shaded Relief",
-		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_shaded_map_thumb.png"
+		thumbnailUrl : "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/world_shaded_map_thumb.png"
 	});
 	*/
 	var worldsstreet = new esri.dijit.Basemap({
 		layers : [ WorldStreet ],
 		title : "World Street",
-		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_street_map_thumb.png"
+		thumbnailUrl : "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/world_street_map_thumb.png"
 	});
 	
 	//basemaps.push(worldphysicalmap);

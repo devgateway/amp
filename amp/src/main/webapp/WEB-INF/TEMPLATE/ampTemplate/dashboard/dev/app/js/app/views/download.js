@@ -389,8 +389,8 @@ module.exports = BackboneDash.View.extend({
         // bad browser, but has flash! fallback to downloadify
         this.app.tryTo(function() {
           window.Downloadify.create(dlButton[0], {
-            swf: '/TEMPLATE/ampTemplate/commonMedia/downloadify.swf',
-            downloadImage: '/TEMPLATE/ampTemplate/commonMedia/download-button-states.png?rev=4',
+            swf: '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/commonMedia/downloadify.swf',
+            downloadImage: '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/commonMedia/download-button-states.png?rev=4',
             transparent: true,
             width: 176,
             height: 34,

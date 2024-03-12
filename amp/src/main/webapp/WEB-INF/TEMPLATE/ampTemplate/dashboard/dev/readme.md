@@ -38,7 +38,7 @@ $ gulp dev
 
 You can access the dashboards now at
 
-[`localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html`](http://localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html)
+[`localhost:3000/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard/dev/app/index.html`](http://localhost:3000/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard/dev/app/index.html)
 
 
 Testing

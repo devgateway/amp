@@ -30,10 +30,10 @@
 
 <link rel="stylesheet" href="<digi:file src="/WEB-INF/repository/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
 <link rel="stylesheet" href="<digi:file src="/WEB-INF/repository/aim/css/css_dhtmlsuite/context-menu.css" />" />
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
 
 <script type="text/javascript">
 function openFieldPermissionsPopup(fieldId) {
@@ -92,7 +92,7 @@ function showDescriptionToolbox(id){
 <div id="loader_background" 
 	style = 'background-color:grey; position:absolute; width:100%; height:2000px; top:81px; left:0;opacity:0.4;z-index:2; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)"; filter: alpha(opacity=40);'>
 	<img style="position:relative;top:300px;opacity:1;z-index:3; margin: 0 auto; display: block;" 
-		src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-white.gif">
+		src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-white.gif">
 </div>
 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<!--<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">-->

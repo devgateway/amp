@@ -60,7 +60,7 @@
       href="<digi:file src= '/src/main/webapp/WEB-INF/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.theme.min.css'/>">
 <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/repository/aim/view/css/filters/filters2.css">
 
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
+<link rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
 <link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/prefilters.js'/>"></script>
@@ -68,12 +68,12 @@
         src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/filters.js'/>?version=fantastic_15"></script>
 <script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/searchManager.js'/>"></script>
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
-<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
-<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
 <script src="/src/main/webapp/WEB-INF/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript"
-        src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
+        src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
 <script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <c:set var="filterPanelName">
@@ -137,7 +137,7 @@
         myPanel.setHeader(msg);
         var content = document.getElementById("popinContent");
         content.innerHTML = '<div style="text-align: center">' +
-            '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+            '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
             '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
         showContent();
     }

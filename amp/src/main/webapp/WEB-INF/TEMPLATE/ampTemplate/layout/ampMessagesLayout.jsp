@@ -29,11 +29,11 @@
 		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
 		
         <!-- Jquery Base Library -->
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-        <link type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/css_2/tabs.css"/>" rel="stylesheet" />
+		<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+        <link type="text/css" href="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/tabs.css"/>" rel="stylesheet" />
     	<link rel="stylesheet" href="tabs/css/bootstrap.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
-    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+    	<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
 		
     
 	</head>

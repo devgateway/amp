@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
 
 <script type="text/javascript">
   if (YAHOOAmp != null){
@@ -38,14 +38,14 @@
 		document.forms[1].submit();
 	}
 </script>
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/treeview.css" />
+    <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
+    <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+    <link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/styles.css" />
 
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>    
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"></script>
+    <script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
+    <script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
+    <script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"></script>
 
 <style type="text/css">
 
@@ -60,9 +60,9 @@
 
 	/** End Clearfix */
 
-.ygtvcheck0 { background: url(/TEMPLATE/ampTemplate/images/yui/check0.gif) 0 0 no-repeat; width:16px; cursor:pointer }
-.ygtvcheck1 { background: url(/TEMPLATE/ampTemplate/images/yui/check1.gif) 0 0 no-repeat; width:16px; cursor:pointer }
-.ygtvcheck2 { background: url(/TEMPLATE/ampTemplate/images/yui/check2.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+.ygtvcheck0 { background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/yui/check0.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+.ygtvcheck1 { background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/yui/check1.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+.ygtvcheck2 { background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/yui/check2.gif) 0 0 no-repeat; width:16px; cursor:pointer }
 
 	.ygtvlabel{
 		background-color:  #EDF5FF;

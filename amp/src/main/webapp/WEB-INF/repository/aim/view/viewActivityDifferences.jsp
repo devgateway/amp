@@ -11,10 +11,10 @@
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/amp.css">
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css">
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_datatable.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
 
 <style type="text/css">
 .tableEven {
@@ -57,34 +57,34 @@
 		<div style="border: 1px solid rgb(208, 208, 208); padding: 10px;font-size:12px; height: 100%;" class="contentstyle" id="ajaxcontentarea">
 			<table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" id="dataTable" width="100%">
 				<tr>
-					<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px; width: 13%">
+					<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px; width: 13%">
 	            		<div align="center">
 	                		<strong><digi:trn>Value name</digi:trn></strong>
 	            		</div>
 	        		</td>
-					<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px; width: 29%">
+					<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px; width: 29%">
 	            		<div align="center">
 	                		<strong><digi:trn>First version (Older)</digi:trn></strong>
 	            		</div>
 	        		</td>
 	        		<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
-	        			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+	        			<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
 		            		<div align="center">
 		                		&nbsp;
 		            		</div>
 		        		</td>
-		        		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; width: 29%">
+		        		<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; width: 29%">
 		            		<div align="center">
 		                		<strong><digi:trn>Merge</digi:trn></strong>
 		            		</div>
 		        		</td>
-		        		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px;">
+		        		<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px;">
 		            		<div align="center">
 		                		&nbsp;
 		            		</div>
 		        		</td>
 	        		</logic:equal>
-	        		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 0px; width: 29%">
+	        		<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 0px; width: 29%">
 	            		<div align="center">
 	                		<strong><digi:trn>Second version (Newer)</digi:trn></strong>
 	            		</div>
@@ -111,7 +111,7 @@
 										<td align="center" valign="middle" class="inside">
                                             <c:if test="${!diffItem.blockSingleChangeOutput}">
                                                 <button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+                                                    <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
                                                 </button>
                                             </c:if>
 										</td>
@@ -121,7 +121,7 @@
 										<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
                                             <c:if test="${!diffItem.blockSingleChangeOutput}">
                                                 <button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+                                                    <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
                                                 </button>
                                             </c:if>
 										</td>
@@ -157,7 +157,7 @@
 						<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
 							<td align="center" valign="middle" class="inside">
 								<button type="button" onClick="javascript:left(${index});" style="border: none; background-color: transparent">
-									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+									<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
 								</button>	
 							</td>
 							<td align="left" valign="top" style="padding-left: 5px;" class="inside">
@@ -165,7 +165,7 @@
 							</td>
 							<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
 								<button type="button" onClick="javascript:right(${index});" style="border: none; background-color: transparent">
-									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+									<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
 								</button>	
 							</td>
 							<input type="hidden" id='mergedValues[${index}]' value="" name="mergedValues[${index}]"/>

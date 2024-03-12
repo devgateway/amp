@@ -71,7 +71,7 @@ function showUser(email){
 
 							<table class="inside" width="970" cellpadding="0" cellspacing="0">
 								<tr>
-							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<c:if test="${aimTeamAuditListForm.sortBy!='nameasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=nameasc" styleClass="l_sm">
@@ -89,7 +89,7 @@ function showUser(email){
 							  			</c:if>
 							  		</b>
 							  	</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='typeasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=typeasc" styleClass="l_sm">
@@ -107,7 +107,7 @@ function showUser(email){
 											</c:if>
 										</b>
 							    </td>
-							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 								    	<c:if test="${aimTeamAuditListForm.sortBy!='teamasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=teamasc" styleClass="l_sm">
@@ -125,7 +125,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='authorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=authorasc" styleClass="l_sm">
@@ -143,7 +143,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='creationdateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=creationdateasc" styleClass="l_sm">
@@ -161,7 +161,7 @@ function showUser(email){
 								  		</c:if>
 							  		</b>
 							  	</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='editorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=editorasc" styleClass="l_sm">
@@ -179,7 +179,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='changedateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=changedateasc" styleClass="l_sm">
@@ -197,7 +197,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='actionasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=actionasc" styleClass="l_sm">

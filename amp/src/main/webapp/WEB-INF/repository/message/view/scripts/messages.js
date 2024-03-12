@@ -23,7 +23,7 @@
 	        div.id="message_loader_indicator";
 	        div.className="message";
 	        div.align="center";
-					div.innerHTML='<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>';
+					div.innerHTML='<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>';
 					msgContainer.append(div);
 	        var url;
 	        url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId=' + id);
@@ -94,7 +94,7 @@
 	        div.id="message_loader_indicator";
 	        div.className="message";
 	        div.align="center";
-					div.innerHTML='<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>';
+					div.innerHTML='<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>';
 					$("td#msg_body_" + id).append(div);
 	        var url;
 	        url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId=' + id);
@@ -361,7 +361,7 @@
 				if(isRead){
 					var msgTd = $("#msg_body_" + msgId);
 					if (msgTd.find("B.show_msg_link")[0] != null) {
-						msgTd.find("IMG.show_msg_link").attr("src", "/TEMPLATE/ampTemplate/img_2/ico_read.gif");
+						msgTd.find("IMG.show_msg_link").attr("src", "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_read.gif");
 						msgTd.find("A.show_msg_link").text(msgTd.find("B.show_msg_link").text());
 						msgTd.find("B.show_msg_link").remove();
 					}
@@ -390,7 +390,7 @@
 		lastTimeStamp = new Date().getTime();
 		
 		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+ currentPage + '&childTab=' + childTab + '&tabIndex=' + tabIndex +'&timeStamp='+lastTimeStamp);			
-		$("#msgsList").html("<tr><td><div align='center'><img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif'/></div></td></tr>");
+		$("#msgsList").html("<tr><td><div align='center'><img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif'/></div></td></tr>");
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
 		async.call(url);
@@ -458,9 +458,9 @@
     
     				if (messages.length != 0) {
 		    
-		    			messageListMarkup.push('<tbody><tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" id="select_all_msg_checkbox" type="checkbox" value="" /></td>');
-		    			messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">'+msgHeaders.msgTitle+'</b></td>');
-						messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">'+msgHeaders.msgActions+'</b></td></tr>');
+		    			messageListMarkup.push('<tbody><tr><td width=20 background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" id="select_all_msg_checkbox" type="checkbox" value="" /></td>');
+		    			messageListMarkup.push('<td width=620 background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">'+msgHeaders.msgTitle+'</b></td>');
+						messageListMarkup.push('<td width=100 background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">'+msgHeaders.msgActions+'</b></td></tr>');
 					
 						for(var i=0;i<messages.length;i++){
 							var msgId=messages[i].getAttribute('msgId');
@@ -485,7 +485,7 @@
 	            		messageListMarkup.push('javascript:loadSelectedMessage(');
 	            		messageListMarkup.push(msgId);
 	            		messageListMarkup.push(')>');
-		            	messageListMarkup.push('<img class="show_msg_link" src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" border="0" align=left style="margin-right:5px;">');
+		            	messageListMarkup.push('<img class="show_msg_link" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_unread.gif" border="0" align=left style="margin-right:5px;">');
 	            		messageListMarkup.push('</a><a href=');
 	            		messageListMarkup.push('javascript:loadSelectedMessage(');
 	            		messageListMarkup.push(msgId);
@@ -501,7 +501,7 @@
 	            		messageListMarkup.push('javascript:loadSelectedMessage(');
 	            		messageListMarkup.push(msgId);
 	            		messageListMarkup.push(')>');
-	            		messageListMarkup.push('<img class="show_msg_link" src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" border="0" align=left style="margin-right:5px;">');
+	            		messageListMarkup.push('<img class="show_msg_link" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_read.gif" border="0" align=left style="margin-right:5px;">');
 	            		messageListMarkup.push('</a><a href=');
 	            		messageListMarkup.push('javascript:loadSelectedMessage(');
 	            		messageListMarkup.push(msgId);
@@ -524,26 +524,26 @@
 									messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~reply=fillForm~editingMessage=true~msgStateId=');
 									messageListMarkup.push(messages[i].getAttribute('id'));
 									messageListMarkup.push('">');
-									messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+									messageListMarkup.push('<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_reply.gif" border="0" width="16" height="14" style="margin-right:10px;">');
 									messageListMarkup.push('</a>');
 									
 									messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~fwd=fillForm~msgStateId=');
 									messageListMarkup.push(messages[i].getAttribute('id'));
 									messageListMarkup.push('">');
-									messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+									messageListMarkup.push('<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_forward.gif" border="0" width="16" height="14" style="margin-right:10px;">');
 									messageListMarkup.push('</a>');
 								} else {
 									messageListMarkup.push('<a href="/message/messageActions.do~actionType=fillTypesAndLevels~editingMessage=true~msgStateId=');
 									messageListMarkup.push(messages[i].getAttribute('id'));
 									messageListMarkup.push('">');
-									messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+									messageListMarkup.push('<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0" width="16" height="14" style="margin-right:10px;">');
 									messageListMarkup.push('</a>');
 								}
 								
 								messageListMarkup.push('<a href="javascript:deleteMessage(\'');
 								messageListMarkup.push(messages[i].getAttribute('id'));
 								messageListMarkup.push('\')">');
-								messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" border="0" width="14" height="14"></td>');
+								messageListMarkup.push('<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_trash.gif" border="0" width="14" height="14"></td>');
 								messageListMarkup.push('</a>');
 								
 								messageListMarkup.push('</tr>');

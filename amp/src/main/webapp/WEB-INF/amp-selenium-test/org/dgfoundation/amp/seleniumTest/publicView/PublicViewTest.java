@@ -53,8 +53,8 @@ public class PublicViewTest extends SeleneseTestCase {
         
         boolean addTabAvailable = false;
         if (selenium.isElementPresent("//a[contains(@href, "
-                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
-            selenium.click("//a[contains(@href, \"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
+                + "\"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
+            selenium.click("//a[contains(@href, \"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
             selenium.waitForPageToLoad("50000");
             addTabAvailable = true;
         } else {
@@ -95,8 +95,8 @@ public class PublicViewTest extends SeleneseTestCase {
         
         boolean addReportAvailable = false;
         if (selenium.isElementPresent("//a[contains(@href, "
-                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]")) {
-            selenium.click("//a[contains(@href, \"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]");
+                + "\"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]")) {
+            selenium.click("//a[contains(@href, \"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]");
             selenium.waitForPageToLoad("360000");
             addReportAvailable = true;
         } else {

@@ -67,11 +67,11 @@
 		<%--
 		<hr class=hr_3>
 		--%>
-		<img src="/TEMPLATE/ampTemplate/img_2/ico_attachment.png" width="16" height="16" align=left style="margin-right:3px;"> <b><digi:trn>Attachments</digi:trn></b>:
+		<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_attachment.png" width="16" height="16" align=left style="margin-right:3px;"> <b><digi:trn>Attachments</digi:trn></b>:
 		<div class="msg_attachments">
 			<c:forEach var="item" items="${messageForm.sdmDocument.items}">
 					<hr>
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_other.gif" align=left style="margin-right:5px;">
+					<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_other.gif" align=left style="margin-right:5px;">
 					<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 					<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>																																														
 					<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${item.paragraphOrder}" name="urlParamsSort">

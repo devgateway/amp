@@ -17,12 +17,12 @@ a {
 }
 </style>
 <digi:ref
-	href="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.css"
+	href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.css"
 	type="text/css" rel="stylesheet" />
 <script type="text/javascript"
-	src="<digi:file src="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.js"/>"></script>
+	src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.js"/>"></script>
 <script type="text/javascript"
-	src="<digi:file src="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/esri-leaflet/dist/esri-leaflet.js"/>"></script>
+	src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dev/node_modules/esri-leaflet/dist/esri-leaflet.js"/>"></script>
 
 <script type="text/javascript">
 	var MapConstants = {

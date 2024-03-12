@@ -12,14 +12,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Home</title>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.class.min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/md5-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/digest-auth.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/sha1.js"/>" ></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"></script>
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/tabs/css/bootstrap.css">
-<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp_public_portal_login.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery.class.min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jdigestauth/md5-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jdigestauth/digest-auth.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jdigestauth/sha1.js"/>" ></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"></script>
+<link rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/css/bootstrap.css">
+<digi:ref href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp_public_portal_login.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript">
 var loginFailed = function(data, status) {
     $(".error").remove();
@@ -77,10 +77,10 @@ var loginFailed = function(data, status) {
 				</p>
 				<div id="result" style="display:none;">
 					<div id="loader" style="display:none;">
-						<img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif'>
+						<img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ajax-loader.gif'>
 					</div>
 					<div class="error_text_login">
-						<img src='/TEMPLATE/ampTemplate/img_2/login_error.gif'> <span
+						<img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/login_error.gif'> <span
 							id="invalid_user_pwd"><digi:trn>Invalid username or password</digi:trn>.</span>
 							<span id="unassigned_user"><digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</span>
 							<span id="banned_user"><digi:trn>Your username has been banned. Please contact the AMP administrator</digi:trn>.</span>

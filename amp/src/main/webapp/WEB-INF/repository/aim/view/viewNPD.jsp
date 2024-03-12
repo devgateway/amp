@@ -17,17 +17,17 @@
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
 <digi:ref
-	href="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/treeview.css"
+	href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/treeview.css"
 	type="text/css" rel="stylesheet" />
 <style type="text/css">
 .ygtvlabel {
 	font-size: 12px;
 }
 .ygtvtp, .ygtvtph, .ygtvlp,.ygtvlph{
-background:url(/TEMPLATE/ampTemplate/img_2/ico_plus.gif) 0 0 no-repeat;
+background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_plus.gif) 0 0 no-repeat;
 }
 .ygtvtm,.ygtvtmh,.ygtvlm,.ygtvlmh{
-background:url(/TEMPLATE/ampTemplate/img_2/ico_minus.gif) 0 0 no-repeat; ;
+background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_minus.gif) 0 0 no-repeat; ;
 }
 .ygtvfocus, .ygtvfocus .ygtvlabel,.ygtvfocus .ygtvlabel:link,.ygtvfocus .ygtvlabel:visited,.ygtvfocus .ygtvlabel:hover{
 background-color:#FFFFFF;
@@ -36,7 +36,7 @@ background-color:#FFFFFF;
 
 
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"/>"></script>
+	src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/WEB-INF/repository/aim/scripts/tree/jktreeview.js"/>"></script><jsp:include
 	page="scripts/npdScripts/programTree.jsp" flush="true" />
@@ -132,7 +132,7 @@ background-color:#FFFFFF;
    		clearChildren(parent);
    		var div=document.createElement('div');
    		var img=document.createElement('img');
-   		img.src="/TEMPLATE/ampTemplate/images/amploading.gif";
+   		img.src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/amploading.gif";
    		img.alt="Loading...";
    		div.appendChild(img);
    		parent.appendChild(div);
@@ -212,9 +212,9 @@ background-color:#FFFFFF;
 			<digi:trn>Reports</digi:trn>
 		</digi:link></div>
 		<a class="l_sm" href="#"><img
-			border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
+			border="0" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
 			class="l_sm" href="#" onclick="exportToExcel();return false;"><digi:trn>Export to Excel</digi:trn></a> &nbsp;|&nbsp; <a class="l_sm" href="#"><img border="0"
-			src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a
+			src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a
 			class="l_sm" href="#" onclick="window.print(); return false;"><digi:trn>Print</digi:trn></a>
 		&nbsp;|&nbsp; <a class="l_sm" id="showGridLink"
 			href="javascript:showGridTable();"><digi:trn>View Table</digi:trn></a><a class="l_sm" id="hideGridLink"

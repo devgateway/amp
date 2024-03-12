@@ -7,9 +7,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://digijava.org/CategoryManager" prefix="category" %>
 
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/tabview.css">
 
 
 
@@ -157,14 +157,14 @@
 </style>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/asynchronous.js"/>"></script>
 <!-- Individual YUI JS files -->
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script>
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 <digi:instance property="aimWorkspaceForm" />
 <script type="text/javascript">
 
@@ -236,8 +236,8 @@
  	
        	    this.formatActions = function(elCell, oRecord, oColumn, sData) {
                 elCell.innerHTML = 
-                    "<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do?dest=admin&event=edit&tId=" +oRecord.getData( 'ID' )+' title="<digi:trn>Click here to Edit Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-                    "<a href='javascript:deleteWorkspace(" + oRecord.getData( 'ID' )+ ")'" + ' title="<digi:trn>Click here to Delete Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+                    "<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do?dest=admin&event=edit&tId=" +oRecord.getData( 'ID' )+' title="<digi:trn>Click here to Edit Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+                    "<a href='javascript:deleteWorkspace(" + oRecord.getData( 'ID' )+ ")'" + ' title="<digi:trn>Click here to Delete Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
                     "<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
             };
         
@@ -565,7 +565,7 @@
     function showPanelLoading(msg){
         myPanel.setHeader(msg);	
         var bodymsg='<div style="text-align: center">' + 
-        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+        '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
         '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>'
         myPanel.setBody(bodymsg);
         showContent();
@@ -691,8 +691,8 @@
                 html[j++] = '<tr><td width="75%" class="inside">';
                 html[j++] = '<a href=\'javascript:showTeamMemberProfile("'+item.email+'")\' title=\'<digi:trn jsFriendly="true">Click to View Member Detais</digi:trn>\'>'+item.name+'</a>';
                 html[j++] = '</td><td align=\'center\' width="25%" class="inside">';
-                html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn jsFriendly="true">Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
-                html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn  jsFriendly="true">Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
+                html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn jsFriendly="true">Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
+                html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn  jsFriendly="true">Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
                 html[j++] = '</td></tr>';
             }
             document.getElementById('footerMessage').innerHTML='<em style="font-size:11px;">* <digi:trn  jsFriendly="true">Workspace Manager</digi:trn></em>';
@@ -769,7 +769,7 @@
                 html[j++] = '<tr><td width="75%" class="inside">';
                 html[j++] = item.name.replace("<", "&lt;").replace(">", "&gt;");
                 html[j++] = '</td ><td align=\'center\' width="25%" class="inside">';
-                html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn jsFriendly="true">Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
+                html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn jsFriendly="true">Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
                 html[j++] = '</td></tr>';
                 if(i%10==9||i==l-1){
             		html[j++]='</tbody>';
@@ -1131,7 +1131,7 @@
             var url = "<%=commentUrl %>";
             url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
             var bodymsg='<div style="text-align: center">' + 
-            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+            '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
             '<digi:trn jsFriendly="true">Saving, please wait ...</digi:trn><br/><br/></div>'
             myPanel.setBody(bodymsg);
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
@@ -1171,7 +1171,7 @@
                                 <digi:trn>Admin Home</digi:trn>
                             </digi:link>&nbsp;&gt;&nbsp;
                             <digi:trn>Workspace Manager</digi:trn>
-                            <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/workspacemanager.jpg"/></div>
+                            <div class="adminicon"><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/adminicons/workspacemanager.jpg"/></div>
                     </td>
                 </tr> 
 				-->
@@ -1360,7 +1360,7 @@
                             </td>
                         </tr>
                     </table>
-                     <img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" alt="loading" id="loadingDetailsIcon" class="invisibleTable"/>
+                     <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" alt="loading" id="loadingDetailsIcon" class="invisibleTable"/>
                 </div>
             </td>
         </tr>

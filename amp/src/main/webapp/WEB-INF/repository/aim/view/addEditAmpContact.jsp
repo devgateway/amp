@@ -358,7 +358,7 @@
 				property.size="33";
 				deletePropertyLink.href="javascript:removeData('"+dataName+"',"+index+")";
 				var deleteImg=document.createElement("img");
-				deleteImg.src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif";
+				deleteImg.src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif";
 				deleteImg.alt="delete";
 				deleteImg.svpace="2";
 				deleteImg.border="0";
@@ -464,7 +464,7 @@
             myPanel.setHeader(msg);
             var content = document.getElementById("popinContent");
             content.innerHTML = '<div style="text-align: center">' +
-                '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+                '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
                 '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
                 showContent();
         }
@@ -505,12 +505,12 @@
 		// hide loading image
 //        addLoadEvent(delBody);
 </script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <jsp:include page="/src/main/webapp/WEB-INF/repository/aim/view/addOrganizationPopin.jsp"  />
 <!-- Individual YUI CSS files --> 
 
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/tabview.css">
 <!-- BREADCRUMP START -->
 <div class="breadcrump">
 	<div class="centering">
@@ -629,7 +629,7 @@
 																<category:showoptions multiselect="false" firstLine="${translationNone}" name="addressbookForm" property="phones[${ctr}].phoneTypeId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="nputx insidex address-title" outerid="phoneType_${ctr}" /> 	 	
 																<html:text name="addressbookForm" property="phones[${ctr}].value" styleId="phoneNum_${ctr}"  size="33" styleClass="inputx insidex" /> 
 																<a href="javascript:removeData('phone',${ctr})">
-																	<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" />
+																	<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" />
 																</a> 
 																<c:if test="${addressbookForm.phonesSize==0 ||  ctr==0}">
 																	<c:set var="trnadd">
@@ -661,7 +661,7 @@
 														<logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
 															<div id="div_fax_${ctr}">
 																<html:text name="addressbookForm" property="faxes[${ctr}].value" size="33" styleClass="inputx insidex" styleId="fax_${ctr}"/>																												                    																												                    
-																<a href="javascript:removeData('fax',${ctr})"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/></a>
+																<a href="javascript:removeData('fax',${ctr})"><img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/></a>
 																<c:if test="${ctr==0}">
 																	<c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
 																	<a href="#" id="faxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
@@ -685,7 +685,7 @@
 											    	<a href="#" id="emailBtnEmpty" onclick="addNewData('email');return false;" class="l_mid_b" style="display:none">${trnadd}</a>
 														<logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
 															<div id="div_email_${ctr}"><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
-															 	<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /> </a> 
+															 	<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /> </a>
 															 	<c:if test="${ctr==0}">
 																	<c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
 																	<a href="#" id="emailBtn" class="l_mid_b" onclick="addNewData('email');return false;">${trnadd}</a>

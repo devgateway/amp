@@ -13,14 +13,14 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/addFunding.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 
 <jsp:include page="scripts/newCalendar.jsp"  />
 

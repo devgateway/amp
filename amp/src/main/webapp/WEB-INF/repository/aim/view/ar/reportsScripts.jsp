@@ -14,9 +14,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 
 	<!-- Jquery Base Library -->
-<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
-<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
-<script src="/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min.js" type="text/javascript"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min.js" type="text/javascript"></script>
 <c:set var="maxFractionDigits"><%= org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %></c:set>
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -147,8 +147,8 @@ background-color: yellow;css
 }
 
 </style>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
@@ -333,7 +333,7 @@ saveReportEngine	= null;
 	}
 	
 	function showFilter(reportContextId) {
-		document.getElementById("myFilter").innerHTML = '<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>';
+		document.getElementById("myFilter").innerHTML = '<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>';
 		
 		var element = document.getElementById("myFilter");
 		element.style.display   = "block";
@@ -877,7 +877,7 @@ function validateFormat(){
 	    ); 
 
 		wait.setHeader(msg0); 
-		wait.setBody("<div align='center'>"+msg3+"<br>"+'<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />'+"</div>"); 
+		wait.setBody("<div align='center'>"+msg3+"<br>"+'<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />'+"</div>");
 		wait.render(document.body);
 		wait.show();
 		var winH;

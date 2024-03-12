@@ -23,12 +23,12 @@
     <td valign=top width=712>
 	<table class="inside" width=712 cellpadding="0" cellspacing="0" border=1>
 <tr>
-<td colspan=4 align=center background="/TEMPLATE/ampTemplate/images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Budget Export Manager</digi:trn></b></td>
+<td colspan=4 align=center background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Budget Export Manager</digi:trn></b></td>
 </tr>
 <tr>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside width=30%><b class="ins_header" style="font-size:11px;"><digi:trn>Name</digi:trn></b></td>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside width=30%><b class="ins_header" style="font-size:11px;"><digi:trn>Description</digi:trn></b></td>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside width=40%><b class="ins_header" style="font-size:11px;"><digi:trn>Options</digi:trn></b></td>
+    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside width=30%><b class="ins_header" style="font-size:11px;"><digi:trn>Name</digi:trn></b></td>
+    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside width=30%><b class="ins_header" style="font-size:11px;"><digi:trn>Description</digi:trn></b></td>
+    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside width=40%><b class="ins_header" style="font-size:11px;"><digi:trn>Options</digi:trn></b></td>
     </tr>
     
     <logic:present name="beBudgetExportForm" property="projects">

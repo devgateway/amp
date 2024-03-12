@@ -74,7 +74,7 @@
 							
 							<table class="inside" width="970" cellpadding="0" cellspacing="0">
 								<tr>
-							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<digi:trn key="aim:activityList">Activity List</digi:trn>
 							    	</b>

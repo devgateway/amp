@@ -1,4 +1,4 @@
-//_editor_url = "/digijava/TEMPLATE/blank/module/editor/";                     // URL to htmlarea files
+//_editor_url = "/digijava/src/main/webapp/WEB-INF/TEMPLATE/blank/module/editor/";                     // URL to htmlarea files
 	
 var win_ie_ver = parseFloat(navigator.appVersion.split("MSIE")[1]);
 if (navigator.userAgent.indexOf('Mac')        >= 0) { win_ie_ver = 0; }

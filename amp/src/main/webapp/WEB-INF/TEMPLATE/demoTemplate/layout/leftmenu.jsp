@@ -91,7 +91,7 @@
 
                  <IMG height="4" src="jsp/eproc/images/blank.gif" width="151" border="0"><BR>
                  <a href="http://dev.dgmarket.com/dacon/search">Search</a><br>
-                 <IMG height="4" src="TEMPLATE/images/blank.gif" width="151" border="0"><BR>
+                 <IMG height="4" src="src/main/webapp/WEB-INF/TEMPLATE/images/blank.gif" width="151" border="0"><BR>
 
               </td>
              </tr>

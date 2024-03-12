@@ -8,9 +8,9 @@
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
 
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/tabview.css">
 
 <style>
 
@@ -176,15 +176,15 @@
 </style>
 
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 
 	
 <script language="JavaScript">
@@ -199,8 +199,8 @@
 
 		    	this.formatActions = function(elCell, oRecord, oColumn, sData) {
 		        	elCell.innerHTML =
-		        		"<a href=/aim/addressBook.do?actionType=editContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Edit Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Delete Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 		        	
+		        		"<a href=/aim/addressBook.do?actionType=editContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Edit Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Delete Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>"
 			        	
 		        };		        
 		        

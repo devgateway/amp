@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
  <script type="text/javascript">
      function validateItemTitle() {
          var title=document.glossaryForm.nodeName.value;

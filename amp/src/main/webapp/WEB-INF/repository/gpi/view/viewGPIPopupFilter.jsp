@@ -67,7 +67,7 @@ div.membersSelector {
 
 div.innerTabHeader {
 	border-bottom: 1px solid #cccccc;
-	background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);
+	background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif);
 	height: 31px;
 }
 

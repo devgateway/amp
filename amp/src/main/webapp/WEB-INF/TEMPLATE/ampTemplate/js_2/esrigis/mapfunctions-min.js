@@ -30,7 +30,7 @@ map.infoWindow.setTitle("Structures");for(var int=0;int<foundstr.length;int+=2){
 +foundstr[int].attributes["Activity"]+"</td></tr>";}
 content=content
 +"<tr><td colspan='3'>"
-+"<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
++"<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
 +"</td></tr></table>";if(foundstr.length>0){map.infoWindow.setContent(content);map.infoWindow.resize(600,200);map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));}else{map.infoWindow.setContent("<b>"+translate("There are no structures around this area")+"</b>");
 map.infoWindow.resize(200, 100);map.infoWindow.show(searchpoint.screenPoint, map.getInfoWindowAnchor(searchpoint.screenPoint));}
 dojo.connect(map.infoWindow,"onHide",clearbuffer);hideLoading();}
@@ -187,7 +187,7 @@ map.infoWindow.setTitle("<digi:trn>Add new activity</digi:trn>");content=content
 function MapFindPoint(level,evt){searchpoint=evt;showLoading();var queryTask=new esri.tasks.QueryTask(countrymapurl+'/'+level.mapId);var query=new esri.tasks.Query();query.geometry=evt.mapPoint;query.outSpatialReference={wkid:map.spatialReference.wkid};query.returnGeometry=false;query.outFields=[COUNTY,DISTRICT,GEO_ID];queryTask.execute(query,showAddActivityInfoWindow);}
 function submitActivity(){var name,lat,lon,geoid;name=dojo.byId("activityName");lat=dojo.byId("lat");lon=dojo.byId("lon");geoId=dojo.byId("geoId");geoIdShort=geoId.value.substring(0,4);window.open("/wicket/onepager/activity/new/name/"+name.value+"/lat/"
 +lat.value+"/lon/"+lon.value+"/geoId/"+geoIdShort);}
-function showLegendClusterDonor(pointSymbolBank){var htmlDiv="";htmlDiv+="<div onclick=\"$('#legendcontainer').toggle('slow');\" style='color:white;float:right;cursor:pointer;'><img src='/TEMPLATE/ampTemplate/img_2/gis/minimize.gif'></div>";htmlDiv+="<div class='legendHeader'>";htmlDiv+=translate('Point color reference');htmlDiv+="<br/><hr/></div><div id='legendcontainer'>";if(donorArray.length<10){for(var i=0;i<donorArray.length;i++){htmlDiv+="<div class='legendContentContainer'>"
+function showLegendClusterDonor(pointSymbolBank){var htmlDiv="";htmlDiv+="<div onclick=\"$('#legendcontainer').toggle('slow');\" style='color:white;float:right;cursor:pointer;'><img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/minimize.gif'></div>";htmlDiv+="<div class='legendHeader'>";htmlDiv+=translate('Point color reference');htmlDiv+="<br/><hr/></div><div id='legendcontainer'>";if(donorArray.length<10){for(var i=0;i<donorArray.length;i++){htmlDiv+="<div class='legendContentContainer'>"
 +"<div class='legendContentValue' style='background-color:rgba("
 +pointSymbolBank[donorArray[i].donorCode].color.toRgba()
 +");' ></div>"+"</div>"

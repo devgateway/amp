@@ -49,9 +49,9 @@
 		actRiskChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actRiskChartFileName;
 	}
 %>
-<link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
+<link href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
 <% if(org.digijava.kernel.util.SiteUtils.isEffectiveLangRTL() == true) {%>
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
 <% } %>
 <style>
 html {background:none;}

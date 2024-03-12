@@ -38,8 +38,8 @@
 		<td>
 			<!-- CSS -->
 			<link href='css_2/amp.css' rel='stylesheet' type='text/css'>
-			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
-			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
+			<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+			<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/gpi/script/gpi_scripts.js"/>"></script>
@@ -85,15 +85,15 @@
 													<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
 														<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;
 														<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer;" title="<digi:trn>Export to PDF</digi:trn>">
-													    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
+													    	<digi:img width="17" height="20" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
 													    	<digi:trn>Export to PDF</digi:trn>
 														</a>|&nbsp;
 													    <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
-													    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
+													    	<digi:img width="17" height="20" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
 													    	<digi:trn>Export to Excel</digi:trn>
 													    </a>|&nbsp;
 													    <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Printer Friendly</digi:trn>">
-															<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
+															<digi:img width="17" height="20" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
 															<digi:trn>Print</digi:trn> 
 														</a>|&nbsp;
 													</td>
@@ -231,7 +231,7 @@
 												                    </td>												                    
 										                    		<td width="60%" align="right" style="font-size: 11px; padding-right: 15px;">
 										                    			<logic:notEmpty name="gpiForm" property="setup">
-									                           				<p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: bottom;">&nbsp;<digi:trn><bean:write name="gpiForm" property="gpiReport.description"/></digi:trn></p>
+									                           				<p><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: bottom;">&nbsp;<digi:trn><bean:write name="gpiForm" property="gpiReport.description"/></digi:trn></p>
 																		</logic:notEmpty>										                           				
 										                    		</td>											                    	
 										                    	</tr>

@@ -136,7 +136,7 @@ function GetXmlHttpObj()	{
 
    function showProgress(name)
    {
-      var prg = '<img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="Loading..."/>Saving...';
+      var prg = '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="Loading..."/>Saving...';
        var progressViewer = document.getElementById(name);
        progressViewer.innerHTML = prg;
    }

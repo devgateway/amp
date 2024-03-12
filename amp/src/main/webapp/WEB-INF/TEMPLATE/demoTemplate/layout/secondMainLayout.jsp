@@ -1,7 +1,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <html>
-<link href="/digijava/TEMPLATE/demoSite/css/global.css" rel="stylesheet" type="text/css">
+<link href="/digijava/src/main/webapp/WEB-INF/TEMPLATE/demoSite/css/global.css" rel="stylesheet" type="text/css">
 <head>
 <title>DemoSite secondary layout: <tiles:getAsString name="title"/></title>
 </head>

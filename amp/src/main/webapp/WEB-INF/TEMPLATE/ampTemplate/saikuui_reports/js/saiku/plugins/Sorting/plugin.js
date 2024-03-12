@@ -172,9 +172,9 @@ function updateArrowIcon(data) {
 				var col = $("[id='" + item.id + "']");
 				var imgHtml = "";
 				if (item.asc) {
-					imgHtml = "<img id='sorting-arrow' src='/TEMPLATE/ampTemplate/images/up.gif' />";
+					imgHtml = "<img id='sorting-arrow' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/up.gif' />";
 				} else {
-					imgHtml = "<img id='sorting-arrow' src='/TEMPLATE/ampTemplate/images/down.gif' />";
+					imgHtml = "<img id='sorting-arrow' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/down.gif' />";
 				}
 				$(col).find("div").append(imgHtml);
 			});

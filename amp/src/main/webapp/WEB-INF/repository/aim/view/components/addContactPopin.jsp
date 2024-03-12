@@ -207,7 +207,7 @@
 							<div><html:text name="aimAddContactForm"
 								property="emails[${ctr}].value" size="30" styleId="email_${ctr}" />
 							<a href="javascript:removeData('email',${ctr})"> <img
-								src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
+								src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
 								vspace="2" border="0" /> </a> <c:if
 								test="${ctr==aimAddContactForm.emailsSize-1}">
 								<c:set var="trnadd">
@@ -247,7 +247,7 @@
 											--%> 
 									<html:text name="aimAddContactForm"	property="phones[${ctr}].value" size="16" styleId="phoneNum_${ctr}" /> 
 									<a href="javascript:removeData('phone',${ctr})"> 
-										<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"	vspace="2" border="0" />
+										<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"	vspace="2" border="0" />
 									</a> 
 									<c:if test="${aimAddContactForm.phonesSize==0 ||  ctr==aimAddContactForm.phonesSize-1}">
 										<c:set var="trnadd">
@@ -277,7 +277,7 @@
 							<div><html:text name="aimAddContactForm"
 								property="faxes[${ctr}].value" size="30" styleId="fax_${ctr}" />
 							<a href="javascript:removeData('fax',${ctr})"> <img
-								src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
+								src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
 								vspace="2" border="0" /> </a> <c:if
 								test="${ctr==aimAddContactForm.faxesSize-1}">
 								<c:set var="trnadd">

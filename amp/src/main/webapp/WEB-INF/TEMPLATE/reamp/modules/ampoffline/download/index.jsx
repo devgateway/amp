@@ -22,7 +22,7 @@ var AMPOfflineDownload = React.createClass( {
         return (
             <div>
                 <div className='col-md-5'>
-                    <img src='/TEMPLATE/reamp/modules/ampoffline/download/images/monitor.png' />
+                    <img src='/src/main/webapp/WEB-INF/TEMPLATE/reamp/modules/ampoffline/download/images/monitor.png' />
                 </div>
                 <div className='col-md-7'>
                     <div className='c'>

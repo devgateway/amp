@@ -288,7 +288,7 @@ addLoadEvent(addpanel);
 		<%--<td noWrap align=left valign="middle" style="background-color: #CFCFCF">		
 			<a href="#" target="_blank" onclick="toggleActionForm('richXls'); return false;" title="<digi:trn>Download as Rich XLS</digi:trn>">
 			    <c:set var="title"><digi:trn>Export to Excel</digi:trn></c:set>
-				<img src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg" border="0" hspace="2" vspace="2" alt="Export as Rich Excel" />
+				<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg" border="0" hspace="2" vspace="2" alt="Export as Rich Excel" />
 			</a>
 		</td> --%>
 				

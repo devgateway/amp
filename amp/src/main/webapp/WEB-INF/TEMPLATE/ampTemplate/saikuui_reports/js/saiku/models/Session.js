@@ -72,6 +72,6 @@ var Session = Backbone.Model.extend({
     url: function() {
     	Saiku.logger.log("Session.url");
     	//TODO: Instead of loading this file add the content here.
-    	return "/TEMPLATE/ampTemplate/saikuui_reports/mockData/session.json";
+    	return "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/mockData/session.json";
     }
 });

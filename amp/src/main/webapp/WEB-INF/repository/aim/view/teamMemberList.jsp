@@ -238,17 +238,17 @@ function addTeamMember(id) {
 															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" 
 															 id="dataTable">
 																<tr>
-																	<td class="inside" style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;color:#767676;">
+																	<td class="inside" style="color:black; background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;color:#767676;">
 																		<b>
 																			<digi:trn key="aim:teamMemberName">Name</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;color:#767676;">
+																	<td class="inside" style="color:black;background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;color:#767676;">
 																		<b>
 																			<digi:trn key="aim:userId">User Id</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;color:#767676;">
+																	<td class="inside" style="color:black;background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;color:#767676;">
 																		<b>
 																			<digi:trn key="aim:role">Role</digi:trn>
 																		</b>

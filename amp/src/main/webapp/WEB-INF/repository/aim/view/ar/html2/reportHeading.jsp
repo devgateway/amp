@@ -50,9 +50,9 @@
 				<logic:iterate name="generatedReport" property="levelSorters" id="sorter" indexId="levelId">
 					<c:if test="${levelId==hIdx}">
 						<c:set var="hSortOrder">${sorter.value}</c:set>
-						<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/up_red${levelId}.gif</c:set>
+						<c:set var="sortIconPath">/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/up_red${levelId}.gif</c:set>
 						<c:if test="${sorter.value=='descending'}">
-							<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/down_red${levelId}.gif</c:set>
+							<c:set var="sortIconPath">/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/down_red${levelId}.gif</c:set>
 						</c:if>
 					</c:if>
 				</logic:iterate>

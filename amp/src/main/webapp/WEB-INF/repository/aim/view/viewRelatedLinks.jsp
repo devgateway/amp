@@ -85,12 +85,12 @@
 
 						<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 							<tr>
-							    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							    <td width=30% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<digi:trn key="aim:doctitle">Title</digi:trn>
 							    	</b>
 							    </td>
-							    <td width=40% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							    <td width=40% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<c:if test="${subtabId == 0 }">
 							    			<digi:trn key="fm:documentfilename">Filename</digi:trn>
@@ -100,7 +100,7 @@
 							    		</c:if>
 							    	</b>
 							    </td>
-							    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							    <td width=30% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<digi:trn key="aim:activityName">Activity</digi:trn>
 							    	</b>

@@ -289,7 +289,7 @@ function submitForm(action){
 																				<b><digi:trn>${titleColumn}</digi:trn> </b>
 																			</digi:link>
 																			<c:if test="${aimTeamReportsForm.sortBy==2}">
-																				<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
+																				<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
 																			</c:if>
 																		</c:if> 
 																		<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
@@ -298,7 +298,7 @@ function submitForm(action){
 																				<digi:trn key="aim:organizationName">${titleColumn}</digi:trn>
 																				</b>
 																			</digi:link>
-																			<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+																			<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
 																		</c:if>
 																	</td>
 
@@ -419,12 +419,12 @@ function submitForm(action){
 																					style="font-size: 11px;" bgcolor="${color}"><c:choose>
 																						<c:when test="${empty report.filterDataSet}">
 																							<img
-																								src="/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif"
+																								src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif"
 																								vspace="2" border="0" align="absmiddle" />
 																						</c:when>
 																						<c:otherwise>
 																							<img
-																								src="/TEMPLATE/ampTemplate/images/bullet_green_sq.gif"
+																								src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_green_sq.gif"
 																								vspace="2" border="0" align="absmiddle" />
 																						</c:otherwise>
 																					</c:choose></td>
@@ -461,7 +461,7 @@ function submitForm(action){
 
 																						<a href="${reportLink}"
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the report</digi:trn>">
-						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
+						                                								<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>
 																						<%if(!FeaturesUtil.showEditableExportFormats()){ %>
@@ -476,7 +476,7 @@ function submitForm(action){
 																								onclick="$.downloadReport(${report.ampReportId}, 'xls')" 
 																								title="${translation}">
 																								<digi:img hspace="0" vspace="0" height="16"	width="16" 
-																								src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
+																								src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
 																							</a>
 																						</c:if>
 																						&nbsp;
@@ -489,7 +489,7 @@ function submitForm(action){
 																							title="${translation}">
 																							<digi:img hspace="0" vspace="0" height="16"
 																								width="16"
-																								src="/TEMPLATE/ampTemplate/images/icons/pdf.gif"
+																								src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/icons/pdf.gif"
 																								border="0" />
 																						</a>
 																						-->
@@ -508,7 +508,7 @@ function submitForm(action){
 																								title="${translation}">
 																								<digi:img hspace="0" vspace="0" height="16"
 																									width="16"
-																									src="/TEMPLATE/ampTemplate/img_2/ico-print.png"
+																									src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico-print.png"
 																									border="0" />
 																							</a>
 																						</feature:display> -->

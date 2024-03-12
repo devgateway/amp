@@ -56,7 +56,7 @@ body {
 }
 
 .headerBackground {
-    background:url(/TEMPLATE/ampTemplate/img_2/mapbg.jpg) repeat-x top;
+    background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/mapbg.jpg) repeat-x top;
 	height: 50px;
     position: absolute;
     top: 0;
@@ -107,7 +107,7 @@ body {
     width: 100px;
 }
 
-div#mainGisMenu{  background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
+div#mainGisMenu{  background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;
 	z-Index:100;
 	right:10px;
@@ -119,13 +119,13 @@ div#mainGisMenu{  background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
     color:#fff;}
 div#mainGisMenu ul, div#mainGisMenu ul li {margin:0px;padding:0px;}
 div#mainGisMenu ul li {background-position:10px 125px;list-style:none;text-align:right;font-size:12px;width:127px;border-bottom:1px #000 solid;padding:8px 30px 8px 0px;font-weight:bold;border-left:3px solid #000;}
-div#mainGisMenu ul li#search{background:url(/TEMPLATE/ampTemplate/img_2/gis/searchstr.png) no-repeat right;background-position:135px 8px;} 
-div#mainGisMenu ul li#hlight{background:url(/TEMPLATE/ampTemplate/img_2/gis/highlightregions.png) no-repeat right;background-position:135px 8px;}
-div#mainGisMenu ul li#hlightz{background:url(/TEMPLATE/ampTemplate/img_2/gis/highlightzones.png) no-repeat right;background-position:135px 8px;}
-div#mainGisMenu ul li#add{background:url(/TEMPLATE/ampTemplate/img_2/gis/addactivity.png) no-repeat right;background-position:135px 8px;}
-div#mainGisMenu ul li#structures{background:url(/TEMPLATE/ampTemplate/img_2/gis/structures.png) no-repeat right;background-position:135px 8px;}
-div#mainGisMenu ul li#povmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/povertymap.png) no-repeat right;background-position:135px 8px;}
-div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/censusmap.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#search{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/searchstr.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#hlight{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/highlightregions.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#hlightz{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/highlightzones.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#add{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/addactivity.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#structures{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/structures.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#povmap{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/povertymap.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#censusmap{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/censusmap.png) no-repeat right;background-position:135px 8px;}
 
 .usaidlogo{
     position:absolute;
@@ -136,7 +136,7 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 }
 
 .legendContent {
-    background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
+    background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;
 	z-Index:100;
 	display: none;
@@ -178,7 +178,7 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 }
 
 .searchContent {
-   background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
+   background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;
 	z-Index:100;
 	margin-left: 600px;
@@ -210,7 +210,7 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 
 .esriBasemapGallery {
 	position:absolute;
-	background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
+	background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	z-index:100;
 	margin-top:5%;
 	/*margin-left:60%;*/
@@ -256,7 +256,7 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 
 div.gisBoxHeader{width:100%;height:40px;position:relative}
 div.gisBoxHeader a{width:10px;height:10px; display:block;position:absolute;right:5px;top:5px;}
-div.gisBoxHeader a:hover{width:10px;height:10px; display:block;position:absolute;right:5px;top:5px;background:url(/TEMPLATE/ampTemplate/img_2/gis/close.gif);}
+div.gisBoxHeader a:hover{width:10px;height:10px; display:block;position:absolute;right:5px;top:5px;background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/close.gif);}
 
 .snapShoots{
 		    position:absolute;
@@ -267,7 +267,7 @@ div.gisBoxHeader a:hover{width:10px;height:10px; display:block;position:absolute
 			height:auto;
 			margin-left: 25% ;
   			margin-right: 25%; 
-			background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
+			background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 		    color:#fff;
 		    }
 		    .snapShoots a{

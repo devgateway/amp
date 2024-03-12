@@ -797,8 +797,8 @@ public class ActivityFormTest extends SeleneseTestCase{
         //ADD TAB
         boolean addTabAvailable = false;
         if (selenium.isElementPresent("//a[contains(@href, "
-                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
-            selenium.click("//a[contains(@href, \"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
+                + "\"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
+            selenium.click("//a[contains(@href, \"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
             selenium.waitForPageToLoad("50000");
             addTabAvailable = true;
         } else {

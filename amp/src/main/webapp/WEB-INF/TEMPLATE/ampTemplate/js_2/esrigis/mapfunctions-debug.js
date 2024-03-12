@@ -132,11 +132,11 @@ function loadScript(src, f) {
 function init() {
 	
 	//Ensure scripts are loaded after dojo modules are loaded
-	loadScript('/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js', function() { 
+	loadScript('/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js', function() {
 		   console.log('esri.ux.layers.ClusterLayer-debug loaded');
 		 });
 	
-	loadScript('/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.AMPCluster.js', function() { 
+	loadScript('/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.AMPCluster.js', function() {
 		   console.log('esri.ux.layers.AMPCluster loaded');
 		 });
 	
@@ -878,7 +878,7 @@ function showStInfoWindow() {
 	}
 	content = content
 			+ "<tr><td colspan='3'>"
-			+ "<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
+			+ "<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
 			+ "</td></tr></table>";
 	if (foundstr.length > 0) {
 		map.infoWindow.setContent(content);
@@ -2048,7 +2048,7 @@ function submitActivity() {
 
 function showLegendClusterDonor(pointSymbolBank) {
 	var htmlDiv = "";
-	htmlDiv += "<div onclick=\"$('#legendcontainer').toggle('slow');\" style='color:white;float:right;cursor:pointer;'><img src='/TEMPLATE/ampTemplate/img_2/gis/minimize.gif'></div>";
+	htmlDiv += "<div onclick=\"$('#legendcontainer').toggle('slow');\" style='color:white;float:right;cursor:pointer;'><img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/minimize.gif'></div>";
 	htmlDiv += "<div class='legendHeader'>";
 	htmlDiv += translate('Point color reference');
 	htmlDiv += "<br/><hr/></div><div id='legendcontainer'>";

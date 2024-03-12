@@ -578,7 +578,7 @@ function refreshLoadingPanel(){
 }
 var callbackUpdateLoadingPanel = {
 		  success: function(o) {
-			   loadingPanel.loadingPanel.setBody(o.responseText + '<br/> <img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
+			   loadingPanel.loadingPanel.setBody(o.responseText + '<br/> <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
 			   loadingPanel.loadingPanel.render(document.body);
 		       var cancelLink = document.createElement('a');
 		       $D.setStyle(cancelLink, 'cursor', 'pointer');
@@ -596,7 +596,7 @@ var callbackUpdateLoadingPanel = {
 		       loadingPanel.loadingPanel.appendToBody(cancelLink);
 		       $D.setStyle(loadingPanel.body, 'text-align', 'center');
 
-//			  loadingPanel.loadingPanel.setBody( + '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
+//			  loadingPanel.loadingPanel.setBody( + '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
 			  if(!panelLoaded)
 			  	setTimeout(refreshLoadingPanel, 1000);
 		  },

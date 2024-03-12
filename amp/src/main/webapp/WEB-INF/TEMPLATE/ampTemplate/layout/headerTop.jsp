@@ -11,43 +11,43 @@
 	 var newscript = document.createElement('script');
      newscript.type = 'text/javascript';
      newscript.async = true;
-     newscript.src = '<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>';
+     newscript.src = '<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>';
      if(jQuery === undefined && $ === undefined){
   		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(newscript);
      }
 })();
 </script>  
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.class.min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jquery/jquery.class.min.js"/>" ></script>
 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/md5-min.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/digest-auth.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/sha1.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jdigestauth/md5-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jdigestauth/digest-auth.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/jdigestauth/sha1.js"/>" ></script>
 
 	<!-- Styles -->	
-	<link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
-	<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp-wicket.css" type="text/css" rel="stylesheet"/>
-	<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
-	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" type="text/css" rel="stylesheet" />
-	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" type="text/css" rel="stylesheet" />
-	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
-	<digi:ref href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" />
-	<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+	<link href='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+	<digi:ref href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp-wicket.css" type="text/css" rel="stylesheet"/>
+	<digi:ref href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_tabs.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_popins.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css">
 	
 <script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 <!-- Individual YUI CSS files --> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/yui_popins.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"> 
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_popins.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css">
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"></script>
 
 <script type="text/javascript">
 	var YAHOOAmp 	= YAHOO;
@@ -83,6 +83,6 @@ table tr td {font-size:11px;}
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
 <jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
-<jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/>
+<jsp:include page="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/layout/header.jsp"/>
 
 

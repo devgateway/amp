@@ -136,7 +136,7 @@ YAHOO.namespace("YAHOO.amp");
         myPanelContact.setHeader(msg);
         var content = document.getElementById("popinContactContent");
         content.innerHTML = '<div style="text-align: center">' +
-            '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+            '<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
             '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
         showContactContent();
     }

@@ -11,10 +11,10 @@
 		<c:if test="${subColumn.namePath == sorterPath.key && !subColumn.namePath.contains('/')}">
 			<c:choose>
 				<c:when test="${ sorterPath.value == 'ascending'}">
-					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red${status.count-1}.gif" align="absmiddle" border="0"/>
+					<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/up_red${status.count-1}.gif" align="absmiddle" border="0"/>
 				</c:when>
 				<c:otherwise>
-					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down_red${status.count-1}.gif" align="absmiddle" border="0"/>
+					<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/down_red${status.count-1}.gif" align="absmiddle" border="0"/>
 				</c:otherwise>
 			</c:choose>
 		</c:if>

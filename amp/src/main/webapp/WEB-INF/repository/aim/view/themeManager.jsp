@@ -118,10 +118,10 @@
 		}
 
         function setOverImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-righthover1.gif"
+          document.getElementById("img"+index).src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-righthover1.gif"
         }
         function setOutImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif"
+          document.getElementById("img"+index).src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/tab-rightselected1.gif"
         }
  
         function expandProgram(progId){

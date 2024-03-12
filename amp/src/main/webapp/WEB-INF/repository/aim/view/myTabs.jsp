@@ -373,7 +373,7 @@ function toggleSettings(){
 	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
 </c:set>
 <script type="text/javascript">
-	loadstatustext='<div align="center" style="font-size: 11px;margin-top:260px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/><p><%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%><span id="statusValue">...</span></p><div>';
+	loadstatustext='<div align="center" style="font-size: 11px;margin-top:260px;"><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/><p><%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%><span id="statusValue">...</span></p><div>';
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	startajaxtabs("MyTabs");
 	if(document.getElementById(tabName)){

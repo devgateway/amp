@@ -643,7 +643,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								<tr>
 						        	<td>
 							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
-							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+							        		<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 							        	</button>
 						        		<input type="text" id="privateSearchStr">
 						        		<button id="privateSearchButtonId" type="button" class="buttonx">
@@ -651,15 +651,15 @@ border-right: 1px solid rgb(208, 208, 208);
 							        	</button>
 							        	<button id="keywordModeButtonId" class="buttonx" type="button" onclick="privateListObj.getKeywordModePanel('keywordModeButtonId','privateKeywordModeDivId');fPanel.hide();menuPanelForUser.hide();">
                                             <digi:trn>Mode</digi:trn>
-                                            <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+                                            <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
                                         </button>
 								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId', false);fPanel.hide();menuPanelForUser.hide();">
 								    		<digi:trn>Filters</digi:trn>
-											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+											<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 								    	<button id="labelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();menuPanelForUser.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);">
 								    		<digi:trn>Labels</digi:trn>
-											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+											<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 									        <button id="privateClearButtonId" type="button" onclick="reset('private', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
@@ -701,7 +701,7 @@ border-right: 1px solid rgb(208, 208, 208);
 						        	<td>
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
 										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();teamFPanel.hide();teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
-											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+											<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 										</button>
 									<%}%>
 									
@@ -711,15 +711,15 @@ border-right: 1px solid rgb(208, 208, 208);
 							        	</button>
 							        	<button id="teamKeywordModeButtonId" class="buttonx" type="button" onclick="teamListObj.getKeywordModePanel('teamKeywordModeButtonId','teamKeywordModeDivId',false);fPanel.hide();menuPanelForTeam.hide();">
                                             <digi:trn>Mode</digi:trn>
-                                            <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+                                            <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
                                         </button>
 										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', false);teamFPanel.hide();menuPanelForTeam.hide();">
 								    		<digi:trn>Filters</digi:trn>
-								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+								    		<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 								    	<button id="teamLabelButtonId" class="buttonx" type="button" onclick="teamFPanel.toggleView();teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', true);menuPanelForTeam.hide();">
 								    		<digi:trn>Labels</digi:trn>
-								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+								    		<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 								    	 <button id="teamClearButtonId" type="button" onclick="reset('team', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
@@ -766,15 +766,15 @@ border-right: 1px solid rgb(208, 208, 208);
 								        	</button>
 								            <button id="sharedKeywordModeButtonId" class="buttonx" type="button" onclick="sharedListObj.getKeywordModePanel('sharedKeywordModeButtonId','sharedKeywordModeDivId', false);fPanel.hide();sharedFPanel.hide();">
 	                                            <digi:trn>Mode</digi:trn>
-	                                            <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+	                                            <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
                                             </button>							
 											<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId', false);sharedFPanel.hide();">
 									    		<digi:trn>Filters</digi:trn>
-									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+									    		<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>
 									    	<button id="sharedLabelButtonId" class="buttonx" type="button" onclick="sharedFPanel.toggleView();sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId', true);">
 									    		<digi:trn>Labels</digi:trn>
-									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+									    		<img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>
 									    	<button id="sharedClearButtonId" type="button" onclick="reset('shared', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
@@ -816,7 +816,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								        	</button>
 								        	<button id="publicKeywordModeButtonId" class="buttonx" type="button" onclick="publicListObj.getKeywordModePanel('publicKeywordModeButtonId','publicKeywordModeDivId', false);fPanel.hide();menuPanelForPublic.hide();">
                                                 <digi:trn>Mode</digi:trn>
-                                                <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+                                                <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
                                             </button>
 											<button id="publicClearButtonId" type="button" onclick="reset('public', false);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>

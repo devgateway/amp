@@ -2,7 +2,7 @@
 // is this file ever used?
 
 // load the TranslationManager object
-$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+$.getScript("/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
 
 var REPORT_URL = '/rest/data/report/';
 var TEAM_URL = '/rest/security/ampTeam/';

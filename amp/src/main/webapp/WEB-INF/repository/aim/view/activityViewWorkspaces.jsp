@@ -13,7 +13,7 @@
                 <td bgcolor="#999999" nowrap width="120px">
                     <div class="ws-tooltip">
                         <b><digi:trn>Workspace Type</digi:trn></b>
-                        <img src="/TEMPLATE/ampTemplate/images/tooltip-help.png" >
+                        <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tooltip-help.png" >
                         <span class="ws-tooltiptext">
                             <div class="ws-tooltip-item">
                                 <b>TEAM</b> - <digi:trn>Members can create new activities for the workspace but can also pull
@@ -72,7 +72,7 @@
         var content = document.getElementById("viewWorkspacesContent");
         var element6 = document.getElementById("viewWorkspaces");
         var loading = '\n<digi:trn jsFriendly="true">Loading...</digi:trn>';
-        content.innerHTML = '<p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>' + loading + '</b></font></p>';
+        content.innerHTML = '<p align="center"><img align="top" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>' + loading + '</b></font></p>';
         viewWorkspacesPanel.setBody(element6.innerHTML);
         panelFirstShow = 0;
         document.getElementById("viewWorkspacesContent").scrollTop = 0;

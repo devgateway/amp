@@ -17,11 +17,11 @@
 <bean:define id="reqSearchManagerId" toScope="request" value="searchStr" />
 
 <!-- Individual YUI CSS files -->
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css">
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 <script type="text/javascript" src="<digi:file src='/WEB-INF/repository/aim/scripts/filters/searchManager.js'/>" ></script>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -761,7 +761,7 @@ span.extContactDropdownEmail {
 		<table width="100%" border="0" cellspacing="3" cellpadding="3">
 		  <tr>
 	  		  <td valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Receivers</digi:trn></b>
-	  		  	<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
+	  		  	<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
 	  		  </td>
   			</tr>
   			<tr>
@@ -838,7 +838,7 @@ span.extContactDropdownEmail {
   </tr>
   <tr>
     <td valign="top" colspan=2>
-    	<b style="font-size:12px;"><digi:trn>Related Activity</digi:trn></b> &nbsp;<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,relatedActivityHelpText],Style[15])" onmouseout="htm()"/>
+    	<b style="font-size:12px;"><digi:trn>Related Activity</digi:trn></b> &nbsp;<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,relatedActivityHelpText],Style[15])" onmouseout="htm()"/>
     </td>
   </tr>
   <tr>
@@ -889,7 +889,7 @@ span.extContactDropdownEmail {
 								<img src="/src/main/webapp/WEB-INF/repository/message/view/images/attachment.png" border="0" />
 								${attachedDoc.contentTitle}
 							</digi:link>
-							<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/></a>
+							<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/></a>
 						</td>
 					</tr>
 				</c:forEach>

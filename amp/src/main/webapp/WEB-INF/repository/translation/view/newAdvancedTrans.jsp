@@ -221,7 +221,7 @@ th {
 									<table>
 										<tr>
 											<td>
-												<digi:img styleClass="imgGroupToggle toggle" src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>
+												<digi:img styleClass="imgGroupToggle toggle" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>
 											</td>
 											<td>
 												<bean:write name="msgGroup" property="defaultText" filter="true"/>
@@ -303,8 +303,8 @@ th {
 	<digi:context name="saveChanges" property="context/module/moduleinstance/AdvTranSaveChanges.do" />
 	<digi:context name="updateChanges" property="context/module/moduleinstance/AdvTranUpdate.do" />
 	
-	var imgPlus 		= '<digi:file src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>';
-	var imgMinus 		= '<digi:file src="/TEMPLATE/ampTemplate/img_2/ico_minus.gif"/>';
+	var imgPlus 		= '<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>';
+	var imgMinus 		= '<digi:file src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_minus.gif"/>';
 	var imgLoading		= '<digi:file src="images/amploading.gif"/>';
 	var undoUrl			= '<%=undoAction%>';
 	var saveAllUrl		= '<%=saveChanges%>';

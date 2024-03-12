@@ -16,14 +16,14 @@ ${fn:length(aimNPDForm.selYears)*3+1}
 	class="inside" style="margin-top: 20px;">
 	<tbody>
 		<tr>
-			<td colspan="${colspanInd}" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif"
+			<td colspan="${colspanInd}" align="center" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif"
 				class="indicator_title"><digi:trn>Indicators</digi:trn></td>
 		</tr>
 		<tr>
-		<td width="400" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"
+		<td width="400" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"
 				style="background-repeat: repeat-x; font-size: 12px; border-top: none">&nbsp;</td>
 		<c:forEach var="year" items="${aimNPDForm.selYears}">
-		<th colspan="3" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"
+		<th colspan="3" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"
 				style="background-repeat: repeat-x; font-size: 12px; border-right: 1px solid #cccccc"><b
 				class="ins_title">${year}</b><b class="ins_title"></b></th>
 		</c:forEach>

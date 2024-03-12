@@ -72,7 +72,7 @@ function validate(){
 						<logic:equal name="aimTeamMemberForm" property="action" value="delete">
 							<digi:trn key="aim:deleteTeamMembers">Delete Members</digi:trn>	
 						</logic:equal>	
-                        <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
+                        <div class="adminicon"><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
 					
 					</td>
 				</tr>

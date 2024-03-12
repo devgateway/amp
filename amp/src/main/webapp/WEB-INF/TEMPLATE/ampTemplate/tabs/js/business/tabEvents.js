@@ -19,7 +19,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 
 	// Some private method.
 	function putAnimation() {
-		return '<span><img src="/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif"/></span>';
+		return '<span><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif"/></span>';
 	}
 
 	function retrieveTabContent(selectedTabIndex) {

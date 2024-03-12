@@ -9,7 +9,7 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <% if(SiteUtils.isEffectiveLangRTL()) { %>
-  <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+  <link rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
 <% } %>
 <script language="JavaScript">
 

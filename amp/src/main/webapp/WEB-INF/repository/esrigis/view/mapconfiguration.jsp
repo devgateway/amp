@@ -255,10 +255,10 @@
 					</tr>
 					<tr>
 						<td style="padding: 10px" align="center">
-							<img src="/TEMPLATE/ampTemplate/img_2/gis/legend-poverty.jpg">
+							<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/legend-poverty.jpg">
 						</td>
 						<td style="padding: 10px" align="center">
-							<img src="/TEMPLATE/ampTemplate/img_2/gis/population-legend.jpg">
+							<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/population-legend.jpg">
 						</td>
 					</tr>
 				</table>

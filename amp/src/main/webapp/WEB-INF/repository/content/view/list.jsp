@@ -163,14 +163,14 @@ $(document).ready(function(){
                           
                           <td align="center" class="inside">
                           	<digi:link href="/contentManager.do?action=edit&id=${content.ampContentItemId}">
-                              <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit content</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit content</digi:trn>"/>
                             </digi:link>
                           	<digi:link href="/contentManager.do?action=delete&id=${content.ampContentItemId}" onclick="return confirm('${confirmationTrn}');">
-                              <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete content</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete content</digi:trn>"/>
                             </digi:link>
                             <c:if test="${content.isHomepage ne true}">
                                 <digi:link href="/contentManager.do?action=homepage&id=${content.ampContentItemId}">
-                                  <img src="/TEMPLATE/ampTemplate/imagesSource/common/homepage.png" border="0" title="<digi:trn>Mark as Homepage</digi:trn>"/>
+                                  <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/homepage.png" border="0" title="<digi:trn>Mark as Homepage</digi:trn>"/>
                                 </digi:link>
                             </c:if>
                           </td>

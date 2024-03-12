@@ -86,20 +86,20 @@
 	<http pattern="/rest/**" security="none" />
     <http pattern="/api-docs/**" security="none" />
 
-	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
-	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
+	<http pattern="/src/main/webapp/WEB-INF/TEMPLATE/ampTEMPLATE**" security="none" />
+	<http pattern="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
+    <http pattern="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
+    <http pattern="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/**" security="none" />
     <http pattern="/gis/boundaries/**" security="none" />
 
-	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
-	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
+	<http pattern="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard/**" security="none" />
+	<http pattern="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
 
-	<http pattern="/TEMPLATE/reamp/modules/ampoffline/download/**" security="none" />
-	<http pattern="/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
-	<http pattern="/TEMPLATE/reampv2/build/**" security="none" />
+	<http pattern="/src/main/webapp/WEB-INF/TEMPLATE/reamp/modules/ampoffline/download/**" security="none" />
+	<http pattern="/src/main/webapp/WEB-INF/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
+	<http pattern="/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/**" security="none" />
 
-    <http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
+    <http pattern="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
 
 
 	<!-- match images -->

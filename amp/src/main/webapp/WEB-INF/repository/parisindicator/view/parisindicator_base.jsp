@@ -37,9 +37,9 @@
 	<tr align="center">
 		<td>
 			<!-- CSS -->
-			<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
-			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
-			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
+			<link href='src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+			<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+			<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/common.js"/>"></script>
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/parisindicator/script/pi_scripts.js"/>"></script>
@@ -83,15 +83,15 @@
 												<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
 													<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;
 													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer;" title="<digi:trn>Export to PDF</digi:trn>">
-												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
+												    	<digi:img width="17" height="20" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
 												    	<digi:trn>Export to PDF</digi:trn>
 													</a>|&nbsp;
 												    <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
-												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
+												    	<digi:img width="17" height="20" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
 												    	<digi:trn>Export to Excel</digi:trn>
 												    </a>|&nbsp;
 												    <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Printer Friendly</digi:trn>">
-														<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
+														<digi:img width="17" height="20" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
 														<digi:trn>Print</digi:trn> 
 													</a>|&nbsp;
 												</td>
@@ -214,7 +214,7 @@
 											                        <p style="font-size: 20px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><strong><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn> <digi:trn key="aim:report">Report</digi:trn>&nbsp;<bean:write name="parisIndicatorForm" property="piReport.indicatorCode"/></strong></p>
 											                    </td>
 									                    		<td width="60%" align="right" style="font-size: 11px; padding-right: 15px;">
-								                           			<p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: bottom;">&nbsp;<bean:write name="parisIndicatorForm" property="piReport.name"/></p>
+								                           			<p><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: bottom;">&nbsp;<bean:write name="parisIndicatorForm" property="piReport.name"/></p>
 									                    		</td>
 									                    	</tr>
 									                  	</table>

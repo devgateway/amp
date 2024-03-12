@@ -256,7 +256,7 @@ function fnEditProject(id)
 }
 
 #tabs ul li a { 
-	background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
+	background:#222E5D url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
 	color:#FFFFFF;
 	float:left;
 	margin:0pt 0px 0pt 0pt;
@@ -267,12 +267,12 @@ function fnEditProject(id)
 }
 
 #tabs ul li a div { 
-	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
+	background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
 	padding: 4px 10px 4px 10px;
 }
 
 #tabs ul li span a { 
-	background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
+	background:#3754A1 url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
 	color:#FFFFFF;
 	float:left;
 	margin:0pt 0px 0pt 0pt;
@@ -283,19 +283,19 @@ function fnEditProject(id)
 }
 
 #tabs ul li span a div { 
-	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
+	background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
 	padding: 4px 10px 4px 10px;
 }
 
 #tabs a:hover {
-    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
+    background: #455786 url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;
 }
 
 #tabs a:hover span {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+    background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;
 }
 #tabs a:hover div {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+    background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;
 }
 
 #tabs a.active {

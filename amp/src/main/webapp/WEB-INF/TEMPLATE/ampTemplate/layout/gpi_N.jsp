@@ -40,7 +40,7 @@ request.getParameter("print");
 		                        </tr>
 		                        <tr>
 		                            <td style="padding:5">
-		                                <strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15">&nbsp;<bean:write name="gpiForm" property="gpiReport.name"/></p></strong>
+		                                <strong><p><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/info.png" width="15" height="15">&nbsp;<bean:write name="gpiForm" property="gpiReport.name"/></p></strong>
 		                            </td>
 		                        </tr>
 		                    </table>

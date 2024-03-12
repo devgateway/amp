@@ -104,7 +104,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		jQuery.ajaxSetup({
 			cache : cacheEnabled
 		});
-		jQuery.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
+		jQuery.getScript("/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
 			var rowNum = 0;
 			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
 			var grandTotals = null;
@@ -232,9 +232,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								className = row.className;
 								var id = row.cells[1].textContent;
 								var iconedit = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
+									+ "'><img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
 								var iconvalidated = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
+									+ "'><img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
 								var link = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>";
 								
 								

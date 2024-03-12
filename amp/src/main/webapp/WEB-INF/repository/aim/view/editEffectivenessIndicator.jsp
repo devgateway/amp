@@ -12,10 +12,10 @@
 
 <%@ page import="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" %>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <script type="text/javascript" src='<digi:file src="/WEB-INF/repository/aim/scripts/table_utils.js"/>'>.</script>
 <script type="text/javascript" src="/src/main/webapp/WEB-INF/repository/aim/view/multilingual/multilingual_scripts.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 <script type="text/javascript">
     var optionsTableCounter = 0;
 </script>
@@ -190,7 +190,7 @@
                     </td>
                     <td width="30%" align="center">
                         <a onclick="deleteOptionRow('${option.ampIndicatorOptionId}', '${idx}'); return false;">
-                            <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
+                            <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
                         </a>
                     </td>
                 </tr>

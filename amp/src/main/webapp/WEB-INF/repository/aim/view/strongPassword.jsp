@@ -4,7 +4,7 @@
 <%@ taglib uri="http://digijava.org/GlobalSettings" prefix="globalsettings"%>
 
 <script type="text/javascript"
-		src="/TEMPLATE/ampTemplate/js_2/pwstrength/pwstrength-bootstrap.min.js"></script>
+		src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/pwstrength/pwstrength-bootstrap.min.js"></script>
 
 <script language="JavaScript">
     var STRONG_PASSWORD	= <globalsettings:value name="Strong password" />;

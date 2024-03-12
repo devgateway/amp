@@ -66,8 +66,8 @@ _.extend(App.prototype, BackboneDash.Events, {
       if (this.hasIssue('download') && !this.hasIssue('flash')) {
         var swfObj = document.createElement('script'),
             downloadify = document.createElement('script');
-        swfObj.src = '/TEMPLATE/ampTemplate/commonJs/swfobject-2.2.js';
-        downloadify.src = '/TEMPLATE/ampTemplate/commonJs/downloadify-0.2.js';
+        swfObj.src = '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/commonJs/swfobject-2.2.js';
+        downloadify.src = '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/commonJs/downloadify-0.2.js';
         document.body.appendChild(swfObj);
         document.body.appendChild(downloadify);
       }

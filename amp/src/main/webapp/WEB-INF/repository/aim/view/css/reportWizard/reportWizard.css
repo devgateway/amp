@@ -159,7 +159,7 @@
 						/*color:#fff;*/
 						background-color: white;
 						margin:0pt 0pt 0pt 0pt;
-						/*background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;*/
+						/*background:#3754A1 url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;*/
 				}
 					
 				#wizard_container li.selected a{
@@ -172,17 +172,17 @@
 					/*float:left;
 					cursor:pointer; 
 					text-decoration: none; 
-					background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
+					background:#222E5D url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
 					color: white;*/
 				}
 				#wizard_container li a div{ 
-						/*background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top;*/
+						/*background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top;*/
 						padding: 4px 10px 4px 10px;
 						font-size: 8pt;
 				}
 						
 				#wizard_container li.selected a div{ 
-						/*background:url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) no-repeat scroll right top;*/
+						/*background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcorner.gif) no-repeat scroll right top;*/
 					padding: 4px 10px 4px 10px;
 					font-size: 8pt;
 				}
@@ -220,11 +220,11 @@
 				}
 				
 				#wizard_container .yui-nav li a:hover {
-						/*background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;*/  
+						/*background: #455786 url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;*/
 				}
 					
 				#wizard_container .yui-nav li a:hover div {
-						/*background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+						/*background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;
 						font-size: 8pt;*/
 				}
 				
@@ -232,11 +232,11 @@
 						float:left;
 					cursor:pointer; 
 					text-decoration: none; 
-					background:#565656 url(/TEMPLATE/ampTemplate/images/tableftcornerdis.gif) no-repeat scroll left top;
+					background:#565656 url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tableftcornerdis.gif) no-repeat scroll left top;
 					color: white;
 				}
 				#wizard_container li.disabled a div, #wizard_container .yui-nav li.disabled a:hover div{ 
-					background:url(/TEMPLATE/ampTemplate/images/tabrightcornerdis.gif) no-repeat scroll right top;
+					background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/tabrightcornerdis.gif) no-repeat scroll right top;
 					padding: 4px 10px 4px 10px;
 				}
 

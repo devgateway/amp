@@ -210,10 +210,10 @@ function moveDisplayedImages(structureId, imgCount, next){
 						<div align="center" style="vertical-align: middle;">
 						<img id="aPrev${structure.ampStructureId}" 
 						onclick="moveDisplayedImages(${structure.ampStructureId},${fn:length(structure.images)}, false);" 
-						src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" title="<digi:trn>Previous</digi:trn>" align="middle">
+						src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" title="<digi:trn>Previous</digi:trn>" align="middle">
 						<img id="aNext${structure.ampStructureId}" 
 						onclick="moveDisplayedImages(${structure.ampStructureId},${fn:length(structure.images)}, true);" 
-						src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" title="<digi:trn>Next</digi:trn>" align="middle">
+						src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" title="<digi:trn>Next</digi:trn>" align="middle">
 						</div>
 						<br />
 						<div align="center" style="vertical-align: middle;">

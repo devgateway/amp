@@ -155,10 +155,10 @@ $(document).ready(function(){
                           <!-- <td align="center" class="inside"> ${structureType.graphicType}</td> -->
                           <td align="center" class="inside">
                           	<digi:link href="/structureTypeManager.do?action=edit&id=${structureType.typeId}">
-                              <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
                             </digi:link>
                           	<digi:link href="/structureTypeManager.do?action=delete&id=${structureType.typeId}" onclick="return confirm('${confirmationTrn}');">
-                              <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
                             </digi:link>
                           </td>
                         </tr>

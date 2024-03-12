@@ -75,7 +75,7 @@ public class FeatureManagerTest extends SeleneseTestCase {
         selenium.click("link=UAT Team Workspace");
         selenium.waitForPageToLoad("30000");
         if (selenium.isElementPresent("//a[contains(@href, "
-                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
+                + "\"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
             logger.error("Add Tab option is disabled from Feature Manager but is available");
             //selenium.logAssertion"assertTrue", "Add Tab option is disabled from Feature Manager but is available", "condition=false");
         }

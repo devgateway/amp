@@ -27,7 +27,7 @@
 								<td vAlign="top" width="100%" style="border-bottom:2px solid #ccc;"valign="middle" >
 									<span class=subtitle-blue style="margin:0px 0px 0px 0px;display:block;float:left;width:200px;">
                                     <bean:write name="aimTeamMemberForm" property="teamName" /></span>
-                                    <div class="adminicon" style="float: right;"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
+                                    <div class="adminicon" style="float: right;"><img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
 								</td>
 							</tr>
 							<tr >

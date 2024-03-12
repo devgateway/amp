@@ -141,10 +141,10 @@
 									
 									
 										<tr style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									  	<td width="5" align="center" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									  		<input type="checkbox" id="checkAll">
 									  	</td>
-									    <td width=25% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width=25% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<c:if test="${aimTeamReportsForm.showReportList == true}">
 														<digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn>
@@ -154,25 +154,25 @@
 													</c:if>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width=15% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width=15% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:reportType">Type</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width=15% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:hierarchies">Hierarchies</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=18% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;
+									    <td width=18% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;
 									    	
 									    </td>
-									     <td width=7% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									     <td width=7% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:visibility">Visibility</digi:trn>
 									    	</b>

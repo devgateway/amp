@@ -127,13 +127,13 @@ function addJc(){
                 <tbody>
                 <tr>
                   <td class="inside"><img width="15" height="10"
-                                          src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/arrow-014E86.gif"> <digi:link
+                                          src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/arrow-014E86.gif"> <digi:link
                           module="aim" href="/admin.do"> <digi:trn
                           key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></td>
                 </tr>
                 <tr>
                   <td class="inside">
-                    <img width="15" height="10" src="/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/arrow-014E86.gif">
+                    <img width="15" height="10" src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate//WEB-INF/repository/aim/images/arrow-014E86.gif">
                     <c:set var="trn"><digi:trn
                             key="aim:viewSettings">Click here to view Job Manager</digi:trn></c:set>
                     <digi:link module="aim" href="/quartzJobManager.do~action=all" title="${trn}">

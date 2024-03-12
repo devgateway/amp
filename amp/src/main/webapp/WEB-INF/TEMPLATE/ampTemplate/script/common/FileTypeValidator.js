@@ -50,7 +50,7 @@ FileTypeValidator = {
 
 FileTypeValidator.init();
 
-$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js")
+$.getScript("/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/script/common/TranslationManager.js")
 	.done(function() {
 		FileTypeValidator.errorMessage = TranslationManager.getTranslated(FileTypeValidator.errorMessage);
 		FileTypeValidator.exceptionMessage = TranslationManager.getTranslated(FileTypeValidator.exceptionMessage);

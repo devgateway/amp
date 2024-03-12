@@ -56,7 +56,7 @@ table.inside, td.inside,td.report_inside {border:1px solid #b8b7b7;  font-size:1
 td.inside ul{padding-left: 1.3em;}
 table.inside1, td.inside1 {background:#fff;padding:0px 5px ;}
 table.inside, td.inside_zebra {}
-td.tdInsideHeader{background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x;padding:3px;text-align:center;}
+td.tdInsideHeader{background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x;padding:3px;text-align:center;}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
 td.inside {margin: 0; padding: 4px; border-bottom:1px solid #b8b7b7;}
 li.bullet {margin-left:14px;}
@@ -169,8 +169,8 @@ html.chrome .bd_drop{margin-top:15px;}
 .step_num_sel {background-color:#FF6000; margin-right:3px; padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:2px; font-size:11px; color:#FFFFFF; font-weight:bold;}
 .tab_sel {margin-left:-1px; background-color:#EFEFEF; border-left:1px solid #EFEFEF; border-top:1px solid #BEBDB6; border-right: 1px solid #BEBDB6; border-bottom:1px solid #BEBDB6; margin-bottom:7px;}
 .tab_cont_sel {padding-top:7px; padding-bottom:7px; padding-left:7px; font-size:14px; color:#FF6000; font-weight:bold;}
-.step_head {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head.gif);}
-.step_head_lng {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head_lng.gif);}
+.step_head {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/step_head.gif);}
+.step_head_lng {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/step_head_lng.gif);}
 .step_head_cont {padding-left:10px; padding-top:5px; padding-bottom:5px;color:#FFFFFF; font-size:12px; font-weight:bold;display: inline-block}
 .step_head_cont_name {
     float: right;
@@ -179,8 +179,8 @@ html.chrome .bd_drop{margin-top:15px;}
 .cont_search {background-color:#F7F7F7; border:1px solid #E0E0DC; min-height:320px;}
 .cont_search_cont {padding:10px;}
 .right_menu {margin-bottom:20px;}
-.right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif);width:162px; height:27px;}
-.right_menu_header_big {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header_big.gif);width:220px; height:27px;}
+.right_menu_header {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/blue_header.gif);width:162px; height:27px;}
+.right_menu_header_big {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/blue_header_big.gif);width:220px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:11px; font-weight:bold; }
 .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px !important; }
 .right_menu_box_big {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:218px; }
@@ -192,7 +192,7 @@ html.chrome .bd_drop{margin-top:15px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
 .tri {
-    background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px -1px;
+    background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px -1px;
     list-style: none inside none;
     display:block;
     font-size:11px;
@@ -202,7 +202,7 @@ html.chrome .bd_drop{margin-top:15px;}
 }
 #quickfloat .tri { border-top: 1px solid white; border-bottom: 1px solid white; padding-left: 12px; background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px;}
 html.ie #quickfloat ul{margin:0px 0px 0px -5px;}
-html.ie #quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri_1.gif); background-position: 5px -5px; background-repeat: no-repeat;  list-style:none; width:148px; font-size:12px; padding-left: 12px; padding-bottom:5px; }
+html.ie #quickfloat .tri {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_tri_1.gif); background-position: 5px -5px; background-repeat: no-repeat;  list-style:none; width:148px; font-size:12px; padding-left: 12px; padding-bottom:5px; }
 .tri_adv {background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px; margin-top:7px;}
 .desktop_tab_base {border-bottom:1px solid #F2F2F2; padding-left:1px;}
 .filter_tab_base {height:29px; border-bottom:1px solid #D0D0D0; background-color:#FFFFFF;}
@@ -252,8 +252,8 @@ a.settingsbut{float:left;display:block;width:250px;}
 .opt_item {background-color:#F3F2F1; border:1px solid #C2C1C0; margin-top:10px; }
 .opt_item_tree_1 {background-color:#F3F2F1; border:1px solid #C2C1C0;  margin-top:10px;}
 .opt_item_cont {padding:5px;}
-.tree_1 {background-image:url(/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:25px;}
-.tree_2 {background-image:url(/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:75px;}
+.tree_1 {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:25px;}
+.tree_2 {background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/tree_dot.gif); height:37px; padding-left:25px; background-repeat:no-repeat; margin-left:75px;}
 .issue_act {float:right; color:#999999;}
 .rep_tree_item_1 {background-color:#E1E1E1;  border:1px solid #CECECE; padding:1px; font-size:11px; margin-left:17px; margin-top:5px; margin-bottom:5px;}
 .rep_tree_item {background-color:#E1E1E1;  border:1px solid #CECECE; padding:1px; font-size:11px; margin-top:5px; margin-bottom:5px;}
@@ -346,7 +346,7 @@ html.chrome #show_login_pop_box{margin-top:44px;}
 .dialog {display:none;}
 
 /* ADMIN */
-.permission {width:1000px; height:35px; background-image:url(/TEMPLATE/ampTemplate/img_2/perm_bg.gif);border:1px solid #C4C2BD; margin-left:auto; margin-right:auto; margin-bottom:10px;}
+.permission {width:1000px; height:35px; background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/perm_bg.gif);border:1px solid #C4C2BD; margin-left:auto; margin-right:auto; margin-bottom:10px;}
 .permission_sel {width:1000px; background-color:#FAFAFA; border:1px solid #C4C2BD; margin-left:auto; margin-right:auto; margin-bottom:10px;}
 .permission_cont {padding:10px;}
 .perm_h3 {font-size:14px; font-weight:bold; text-align: center}
@@ -472,7 +472,7 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}
 #actionsMenu_c #actionsMenu_h .yui-panel .hd {font-size:12px;}
 /*---RAFY GIS STYLES---*/
-#navToolbar {width:160px;margin:0px; top: 60px;left: 5px;height: 260px;padding:0px 0px 0px 25px;margin-top:-5px; background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
+#navToolbar {width:160px;margin:0px; top: 60px;left: 5px;height: 260px;padding:0px 0px 0px 25px;margin-top:-5px; background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
 #navToolbar .toolscontainer{margin-top:5px;width:160px;filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
 #navToolbar .toolscontainer .dijitButtonNode {width:160px;border-bottom:1px solid #000;margin:0px 0px 0px -5px;}
 #navToolbar .toolscontainer span{line-height:25px; color:#fff;font-size:12px;text-align:left;}
@@ -481,7 +481,7 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #navToolbar .toolscontainer .mapButton .dijitButtonContents {float:left;width:150px;text-align:right;}
 #navToolbar .toolscontainer h3{margin:0px 0px 5px 0px;padding:5px 0px 0px 15px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;width:135px;font-weight:bold;}
 #mainGisMenu h3 {margin:0px 0px 5px 0px;padding:10px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;font-weight:bold;text-align:left;}
-td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
+td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
 .soria .dijitToolbar {border:none;}
 .infowindow .window{background:#fcf6c7;}
 div.yui-ac-hd{border:1px solid red;}
@@ -504,7 +504,7 @@ div.adminicon{float:right;}
     border:none;
     padding: 0;}
 
-.soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
+.soria .infowindow .sprite{background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
 .yui-navset, .yui-navset ul, .yui-navset ul li, .yui-navset ul li a{z-index:-1px;}
 #breadcrumbs {width:1000px;padding:0px;height:30px;margin:0px 0px 0px 0px;margin:0 auto;position:relative;text-align:left;}
 #breadcrumbs ul{float:left;}
@@ -524,7 +524,7 @@ div.adminicon{float:right;}
     font-weight:bold;
     text-decoration:none;
     text-align: left;
-    background:url(/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
+    background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
 }
 #breadcrumbs .bd li.yuimenuitem  a:hover {
     text-decoration:underline;
@@ -607,7 +607,7 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}
 #actionsMenu_c #actionsMenu_h .yui-panel .hd {font-size:12px;}
 /*---RAFY GIS STYLES---*/
-#navToolbar {width:160px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
+#navToolbar {width:160px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
 #navToolbar .toolscontainer{margin-top:5px;width:160px;filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
 #navToolbar .toolscontainer .dijitButtonNode {width:160px;border-bottom:1px solid #000;margin:0px 0px 0px -5px;}
 #navToolbar .toolscontainer span{line-height:25px; color:#fff;font-size:12px;text-align:left;}
@@ -616,7 +616,7 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #navToolbar .toolscontainer .mapButton .dijitButtonContents {float:left;width:150px;text-align:right;}
 #navToolbar .toolscontainer h3{margin:0px 0px 5px 0px;padding:5px 0px 0px 15px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;width:135px;font-weight:bold;}
 #mainGisMenu h3 {margin:0px 0px 5px 0px;padding:10px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;font-weight:bold;text-align:left;}
-td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
+td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
 .soria .dijitToolbar {border:none;}
 .infowindow .window{background:#fcf6c7;}
 div.yui-ac-hd{border:1px solid red;}
@@ -639,7 +639,7 @@ div.adminicon{float:right;}
     border:none;
     padding: 0;}
 
-.soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
+.soria .infowindow .sprite{background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
 .yui-navset{z-index:50px;}
 #breadcrumbs {width:1000px;padding:0px;height:30px;margin:0px 0px 0px 0px;margin:0 auto;position:relative;text-align:left;}
 #breadcrumbs ul{float:left;}
@@ -659,7 +659,7 @@ div.adminicon{float:right;}
     font-weight:bold;
     text-decoration:none;
     text-align: left;
-    background:url(/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
+    background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
 }
 #breadcrumbs .bd li.yuimenuitem  a:hover {
     text-decoration:underline;
@@ -668,7 +668,7 @@ div.adminicon{float:right;}
 .usr_menu_logged{position:absolute;top:0px;right:0px;}
 /*---RAFY GIS STYLES---*/
 body.gisbody div#map{z-index:1;}
-#navToolbar {top: 60px;left: 5px;height: 260px;width:160px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
+#navToolbar {top: 60px;left: 5px;height: 260px;width:160px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
 #navToolbar.toolscontainer{margin-top:5px;width:160px;filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
 #navToolbar.toolscontainer .dijitButtonNode {width:160px;border-bottom:1px solid #000;margin:0px 0px 0px -5px;}
 #navToolbar.toolscontainer span{line-height:25px; color:#fff;font-size:12px;text-align:left;}
@@ -677,7 +677,7 @@ body.gisbody div#map{z-index:1;}
 #navToolbar.toolscontainer .mapButton .dijitButtonContents {float:left;width:150px;text-align:right;}
 #navToolbar.toolscontainer h3{margin:0px 0px 5px 0px;padding:5px 0px 0px 15px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;width:135px;font-weight:bold;}
 #mainGisMenu h3 {margin:0px 0px 5px 0px;padding:10px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;font-weight:bold;text-align:left;}
-td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
+td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
 .soria .dijitToolbar {border:none;}
 .infowindow .window{background:#fcf6c7;}
 div.yui-ac-hd{border:1px solid red;}
@@ -699,7 +699,7 @@ div.adminicon{float:right;}
     background:none;
     border:none;
     padding: 0;}
-.soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
+.soria .infowindow .sprite{background-image:url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
 .yui-navset, .yui-navset ul, .yui-navset ul li, .yui-navset ul li a{z-index:-1px;}
 .admin_landing_page_box {background-color:#FFFFFF; border-left:1px solid #DADAD6; border-top:1px solid #DADAD6; border-right:2px solid #DADAD6; border-bottom:2px solid #DADAD6; width: 33%; vertical-align: top;}
 .admin_landing_page_box_cont {padding:10px;}
@@ -749,7 +749,7 @@ html.ie .login_here:hover {
 }
 html.ie .login_nav {font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; overflow:visible;position:absolute;right:0px;}
 html.ie .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:162px; }
-html.ie li.tri a{background:(/TEMPLATE/ampTemplate/img_2/ico_tri.gif)no-repeat left;  font-size:11px;}
+html.ie li.tri a{background:(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ico_tri.gif)no-repeat left;  font-size:11px;}
 html.ie li.tri {margin:0px;text-indent:none;backgrund:red;}
 /* html.ie li.tri:first-child{padding:0px 0px 0px 10px;} */
 html.ie div.header {overflow:visible;}
@@ -828,7 +828,7 @@ html.ie div.filterContainerTabs div.innerTab{ padding:10px; overflow:auto;height
 html.ie div.filterContainerTabs div.innerTab li{list-style:none;}
 html.ie div.filterContainerTabs div#gisfilters div.groupingSelector ul, html.ie div.filterContainerTabs div#gisfilters div.membersSelector ul{width:90%;margin:0 auto;}
 html.ie div.filterContainerTabs div#gisfilters div.groupingSelector{border-right:1px solid #ccc;}
-html.ie div.innertabheader{border-bottom: 1px solid #CCC; background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); height: 31px;}
+html.ie div.innertabheader{border-bottom: 1px solid #CCC; background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif); height: 31px;}
 html.ie div.innertabheader h3 {height: 31px; line-height: 31px; text-indent: 11px; float: left; font-size: 11px; color: #767676; margin: 0; padding: 0;}
 html.ie  div.filterContainerTabs .otherCriteriaFoofet{border-top:1px solid #ccc;padding:10px;}
 html.ie .groupingselector ul li a { padding: 5px; font-size: 12px; display: block; background: white; color: black; text-decoration: none;}
@@ -938,7 +938,7 @@ div.membersSelector {
 
 div.innerTabHeader {
     border-bottom: 1px solid #cccccc;
-    background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);
+    background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif);
     height: 31px;
 }
 

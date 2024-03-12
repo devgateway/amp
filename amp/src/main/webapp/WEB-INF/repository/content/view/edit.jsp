@@ -345,7 +345,7 @@ div.fakefile2 input {
                         <td class="inside">
                         	<c:if test="${loop.index != 0}">
                           	<a onclick="doAction(${loop.index}, 'moveup', false)">
-                              <img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" border="0" title="<digi:trn>Move up</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_up.gif" border="0" title="<digi:trn>Move up</digi:trn>"/>
                             </a>
                             </c:if>
                         	<c:if test="${loop.index == 0}">
@@ -353,14 +353,14 @@ div.fakefile2 input {
                             </c:if>
                         	<c:if test="${loop.index != fn:length(contentForm.sortedContentThumbnails)-1}">
                           	<a onclick="doAction(${loop.index}, 'movedown', false)">
-                              <img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" border="0" title="<digi:trn>Move down</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif" border="0" title="<digi:trn>Move down</digi:trn>"/>
                             </a>
                             </c:if>
                         	<c:if test="${loop.index == fn:length(contentForm.sortedContentThumbnails)-1}">
                             	&nbsp;&nbsp;&nbsp;&nbsp;
                             </c:if>
                           	<a onclick="doAction(${loop.index}, 'deleteThumb', true)">
-                              <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete thumbnail</digi:trn>"/>
+                              <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete thumbnail</digi:trn>"/>
                             </a>
                         </td>
                         </tr>

@@ -243,13 +243,13 @@
                                         <td style="background:#ccc;">
                                         	<table cellpadding="1" cellspacing="1" border="0" width="970" style="background:none;border:none;">
                                             	<tr>
-                                                <td width="5" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;width:25px;border-left:none;" >
+                                                <td width="5" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;width:25px;border-left:none;" >
 									  		<input type="checkbox" id="checkAll">
 									  	</td>
-									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;">
+									    <td width="20%" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;">
 									    	<b class="ins_title"><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 									    </td>
-									    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="border:none;">
+									    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="border:none;">
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 														<b><digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn></b>
@@ -262,7 +262,7 @@
 												</a>												
 									    	</b>
 									    </td>
-									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="border:none;" >
+									    <td width="20%" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="border:none;" >
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 														<b><digi:trn key="aim:donors">Donors</digi:trn></b>

@@ -160,7 +160,7 @@
 					          </legend>
 					          <div id="docDiv" style="display: block;">
 						          <p align="center">
-						          	  <img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="Loading..."/>
+						          	  <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="Loading..."/>
 						          </p>
 							  </div>
 							</fieldset>

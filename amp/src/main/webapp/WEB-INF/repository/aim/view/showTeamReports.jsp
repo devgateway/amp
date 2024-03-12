@@ -29,14 +29,14 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/WEB-INF/repository/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- CSS -->
-<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
+<link href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
 <!-- Commenting this out as they have a wrong path anyway, missing / 
-<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
-<link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
+<link href='src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+<link href='src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
 -->
-<link href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css" type="text/css" rel="stylesheet">
-<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" type="text/css" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
+<link href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css" type="text/css" rel="stylesheet">
+<link href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
 <digi:instance property="aimTeamReportsForm" />
 
@@ -212,7 +212,7 @@ function showHidePositions(id,selectedPosition){
 }
 
 function updateProcessingChangesInfo(id){
-	var processingChangesStr = "<img src='/TEMPLATE/ampTemplate/images/amploading.gif' width='10' height='10' />" + 
+	var processingChangesStr = "<img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/amploading.gif' width='10' height='10' />" +
 	"<digi:trn>applying changes</digi:trn>";
 	updateStatusInfo(id, processingChangesStr, "black");
 }
@@ -328,12 +328,12 @@ $(document).ready(function() {
 							<table border="0" cellpadding="6" cellspacing="6">
 								<tr>
 									<td>
-										<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" /></span>
+										<span><img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" /></span>
 									</td>
 									<td>
 										<span>
 											<digi:trn>Not filtered Report</digi:trn>&nbsp;
-											<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
+											<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
 										</span>
 									</td>
 									<td>
@@ -356,11 +356,11 @@ $(document).ready(function() {
 					<c:if test="${aimTeamReportsForm.showTabs}">
 						<div  class="filtered" style="float: right; font-size: 11px;">
 						<span>
-							<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" />
+							<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" />
 							<digi:trn>Not filtered Tab</digi:trn>&nbsp;
 						</span>
 						<span>
-							<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
+							<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
 						
 						<digi:trn>Filtered Tab</digi:trn>&nbsp;</span>
 						<span><img src= "/src/main/webapp/WEB-INF/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
@@ -398,14 +398,14 @@ $(document).ready(function() {
 								<b><digi:trn>${titleColumn}</digi:trn></b>
 							</digi:link>
 							<c:if test="${aimTeamReportsForm.sortBy==2}">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
+								<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
 							</c:if>
 						</c:if>
 						<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
 							<digi:link href="/viewTeamReports.do?sortBy=2">
 								<b><digi:trn key="aim:organizationName">${titleColumn}</digi:trn></b>
 							</digi:link>
-							<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+							<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
 						</c:if>
 					</td>
 					<td align="center" class="inside_header"><b>
@@ -414,14 +414,14 @@ $(document).ready(function() {
 								<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
 							</digi:link>
 							<c:if test="${aimTeamReportsForm.sortBy==4}">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
+								<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
 							</c:if>
 						</c:if>
 						<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==3}">
 							<digi:link href="/viewTeamReports.do?sortBy=4">
 								<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
 							</digi:link>
-							<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+							<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
 						</c:if> 
 					</b></td>
 					<td align="center" class="inside_header"> <b>
@@ -430,13 +430,13 @@ $(document).ready(function() {
 								<digi:trn key="aim:reportCreationDate">Update Date</digi:trn>
 							</digi:link>
 							<c:if test="${aimTeamReportsForm.sortBy==6}">
-								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
+								<img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
 							</c:if>
 						</c:if> 
 						<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
 							<digi:link href="/viewTeamReports.do?sortBy=6"> 
 								<digi:trn key="aim:reportCreationDate">Update Date</digi:trn>
-							</digi:link> <img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+							</digi:link> <img src="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
 						</c:if> 
 					</b></td>
 					<c:if test="${!aimTeamReportsForm.tabs}">
@@ -492,10 +492,10 @@ $(document).ready(function() {
 							<%if(idx.intValue()%2!=1) color = "#ffffff"; %>
 							<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;" bgcolor="<%=color%>">
 								<logic:notEmpty name="report" property="filterDataSet">
-									<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" align="middle" />
+									<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" align="middle" />
 								</logic:notEmpty>
 								<logic:empty name="report" property="filterDataSet">
-									<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" align="middle" />
+									<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" align="middle" />
 								</logic:empty>
 							</td>
 							<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
@@ -669,7 +669,7 @@ $(document).ready(function() {
 						<c:if test="${showViewReportIcon == true}">
 							<a href="${reportLink}"
 							   onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the report</digi:trn>">
-								<img src= "/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
+								<img src= "/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
 						</c:if>
 
 						<c:set target="${urlParams}" property="event" value="edit" />
@@ -684,12 +684,12 @@ $(document).ready(function() {
 							</c:set>
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
-									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
+									<a href="/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
 										<img src= "/src/main/webapp/WEB-INF/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:when>
 								<c:otherwise>
-									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
+									<a href="/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
 										<img src= "/src/main/webapp/WEB-INF/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:otherwise>
@@ -719,7 +719,7 @@ $(document).ready(function() {
 										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
 									</c:if>
 								</c:set>
-								<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
+								<a href="/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
 									<img src= "/src/main/webapp/WEB-INF/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 								</a>
 								<c:set var="translation">

@@ -152,9 +152,9 @@ function trim(stringToTrim) {
 								<c:if test="${subtabId == 0 }">
 									<table class="inside" width="970" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Team name</digi:trn></b></td>
-										    <td width=40% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Team Description</digi:trn></b></td>
-										    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Workspace Type</digi:trn></b></td>
+										    <td width=30% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Team name</digi:trn></b></td>
+										    <td width=40% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Team Description</digi:trn></b></td>
+										    <td width=30% background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Workspace Type</digi:trn></b></td>
 										</tr>
 										<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
 										<tr>
@@ -248,12 +248,12 @@ function trim(stringToTrim) {
 										</tr>
 										</logic:equal>
 										<tr>
-											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+											<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 												<b class="ins_title">
 													<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>
 												</b>
 											</td>
-											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width="50" align="center">
+											<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width="50" align="center">
 												<c:set var="translation">
 													<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
 												</c:set>

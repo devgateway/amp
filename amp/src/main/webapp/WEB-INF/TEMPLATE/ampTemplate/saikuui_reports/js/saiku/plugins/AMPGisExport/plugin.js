@@ -53,7 +53,7 @@ var AMPGisExport = Backbone.View.extend({
 			})
 		}).done(function(configId) {
 			if (configId != null) {
-				var url = '/TEMPLATE/ampTemplate/gisModule/dist/index.html#report/' + configId;
+				var url = '/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dist/index.html#report/' + configId;
 				var mapWindow = window.open(url);
            		if (window.focus) {
            			mapWindow.focus();

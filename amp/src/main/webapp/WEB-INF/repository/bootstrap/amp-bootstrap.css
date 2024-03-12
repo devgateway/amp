@@ -147,7 +147,7 @@ div.amp-subgroup:hover {
 }
 
 .amp-subsection-title{
-	background-image: url('/TEMPLATE/ampTemplate/img_2/ins_header.gif');
+	background-image: url('/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_header.gif');
 	color: #545454;
 	font-size: 1.1em;
 	font-weight: bold;

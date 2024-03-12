@@ -17,8 +17,8 @@ version: 2.8.2r1
 /* buttons */
 .yui-skin-sam  .yui-button {vertical-align:middle;}
 
-.yui-skin-sam  .yui-button button {background: url(/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/img/ac-arrow-rt.png) center center no-repeat } 
-.yui-skin-sam  .open .yui-button button {background: url(/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/img/ac-arrow-dn.png) center center no-repeat} 
+.yui-skin-sam  .yui-button button {background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/img/ac-arrow-rt.png) center center no-repeat }
+.yui-skin-sam  .open .yui-button button {background: url(/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/img/ac-arrow-dn.png) center center no-repeat}
 .yui-skin-sam  .yui-ac-container {width: 30em;}
 /* custom styles for scrolling container */
 #wicket-autocomplete {

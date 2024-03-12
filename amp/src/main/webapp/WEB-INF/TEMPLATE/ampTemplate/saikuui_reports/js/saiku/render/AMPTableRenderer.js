@@ -175,7 +175,7 @@ function generateReportHeaderHtml(headers) {
 			header += "<div class = 'i18n'>"+ headers[i][j].name;
 			
 			if (headers[i][j].description) {
-				header += "<img src='/TEMPLATE/ampTemplate/images/help.gif'" +
+				header += "<img src='/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/help.gif'" +
 						" style= 'padding-left:5px'" + 
 						" title='" + headers[i][j].description + "'>"
 			}

@@ -47,7 +47,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 <c:if test="${not empty aimUserDetailForm.mailingAddress}">
 					<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<tr>
-							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+							<td colspan="2" background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:userProfile">User Profile</digi:trn>
 							</td>
 						</tr>
@@ -122,10 +122,10 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 								<div style="overflow: auto; height: 250px">
 									<table width="100%" class="inside">
 										<tr>
-											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="width:60%;" align="center">
+											<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="width:60%;" align="center">
 												<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>
 											</td>
-											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center">
+											<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center">
 												<b><digi:trn key="aim:role">Role</digi:trn></b>
 											</td>
 										</tr>

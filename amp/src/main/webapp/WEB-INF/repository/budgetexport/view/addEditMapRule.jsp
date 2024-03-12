@@ -31,16 +31,16 @@
     <td valign=top width=712>
 	<table class="inside" width="100%" cellpadding="0" cellspacing="0" border=1>
 <tr>
-<td colspan=7 align=center background="/TEMPLATE/ampTemplate/images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Budget export manager</digi:trn></b></td>
+<td colspan=7 align=center background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Budget export manager</digi:trn></b></td>
 </tr>
 <tr>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Name</digi:trn></b></td>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>AMP Column</digi:trn></b></td>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Has Header</digi:trn></b></td>
-	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Allow "None" Mapping</digi:trn></b></td>
-	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Allow "All" Mapping</digi:trn></b></td>
-	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>CSV Column Delimiter</digi:trn></b></td>
-	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Service</digi:trn></b></td>
+    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Name</digi:trn></b></td>
+    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>AMP Column</digi:trn></b></td>
+    <td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Has Header</digi:trn></b></td>
+	<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Allow "None" Mapping</digi:trn></b></td>
+	<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Allow "All" Mapping</digi:trn></b></td>
+	<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>CSV Column Delimiter</digi:trn></b></td>
+	<td background="/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Service</digi:trn></b></td>
     </tr>
 <tr>
     <td class=inside><html:text name="beMapRuleForm" property="name" styleClass="inputx" style="width:95%;"/></td>

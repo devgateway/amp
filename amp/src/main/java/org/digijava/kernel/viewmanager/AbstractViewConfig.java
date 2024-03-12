@@ -22,17 +22,16 @@
 
 package org.digijava.kernel.viewmanager;
 
-import org.apache.log4j.Logger;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.siteconfig.Layout;
-import org.digijava.kernel.siteconfig.PutItem;
-import org.digijava.kernel.siteconfig.SiteConfig;
-import org.digijava.kernel.siteconfig.SiteLayout;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.SiteCache;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -41,10 +40,17 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.*;
+
+import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.siteconfig.Layout;
+import org.digijava.kernel.siteconfig.PutItem;
+import org.digijava.kernel.siteconfig.SiteConfig;
+import org.digijava.kernel.siteconfig.SiteLayout;
+import org.digijava.kernel.util.SiteCache;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Ecnapsulates basic methods for file-based view configuration. Implementation
@@ -52,12 +58,12 @@ import java.util.*;
  */
 public abstract class AbstractViewConfig implements ViewConfig{
     protected static Logger logger =
-        Logger.getLogger(AbstractViewConfig.class);
+            Logger.getLogger(AbstractViewConfig.class);
 
     public static final String MODULE_DIR = "module";
     public static final String LAYOUT_DIR = "layout";
     public static final String TEMPLATE_DIR = "TEMPLATE";
-    public static final String SITE_DIR = "WEB-INF/SITE";
+    public static final String SITE_DIR = "SITE";
     public static final String BLANK_TEMPLATE_NAME = "blank";
 
 
@@ -76,31 +82,31 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
 
     protected static String expandFilePath(String path, String folderName,
-                                        boolean isTemplate, String groupType,
-                                        String groupName) {
+                                           boolean isTemplate, String groupType,
+                                           String groupName) {
         String expandedPath = null;
         if ( (path != null) && (path.trim().length() != 0) &&
-            !path.startsWith("/")) {
+                !path.startsWith("/")) {
 
             String groupDir = groupName == null ? "" : "/" + groupName;
             if (isTemplate) {
                 if( !groupType.equalsIgnoreCase("") ) {
                     expandedPath = "/" + TEMPLATE_DIR + "/" + folderName + "/" +
-                        groupType +
-                        groupDir + "/" + path;
+                            groupType +
+                            groupDir + "/" + path;
                 } else {
                     expandedPath = "/" + TEMPLATE_DIR + "/" + folderName + groupDir + "/" + path;
                 }
             }
             else {
                 if( !groupType.equalsIgnoreCase("") ) {
-                    expandedPath = "/"+ SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
-                        "/" +
-                        path;
+                    expandedPath = "/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
+                            "/" +
+                            path;
                 } else {
-                    expandedPath = "/"+SITE_DIR + "/" + folderName + groupDir +
-                        "/" +
-                        path;
+                    expandedPath = "/" + SITE_DIR + "/" + folderName + groupDir +
+                            "/" +
+                            path;
                 }
             }
         }
@@ -108,19 +114,18 @@ public abstract class AbstractViewConfig implements ViewConfig{
     }
 
     protected SiteConfig addConfigurationFile(String folderName,
-                                            boolean isTemplate) throws
-        ViewConfigException {
+                                              boolean isTemplate) throws
+            ViewConfigException {
         File configFile;
         if (isTemplate) {
             configFile = new File(servletContext.getRealPath("/" +
-                TEMPLATE_DIR + "/" +
-                folderName + "/site-config.xml"));
+                    TEMPLATE_DIR + "/" +
+                    folderName + "/site-config.xml"));
         }
         else {
-            configFile = new File(servletContext.getRealPath("WEB-INF/SITE/" +
-              folderName + "/site-config.xml"));
+            configFile = new File(servletContext.getRealPath("/" +
+                    SITE_DIR + "/" + folderName + "/site-config.xml"));
         }
-        logger.info("CONF FILE"+configFile.getPath());
 
         SiteConfig siteConfig = null;
         if (configFile.exists()) {
@@ -136,8 +141,9 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
             SiteLayout siteLayout = siteConfig.getSiteLayout();
             if (siteLayout != null) {
-                for (Object o : siteLayout.getLayout().values()) {
-                    Layout layout = (Layout) o;
+                Iterator iter = siteLayout.getLayout().values().iterator();
+                while (iter.hasNext()) {
+                    Layout layout = (Layout) iter.next();
                     layout.setFileBlank(layout.getFile() == null);
                 }
             }
@@ -164,14 +170,14 @@ public abstract class AbstractViewConfig implements ViewConfig{
             HashMap newLayout = new HashMap();
             // Iterate through layouts
             Iterator iter = siteConfig.getSiteLayout().getLayout().values().
-                iterator();
+                    iterator();
             while (iter.hasNext()) {
                 Layout layout = (Layout) iter.next();
                 // If this layout is not processed yet, process it
                 if (!newLayout.containsKey(layout.getName())) {
                     expandLayoutAndStore(layout,
-                                         siteConfig.getSiteLayout().getLayout(),
-                                         newLayout);
+                            siteConfig.getSiteLayout().getLayout(),
+                            newLayout);
                 }
             }
             // Assign new layout list to site configuration
@@ -187,25 +193,25 @@ public abstract class AbstractViewConfig implements ViewConfig{
      * @throws ViewConfigException if configuration error occurs
      */
     protected void expandLayoutAndStore(Layout layout, HashMap sourceLayout,
-                                      HashMap destinationLayout) throws ViewConfigException {
+                                        HashMap destinationLayout) throws ViewConfigException {
         // If layout has parent, expand it
         if (layout.getExtendsLayout() != null) {
             // Was parent layout processed?
             if (!destinationLayout.containsKey(layout.getExtendsLayout())) {
                 // If not, then process it first
                 Layout parentLayout = (Layout) sourceLayout.get(layout.
-                    getExtendsLayout());
+                        getExtendsLayout());
                 if (parentLayout == null) {
                     throw new ViewConfigException("Layout " + layout.getName() +
-                        " references to non-existent layout " + layout.
-                                                  getExtendsLayout());
+                            " references to non-existent layout " + layout.
+                            getExtendsLayout());
                 }
                 expandLayoutAndStore(parentLayout ,
-                                     sourceLayout, destinationLayout);
+                        sourceLayout, destinationLayout);
             }
             // Get parent layout, which is already expanded
             Layout parentLayout = (Layout) destinationLayout.get(layout.
-                getExtendsLayout());
+                    getExtendsLayout());
 
             // overwrite all put and put-item items
             HashMap newPut = (HashMap) parentLayout.getPut().clone();
@@ -217,7 +223,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
             layout.setPut(newPut);
             layout.setPutItem(newPutItem);
 
-                /** @todo: layout.getFile() == null is not needed I think. Mikheil */
+            /** @todo: layout.getFile() == null is not needed I think. Mikheil */
             if ( (layout.getFile() == null) || (layout.isFileBlank())) {
                 layout.setFile(parentLayout.getFile());
             }
@@ -283,29 +289,29 @@ public abstract class AbstractViewConfig implements ViewConfig{
                 while (iter1.hasNext()) {
                     PutItem putItem = (PutItem) iter1.next();
                     if ( (putItem.getModule() != null) &&
-                        (putItem.getModule().trim().length() != 0) &&
-                        (putItem.getInstance() != null) &&
-                        (putItem.getInstance().trim().length() != 0)
-                        ) {
-                       ModuleInstance moduleInstance = new ModuleInstance();
-                       moduleInstance.setSite(null);
-                       moduleInstance.setModuleName(putItem.getModule());
-                       moduleInstance.setInstanceName(putItem.getInstance());
-                       moduleInstance.setPermitted(true);
-                       moduleInstance.setRealInstance(null);
+                            (putItem.getModule().trim().length() != 0) &&
+                            (putItem.getInstance() != null) &&
+                            (putItem.getInstance().trim().length() != 0)
+                    ) {
+                        ModuleInstance moduleInstance = new ModuleInstance();
+                        moduleInstance.setSite(null);
+                        moduleInstance.setModuleName(putItem.getModule());
+                        moduleInstance.setInstanceName(putItem.getInstance());
+                        moduleInstance.setPermitted(true);
+                        moduleInstance.setRealInstance(null);
 
-                       if (includeCommons) {
-                           moduleInstances.add(moduleInstance);
-                       } else {
-                           List sharedInstances = SiteCache.getInstance().
-                               getSharedInstances();
-                           if (Collections.binarySearch(sharedInstances,
-                               moduleInstance,
-                               SiteCache.moduleInstanceComparator) < 0) {
-                               moduleInstances.add(moduleInstance);
-                           }
-                       }
-                   }
+                        if (includeCommons) {
+                            moduleInstances.add(moduleInstance);
+                        } else {
+                            List sharedInstances = SiteCache.getInstance().
+                                    getSharedInstances();
+                            if (Collections.binarySearch(sharedInstances,
+                                    moduleInstance,
+                                    SiteCache.moduleInstanceComparator) < 0) {
+                                moduleInstances.add(moduleInstance);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -333,7 +339,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
                 return null;
             }
             Transformer transformer = TransformerFactory.newInstance().
-                newTransformer();
+                    newTransformer();
             transformer.transform(new DOMSource(document), streamResult);
             writer.flush();
         }
@@ -358,7 +364,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
         Document document = null;
         try {
             DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
+                    DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             document = builder.parse(new InputSource(reader));
         }

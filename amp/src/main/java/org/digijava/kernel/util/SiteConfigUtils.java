@@ -43,7 +43,7 @@ public class SiteConfigUtils {
     public static final String MODULE_DIR = "module";
     public static final String LAYOUT_DIR = "layout";
     public static final String TEMPLATE_DIR = "TEMPLATE";
-    public static final String SITE_DIR = ("/WEB-INF/SITE");
+    public static final String SITE_DIR = "SITE";
     public static final String BLANK_TEMPLATE_NAME = "blank";
 
 

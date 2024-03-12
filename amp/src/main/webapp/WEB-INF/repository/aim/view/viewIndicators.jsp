@@ -140,7 +140,7 @@ a.itr:hover {
 						
 						<tr>
 							<td vAlign="center" width="100%"><jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
+									page="/WEB-INF/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
 						</tr>
 						<tr>
 							<td height=16 vAlign="center" width="100%"><span
@@ -214,7 +214,7 @@ a.itr:hover {
 																									test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
 																									<a href="javascript:sortByVal('nameDesc')">
 																										<b><digi:trn>Indicator Name</digi:trn>
-																									</b> <img src="/repository/aim/images/up.gif"
+																									</b> <img src="/WEB-INF/repository/aim/images/up.gif"
 																										border="0" /> </a>
 																								</c:if> <c:if
 																									test="${not empty aimViewIndicatorsForm.sortBy && aimViewIndicatorsForm.sortBy!='nameAsc'}">
@@ -224,7 +224,7 @@ a.itr:hover {
 																									</b>
 																									<c:if
 																											test="${aimViewIndicatorsForm.sortBy=='nameDesc'}">
-																											<img src="/repository/aim/images/down.gif"
+																											<img src="/WEB-INF/repository/aim/images/down.gif"
 																												border="0" />
 																										</c:if> </a>
 																								</c:if></td>
@@ -233,7 +233,7 @@ a.itr:hover {
 																									test="${aimViewIndicatorsForm.sortBy=='sectAsc'}">
 																									<a href="javascript:sortByVal('sectDesc')">
 																										<b><digi:trn>Sector</digi:trn>
-																									</b><img src="/repository/aim/images/up.gif"
+																									</b><img src="/WEB-INF/repository/aim/images/up.gif"
 																										border="0" /> </a>
 																								</c:if> <c:if
 																									test="${aimViewIndicatorsForm.sortBy!='sectAsc'}">
@@ -241,7 +241,7 @@ a.itr:hover {
 																										<b><digi:trn>Sector</digi:trn>
 																									</b> <c:if
 																											test="${aimViewIndicatorsForm.sortBy=='sectDesc'}">
-																											<img src="/repository/aim/images/down.gif"
+																											<img src="/WEB-INF/repository/aim/images/down.gif"
 																												border="0" />
 																										</c:if> </a>
 																								</c:if></td>

@@ -15,7 +15,7 @@
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>
 <%@ taglib prefix="httml" uri="http://struts.apache.org/tags-html" %>
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="/WEB-INF/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <style>
 .contentbox_border {

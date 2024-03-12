@@ -14,21 +14,21 @@
 
     <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
     
-    <link href="/repository/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
-    <link href="/repository/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
-    <link href="/repository/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
-<!-- <link href="/repository/bootstrap/lightbox/ekko-lightbox.min.css" media="all" rel="stylesheet" type="text/css" />  -->        
-    <link href="/repository/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
-    <link href="/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="/repository/bootstrap/upload/jquery.fileupload.css" rel="stylesheet" type="text/css" />
-    <link href="/repository/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
+    <link href="/WEB-INF/repository/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+    <link href="/WEB-INF/repository/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/WEB-INF/repository/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
+<!-- <link href="/WEB-INF/repository/bootstrap/lightbox/ekko-lightbox.min.css" media="all" rel="stylesheet" type="text/css" />  -->
+    <link href="/WEB-INF/repository/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+    <link href="/WEB-INF/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="/WEB-INF/repository/bootstrap/upload/jquery.fileupload.css" rel="stylesheet" type="text/css" />
+    <link href="/WEB-INF/repository/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
     
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>       
-    <script src="/repository/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
-    <script src="/repository/aim/view/bootstrap/amp_validation.js" type="text/javascript"></script>
-	<script src="/repository/aim/view/bootstrap/forms.js" type="text/javascript"></script>
+	<script src="/WEB-INF/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/aim/view/bootstrap/amp_validation.js" type="text/javascript"></script>
+	<script src="/WEB-INF/repository/aim/view/bootstrap/forms.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var please_enter_phone_number_message = '<digi:trn jsFriendly="true">Please enter phone</digi:trn>';
 		var please_enter_email_message = '<digi:trn jsFriendly="true">Please enter email</digi:trn>';
@@ -93,8 +93,8 @@
 			</aim:renderFormSubsection>
 		</feature:display>
 	
-		<jsp:include page="/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
-		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
 	
 		<div class="big-form-buttons">
 			<button type="button" onclick="pledge_form_submit('#pledge_form_big_div');" class="btn btn-primary" id='pledgeForm_submit'><digi:trn>Submit</digi:trn></button>
@@ -109,15 +109,15 @@
 	</script>
 </logic:notPresent>	
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/repository/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
-    <script src="/repository/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
-    <script src="/repository/bootstrap/jquery.ui.widget.js" type="text/javascript"></script>
-	<script src="/repository/bootstrap/upload/jquery.iframe-transport.js" type="text/javascript"></script>
-    <script src="/repository/bootstrap/upload/jquery.fileupload.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/bootstrap/jquery.ui.widget.js" type="text/javascript"></script>
+	<script src="/WEB-INF/repository/bootstrap/upload/jquery.iframe-transport.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/bootstrap/upload/jquery.fileupload.js" type="text/javascript"></script>
     
-    <script src="/repository/bootstrap/datetimepicker/moment-with-langs.min.js" type="text/javascript"></script>   
-    <script src="/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
-    <script src="/repository/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
- <!--   <script src="/repository/bootstrap/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>  --> 
+    <script src="/WEB-INF/repository/bootstrap/datetimepicker/moment-with-langs.min.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+    <script src="/WEB-INF/repository/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
+ <!--   <script src="/WEB-INF/repository/bootstrap/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>  -->
 

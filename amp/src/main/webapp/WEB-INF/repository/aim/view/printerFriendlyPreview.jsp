@@ -2707,10 +2707,10 @@ body {background:none;}
 																		</c:set>
 																		<%-- <a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>"
 																			onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}">
-																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
+																			<img src="/WEB-INF/repository/contentrepository/view/images/check_out.gif" border="0">
 																		</a> --%>
 																		<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
-																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0"></a>
+																			<img src="/WEB-INF/repository/contentrepository/view/images/check_out.gif" border="0"></a>
 																		<logic:notEmpty name="crDoc" property="description">
 																			<br />&nbsp;
 																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;

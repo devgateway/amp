@@ -15,7 +15,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
-<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="/WEB-INF/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <digi:instance property="aimNewIndicatorForm" />
 <script language="javascript">
@@ -230,7 +230,7 @@ function closeWindow() {
             <b style="color: red;">*</b> <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
             </td>
             <td>
-                <jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+                <jsp:include page="/WEB-INF/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
                     <jsp:param name="attr_name" value="multilingual_indicator_name" />
                 </jsp:include>
             </td>
@@ -240,7 +240,7 @@ function closeWindow() {
             <digi:trn>Indicator Description</digi:trn>:
             </td>
             <td>
-                <jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+                <jsp:include page="/WEB-INF/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
                     <jsp:param name="attr_name" value="multilingual_indicator_desc" />
                     <jsp:param name="input_type" value="textarea" />
                 </jsp:include>

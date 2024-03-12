@@ -16,7 +16,7 @@
 	</div> --%>	
 	<div class="row">
 		<div class="col-xs-8 col-xs-offset-2">
-			<jsp:include page="/repository/bootstrap/upload/fileupload.jsp">
+			<jsp:include page="/WEB-INF/repository/bootstrap/upload/fileupload.jsp">
 				<jsp:param name="button_caption" value="Select pledge document" />
 				<jsp:param name="url" value="/selectPledgeProgram.do?extra_action=file_upload" />
 			</jsp:include>

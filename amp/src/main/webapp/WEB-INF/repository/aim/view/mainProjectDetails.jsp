@@ -419,7 +419,7 @@ ${aimMainProjectDetailsForm.activityExists}
 				<feature:display name="Preview Activity" module="Previews">
 					<field:display feature="Preview Activity" name="Preview Button">
 						<a href="javascript:preview(document.getElementById('tempActivity').value);" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
-							<img src="/repository/aim/images/tangopack_preview.png" border="0"></a>
+							<img src="/WEB-INF/repository/aim/images/tangopack_preview.png" border="0"></a>
 					</field:display>
 				</feature:display>
 			</module:display>
@@ -434,9 +434,9 @@ ${aimMainProjectDetailsForm.activityExists}
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
 	                		<a href="${activityEditURL}" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>">
-								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
+								<img src="/WEB-INF/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
 	                		 <a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:oldedit'>Edit using Old Form</digi:trn>"> 
-								<img src="/repository/aim/images/tangopack_old_edit.png" border="0"></a>&nbsp;
+								<img src="/WEB-INF/repository/aim/images/tangopack_old_edit.png" border="0"></a>&nbsp;
 						</logic:equal>
 					</field:display>
 				</feature:display>
@@ -448,14 +448,14 @@ ${aimMainProjectDetailsForm.activityExists}
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="validate">
 							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
 								<a href="${activityEditURL}" style="cursor:pointer" target="_self" title="<digi:trn key='btn:validate'>Validate</digi:trn>">
-									<img src="/repository/aim/images/tangopack_validate2.png" border="0"></a>&nbsp;
+									<img src="/WEB-INF/repository/aim/images/tangopack_validate2.png" border="0"></a>&nbsp;
 							</c:if>
 						</logic:equal>
 					</field:display>
 				</feature:display>
 			</module:display>
 			<a style="cursor:pointer" target="_blank" onclick="javascript:previewHistory(document.getElementById('tempActivity').value); return false;" title="<digi:trn>View History</digi:trn>">
-				<img src="/repository/aim/images/activity_history.png" border="0"></a>&nbsp;
+				<img src="/WEB-INF/repository/aim/images/activity_history.png" border="0"></a>&nbsp;
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Logframe" module="Previews">
 					<field:display name="Logframe Preview Button" feature="Logframe">

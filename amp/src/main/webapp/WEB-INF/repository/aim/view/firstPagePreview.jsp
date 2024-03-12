@@ -14,7 +14,7 @@
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="/WEB-INF/repository/aim/view/teamPagesHeader.jsp"  />
 <%@include file="addThumbnailPanel.jsp" %>
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
 <style type="text/css">

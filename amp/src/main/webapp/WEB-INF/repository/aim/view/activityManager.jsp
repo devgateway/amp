@@ -225,7 +225,7 @@
 
                     <td noWrap align=center valign="middle">
                       	<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="/WEB-INF/repository/aim/view/adminXSLExportToolbar.jsp" />
         </td>
     </tr>
 </table></td>
@@ -328,10 +328,10 @@
 	                                                                            </digi:trn>
 																</digi:link>  --%></b>
 																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="/WEB-INF/repository/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="/WEB-INF/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>
@@ -350,10 +350,10 @@
 	                                                                            </digi:trn>
 																</digi:link>  --%></b>
 																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="/WEB-INF/repository/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="/WEB-INF/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>
@@ -373,10 +373,10 @@
 	                                                                            </digi:trn>
 																</digi:link> --%> </b>
 																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="/WEB-INF/repository/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="/WEB-INF/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>

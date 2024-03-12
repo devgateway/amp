@@ -47,7 +47,7 @@ function exportXSL(){
 				<tr>
 						<td align="left">
 						<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
+									page="/WEB-INF/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
 					</tr>
 				<tr>
 					<td height=16 valign="center" width=571>

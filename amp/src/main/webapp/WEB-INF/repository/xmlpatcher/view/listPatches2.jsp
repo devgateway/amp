@@ -19,10 +19,10 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
 
 <!-- XML/Java Beautifier -->
-<script type="text/javascript" src="/repository/xmlpatcher/js/sh_main.min.js"></script>
-<script type="text/javascript" src="/repository/xmlpatcher/js/sh_xml.min.js"></script>
-<script type="text/javascript" src="/repository/xmlpatcher/js/sh_java.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/sh_style.css" />
+<script type="text/javascript" src="/WEB-INF/repository/xmlpatcher/js/sh_main.min.js"></script>
+<script type="text/javascript" src="/WEB-INF/repository/xmlpatcher/js/sh_xml.min.js"></script>
+<script type="text/javascript" src="/WEB-INF/repository/xmlpatcher/js/sh_java.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/WEB-INF/repository/xmlpatcher/css/sh_style.css" />
 
 <style type="text/css"> 
 /* Class for marked rows */

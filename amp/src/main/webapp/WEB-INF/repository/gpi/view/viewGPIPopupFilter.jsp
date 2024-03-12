@@ -261,7 +261,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
 											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
-												page="/repository/aim/view/filters/hierarchyLister.jsp" />
+												page="/WEB-INF/repository/aim/view/filters/hierarchyLister.jsp" />
 										</li>
 									</ul>
 								</div>
@@ -391,7 +391,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
 											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
-												page="/repository/aim/view/filters/hierarchyLister.jsp" />
+												page="/WEB-INF/repository/aim/view/filters/hierarchyLister.jsp" />
 										</li>
 									</ul>
 								</div>
@@ -454,7 +454,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
 											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
-												page="/repository/aim/view/filters/hierarchyLister.jsp" />
+												page="/WEB-INF/repository/aim/view/filters/hierarchyLister.jsp" />
 										</li>
 									</ul>
 								</div>

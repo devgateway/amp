@@ -189,10 +189,10 @@
                                                                                             </digi:link>
                                                                                         </c:if>
                                                                                         <c:if test="${not empty interchangeResultForm.sortBy && interchangeResultForm.sortBy=='dateAscending'}">
-                                                                                            <img src="/repository/aim/images/up.gif"/>
+                                                                                            <img src="/WEB-INF/repository/aim/images/up.gif"/>
                                                                                         </c:if>
                                                                                         <c:if test="${not empty interchangeResultForm.sortBy && interchangeResultForm.sortBy=='dateDescending'}">
-                                                                                            <img src="/repository/aim/images/down.gif"/>
+                                                                                            <img src="/WEB-INF/repository/aim/images/down.gif"/>
                                                                                         </c:if>
                                                                                     </td>
                                                                                     <td height="30" width="220"><b><digi:trn>Status</digi:trn></b></td>

@@ -157,7 +157,7 @@ function exportXSL(){
 								<tr>
 									<td align="left">
 										<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="/WEB-INF/repository/aim/view/adminXSLExportToolbar.jsp" />
 									</td>
 									<td rowspan="4" valign=top>
 										<table align="center" cellpadding="0" cellspacing="0"
@@ -315,10 +315,10 @@ function exportXSL(){
 																			key="aim:currCode">Code</digi:trn>
 																</b>
 																<c:if test="${aimCurrencyForm.sort=='code' && aimCurrencyForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="/WEB-INF/repository/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimCurrencyForm.sort=='code' && aimCurrencyForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="/WEB-INF/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 																<td align="left" class="inside" width="35%"
@@ -328,10 +328,10 @@ function exportXSL(){
 																			key="aim:currencyName">Currency Name</digi:trn>
 																</b>
 																<c:if test="${aimCurrencyForm.sort=='cname' && aimCurrencyForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="/WEB-INF/repository/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimCurrencyForm.sort=='cname' && aimCurrencyForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="/WEB-INF/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 																<td colspan="2" align="left" class="inside"
@@ -342,10 +342,10 @@ function exportXSL(){
 																			key="aim:countryName">Administrative Level 0</digi:trn>
 																</b>
 																<c:if test="${aimCurrencyForm.sort=='country' && aimCurrencyForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="/WEB-INF/repository/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimCurrencyForm.sort=='country' && aimCurrencyForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="/WEB-INF/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 															</tr>

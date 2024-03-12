@@ -27,7 +27,7 @@
 
 
 <!-- Individual YUI CSS files -->
-<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
+<link rel="stylesheet" type="text/css" href="/WEB-INF/repository/aim/view/css/filters/filters2.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css"/>
@@ -104,8 +104,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
-<script type="text/javascript" src="/repository/aim/view/scripts/arFunctions.js"></script>
-<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="/WEB-INF/repository/aim/view/scripts/arFunctions.js"></script>
+<script type="text/javascript" src="/WEB-INF/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <!-- Individual YUI JS files -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -157,7 +157,7 @@
     }
 </script>
 
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
 
 
 <c:set var="showCurrSettings">
@@ -183,7 +183,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 
 <div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto; display: none;">
-    <jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp"/>
+    <jsp:include page="/WEB-INF/repository/aim/view/ar/levelSorterPicker.jsp"/>
 </div>
 <%
     int counter = ReportContextData.getFromRequest().getProgressValue();
@@ -200,7 +200,7 @@
         </div>
     </div>
 </logic:notEqual>
-<jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp"/>
+<jsp:include page="/WEB-INF/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp"/>
 <%
     counter++;
     ReportContextData.getFromRequest().setProgressValue(counter);
@@ -213,7 +213,7 @@
             <logic:notEqual name="viewFormat" scope="request" value="print">
                 <bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable"
                              toScope="request"/>
-                <jsp:include page="/repository/aim/view/ar/toolBar.jsp"/>
+                <jsp:include page="/WEB-INF/repository/aim/view/ar/toolBar.jsp"/>
 
                 <c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
 
@@ -277,7 +277,7 @@
             <!-- not a tab, not a print, e.g. a normal report -->
     <tr>
         <td>
-            <%@include file="/repository/aim/view/ar/opts/report_opts.jspf" %>
+            <%@include file="/WEB-INF/repository/aim/view/ar/opts/report_opts.jspf" %>
         </td>
     </tr>
     </logic:notEqual>
@@ -287,12 +287,12 @@
         <!-- <table width="100%"> -->
         <tr>
             <td style="padding-left:-2px;">
-                <%@include file="/repository/aim/view/ar/opts/tab_opts.jspf" %>
+                <%@include file="/WEB-INF/repository/aim/view/ar/opts/tab_opts.jspf" %>
             </td>
         </tr>
         <tr>
             <td>
-                <%@include file="/repository/aim/view/ar/opts/tab_opts_common.jspf" %>
+                <%@include file="/WEB-INF/repository/aim/view/ar/opts/tab_opts_common.jspf" %>
             </td>
         </tr>
         <tr>
@@ -340,7 +340,7 @@
                                 <table id='reportTable' cellSpacing="0" width="900px" style="overflow:hidden">
                                     <bean:define id="viewable" name="generatedReport"
                                                  type="org.dgfoundation.amp.ar.Viewable" toScope="request"/>
-                                    <jsp:include page="/repository/aim/view/ar/viewableItem.jsp"/>
+                                    <jsp:include page="/WEB-INF/repository/aim/view/ar/viewableItem.jsp"/>
                                 </table>
                             </logic:equal>
                             <logic:notEqual name="viewFormat" value="print">
@@ -349,7 +349,7 @@
                                            cellspacing="0">
                                         <bean:define id="viewable" name="generatedReport"
                                                      type="org.dgfoundation.amp.ar.Viewable" toScope="request"/>
-                                        <jsp:include page="/repository/aim/view/ar/viewableItem.jsp"/>
+                                        <jsp:include page="/WEB-INF/repository/aim/view/ar/viewableItem.jsp"/>
                                     </table>
                                 </div>
                             </logic:notEqual>

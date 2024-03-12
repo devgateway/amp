@@ -94,9 +94,9 @@ div.charcounter-progress-bar {
 }
 </style>
 
-<jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" />
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" />
-<jsp:include page="/repository/aim/view/components/contactScripts.jsp" />
+<jsp:include page="/WEB-INF/repository/aim/view/addEditOrganizationsPopin.jsp" />
+<jsp:include page="/WEB-INF/repository/aim/view/addOrganizationPopin.jsp" />
+<jsp:include page="/WEB-INF/repository/aim/view/components/contactScripts.jsp" />
 
 <script language="JavaScript" type="text/javascript">
 	function addLoadEvent(func) {
@@ -1071,7 +1071,7 @@ initContactScript();
 																		<bean:define toScope="request"
 																		id="showLineBreaks" value="false" />
 																	<jsp:include
-																		page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp" />
+																		page="/WEB-INF/repository/contentrepository/view/showSelectedDocumentsDM.jsp" />
 																		<c:set var="showTheFollowingDocuments" value="PUBLIC" />
 																	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
 																	<html:button styleClass="buttonx_sm"

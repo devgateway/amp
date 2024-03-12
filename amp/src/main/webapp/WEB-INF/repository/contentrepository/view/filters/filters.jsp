@@ -12,7 +12,7 @@
 <%@ taglib uri="http://digijava.org/fields" prefix="field" %>
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>
-<jsp:include page="/repository/aim/view/scripts/newCalendar.jsp"  />
+<jsp:include page="/WEB-INF/repository/aim/view/scripts/newCalendar.jsp"  />
 <%-- This file renders the Resource-Filtering popup table. Add one <tr></tr> per filter criterium --%>
 <style>
 #docTypes {

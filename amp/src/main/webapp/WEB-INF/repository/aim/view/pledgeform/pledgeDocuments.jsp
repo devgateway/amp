@@ -30,7 +30,7 @@
 				<td>
 					<a target="_blank" href="${selectedDocs.generalLink}">
 						<c:out value="${selectedDocs.fileName}" /><%--
-						<img src="/repository/contentrepository/view/images/check_out.gif" border="0"> --%>
+						<img src="/WEB-INF/repository/contentrepository/view/images/check_out.gif" border="0"> --%>
 					</a>
 					 (<c:out value="${selectedDocs.formattedSize}" /> MB)
 				</td>

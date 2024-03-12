@@ -23,7 +23,7 @@ public class BoundariesService {
 
     protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-    private static final String BOUNDARY_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/WEB-INF/gis" + File.separator + "boundaries" + File.separator);
+    private static final String BOUNDARY_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/src/main/webapp/WEB-INF/gis" + File.separator + "boundaries" + File.separator);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

@@ -60,14 +60,13 @@ public abstract class ViewConfigUtil
 
         String templateName = null;
         if (currentConfig.getTemplate() != null &&
-            currentConfig.getTemplate().trim().length() != 0) {
+                !currentConfig.getTemplate().trim().isEmpty()) {
             templateName = currentConfig.getTemplate().trim();
         }
 
         if (!isTemplate && templateName != null) {
-            SiteConfig parentConfig = createConfiguration(templateName, true);
 
-            siteConfig = parentConfig;
+            siteConfig = createConfiguration(templateName, true);
             siteConfig.merge(currentConfig);
             expandLayoutsFromRepository(currentConfig);
             expandLayoutInheritance(siteConfig);

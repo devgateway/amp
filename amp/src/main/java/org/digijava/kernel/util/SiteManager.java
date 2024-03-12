@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashSet;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class SiteManager {
 
     private static Logger logger = Logger.getLogger(SiteManager.class);
@@ -74,8 +76,8 @@ public class SiteManager {
         if (!siteDir.exists()) {
             siteDir.mkdir();
 
-            File siteConfig = new File(siteRootDir + File.separator + dirName +
-                                       File.separator + "site-config.xml");
+            File siteConfig = new File(getServletContext().getRealPath(siteRootDir + File.separator + dirName +
+                                       File.separator + "site-config.xml"));
 
             try {
                 siteConfig.createNewFile();

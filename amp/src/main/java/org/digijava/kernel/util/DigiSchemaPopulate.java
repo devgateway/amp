@@ -250,7 +250,7 @@ class DigiInitUtil {
                                    getHost()}
                                    , new String[] {
                                    DigiConfigManager.getConfig().getLogonSite().
-                                   getPath()},DgUtil.getWebInfPath("SITE"), "default");
+                                   getPath()},"WEB-INF/SITE", "default");
 
         }
     }

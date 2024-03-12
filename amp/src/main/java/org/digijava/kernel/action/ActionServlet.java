@@ -63,7 +63,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
         String[] dirList = configDir.list();
 
-        tmpFile = new File(configDir.getAbsolutePath() +
+        tmpFile = new File(configDir +
                 File.separator + STRUTS_CONFIG_FILE);
 
         if (tmpFile.exists() && tmpFile.isFile()) {
@@ -72,10 +72,10 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
             retVal.append(tmpFile.getName());
         }
 
-        for (int i = 0; i<dirList.length; i++) {
+        for (String s : dirList) {
 
-            tmpFile =  new File(configDir.getAbsolutePath() +
-                    File.separator + dirList[i] +
+            tmpFile = new File(configDir +
+                    File.separator + s +
                     File.separator + STRUTS_CONFIG_FILE);
 
             if (tmpFile.exists() && tmpFile.isFile()) {
@@ -83,7 +83,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
                 retVal.append(",");
                 retVal.append(MODULE_DIRECTORY);
                 retVal.append("/");
-                retVal.append(dirList[i]);
+                retVal.append(s);
                 retVal.append("/");
                 retVal.append(tmpFile.getName());
 

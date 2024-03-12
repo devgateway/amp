@@ -1,0 +1,50 @@
+	p{
+		font-family:arial;
+		
+	}
+	
+	.dhtmlgoodies_tree{
+		margin:0px;
+		padding:0px;
+	}
+	
+	a{
+	text-decoration: none;
+	}
+	a.alinkblue{
+		font-size: 12px;
+		color: #0e69b3;
+		text-decoration: none;
+	}
+	a.alinkblue:link{
+		font-size: 12px;
+		color: #0e69b3;
+		text-decoration: none;
+	}
+	a.alinkblue:hover	{
+		font-size: 12px;
+		color: #0e69b3;
+		text-decoration: none;
+	}
+	
+	.dhtmlgoodies_tree ul{	/* Sub menu groups */
+		margin-left:20px;	/* Left spacing */
+		padding-left:0px;
+		display:none;	/* Initially hide sub nodes */
+	}
+	.dhtmlgoodies_tree li{	/* Nodes */
+		list-style-type:none;
+		vertical-align:middle;
+		
+	}
+	.dhtmlgoodies_tree li a{	/* Node links */
+		color:#000;
+		text-decoration:none;
+		font-family:arial;
+		font-size: 12px;
+		padding-left:2px;
+	}
+	a{
+	text-decoration: none;
+	}
+	

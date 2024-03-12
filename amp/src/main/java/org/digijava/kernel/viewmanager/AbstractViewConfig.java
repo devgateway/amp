@@ -74,11 +74,11 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
 
 
-    protected static String expandFilePath(String path, String folderName,
+    protected String expandFilePath(String path, String folderName,
                                         boolean isTemplate, String groupType,
                                         String groupName) {
         String expandedPath = null;
-        if ( (path != null) && (path.trim().length() != 0) &&
+        if ( (path != null) && (!path.trim().isEmpty()) &&
             !path.startsWith("/")) {
 
             String groupDir = groupName == null ? "" : "/" + groupName;
@@ -93,13 +93,13 @@ public abstract class AbstractViewConfig implements ViewConfig{
             }
             else {
                 if( !groupType.equalsIgnoreCase("") ) {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
+                    expandedPath = servletContext.getRealPath("/WEB-INF/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
                         "/" +
-                        path;
+                        path);
                 } else {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + groupDir +
+                    expandedPath = servletContext.getRealPath("/WEB-INF/" + SITE_DIR + "/" + folderName + groupDir +
                         "/" +
-                        path;
+                        path);
                 }
             }
         }
@@ -111,13 +111,14 @@ public abstract class AbstractViewConfig implements ViewConfig{
         ViewConfigException {
         File configFile;
         if (isTemplate) {
-            configFile = new File(servletContext.getRealPath("/" +
+            configFile = new File(servletContext.getRealPath(
                 TEMPLATE_DIR + "/" +
                 folderName + "/site-config.xml"));
         }
         else {
-            configFile = new File(servletContext.getRealPath("/" +
-                SITE_DIR + "/" + folderName + "/site-config.xml"));
+            String realPath = servletContext.getRealPath("/WEB-INF/"+SITE_DIR + "/" + folderName + "/site-config.xml");
+
+            configFile = new File(realPath);
         }
 
         SiteConfig siteConfig = null;
@@ -134,9 +135,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
             SiteLayout siteLayout = siteConfig.getSiteLayout();
             if (siteLayout != null) {
-                Iterator iter = siteLayout.getLayout().values().iterator();
-                while (iter.hasNext()) {
-                    Layout layout = (Layout) iter.next();
+                for (Object o : siteLayout.getLayout().values()) {
+                    Layout layout = (Layout) o;
                     layout.setFileBlank(layout.getFile() == null);
                 }
             }
@@ -162,15 +162,13 @@ public abstract class AbstractViewConfig implements ViewConfig{
             // Create empty storage for layouts
             HashMap newLayout = new HashMap();
             // Iterate through layouts
-            Iterator iter = siteConfig.getSiteLayout().getLayout().values().
-                iterator();
-            while (iter.hasNext()) {
-                Layout layout = (Layout) iter.next();
+            for (Object o : siteConfig.getSiteLayout().getLayout().values()) {
+                Layout layout = (Layout) o;
                 // If this layout is not processed yet, process it
                 if (!newLayout.containsKey(layout.getName())) {
                     expandLayoutAndStore(layout,
-                                         siteConfig.getSiteLayout().getLayout(),
-                                         newLayout);
+                            siteConfig.getSiteLayout().getLayout(),
+                            newLayout);
                 }
             }
             // Assign new layout list to site configuration
@@ -258,9 +256,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
     public Set getReferencedModules(boolean includeCommons) {
         HashSet modules = new HashSet();
-        Iterator iter = getReferencedInstances(includeCommons).iterator();
-        while (iter.hasNext()) {
-            ModuleInstance item = (ModuleInstance)iter.next();
+        for (Object o : getReferencedInstances(includeCommons)) {
+            ModuleInstance item = (ModuleInstance) o;
             modules.add(item.getModuleName());
         }
 
@@ -275,36 +272,34 @@ public abstract class AbstractViewConfig implements ViewConfig{
         TreeSet moduleInstances = new TreeSet(SiteCache.moduleInstanceComparator);
 
         if (siteLayout != null) {
-            Iterator iter = siteLayout.getLayout().values().iterator();
-            while (iter.hasNext()) {
-                Layout layout = (Layout) iter.next();
-                Iterator iter1 = layout.getPutItem().values().iterator();
-                while (iter1.hasNext()) {
-                    PutItem putItem = (PutItem) iter1.next();
-                    if ( (putItem.getModule() != null) &&
-                        (putItem.getModule().trim().length() != 0) &&
-                        (putItem.getInstance() != null) &&
-                        (putItem.getInstance().trim().length() != 0)
-                        ) {
-                       ModuleInstance moduleInstance = new ModuleInstance();
-                       moduleInstance.setSite(null);
-                       moduleInstance.setModuleName(putItem.getModule());
-                       moduleInstance.setInstanceName(putItem.getInstance());
-                       moduleInstance.setPermitted(true);
-                       moduleInstance.setRealInstance(null);
+            for (Object o : siteLayout.getLayout().values()) {
+                Layout layout = (Layout) o;
+                for (Object object : layout.getPutItem().values()) {
+                    PutItem putItem = (PutItem) object;
+                    if ((putItem.getModule() != null) &&
+                            (putItem.getModule().trim().length() != 0) &&
+                            (putItem.getInstance() != null) &&
+                            (putItem.getInstance().trim().length() != 0)
+                    ) {
+                        ModuleInstance moduleInstance = new ModuleInstance();
+                        moduleInstance.setSite(null);
+                        moduleInstance.setModuleName(putItem.getModule());
+                        moduleInstance.setInstanceName(putItem.getInstance());
+                        moduleInstance.setPermitted(true);
+                        moduleInstance.setRealInstance(null);
 
-                       if (includeCommons) {
-                           moduleInstances.add(moduleInstance);
-                       } else {
-                           List sharedInstances = SiteCache.getInstance().
-                               getSharedInstances();
-                           if (Collections.binarySearch(sharedInstances,
-                               moduleInstance,
-                               SiteCache.moduleInstanceComparator) < 0) {
-                               moduleInstances.add(moduleInstance);
-                           }
-                       }
-                   }
+                        if (includeCommons) {
+                            moduleInstances.add(moduleInstance);
+                        } else {
+                            List sharedInstances = SiteCache.getInstance().
+                                    getSharedInstances();
+                            if (Collections.binarySearch(sharedInstances,
+                                    moduleInstance,
+                                    SiteCache.moduleInstanceComparator) < 0) {
+                                moduleInstances.add(moduleInstance);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -313,13 +308,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
     }
 
     public boolean isLayoutDefined(String layoutName) {
-        if (siteConfig.getSiteLayout() != null) {
-            if (siteConfig.getSiteLayout().getLayout().containsKey(layoutName)) {
-                return true;
-            }
-        }
-
-        return false;
+        return siteConfig.getSiteLayout() != null && (siteConfig.getSiteLayout().getLayout().containsKey(layoutName));
     }
 
     public String getXML() throws ViewConfigException {

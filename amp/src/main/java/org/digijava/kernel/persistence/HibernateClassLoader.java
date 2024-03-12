@@ -99,9 +99,8 @@ public class HibernateClassLoader {
      */
     public static void initialize(HashMap config) {
 
-        Iterator iterModules = config.keySet().iterator();
-        while (iterModules.hasNext()) {
-            String moduleName = (String) iterModules.next();
+        for (Object o : config.keySet()) {
+            String moduleName = (String) o;
             ModuleConfig moduleConfig = (ModuleConfig) config.get(moduleName);
 
             HibernateClasses classes = moduleConfig.getHibernateClasses();
@@ -121,7 +120,7 @@ public class HibernateClassLoader {
         /*
          * only register classes within package
          * org.digijava.kernel.ampapi.postgis.entity need to take the
-         * configuration file /repository/hibernate-annotated.xml
+         * configuration file /src/main/webapp/WEB-INF/repository/hibernate-annotated.xml
          */
 
         for (BeanDefinition bd : scanner
@@ -180,10 +179,10 @@ public class HibernateClassLoader {
                 cfg.addClass(Class.forName(hibernateClass.getContent()));
             } catch (Exception ex) {
                 if (required) {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                     break;
                 } else {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                 }
             }
 

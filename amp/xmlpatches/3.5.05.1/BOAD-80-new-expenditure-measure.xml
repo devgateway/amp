@@ -12,7 +12,9 @@
 
 				INSERT INTO amp_measures (measureid, measurename, aliasname, type, expression, description)
 				VALUES (nextval('amp_measures_seq'), 'Unexpenditured Balance', 'Unexpenditured Balance', 'A',
-					'unexpendituredBalance', 'Total Actual Dibursement - Total Actual Expenditures');
+				'unexpendituredBalance', 'Total Actual Disbursement - Total Actual Expenditures')
+				ON CONFLICT (measurename,type) DO NOTHING;
+
 			</lang>
 		</script>
 	</apply>

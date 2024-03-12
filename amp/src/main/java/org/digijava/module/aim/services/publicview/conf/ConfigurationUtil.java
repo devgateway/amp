@@ -19,7 +19,7 @@ import java.util.Properties;
 
 public class ConfigurationUtil {
     private static Configuration configuration = null;
-    private static final String configFilePath = "/org/digijava/module/aim/services/publicview/conf.xml";
+    private static final String configFilePath = "/org/digijava//WEB-INF/repository/aim/services/publicview/conf.xml";
 
     public static Configuration getConfiguration (ServletContext ctx) throws JAXBException, IOException {
         return (configuration != null ? configuration : initConfig(ctx));

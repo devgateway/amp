@@ -58,7 +58,7 @@ public class DigiSchemaPopulate {
         ResourceStreamHandlerFactory.installIfNeeded();
 
         ViewConfigFactory.initialize(new DummyServletContext("."));
-        DigiConfigManager.initialize("./src/main/webapp/repository");
+        DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
         PersistenceManager.initialize(false);
         ServiceContext serviceContext = new StandaloneServiceContext(".");
         ServiceManager.getInstance().init(serviceContext, 0);
@@ -248,7 +248,7 @@ class DigiInitUtil {
                                    getHost()}
                                    , new String[] {
                                    DigiConfigManager.getConfig().getLogonSite().
-                                   getPath()},"SITE", "default");
+                                   getPath()},"src/main/webapp/WEB-INF/SITE", "default");
 
         }
     }

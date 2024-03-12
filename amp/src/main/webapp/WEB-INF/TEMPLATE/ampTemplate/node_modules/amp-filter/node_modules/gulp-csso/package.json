@@ -1,0 +1,39 @@
+{
+  "name": "gulp-csso",
+  "version": "4.0.1",
+  "description": "Minify CSS with CSSO.",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "LICENSE-MIT"
+  ],
+  "homepage": "https://github.com/ben-eb/gulp-csso",
+  "author": {
+    "name": "Ben Briggs",
+    "email": "beneb.info@gmail.com",
+    "url": "http://beneb.info"
+  },
+  "scripts": {
+    "test": "tape test.js | tap-spec"
+  },
+  "repository": "ben-eb/gulp-csso",
+  "keywords": [
+    "gulpplugin",
+    "minify",
+    "css"
+  ],
+  "dependencies": {
+    "csso": "^4.0.0",
+    "plugin-error": "^1.0.0",
+    "vinyl-sourcemaps-apply": "^0.2.1"
+  },
+  "devDependencies": {
+    "tap-spec": "^5.0.0",
+    "tape": "^4.2.1",
+    "vinyl": "^2.1.0"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}

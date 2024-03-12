@@ -62,8 +62,8 @@ public class TabTest extends SeleneseTestCase{
         //ADD TAB
         boolean addTabAvailable = false;
         if (selenium.isElementPresent("//a[contains(@href, "
-                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
-            selenium.click("//a[contains(@href, \"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
+                + "\"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
+            selenium.click("//a[contains(@href, \"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
             selenium.waitForPageToLoad("50000");
             addTabAvailable = true;
         } else {
@@ -282,7 +282,7 @@ public class TabTest extends SeleneseTestCase{
                 }
             }
             selenium.click("//a[contains(@href, \"/aim/reportWizard.do~editReportId=" + lastId + "\")]");*/
-            selenium.click("//img[@src=\"/repository/message/view/images/edit.gif\"]");
+            selenium.click("//img[@src=\"/src/main/webapp/WEB-INF/repository/message/view/images/edit.gif\"]");
             selenium.waitForPageToLoad("50000");
             selenium.click("//li[@id='measures_tab_label']/a/div");
             if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
@@ -379,8 +379,8 @@ public class TabTest extends SeleneseTestCase{
     public static void addBasicTab (LoggingSelenium selenium, String tabName, String filter) throws InterruptedException{
         boolean addTabAvailable = false;
         if (selenium.isElementPresent("//a[contains(@href, "
-                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
-            selenium.click("//a[contains(@href, \"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
+                + "\"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
+            selenium.click("//a[contains(@href, \"/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
             selenium.waitForPageToLoad("50000");
             addTabAvailable = true;
         } else {

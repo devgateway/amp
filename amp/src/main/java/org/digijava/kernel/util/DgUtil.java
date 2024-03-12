@@ -1866,4 +1866,8 @@ public class DgUtil {
         String noNbsp = noTags.replace("&nbsp;", " ");
         return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(noNbsp));
     }
+    public static String getWebInfPath(String path){
+        path=path.replace("/","");
+        return "/src/main/webapp/WEB-INF/"+path;
+    }
 }

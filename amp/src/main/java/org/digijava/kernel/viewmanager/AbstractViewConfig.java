@@ -117,7 +117,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
         }
         else {
             configFile = new File(
-                "/src/main/webapp/WEB-INF/"+SITE_DIR + "/" + folderName + "/site-config.xml");
+                "src/main/webapp/WEB-INF/"+SITE_DIR + "/" + folderName + "/site-config.xml");
         }
 
         SiteConfig siteConfig = null;
@@ -134,9 +134,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
             SiteLayout siteLayout = siteConfig.getSiteLayout();
             if (siteLayout != null) {
-                Iterator iter = siteLayout.getLayout().values().iterator();
-                while (iter.hasNext()) {
-                    Layout layout = (Layout) iter.next();
+                for (Object o : siteLayout.getLayout().values()) {
+                    Layout layout = (Layout) o;
                     layout.setFileBlank(layout.getFile() == null);
                 }
             }

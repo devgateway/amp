@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.File;
+import java.util.Objects;
 
 public class DigiXmlECSLoaderListener implements ServletContextListener {
     private static Logger logger = Logger.getLogger(DigiXmlECSLoaderListener.class);
@@ -22,7 +23,7 @@ public class DigiXmlECSLoaderListener implements ServletContextListener {
             
             ServletContext servletContext = contextEvent.getServletContext();
             
-            String warPath = servletContext.getRealPath("/repository");
+            String warPath = Objects.requireNonNull(getClass().getResource("/repository")).toURI().getPath();
     
             String configDirectory = warPath;
             

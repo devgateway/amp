@@ -69,6 +69,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class DgUtil {
     
     private static Logger logger = I18NHelper.getKernelLogger(DgUtil.class);
@@ -1865,4 +1867,10 @@ public class DgUtil {
         path=path.replace("/","");
         return "/src/main/webapp/WEB-INF/"+path;
     }
+    public static String getWebInfPathWithContext(String path){
+        path=path.replace("/","");
+        return getServletContext().getRealPath("/WEB-INF/"+path);
+
+    }
+
 }

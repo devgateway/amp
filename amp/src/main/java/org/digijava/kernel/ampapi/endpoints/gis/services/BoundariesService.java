@@ -13,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +23,7 @@ public class BoundariesService {
 
     protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-    private static final String CONTEXT_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/");
-    private static final String BOUNDARY_PATH = "gis" + File.separator + "boundaries" + File.separator;
+    private static final String BOUNDARY_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/WEB-INF/gis" + File.separator + "boundaries" + File.separator);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -33,8 +34,8 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-        String path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
-        try (InputStream is = new FileInputStream(path)) {
+        String path = BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+        try (InputStream is = Files.newInputStream(Paths.get(path))) {
             String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);
             return MAPPER.readValue(jsonTxt, new TypeReference<List<Boundary>>() { });
         } catch (IOException e) {

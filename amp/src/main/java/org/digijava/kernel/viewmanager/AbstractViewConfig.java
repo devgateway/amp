@@ -94,11 +94,11 @@ public abstract class AbstractViewConfig implements ViewConfig{
             }
             else {
                 if( !groupType.equalsIgnoreCase("") ) {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
+                    expandedPath = SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
                         "/" +
                         path;
                 } else {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + groupDir +
+                    expandedPath = SITE_DIR + "/" + folderName + groupDir +
                         "/" +
                         path;
                 }

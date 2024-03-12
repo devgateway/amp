@@ -25,6 +25,7 @@ package org.digijava.kernel.security.util;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.DigiPolicy;
 import org.digijava.kernel.security.ModuleInstancePermission;
 import org.digijava.kernel.security.SitePermission;
@@ -38,11 +39,13 @@ import org.hibernate.Session;
 import java.security.Permission;
 import java.util.Iterator;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class PermissionConverter {
 
     public static void main(String[] args) throws Exception {
         ViewConfigFactory.initialize(new DummyServletContext("."));
-        DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
+        DigiConfigManager.initialize("/WEB-INF/repository");
         PersistenceManager.initialize(false);
         DigiPolicy digiPolicy = new DigiPolicy();
         try {

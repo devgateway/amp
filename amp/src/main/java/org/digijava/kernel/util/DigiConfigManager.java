@@ -43,6 +43,9 @@ import java.util.Map;
 //import org.digijava.kernel.config.ServiceDependencyConfig;
 
 import  org.digijava.kernel.config.Module;
+
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class DigiConfigManager {
 
     private static final String ENV_SMTP_HOST = "SMTP_HOST";
@@ -66,7 +69,7 @@ public class DigiConfigManager {
      * @throws DgException if configuration error occurs
      */
     public static synchronized void initialize(String configDirectory) throws DgException {
-        File configDirFile = new File(configDirectory);
+        File configDirFile = new File(getServletContext().getRealPath(configDirectory));
         if (!configDirFile.exists() || !configDirFile.isDirectory()) {
             throw new DgException("Configuration directory " + configDirectory + " does not exist or is not directory");
         } else {

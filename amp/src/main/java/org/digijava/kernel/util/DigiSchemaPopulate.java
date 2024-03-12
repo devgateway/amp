@@ -49,6 +49,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class DigiSchemaPopulate {
 
     private static Logger logger = Logger.getLogger(DigiSchemaPopulate.class);
@@ -58,7 +60,7 @@ public class DigiSchemaPopulate {
         ResourceStreamHandlerFactory.installIfNeeded();
 
         ViewConfigFactory.initialize(new DummyServletContext("."));
-        DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
+        DigiConfigManager.initialize("/WEB-INF/repository");
         PersistenceManager.initialize(false);
         ServiceContext serviceContext = new StandaloneServiceContext(".");
         ServiceManager.getInstance().init(serviceContext, 0);

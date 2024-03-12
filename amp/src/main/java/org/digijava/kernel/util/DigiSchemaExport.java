@@ -38,6 +38,8 @@ import org.hibernate.tool.schema.TargetType;
 
 import java.util.*;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);
 
@@ -63,7 +65,7 @@ public class DigiSchemaExport {
             logger.info("Working for the whole database");
         }
 
-        DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
+        DigiConfigManager.initialize("/WEB-INF/repository");
         PersistenceManager.initialize(false, moduleName);
         try {
             Configuration cfg = null;

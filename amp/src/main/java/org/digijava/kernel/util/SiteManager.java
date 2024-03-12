@@ -76,8 +76,8 @@ public class SiteManager {
         if (!siteDir.exists()) {
             siteDir.mkdir();
 
-            File siteConfig = new File(getServletContext().getRealPath(siteRootDir + File.separator + dirName +
-                                       File.separator + "site-config.xml"));
+            File siteConfig = new File(siteRootDir + File.separator + dirName +
+                                       File.separator + "site-config.xml");
 
             try {
                 siteConfig.createNewFile();

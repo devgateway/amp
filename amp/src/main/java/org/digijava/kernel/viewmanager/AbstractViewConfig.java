@@ -143,9 +143,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
             SiteLayout siteLayout = siteConfig.getSiteLayout();
             if (siteLayout != null) {
-                Iterator iter = siteLayout.getLayout().values().iterator();
-                while (iter.hasNext()) {
-                    Layout layout = (Layout) iter.next();
+                for (Object o : siteLayout.getLayout().values()) {
+                    Layout layout = (Layout) o;
                     layout.setFileBlank(layout.getFile() == null);
                 }
             }
@@ -171,10 +170,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
             // Create empty storage for layouts
             HashMap newLayout = new HashMap();
             // Iterate through layouts
-            Iterator iter = siteConfig.getSiteLayout().getLayout().values().
-                    iterator();
-            while (iter.hasNext()) {
-                Layout layout = (Layout) iter.next();
+            for (Object o : siteConfig.getSiteLayout().getLayout().values()) {
+                Layout layout = (Layout) o;
                 // If this layout is not processed yet, process it
                 if (!newLayout.containsKey(layout.getName())) {
                     expandLayoutAndStore(layout,

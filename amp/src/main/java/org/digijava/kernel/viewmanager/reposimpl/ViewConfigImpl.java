@@ -365,7 +365,7 @@ public class ViewConfigImpl extends ViewConfigUtil  {
     private Map getContextAttributes(SiteLayout siteLayout,
                                                 String layoutName) throws
         ViewConfigException {
-        HashMap contextAttributes = new HashMap();
+        HashMap contextAttributes = new HashMap<>();
 
         Layout layout = (Layout) siteLayout.getLayout().get(layoutName);
         if (layout == null) {

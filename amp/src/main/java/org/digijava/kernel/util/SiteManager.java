@@ -78,6 +78,7 @@ public class SiteManager {
 
             File siteConfig = new File(siteRootDir + File.separator + dirName +
                                        File.separator + "site-config.xml"   );
+            logger.info("SITE CONF "+siteConfig);
 
             try {
                 siteConfig.createNewFile();

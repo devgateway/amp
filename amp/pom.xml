@@ -1409,6 +1409,35 @@
                             <includes>
                                 <include>**/*</include>
                             </includes>
+                            <excludes>
+                                <!--                            <exclude>WEB-INF/src/**</exclude>-->
+                                <exclude>.idea/**</exclude>
+                                <exclude>.settings/**</exclude>
+                                <exclude>.externalToolBuilders/**</exclude>
+                                <!--                            <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/site-config.xml</exclude>-->
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/gisModule/dev/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/gisModule/dev/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/dashboard/dev/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/dashboard/dev/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-settings/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-filter/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-translate/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-translate/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-state/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//ampTemplate/node_modules/amp-state/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//reamp/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//reamp/node_modules/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//reampv2/node/**</exclude>
+                                <exclude>src/main/webapp/WEB-INF/TEMPLATE//reampv2/node_modules/**</exclude>
+                                <exclude>src/**</exclude>
+                                <exclude>target/**</exclude>
+                            </excludes>
                         </resource>
                         <resource>
                         <directory>${project.basedir}</directory>

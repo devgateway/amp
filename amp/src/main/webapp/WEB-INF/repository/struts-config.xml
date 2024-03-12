@@ -29,7 +29,7 @@
   <message-resources parameter="java.resources.application" />
   <!-- comment following if struts1.0.x -->
   <plug-in className="org.apache.struts.tiles.TilesPlugin">
-    <set-property value="/src/main/webapp/WEB-INF/WEB-INF/tiles-defs.xml" property="definitions-config" />
+    <set-property value="/src/main/webapp/WEB-INF/tiles-defs.xml" property="definitions-config" />
     <set-property value="true" property="moduleAware" />
     <set-property value="true" property="definitions-parser-validate" />
   </plug-in>

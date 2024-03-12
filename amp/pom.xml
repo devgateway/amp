@@ -35,7 +35,7 @@
         <etc>${project.basedir}/etc</etc>
         <deployConfigs>deployConfigs</deployConfigs>
         <repository>${project.basedir}/src/main/resources/repository</repository>
-        <jackrabbit>${project.basedir}/jackrabbit</jackrabbit>
+        <jackrabbit>${project.basedir}/src/main/webapp/WEB-INF/jackrabbit</jackrabbit>
         <ampTest>${project.basedir}/src/main/webapp/WEB-INF/amp-test</ampTest>
         <ampSelenium>${project.basedir}/src/main/webapp/WEB-INF/amp-selenium-test</ampSelenium>
 

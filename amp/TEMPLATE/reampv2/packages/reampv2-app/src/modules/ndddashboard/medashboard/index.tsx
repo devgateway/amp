@@ -13,7 +13,7 @@ interface MeDashboardHomeProps {
 }
 
 const MeDashboardHome: React.FC<MeDashboardHomeProps> = (props) => {
-  const { filters, settings, translations } = props;
+  const { filters, settings, translations, globalSettings } = props;
 
   return (
       <Container style={{
@@ -34,7 +34,7 @@ const MeDashboardHome: React.FC<MeDashboardHomeProps> = (props) => {
             </span>
           </Col>
         </Row>
-        <MainDashboardContainer filters={filters} settings={settings} translations={translations} />
+        <MainDashboardContainer filters={filters} settings={settings} translations={translations} globalSettings={globalSettings} />
         <PrintDummy/>
       </Container>
 

@@ -27,12 +27,20 @@ const RightSection: React.FC<RightSectionProps> = (props) => {
     const indicatorsReducer = useSelector((state: any) => state.fetchIndicatorsBySectorReducer);
     const sectors: SectorObjectType [] = useSelector((state: any) => state.fetchSectorClassificationReducer.sectors);
 
+    // @ts-ignore
+    const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
+    const numberOfIndicatorsToShow = globalSettings["number-of-indicators-in-dashboard"];
+
     const [selectedSector, setSelectedSector] = React.useState<number | null>(null);
     const [numberOfIndicators, setNumberOfIndicators] = React.useState<number>(1);
     const [indicators, setIndicators] = React.useState<IndicatorObjectType[]>([]);
 
     const handleAddIndicator = () => {
-        setNumberOfIndicators(numberOfIndicators + 1);
+        if (numberOfIndicators < numberOfIndicatorsToShow) {
+            setNumberOfIndicators(numberOfIndicators + 1);
+        } else {
+            alert(translations["amp.ndd.dashboard:me-you-can-add"] + ' ' + numberOfIndicatorsToShow + ' ' + translations["amp.ndd.dashboard:me-indicators"]);
+        }
     }
 
 

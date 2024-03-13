@@ -23,12 +23,20 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
     const dispatch = useDispatch();
     const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
 
+    // @ts-ignore
+    const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
+    const numberOfIndicatorsToShow = globalSettings["number-of-indicators-in-dashboard"];
+
     const [level1Child, setLevel1Child] = useState<number | null>(null);
     const [numberOfIndicators, setNumberOfIndicators] = useState<number>(1);
     const [indicators, setIndicators] = React.useState<IndicatorObjectType[]>([]);
 
     const handleAddIndicator = () => {
-        setNumberOfIndicators(numberOfIndicators + 1);
+        if (numberOfIndicators < numberOfIndicatorsToShow) {
+            setNumberOfIndicators(numberOfIndicators + 1);
+        } else {
+            alert(translations["amp.ndd.dashboard:me-you-can-add"] + ' ' + numberOfIndicatorsToShow + ' ' + translations["amp.ndd.dashboard:me-indicators"]);
+        }
     }
 
     useEffect(() => {

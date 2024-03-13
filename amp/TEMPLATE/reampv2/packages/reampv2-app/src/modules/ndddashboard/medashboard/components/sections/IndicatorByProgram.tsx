@@ -20,6 +20,7 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
 
     // @ts-ignore
     const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
+    const numberOfIndicators = globalSettings["number-of-indicators-in-dashboard"];
 
     const [selectedIndicator, setSelectedIndicator] = useState<IndicatorObjectType | null>(null);
     const [selectedIndicatorId, setSelectedIndicatorId] = useState<number | null>(null);

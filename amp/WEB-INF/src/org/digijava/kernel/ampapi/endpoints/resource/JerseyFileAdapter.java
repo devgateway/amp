@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.struts.upload.FormFile;
-import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
 /**
  * Adapts jersey file & metadata to {@link FormFile} that is consumed by {@link TemporaryDocumentData}.

@@ -195,10 +195,9 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         try {
             ActivityGatekeeper.doWithLock(activityId, modifiedBy.getAmpTeamMemId(), persistenceTransactionManager,
                     () -> importOrUpdateActivity(activityId));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             // error is not always logged at source; better duplicate it than have none
             logger.error("Import failed", e);
-            e.printStackTrace();
             if (e instanceof ActivityLockNotGrantedException) {
                 logger.error("Cannot acquire lock during IATI update for activity " + activityId);
                 Long userId = ((ActivityLockNotGrantedException) e).getUserId();

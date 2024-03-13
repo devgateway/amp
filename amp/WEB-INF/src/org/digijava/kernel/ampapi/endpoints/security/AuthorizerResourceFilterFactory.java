@@ -19,8 +19,6 @@ public class AuthorizerResourceFilterFactory implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         Method method = resourceInfo.getResourceMethod();
-        System.out.println("******");
-        System.out.println("method: " + method.toString());
         ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
         if (apiMethod != null) {
             ActionAuthorizer.authorize(method, apiMethod, (ContainerRequest) requestContext.getRequest());

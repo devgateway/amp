@@ -18,6 +18,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -63,12 +64,7 @@ public class ResourceEndpoint {
     @ApiMethod(id = "getAvailableFieldsBasedOnWs", ui = false)
     public List<APIWorkspaceMemberFieldList>
     getAvailableFieldsBasedOnWs(@ApiParam(value = "List of WS ids", required = true) List<Long> ids) {
-        try {
-            return AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(ids, AmpFieldsEnumerator.TYPE_RESOURCE);
-        }catch(Exception e){
-            logger.error("Error getting fields based on ws", e);
-            throw e;
-        }
+        return AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(ids, AmpFieldsEnumerator.TYPE_RESOURCE);
     }
 
     @GET

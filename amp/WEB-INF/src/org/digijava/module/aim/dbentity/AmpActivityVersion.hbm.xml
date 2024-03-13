@@ -262,7 +262,6 @@
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorActivity" />
 		</set>
-
 		<many-to-one name="approvedBy" column="approvedBy"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 		<property name="approvalDate" column="approvalDate" type="java.util.Date" />

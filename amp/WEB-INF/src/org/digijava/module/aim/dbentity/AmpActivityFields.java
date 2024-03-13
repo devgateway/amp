@@ -2302,8 +2302,16 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
-            this.regionalObservations = regionalObservations;
+            if (this.regionalObservations == null) {
+                this.regionalObservations = regionalObservations;
+            } else {
+                this.regionalObservations.clear();
+                if (regionalObservations==null)regionalObservations=new HashSet<>();
+                this.regionalObservations.addAll(regionalObservations);
+            }
         }
+
+
 
         public String getEmail() {
             return email;

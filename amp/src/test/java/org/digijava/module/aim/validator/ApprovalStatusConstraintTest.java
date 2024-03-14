@@ -40,7 +40,6 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
         PowerMockito.mockStatic(FeaturesUtil.class);
         PowerMockito.mockStatic(DbUtil.class);
     }
-
     @Test
     public void testNotAppliedInHibernate() {
         AmpActivity activity = new AmpActivity();

@@ -55,7 +55,7 @@ public class SiteCache implements Runnable {
             instances.addAll(site.getModuleInstances());
             Collections.sort(instances, moduleInstanceComparator);
         }
-        
+
         private void initLanguageCodes() {
             this.userLanguagesCodes = new ArrayList<String>(this.userLanguages.size());
             for (Locale locale : userLanguages) {
@@ -95,7 +95,7 @@ public class SiteCache implements Runnable {
         public void setUserLanguages(Collection<Locale> userLanguages) {
             this.userLanguages = new ArrayList<Locale>(userLanguages);
         }
-        
+
         public Collection<String> getUserLanguagesCodes() {
             return userLanguagesCodes;
         }
@@ -205,7 +205,7 @@ public class SiteCache implements Runnable {
 
             String queryString = " from " + ModuleInstance.class.getName() +
                                  " mi where mi.site is null";
-            
+
             newSharedInstances = new ArrayList<ModuleInstance>(session.createQuery(queryString).list());
 
             newSharedInstances.sort(moduleInstanceComparator);
@@ -404,7 +404,7 @@ public class SiteCache implements Runnable {
             return null;
         }
     }
-    
+
     public Collection<String> getUserLanguagesCodes(Site site) {
         CachedSite cachedSite = (CachedSite) getSites().get(site.getId());
         if (cachedSite != null) {
@@ -459,9 +459,8 @@ public class SiteCache implements Runnable {
         }
 
         SiteDomain siteDomain = null;
-        Iterator iter = siteDomainPathes.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry item = (Map.Entry) iter.next();
+        for (Object o : siteDomainPathes.entrySet()) {
+            Map.Entry item = (Map.Entry) o;
             if (path.startsWith(item.getKey() + "/")) {
                 siteDomain = (SiteDomain) item.getValue();
                 break;
@@ -470,7 +469,7 @@ public class SiteCache implements Runnable {
 
         return siteDomain;
     }
-    
+
     /**
      * looks up the site by name. Handles some special cases: for siteId = 0 or siteId = null returns null
      * for invalid siteId values (not found in the DB) also returns null, but also prints an error message
@@ -504,7 +503,7 @@ public class SiteCache implements Runnable {
         }
         return result;
     }
-    
+
     private synchronized HashMap<String, SortedMap<String, SiteDomain>> getSiteDomains() {
         handleVersioning();
         return siteDomains;
@@ -567,5 +566,5 @@ public class SiteCache implements Runnable {
             throw new RuntimeException("Unabme to refresh SiteCache", ex);
         }
     }
-     
+
 }

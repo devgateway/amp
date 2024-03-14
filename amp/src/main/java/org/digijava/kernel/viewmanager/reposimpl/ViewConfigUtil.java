@@ -60,14 +60,13 @@ public abstract class ViewConfigUtil
 
         String templateName = null;
         if (currentConfig.getTemplate() != null &&
-            currentConfig.getTemplate().trim().length() != 0) {
+                !currentConfig.getTemplate().trim().isEmpty()) {
             templateName = currentConfig.getTemplate().trim();
         }
 
         if (!isTemplate && templateName != null) {
-            SiteConfig parentConfig = createConfiguration(templateName, true);
 
-            siteConfig = parentConfig;
+            siteConfig = createConfiguration(templateName, true);
             siteConfig.merge(currentConfig);
             expandLayoutsFromRepository(currentConfig);
             expandLayoutInheritance(siteConfig);
@@ -98,7 +97,7 @@ public abstract class ViewConfigUtil
     protected RepositoryLayout addComponentsFile(String moduleName) throws
         ViewConfigException {
         File configFile;
-        configFile = new File(servletContext.getRealPath("/repository/" +
+        configFile = new File(servletContext.getRealPath("/WEB-INF/repository" +
             moduleName + "/components.xml"));
 
         RepositoryLayout componentsFile = null;
@@ -295,9 +294,8 @@ public abstract class ViewConfigUtil
             siteConfig.setModuleLayout(new ModuleLayout());
         }
         HashMap modules = siteConfig.getModuleLayout().getModule();
-        Iterator repositoryIter = repository.entrySet().iterator();
-        while (repositoryIter.hasNext()) {
-            Map.Entry entry = (Map.Entry) repositoryIter.next();
+        for (Object o : repository.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
 
             RepositoryLayout components = (RepositoryLayout) entry.getValue();
             String moduleName = (String) entry.getKey();
@@ -311,7 +309,7 @@ public abstract class ViewConfigUtil
                     newModule.setTeaserFile(repositoryModule.getTeaserFile());
 
                     Iterator reposModIter = repositoryModule.getTeaser().values().
-                        iterator();
+                            iterator();
                     while (reposModIter.hasNext()) {
                         Teaser item = (Teaser) reposModIter.next();
                         newModule.addTeaser(item);
@@ -324,8 +322,7 @@ public abstract class ViewConfigUtil
                     }
 
                     siteConfig.getModuleLayout().addModule(newModule);
-                }
-                else {
+                } else {
                     siteConfModule.merge(repositoryModule);
                 }
             }
@@ -339,7 +336,7 @@ public abstract class ViewConfigUtil
                                       String groupType,
                                       String groupName) throws
         ViewConfigException {
-        logger.debug("findExistingFile(): " +
+        logger.info("findExistingFile(): " +
                      path + "," + isTemplate + "," + parentTemplateName + "," +
                      groupType + "," + groupName
                      );
@@ -356,14 +353,13 @@ public abstract class ViewConfigUtil
             }
         }
         // Workaround for images
-        if ( ( (groupType == null || groupType.trim().length() == 0) ||
+        if ( ( (groupType == null || groupType.trim().isEmpty()) ||
               groupType.equals(LAYOUT_DIR)) &&
             path.startsWith("module/")) {
             logger.debug("normalizing call of findExistingFile()");
             String[] parts = DgUtil.fastSplit(path, '/');
             if (parts.length > 2) {
-                StringBuffer newPath = new StringBuffer(path.length());
-                //String newPath = "";
+                StringBuilder newPath = new StringBuilder(path.length());
                 for (int i = 2; i < parts.length; i++) {
                     if (i > 2) {
                         newPath.append("/");
@@ -389,7 +385,7 @@ public abstract class ViewConfigUtil
                 if (groupType.equals(MODULE_DIR)) {
                     String groupDir = groupName == null ? "" : "/" + groupName;
 
-                    fileName = "/repository" + groupDir + "/view/" +
+                    fileName = "/WEB-INF/repository" + groupDir + "/view/" +
                         path;
                     file = new File(servletContext.getRealPath(fileName));
 

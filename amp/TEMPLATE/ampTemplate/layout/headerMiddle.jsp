@@ -1,6 +1,6 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fn.tld" prefix="fn"%>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!-- Dependencies -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
@@ -20,7 +20,7 @@
 
 <div id="myUserFilterWrapper" style="display: none;">
 	<div id="customUser" class="invisible-item" class="content">
-		<jsp:include page="/repository/aim/view/workspacePopup.jsp" />
+		<jsp:include page="/WEB-INF/repository/aim/view/workspacePopup.jsp" />
 	</div>
 </div>
 

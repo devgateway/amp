@@ -1,11 +1,11 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
 
 
-<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="/WEB-INF/repository/aim/view/scripts/common.js"/>"></script>
 <script type="text/javascript">
 (function(){
 	 var newscript = document.createElement('script');
@@ -82,7 +82,7 @@ table tr td {font-size:11px;}
 <c:set var="msg">
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/WEB-INF/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/>
 
 

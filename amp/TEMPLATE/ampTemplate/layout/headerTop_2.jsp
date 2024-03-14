@@ -1,15 +1,15 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/moduleVisibility.tld" prefix="module" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://digijava.org/fields" prefix="field" %>
+<%@ taglib uri="http://digijava.org/features" prefix="feature" %>
+<%@ taglib uri="http://digijava.org/modules" prefix="module" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
+<script language="JavaScript" type="text/javascript" src="/WEB-INF/repository/aim/view/scripts/common.js"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>

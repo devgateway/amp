@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <taglib xmlns="http://java.sun.com/xml/ns/j2ee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
-	version="2.0">
-	<tlibversion>1.0</tlibversion>
-	<jspversion>2.0</jspversion>
-	<shortname>globalsettings</shortname>
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+		version="2.0">
+
 	<uri>http://digijava.org/aim</uri>
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>2.0</jsp-version>
+	<short-name>globalsettings</short-name>
 	<tag>
 		<description>
 			Formats a Date object as a string

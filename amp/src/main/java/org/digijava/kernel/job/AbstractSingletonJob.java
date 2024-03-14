@@ -76,7 +76,7 @@ public abstract class AbstractSingletonJob
     AbstractCache jobCache = DigiCacheManager.getInstance().getCache(CACHE_REGION);
     JobCachedObject cachedJob = (JobCachedObject) jobCache.get(jobName);
     String serverName = DigiConfigManager.getConfig().getServerType();
-    if (serverName == null || serverName.trim().length() == 0) {
+    if (serverName == null || serverName.trim().isEmpty()) {
       logger.warn ("Server type is not specified in digi.xml. " +
                    "This may cause abnormal execution of the scheduled job");
       serverName = JobCachedObject.UNKNOWN_SERVER_NAME;

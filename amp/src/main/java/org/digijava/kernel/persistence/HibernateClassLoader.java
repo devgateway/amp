@@ -99,9 +99,8 @@ public class HibernateClassLoader {
      */
     public static void initialize(HashMap config) {
 
-        Iterator iterModules = config.keySet().iterator();
-        while (iterModules.hasNext()) {
-            String moduleName = (String) iterModules.next();
+        for (Object o : config.keySet()) {
+            String moduleName = (String) o;
             ModuleConfig moduleConfig = (ModuleConfig) config.get(moduleName);
 
             HibernateClasses classes = moduleConfig.getHibernateClasses();
@@ -180,10 +179,10 @@ public class HibernateClassLoader {
                 cfg.addClass(Class.forName(hibernateClass.getContent()));
             } catch (Exception ex) {
                 if (required) {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                     break;
                 } else {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent(),ex);
                 }
             }
 

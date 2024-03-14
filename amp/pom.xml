@@ -34,8 +34,8 @@
         <test>${project.basedir}/test</test>
         <etc>${project.basedir}/etc</etc>
         <deployConfigs>deployConfigs</deployConfigs>
-        <repository>${project.basedir}/src/main/webapp/repository</repository>
-        <jackrabbit>${project.basedir}/jackrabbit</jackrabbit>
+        <repository>${project.basedir}/src/main/webapp/WEB-INF/repository</repository>
+        <jackrabbit>${project.basedir}/src/main/webapp/WEB-INF/jackrabbit</jackrabbit>
         <ampTest>${project.basedir}/src/main/webapp/WEB-INF/amp-test</ampTest>
         <ampSelenium>${project.basedir}/src/main/webapp/WEB-INF/amp-selenium-test</ampSelenium>
 
@@ -1261,15 +1261,22 @@
 <!--                    <include>**</include>-->
 <!--                </includes>-->
 <!--            </resource>-->
-<!--            <resource>-->
+            <resource>
 
-<!--                <directory>${project.basedir}/src/main/java</directory>-->
-<!--                <excludes>-->
-<!--                    <exclude>**/*.java</exclude>-->
-<!--                </excludes>-->
-<!--            </resource>-->
+                <directory>${project.basedir}/src</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>${project.basedir}/src/main/webapp</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
@@ -1294,7 +1301,7 @@
                             <sources>
 
                                 <source>
-                                    doc/translation.xsd
+                                    ./src/main/resources/schemas/translation.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
@@ -1312,7 +1319,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./doc/help.xsd
+                                    ./src/main/resources/schemas/help.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
@@ -1349,7 +1356,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./doc/xmlpatcher.xsd
+                                    ./src/main/resources/schemas/xmlpatcher.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
@@ -1375,6 +1382,7 @@
                 <version>2.3</version>
 
                 <configuration>
+
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1383,6 +1391,7 @@
                             <Implementation-Vendor>Development Gateway</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
+
 
                     <webResources>
                         <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
@@ -1393,6 +1402,14 @@
                             </includes>
                             <filtering>true</filtering>
                             <targetPath>/TEMPLATE/ampTemplate</targetPath>
+                        </resource>
+
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
                         </resource>
                         <resource>
                         <directory>${project.basedir}</directory>
@@ -1467,6 +1484,7 @@
                                 </resource>
                                 <!-- Add more resources as needed -->
                             </resources>
+
                         </configuration>
                     </execution>
 

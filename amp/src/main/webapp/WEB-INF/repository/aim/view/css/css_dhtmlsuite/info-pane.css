@@ -1,0 +1,45 @@
+.DHTMLSuite_panel{
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;	
+}
+.DHTMLSuite_panelContent{
+	font-size:0.7em;	
+	background-position:top right;
+	background-repeat:repeat-y;
+	border-left:1px solid #FFF;
+	border-bottom:1px solid #FFF;	
+	padding-left:2px;
+	padding-right:2px;	
+	overflow:hidden;
+	position:relative;
+	clear:both;
+}
+.DHTMLSuite_panelContent div{
+	position:relative;
+	text-align:left;
+	top:0px;
+}
+.DHTMLSuite_panel .DHTMLSuite_infoPaneTopBar{	
+	background-repeat:no-repeat;
+	background-position:top right;
+	height:25px;
+	padding-right:5px;
+	cursor:pointer;
+	overflow:hidden;		
+
+}
+.DHTMLSuite_panel .DHTMLSuite_infoPaneTopBar span{
+	line-height:25px;
+	vertical-align:middle;
+	font-family:arial;
+	font-size:0.7em;
+	color:#215DC6;
+	font-weight:bold;
+	float:left;
+	padding-left:5px;
+}
+.DHTMLSuite_panel .DHTMLSuite_infoPaneTopBar img{
+	float:right;
+	cursor:pointer;
+}

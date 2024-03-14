@@ -281,7 +281,7 @@ public class ViewConfigImpl extends ViewConfigUtil  {
                 }
             }
 
-            if ((fileName == null) || (fileName.trim().length() == 0)) {
+            if ((fileName == null) || (fileName.trim().isEmpty())) {
                 // Search default file in all directories: site, parent
                 // template
                 if (teaserName == null) {
@@ -365,7 +365,7 @@ public class ViewConfigImpl extends ViewConfigUtil  {
     private Map getContextAttributes(SiteLayout siteLayout,
                                                 String layoutName) throws
         ViewConfigException {
-        HashMap contextAttributes = new HashMap();
+        HashMap contextAttributes = new HashMap<>();
 
         Layout layout = (Layout) siteLayout.getLayout().get(layoutName);
         if (layout == null) {

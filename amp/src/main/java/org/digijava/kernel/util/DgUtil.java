@@ -69,18 +69,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class DgUtil {
     
     private static Logger logger = I18NHelper.getKernelLogger(DgUtil.class);
 
     private static final int FASTSPLIT_MAXSIZE = 2048;
 
-    private static final Comparator userComparator = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            return ( (User) o1).getId().compareTo( ( (User) o2).getId());
-        }
-
-    };
+    private static final Comparator userComparator = (o1, o2) -> ( (User) o1).getId().compareTo( ( (User) o2).getId());
 
     /**
      * Returns current site domain, using which the request was performed, or
@@ -1866,4 +1863,14 @@ public class DgUtil {
         String noNbsp = noTags.replace("&nbsp;", " ");
         return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(noNbsp));
     }
+    public static String getWebInfPath(String path){
+        path=path.replace("/","");
+        return "/src/main/webapp/WEB-INF/"+path;
+    }
+    public static String getWebInfPathWithContext(String path){
+        path=path.replace("/","");
+        return getServletContext().getRealPath("/WEB-INF/"+path);
+
+    }
+
 }

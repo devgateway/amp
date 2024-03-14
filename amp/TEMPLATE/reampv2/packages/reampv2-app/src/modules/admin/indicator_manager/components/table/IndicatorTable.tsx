@@ -1,26 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
-import React, { useState, useMemo, useLayoutEffect, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Row } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
+import {connect, useDispatch, useSelector} from 'react-redux';
+import {Row} from 'react-bootstrap';
+import {bindActionCreators} from 'redux';
 // @ts-ignore
-import { ColumnDescription } from '@musicstory/react-bootstrap-table-next';
+import {ColumnDescription} from '@musicstory/react-bootstrap-table-next';
 import SkeletonTable from './Table';
 import styles from './IndicatorTable.module.css';
 import {DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SettingsType} from '../../types';
 
-import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
+import {getIndicators} from '../../reducers/fetchIndicatorsReducer';
 
 // Modals
 import ViewIndicatorModal from '../modals/ViewIndicatorModal';
 import EditIndicatorModal from '../modals/EditIndicatorModal';
 import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
-import { Loading } from '../../../../../utils/components/Loading';
-import dayjs from 'dayjs';
-import {DateUtil} from "../../utils/dateFn";
+import {Loading} from '../../../../../utils/components/Loading';
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
@@ -92,7 +89,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
           sort: true,
           headerStyle: { width: '30%' },
           csvFormatter: (_cell: any, row: any) => {
-            const dataset = _cell.map((sectorId: any) => {
+            return _cell.map((sectorId: any) => {
               if (sectorId) {
                 const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
 
@@ -104,10 +101,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
               } else {
                 return ''
               }
-            })
-
-            return dataset;
-
+            });
           },
           formatter: (_cell: any, row: any) => {
             return (

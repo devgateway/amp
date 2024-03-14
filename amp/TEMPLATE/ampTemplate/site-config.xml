@@ -436,7 +436,7 @@
 <!-- 			<put-item name="body" module="aim" instance="default" teaser="myDesktop"/> -->
 		</layout>
 
-		<layout name="selectTeam" extends="userHomeLayout">
+		<layout name="selectTeam" extends="userHomeLayout" file="selectTeam.jsp">
 			<put name="title">- Select Team</put>
 			<put-item name="body" module="aim" instance="default" teaser="myTabs"/>
 			<!-- 			<put-item name="body" module="aim" instance="default" teaser="myDesktop"/> -->

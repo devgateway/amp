@@ -91,11 +91,30 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
           text: translations['amp.indicatormanager:sectors'],
           sort: true,
           headerStyle: { width: '30%' },
+          csvFormatter: (_cell: any, row: any) => {
+            const dataset = _cell.map((sectorId: any) => {
+              if (sectorId) {
+                const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
+
+                if (foundSector) {
+                  return foundSector.name
+                } else {
+                  return sectorId
+                }
+              } else {
+                return ''
+              }
+            })
+
+            return dataset;
+
+          },
           formatter: (_cell: any, row: any) => {
             return (
                 <div>
                   {
                     _cell.map((sectorId: any) => {
+
                       const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
 
                       if (foundSector) {
@@ -125,6 +144,20 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
             text: translations['amp.indicatormanager:programs'],
             sort: true,
             headerStyle: {width: '40%'},
+            csvFormatter: (_cell: any, row: any) => {
+              const programId = row.programId;
+              if (programId) {
+                const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
+                if (foundProgram) {
+                  return foundProgram.name;
+                } else {
+                  return programId;
+                }
+
+              }else {
+                return '';
+              }
+            },
             formatter: (_cell: any, row: any) => {
               const programId = row.programId;
               const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);

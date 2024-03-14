@@ -39,7 +39,7 @@ public class VisibilityManager extends MultiAction {
     private static Logger logger = Logger.getLogger(VisibilityManager.class);
 
     private ServletContext ampContext = null;
-    
+
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         //generateAllFieldsInFile();
         HttpSession session = request.getSession();
@@ -70,7 +70,7 @@ public class VisibilityManager extends MultiAction {
 
                 return modeEditTemplate(mapping, form, request, response);
             }
-            if(request.getParameter("action").compareTo("delete")==0) return modeDeleteTemplate(mapping, form, request, response);              
+            if(request.getParameter("action").compareTo("delete")==0) return modeDeleteTemplate(mapping, form, request, response);
             if(request.getParameter("action").compareTo("deleteFFM")==0) return modeDeleteFFM(mapping, form, request, response);
             if(request.getParameter("action").compareTo("manageTemplates")==0) return modeManageTemplates(mapping, form, request, response);
         }
@@ -79,7 +79,7 @@ public class VisibilityManager extends MultiAction {
         if(request.getParameter("saveTreeVisibility")!=null) return modeSaveTreeVisibility(mapping, (VisibilityManagerForm) form, request, response);
         if(request.getParameter("exportTreeVisibility")!=null) return modeExportTreeVisibility(mapping, form, request, response);
         if(request.getParameter("importTreeVisibility")!=null) return modeImportTreeVisibility(mapping, form, request, response);
-        
+
         Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
         FeaturesUtil.setUsedByTeamNames(templates);
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
@@ -87,7 +87,7 @@ public class VisibilityManager extends MultiAction {
         vForm.setMode("manageTemplates");
         return mapping.findForward("forward");
     }
-    
+
     public ActionForward modeImportTreeVisibility(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
@@ -101,7 +101,7 @@ public class VisibilityManager extends MultiAction {
         }
         return modeManageTemplates(mapping, form, request, response);
     }
-    
+
     public ActionForward modeExportTreeVisibility(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
         Marshaller m = jc.createMarshaller();
@@ -113,7 +113,7 @@ public class VisibilityManager extends MultiAction {
         }
         return null;
 }
-    
+
     public ActionForward modeManageTemplates(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // TODO Auto-generated method stub
         Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
@@ -143,8 +143,8 @@ public class VisibilityManager extends MultiAction {
         Collection features=FeaturesUtil.getAMPFeaturesVisibility();
         Collection fields=FeaturesUtil.getAMPFieldsVisibility();
         vForm.setMode("viewFields");
-        
-        // Create a new Collection only with AmpModulesVisibility object not repeated (can't change the query because is used elsewhere). 
+
+        // Create a new Collection only with AmpModulesVisibility object not repeated (can't change the query because is used elsewhere).
         Collection modulesGrouped = new ArrayList<AmpModulesVisibility>();
         String nameAux = "";
 
@@ -156,7 +156,7 @@ public class VisibilityManager extends MultiAction {
                 nameAux = auxAmp.getName();
             }
         }
-        
+
         vForm.setAllModules(modulesGrouped);
         vForm.setAllFeatures(features);
         vForm.setAllFields(fields);
@@ -165,14 +165,14 @@ public class VisibilityManager extends MultiAction {
     }
 
 
-    public ActionForward modeStartCleanUp(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeStartCleanUp(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         vForm.setMode("step1clean");
         logger.info("First step of the wizzard");
         return mapping.findForward("cleaning");
     }
-    public ActionForward modeCleanUpStep2(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeCleanUpStep2(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         vForm.setMode("step2clean");
@@ -181,7 +181,7 @@ public class VisibilityManager extends MultiAction {
         //return mapping.findForward("cleaning");
     }
 
-    public ActionForward modeCleanUpStep3(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeCleanUpStep3(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         vForm.setMode("step3clean");
@@ -198,7 +198,7 @@ public class VisibilityManager extends MultiAction {
         return mapping.findForward("cleaning");
     }
 
-    public ActionForward modeCleanUpStep4(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeCleanUpStep4(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //  VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         //vForm.setMode("step4clean");
@@ -294,7 +294,7 @@ public class VisibilityManager extends MultiAction {
     }
 
     public ActionForward modeEditTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
+
         VisibilityManagerForm vForm = (VisibilityManagerForm) form;
         Long templateId = null;
         HttpSession session=request.getSession();
@@ -344,8 +344,7 @@ public class VisibilityManager extends MultiAction {
 
             AmpModulesVisibility ampModule = (AmpModulesVisibility) allAmpModule;
             String existentModule = ampModule.getName().replaceAll(" ", "");
-            if (request.getParameter("moduleVis:" + existentModule) != null)
-                if (request.getParameter("moduleVis:" + existentModule).compareTo("enable") == 0) {
+            if (request.getParameter("moduleVis:" + existentModule) != null && (request.getParameter("moduleVis:" + existentModule).compareTo("enable") == 0)) {
                     newTemplateModulesList.add(ampModule);
                 }
         }
@@ -365,7 +364,7 @@ public class VisibilityManager extends MultiAction {
         FeaturesUtil.deleteTemplateVisibility(Long.parseLong(request.getParameter("templateId")));
         ((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
 //      return modeManageTemplates(mapping, form, request, response);
-        
+
         {//for refreshing the page
             VisibilityManagerForm vForm = (VisibilityManagerForm) form;
             Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
@@ -381,7 +380,7 @@ public class VisibilityManager extends MultiAction {
         if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(Long.parseLong(request.getParameter("fieldId")),hbsession);//delete field
         if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(Long.parseLong(request.getParameter("featureId")),hbsession);//delete feature
         if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(Long.parseLong(request.getParameter("moduleId")),hbsession);//delete module
-        this.updateAmpContext(new AmpTreeVisibility(), hbsession, request.getSession());
+        this.updateAmpContext(new AmpTreeVisibility(), request.getSession());
         return modeViewFields(mapping, form, request, response);
     }
 
@@ -392,7 +391,7 @@ public class VisibilityManager extends MultiAction {
         Session hbsession = PersistenceManager.getRequestDBSession();
         HttpSession session=request.getSession();
         Long templateId = (Long)session.getAttribute("templateId");
-        
+
         if(FeaturesUtil.existTemplateVisibility(request.getParameter("templateName"),templateId)) {
             form.addError("aim:fm:errortemplateExistent", "Template name already exist in database. Please choose another name for template.");
             request.setAttribute("templateId", templateId);
@@ -404,8 +403,7 @@ public class VisibilityManager extends MultiAction {
             TreeSet<AmpFieldsVisibility> fields = new TreeSet<>();
 
             for (AmpTreeVisibility obj : ampTreeVisibility.getItems().values()) {
-                if (obj.getRoot() instanceof AmpModulesVisibility)
-                    if (request.getParameter("moduleVis:" + obj.getRoot().getId()) != null) {
+                if (obj.getRoot() instanceof AmpModulesVisibility && (request.getParameter("moduleVis:" + obj.getRoot().getId()) != null)) {
                         modules.add((AmpModulesVisibility) obj.getRoot());
                     }
                 recursivelyParseFMTree(obj, modules, features, fields, request);
@@ -416,9 +414,9 @@ public class VisibilityManager extends MultiAction {
             FeaturesUtil.updateAmpFeaturesTreeVisibility(features, templateId, hbsession);
             FeaturesUtil.updateAmpFieldsTreeVisibility(fields, templateId, hbsession);
             request.setAttribute("templateId", templateId);
-            
+
             form.addMessage("aim:ampfeaturemanager:visibilityTreeUpdated", Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
-            // we need to refresh FM cache for non-default templates, since a user can continue to use a WS based on it  
+            // we need to refresh FM cache for non-default templates, since a user can continue to use a WS based on it
             FeaturesUtil.setAmpTreeVisibility(this.getServlet().getServletContext(), session, ampTreeVisibility);
 
             AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
@@ -426,7 +424,7 @@ public class VisibilityManager extends MultiAction {
 
             ampContext=this.getServlet().getServletContext();
             FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
-            
+
             // notify about visibility change
             DataVisibility.notifyVisibilityChanged();
         }
@@ -440,30 +438,27 @@ public class VisibilityManager extends MultiAction {
         if (atv.getItems() ==null ) return;
         if (atv.getItems().isEmpty()) return;
         for(AmpTreeVisibility auxTree:atv.getItems().values()) {
-            if (auxTree.getRoot() instanceof AmpModulesVisibility)
-                if(request.getParameter("moduleVis:"+auxTree.getRoot().getId())!=null)
+            if (auxTree.getRoot() instanceof AmpModulesVisibility && (request.getParameter("moduleVis:"+auxTree.getRoot().getId())!=null))
                 {
                     modules.add((AmpModulesVisibility) auxTree.getRoot());
                 }
-            if(auxTree.getRoot() instanceof AmpFeaturesVisibility)
-                if(request.getParameter("featureVis:"+auxTree.getRoot().getId())!=null)
+            if(auxTree.getRoot() instanceof AmpFeaturesVisibility && (request.getParameter("featureVis:"+auxTree.getRoot().getId())!=null))
                 {
                     features.add((AmpFeaturesVisibility) auxTree.getRoot());
                 }
-            if(auxTree.getRoot() instanceof AmpFieldsVisibility)
-                if(request.getParameter("fieldVis:"+auxTree.getRoot().getId())!=null)
+            if(auxTree.getRoot() instanceof AmpFieldsVisibility && (request.getParameter("fieldVis:"+auxTree.getRoot().getId())!=null))
                 {
                     fields.add((AmpFieldsVisibility) auxTree.getRoot());
                 }
             recursivelyParseFMTree(auxTree, modules, features, fields, request);
         }
     }
-    
+
     public String trimString(String s)
     {
         StringTokenizer st = new StringTokenizer(s);
         StringBuilder result= new StringBuilder();
-        while (st.hasMoreTokens()) 
+        while (st.hasMoreTokens())
             result.append(st.nextToken()).append(" ");
         return result.toString();
 
@@ -475,8 +470,7 @@ public class VisibilityManager extends MultiAction {
         File dir = new File(abstractPatchesLocation);
         String[] files = dir.list();
 
-        if(files!=null)
-            if(files.length>0)
+        if(files!=null && (files.length>0))
                 try {
                     for (String file : files) {
                         File f = new File(dir, file);
@@ -485,61 +479,63 @@ public class VisibilityManager extends MultiAction {
                             getAllPatchesFiles(f.getAbsolutePath(), modules, features, fields);
                         }
                         if (!f.isDirectory() && f.getName().contains(".jsp") && !f.getName().contains("allVisibilityTagsComputed")) {
-                            Scanner scanner = new Scanner(f);
-                            scanner.useDelimiter(System.getProperty("line.separator"));
-                            while (scanner.hasNext()) {
-                                String s = scanner.next();
-                                if (s.contains("<module:display")) {
-                                    String aux = "";
-                                    if (s.indexOf(">", (s.indexOf("<module:display")) + 1) < 0) {
-                                        aux = scanner.next();
-                                    }
-                                    String module = "";
-                                    if ("".equals(aux))
-                                        module = s.substring(s.indexOf("<module:display"), s.indexOf(">", (s.indexOf("<module:display")) + 1) + 1);
-                                    else module = s.substring(s.indexOf("<module:display"), s.length()) + aux;
-                                    if (!module.contains("${"))
-                                        modules.add(trimString(module + "</module:display>") + "\n");
+                            try (Scanner scanner = new Scanner(f)) {
+                                scanner.useDelimiter(System.getProperty("line.separator"));
+                                while (scanner.hasNext()) {
+                                    String s = scanner.next();
+                                    if (s.contains("<module:display")) {
+                                        String aux = "";
+                                        if (s.indexOf(">", (s.indexOf("<module:display")) + 1) < 0) {
+                                            aux = scanner.next();
+                                        }
+                                        String module = "";
+                                        if ("".equals(aux))
+                                            module = s.substring(s.indexOf("<module:display"), s.indexOf(">", (s.indexOf("<module:display")) + 1) + 1);
+                                        else module = s.substring(s.indexOf("<module:display"), s.length()) + aux;
+                                        if (!module.contains("${"))
+                                            modules.add(trimString(module + "</module:display>") + "\n");
 
+
+                                    }
+                                    if (s.contains("<field:display")) {
+                                        String aux = "";
+                                        if (s.indexOf(">", (s.indexOf("<field:display")) + 1) < 0) {
+                                            aux = scanner.next();
+                                            if (aux.indexOf(">", (aux.indexOf("<field:display")) + 1) < 0)
+                                                aux += scanner.next();
+                                        }
+                                        String module = "";
+                                        if (aux.isEmpty())
+                                            module = s.substring(s.indexOf("<field:display"), s.indexOf(">", (s.indexOf("<field:display")) + 1) + 1);
+                                        else module = s.substring(s.indexOf("<field:display"), s.length()) + aux;
+                                        if (!module.contains("${"))
+                                            fields.add(trimString(module + "</field:display>") + "\n");
+                                    }
+
+                                    if (s.contains("<feature:display")) {
+                                        String aux = "";
+                                        if (s.indexOf(">", (s.indexOf("<feature:display")) + 1) < 0) {
+                                            aux = scanner.next();
+                                        }
+                                        String module = "";
+                                        if ("".equals(aux))
+                                            module = s.substring(s.indexOf("<feature:display"), s.indexOf(">", (s.indexOf("<feature:display")) + 1) + 1);
+                                        else module = s.substring(s.indexOf("<feature:display"), s.length()) + aux;
+                                        if (!module.contains("${"))
+                                            features.add(trimString(module + "</feature:display>") + "\n");
+                                    }
 
                                 }
-                                if (s.contains("<field:display")) {
-                                    String aux = "";
-                                    if (s.indexOf(">", (s.indexOf("<field:display")) + 1) < 0) {
-                                        aux = scanner.next();
-                                        if (aux.indexOf(">", (aux.indexOf("<field:display")) + 1) < 0)
-                                            aux += scanner.next();
-                                    }
-                                    String module = "";
-                                    if ("".equals(aux))
-                                        module = s.substring(s.indexOf("<field:display"), s.indexOf(">", (s.indexOf("<field:display")) + 1) + 1);
-                                    else module = s.substring(s.indexOf("<field:display"), s.length()) + aux;
-                                    if (!module.contains("${"))
-                                        fields.add(trimString(module + "</field:display>") + "\n");
-                                }
-
-                                if (s.contains("<feature:display")) {
-                                    String aux = "";
-                                    if (s.indexOf(">", (s.indexOf("<feature:display")) + 1) < 0) {
-                                        aux = scanner.next();
-                                    }
-                                    String module = "";
-                                    if ("".equals(aux))
-                                        module = s.substring(s.indexOf("<feature:display"), s.indexOf(">", (s.indexOf("<feature:display")) + 1) + 1);
-                                    else module = s.substring(s.indexOf("<feature:display"), s.length()) + aux;
-                                    if (!module.contains("${"))
-                                        features.add(trimString(module + "</feature:display>") + "\n");
-                                }
-
                             }
-                            scanner.close();
                         }
                     }
-                }catch(Exception e){ e.printStackTrace(); }
+                }catch(Exception e){
+                    logger.error("Error occurred",e);
+                }
                 return 1;
     }
-    
-    private void updateAmpContext(AmpTreeVisibility ampTreeVisibility, Session hbsession,HttpSession session) throws HibernateException {
+
+    private void updateAmpContext(AmpTreeVisibility ampTreeVisibility, HttpSession session) throws HibernateException {
         AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
         ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
         ampContext = this.getServlet().getServletContext();
@@ -550,41 +546,40 @@ public class VisibilityManager extends MultiAction {
         TreeSet<String> modules=new TreeSet<String>();
         TreeSet<String> features=new TreeSet<String>();
         TreeSet<String> fields=new TreeSet<String>();
-        getAllPatchesFiles(this.getServlet().getServletContext().getRealPath("/"),modules, features, fields);
+        getAllPatchesFiles(this.getServlet().getServletContext().getRealPath("/WEB-INF"),modules, features, fields);
         try {
-            FileWriter fstream = new FileWriter(this.getServlet().getServletContext().getRealPath("/")+"repository/aim/view/allVisibilityTagsComputed.jsp");
-            BufferedWriter out = new BufferedWriter(fstream);
-            String outHeader="";
-            outHeader="<%@ page pageEncoding=\"UTF-8\" %>\n"+
-            "<%@ taglib uri=\"http://struts.apache.org/tags-bean\" prefix=\"bean\" %>\n"+
-            "<%@ taglib uri=\"http://struts.apache.org/tags-logic\" prefix=\"logic\" %>\n"+
-            "<%@ taglib uri=\"http://struts.apache.org/tags-tiles\" prefix=\"tiles\" %>\n"+
-            "<%@ taglib uri=\"http://struts.apache.org/tags-html\" prefix=\"html\" %>\n"+
-            "<%@ taglib uri=\"http://digijava.org/digi\" prefix=\"digi\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/c.tld\" prefix=\"c\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/category.tld\" prefix=\"category\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/fieldVisibility.tld\" prefix=\"field\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/featureVisibility.tld\" prefix=\"feature\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/moduleVisibility.tld\" prefix=\"module\" %>\n"+
-            "<%@ taglib uri=\"/src/main/resources/tld/fn.tld\" prefix=\"fn\" %>\n";
+            FileWriter fstream = new FileWriter(this.getServlet().getServletContext().getRealPath("/WEB-INF/repository/aim/view/allVisibilityTagsComputed.jsp"));
+            try (BufferedWriter out = new BufferedWriter(fstream)) {
+                String outHeader = "";
+                outHeader = "<%@ page pageEncoding=\"UTF-8\" %>\n" +
+                        "<%@ taglib uri=\"http://struts.apache.org/tags-bean\" prefix=\"bean\" %>\n" +
+                        "<%@ taglib uri=\"http://struts.apache.org/tags-logic\" prefix=\"logic\" %>\n" +
+                        "<%@ taglib uri=\"http://struts.apache.org/tags-tiles\" prefix=\"tiles\" %>\n" +
+                        "<%@ taglib uri=\"http://struts.apache.org/tags-html\" prefix=\"html\" %>\n" +
+                        "<%@ taglib uri=\"http://digijava.org/digi\" prefix=\"digi\" %>\n" +
+                        "<%@ taglib uri=\"http://java.sun.com/jsp/jstl/core\" prefix=\"c\" %>\n" +
+                        "<%@ taglib uri=\"http://digijava.org/CategoryManager\" prefix=\"category\" %>\n" +
+                        "<%@ taglib uri=\"http://digijava.org/fields\" prefix=\"field\" %>\n" +
+                        "<%@ taglib uri=\"http://digijava.org/features\" prefix=\"feature\" %>\n" +
+                        "<%@ taglib uri=\"http://digijava.org/modules\" prefix=\"module\" %>\n" +
+                        "<%@ taglib uri=\"http://java.sun.com/jsp/jstl/functions\" prefix=\"fn\" %>\n";
 
 
+                out.append(outHeader);
 
-            out.append(outHeader);
+                for (String s : modules) {
+                    out.append(s);
+                }
+                for (String s : features) {
+                    out.append(s);
+                }
+                for (String s : fields) {
+                    out.append(s);
+                }
 
-            for (String s : modules) {
-                out.append(s);
             }
-            for (String s : features) {
-                out.append(s);
-            }
-            for (String s : fields) {
-                out.append(s);
-            }
-
-            out.close();
         }catch (Exception e){//Catch exception if any
-            System.err.println("Error: " + e.getMessage());
+          logger.error("Error: " + e.getMessage(),e);
         }
 
     }

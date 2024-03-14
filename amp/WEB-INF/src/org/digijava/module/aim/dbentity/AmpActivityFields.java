@@ -1325,7 +1325,13 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
-            this.activityContacts = activityContacts;
+            if (this.activityContacts == null) {
+                this.activityContacts = activityContacts;
+            } else {
+                this.activityContacts.clear();
+                if (activityContacts==null)activityContacts=new HashSet<>();
+                this.activityContacts.addAll(activityContacts);
+            }
         }
 
         /**

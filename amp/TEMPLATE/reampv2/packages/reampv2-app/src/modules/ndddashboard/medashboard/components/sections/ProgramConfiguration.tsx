@@ -237,7 +237,7 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
 
                               ) : (
                                   <>
-                                      {!programReportReducer.loading && !progressValueLoading && !programReportReducer.data && (
+                                      {!programReportReducer.loading && !progressValueLoading && (!programReportReducer.data || programReportReducer.data.length === 0) && (
                                           <NoData translations={translations} />
                                       )}
                                   </>

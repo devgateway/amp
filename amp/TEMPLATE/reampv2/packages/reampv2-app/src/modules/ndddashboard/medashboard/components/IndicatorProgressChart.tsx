@@ -45,6 +45,9 @@ const CustomTooltip = ({ sectorName }) => {
 const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: IndicatorProgressChartProps) => {
     const { translations, filters, settings, indicator, section, title, globalSettings, sectorName, showSectorName } = props;
 
+    const programConfigurationReducer = useSelector((state: any) => state.programConfigurationReducer);
+    const programStartDate = programConfigurationReducer.programStartDate;
+
     const [indicatorReportData, setIndicatorReportData] = useState<any>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);

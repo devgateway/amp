@@ -9,6 +9,7 @@ import { fetchProgramReport } from '../../reducers/fetchProgramReportReducer';
 import ChartUtils from '../../utils/chart';
 import {extractLv1Children, findProgramConfig} from "../../utils/data";
 import NoData from "../NoData";
+import {saveProgramStartDate} from "../../reducers/fetchProgramConfigurationReducer";
 
 interface IndicatorByProgramProps extends ComponentProps {
     level1Child: number | null;
@@ -42,6 +43,12 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
     useEffect(() => {
         if (programConfiguration.length > 0) {
             const defaultConfig = programConfiguration[0].ampProgramSettingsId;
+            const startDate = programConfiguration[0].startDate;
+
+            if (startDate) {
+                dispatch(saveProgramStartDate(startDate));
+            }
+
             setSelectedConfiguration(defaultConfig);
         }
     }, [programConfigurationReducer.data]);
@@ -55,6 +62,7 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
                 setLevel1Children(children);
                 setLevel1ChildName(children[0].name);
                 setLevel1Child(children[0].id);
+                dispatch(saveProgramStartDate(foundProgram.startDate))
             }
         }
     }

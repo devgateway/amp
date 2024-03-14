@@ -23,8 +23,8 @@ export type ProgramConfig = {
     name:                 string;
     programName:          string;
     allowMultiple:        boolean;
-    startDate:            null;
-    endDate:              null;
+    startDate:            null | string;
+    endDate:              null | string;
     children:             ProgramConfigChild[];
 }
 

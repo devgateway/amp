@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.util.HashSet;
 
 import static net.bull.javamelody.internal.common.Parameters.getServletContext;
@@ -82,15 +83,14 @@ public class SiteManager {
 
             try {
                 siteConfig.createNewFile();
-                PrintStream ps = new PrintStream(new FileOutputStream(
-                    siteConfig));
-                ps.println("<?xml version=\"1.0\"?>");
-                if (templateName == null) {
-                    ps.println("<site-config />");
-                }
-                else {
-                    ps.println("<site-config template=\"" + templateName +
-                               "\" />");
+                try (PrintStream ps = new PrintStream(Files.newOutputStream(siteConfig.toPath()))) {
+                    ps.println("<?xml version=\"1.0\"?>");
+                    if (templateName == null) {
+                        ps.println("<site-config />");
+                    } else {
+                        ps.println("<site-config template=\"" + templateName +
+                                "\" />");
+                    }
                 }
 
             }
@@ -106,7 +106,7 @@ public class SiteManager {
         DgException {
         Site site = new Site(name, siteKey);
         site.setFolder(dirName);
-        site.setSiteDomains(new HashSet());
+        site.setSiteDomains(new HashSet<>());
 
         for (int i = 0; i < hosts.length; i++) {
             SiteDomain siteDomain = new SiteDomain();
@@ -165,7 +165,7 @@ public class SiteManager {
 
         if (!siteConfig.exists()) {
             siteConfig.createNewFile();
-            PrintStream ps = new PrintStream(new FileOutputStream(siteConfig));
+            PrintStream ps = new PrintStream(Files.newOutputStream(siteConfig.toPath()));
             ps.println("<?xml version=\"1.0\"?>");
 
             if (SiteConfigUtils.BLANK_TEMPLATE_NAME.equals(template)) {

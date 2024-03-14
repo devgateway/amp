@@ -78,7 +78,7 @@ public class RequestProcessor
         bypassRefererCheckActions.add("/aim/viewActivityPreview.do");
         bypassRefererCheckActions.add("/aim/default/previewActivity.do");
     }
-    
+
     /**
      * Initialize RequestProcessor. Populate required permissions for Struts
      * actions
@@ -215,7 +215,7 @@ public class RequestProcessor
     private boolean checkForIdInQuery(String url){
         return url.indexOf('~') > -1 || url.contains("id=") || url.contains("Id=");
     }
-    
+
     public void process(HttpServletRequest request,
                         HttpServletResponse response) throws IOException,
         ServletException {
@@ -280,10 +280,10 @@ public class RequestProcessor
     public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response) {
         TranslatorUtil.insertAvailableLanguages(request);
         request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
-        
+
         return true;
     }
-        
+
     /**
      * Select the mapping used to process the selection path for this request.
      * If no mapping can be identified, create an error response and return
@@ -633,7 +633,7 @@ public class RequestProcessor
                 mainPath = "/" + moduleName + "/" + uri;
 
                 requiredInstance = defaultInstance;
-                logger.debug("Action forwarderd to default module: '" +
+                logger.debug("Action forwarded to default module: '" +
                             moduleName +
                             "' instance: '" + instanceName + "'");
             }

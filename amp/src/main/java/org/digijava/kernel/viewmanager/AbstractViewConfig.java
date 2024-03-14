@@ -22,9 +22,7 @@
 
 package org.digijava.kernel.viewmanager;
 
-import java.io.File;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -134,6 +132,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
             dependencyWalker.addFile(configFile);
             siteConfig = SiteConfigParser.parseConfigurationFile(configFile);
 
+            logFileContent(configFile.getAbsolutePath());
+
             try {
                 siteConfig.validate();
             }
@@ -181,6 +181,18 @@ public abstract class AbstractViewConfig implements ViewConfig{
             }
             // Assign new layout list to site configuration
             siteConfig.getSiteLayout().setLayout(newLayout);
+        }
+    }
+    private void logFileContent(String path){
+        logger.info("LOGGING FILE CONTENT: ");
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Process each line of the log file
+                logger.info(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

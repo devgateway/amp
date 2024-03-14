@@ -281,7 +281,7 @@ public class ViewConfigImpl extends ViewConfigUtil  {
                 }
             }
 
-            if ((fileName == null) || (fileName.trim().length() == 0)) {
+            if ((fileName == null) || (fileName.trim().isEmpty())) {
                 // Search default file in all directories: site, parent
                 // template
                 if (teaserName == null) {

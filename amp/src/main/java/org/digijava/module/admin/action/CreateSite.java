@@ -100,19 +100,17 @@ public class CreateSite extends Action {
 
         // Assign domains to site
         ActionMessages errors = new ActionMessages();
-        site.setSiteDomains(new HashSet());
-        Iterator iter = siteForm.getSiteDomains().iterator();
-        while (iter.hasNext()) {
-            SiteForm.SiteDomainInfo item = (SiteForm.SiteDomainInfo) iter.next();
+        site.setSiteDomains(new HashSet<>());
+        for (Object o : siteForm.getSiteDomains()) {
+            SiteForm.SiteDomainInfo item = (SiteForm.SiteDomainInfo) o;
 
             SiteDomain siteDomain = new SiteDomain();
             siteDomain.setSite(site);
             site.getSiteDomains().add(siteDomain);
             siteDomain.setSiteDbDomain(item.getDomain());
-            if ( (item.getPath() != null) && (item.getPath().trim().length() == 0)) {
+            if ((item.getPath() != null) && (item.getPath().trim().isEmpty())) {
                 siteDomain.setSitePath(null);
-            }
-            else {
+            } else {
                 siteDomain.setSitePath(item.getPath());
             }
 
@@ -120,8 +118,8 @@ public class CreateSite extends Action {
             Site tmpSite = DbUtil.getSite(siteDomain.getSiteDomain(), siteDomain.getSitePath());
             if (tmpSite != null) {
                 Object[] params = {
-                    item.getDomain(),
-                    item.getPath(), tmpSite.getName()};
+                        item.getDomain(),
+                        item.getPath(), tmpSite.getName()};
 
                 errors.add(null, new ActionMessage("error.admin.siteDomainExists", params));
             }
@@ -129,12 +127,7 @@ public class CreateSite extends Action {
             siteDomain.setLanguage(null);
 
             // Toggle default mark
-            if (siteForm.getDefDomain() == item.getIndex()) {
-                siteDomain.setDefaultDomain(true);
-            }
-            else {
-                siteDomain.setDefaultDomain(false);
-            }
+            siteDomain.setDefaultDomain(siteForm.getDefDomain() == item.getIndex());
             switch (item.getEnableSecurity()) {
                 case 0:
                     siteDomain.setEnableSecurity(Boolean.FALSE);
@@ -157,9 +150,8 @@ public class CreateSite extends Action {
         // Get required module instances from template
         ViewConfig templateViewConfig = ViewConfigFactory.getInstance().getTemplateViewConfig(siteForm.getTemplate());
         HashSet moduleInstances = new HashSet(templateViewConfig.getReferencedInstances(false));
-        Iterator instancesIter = moduleInstances.iterator();
-        while (instancesIter.hasNext()) {
-            ModuleInstance moduleInstance = (ModuleInstance)instancesIter.next();
+        for (Object instance : moduleInstances) {
+            ModuleInstance moduleInstance = (ModuleInstance) instance;
             moduleInstance.setSite(site);
             moduleInstance.setPermitted(true);
             moduleInstance.setRealInstance(null);
@@ -186,12 +178,11 @@ public class CreateSite extends Action {
         SiteUtils.fixDefaultGroupPermissions(site);
 
         if ( (siteForm.getTargetAction() == null) ||
-            (siteForm.getTargetAction().trim().length() == 0)) {
+            (siteForm.getTargetAction().trim().isEmpty())) {
             return mapping.findForward("forward");
         }
         else {
-            ActionForward forward = new ActionForward(siteForm.getTargetAction());
-            return forward;
+            return new ActionForward(siteForm.getTargetAction());
         }
     }
 

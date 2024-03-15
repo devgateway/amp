@@ -13,6 +13,7 @@ import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.AmpGeneralSettings;
+import org.digijava.kernel.ampapi.endpoints.common.AmpGisSettings;
 import org.digijava.kernel.ampapi.endpoints.common.CurrencySettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
@@ -485,6 +486,14 @@ public class SettingsUtils {
 
         return settings;
     }
+    public static AmpGisSettings getGisSettings()
+    {
+        AmpGisSettings ampGisSettings = new AmpGisSettings();
+        ampGisSettings.setSectorsEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.GIS_SECTORS_ENABLED));
+        ampGisSettings.setProgramsEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.GIS_PROGRAMS_ENABLED));
+        ampGisSettings.setMultiCountryEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.MULTICOUNTRY_ENABLED));
+        return ampGisSettings;
+    }
 
     private static void addCalendarSettings(AmpGeneralSettings settings) {
         AmpFiscalCalendar ampFiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(FeaturesUtil.
@@ -544,18 +553,25 @@ public class SettingsUtils {
 
         String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
 
-        if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE)) {
-            settings.setDashboardDefaultMaxYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE)) {
-            settings.setDashboardDefaultMinYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MAX_YEAR_RANGE)) {
-            settings.setGisDefaultMaxYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE)) {
-            settings.setGisDefaultMinYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MAX_YEAR_RANGE)) {
-            settings.setReportDefaultMaxYearRange(yearNumber);
-        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE)) {
-            settings.setReportDefaultMinYearRange(yearNumber);
+        switch (yearSettingsName) {
+            case SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE:
+                settings.setDashboardDefaultMaxYearRange(yearNumber);
+                break;
+            case SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE:
+                settings.setDashboardDefaultMinYearRange(yearNumber);
+                break;
+            case SettingsConstants.GIS_DEFAULT_MAX_YEAR_RANGE:
+                settings.setGisDefaultMaxYearRange(yearNumber);
+                break;
+            case SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE:
+                settings.setGisDefaultMinYearRange(yearNumber);
+                break;
+            case SettingsConstants.REPORT_DEFAULT_MAX_YEAR_RANGE:
+                settings.setReportDefaultMaxYearRange(yearNumber);
+                break;
+            case SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE:
+                settings.setReportDefaultMinYearRange(yearNumber);
+                break;
         }
 
         if (!StringUtils.equals(yearNumber, "-1")) {

@@ -1436,14 +1436,7 @@ public class ProgramUtil {
             programSettings = createDefaultAmpActivityProgramSettingsList();
         }
 
-        Iterator<AmpActivityProgramSettings> iterator = programSettings.iterator();
-
-        while(iterator.hasNext()){
-            AmpActivityProgramSettings programSetting = iterator.next();
-            if(programSetting.getDefaultHierarchy() == null) {
-                iterator.remove();
-            }
-        }
+        programSettings.removeIf(programSetting -> programSetting.getDefaultHierarchy() == null);
 
         return programSettings;
     }

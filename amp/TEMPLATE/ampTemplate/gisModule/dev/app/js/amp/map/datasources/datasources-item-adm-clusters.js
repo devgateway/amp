@@ -2,7 +2,9 @@ var fs = require('fs');
 var _ = require('underscore');
 var chartUtils = require('../../../libs/local/chart-util');
 var Backbone = require('backbone');
+var GisSettings = require('../../services/gis_settings');
 var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html', 'utf8');
+var gisSettings = new GisSettings();
 
 
 module.exports = Backbone.View.extend({
@@ -53,16 +55,19 @@ module.exports = Backbone.View.extend({
 					  var formattedColumnName2 = ampFormatter.format(project.attributes[columnName2]);
 					  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
 
-                      var activity = project.toJSON()
+                      var activity = project.toJSON();
                       var orgColumnName = activity[orgColumn];
 
                       // put them on the page.
-					  self.$el.append(self.template({
-						  activity: activity,
-                          orgColumnName: orgColumnName ? orgColumnName : '',
-                          formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
-                          formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
-					  }));
+
+                          self.$el.append(self.template({
+                              gisSettings: gisSettings.gisSettings,
+                              activity: activity,
+                              orgColumnName: orgColumnName ? orgColumnName : '',
+                              formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
+                              formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
+                          }));
+
 				 
 			  });
 

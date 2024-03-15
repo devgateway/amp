@@ -18,6 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 
 import java.util.*;
@@ -300,7 +301,7 @@ public class DbHelper {
                     }
                 }
             } else {
-                tempSectorIds.add(new Long(-1));
+                tempSectorIds.add((long) -1);
             }
         }
         return (Long[]) tempSectorIds.toArray(new Long[0]);
@@ -321,9 +322,9 @@ public class DbHelper {
         try {
             session = PersistenceManager.getRequestDBSession();
             q = session.createQuery(queryString.toString());
-            q.setInteger("mapType", mapType);
+            q.setParameter("mapType", mapType, IntegerType.INSTANCE);
             List<AmpMapConfig> maps = q.list();
-            if (maps.size() > 0)
+            if (!maps.isEmpty())
                 map = maps.get(0);
             else
                 map = null;

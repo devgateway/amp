@@ -23,7 +23,7 @@ import java.util.TreeSet;
  */
 public class SimpleSQLPatcher {
     
-    private static Logger logger = Logger.getLogger(SimpleSQLPatcher.class) ;
+    private static final Logger logger = Logger.getLogger(SimpleSQLPatcher.class) ;
     
     public SortedSet<SimpleSQLPatch> patches = new TreeSet<SimpleSQLPatch>(){
             void addPatch(SimpleSQLPatch p){

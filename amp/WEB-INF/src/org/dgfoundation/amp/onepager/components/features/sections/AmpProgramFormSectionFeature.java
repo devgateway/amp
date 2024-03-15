@@ -55,7 +55,7 @@ public class AmpProgramFormSectionFeature extends
         else
             add(tpTable);
         add(new AmpTextAreaFieldPanel("description",
-                new PropertyModel<String>(am, "programDescription"),
+                new PropertyModel<>(am, "programDescription"),
                 "Program Description", true, AmpFMTypes.MODULE));
 
     }

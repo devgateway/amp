@@ -5,7 +5,7 @@
   "proxy": "http://localhost:8080",
   "dependencies": {
     "@devgateway/amp-boilerplate": "github:devgateway/amp-boilerplate",
-    "@devgateway/amp-filter": "github:devgateway/amp-filter",
+    "@devgateway/amp-filter": "https://github.com/devgateway/amp-filter.git",
     "@devgateway/amp-settings": "github:devgateway/amp-settings",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",

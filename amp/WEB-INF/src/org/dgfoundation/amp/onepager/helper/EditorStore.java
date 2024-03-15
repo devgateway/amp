@@ -2,6 +2,7 @@ package org.dgfoundation.amp.onepager.helper;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.TreeMap;
 
 /**
@@ -33,5 +34,12 @@ public class EditorStore implements Serializable {
 
     public Map<String, Map<String, String>> getValues() {
         return values;
+    }
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", EditorStore.class.getSimpleName() + "[", "]")
+                .add("oldKey=" + oldKey)
+                .add("values=" + values)
+                .toString();
     }
 }

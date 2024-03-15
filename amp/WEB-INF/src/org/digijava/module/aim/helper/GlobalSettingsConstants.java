@@ -109,6 +109,7 @@ public class GlobalSettingsConstants {
     public static final String AUTOMATIC_AUDIT_LOGGER_CLEANUP = "Automatic Audit Logger Cleanup";
 
     public static final String NPD_DEFAULT_PROGRAM = "NPD Default Program";
+    public static final String MULTI_COUNTRY_GIS_ENABLED = "Multicountry Enabled";
 
     public static final String COMPONENT_TYPE = "Default Component Type";
 

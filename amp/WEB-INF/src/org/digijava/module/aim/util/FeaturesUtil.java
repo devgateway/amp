@@ -36,19 +36,16 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FeaturesUtil {
 
-    private static Logger logger = Logger.getLogger(FeaturesUtil.class);
+    private static final Logger logger = Logger.getLogger(FeaturesUtil.class);
 
     private static Map<String, AmpGlobalSettings> globalSettingsCache = null;
 
-    public static String errorLog = "";
-
-    public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
+    public static final String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
 
     public static void logGlobalSettingsCache() {
-        String log = "";
+        StringBuilder log = new StringBuilder();
         for (AmpGlobalSettings ampGlobalSetting:globalSettingsCache.values()) {
-            log = log + ampGlobalSetting.getGlobalSettingsName() + ":" +
-            ampGlobalSetting.getGlobalSettingsValue() + ";";
+            log.append(ampGlobalSetting.getGlobalSettingsName()).append(":").append(ampGlobalSetting.getGlobalSettingsValue()).append(";");
         }
         logger.info("GlobalSettingsCache is -> " + log);
     }
@@ -58,7 +55,7 @@ public class FeaturesUtil {
     }
 
     public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
-        globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
+        globalSettingsCache = new HashMap<>();
         for (AmpGlobalSettings sett : globalSettings) {
             globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
         }
@@ -72,10 +69,10 @@ public class FeaturesUtil {
     public static List<String> getAssignedToTeams (Long templateId) {
         List<String> retVal = null;
         Session sess = PersistenceManager.getSession();
-        StringBuilder qs = new StringBuilder("select t.name from ").
-                append(AmpTeam.class.getName()).append(" t  where t.fmTemplate=:TEMPLATE_ID");
-        Query q = sess.createQuery(qs.toString());
-        q.setLong("TEMPLATE_ID", templateId);
+        String qs = "select t.name from " +
+                AmpTeam.class.getName() + " t  where t.fmTemplate=:TEMPLATE_ID";
+        Query q = sess.createQuery(qs);
+        q.setParameter("TEMPLATE_ID", templateId,LongType.INSTANCE);
         List<String> tmpVal = q.list();
         if (!tmpVal.isEmpty())
             retVal = tmpVal;
@@ -105,7 +102,7 @@ public class FeaturesUtil {
 
     public static Collection getAMPFeatures() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
 
@@ -129,7 +126,7 @@ public class FeaturesUtil {
      */
     public static Collection getAMPTemplates() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
 
@@ -157,8 +154,7 @@ public class FeaturesUtil {
     }
 
     public static FeatureTemplates getActiveTemplate(){
-        FeatureTemplates template = getTemplate(getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE));
-        return template;
+        return getTemplate(getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE));
     }
 
     public static AmpFeature toggleFeature(Integer featureId) {
@@ -166,7 +162,7 @@ public class FeaturesUtil {
         AmpFeature feature = null;
 
         session = PersistenceManager.getSession();
-        feature = (AmpFeature) session.load(AmpFeature.class,featureId);
+        feature = session.load(AmpFeature.class,featureId);
         feature.setActive(!feature.isActive());
         session.update(feature);
 
@@ -178,7 +174,7 @@ public class FeaturesUtil {
      */
     public static boolean existTemplate(String templateName) {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col;
         String qryStr = null;
         Query qry = null;
 
@@ -190,10 +186,8 @@ public class FeaturesUtil {
             col = qry.list();
             if (col == null)
                 return false;
-            if (col.size() == 0)
-                return false;
-            if (col.size() > 0)
-                return true;
+
+            return !col.isEmpty();
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -206,7 +200,7 @@ public class FeaturesUtil {
      */
     public static FeatureTemplates getTemplate(String templateId) {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
 
@@ -224,8 +218,7 @@ public class FeaturesUtil {
         if (!col.isEmpty()) {
             Iterator it = col.iterator();
 
-            FeatureTemplates x = (FeatureTemplates) it.next();
-            return x;
+            return (FeatureTemplates) it.next();
         }
         else
             return null;
@@ -236,7 +229,6 @@ public class FeaturesUtil {
      */
     public static boolean deleteTemplate(Long id) {
         Session session = null;
-        Transaction tx = null;
 
         try {
             session = PersistenceManager.getSession();
@@ -260,7 +252,7 @@ public class FeaturesUtil {
         FeatureTemplates ft = new FeatureTemplates();
         try {
             session = PersistenceManager.getSession();
-            ft = (FeatureTemplates) session.load(FeatureTemplates.class, id);
+            ft = session.load(FeatureTemplates.class, id);
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -276,7 +268,7 @@ public class FeaturesUtil {
         FeatureTemplates ft = new FeatureTemplates();
         try {
             session = PersistenceManager.getSession();
-            ft = (FeatureTemplates) session.load(FeatureTemplates.class, id);
+            ft = session.load(FeatureTemplates.class, id);
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -298,9 +290,9 @@ public class FeaturesUtil {
             session = PersistenceManager.getSession();
             FeatureTemplates ampTemplate = new FeatureTemplates();
             ampTemplate.setFeatureTemplateName(template);
-            ampTemplate.setFeatures(new HashSet());
-            for (Iterator it = features.iterator(); it.hasNext(); ) {
-                AmpFeature ampFeature = (AmpFeature) it.next();
+            ampTemplate.setFeatures(new HashSet<>());
+            for (Object feature : features) {
+                AmpFeature ampFeature = (AmpFeature) feature;
                 ampTemplate.getFeatures().add(ampFeature);
             }
             session.save(ampTemplate);
@@ -329,9 +321,9 @@ public class FeaturesUtil {
             ampTemplate = (FeatureTemplates) session.load(FeatureTemplates.class,
                     templateId);
             ampTemplate.setFeatureTemplateName(templateName);
-            ampTemplate.setFeatures(new HashSet());
-            for (Iterator it = features.iterator(); it.hasNext(); ) {
-                AmpFeature ampFeature = (AmpFeature) it.next();
+            ampTemplate.setFeatures(new HashSet<>());
+            for (Object feature : features) {
+                AmpFeature ampFeature = (AmpFeature) feature;
                 ampTemplate.getFeatures().add(ampFeature);
             }
             session.saveOrUpdate(ampTemplate);
@@ -344,7 +336,7 @@ public class FeaturesUtil {
 
     public static Collection getAllCountries() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
 
@@ -353,13 +345,12 @@ public class FeaturesUtil {
             qryStr = "select c.countryId,c.countryName from " + Country.class.getName() +
             " c order by c.countryName";
             qry = session.createQuery(qryStr);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                Object obj[] = (Object[]) itr.next();
+            for (Object o : qry.list()) {
+                Object[] obj = (Object[]) o;
                 Long cId = (Long) obj[0];
                 String cName = (String) obj[1];
                 org.digijava.module.aim.helper.Country
-                ctry = new org.digijava.module.aim.helper.Country();
+                        ctry = new org.digijava.module.aim.helper.Country();
                 ctry.setId(cId);
                 ctry.setName(cName);
                 col.add(ctry);
@@ -385,9 +376,8 @@ public class FeaturesUtil {
             qryStr = "select c.countryId, c.countryName from " + Country.class.getName() +
             " c where c.iso = '"+defaultCountry+"'";
             qry = session.createQuery(qryStr);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                Object obj[] = (Object[]) itr.next();
+            for (Object o : qry.list()) {
+                Object[] obj = (Object[]) o;
                 countryName = (String) obj[1];
             }
         }
@@ -426,7 +416,7 @@ public class FeaturesUtil {
             q = session.createQuery(queryString);
             q.setParameter("placeholder", placeholder, IntegerType.INSTANCE);
             c = q.list();
-            if(c.size()!=0)
+            if(!c.isEmpty())
                 thumbnail=(AmpHomeThumbnail) c.iterator().next();
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -436,49 +426,46 @@ public class FeaturesUtil {
 
     public static Collection getAllCountryFlags() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
-        String params = "";
+        StringBuilder params = new StringBuilder();
 
         try {
             session = PersistenceManager.getSession();
             qryStr = "select f.countryId,f.defaultFlag from " +
             AmpSiteFlag.class.getName() + " f";
             qry = session.createQuery(qryStr);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                Object obj[] = (Object[]) itr.next();
+            for (Object o : qry.list()) {
+                Object[] obj = (Object[]) o;
                 Long cId = (Long) obj[0];
                 Boolean defFlag = (Boolean) obj[1];
                 Flag f = new Flag();
-                if (params != null && params.trim().length() > 0) {
-                    params += ",";
+                if (!params.toString().trim().isEmpty()) {
+                    params.append(",");
                 }
-                params += cId.longValue();
+                params.append(cId.longValue());
 
                 f.setCntryId(cId);
-                f.setDefaultFlag(defFlag.booleanValue());
+                f.setDefaultFlag(defFlag);
                 col.add(f);
             }
 
-            if (params != null && params.trim().length() > 0) {
+            if (!params.toString().trim().isEmpty()) {
                 qryStr = "select c.countryId,c.countryName from " +
                 Country.class.getName() + " c" +
                 " where c.countryId in (" + params + ")";
 
                 qry = session.createQuery(qryStr);
-                itr = qry.list().iterator();
-                while (itr.hasNext()) {
-                    Object obj[] = (Object[]) itr.next();
+                for (Object o : qry.list()) {
+                    Object[] obj = (Object[]) o;
                     Long cId = (Long) obj[0];
                     String cName = (String) obj[1];
-                    long temp = cId.longValue();
+                    long temp = cId;
 
-                    Iterator itr1 = col.iterator();
-                    while (itr1.hasNext()) {
-                        Flag f = (Flag) itr1.next();
-                        if (f.getCntryId().longValue() == temp) {
+                    for (Object object : col) {
+                        Flag f = (Flag) object;
+                        if (f.getCntryId() == temp) {
                             f.setCntryName(cName);
                         }
                     }
@@ -499,7 +486,7 @@ public class FeaturesUtil {
 
         try {
             session = PersistenceManager.getSession();
-            flag = (AmpSiteFlag) session.get(AmpSiteFlag.class, id);
+            flag = session.get(AmpSiteFlag.class, id);
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -510,7 +497,7 @@ public class FeaturesUtil {
 
     public static byte[] getFlag(Long id) {
         Session session = null;
-        byte flag[] = null;
+        byte[] flag = null;
 
         try {
             session = PersistenceManager.getSession();
@@ -624,8 +611,8 @@ public class FeaturesUtil {
             qry = session.createQuery(queryString);
             qry.setParameter("globalSettingName", globalSettingName, StringType.INSTANCE);
             coll = qry.list();
-            if(coll.size()!=0)
-                ampGlobalSettings = (AmpGlobalSettings) coll.iterator().next();
+            if(!coll.isEmpty())
+                ampGlobalSettings = coll.iterator().next();
         }
         catch (Exception ex) {
             logger.error(ex, ex);
@@ -648,7 +635,6 @@ public class FeaturesUtil {
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
-        return;
     }
 
     private static void updateCachedValue(AmpGlobalSettings ampGlobalSettings) {
@@ -668,6 +654,11 @@ public class FeaturesUtil {
         if (value == null)
             return null;
         return value.getGlobalSettingsValue();
+    }
+    public static void refreshSettingsCache()
+    {
+        buildGlobalSettingsCache(getGlobalSettings());
+
     }
 
     public static boolean getGlobalSettingValueBoolean(String globalSettingName) {
@@ -706,7 +697,7 @@ public class FeaturesUtil {
 
     public static String[] getGlobalSettingsStringArray(String key) {
         String[] ret = null;
-        ret = getGlobalSettingValue(key).split(";");
+        ret = Objects.requireNonNull(getGlobalSettingValue(key)).split(";");
         return ret;
     }
 
@@ -877,7 +868,7 @@ public class FeaturesUtil {
      */
     public static Collection getAMPFeaturesVisibility() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
 
@@ -1040,10 +1031,8 @@ public class FeaturesUtil {
             col = qry.list();
             if (col == null)
                 return false;
-            if (col.size() == 0)
-                return false;
-            if (col.size() > 0)
-                return true;
+
+            return !col.isEmpty();
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -2124,8 +2113,7 @@ public class FeaturesUtil {
         String qryStr = "select gs.globalSettingsValue from " + AmpGlobalSettings.class.getName() +
                     " gs where gs.globalSettingsName = 'Default Country' ";
         Query qry = PersistenceManager.getRequestDBSession().createQuery(qryStr);
-        String defaultCountryIso = (String) qry.uniqueResult();
-        return defaultCountryIso;
+        return (String) qry.uniqueResult();
     }
 
     public static String makeProperString(String theString) throws java.io.IOException{

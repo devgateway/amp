@@ -26,6 +26,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -135,11 +136,9 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 	}
 
 	private String getJsSwitchMode() {
-		StringBuffer js = new StringBuffer();
-		js.append("var newLoc=window.location.href;");
-		js.append("newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));");
-		js.append("window.location.replace(newLoc);");
-		return js.toString();
+        return "var newLoc=window.location.href;" +
+                "newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));" +
+                "window.location.replace(newLoc);";
 	}
 
     @Override
@@ -160,8 +159,11 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
         
         PackageTextTemplate ptt = new PackageTextTemplate(AmpAjaxBehavior.class, JS_FILE_NAME);
         ptt.interpolate(variables);
-        JavaScriptTemplate jst = new JavaScriptTemplate(ptt);
-        response.render(StringHeaderItem.forString(jst.asString()));
+        try (JavaScriptTemplate jst = new JavaScriptTemplate(ptt)) {
+            response.render(StringHeaderItem.forString(jst.asString()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

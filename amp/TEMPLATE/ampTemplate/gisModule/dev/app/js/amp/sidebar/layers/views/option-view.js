@@ -45,7 +45,6 @@ module.exports = Backbone.View.extend({
         || this.model.get('type') === "joinBoundaries"
         || this.model.get('type') === "wms"
     ) {
-        debugger;
     	this.app.mapView.headerGapAnalysisView.refresh(this.model);
     }    
     this.app.translator.translateDOM(this.el);

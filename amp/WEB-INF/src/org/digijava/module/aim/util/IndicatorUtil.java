@@ -691,7 +691,51 @@ public class IndicatorUtil {
         }
         return result;
     }
-    
+
+            /**
+             * Get indicator connection for a specific location category value i.e NIgeria, NIger
+             * @param locationId
+             * @throws DgException
+             * */
+            public static List<IndicatorActivity> findIndicatorConnectionByLocationCategoryValue(Long locationId) throws DgException{
+                List<IndicatorActivity> result=null;
+                Session session=PersistenceManager.getRequestDBSession();
+                String oql="from "+IndicatorActivity.class.getName()+" conn ";
+                oql+=" where conn.activityLocation.location.id=:locationId";
+                try {
+                    Query query=session.createQuery(oql);
+                    query.setParameter("locationId", locationId, LongType.INSTANCE);
+                    result= (List<IndicatorActivity>) query.list();
+                } catch (ObjectNotFoundException e) {
+                    logger.debug("Cannot find conenction for location value("+locationId+")!");
+                } catch (HibernateException e) {
+                    throw new DgException("Error searching conenction for location category value("+locationId+")!",e);
+                }
+                return result;
+            }
+
+            /**
+             * Get Indicator location by location id
+             * @param locationId
+             * @throws DgException
+             * */
+            public static List<AmpIndicatorLocation> findIndicatorLocationByLocationId(Long locationId) throws DgException{
+                List<AmpIndicatorLocation> result=null;
+                Session session=PersistenceManager.getRequestDBSession();
+                String oql="from "+AmpIndicatorLocation.class.getName()+" conn ";
+                oql+=" where conn.location.id=:locationId";
+                try {
+                    Query query=session.createQuery(oql);
+                    query.setParameter("locationId", locationId, LongType.INSTANCE);
+                    result= (List<AmpIndicatorLocation>) query.list();
+                } catch (ObjectNotFoundException e) {
+                    logger.debug("Cannot find indicator locations for location ("+locationId+")!");
+                } catch (HibernateException e) {
+                    throw new DgException("Error searching indicator locations for location ("+locationId+")!",e);
+                }
+                return result;
+            }
+
     /**
      * Tries to find connection bean between activity and indicator.
      * If not found NULL is returned.

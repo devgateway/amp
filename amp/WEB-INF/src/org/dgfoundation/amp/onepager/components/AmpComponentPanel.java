@@ -265,12 +265,12 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
 
         boolean fmMode = ((AmpAuthWebSession) getSession()).isFmMode();
         if (this instanceof AmpFormSectionFeaturePanel && fmMode) {
-            upButton.add(new AttributeModifier("title", new Model<String>("Up")));
+            upButton.add(new AttributeModifier("title", new Model<>("Up")));
             upButton.add(
-                    new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/up.png")));
-            downButton.add(new AttributeModifier("title", new Model<String>("Down")));
+                    new AttributeModifier("src", new Model<>("/TEMPLATE/ampTemplate/img_2/onepager/up.png")));
+            downButton.add(new AttributeModifier("title", new Model<>("Down")));
             downButton.add(
-                    new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/down.png")));
+                    new AttributeModifier("src", new Model<>("/TEMPLATE/ampTemplate/img_2/onepager/down.png")));
         } else {
             upButton.setVisible(false);
             downButton.setVisible(false);
@@ -326,7 +326,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
 
         final Model<Boolean> foundEnabledChild = new Model<Boolean>(Boolean.FALSE);
         searchForEnabledChild(foundEnabledChild);
-        if (foundEnabledChild.getObject())
+        if (Boolean.TRUE.equals(foundEnabledChild.getObject()))
             setEnabled(true);
     }
 
@@ -371,20 +371,20 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
             OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
             if (tmpos != null) {
                 foldButton.add(
-                        new AttributeModifier("title", new Model<String>((tmpos.getFolded() ? "Unfold" : "Fold"))));
-                foldButton.add(new AttributeModifier("src", new Model<String>(
+                        new AttributeModifier("title", new Model<>((tmpos.getFolded() ? "Unfold" : "Fold"))));
+                foldButton.add(new AttributeModifier("src", new Model<>(
                         "/TEMPLATE/ampTemplate/img_2/onepager/" + (tmpos.getFolded() ? "fold.png" : "unfold.png"))));
             }
         }
 
         if (fmMode && !ignoreFmButtonsVisibility) {
             enabledFmButton.add(new AttributeModifier("title",
-                    new Model<String>((fmEnabled ? "Disable" : "Enable") + " " + getFMName())));
-            enabledFmButton.add(new AttributeModifier("src", new Model<String>(
+                    new Model<>((fmEnabled ? "Disable" : "Enable") + " " + getFMName())));
+            enabledFmButton.add(new AttributeModifier("src", new Model<>(
                     "/TEMPLATE/ampTemplate/img_2/onepager/" + (fmEnabled ? "enable.png" : "disable.png"))));
             visibleFmButton.add(new AttributeModifier("title",
-                    new Model<String>((fmVisible ? "Hide" : "Show") + " " + getFMName())));
-            visibleFmButton.add(new AttributeModifier("src", new Model<String>(
+                    new Model<>((fmVisible ? "Hide" : "Show") + " " + getFMName())));
+            visibleFmButton.add(new AttributeModifier("src", new Model<>(
                     "/TEMPLATE/ampTemplate/img_2/onepager/" + (fmVisible ? "alt_enable.png" : "alt_disable.png"))));
             visibleFmButton.setVisible(true);
             // enabledFmButton.setVisible(true);
@@ -402,23 +402,20 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
 
     private void searchForEnabledChild(final Model<Boolean> foundEnabledChild) {
         // Check if any child is enabled
-        this.visitChildren(AmpComponentPanel.class, new IVisitor<Component, Object>() {
-            @Override
-            public void component(Component child, IVisit<Object> visit) {
-                if (foundEnabledChild.getObject()) {
-                    visit.stop();
-                    return;
-                }
-                // run onConfigure for direct child
-                child.configure();
-                if (child.isEnabled()) {
-                    foundEnabledChild.setObject(Boolean.TRUE);
-                    visit.stop();
-                    return;
-                }
-                // visit only direct children
-                visit.dontGoDeeper();
+        this.visitChildren(AmpComponentPanel.class, (child, visit) -> {
+            if (Boolean.TRUE.equals(foundEnabledChild.getObject())) {
+                visit.stop();
+                return;
             }
+            // run onConfigure for direct child
+            child.configure();
+            if (child.isEnabled()) {
+                foundEnabledChild.setObject(Boolean.TRUE);
+                visit.stop();
+                return;
+            }
+            // visit only direct children
+            visit.dontGoDeeper();
         });
     }
 }

@@ -10,6 +10,7 @@ import org.dgfoundation.amp.onepager.components.*;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -20,9 +21,10 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
 
     protected IModel<Set<AmpIndicatorValue>> parentModel;
     protected IModel<Set<AmpIndicatorValue>> setModel;
+    protected IModel<Set<AmpIndicatorValue>> setBaseTargetModel;
 
     public AmpMEValuesFormTableFeaturePanel(
-            String id, IModel<AmpIndicator> model, IModel<IndicatorActivity> indicatorActivity, String fmName, boolean hideLeadingNewLine, int titleHeaderColSpan) throws Exception {
+            String id, IModel<AmpIndicator> model, IModel<IndicatorActivity> indicatorActivity, IModel<AmpActivityLocation> location, String fmName, boolean hideLeadingNewLine, int titleHeaderColSpan) throws Exception {
         super(id, model, fmName, hideLeadingNewLine);
 
         getTableId().add(new AttributeModifier("width", "620"));
@@ -33,7 +35,14 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
         setModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
             @Override
             public boolean condition(AmpIndicatorValue item) {
-                return item.getValueType() == AmpIndicatorValue.ACTUAL;
+                return item.getValueType() == AmpIndicatorValue.ACTUAL && item.getActivityLocation() == location.getObject();
+            }
+        };
+
+        setBaseTargetModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
+            @Override
+            public boolean condition(AmpIndicatorValue item) {
+                return (item.getValueType() == AmpIndicatorValue.BASE || item.getValueType() == AmpIndicatorValue.TARGET) && item.getActivityLocation() == location.getObject();
             }
         };
     }

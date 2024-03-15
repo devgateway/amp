@@ -49,5 +49,10 @@
 				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorConnection"/>
 		</set>
 
+		<set name="indicatorLocations" lazy="true" inverse="true" cascade="delete-orphan">
+			<key column="indicator_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorLocation"/>
+		</set>
+
 	</class>
 </hibernate-mapping>

@@ -1413,7 +1413,8 @@ public class ProgramUtil {
           if (excludeIndirect) {
               queryString += " where ap.name <> :indirectName";
           }
-          Query qry = PersistenceManager.getSession().createQuery(queryString);
+          Session session = PersistenceManager.getRequestDBSession();
+          Query qry = session.createQuery(queryString);
           if (excludeIndirect) {
               qry.setParameter("indirectName", INDIRECT_PRIMARY_PROGRAM, StringType.INSTANCE);
           }

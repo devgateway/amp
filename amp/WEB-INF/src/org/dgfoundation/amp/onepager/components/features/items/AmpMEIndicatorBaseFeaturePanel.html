@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<style xmlns:wicket="http://www.w3.org/1999/xhtml">
+    .featuredLabelLnk{background-color:#FFFFFF; padding:5px; border:1px solid #CCCCCC; display:block; margin-top:7px;}
+</style>
+<wicket:extend>
+
+    <span wicket:id="featureLabel"></span>
+
+    <a href="#" class="slider featuredLabelLnk">
+        <b><span/>Add Base Target Values</b>
+    </a>
+    <div class="invisible-item">
+        <table width="100%" border="0" cellspacing="2" cellpadding="2" class="activity_me">
+
+            <tr>
+                <td colspan="2">
+                    <div>
+                        <!-- Adding base and target values table -->
+                        <span wicket:id="addBaseValue"></span>
+
+                        <div class="indicator_values_button_display">
+                            <span wicket:id="addBaseValueButton"></span>
+                            <span wicket:id="addTargetValueButton"></span>
+                        </div>
+
+                    </div>
+                </td>
+            </tr>
+
+
+
+        </table>
+
+    </div>
+</wicket:extend>
+</html>

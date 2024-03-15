@@ -21,7 +21,7 @@
 			<lang delimiter=";" type="postgres"><![CDATA[
 				DROP VIEW IF EXISTS v_funding_start_date;
 				CREATE OR REPLACE VIEW v_funding_start_date AS
-				  SELECT f.amp_activity_id, f.amp_funding_id, f.actual_start_date,
+				  SELECT f.amp_activity_id, f.actual_start_date, f.amp_funding_id,
 					f.type_of_assistance_category_va as terms_assist_id,
 					f.financing_instr_category_value as financing_instrument_id,
 					f.amp_donor_org_id as donor_org_id,

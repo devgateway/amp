@@ -7,6 +7,7 @@ import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.TreeNodeAware;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.Objects;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable, Serializable, Cloneable,
+public class AmpActivityLocation implements Comparable<AmpActivityLocation>, Versionable, Serializable, Cloneable,
         TreeNodeAware<AmpCategoryValueLocations> {
 
     //IATI-check: should be exported.
@@ -160,5 +161,10 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     @Override
     public int hashCode() {
         return Objects.hash(activity, location);
+    }
+
+    @Override
+    public int compareTo(@NotNull AmpActivityLocation ampActivityLocation) {
+        return 0;
     }
 }

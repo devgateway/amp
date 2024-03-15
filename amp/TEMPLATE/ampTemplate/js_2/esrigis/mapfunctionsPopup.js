@@ -22,7 +22,7 @@ var basemapurl;
 var mapurl;
 var locatorurl;
 var rooturl;
-var stpoints = new Array();
+var stpoints = [];
 var isOsm = false;
 
 var MapConstants = {

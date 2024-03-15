@@ -27,4 +27,11 @@ public class PerformanceFilterParameters extends SettingsAndFiltersParameters {
     public void setShowActivitiewWithPerformanceIssues(Boolean showActivitiewWithPerformanceIssues) {
         this.showActivitiewWithPerformanceIssues = showActivitiewWithPerformanceIssues;
     }
+
+    @Override
+    public String toString() {
+        return "PerformanceFilterParameters{" +
+                "showActivitiewWithPerformanceIssues=" + showActivitiewWithPerformanceIssues +
+                '}';
+    }
 }

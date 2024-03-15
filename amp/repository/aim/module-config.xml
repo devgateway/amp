@@ -187,6 +187,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorLayer</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorWorkspace</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorColor</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLocationIndicatorValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpDesktopTabSelection</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorSubgroup</hibernate-class>

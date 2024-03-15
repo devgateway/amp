@@ -127,28 +127,30 @@ module.exports = Backbone.View.extend({
   // TODO: currently reparses topojson everytime settings/filters change...
   // instead it should do it once and cache it in a variable like boundaryLayerMap
   getNewBoundary: function(admLayer) {
-    var topoboundaries = admLayer.get('boundary');
+    var boundaries = admLayer.get('boundaries');
 
-    if (topoboundaries) {
-      /* retrieve the TopoJSON index key */
-      var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
-                               .keys()
-                               .first()
-                               .value();
-      var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+    if (boundaries) {
+      var geoJson = new L.geoJson(null, {
+        style: {
+          weight: 1,
+          dashArray: '3',
+          color: '#243241',
+          fillColor: 'transparent'
+        }
+      });
 
-      if (boundaries) {
-        return new L.geoJson(boundaries, {
-          style: {
-            weight: 1,
-            dashArray: '3',
-            color: '#243241',
-            fillColor: 'transparent'
-          }
-        });
-      } else {
-        console.error('no boundaries for admLayer?', admLayer);
-      }
+      boundaries.forEach(function (boundary) {
+        var i = _.chain(boundary.objects)
+          .keys()
+          .first()
+          .value();
+        var feature = TopojsonLibrary.feature(boundary, boundary.objects[i]);
+        if (feature) {
+          geoJson.addData(feature);
+        }
+      });
+
+      return geoJson;
     }
   },
 

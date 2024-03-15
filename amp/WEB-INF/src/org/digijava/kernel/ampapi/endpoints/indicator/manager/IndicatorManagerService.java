@@ -52,6 +52,8 @@ public class IndicatorManagerService {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static final String FILTER_BY_PROGRAM = "Filter By Program";
+
+    public static final String FILTER_BY_INDICATOR_LOCATION = "Filter By Indicator Location";
     public static final String FILTER_BY_SECTOR = "Filter By Sector";
 
     public static String INDICATOR_CATEGORY_KEY = "core_indicator_type";
@@ -266,6 +268,7 @@ public class IndicatorManagerService {
 
     public List<ProgramSchemeDTO> getProgramScheme() {
         return ProgramUtil.getAmpActivityProgramSettingsList(false).stream()
+                .filter(program -> program.getDefaultHierarchy() != null)
                 .map(ProgramSchemeDTO::new)
                 .collect(Collectors.toList());
     }

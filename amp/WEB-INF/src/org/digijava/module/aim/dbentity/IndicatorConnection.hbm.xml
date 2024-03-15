@@ -15,6 +15,9 @@
 		<many-to-one name="indicator" column="indicator_id"
 			class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" lazy="false"/>
 
+		<many-to-one name="activityLocation" column="activity_location"
+					 class="org.digijava.module.aim.dbentity.AmpActivityLocation" cascade="none" />
+
 		<set name="values" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="value_date">
 			<cache usage="read-write" />
 			<key column="ind_connect_id" />

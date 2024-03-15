@@ -178,12 +178,12 @@ public final class XmlPatcherUtil {
             throw new RuntimeException(
                     "Patch discovery location is not a directory!");
         String[] files = dir.list();
-        for (int i = 0; i < files.length; i++) {
-            File f = new File(dir, files[i]);
+        for (String file : files) {
+            File f = new File(dir, file);
             if (f.isDirectory() && !f.getName().equals("CVS") && !f.getName().equals(".svn")) {
                 if (f.getName().equals(XmlPatcherConstants.patchDirName))
                     patchDirs.add(f);
-                else 
+                else
                     patchDirs.addAll(discoverPatchDirs(f.getAbsolutePath()));
             }
         }

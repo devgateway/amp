@@ -1,62 +1,62 @@
 FROM node:16.4.0 as node
 
 FROM node as compile-amp-state
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state
-COPY /TEMPLATE/ampTemplate/node_modules/amp-state .
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-state
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-state .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
 FROM node as compile-amp-translate
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-translate .
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
 FROM node as compile-amp-boilerplate
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
+COPY --from=compile-amp-translate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
 
 FROM node as compile-amp-filter
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-filter .
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter
+COPY --from=compile-amp-translate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter .
 # HACK otherwise amp-filter won't compile!
-COPY /TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
+COPY /src/main/webapp/WEB-INF/TEMPLATE/reamp/tools/log /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/reamp/tools/log
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
 
 FROM node as compile-amp-settings
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-settings .
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-settings
+COPY --from=compile-amp-translate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-settings .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
 
 FROM node as compile-gis-layers-manager
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
+COPY --from=compile-amp-translate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
 
 FROM node as compile-gis-module
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/gisModule
-COPY --from=compile-amp-state /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state ../node_modules/amp-state
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../node_modules/amp-translate
-COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../node_modules/amp-boilerplate
-COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../node_modules/amp-filter
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule
+COPY --from=compile-amp-state /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-state ../node_modules/amp-state
+COPY --from=compile-amp-translate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate ../node_modules/amp-translate
+COPY --from=compile-amp-boilerplate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../node_modules/amp-boilerplate
+COPY --from=compile-amp-filter /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter ../node_modules/amp-filter
 # HACK otherwise amp-filter won't compile!
-COPY /TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
-COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../node_modules/amp-settings
-COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager ../node_modules/gis-layers-manager
-COPY /TEMPLATE/ampTemplate/gisModule .
+COPY /src/main/webapp/WEB-INF/TEMPLATE/reamp/tools/log /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/reamp/tools/log
+COPY --from=compile-amp-settings /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-settings ../node_modules/amp-settings
+COPY --from=compile-gis-layers-manager /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/gis-layers-manager ../node_modules/gis-layers-manager
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule .
 RUN --mount=type=cache,target=/root/.npm \
     cd dev \
     && npm ci \
@@ -65,16 +65,16 @@ RUN --mount=type=cache,target=/root/.npm \
     && rm -rf node_modules
 
 FROM node as compile-dashboard
-WORKDIR /tmp/amp/TEMPLATE/ampTemplate/dashboard
-COPY --from=compile-amp-state /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state ../node_modules/amp-state
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../node_modules/amp-translate
-COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../node_modules/amp-boilerplate
-COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../node_modules/amp-filter
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard
+COPY --from=compile-amp-state /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-state ../node_modules/amp-state
+COPY --from=compile-amp-translate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-translate ../node_modules/amp-translate
+COPY --from=compile-amp-boilerplate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../node_modules/amp-boilerplate
+COPY --from=compile-amp-filter /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter ../node_modules/amp-filter
 # HACK otherwise amp-filter won't compile!
-COPY /TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
-COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../node_modules/amp-settings
-COPY /TEMPLATE/ampTemplate/node_modules/amp-url ../node_modules/amp-url
-COPY /TEMPLATE/ampTemplate/dashboard .
+COPY /src/main/webapp/WEB-INF/TEMPLATE/reamp/tools/log /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/reamp/tools/log
+COPY --from=compile-amp-settings /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-settings ../node_modules/amp-settings
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-url ../node_modules/amp-url
+COPY /src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard .
 RUN --mount=type=cache,target=/root/.npm \
     cd dev \
     && npm ci \
@@ -82,9 +82,9 @@ RUN --mount=type=cache,target=/root/.npm \
     && rm -rf node_modules
 
 FROM node as compile-reamp
-WORKDIR /tmp/amp/TEMPLATE/reamp
-COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
-COPY /TEMPLATE/reamp .
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/reamp
+COPY --from=compile-amp-boilerplate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
+COPY /src/main/webapp/WEB-INF/TEMPLATE/reamp .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci \
@@ -92,11 +92,11 @@ RUN --mount=type=cache,target=/root/.npm \
     && rm -rf node_modules
 
 FROM node as compile-reampv2
-WORKDIR /tmp/amp/TEMPLATE/reampv2
-COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
-COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../ampTemplate/node_modules/amp-filter
-COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
-COPY /TEMPLATE/reampv2 .
+WORKDIR /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/reampv2
+COPY --from=compile-amp-boilerplate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
+COPY --from=compile-amp-filter /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter ../ampTemplate/node_modules/amp-filter
+COPY --from=compile-amp-settings /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
+COPY /src/main/webapp/WEB-INF/TEMPLATE/reampv2 .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci \
@@ -106,14 +106,14 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp
 COPY . .
-COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist
-COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/dist TEMPLATE/ampTemplate/node_modules/amp-filter/dist
-COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings/dist TEMPLATE/ampTemplate/node_modules/amp-settings/dist
-COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist
-COPY --from=compile-gis-module /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
-COPY --from=compile-dashboard /tmp/amp/TEMPLATE/ampTemplate/dashboard/build TEMPLATE/ampTemplate/dashboard/build
-COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
-COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/build
+COPY --from=compile-amp-boilerplate /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist
+COPY --from=compile-amp-filter /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter/dist src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-filter/dist
+COPY --from=compile-amp-settings /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-settings/dist src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/amp-settings/dist
+COPY --from=compile-gis-layers-manager /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist
+COPY --from=compile-gis-module /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dist src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/gisModule/dist
+COPY --from=compile-dashboard /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard/build src/main/webapp/WEB-INF/TEMPLATE/ampTemplate/dashboard/build
+COPY --from=compile-reamp /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/reamp src/main/webapp/WEB-INF/TEMPLATE/reamp
+COPY --from=compile-reampv2 /tmp/amp/src/main/webapp/WEB-INF/TEMPLATE/reampv2/build src/main/webapp/WEB-INF/TEMPLATE/reampv2/build
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
     mvn -B test war:exploded \

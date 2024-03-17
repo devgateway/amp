@@ -62,7 +62,7 @@ public class BaseTag
         java.util.StringTokenizer tokenizer = new java.util.StringTokenizer(filePath, "/");
         String path = null;
         String buffer = tokenizer.nextToken();
-        if (buffer.equalsIgnoreCase("TEMPLATE")) {
+        if (buffer.equalsIgnoreCase("src/main/webapp/WEB-INF/TEMPLATE")) {
            path = "/" + buffer + "/" + tokenizer.nextToken() + "/";
         } else {
            path = "/" + buffer + "/";

@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.js": "/TEMPLATE/reampv2/packages/container/build/main.bundle.js",
+    "104.bundle.js": "/TEMPLATE/reampv2/packages/container/build/104.bundle.js",
+    "831.bundle.js": "/TEMPLATE/reampv2/packages/container/build/831.bundle.js",
+    "694.bundle.js": "/TEMPLATE/reampv2/packages/container/build/694.bundle.js",
+    "416.bundle.js": "/TEMPLATE/reampv2/packages/container/build/416.bundle.js",
+    "223.bundle.js": "/TEMPLATE/reampv2/packages/container/build/223.bundle.js",
+    "32.bundle.js": "/TEMPLATE/reampv2/packages/container/build/32.bundle.js",
+    "25.bundle.js": "/TEMPLATE/reampv2/packages/container/build/25.bundle.js",
+    "351.bundle.js": "/TEMPLATE/reampv2/packages/container/build/351.bundle.js",
+    "976.bundle.js": "/TEMPLATE/reampv2/packages/container/build/976.bundle.js",
+    "index.html": "/TEMPLATE/reampv2/packages/container/build/index.html",
+    "main.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/main.bundle.js.map",
+    "104.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/104.bundle.js.map",
+    "831.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/831.bundle.js.map",
+    "694.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/694.bundle.js.map",
+    "416.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/416.bundle.js.map",
+    "223.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/223.bundle.js.map",
+    "32.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/32.bundle.js.map",
+    "25.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/25.bundle.js.map",
+    "351.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/351.bundle.js.map",
+    "976.bundle.js.map": "/TEMPLATE/reampv2/packages/container/build/976.bundle.js.map"
+  },
+  "entrypoints": [
+    "main.bundle.js"
+  ]
+}

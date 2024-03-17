@@ -1,0 +1,49 @@
+{
+  "name": "multimatch",
+  "version": "2.0.0",
+  "description": "Extends minimatch.match() with support for multiple patterns",
+  "license": "MIT",
+  "repository": "sindresorhus/multimatch",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com"
+  },
+  "maintainers": [
+    {
+      "name": "Jon Schlinkert",
+      "url": "https://github.com/jonschlinkert"
+    }
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "minimatch",
+    "match",
+    "matcher",
+    "pattern",
+    "patterns",
+    "glob",
+    "globs",
+    "globbing",
+    "expand",
+    "wildcard",
+    "find"
+  ],
+  "dependencies": {
+    "array-differ": "^1.0.0",
+    "array-union": "^1.0.1",
+    "minimatch": "^2.0.1"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "*"
+  }
+}

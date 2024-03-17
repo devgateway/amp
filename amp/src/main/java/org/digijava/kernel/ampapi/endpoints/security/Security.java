@@ -28,7 +28,7 @@ import java.util.List;
 @Api("security")
 public class Security {
 
-    private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
+    private static String SITE_CONFIG_PATH = "src/main/webapp/WEB-INF/TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
             + System.getProperty("file.separator") + "site-config.xml";
 
     public static String getSiteConfigPath() {

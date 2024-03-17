@@ -1,0 +1,1 @@
+{"version":3,"file":"RadialGrid.d.ts","sourceRoot":"","sources":["../../src/RadialGrid.tsx"],"names":[],"mappings":";AAGA,OAAO,EAAE,QAAQ,EAAiB,MAAM,cAAc,CAAA;AAEtD,UAAU,cAAc;IACpB,KAAK,EAAE,QAAQ,CAAA;IACf,KAAK,CAAC,EAAE,MAAM,GAAG,MAAM,EAAE,CAAA;IACzB,WAAW,EAAE,MAAM,CAAA;IACnB,WAAW,EAAE,MAAM,CAAA;CACtB;AAED,eAAO,MAAM,UAAU,wCAAyC,cAAc,gBA2D7E,CAAA"}

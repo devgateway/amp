@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkampoffiline=self.webpackChunkampoffiline||[]).push([[912],{912:(t,n,e)=>{function u(t){return function(n){var e=n.dispatch,u=n.getState;return function(n){return function(r){return"function"===typeof r?r(e,u,t):n(r)}}}}e.r(n),e.d(n,{default:()=>f});var r=u();r.withExtraArgument=u;const f=r}}]);
+//# sourceMappingURL=912.bundle.js.map

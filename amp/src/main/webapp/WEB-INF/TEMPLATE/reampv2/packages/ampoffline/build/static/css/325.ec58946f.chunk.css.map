@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/325.ec58946f.chunk.css","mappings":"AAAA,WACE,eACF,CAEA,WACC,mBACD","sources":["components/css/style.css"],"sourcesContent":[".jumbotron {\n  margin-top: 10px;\n}\n\n.main_text {\n\tpadding-bottom: 15px;\n}\n"],"names":[],"sourceRoot":""}

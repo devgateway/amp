@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.js": "/TEMPLATE/reampv2/build/ampoffline/main.bundle.js",
+    "ampoffline.js": "/TEMPLATE/reampv2/build/ampoffline/remoteEntry.js",
+    "325.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/325.bundle.js",
+    "static/css/325.ec58946f.chunk.css": "/TEMPLATE/reampv2/build/ampoffline/static/css/325.ec58946f.chunk.css",
+    "556.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/556.bundle.js",
+    "831.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/831.bundle.js",
+    "912.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/912.bundle.js",
+    "128.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/128.bundle.js",
+    "269.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/269.bundle.js",
+    "416.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/416.bundle.js",
+    "435.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/435.bundle.js",
+    "351.bundle.js": "/TEMPLATE/reampv2/build/ampoffline/351.bundle.js",
+    "static/media/monitor.png": "/TEMPLATE/reampv2/build/ampoffline/static/media/monitor.0d3bcd4b5f57a7495585.png",
+    "index.html": "/TEMPLATE/reampv2/build/ampoffline/index.html",
+    "main.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/main.bundle.js.map",
+    "remoteEntry.js.map": "/TEMPLATE/reampv2/build/ampoffline/remoteEntry.js.map",
+    "325.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/325.bundle.js.map",
+    "325.ec58946f.chunk.css.map": "/TEMPLATE/reampv2/build/ampoffline/static/css/325.ec58946f.chunk.css.map",
+    "556.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/556.bundle.js.map",
+    "831.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/831.bundle.js.map",
+    "912.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/912.bundle.js.map",
+    "128.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/128.bundle.js.map",
+    "269.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/269.bundle.js.map",
+    "416.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/416.bundle.js.map",
+    "435.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/435.bundle.js.map",
+    "351.bundle.js.map": "/TEMPLATE/reampv2/build/ampoffline/351.bundle.js.map"
+  },
+  "entrypoints": [
+    "main.bundle.js"
+  ]
+}

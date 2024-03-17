@@ -1280,6 +1280,9 @@
                 <includes>
                     <include>**/*</include>
                 </includes>
+                <excludes>
+                    <exclude>**/node_modules/**</exclude>
+                </excludes>
             </resource>
         </resources>
 
@@ -1410,6 +1413,9 @@
                             <includes>
                                 <include>**/*</include>
                             </includes>
+                                <excludes>
+                                    <exclude>**/node_modules/**</exclude>
+                                </excludes>
                         </resource>
                         <resource>
                         <directory>${project.basedir}</directory>

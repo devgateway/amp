@@ -1274,19 +1274,18 @@
 
         <resources>
             <resource>
-                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+                <directory>${project.basedir}/src/main/java</directory>
                 <includes>
                     <include>**</include>
                 </includes>
-            </resource>
-            <resource>
 
-                <directory>${project.basedir}/src</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
             </resource>
             <resource>
+                <filtering>false</filtering>
                 <directory>${project.basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>
@@ -1294,6 +1293,7 @@
             </resource>
 
             <resource>
+                <filtering>false</filtering>
                 <directory>${project.basedir}/src/main/webapp</directory>
                 <includes>
                     <include>**/*</include>

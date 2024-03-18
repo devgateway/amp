@@ -2125,7 +2125,7 @@
                         <include>**/Test*.java</include>
                         <include>**/*Test.java</include>
                         <include>**/*Testcases.java</include>
-                        <include>**/*Tests*.java</include>
+                        <include>**/*Test*.java</include>
                     </includes>
                     <excludes>
                         <!--suites are running tests twice-->
@@ -2138,36 +2138,36 @@
                     </excludedGroups>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
-<!--                <version>2.22.0</version>-->
-<!--                <configuration>-->
-<!--                    <includes>-->
-<!--                        <include>**/Test*.java</include>-->
-<!--                        <include>**/*Test.java</include>-->
-<!--                        <include>**/*Testcases.java</include>-->
-<!--                        <include>**/*Tests*.java</include>-->
-<!--                    </includes>-->
-<!--                    <excludes>-->
-<!--                        &lt;!&ndash;suites are running tests twice&ndash;&gt;-->
-<!--                        <exclude>**/*TestSuite.java</exclude>-->
-<!--                    </excludes>-->
-<!--                    <groups>-->
-<!--                        org.dgfoundation.amp.test.categories.DatabaseTests,-->
-<!--                        org.dgfoundation.amp.test.categories.SlowTests,-->
-<!--                        org.dgfoundation.amp.test.categories.IgnoreTests-->
-<!--                    </groups>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>integration-test</goal>-->
-<!--                            <goal>verify</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <includes>
+                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
+                        <include>**/*Testcases.java</include>
+                        <include>**/*Tests*.java</include>
+                    </includes>
+                    <excludes>
+                        <!--suites are running tests twice-->
+                        <exclude>**/*TestSuite.java</exclude>
+                    </excludes>
+                    <groups>
+                        org.dgfoundation.amp.test.categories.DatabaseTests,
+                        org.dgfoundation.amp.test.categories.SlowTests,
+                        org.dgfoundation.amp.test.categories.IgnoreTests
+                    </groups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

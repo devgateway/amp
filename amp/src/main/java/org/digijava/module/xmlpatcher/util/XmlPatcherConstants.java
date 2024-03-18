@@ -12,8 +12,8 @@ package org.digijava.module.xmlpatcher.util;
  */
 public final class XmlPatcherConstants {
 
-    public static final String xsdLocation="src/main/resources/schema/xmlpatcher.xsd";
-    public static final String xslLocation="src/main/resources/schema/xmlpatcher.xsl";
+    public static final String xsdLocation="/schema/xmlpatcher.xsd";
+    public static final String xslLocation="/schema/xmlpatcher.xsl";
     public static final String jaxbPackage="org.digijava.module.xmlpatcher.jaxb";
 
 

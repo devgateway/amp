@@ -1285,7 +1285,6 @@
                 </excludes>
             </resource>
             <resource>
-                <filtering>false</filtering>
                 <directory>${project.basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>
@@ -1293,7 +1292,6 @@
             </resource>
 
             <resource>
-                <filtering>false</filtering>
                 <directory>${project.basedir}/src/main/webapp</directory>
                 <includes>
                     <include>**/*</include>
@@ -1421,6 +1419,14 @@
 
                         <resource>
                             <directory>src/main/webapp</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </resource>
+
+                        <resource>
+                            <directory>src/main/resources</directory>
                             <filtering>true</filtering>
                             <includes>
                                 <include>**/*</include>

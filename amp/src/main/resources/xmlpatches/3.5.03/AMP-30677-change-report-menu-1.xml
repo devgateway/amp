@@ -4,13 +4,13 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
     <jira>AMP-30253</jira>
     <keyword>Change url to new report generator</keyword>
-    <author>ginchauspe</author>
+    <author>bmokandu</author>
     <description>Change menu entry for report generator.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                UPDATE amp_menu_entry SET url = '/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R' WHERE url LIKE 'TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator?profile=R%';
-                UPDATE amp_menu_entry SET url = '/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T' WHERE url LIKE 'TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator?profile=T%';
+                UPDATE amp_menu_entry SET url = '/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R' WHERE url LIKE '%report_generator?profile=R%';
+                UPDATE amp_menu_entry SET url = '/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T' WHERE url LIKE '%report_generator?profile=T%';
             </lang>
         </script>
     </apply>

@@ -2120,7 +2120,6 @@
                 <version>3.0.0-M2</version>
                 <configuration>
                     <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>
-
                     <includes>
                         <include>**/Test*.java</include>
                         <include>**/*Test.java</include>

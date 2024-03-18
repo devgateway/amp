@@ -58,7 +58,7 @@ public class DigiSchemaPopulate {
         ResourceStreamHandlerFactory.installIfNeeded();
 
         ViewConfigFactory.initialize(new DummyServletContext("."));
-        DigiConfigManager.initialize("./repository");
+        DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
         PersistenceManager.initialize(false);
         ServiceContext serviceContext = new StandaloneServiceContext(".");
         ServiceManager.getInstance().init(serviceContext, 0);
@@ -76,7 +76,7 @@ public class DigiSchemaPopulate {
             AutopatcherService aps=new AutopatcherService();
             aps.setPatchesDir("/init_patches");
             aps.processInitEvent(serviceContext);
-            
+
 //            File sqlDir = new File("./WEB-INF/classes/initSQL");
 //            //-- logger.debug ( sqlDir.getAbsolutePath() );
 //
@@ -190,7 +190,7 @@ class DigiInitUtil {
         try {
             BufferedReader in = new BufferedReader(new FileReader(path));
             while ( (s = in.readLine()) != null) {
-                
+
                 szFInput.append(s).append('\n');
             }
             in.close();

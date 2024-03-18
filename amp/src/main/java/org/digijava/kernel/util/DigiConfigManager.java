@@ -128,27 +128,25 @@ public class DigiConfigManager {
         };
         File[] subDirectories = configDirFile.listFiles(fileFilter);
 
-        for (int i = 0; i < subDirectories.length; i++) {
-            File subDir = subDirectories[i];
+        for (File subDir : subDirectories) {
             String moduleName = subDir.getName();
 
             logger.debug("Searching configuration file for module " + moduleName + ":");
             File modConfigFile = new File(subDir.getAbsolutePath() +
-                                          File.separator + MODULE_CONFIG_FILE);
+                    File.separator + MODULE_CONFIG_FILE);
             if (modConfigFile.exists()) {
                 ModuleConfig moduleConfig = null;
                 try {
                     logger.debug("Parsing " + subDir.getName() + File.separator + modConfigFile.getName());
                     moduleConfig = (ModuleConfig) digester.parse(modConfigFile);
                     logger.info("File " + subDir.getName() + File.separator + modConfigFile.getName() + " was parsed successfully");
-                }
-                catch (Exception ex1) {
+                } catch (Exception ex1) {
                     logger.debug(
-                        "Error while parsing configuration file for module " +
-                        moduleName, ex1);
+                            "Error while parsing configuration file for module " +
+                                    moduleName, ex1);
                     throw new DgException(
-                        "Error while parsing configuration file for module " +
-                        moduleName, ex1);
+                            "Error while parsing configuration file for module " +
+                                    moduleName, ex1);
                 }
 
                 moduleConfigs.put(moduleName, moduleConfig);
@@ -341,7 +339,7 @@ public class DigiConfigManager {
         digester.addSetProperties("digi-config/logon-site", "host", "host");
         digester.addSetProperties("digi-config/logon-site", "path", "path");
         digester.addBeanPropertySetter("digi-config/logon-site", "content");
-        
+
         digester.addSetNext("digi-config/site-domain", "setSiteDomain");
         digester.addSetProperties("digi-config/site-domain", "id", "id");
         digester.addSetProperties("digi-config/site-domain", "host", "host");
@@ -350,11 +348,11 @@ public class DigiConfigManager {
 
         digester.addBeanPropertySetter("digi-config/http-port", "httpPort");
         digester.addBeanPropertySetter("digi-config/https-port", "httpsPort");
-        
+
         digester.addBeanPropertySetter("digi-config/ecsDisable", "ecsDisable");
         digester.addBeanPropertySetter("digi-config/ecsServerName", "ecsServerName");
         digester.addBeanPropertySetter("digi-config/propertiesFile", "propertiesFile");
-        
+
         digester.addSetNext("digi-config/hibernate-classes",
                             "setHibernateClasses");
         digester.addSetNext(
@@ -404,7 +402,7 @@ public class DigiConfigManager {
                                   "accessLogBuffSize");
 
         digester.addBeanPropertySetter("digi-config/enable-autologin", "enableAutoLogin");
-        
+
         digester.addBeanPropertySetter("digi-config/site-config",
                                        "siteConfigImpl");
         digester.addBeanPropertySetter("digi-config/job-delay-sec",

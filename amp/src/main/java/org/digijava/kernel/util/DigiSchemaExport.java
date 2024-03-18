@@ -43,13 +43,13 @@ public class DigiSchemaExport {
 
     public static void main(String[] args) throws Exception {
         //StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
-        
-        
+
+
         /**
          * Change hibernate configuration file
          */
         HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-        
+
         ResourceStreamHandlerFactory.installIfNeeded();
 
         Map commandLineParams = getCommandLineParameters(args);
@@ -63,7 +63,7 @@ public class DigiSchemaExport {
             logger.info("Working for the whole database");
         }
 
-        DigiConfigManager.initialize("./repository");
+        DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
         PersistenceManager.initialize(false, moduleName);
         try {
             Configuration cfg = null;

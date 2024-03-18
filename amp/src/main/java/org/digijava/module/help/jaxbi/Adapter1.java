@@ -13,7 +13,6 @@ public class Adapter1
     extends XmlAdapter<String, Calendar>
 {
 
-
     public Calendar unmarshal(String value) {
         return (javax.xml.bind.DatatypeConverter.parseDate(value));
     }

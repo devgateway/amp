@@ -5,11 +5,12 @@
     <jira>AMP-30253</jira>
     <keyword>Change url to new report generator</keyword>
     <author>ginchauspe</author>
-    <description>Change menu entry for tab generator.</description>
+    <description>Change menu entry for report generator.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                UPDATE amp_menu_entry SET url = '/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R' WHERE url LIKE '/TEMPLATE/reampv2/packages/container/build/%';
+                UPDATE amp_menu_entry SET url = '/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R' WHERE url LIKE 'TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator?profile=R%';
+                UPDATE amp_menu_entry SET url = '/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T' WHERE url LIKE 'TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator?profile=T%';
             </lang>
         </script>
     </apply>

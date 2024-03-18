@@ -12,25 +12,25 @@ package org.digijava.module.xmlpatcher.util;
  */
 public final class XmlPatcherConstants {
 
-    public static final String xsdLocation="/src/main/resources/schema/xmlpatcher.xsd";
-    public static final String xslLocation="/src/main/resources/schema/xmlpatcher.xsl";
+    public static final String xsdLocation="src/main/resources/schema/xmlpatcher.xsd";
+    public static final String xslLocation="src/main/resources/schema/xmlpatcher.xsl";
     public static final String jaxbPackage="org.digijava.module.xmlpatcher.jaxb";
-    
-    
+
+
     public static final String patchDirName = "xmlpatches";
     public static final String testPatchDirName = "testxmlpatches";
     public static final String schedulersPackage = "org.digijava.module.xmlpatcher.scheduler.";
 
     public static final String CONDITION_CUSTOM = "custom";
-    
+
     public static final class TriggerTypes {
         public static final String ALL="all";
         public static final String ANY="any";
     }
-    
+
     /**
      * Describes states of the patch execution.
-     * 
+     *
      * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
      * @see org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch#getState()
      */
@@ -51,18 +51,18 @@ public final class XmlPatcherConstants {
          * and the developer needs to check what's wrong.
          */
         public static final short FAILED = 2;
-        
+
         /**
          * The patch has been deprecated by another newer patch.
          */
         public static final short DEPRECATED = 3;
-        
+
         /**
          * The pach is no longer available (file was deleted) and was marked deleted
          */
         public static final short DELETED=4;
 
-        
+
         public static String toString(short state) {
             switch(state) {
             case OPEN: return "OPEN";
@@ -77,7 +77,7 @@ public final class XmlPatcherConstants {
 
     /**
      * Defines properties used by the patcher schedulers.
-     * 
+     *
      * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
      * @see org.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler
      */
@@ -106,7 +106,7 @@ public final class XmlPatcherConstants {
 
         /**
          * BeanShell scripting. Very flexible java-like scripting language
-         * 
+         *
          * @see http://www.beanshell.org
          */
         public static final String BSH = "bsh";

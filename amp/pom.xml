@@ -1697,7 +1697,7 @@
                     <configuration>
                         <filesets>
                             <fileset>
-                                <directory>${repository}</directory>
+                                <directory>${project.basedir}/src/main/webapp/WEB-INF/repository</directory>
                                 <includes>
                                     <include>digi.xml</include>
                                 </includes>

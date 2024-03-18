@@ -16,16 +16,16 @@ public class DigiXmlECSLoaderListener implements ServletContextListener {
     public static String DISABLE_ECS="ecsDisable";
     public static String SERVER_NAME="ecsServerName";
     public static String PROPERTIES_FILE="propertiesFile";
-    
+
     public void contextInitialized(ServletContextEvent contextEvent) {
         try {
-            
+
             ServletContext servletContext = contextEvent.getServletContext();
-            
-            String warPath = servletContext.getRealPath("repository");
-    
+
+            String warPath = servletContext.getRealPath("/WEB-INF/repository");
+
             String configDirectory = warPath;
-            
+
             File configDirFile = new File(configDirectory);
             if (!configDirFile.exists() || !configDirFile.isDirectory()) {
                 throw new DgException("Configuration directory " + configDirectory + " does not exist or is not directory");
@@ -46,11 +46,11 @@ public class DigiXmlECSLoaderListener implements ServletContextListener {
                 throw new DgException(
                     "Error while parsing DiGi configuration file: " + configFile.getName(), ex);
             }
-            
+
             String ecsDisable = digiConfig.getEcsDisable();//servletContext.getInitParameter(DISABLE_ECS);
             String ecsServerName = digiConfig.getEcsServerName();//servletContext.getInitParameter(SERVER_NAME);
             String propertiesFile = digiConfig.getPropertiesFile();//servletContext.getInitParameter(PROPERTIES_FILE);
-            
+
             servletContext.setAttribute(SERVER_NAME, ecsServerName);
             servletContext.setAttribute(DISABLE_ECS, ecsDisable);
             servletContext.setAttribute(PROPERTIES_FILE, propertiesFile);
@@ -59,9 +59,9 @@ public class DigiXmlECSLoaderListener implements ServletContextListener {
         }
     }
     public void contextDestroyed(ServletContextEvent contextEvent) {
-    
+
     }
-    
+
     public static synchronized void destroy() {
     }
 }

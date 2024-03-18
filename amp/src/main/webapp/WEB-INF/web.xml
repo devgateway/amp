@@ -355,7 +355,7 @@
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/gate</taglib-uri>
-			<taglib-location>/repository/gateperm/gateperm.tld</taglib-location>
+			<taglib-location>/WEB-INF/tld/gateperm.tld</taglib-location>
 		</taglib>
 		<taglib>
 			<taglib-uri>http://digijava.org/CategoryManager</taglib-uri>

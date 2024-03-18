@@ -7,7 +7,6 @@
 
 
 package org.digijava.module.help.jaxbi;
-
 import java.util.Calendar;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 public class Adapter1

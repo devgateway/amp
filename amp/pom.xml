@@ -1249,6 +1249,12 @@
     </dependencyManagement>
 
     <build>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
         <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
 <!--        <outputDirectory>${project.basedir}/target</outputDirectory>-->
 

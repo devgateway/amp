@@ -274,8 +274,8 @@ public final class XmlPatcherUtil {
             if ((!loadedPatches.containsKey(p)))
             {
                 //perform XSLT transformation. See xmlpatcher.xsl
-                javax.xml.transform.Transformer trans = getTransformer(XmlPatcherConstants.xslLocation);
-                Unmarshaller um = getUnmarshaller(XmlPatcherConstants.xsdLocation);
+                javax.xml.transform.Transformer trans = getTransformer(serviceContext.getRealPath(XmlPatcherConstants.xslLocation));
+                Unmarshaller um = getUnmarshaller(serviceContext.getRealPath(XmlPatcherConstants.xsdLocation));
                 JAXBResult result = new JAXBResult(um);
 
                 trans.transform(new StreamSource(getXmlPatchAbsoluteFileName(p, serviceContext)), result);

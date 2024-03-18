@@ -1317,7 +1317,7 @@
                             <sources>
 
                                 <source>
-                                    ./src/main/resources/schemas/translation.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/translation.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
@@ -1335,7 +1335,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./src/main/resources/schemas/help.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/help.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
@@ -1354,7 +1354,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./src/main/resources/schemas/report.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/report.xsd
                                 </source>
                             </sources>
                             <packageName>org.dgfoundation.amp.reports.xml</packageName>
@@ -1372,7 +1372,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./src/main/resources/schemas/xmlpatcher.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/xmlpatcher.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>

@@ -15,7 +15,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
@@ -34,14 +34,14 @@ public class MultilingualTests extends ReportsTestCase {
     public void testTopSectorNames()
     {
         List<Long> sectorIds = Arrays.asList(new Long[] {6476L, 6482L, 6488L, 6493L, 6480L});
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-        
+
         List<String> sectorNamesEn = loadSectors(sectorIds);
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         List<String> sectorNamesRu = loadSectors(sectorIds);
-        
+
         assertTrue(sectorNamesEn.contains("3 NATIONAL COMPETITIVENESS"));
         assertTrue(sectorNamesEn.contains("02 TRANSDNISTRIAN CONFLICT"));
         assertTrue(sectorNamesEn.contains("4 HUMAN RESOURCES"));
@@ -82,7 +82,7 @@ public class MultilingualTests extends ReportsTestCase {
         Map<Long, Object[]> actResumesEn = TeamUtil.getAllTeamAmpActivitiesResume(4L, true, null, "ampActivityId", "name");
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         Map<Long, Object[]> actResumesRu = TeamUtil.getAllTeamAmpActivitiesResume(4L, true, null, "ampActivityId", "name");
-        
+
         assertEquals("Project with documents", actResumesEn.get(23L)[1]);
         assertEquals("Проект с документами", actResumesRu.get(23L)[1]);
     }
@@ -93,15 +93,15 @@ public class MultilingualTests extends ReportsTestCase {
         // we actually just test that we don't crash + couple of sanity checks
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
         Set<String> orgNamesEn = collectOrgNames(ReportsUtil.getAllOrgByRoleOfPortfolio("DN"));
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         Set<String> orgNamesRu = collectOrgNames(ReportsUtil.getAllOrgByRoleOfPortfolio("DN"));
-    
+
         assertTrue(orgNamesEn.contains("Finland"));
         assertTrue(orgNamesEn.contains("Ministry of Economy"));
         assertTrue(orgNamesEn.contains("Ministry of Finance"));
         assertTrue(orgNamesEn.contains("USAID"));
-        
+
         assertTrue(orgNamesRu.contains("Всемирный банк"));
         assertTrue(orgNamesRu.contains("Министерство финансов"));
         assertTrue(orgNamesRu.contains("Норвегия"));
@@ -122,7 +122,7 @@ public class MultilingualTests extends ReportsTestCase {
         assertFalse(allEnGroups.contains("Международная"));
         assertFalse(allEnGroups.contains("Национальная"));
 
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         Set<String> allRuGroups = collectOrgGrpNames(DbUtil.getAllOrgGroups());
         assertTrue(allRuGroups.contains("Американская"));
@@ -134,12 +134,12 @@ public class MultilingualTests extends ReportsTestCase {
         assertFalse(allRuGroups.contains("International"));
         assertFalse(allRuGroups.contains("National"));
 
-        TLSUtils.getThreadLocalInstance().setForcedLangCode("en");      
+        TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
         assertNotNull(DbUtil.getAmpOrgGroupByName("American"));
         assertNotNull(DbUtil.getAmpOrgGroupByName("International"));
         assertNull(DbUtil.getAmpOrgGroupByName("dummy_nonexisting"));
 
-        TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");      
+        TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         assertNotNull(DbUtil.getAmpOrgGroupByName("Американская"));
         assertNotNull(DbUtil.getAmpOrgGroupByName("Международная"));
         assertNull(DbUtil.getAmpOrgGroupByName("dummy_nonexisting"));
@@ -150,7 +150,7 @@ public class MultilingualTests extends ReportsTestCase {
     {
         //DbUtil.getAllOrgTypes(); nothing to test - superfluous
     }
-    
+
     public Set<String> collectOrgGrpNames(Collection<AmpOrgGroup> in)
     {
         Set<String> res = new LinkedHashSet<String>();
@@ -158,7 +158,7 @@ public class MultilingualTests extends ReportsTestCase {
             res.add(aaf.getOrgGrpName());
         return res;
     }
-    
+
     public Set<String> collectOrgNames(Collection<AmpOrganisation> in)
     {
         Set<String> res = new LinkedHashSet<String>();
@@ -166,7 +166,7 @@ public class MultilingualTests extends ReportsTestCase {
             res.add(aaf.getName());
         return res;
     }
-    
+
     public Set<String> collectNames(List<AmpActivityFake> in)
     {
         Set<String> res = new LinkedHashSet<String>();
@@ -183,7 +183,7 @@ public class MultilingualTests extends ReportsTestCase {
         assertFalse(ComponentsUtil.checkComponentNameExists("Первый подпроект", 1L));
 
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
-        assertFalse(ComponentsUtil.checkComponentNameExists("First Component", 1L));        
+        assertFalse(ComponentsUtil.checkComponentNameExists("First Component", 1L));
         assertTrue(ComponentsUtil.checkComponentNameExists("Первый подпроект", 1L));
     }
 
@@ -197,19 +197,19 @@ public class MultilingualTests extends ReportsTestCase {
         assertTrue(actiesEn.contains("mtef activity 2"));
         assertFalse(actiesEn.contains("Вода Eth"));
         assertFalse(actiesEn.contains("Предполагаемая стоймость проекта 1 - USD"));
-        assertFalse(actiesEn.contains("Проект МТЕФ 2"));    
+        assertFalse(actiesEn.contains("Проект МТЕФ 2"));
 
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         Set<String> actiesRu = collectNames(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
         assertTrue(actiesRu.contains("Вода Eth"));
         assertTrue(actiesRu.contains("Предполагаемая стоймость проекта 1 - USD"));
-        assertTrue(actiesRu.contains("Проект МТЕФ 2")); 
+        assertTrue(actiesRu.contains("Проект МТЕФ 2"));
         assertFalse(actiesRu.contains("Eth Water"));
         assertFalse(actiesRu.contains("Proposed Project Cost 1 - USD"));
         assertFalse(actiesRu.contains("mtef activity 2"));
-        
-        
+
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
         actiesEn = collectNames(ActivityUtil.getAllActivitiesAdmin("mtef", null, ActivityForm.DataFreezeFilter.ALL));
         assertTrue(actiesEn.contains("mtef activity 2"));
@@ -221,33 +221,33 @@ public class MultilingualTests extends ReportsTestCase {
         assertFalse(actiesEn.contains("Тест направленных МТЕФ"));
         assertFalse(actiesEn.contains("Чисто-МТЕФ-Проект"));
 
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         actiesRu = collectNames(ActivityUtil.getAllActivitiesAdmin("МТЕФ", null, ActivityForm.DataFreezeFilter.ALL));
         assertTrue(actiesRu.contains("Проект МТЕФ 2"));
-        assertTrue(actiesRu.contains("Проект МТЕФ 1")); 
-        assertTrue(actiesRu.contains("Тест направленных МТЕФ"));    
-        assertTrue(actiesRu.contains("Чисто-МТЕФ-Проект")); 
-        
+        assertTrue(actiesRu.contains("Проект МТЕФ 1"));
+        assertTrue(actiesRu.contains("Тест направленных МТЕФ"));
+        assertTrue(actiesRu.contains("Чисто-МТЕФ-Проект"));
+
         assertFalse(actiesRu.contains("mtef activity 2"));
         assertFalse(actiesRu.contains("mtef activity 1"));
         assertFalse(actiesRu.contains("Pure MTEF Project"));
-        assertFalse(actiesRu.contains("Test MTEF directed"));       
+        assertFalse(actiesRu.contains("Test MTEF directed"));
     }
 
     @Test
     public void testActivitiesLoading() throws Exception
     {
         TeamMember member = new TeamMember(TeamMemberUtil.getAmpTeamMember(12L));// ATL in "test workspace"
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
-        String z = Util.toCSString(Arrays.asList(ActivityUtil.loadActivitiesNamesAndIds(member)));      
+        String z = Util.toCSString(Arrays.asList(ActivityUtil.loadActivitiesNamesAndIds(member)));
         assertEquals(true, z.contains("Проект МТЕФ 2"));
         assertEquals(true, z.contains("проект с подпроектами"));
         assertEquals(true, z.contains("Предполагаемая стоймость проекта 1 - USD"));
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-        z = Util.toCSString(Arrays.asList(ActivityUtil.loadActivitiesNamesAndIds(member)));     
+        z = Util.toCSString(Arrays.asList(ActivityUtil.loadActivitiesNamesAndIds(member)));
         assertEquals(true, z.contains("mtef activity 2"));
         assertEquals(true, z.contains("activity with components"));
         assertEquals(true, z.contains("Proposed Project Cost 1 - USD"));
@@ -265,16 +265,16 @@ public class MultilingualTests extends ReportsTestCase {
                 + "r.cv_activity_level, r.report_category, r.updated_date, r.published_date, r.also_show_pledges, "
                 + "r.split_by_funding, r.show_original_currency";
         assertEquals(corQuery, res);
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
         List<AmpComponent> comps = ActivityUtil.getComponents(ReportTestingUtils.getActivityIdByName("activity with components"));
-        assertEquals(1, comps.size()); 
+        assertEquals(1, comps.size());
         assertEquals("First Component", comps.get(0).getTitle());
         assertEquals("First Component Description", comps.get(0).getDescription());
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         comps = ActivityUtil.getComponents(ReportTestingUtils.getActivityIdByName("проект с подпроектами"));
-        assertEquals(1, comps.size()); 
+        assertEquals(1, comps.size());
         assertEquals("Первый подпроект", comps.get(0).getTitle());
         assertEquals("Описание первого подпроекта", comps.get(0).getDescription());
 
@@ -302,7 +302,7 @@ public class MultilingualTests extends ReportsTestCase {
             String ruVer = ReportTestingUtils.getActivityName(2L);
             TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
             String enVer = ReportTestingUtils.getActivityName(2L);
-            
+
             assertEquals("Вода Eth", ruVer);
             assertEquals("Eth Water", enVer);
         }
@@ -314,11 +314,11 @@ public class MultilingualTests extends ReportsTestCase {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
         String ruVer = ReportTestingUtils.getActivityName(24L);
         String ruVerView = ReportTestingUtils.getActivityName_notVersion(24L);
-        
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
         String enVer = ReportTestingUtils.getActivityName(24L);
         String enVerView = ReportTestingUtils.getActivityName_notVersion(24L);
-        
+
         assertEquals("AMP-16257", "Вода Eth", ruVer);
         assertEquals("AMP-16257", "Eth Water", enVer);
 

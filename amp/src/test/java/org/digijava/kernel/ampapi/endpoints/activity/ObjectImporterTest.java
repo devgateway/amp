@@ -15,7 +15,7 @@ import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.module.aim.annotations.interchange.*;
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;

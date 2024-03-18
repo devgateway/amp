@@ -8,7 +8,7 @@ import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.approval.AllowedApproverConstraint;
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -96,7 +96,7 @@ public class AmpRegistryServiceTest {
         verify(ampRegistryClient).destroy();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDestroyOnException() {
         when(ampRegistryClient.listAmpInstallations(TEST_SECRET_TOKEN)).thenThrow(new RuntimeException());
 

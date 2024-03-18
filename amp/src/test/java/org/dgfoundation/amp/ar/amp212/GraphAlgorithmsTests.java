@@ -2,7 +2,7 @@ package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.function.Function;

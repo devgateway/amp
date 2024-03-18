@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.amp.ForecastExecutionRateBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -22,9 +22,9 @@ import java.util.Map;
  *
  */
 public class ForecastExecutionRateTests extends AmpReportingTestCase {
-        
+
     ForecastExecutionRateBehaviour ferbeh = ForecastExecutionRateBehaviour.instance;
-    
+
     final List<String> acts = Arrays.asList(
             "Activity with both MTEFs and Act.Comms",
             "activity with directed MTEFs",
@@ -51,8 +51,8 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
             "TAC_activity_1",
             "Test MTEF directed"
         );
-    
-    
+
+
     @Test
     public void testPlain() {
         NiReportModel cor = new NiReportModel("AMP-21240-forecast-execution-rate")
@@ -87,7 +87,7 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Actual Disbursements", "55 000", "Funding-2015-Actual Disbursements", "35 000", "Totals-Actual Disbursements", "90 000", "Totals-Execution Rate", "97,83"),
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000", "Totals-Forecast Execution Rate", "117,65"),
                     new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Funding-2016-Actual Disbursements", "253 700", "Totals-Actual Disbursements", "253 700")      ));
-        
+
         runNiTestCase(spec("AMP-21240-forecast-execution-rate"), "en", acts, cor);
     }
 
@@ -141,7 +141,7 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner("Donor Agency", "World Bank", 21697)).withContents("Project Title", "", "Funding-2010-Actual Disbursements", "123 321", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Disbursements", "0", "Funding-2016-Actual Disbursements", "0", "Totals-Actual Disbursements", "123 321", "Donor Agency", "World Bank")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123 321", "Totals-Actual Disbursements", "123 321")        )      ));
-        
+
         runNiTestCase(spec("AMP-21240-forecast-execution-rate-by-donor"), "en", acts, cor);
     }
 
@@ -178,7 +178,7 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Actual Disbursements", "90 000", "Totals-Execution Rate", "97,83"),
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Totals-Actual Disbursements", "80 000", "Totals-Forecast Execution Rate", "117,65"),
                     new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253 700")      ));
-        
+
         runNiTestCase(spec("AMP-21240-forecast-execution-rate-totals-only"), "en", acts, cor);
     }
 
@@ -217,7 +217,7 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Q4-Actual Disbursements", "55 000", "Funding-2014-Total-Actual Disbursements", "55 000", "Funding-2015-Q4-Actual Disbursements", "35 000", "Funding-2015-Total-Actual Disbursements", "35 000", "Totals-Actual Disbursements", "90 000", "Totals-Execution Rate", "97,83"),
                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2015-Q4-Actual Disbursements", "80 000", "Funding-2015-Total-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000", "Totals-Forecast Execution Rate", "117,65"),
                                 new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Funding-2016-Q1-Actual Disbursements", "87 500", "Funding-2016-Q2-Actual Disbursements", "166 200", "Funding-2016-Total-Actual Disbursements", "253 700", "Totals-Actual Disbursements", "253 700")      ));
-        
+
         runNiTestCase(spec("AMP-21240-forecast-execution-rate-quarterly"), "en", acts, cor);
     }
 
@@ -256,7 +256,7 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
                   new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000", "Totals-Forecast Execution Rate", "117,65"),
                   new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Funding-2016-Actual Disbursements", "253 700", "Totals-Actual Disbursements", "253 700")        )      ));
 
-        
+
         runNiTestCase(spec("AMP-21240-forecast-execution-rate-by-mop"), "en", acts, cor);
     }
 
@@ -270,7 +270,7 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
         NiFormulaicAmountCell cell = ferbeh.buildCell(vals, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
         assertBigDecimalEquals(expectedValue == null ? null : BigDecimal.valueOf(expectedValue), cell.amount);
     }
-    
+
     @Test
     public void testBehaviourNoMtefs() {
         checkCalculatedValue(null, MeasureConstants.ACTUAL_DISBURSEMENTS, 2);
@@ -294,7 +294,7 @@ public class ForecastExecutionRateTests extends AmpReportingTestCase {
     @Test
     public void testBehaviourPipeAndProjection() {
         checkCalculatedValue(140.0, "pipe2010", 2, "pipe2011", 5, "proj2012", 3, MeasureConstants.ACTUAL_DISBURSEMENTS, 14);
-        
+
         checkCalculatedValue(140.0, "pipe2010", 2, "pipe2011", 5, "proj2012", 3, "proj2011", 500, MeasureConstants.ACTUAL_DISBURSEMENTS, 14);
     }
 }

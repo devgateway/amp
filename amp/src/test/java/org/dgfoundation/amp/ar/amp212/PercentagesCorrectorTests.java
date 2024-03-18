@@ -2,7 +2,7 @@ package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.HashMap;

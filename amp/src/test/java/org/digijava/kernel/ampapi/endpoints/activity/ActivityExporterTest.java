@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 

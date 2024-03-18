@@ -3,7 +3,7 @@ package org.dgfoundation.amp.ar.legacy;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.HashSet;

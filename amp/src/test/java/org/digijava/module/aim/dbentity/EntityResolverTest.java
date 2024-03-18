@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.deser.UnresolvedForwardReference;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import org.digijava.kernel.ampapi.endpoints.gpi.JacksonInTestRule;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 

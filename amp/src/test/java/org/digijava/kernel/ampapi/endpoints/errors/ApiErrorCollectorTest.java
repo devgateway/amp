@@ -1,6 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;

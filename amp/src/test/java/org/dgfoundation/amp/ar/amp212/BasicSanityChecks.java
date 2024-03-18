@@ -11,7 +11,7 @@ import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.test.categories.SlowTests;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.experimental.categories.Category;
 
 import java.util.Arrays;

@@ -15,37 +15,37 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
 /**
  * A period have passed since the project signature date and still no disbursement from donor
- * 
+ *
  * @author Viorel Chihai
  */
 public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRuleMatcherTests {
-    
+
     @Before
     public void setUp() {
         super.setUp();
         definition = new NoDisbursementsAfterFundingDateMatcherDefinition();
     }
-    
+
     @Test
     public void testValidation() {
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
+
         assertNotNull(definition.createMatcher(rule));
     }
-    
+
     @Test
     public void testNoFundingClassificationDate() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -58,16 +58,16 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
 
     @Test
     public void testOneDisbursementBeforeFundingClassificationDate() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -81,16 +81,16 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testNoDisbursementsNoFundingDate() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1",
                 PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -100,16 +100,16 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testTwoDisbursementAfterFundingClassificationDate() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_YEAR, "1", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_YEAR, "1",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -127,16 +127,16 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testNoDisbursement() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "20", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "20",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getMinorLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -154,16 +154,16 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNotNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testWithDisbursement() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "30", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "30",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getMinorLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -181,16 +181,16 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testTwoFundingsBeforeFundingClassificationDate() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -223,15 +223,15 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
-    
+
     public void testTwoFundingsBeforeFundingEffectiveDate() {
-        
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1",
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -264,18 +264,18 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
 
     /**
      * @return
      */
-    public AmpPerformanceRule createRule(String timeUnit, String timeAmount, String fundingDate, 
+    public AmpPerformanceRule createRule(String timeUnit, String timeAmount, String fundingDate,
             AmpCategoryValue level) {
-        
+
         AmpPerformanceRule rule = new AmpPerformanceRule();
-        
+
         AmpPerformanceRuleAttribute attr1 = new AmpPerformanceRuleAttribute();
         attr1.setName(PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT);
         attr1.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.TIME_UNIT);
@@ -288,11 +288,11 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         attr3.setName(PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
         attr3.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.FUNDING_DATE);
         attr3.setValue(fundingDate);
-        
+
         rule.setAttributes(ImmutableSet.of(attr1, attr2, attr3));
         rule.setLevel(level);
 
         return rule;
     }
-    
+
 }

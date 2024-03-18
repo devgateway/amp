@@ -5,7 +5,7 @@ import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.*;

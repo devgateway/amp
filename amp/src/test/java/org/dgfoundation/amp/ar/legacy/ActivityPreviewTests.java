@@ -7,7 +7,7 @@ import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingOrganization;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;

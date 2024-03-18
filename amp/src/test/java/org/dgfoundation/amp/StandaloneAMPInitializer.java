@@ -43,7 +43,7 @@ public class StandaloneAMPInitializer {
 
                 ResourceStreamHandlerFactory.installIfNeeded();
 
-                DigiConfigManager.initialize("./src/main/webapp/WEB-INF/repository");
+                DigiConfigManager.initialize("./src/main/webapp/WEB-INF/moduleConfig");
                 PersistenceManager.initialize(false, null);
                 ContentRepositoryManager.initialize();
 

@@ -253,27 +253,27 @@
 		<init-param>
 			<param-name>config</param-name>
 			<param-value>
-				/WEB-INF/repository/struts-config.xml,
-				/WEB-INF/repository/admin/struts-config.xml,
-				/WEB-INF/repository/calendar/struts-config.xml,
-				/WEB-INF/repository/aim/struts-config.xml,
-				/WEB-INF/repository/editor/struts-config.xml,
-				/WEB-INF/repository/translation/struts-config.xml,
-				/WEB-INF/repository/um/struts-config.xml,
-				/WEB-INF/repository/exception/struts-config.xml,
-				/WEB-INF/repository/digifeed/struts-config.xml,
-				/WEB-INF/repository/gateperm/struts-config.xml,
-				/WEB-INF/repository/help/struts-config.xml,
-				/WEB-INF/repository/contentrepository/struts-config.xml, /WEB-INF/repository/categorymanager/struts-config.xml,
-				/WEB-INF/repository/sdm/struts-config.xml,
-				/WEB-INF/repository/message/struts-config.xml,
-				/WEB-INF/repository/parisindicator/struts-config.xml,
-				/WEB-INF/repository/search/struts-config.xml,
-				/WEB-INF/repository/content/struts-config.xml,
-				/WEB-INF/repository/xmlpatcher/struts-config.xml,
-				/WEB-INF/repository/esrigis/struts-config.xml,
-				/WEB-INF/repository/budgetexport/struts-config.xml,
-				/WEB-INF/repository/gpi/struts-config.xml
+				/WEB-INF/moduleConfig/struts-config.xml,
+				/WEB-INF/moduleConfig/admin/struts-config.xml,
+				/WEB-INF/moduleConfig/calendar/struts-config.xml,
+				/WEB-INF/moduleConfig/aim/struts-config.xml,
+				/WEB-INF/moduleConfig/editor/struts-config.xml,
+				/WEB-INF/moduleConfig/translation/struts-config.xml,
+				/WEB-INF/moduleConfig/um/struts-config.xml,
+				/WEB-INF/moduleConfig/exception/struts-config.xml,
+				/WEB-INF/moduleConfig/digifeed/struts-config.xml,
+				/WEB-INF/moduleConfig/gateperm/struts-config.xml,
+				/WEB-INF/moduleConfig/help/struts-config.xml,
+				/WEB-INF/moduleConfig/contentrepository/struts-config.xml, /WEB-INF/moduleConfig/categorymanager/struts-config.xml,
+				/WEB-INF/moduleConfig/sdm/struts-config.xml,
+				/WEB-INF/moduleConfig/message/struts-config.xml,
+				/WEB-INF/moduleConfig/parisindicator/struts-config.xml,
+				/WEB-INF/moduleConfig/search/struts-config.xml,
+				/WEB-INF/moduleConfig/content/struts-config.xml,
+				/WEB-INF/moduleConfig/xmlpatcher/struts-config.xml,
+				/WEB-INF/moduleConfig/esrigis/struts-config.xml,
+				/WEB-INF/moduleConfig/budgetexport/struts-config.xml,
+				/WEB-INF/moduleConfig/gpi/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>

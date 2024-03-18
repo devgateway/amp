@@ -36,10 +36,10 @@
   <!-- end comment if struts1.0.x -->
   <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
     <set-property value="/WEB-INF/validator-rules.xml,
-						 /WEB-INF/repository/struts-validation.xml,
-						 /WEB-INF/repository/admin/struts-validation.xml,
-						 /WEB-INF/repository/um/struts-validation.xml,
-						 /WEB-INF/repository/aim/struts-validation.xml"
+						 /WEB-INF/moduleConfig/struts-validation.xml,
+						 /WEB-INF/moduleConfig/admin/struts-validation.xml,
+						 /WEB-INF/moduleConfig/um/struts-validation.xml,
+						 /WEB-INF/moduleConfig/aim/struts-validation.xml"
     			 property="pathnames" />
   </plug-in>
 </struts-config>

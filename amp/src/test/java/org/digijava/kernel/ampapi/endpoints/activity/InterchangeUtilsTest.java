@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -169,19 +171,25 @@ public class InterchangeUtilsTest {
         assertEquals(date, DateTimeUtil.parseISO8601Date("1973-12-07"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseDateWrongFormat() {
-        DateTimeUtil.parseISO8601Date("xyz");
+        assertThrows(RuntimeException.class,()-> {
+            DateTimeUtil.parseISO8601Date("xyz");
+        });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseDateWrongLength() {
-        DateTimeUtil.parseISO8601Date("2019-02-08x");
+        assertThrows(RuntimeException.class,()-> {
+            DateTimeUtil.parseISO8601Date("2019-02-08x");
+        });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseTimestampWrongLength() {
-        DateTimeUtil.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz");
+        assertThrows(RuntimeException.class,()-> {
+            DateTimeUtil.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz");
+        });
     }
 
     @Test

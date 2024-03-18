@@ -31,6 +31,7 @@ import java.util.List;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.TYPE_VARCHAR;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -83,9 +84,12 @@ public class PossibleValuesEnumeratorTest {
         return msg;
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullField() throws IOException {
-        possibleValuesFor(null);
+        assertThrows(NullPointerException.class,()->{
+            possibleValuesFor(null);
+
+        });
     }
 
     @Test

@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /**
  * testcases for Currency Deflator (https://jira.dgfoundation.org/browse/AMP-20534)
  * @author Constantin Dolghier
@@ -34,24 +36,31 @@ public class InflationRatesTests extends AmpReportingTestCase {
     public final static List<String> activities = Arrays.asList(
             "TAC_activity_1", "Test MTEF directed", "Pure MTEF Project", "mtef activity 1", "Activity with both MTEFs and Act.Comms");
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void testInvalidYear() {
-        AmpCurrency usd = CurrencyUtil.getAmpcurrency("USD");
-        AmpInflationRate impossibleYear = new AmpInflationRate(usd, DateTimeUtil.parseDate("1940-01-01", DP), -2.7);
-        saveInflation(impossibleYear);
+        assertThrows(ConstraintViolationException.class,()->{
+            AmpCurrency usd = CurrencyUtil.getAmpcurrency("USD");
+            AmpInflationRate impossibleYear = new AmpInflationRate(usd, DateTimeUtil.parseDate("1940-01-01", DP), -2.7);
+            saveInflation(impossibleYear);
+        });
+
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void testImpossibleInflation() throws Exception {
-        AmpCurrency usd = CurrencyUtil.getAmpcurrency("USD");
-        AmpInflationRate impossibleInflation = new AmpInflationRate(usd, DateTimeUtil.parseDate("2010-01-01", DP), -999);
-        saveInflation(impossibleInflation);
+        assertThrows(ConstraintViolationException.class,()-> {
+            AmpCurrency usd = CurrencyUtil.getAmpcurrency("USD");
+            AmpInflationRate impossibleInflation = new AmpInflationRate(usd, DateTimeUtil.parseDate("2010-01-01", DP), -999);
+            saveInflation(impossibleInflation);
+        });
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void testNoCurrencyGiven() throws Exception {
-        AmpInflationRate noCurrencyGiven = new AmpInflationRate(null, DateTimeUtil.parseDate("2010-01-01", DP), 3.5);
-        saveInflation(noCurrencyGiven);
+        assertThrows(ConstraintViolationException.class,()-> {
+            AmpInflationRate noCurrencyGiven = new AmpInflationRate(null, DateTimeUtil.parseDate("2010-01-01", DP), 3.5);
+            saveInflation(noCurrencyGiven);
+        });
     }
 
     private void saveInflation(final AmpInflationRate inflationRate) {

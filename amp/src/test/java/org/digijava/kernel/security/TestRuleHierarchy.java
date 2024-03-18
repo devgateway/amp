@@ -4,8 +4,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Octavian Ciubotaru
@@ -34,12 +37,14 @@ public class TestRuleHierarchy {
         assertCollection(Arrays.asList("2"), hierarchy.getEffectiveRules(new String[] {"2"}));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testRecursive() {
-        new RuleHierarchy.Builder<String>()
-                .addRuleDependency("1", "2")
-                .addRuleDependency("2", "1")
-                .build();
+        assertThrows(IllegalStateException.class,()-> {
+            new RuleHierarchy.Builder<String>()
+                    .addRuleDependency("1", "2")
+                    .addRuleDependency("2", "1")
+                    .build();
+        });
     }
 
     @Test
@@ -78,13 +83,15 @@ public class TestRuleHierarchy {
         assertCollection(Arrays.asList("2", "3"), hierarchy.getEffectiveRules(new String[] {"2"}));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testThreeLevelRecursive() {
-        new RuleHierarchy.Builder<String>()
-                .addRuleDependency("1", "2")
-                .addRuleDependency("2", "3")
-                .addRuleDependency("3", "1")
-                .build();
+        assertThrows(IllegalStateException.class,()-> {
+            new RuleHierarchy.Builder<String>()
+                    .addRuleDependency("1", "2")
+                    .addRuleDependency("2", "3")
+                    .addRuleDependency("3", "1")
+                    .build();
+        });
     }
 
     private void assertCollection(Collection expected, Collection actual) {

@@ -11,9 +11,11 @@ import org.digijava.kernel.ampapi.endpoints.gpi.JacksonInTestRule;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Octavian Ciubotaru
@@ -150,16 +152,20 @@ public class EntityResolverTest {
         assertTrue(x1.getOne() != x2.getOne());
     }
 
-    @Test(expected = UnresolvedForwardReference.class)
+    @Test
     public void testUnknownId() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.readValue("{\"one\":999}", X.class);
+        assertThrows(UnresolvedForwardReference.class,()-> {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.readValue("{\"one\":999}", X.class);
+        });
     }
 
-    @Test(expected = InvalidDefinitionException.class)
+    @Test
     public void testInvalidIdType() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.readValue("{\"one\":false}", X.class);
+        assertThrows(InvalidDefinitionException.class,()-> {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.readValue("{\"one\":false}", X.class);
+        });
     }
 
     private Object resolve(ObjectIdGenerator.IdKey idKey) {

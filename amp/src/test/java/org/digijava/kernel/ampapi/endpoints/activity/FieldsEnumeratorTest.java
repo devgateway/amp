@@ -34,6 +34,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
@@ -44,6 +45,7 @@ import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.HIDDEN
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.VISIBLE_FM_PATH;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -624,10 +626,12 @@ public class FieldsEnumeratorTest {
         assertEqualsSingle(expected, fields);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testExceptionInTranslator() {
-        new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
-                .getAllAvailableFields(OneFieldClass.class);
+        assertThrows(ConstraintViolationException.class,()-> {
+            new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
+                    .getAllAvailableFields(OneFieldClass.class);
+        });
     }
 
     @Test
@@ -738,9 +742,11 @@ public class FieldsEnumeratorTest {
         private Set<Object> col;
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testEnumerationFailsIfObjectFromCollectionDoesntExposeId() {
-        fieldsEnumerator.getAllAvailableFields(ObjWithImportableCollectionWithoutId.class);
+        assertThrows(ConstraintViolationException.class,()-> {
+            fieldsEnumerator.getAllAvailableFields(ObjWithImportableCollectionWithoutId.class);
+        });
     }
 
     private static class ObjWithReadOnlyCollectionWithoutId {
@@ -749,9 +755,11 @@ public class FieldsEnumeratorTest {
         private Set<Object> col;
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testEnumerationFailsIfObjectFromReadOnlyCollectionDoesntExposeId() {
-        fieldsEnumerator.getAllAvailableFields(ObjWithReadOnlyCollectionWithoutId.class);
+        assertThrows(RuntimeException.class,()-> {
+            fieldsEnumerator.getAllAvailableFields(ObjWithReadOnlyCollectionWithoutId.class);
+        });
     }
 
     private static class ObjWithPrimitiveCollections {
@@ -776,9 +784,11 @@ public class FieldsEnumeratorTest {
         private Object id;
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testObjectIdsNotAllowed() {
-        fieldsEnumerator.getAllAvailableFields(ObjWithObjId.class);
+        assertThrows(RuntimeException.class,()-> {
+            fieldsEnumerator.getAllAvailableFields(ObjWithObjId.class);
+        });
     }
 
     private static class ObjWithListId {
@@ -788,9 +798,11 @@ public class FieldsEnumeratorTest {
         private List<Long> id;
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testListIdsNotAllowed() {
-        fieldsEnumerator.getAllAvailableFields(ObjWithListId.class);
+        assertThrows(RuntimeException.class,()-> {
+            fieldsEnumerator.getAllAvailableFields(ObjWithListId.class);
+        });
     }
 
 
@@ -811,9 +823,11 @@ public class FieldsEnumeratorTest {
         private Long id2;
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testTwoIdsNotAllowed() {
-        fieldsEnumerator.getAllAvailableFields(ObjWithCollectionWithTwoIds.class);
+        assertThrows(RuntimeException.class,()-> {
+            fieldsEnumerator.getAllAvailableFields(ObjWithCollectionWithTwoIds.class);
+        });
     }
 
 

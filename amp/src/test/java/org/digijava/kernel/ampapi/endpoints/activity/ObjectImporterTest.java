@@ -17,6 +17,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -24,6 +25,7 @@ import java.util.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Important cases to test.
@@ -834,15 +836,17 @@ public class ObjectImporterTest {
                         grandChild(null, "Five", null))))));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testTwoDuplicateIds() {
-        Map<String, Object> json = (Map<String, Object>) examples.get("back-references-example");
+        assertThrows(IllegalStateException.class,()-> {
+            Map<String, Object> json = (Map<String, Object>) examples.get("back-references-example");
 
-        Parent parent = new Parent();
-        parent.addChild(new Child(1L, "A", "A"));
-        parent.addChild(new Child(1L, "A", "A"));
+            Parent parent = new Parent();
+            parent.addChild(new Child(1L, "A", "A"));
+            parent.addChild(new Child(1L, "A", "A"));
 
-        importer.validateAndImport(parent, json);
+            importer.validateAndImport(parent, json);
+        });
     }
 
     @Test
@@ -928,15 +932,17 @@ public class ObjectImporterTest {
     /**
      * Object import must fail because there must just one home phone in the original object.
      */
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDiscriminatedNotRepeatableInvalidOriginalObject() {
-        Map<String, Object> json = (Map<String, Object>) examples.get("match-discriminated-but-not-repeatable");
+        assertThrows(RuntimeException.class,()-> {
+            Map<String, Object> json = (Map<String, Object>) examples.get("match-discriminated-but-not-repeatable");
 
-        Parent parent = new Parent();
-        parent.addPhone(new Phone("H", "123", null));
-        parent.addPhone(new Phone("H", "124", null));
+            Parent parent = new Parent();
+            parent.addPhone(new Phone("H", "123", null));
+            parent.addPhone(new Phone("H", "124", null));
 
-        importer.validateAndImport(parent, json);
+            importer.validateAndImport(parent, json);
+        });
     }
 
     @Test

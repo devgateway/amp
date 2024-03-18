@@ -1306,7 +1306,7 @@
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
                             <clearOutputDir>false</clearOutputDir>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1323,7 +1323,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
@@ -1342,7 +1342,7 @@
                                 </source>
                             </sources>
                             <packageName>org.dgfoundation.amp.reports.xml</packageName>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
@@ -1360,7 +1360,7 @@
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>

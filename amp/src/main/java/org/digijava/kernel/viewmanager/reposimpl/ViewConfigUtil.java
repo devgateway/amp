@@ -330,7 +330,6 @@ public abstract class ViewConfigUtil
                      path + "," + isTemplate + "," + parentTemplateName + "," +
                      groupType + "," + groupName
                      );
-        logger.info("FILE PATH: "+path);
 
         if (path.startsWith("/")) {
             File file = new File(servletContext.getRealPath(path));
@@ -396,6 +395,9 @@ public abstract class ViewConfigUtil
                             " with absolute path " +
                             file.getAbsolutePath());
                     }
+                    logger.info("FILE PATH: "+fileName);
+
+                    return fileName;
                 }
                 else {
                     throw new ViewConfigException("Unable to open file " +

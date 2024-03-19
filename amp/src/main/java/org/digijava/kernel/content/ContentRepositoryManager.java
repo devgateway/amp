@@ -31,7 +31,7 @@ public final class ContentRepositoryManager {
     private static Logger logger = Logger.getLogger(ContentRepositoryManager.class);
 
     private static final String JACKRABBIT_DIR_PATH = DgUtil.getWebInfPath("jackrabbit");
-    private static final String REPOSITORY_CONFIG_FILE_PATH = "/WEB-INF/jsp.xml";
+    private static final String REPOSITORY_CONFIG_FILE_PATH = "/repository.xml";
 
     private static final String AMP_LABLE_NAMESPACE = "http://amp-demo.code.ro/label";
     private static final String AMP_DOC_NAMESPACE = "http://amp-demo.code.ro/ampdoc";

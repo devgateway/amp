@@ -7,9 +7,9 @@ import com.thoughtworks.selenium.Selenium;
 import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class MessageTest extends SeleneseTestCase {
-    
+
     private static Logger logger = Logger.getLogger(MessageTest.class);
-    
+
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
@@ -73,7 +73,7 @@ public class MessageTest extends SeleneseTestCase {
             selenium.addSelection("selreceivers", "label=UATtm UATtm");
             selenium.addSelection("selreceivers", "label=UATtl UATtl");
             selenium.click("//input[@onclick=\"MyremoveUserOrTeam()\"]");
-            
+
             selenium.click("//input[@onclick=\"save('send');\"]");
             selenium.waitForPageToLoad("30000");
             selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
@@ -137,7 +137,7 @@ public class MessageTest extends SeleneseTestCase {
                 logger.error("Error on saved Alert");
                 //selenium.logAssertion"assertTrue", "Error on saved Alert", "condition=false");
             }
-            
+
             selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
             selenium.waitForPageToLoad("30000");
             selenium.type("titleMax", "Test Message saved");
@@ -147,7 +147,7 @@ public class MessageTest extends SeleneseTestCase {
             selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
             selenium.waitForPageToLoad("30000");
             if (selenium.isElementPresent("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=1\")]")) {
-                selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=1\")]");   
+                selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=1\")]");
                 selenium.waitForPageToLoad("30000");
             }
             Thread.sleep(1500);
@@ -155,7 +155,7 @@ public class MessageTest extends SeleneseTestCase {
                 logger.error("Error on saved Message");
                 //selenium.logAssertion"assertTrue", "Error on saved Message", "condition=false");
             }
-            
+
             selenium.click("link=UAT Team Workspace - Computed");
             selenium.waitForPageToLoad("30000");
             selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
@@ -167,7 +167,7 @@ public class MessageTest extends SeleneseTestCase {
             }
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             selenium.type("j_username", "uattm@amp.org");
             selenium.type("j_password", "abc");
             selenium.click("submitButton");
@@ -194,7 +194,7 @@ public class MessageTest extends SeleneseTestCase {
             }
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             selenium.type("j_username", "uattmc@amp.org");
             selenium.type("j_password", "abc");
             selenium.click("submitButton");
@@ -223,9 +223,9 @@ public class MessageTest extends SeleneseTestCase {
             Thread.sleep(5000);
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             deleteAllMessages(selenium);
-            
+
             selenium.type("j_username", "admin@amp.org");
             selenium.type("j_password", "admin");
             selenium.click("submitButton");
@@ -238,7 +238,7 @@ public class MessageTest extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "UATtl@amp.org");
                 selenium.type("j_password", "abc");
                 selenium.click("submitButton");
@@ -255,7 +255,7 @@ public class MessageTest extends SeleneseTestCase {
                 }
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "admin@amp.org");
                 selenium.type("j_password", "admin");
                 selenium.click("submitButton");
@@ -275,7 +275,7 @@ public class MessageTest extends SeleneseTestCase {
         logger.info("Messages Test Finished Successfully");
        //selenium.logComment("Messages Test Finished Successfully");
     }
-    
+
     private static void deleteAllMessages(Selenium selenium) throws InterruptedException {
         selenium.type("j_username", "UATtl@amp.org");
         selenium.type("j_password", "abc");
@@ -452,19 +452,19 @@ public class MessageTest extends SeleneseTestCase {
         deleteLoop(selenium);
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
     }
 
     private static void deleteLoop(Selenium selenium) {
-        while (selenium.isElementPresent("//img[@hspace=\"2\" and @src=\"/jsp/message/view/images/trash_12.gif\"]")) {
-            selenium.click("//img[@hspace=\"2\" and @src=\"/jsp/message/view/images/trash_12.gif\"]");
+        while (selenium.isElementPresent("//img[@hspace=\"2\" and @src=\"/WEB-INF/jsp/message/view/images/trash_12.gif\"]")) {
+            selenium.click("//img[@hspace=\"2\" and @src=\"/WEB-INF/jsp/message/view/images/trash_12.gif\"]");
             selenium.getConfirmation();
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            
+
         }
     }
 }

@@ -1,0 +1,57 @@
+input.propertyButton{
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	background-color : #F6DD8B;
+	border : 1px solid #A0A09F;
+}
+
+tr.propertyTitle{
+	background-image : url(../images/propertyView/titleBgr.gif);
+	background-repeat : repeat-x;
+	background-position : center;
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+}
+
+td.valueFiled{
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	border: 1px solid;
+	border-left-color : white;
+	border-top-color : white;
+	border-right-color : #A0A09F;
+	border-bottom-color : #A0A09F;
+	background-color : #F2F2F2;
+}
+
+td.noValueFiled{
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	border: 1px solid;
+	border-left-color : white;
+	border-top-color : white;
+	border-right-color : #A0A09F;
+	border-bottom-color : #A0A09F;
+	background-color : #F2F2F2;
+	background-image : url(../images/dashed.gif);
+}
+
+td.propertyName{
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	background-color : #DBDBDB;
+	border: 1px solid;
+	border-left-color : white;
+	border-top-color : white;
+	border-right-color : #A0A09F;
+	border-bottom-color : #A0A09F;
+}
+
+td.digiBgr {
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	background-color : #DBDBDB;
+	border: 1px solid;
+	border-left-color : white;
+	border-top-color : white;
+	border-right-color : #A0A09F;
+	border-bottom-color : #A0A09F;
+	background-image : url(../images/digiBgr.gif);
+	background-repeat : no-repeat;
+	background-position : bottom right;
+}
+

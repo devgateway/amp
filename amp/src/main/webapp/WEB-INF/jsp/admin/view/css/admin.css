@@ -1,0 +1,114 @@
+.text {font-size:9pt;font-family:verdana,arial, HELVETICA;color:#000000;}
+.title {font-size:10pt;font-family:verdana,arial, HELVETICA;color:#330099; font-weight:bold;}
+a.text {font-family:verdana,arial, HELVETICA;font-weight:normal;color:#000000;text-decoration:none;}
+a:visited.text {color:#000000;text-decoration:none;}
+a:hover.text {color:#000000;text-decoration:underline;}
+
+
+
+tr.headerBackgroung {
+	background-image : url(../images/headerBackground.gif);
+	background-position : top;
+	background-repeat : repeat-x;
+	height: 40px;
+}
+font.headerTitle {
+	font : 18px "MS Sans Serif", Geneva, sans-serif;
+	color : White;
+}
+
+font.sectionTitle {
+	font : bold 14px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : black;
+}
+
+A.admin:ACTIVE, A.admin:FOCUS, A.admin:LINK, A.admin:VISITED {
+	color: black;
+	text-decoration: none;
+}
+A.admin:HOVER {
+	color: red;
+	text-decoration: underline;;
+}
+
+input.admin {
+	border : 1px solid Black;
+}
+
+td.navigarionBarDefault{
+	border: 1px solid #F0F7D8;
+	cursor: hand;
+}
+
+td.navigarionBarMouseOver{
+	border: 1px solid #9D9D9D;
+	cursor: hand;
+	background-color : #E3F0B7;
+}
+td.navigarionBarMouseDown{
+	border: 1px solid;
+	cursor: hand;
+	background-color : #D7EA97;
+	border-bottom-color : White;
+	border-right-color : White;
+	border-top-color : black;
+	border-left-color : black;
+}
+
+tr.green{
+	background-image: url(../images/greenBackground.gif);
+	background-position : top;
+	background-repeat : repeat-x;
+	height: 29px;
+}
+td.green{
+	background-color: #F0F7D8;
+}
+tr.yellow{
+	background-image: url(../images/yellowBackground.gif);
+	background-position : top;
+	background-repeat : repeat-x;
+	height: 29px;
+}
+td.yellow{
+	background-color: #FCF6DD;
+}
+
+
+tr.configContainerHeader{
+	background-image : url(../images/configRowBgr.gif);
+	background-repeat : repeat-x;
+	background-position : center;
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+}
+
+td.configCell{
+	border : 1px solid;
+	border-left-color : White;
+	border-top-color : White;
+	border-right-color : #A0A09F;	
+	border-bottom-color : #A0A09F;
+}
+
+td.configVerticalRow{
+	background-image : url(../images/configVerticalTile.gif);
+	background-position : center;
+	background-repeat : repeat-y;
+    border : 1px solid;
+	border-left-color : White;
+	border-top-color : White;
+	border-right-color : #A0A09F;	
+	border-bottom-color : #A0A09F;	
+}
+
+td.configToolsSeparator {
+	background-image : url(../images/configToolsSeparator.gif);
+	background-position : center;
+	background-repeat : repeat-y;
+}
+
+.confirmationMessage {
+    font-weight: bold;
+    color: #00bb00;
+}
+

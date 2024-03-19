@@ -11,9 +11,9 @@
 	 	<action path="/xmlpatcher/xmlpatches" scope="request"
 			type="org.digijava.module.xmlpatcher.action.XmlPatchesAction">
 			<forward name="listPatches" path="/showLayout.do?layout=xmlPatcherListPatches"/>
-			<forward name="listPatchLogs" path="/jsp/xmlpatcher/view/listPatchLogs.jsp"/>
-			<forward name="patchContents" path="/jsp/xmlpatcher/view/patchContents.jsp"/>
-			<forward name="logContents" path="/jsp/xmlpatcher/view/logContents.jsp"/>
+			<forward name="listPatchLogs" path="/WEB-INF/jsp/xmlpatcher/view/listPatchLogs.jsp"/>
+			<forward name="patchContents" path="/WEB-INF/jsp/xmlpatcher/view/patchContents.jsp"/>
+			<forward name="logContents" path="/WEB-INF/jsp/xmlpatcher/view/logContents.jsp"/>
 	</action>
 
 

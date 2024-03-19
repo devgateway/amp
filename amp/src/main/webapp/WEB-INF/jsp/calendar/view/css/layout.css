@@ -1,0 +1,202 @@
+/*
+Copyright DHTMLX LTD. http://www.dhtmlx.com
+You allowed to use this component or parts of it under GPL terms
+To use it on other terms please contact us at sales@dhtmlx.com
+*/
+
+.dhx_cal_container{
+	/*background-color:#C2D5FC;*/
+	font-family:Tahoma; 
+	font-size:8pt;
+}
+.dhx_cal_container div{
+	-moz-user-select:none;    
+	-moz-user-select:-moz-none;  
+	font-size:11px;
+}
+.dhx_cal_navline{
+	height:20px;
+	z-index:0;
+	width:750px;
+	color:#2F3A48;
+	position:absolute;
+}
+.dhx_cal_navline div{ 
+	top:1px; 
+	white-space:nowrap;
+}
+.dhx_cal_navline .dhx_cal_date{
+	font-weight:600;
+	left:210px;
+}
+.dhx_cal_button .dhx_left_bg{
+	width:1px; overflow:hidden;
+	height:17px;
+	z-index:20;
+	top:0px;
+}
+.dhx_cal_prev_button{
+	background-image: url(/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif);
+	/*background-position:0px 0px;*/
+	width:19px; 
+	height:18px;
+	/*left:50px;*/ 
+	cursor:pointer;
+}
+.dhx_cal_next_button{
+	background-image: url(/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif);
+	/*background-position: -30px 0px;*/
+	width:19px; 
+	height:18px;
+	/*left:80px;*/ 
+	cursor:pointer;
+}
+.dhx_cal_today_button{
+	/*background-image:url(../images/buttons.png);*/
+	/*background-position: -60px 0px;*/
+	width:75px; 
+	height:17px;
+	/*left:112px;*/ 
+	cursor:pointer;
+	text-align:center;
+	/*text-decoration:underline;*/
+	font-size: 12px;
+	color: #376091;
+}
+.dhx_cal_tab{
+	/*background-image:url(../images/white_tab.png);*/
+	/*width:61px; 
+	height:19px;
+	text-align:center;
+	padding-top:3px; 
+	cursor:pointer;
+	color: #376091;
+	border-top: solid 1px #D0D0D0;
+	border-right: solid 1px #D0D0D0;
+	border-left: solid 1px #D0D0D0;
+	font-weight:bold;*/
+	border-top:1px solid #D0D0D0;
+	border-left:1px solid #D0D0D0;
+	border-right:1px solid #D0D0D0;
+	border-bottom:1px solid #D0D0D0;
+	float:left;
+	cursor:pointer; 
+	text-decoration: none; 
+	font-size: 12px; 
+	color:#376091;
+	font-weight: bold;
+	background-color: #EBEBEB;
+	margin:3px 10px 0pt 0pt;
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	padding: 0.6em 1em;
+	top: 1px;
+}
+.dhx_cal_tab.active{
+	/*background-image:url(../images/blue_tab.png);*/
+	/*text-decoration:none;
+	height:20px;
+	padding-top:2px; 
+	cursor:default;
+	background-color: #F5F5F5;
+	color:#FF6000;
+	border-bottom: 0px;*/
+	background-color: #FFFFFF;
+    color: #FF6000;
+    cursor: pointer;
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: none;
+    top: -1px;
+}
+.dhx_cal_header{
+	position:absolute;
+	left:10px; 	
+	top:23px;
+	width:730px;
+	border-top:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	z-index:0;
+	overflow:hidden;
+	color:#2F3A48;
+}
+.dhx_cal_data{
+	border-top:1px solid #CCCCCC;
+	/*position:absolute;*/
+	top:44px;
+	width:600px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+.dhx_scale_bar{
+	position:absolute;	
+	text-align:center;
+	/*background-color:#C2aaaC;*/
+	padding-top:3px;
+	border:1px solid #CCCCCC;
+	border:1px solid #CCCCCC;
+	background-repeat: repeat-x; 
+	font-size: 12px;
+	background-image: url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif);
+}
+.dhx_scale_holder{
+	position:absolute;	
+	border-right:1px solid #CCCCCC;
+	background-image:url(../images/databg.png);
+}
+.dhx_scale_holder_now{
+	position:absolute;	
+	border-right:1px solid #CCCCCC;
+	background-image:url(../images/databg_now.png);
+}
+.dhx_scale_hour{
+	height:41px;
+	width:50px;
+	border-bottom:1px solid #CCCCCC;
+	background-color:#C2D5FC;
+	text-align:center;
+	line-height:40px;
+	color:#586A7E;
+}
+.dhx_month_head{
+	background-color:#FFFFFF;
+	color: #CCCCCC;	
+	border-right:1px solid #CCCCCC;
+	height:18px;
+	padding-right:5px;
+	padding-top:3px;
+	text-align:right;
+	font-size: 11px;
+}
+.dhx_month_body{
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+	background-color:#FFFFFF;
+	font-size: 11px;
+}
+.dhx_now .dhx_month_body{
+	background-color:#E2EDFF;
+}
+.dhx_after  .dhx_month_body, .dhx_before .dhx_month_body{
+	background-color:#ECECEC;
+}
+.dhx_after  .dhx_month_head, .dhx_before .dhx_month_head{
+	background-color:#E2E3E6;
+	color:#94A6BB;
+}
+.dhx_now .dhx_month_head{
+	background-color:#D1DEF4;
+	font-weight:bold;
+}
+.dhx_cal_drag{
+	position:absolute;
+	z-index:9999;
+	background-color:#FFE763;
+	border:1px solid #B7A543;
+	opacity:0.5;
+	filter:alpha(opacity=50);
+}

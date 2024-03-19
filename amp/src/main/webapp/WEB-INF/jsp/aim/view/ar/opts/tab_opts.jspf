@@ -1,0 +1,54 @@
+<%-- renders the "top" of a tab's page --%>
+<div class="tab_opt_box">
+	<div class="show_hide_setting">
+		<b><a style="cursor:pointer;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings}</a></b>
+	</div>
+	<div class="tab_opt">
+		<div class="tab_opt_cont">
+			<logic:notEmpty name="reportMeta" property="hierarchies">
+				<a class="l_sm" onClick="showSorter();" style="cursor: pointer;text-decoration: underline;">
+					<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
+				</a> 
+				&nbsp;|&nbsp; 
+			</logic:notEmpty>
+			<c:if test="${param.queryEngine!='true' }">
+				<a class="l_sm"
+					onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>');"
+					style="cursor: pointer; text-decoration: underline;"> <digi:trn
+						key="rep:pop:ChangeFilters">Change Filters</digi:trn>
+				</a>
+			</c:if>
+			<%
+				AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
+				if (arf.isPublicView() == false) {
+			%>
+			<feature:display name="Save Report/Tab with Filters"
+				module="Report and Tab Options">
+			                &nbsp;|&nbsp;
+			          	 	<a style="cursor: pointer; text-decoration: underline;"
+					class="l_sm" <%-- <%=ReportContextData.getCurrentReportContextId(request, true)%>  --%>
+					onClick="initMultilingualInput('AmpReports_name');initSaveReportEngine(true);saveReportEngine.showPanel(); "
+					title="${fn:escapeXml(saveFiltersTooltip)}"> ${saveFilters} </a>
+			</feature:display>
+			<%
+				}
+			%>
+			<logic:notEqual name="viewFormat" value="foldable">
+				&nbsp;|&nbsp;
+				<a style="cursor: pointer; text-decoration: underline;" id="frezzlink" reportContextId='<%=ReportContextData.getCurrentReportContextId(request, true)%>'
+					class="l_sm">
+						<script type="text/javascript">document.write((scrolling) ? msg2 : msg1);</script>
+				</a>
+			</logic:notEqual>
+			<c:if test="${param.queryEngine!='true' }">
+				&nbsp;|&nbsp;
+				<a class="l_sm" onClick="showFormat(); " style="text-decoration: underline;cursor: pointer;">
+                	<digi:trn>Tab Settings</digi:trn>
+                </a>
+			</c:if>
+             &nbsp;<br />
+             
+			<%@include file="current_settings.jspf" %>
+		</div>
+	</div>
+</div>

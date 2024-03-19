@@ -330,20 +330,19 @@ public abstract class ViewConfigUtil
                      path + "," + isTemplate + "," + parentTemplateName + "," +
                      groupType + "," + groupName
                      );
+        logger.info("FILE PATH: "+path);
 
-//        if (path.startsWith("/")) {
+        if (path.startsWith("/")) {
             File file = new File(servletContext.getRealPath(path));
-
             if (file.exists()) {
-                logger.info("FINAL FILE PATH: "+path);
                 return path;
             }
-//            else {
-//                throw new ViewConfigException("Unable to open file " + path +
-//                                              " with absolute path " +
-//                                              file.getAbsolutePath());
-//            }
-//        }
+            else {
+                throw new ViewConfigException("Unable to open file " + path +
+                                              " with absolute path " +
+                                              file.getAbsolutePath());
+            }
+        }
         // Workaround for images
         if ( ( (groupType == null || groupType.trim().isEmpty()) ||
               groupType.equals(LAYOUT_DIR)) &&
@@ -372,7 +371,7 @@ public abstract class ViewConfigUtil
                                          groupType,
                                          groupName);
         logger.info("EXPANDED: "+servletContext.getRealPath(fileName));
-         file = new File(servletContext.getRealPath(fileName));
+        File file = new File(servletContext.getRealPath(fileName));
 
         if (!file.exists()) {
             if (isTemplate || parentTemplateName == null) {
@@ -387,7 +386,6 @@ public abstract class ViewConfigUtil
                         fileName = "/WEB-INF/jsp" + groupDir + "/view/" +
                                 path;
                     }
-                    logger.info("FILE PATH: "+servletContext.getRealPath(fileName));
                     file = new File(servletContext.getRealPath(fileName));
 
                     if (!file.exists()) {
@@ -414,10 +412,7 @@ public abstract class ViewConfigUtil
             }
         }
         logger.debug("findExistingFile() returns: " + fileName);
-
-        findExistingFile(path,
-                parentTemplateName, isTemplate, null,
-                groupType, groupName);
+        logger.info("FINAL FILE PATH: "+fileName);
 
 
         return fileName;

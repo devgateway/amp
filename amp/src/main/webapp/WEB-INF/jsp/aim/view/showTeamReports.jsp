@@ -338,12 +338,12 @@ $(document).ready(function() {
 									</td>
 									<td>
 										<span><digi:trn>Filtered Report</digi:trn>&nbsp;
-											<img src= "/WEB-INF/jsp/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+											<img src= "/jsp/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
 										</span>
 									</td>
 									<td>
 										<span><digi:trn>Edit Report</digi:trn>&nbsp;
-											<img src= "/WEB-INF/jsp/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+											<img src= "/jsp/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
 										</span>
 									</td>
 									<td>
@@ -363,10 +363,10 @@ $(document).ready(function() {
 							<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
 
 						<digi:trn>Filtered Tab</digi:trn>&nbsp;</span>
-						<span><img src= "/WEB-INF/jsp/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
+						<span><img src= "/jsp/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
 						<digi:trn>Edit Tab</digi:trn>&nbsp;
 							<span>
-								<img src= "/WEB-INF/jsp/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+								<img src= "/jsp/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
 							</span>
 						<span><digi:trn>Delete Tab</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 						</div>
@@ -685,12 +685,12 @@ $(document).ready(function() {
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
 									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
-										<img src= "/WEB-INF/jsp/message/view/images/edit.gif" border="0" class="img-padding" />
+										<img src= "/jsp/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:when>
 								<c:otherwise>
 									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
-										<img src= "/WEB-INF/jsp/message/view/images/edit.gif" border="0" class="img-padding" />
+										<img src= "/jsp/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:otherwise>
 							</c:choose>&nbsp;
@@ -705,7 +705,7 @@ $(document).ready(function() {
 								</c:if>
 							</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/WEB-INF/jsp/message/view/images/trash_12.gif" border="0" class="img-padding" />
+									<img src= "/jsp/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
 						</logic:equal>
 						<logic:equal name="teamLeadFlag" scope="session" value="false">
@@ -720,7 +720,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
-									<img src= "/WEB-INF/jsp/message/view/images/edit.gif" border="0" class="img-padding" />
+									<img src= "/jsp/message/view/images/edit.gif" border="0" class="img-padding" />
 								</a>
 								<c:set var="translation">
 									<c:if test="${aimTeamReportsForm.showTabs}">
@@ -733,7 +733,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/WEB-INF/jsp/message/view/images/trash_12.gif" border="0" class="img-padding" />
+									<img src= "/jsp/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
 							</logic:equal>
 						</logic:present>

@@ -40,7 +40,7 @@
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<td align="left">
-						<jsp:include page="/WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
+						<jsp:include page="/jsp/aim/view/adminXSLExportToolbar.jsp" />
 					</td>
 				</tr>
 				<tr>

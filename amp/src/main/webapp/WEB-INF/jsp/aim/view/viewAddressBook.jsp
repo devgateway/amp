@@ -448,7 +448,7 @@
 	</li>
 </ul>
 <div class="yui-content" style="border: 1px solid rgb(208, 208, 208);">
-<jsp:include page="/WEB-INF/jsp/aim/view/exportTable.jsp" />
+<jsp:include page="/jsp/aim/view/exportTable.jsp" />
 <table>
 <tbody>
 <tr>

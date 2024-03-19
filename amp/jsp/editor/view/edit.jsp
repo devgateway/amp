@@ -15,9 +15,9 @@
 <%String contextPath = request.getContextPath();
 String _editor_url = new String();
 if (contextPath.length() == 0 || contextPath.startsWith("/")) {
-	_editor_url = contextPath + "/WEB-INF/jsp/editor/view/";
+	_editor_url = contextPath + "/jsp/editor/view/";
 } else {
-	_editor_url = "/" + contextPath + "/WEB-INF/jsp/editor/view/";
+	_editor_url = "/" + contextPath + "/jsp/editor/view/";
 }%>
 _editor_url = "<%=_editor_url%>";
 </script>

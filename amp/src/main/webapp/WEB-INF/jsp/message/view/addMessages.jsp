@@ -886,7 +886,7 @@ span.extContactDropdownEmail {
 								<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
 							</c:if>
 							<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
-								<img src="/WEB-INF/jsp/message/view/images/attachment.png" border="0" />
+								<img src="/jsp/message/view/images/attachment.png" border="0" />
 								${attachedDoc.contentTitle}
 							</digi:link>
 							<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/></a>

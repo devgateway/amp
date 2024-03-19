@@ -206,10 +206,10 @@ function checkSelActivities() {
 									    		<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 														<b><digi:trn key="aim:unassignedActivityList">List of unassigned activities</digi:trn></b>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='asc'}">
-															<img id="activityColumnImg" src="/WEB-INF/jsp/aim/images/up.gif" />
+															<img id="activityColumnImg" src="/jsp/aim/images/up.gif" />
 														</c:if>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='desc'}">
-															<img id="activityColumnImg" src="/WEB-INF/jsp/aim/images/down.gif" />
+															<img id="activityColumnImg" src="/jsp/aim/images/down.gif" />
 														</c:if>
 													</a>
 									    	</b>
@@ -219,10 +219,10 @@ function checkSelActivities() {
 									    		<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 														<b><digi:trn key="aim:donors">Donors</digi:trn></b>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='asc'}">
-															<img id="activityColumnImg" src="/WEB-INF/jsp/aim/images/up.gif" />
+															<img id="activityColumnImg" src="/jsp/aim/images/up.gif" />
 														</c:if>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='desc'}">
-															<img id="activityColumnImg" src="/WEB-INF/jsp/aim/images/down.gif" />
+															<img id="activityColumnImg" src="/jsp/aim/images/down.gif" />
 														</c:if>
 													</a>
 									    	</b>

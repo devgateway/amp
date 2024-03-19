@@ -18,7 +18,7 @@ border: none;
 }
 </style>
 
-<jsp:include page="/WEB-INF/jsp/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/jsp/aim/view/ar/reportsScripts.jsp"/>
 
 <bean:define id="firstReportFound"  value="false" toScope="page"/>
 

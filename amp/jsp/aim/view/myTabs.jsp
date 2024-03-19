@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
-<link rel="stylesheet" type="text/css" href="/WEB-INF/jsp/aim/view/css/filters/filters2.css">
+<link rel="stylesheet" type="text/css" href="/jsp/aim/view/css/filters/filters2.css">
 <%
 	{
 		if (ReportContextData.contextIdExists()){
@@ -94,7 +94,7 @@
 	<digi:trn key="rep:hideCurrSettings" jsFriendly="true">Hide current settings</digi:trn>
 </c:set>
 
-<script type="text/javascript" src="/WEB-INF/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <script language="javascript">
 var allTabsPanel = null;
@@ -326,7 +326,7 @@ function toggleSettings(){
 
 
 
-<jsp:include page="/WEB-INF/jsp/aim/view/ar/reportsScripts.jsp">
+<jsp:include page="/jsp/aim/view/ar/reportsScripts.jsp">
 	<jsp:param name="is_a_tab" value="true" />
 </jsp:include>
 

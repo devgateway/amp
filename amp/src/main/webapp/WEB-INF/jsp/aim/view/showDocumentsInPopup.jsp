@@ -20,6 +20,6 @@
 <bean:define toScope="request" id="crRights" value="true" />
 <bean:define toScope="request" id="showLineBreaks" value="true" />
 
-<jsp:include page="/WEB-INF/jsp/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+<jsp:include page="/jsp/contentrepository/view/showSelectedDocumentsDM.jsp"/>
 </body>
 </html>

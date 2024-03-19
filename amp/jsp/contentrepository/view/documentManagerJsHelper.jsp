@@ -1541,7 +1541,7 @@ function rejectVersion(versionId, baseNodeUUID){
 						};
 	var myDiv=document.getElementById('loadingDiv');
 	myDiv.style.display="block";
-	//myDiv.innerHTML='<img src=\"/WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif\" height=\"20px\" />';
+	//myDiv.innerHTML='<img src=\"/jsp/contentrepository/view/images/ajax-loader-darkblue.gif\" height=\"20px\" />';
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectVersion.do?versionId="+versionId+"&baseNodeUUID="+baseNodeUUID, callback);
 }
 

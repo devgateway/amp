@@ -20,7 +20,7 @@
 
 <div id="myUserFilterWrapper" style="display: none;">
 	<div id="customUser" class="invisible-item" class="content">
-		<jsp:include page="/WEB-INF/jsp/aim/view/workspacePopup.jsp" />
+		<jsp:include page="/jsp/aim/view/workspacePopup.jsp" />
 	</div>
 </div>
 

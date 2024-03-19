@@ -101,7 +101,7 @@ public class AmpMessageActions extends DispatchAction {
 
         return null;
     }
-    
+
     private void writeListToOutput(String srchStr, List<String> srcResArray, HttpServletResponse response) throws IOException
     {
         StringBuffer retVal = new StringBuffer();
@@ -117,22 +117,22 @@ public class AmpMessageActions extends DispatchAction {
             }*/
             retVal.append(srcResArray.get(i));
             retVal.append("\n");
-            
+
         }
         //retVal.append("]");
         response.setCharacterEncoding("UTF-8");
         ServletOutputStream sos = response.getOutputStream();
         sos.write(retVal.toString().getBytes("UTF-8"));
-        sos.close();        
+        sos.close();
     }
-        
+
 
     public ActionForward searchExternalContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         AmpMessageForm messageForm=(AmpMessageForm)form;
         HttpSession session = request.getSession();
         String srchStr = request.getParameter("srchStr");
 
-        String[] srcContactArray = AmpMessageUtil.searchExternalReceiversFromContacts(srchStr); 
+        String[] srcContactArray = AmpMessageUtil.searchExternalReceiversFromContacts(srchStr);
 
         /*
         XMLDocument contactsAutocompData = new XMLDocument();
@@ -153,7 +153,7 @@ public class AmpMessageActions extends DispatchAction {
         }
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
-        
+
         out.print(retVal.toString());
         out.close();
         return null;
@@ -165,7 +165,7 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward cancelMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         //AmpMessageForm alertsForm=(AmpMessageForm)form;
         //setDefaultValues(alertsForm);
-        
+
         //clear session if it contains sdm doc
         if(request.getSession().getAttribute("document")!=null){
             request.getSession().removeAttribute("document");
@@ -365,11 +365,11 @@ public class AmpMessageActions extends DispatchAction {
         int howManyPages=0;
         int count=0;
         int hiddenCount = 0;
-        
+
         if(tabIndex==1){ //<-----messages
             if(childTab==null || childTab.equalsIgnoreCase("inbox")){
                 //how many messages are in db. used for pagination
-                count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);               
+                count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);
                 allMessages =AmpMessageUtil.loadAllInboxMessagesStates(UserMessage.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
             }else if(childTab.equalsIgnoreCase("sent")){
                 //how many messages are in db. used for pagination
@@ -383,7 +383,7 @@ public class AmpMessageActions extends DispatchAction {
         }else if(tabIndex==2){// <--alerts
             if(childTab==null || childTab.equalsIgnoreCase("inbox")){
                 //how many messages are in db. used for pagination
-                count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);             
+                count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);
                 allMessages =AmpMessageUtil.loadAllInboxMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
             }else if(childTab.equalsIgnoreCase("sent")){
                 //how many messages are in db. used for pagination
@@ -407,14 +407,14 @@ public class AmpMessageActions extends DispatchAction {
          if(allMessages!=null){
         Collections.reverse(allMessages);
          }
-        
+
         }
         messageForm.setMessagesForTm(allMessages);
 
         messageForm.setAllmsg(count);
 
         messageForm.setTabIndex(tabIndex);
-        
+
         messageForm.setHiddenMsgCount(hiddenCount);
 
         if(childTab==null){
@@ -519,7 +519,7 @@ public class AmpMessageActions extends DispatchAction {
         }
         fillFormFields(message, messagesForm, id,isMessageStateId);
 
-        
+
         for (AmpMessageReceiver receiver : message.getMessageReceivers()) {
             ReciverName recName = new ReciverName();
             recName.setUserNeme(receiver.getReceiver().getUser().getName());
@@ -527,18 +527,18 @@ public class AmpMessageActions extends DispatchAction {
             messagesForm.getReceivesrsNameMail().add(recName);
         }
 
-        
+
         //external people
         if (message.getExternalReceivers() != null && message.getExternalReceivers().length() > 0) {
             String externalPeople = message.getExternalReceivers();
             String[] externalReceivers = externalPeople.split(",");
             for (int j = 0; j < externalReceivers.length; j++) {
-                
+
                 String receiverName = externalReceivers[j];
                 if (j != externalReceivers.length - 1) {
                     receiverName += ",";
                 }
-                
+
                 ReciverName recName = new ReciverName();
                 recName.setUserNeme(receiverName);
                 recName.setTeamName("");
@@ -550,7 +550,7 @@ public class AmpMessageActions extends DispatchAction {
     }
 
     public ActionForward makeMsgRead(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-        
+
         AmpMessageState state=null;
         //Long msgStateId=null;
         if(request.getParameter("msgStateId")!=null){
@@ -561,26 +561,26 @@ public class AmpMessageActions extends DispatchAction {
             PrintWriter out = new PrintWriter(outputStream, true);
             String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
             xml += "<" + ROOT_TAG +">";
-            
+
             for (String msgStateId : messageIds) {
                 state=AmpMessageUtil.getMessageState(new Long(msgStateId));
                 if(state.getSenderId()==null){
                     state.setRead(true);
                 }
                 AmpMessageUtil.saveOrUpdateMessageState(state);
-                
+
                 xml+="<"+"message id=\""+msgStateId+"\" ";
                 xml+="read=\""+state.getRead()+"\" ";
                     xml+="msgId=\""+state.getMessage().getId()+"\" ";
                 xml+="/>";
-            }           
+            }
             xml+="</"+ROOT_TAG+">";
             out.println(xml);
             out.close();
             // return xml
             outputStream.close();
         }
-        
+
         return null;
     }
 
@@ -606,7 +606,7 @@ public class AmpMessageActions extends DispatchAction {
         if (settings!=null && settings.getMsgStoragePerMsgType() != null) {
             maxStorage = settings.getMsgStoragePerMsgType().intValue();
         }
-        
+
         if (teamMember != null) {
             msgType = AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false,maxStorage);
             alertType = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true,false,  maxStorage);
@@ -689,7 +689,7 @@ public class AmpMessageActions extends DispatchAction {
                        String[] recId = new String[]{"m:" + creator.getAmpTeamMemId().toString()};
                        messagesForm.setReceiversIds(recId);
                    }
-               }               
+               }
            }else if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){
                messagesForm.setMessageName("FWD: "+ msg.getName());
                messagesForm.setDescription(msg.getDescription());
@@ -728,7 +728,7 @@ public class AmpMessageActions extends DispatchAction {
             else{
                  hiddenMessages=0;
             }
-            
+
         }
         messagesForm.setHiddenMsgCount(hiddenMessages);
         //getting message which will become visible instead of deleted one
@@ -782,7 +782,7 @@ public class AmpMessageActions extends DispatchAction {
 
         AmpMessageForm messagesForm=(AmpMessageForm)form;
         messagesForm.setTeamsMap(null);
-        
+
         Collection<String> selAtts = new ArrayList<String> ();
         Map<String, Team> teamMap=new HashMap<String, Team>();
         List<AmpTeam> teams=(List<AmpTeam>)TeamUtil.getAllTeams();
@@ -804,27 +804,27 @@ public class AmpMessageActions extends DispatchAction {
 
         return mapping.findForward("addOrEditAmpMessage");
     }
-    
+
     public ActionForward attachFilesToMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         AmpMessageForm messageForm=(AmpMessageForm)form;
         //receivers shouldn't be lost
-        fillMessageFormReceivers(messageForm);      
-        
-        
+        fillMessageFormReceivers(messageForm);
+
+
         int currentAttachmentSize=messageForm.getFileUploaded().getFileData().length;
         int attachedFilesSize=messageForm.getAttachmentsSize();
         //check
         ActionErrors errors=null;
-        if(currentAttachmentSize+attachedFilesSize > MessageConstants.ATTACHMENTS_MAX_SIZE){            
+        if(currentAttachmentSize+attachedFilesSize > MessageConstants.ATTACHMENTS_MAX_SIZE){
             errors=new ActionErrors();
             errors.add("invalidSize", new ActionMessage("error.message.invalidAttachmentsSize", TranslatorWorker.translateText("You can attach max 10 Mb files")));
-            
+
             if (errors.size() > 0){
                 //we have all the errors for this step saved and we must throw the amp error
-                saveErrors(request, errors);                
+                saveErrors(request, errors);
             }
         }else{ //attachments size is OK
-            
+
             Sdm messageHolder=null;
             if(messageForm.getSdmDocument()!=null){
                 messageHolder=messageForm.getSdmDocument();
@@ -837,7 +837,7 @@ public class AmpMessageActions extends DispatchAction {
             sdmItem.setContent(messageForm.getFileUploaded().getFileData());
             sdmItem.setContentText(messageForm.getFileUploaded().getFileName());
             sdmItem.setContentTitle(messageForm.getFileUploaded().getFileName());
-            
+
             if (messageHolder.getItems() != null) {
                 //sdmItem.setParagraphOrder(new Long(DbUtil.getLastParagraph(messageHolder,sdmItem.getParagraphOrder()) + 1));
                 sdmItem.setParagraphOrder(new Long(messageHolder.getItems().size()));
@@ -849,23 +849,23 @@ public class AmpMessageActions extends DispatchAction {
                 items.add(sdmItem);
                 messageHolder.setItems(items);
             }
-            
+
             messageForm.setSdmDocument(messageHolder);
-            //increment attachments size        
+            //increment attachments size
             messageForm.setAttachmentsSize(attachedFilesSize+currentAttachmentSize);
             request.getSession().setAttribute("document", messageHolder);
         }
-        
+
         return mapping.findForward("addOrEditAmpMessage");
     }
-    
-    
-    
+
+
+
     public ActionForward removeAttachment(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         AmpMessageForm messageForm=(AmpMessageForm)form;
         //receivers shouldn't be lost
         fillMessageFormReceivers(messageForm);
-        
+
         Sdm attachmentsHolder=messageForm.getSdmDocument(); //this won't be null, because if we are removing any attachment, this automatically means that we have Sdm
         Long attachmentOrder=null; //order number or sdmItem in Sdm
         if(request.getParameter("attachmentOrder")!=null){
@@ -874,7 +874,7 @@ public class AmpMessageActions extends DispatchAction {
         //messageHolder should contain at least one attachment(the one we want to remove)
         if(attachmentOrder!=null){
             for (SdmItem attachment : attachmentsHolder.getItems()) {
-                if(attachment.getParagraphOrder().equals(attachmentOrder)){                 
+                if(attachment.getParagraphOrder().equals(attachmentOrder)){
                     attachmentsHolder.getItems().remove(attachment);
                     //decrement attached files size
                     int currentAttachmentSize=attachment.getContent().length;
@@ -888,10 +888,10 @@ public class AmpMessageActions extends DispatchAction {
             messageForm.setSdmDocument(null);
         }else{
             messageForm.setSdmDocument(attachmentsHolder);
-        }       
+        }
         return mapping.findForward("addOrEditAmpMessage");
     }
-    
+
     /**
      * Fills form receivers field with submitted values from messageForm.getReceiversIds().
      * used not to loose selected receivers when form is submitted to attach/remove attachment from the message
@@ -903,7 +903,7 @@ public class AmpMessageActions extends DispatchAction {
         List<LabelValueBean> allReceivers=null;
         if(messageReceivers!=null && messageReceivers.length>0){
             allReceivers=new ArrayList<LabelValueBean>();
-            
+
             Set<AmpTeam> selectedTeams=new HashSet<AmpTeam>();
             //this map will hold teamId as key and all the selected members for given team as value
             Map<Long,Set<AmpTeamMember>> membersForTheTeam=new HashMap<Long, Set<AmpTeamMember>>();
@@ -918,17 +918,17 @@ public class AmpMessageActions extends DispatchAction {
                     AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(id);
                     Set<AmpTeamMember> members=membersForTheTeam.get(teamMember.getAmpTeam().getAmpTeamId());
                     if(members==null){
-                        members=new HashSet<AmpTeamMember>();                       
+                        members=new HashSet<AmpTeamMember>();
                     }
                     members.add(teamMember);
                     membersForTheTeam.put(teamMember.getAmpTeam().getAmpTeamId(), members);
-                                        
+
                 }else if(messageReceivers[i].startsWith("c:")){//contacts
                     LabelValueBean contact=new LabelValueBean(messageReceivers[i].substring(messageReceivers[i].indexOf("c:")+2),messageReceivers[i]);
                     allReceivers.add(contact);
                 }
             }
-            
+
             for (AmpTeam team : selectedTeams) {
                 LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());
                 allReceivers.add(teamLabel);
@@ -938,7 +938,7 @@ public class AmpMessageActions extends DispatchAction {
                     allReceivers.add(tm);
                 }
             }
-            
+
             messageForm.setReceivers(allReceivers);
         }
     }
@@ -993,7 +993,7 @@ public class AmpMessageActions extends DispatchAction {
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(teamMember.getMemberId());
         User user=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()).getUser();
-        String senderName = user.getFirstNames() + " " + user.getLastName() 
+        String senderName = user.getFirstNames() + " " + user.getLastName()
                             + "<" + user.getEmailUsedForNotification() + ">;" + teamMember.getTeamName();
         message.setSenderName(senderName);
         /**
@@ -1046,8 +1046,8 @@ public class AmpMessageActions extends DispatchAction {
 
             Calendar cal=Calendar.getInstance();
             message.setCreationDate(cal.getTime());
-            
-            //save attached files 
+
+            //save attached files
             Sdm document=messageForm.getSdmDocument();
             Sdm doc=null;
             if(document!=null){
@@ -1055,7 +1055,7 @@ public class AmpMessageActions extends DispatchAction {
                 document.setId(null);
                 doc=DbUtil.saveOrUpdateDocument(document);
                 message.setAttachedDocs(doc);
-            } 
+            }
 
         //saving message
         AmpMessageUtil.saveOrUpdateMessage(message);
@@ -1065,7 +1065,7 @@ public class AmpMessageActions extends DispatchAction {
         state.setMessage(message);
         state.setSender(teamMember.getMemberName()+";"+teamMember.getTeamName());
         state.setSenderId(teamMember.getMemberId());
-        
+
         // check if user's inbox is already full
         Class clazz=null;
         if(message.getClassName().equalsIgnoreCase("u")){
@@ -1073,7 +1073,7 @@ public class AmpMessageActions extends DispatchAction {
         }else if(message.getClassName().equalsIgnoreCase("a")){
             clazz=AmpAlert.class;
         }
-        
+
         if(AmpMessageUtil.isSentOrDraftFull(clazz,teamMember.getMemberId(),message.getDraft())){
             state.setMessageHidden(true);
         }else{
@@ -1112,12 +1112,12 @@ public class AmpMessageActions extends DispatchAction {
                     }
                 } else if (receiver.startsWith("c")) { //contacts or people outside AMP
                     // we should send email to contacts, regardless setting value in Message Manager
-                    receiver = receiver.substring(2); 
+                    receiver = receiver.substring(2);
                     String email = receiver;
                     if (receiver.indexOf("<") != -1) {
                         email = receiver.substring(receiver.indexOf("<") + 1, receiver.indexOf(">"));
-                    }   
-                    
+                    }
+
                     String receivers = message.getExternalReceivers();
                     if (receivers == null) {
                         receivers = "";
@@ -1128,8 +1128,8 @@ public class AmpMessageActions extends DispatchAction {
                     }
 
                     receivers += receiver;
-                    message.setExternalReceivers(receivers);                        
-                    
+                    message.setExternalReceivers(receivers);
+
                     addrCol.add(new InternetAddress(email));
                 }
             }
@@ -1143,7 +1143,7 @@ public class AmpMessageActions extends DispatchAction {
             }
             AmpMessageUtil.saveOrUpdateMessage(message);
         }
-        
+
          //clear session if it contains sdm doc
         if(request.getSession().getAttribute("document")!=null){
             request.getSession().removeAttribute("document");
@@ -1158,7 +1158,7 @@ public class AmpMessageActions extends DispatchAction {
         }
 
         String fwd = null;
-        
+
         if (errors != null && errors.size() > 0){
             saveErrors(request, errors);
             fwd = "createMessageError";
@@ -1172,7 +1172,7 @@ public class AmpMessageActions extends DispatchAction {
     private void createMessageState(AmpMessage message, AmpTeamMember receiver, String senderName) throws Exception {
         AmpMessageState newMessageState=new AmpMessageState();
         newMessageState.setMessage(message);
-        newMessageState.setSender(senderName);      
+        newMessageState.setSender(senderName);
         newMessageState.setReceiver(receiver);
         newMessageState.setRead(false);
         //check if user's inbox is already full
@@ -1275,7 +1275,7 @@ public class AmpMessageActions extends DispatchAction {
              if(message.getRelatedActivityId()!=null){
                  form.setSelectedAct(getRelatedActivity(message.getRelatedActivityId()));
              }
-             
+
              form.setReceivesrsNameMail(new ArrayList<>());
 
              form.setSdmDocument(message.getAttachedDocs());
@@ -1325,12 +1325,12 @@ public class AmpMessageActions extends DispatchAction {
                     DigiConfig config = DigiConfigManager.getConfig();
                     String partialURL = config.getSiteDomain().getContent() ;
                     String links="";
-                    for (SdmItem attachedFile : attachedDocs.getItems()) {              
+                    for (SdmItem attachedFile : attachedDocs.getItems()) {
                         links += "<img src=\""+"/TEMPLATE/ampTemplate/imagesSource/common/attachment.png"+"\" border=\""+"0\" />";
                         links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
                         links += attachedFile.getContentTitle();
                         links += "</a>";
-                        links+=",";                     
+                        links+=",";
                     }
                     links=links.substring(0, links.length()-1);
                     result += " attachments=\"" +org.digijava.module.aim.util.DbUtil.filter(links) + "\"";
@@ -1402,12 +1402,12 @@ public class AmpMessageActions extends DispatchAction {
             DigiConfig config = DigiConfigManager.getConfig();
             String partialURL = config.getSiteDomain().getContent() ;
             String links="";
-            for (SdmItem attachedFile : attachedDocs.getItems()) {              
-                links += "<img src=\""+"/WEB-INF/jsp/message/view/images/attachment.png"+"\" border=\""+"0\" />";
+            for (SdmItem attachedFile : attachedDocs.getItems()) {
+                links += "<img src=\""+"/jsp/message/view/images/attachment.png"+"\" border=\""+"0\" />";
                 links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
                 links += attachedFile.getContentTitle();
                 links += "</a>";
-                links+=",";                     
+                links+=",";
             }
             links=links.substring(0, links.length()-1);
             result += " attachments=\"" +org.digijava.module.aim.util.DbUtil.filter(links) + "\"";
@@ -1435,7 +1435,7 @@ public class AmpMessageActions extends DispatchAction {
          MessageHelper msgHelper=new MessageHelper(msg.getId(),msg.getName(),msg.getDescription());
          msgHelper.setFrom(AmpMessageUtil.getMessageState(stateId).getSender());
          msgHelper.setObjectURL(msg.getObjectURL());
-         msgHelper.setAttachedDocs(msg.getAttachedDocs());      
+         msgHelper.setAttachedDocs(msg.getAttachedDocs());
          msgHelper.setReceivers(getMessageReceiversNames(msg));
 //       if(msgHelper.getReceivers()==null){
 //          msgHelper.setReceivers(new ArrayList<String>());
@@ -1443,12 +1443,12 @@ public class AmpMessageActions extends DispatchAction {
 //          for (LabelValueBean lvb : receivers) {
 //              msgHelper.getReceivers().add(lvb.getLabel());
 //          }
-//          
+//
 //       }
          msgHelper.setCreationDate(DateConversion.convertDateToString(msg.getCreationDate()));
          return msgHelper;
      }
-     
+
      private static String [] getMessageRecipients(AmpMessage message) throws Exception{
          Set<AmpMessageReceiver> msgReceivers = message.getMessageReceivers();
          Collection<String> selAtts = new ArrayList<String> ();
@@ -1464,18 +1464,18 @@ public class AmpMessageActions extends DispatchAction {
                         teamList.add(team);
                     }
                     memberList.add(teamMember);
-                }               
-                
+                }
+
                 for(AmpTeam team : teamList){
                     for(AmpTeamMember member : memberList){
                         if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
                             selAtts.add("m:" + member.getAmpTeamMemId().toString());
                         }
                     }
-                }               
-                retVal = (String[]) selAtts.toArray(new String[selAtts.size()]);    
-         }         
-         
+                }
+                retVal = (String[]) selAtts.toArray(new String[selAtts.size()]);
+         }
+
          return retVal;
      }
 
@@ -1498,22 +1498,22 @@ public class AmpMessageActions extends DispatchAction {
                     teamList.add(team);
                 }
                 memberList.add(teamMember);
-            }               
-            
+            }
+
             for(AmpTeam team : teamList){
                 allReceivers.add("---"+team.getName()+"---");
-                for(AmpTeamMember member : memberList){                     
+                for(AmpTeamMember member : memberList){
                     allReceivers.add(member.getUser().getFirstNames() + " " + member.getUser().getLastName());
                 }
-            }           
+            }
         }
         //contacts and external people
-        if(message.getExternalReceivers()!=null){            
+        if(message.getExternalReceivers()!=null){
             String[] externalReceivers=message.getExternalReceivers().split(",");
             for (int i = 0; i < externalReceivers.length; i++) {
                 allReceivers.add(externalReceivers[i]);
             }
-        }       
+        }
         return allReceivers;
      }
 }

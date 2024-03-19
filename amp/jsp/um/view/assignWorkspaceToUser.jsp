@@ -236,7 +236,7 @@
 												</td>
 												<td align="center">
 													<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn>Click on this icon to remove user from the workspace</digi:trn>">
-														<img  src="/WEB-INF/jsp/message/view/images/trash_12.gif" border="0" hspace="2"/>
+														<img  src="/jsp/message/view/images/trash_12.gif" border="0" hspace="2"/>
 													</a>
 												</td>
 											</tr>

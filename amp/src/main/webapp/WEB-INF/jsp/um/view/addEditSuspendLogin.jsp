@@ -7,7 +7,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 
-<jsp:include page="/WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"  />
+<jsp:include page="/jsp/aim/view/scripts/newCalendar.jsp"  />
 
 <digi:instance property="suspendLoginManagerForm"/>
 <script type="text/javascript">

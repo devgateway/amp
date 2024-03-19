@@ -14,7 +14,7 @@
 <!-- Individual YUI CSS files -->
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
-<link rel="stylesheet" type="text/css" href="/WEB-INF/jsp/aim/view/css/filters/filters2.css">
+<link rel="stylesheet" type="text/css" href="/jsp/aim/view/css/filters/filters2.css">
 
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
 <link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
@@ -54,7 +54,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
-<script type="text/javascript" src="/WEB-INF/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <!-- Individual YUI JS files -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -79,8 +79,8 @@
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
-<jsp:include page="/WEB-INF/jsp/aim/view/ar/reportsScripts.jsp"/>
-<jsp:include page="/WEB-INF/jsp/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
+<jsp:include page="/jsp/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/jsp/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 
 <c:set var="showCurrSettings">
 	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn>

@@ -46,7 +46,7 @@
 							</c:set>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
 									<jsp:include
-									page="/WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
+									page="/jsp/aim/view/adminXSLExportToolbar.jsp" />
 							</div></td>
 			</tr>
 				<tr>

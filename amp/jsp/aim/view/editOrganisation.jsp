@@ -26,9 +26,9 @@
     <jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 <jsp:include page="scripts/newCalendar.jsp"  />
-<jsp:include page="/WEB-INF/jsp/aim/view/addEditOrganizationsPopin.jsp"  />
-<jsp:include page="/WEB-INF/jsp/aim/view/addOrganizationPopin.jsp"  />
-<jsp:include page="/WEB-INF/jsp/aim/view/components/contactScripts.jsp"  />
+<jsp:include page="/jsp/aim/view/addEditOrganizationsPopin.jsp"  />
+<jsp:include page="/jsp/aim/view/addOrganizationPopin.jsp"  />
+<jsp:include page="/jsp/aim/view/components/contactScripts.jsp"  />
 
 <script language="JavaScript" type="text/javascript">
 	function addLoadEvent(func) {
@@ -1005,7 +1005,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                     <font size="2" color="#FF0000">*</font>
                                                 </td>
                                                 <td align="left">
-                                                	<jsp:include page="/WEB-INF/jsp/aim/view/multilingual/multilingualFieldEntry.jsp">
+                                                	<jsp:include page="/jsp/aim/view/multilingual/multilingualFieldEntry.jsp">
 														<jsp:param name="attr_name" value="multilingual_organisation_name" />
 													</jsp:include>
                                                     <%--<html:text name="aimAddOrgForm" property="name" size="54" styleId="orgName"/>
@@ -2088,7 +2088,7 @@ border-right: 1px solid rgb(208, 208, 208);
 							<bean:define toScope="request" id="crRights" value="true" />
 							<bean:define toScope="request" id="checkBoxToHide" value="false" />
 							<bean:define toScope="request" id="showLineBreaks" value="true" />
-							<jsp:include page="/WEB-INF/jsp/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+							<jsp:include page="/jsp/contentrepository/view/showSelectedDocumentsDM.jsp"/>
 						</td>
 					</tr>
 				</table>

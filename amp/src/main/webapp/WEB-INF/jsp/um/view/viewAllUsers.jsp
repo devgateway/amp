@@ -59,7 +59,7 @@ function banUser(txt) {
 
 
 <!--  AMP Admin Logo -->
-<!-- jsp:include page="/WEB-INF/jspteamPagesHeader.jsp"  /-->
+<!-- jsp:include page="/jspteamPagesHeader.jsp"  /-->
 <!-- End of Logo -->
 <digi:instance property="umViewAllUsersForm" />
 <digi:context name="digiContext" property="context" />
@@ -106,7 +106,7 @@ function banUser(txt) {
 					<tr>
 						<td align="left" colspan=8>
 								<jsp:include
-									page="/WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
+									page="/jsp/aim/view/adminXSLExportToolbar.jsp" />
 						</td>
 					</tr>
 					<tr style="background-color: #F2F2F2; padding: 5px;">
@@ -243,10 +243,10 @@ function banUser(txt) {
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameAscending'}">
-																									<img src="/WEB-INF/jsp/aim/images/up.gif" />
+																									<img src="/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameDescending'}">
-																									<img src="/WEB-INF/jsp/aim/images/down.gif" />
+																									<img src="/jsp/aim/images/down.gif" />
 																								</c:if></td>
 																							<td height="30" width="220"><c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='emailAscending'}">
@@ -264,10 +264,10 @@ function banUser(txt) {
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}">
-																									<img src="/WEB-INF/jsp/aim/images/up.gif" />
+																									<img src="/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailDescending'}">
-																									<img src="/WEB-INF/jsp/aim/images/down.gif" />
+																									<img src="/jsp/aim/images/down.gif" />
 																								</c:if></td>
 																							<td height="30" width="220"><b> <digi:trn
 																										key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn>

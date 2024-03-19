@@ -117,7 +117,7 @@
 
 
 <script language="JavaScript" type="text/javascript"
-	src="/WEB-INF/jsp/aim/view/scripts/common.js"></script>
+	src="/jsp/aim/view/scripts/common.js"></script>
 
 <script language="JavaScript" type="text/javascript">
 $( document ).ready(function() {

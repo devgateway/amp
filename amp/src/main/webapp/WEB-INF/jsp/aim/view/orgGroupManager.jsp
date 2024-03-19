@@ -150,8 +150,8 @@
 																					<b><digi:trn key="aim:orgGroupName">Group Name</digi:trn></b>
 																				</digi:link>
 																			</c:if>
-																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="/WEB-INF/jsp/aim/images/up.gif"/></c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="/WEB-INF/jsp/aim/images/down.gif"/></c:if>
+																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="/jsp/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="/jsp/aim/images/down.gif"/></c:if>
 																		</td>
 																		<td height="30" width="171" class="inside" bgcolor=#F2F2f2>
 																			<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
@@ -166,8 +166,8 @@
 																					<b><digi:trn key="aim:orgGroupCode">Code</digi:trn></b>
 																				</digi:link>
 																			</c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="/WEB-INF/jsp/aim/images/up.gif"/></c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="/WEB-INF/jsp/aim/images/down.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="/jsp/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="/jsp/aim/images/down.gif"/></c:if>
 																		</td>
 																		<td height="30" width="147" class="inside" bgcolor=#F2F2f2>
 																			<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
@@ -182,8 +182,8 @@
 																					<b><digi:trn key="aim:orgGroupType">Type</digi:trn></b>
 																				</digi:link>
 																			</c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeAscending'}"><img  src="/WEB-INF/jsp/aim/images/up.gif"/></c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeDescending'}"><img src="/WEB-INF/jsp/aim/images/down.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeAscending'}"><img  src="/jsp/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeDescending'}"><img src="/jsp/aim/images/down.gif"/></c:if>
 
 																		</td>
 																	</tr>

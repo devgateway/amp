@@ -456,8 +456,8 @@ public class MessageTest extends SeleneseTestCase {
     }
 
     private static void deleteLoop(Selenium selenium) {
-        while (selenium.isElementPresent("//img[@hspace=\"2\" and @src=\"/WEB-INF/jsp/message/view/images/trash_12.gif\"]")) {
-            selenium.click("//img[@hspace=\"2\" and @src=\"/WEB-INF/jsp/message/view/images/trash_12.gif\"]");
+        while (selenium.isElementPresent("//img[@hspace=\"2\" and @src=\"/jsp/message/view/images/trash_12.gif\"]")) {
+            selenium.click("//img[@hspace=\"2\" and @src=\"/jsp/message/view/images/trash_12.gif\"]");
             selenium.getConfirmation();
             try {
                 Thread.sleep(3000);

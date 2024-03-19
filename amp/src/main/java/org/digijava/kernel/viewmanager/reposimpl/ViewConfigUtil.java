@@ -378,13 +378,13 @@ public abstract class ViewConfigUtil
                 if (groupType.equals(MODULE_DIR)) {
                     String groupDir = groupName == null ? "" : "/" + groupName;
 
-                    fileName = "/src/main/webapp/WEB-INF/jsp" + groupDir + "/view/" +
-                        path;
-                    if (path.contains(".jsp"))
-                    {
-                        fileName = "/WEB-INF/jsp" + groupDir + "/view/" +
+//                    fileName = "/src/main/webapp/WEB-INF/jsp" + groupDir + "/view/" +
+//                        path;
+//                    if (path.contains(".jsp"))
+//                    {
+                        fileName = "/jsp" + groupDir + "/view/" +
                                 path;
-                    }
+//                    }
                     file = new File(servletContext.getRealPath(fileName));
 
                     if (!file.exists()) {

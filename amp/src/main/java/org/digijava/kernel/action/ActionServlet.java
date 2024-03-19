@@ -30,7 +30,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
 
     private static final String STRUTS_CONFIG_FILE = "struts-config.xml";
-    private static final String MODULE_DIRECTORY = "/WEB-INF/jsp";
+    private static final String MODULE_DIRECTORY = "/jsp";
 
     public void init() {
 

@@ -5,7 +5,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="/WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"  %>
+<%@ include file="/jsp/aim/view/scripts/newCalendar.jsp"  %>
 
 <script type="text/javascript">
 		YAHOOAmp.namespace("YAHOO.amptab");

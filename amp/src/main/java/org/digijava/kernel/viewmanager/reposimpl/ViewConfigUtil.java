@@ -390,6 +390,7 @@ public abstract class ViewConfigUtil
 
                     fileName = "/WEB-INF/jsp" + groupDir + "/view/" +
                         path;
+                    logger.info("FILE PATH: "+servletContext.getRealPath(fileName));
                     file = new File(servletContext.getRealPath(fileName));
 
                     if (!file.exists()) {

@@ -79,7 +79,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
                                         boolean isTemplate, String groupType,
                                         String groupName) {
         String expandedPath = null;
-        if ( (path != null) && (path.trim().length() != 0) &&
+        if ( (path != null) && (!path.trim().isEmpty()) &&
             !path.startsWith("/")) {
 
             String groupDir = groupName == null ? "" : "/" + groupName;

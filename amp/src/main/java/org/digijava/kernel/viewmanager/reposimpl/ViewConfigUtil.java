@@ -412,6 +412,8 @@ public abstract class ViewConfigUtil
             }
         }
         logger.debug("findExistingFile() returns: " + fileName);
+        logger.info("FINAL FILE PATH: "+fileName);
+
 
         return fileName;
     }

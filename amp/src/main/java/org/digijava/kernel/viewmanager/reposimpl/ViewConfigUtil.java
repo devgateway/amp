@@ -331,17 +331,19 @@ public abstract class ViewConfigUtil
                      groupType + "," + groupName
                      );
 
-        if (path.startsWith("/")) {
+//        if (path.startsWith("/")) {
             File file = new File(servletContext.getRealPath(path));
+
             if (file.exists()) {
+                logger.info("FINAL FILE PATH: "+path);
                 return path;
             }
-            else {
-                throw new ViewConfigException("Unable to open file " + path +
-                                              " with absolute path " +
-                                              file.getAbsolutePath());
-            }
-        }
+//            else {
+//                throw new ViewConfigException("Unable to open file " + path +
+//                                              " with absolute path " +
+//                                              file.getAbsolutePath());
+//            }
+//        }
         // Workaround for images
         if ( ( (groupType == null || groupType.trim().isEmpty()) ||
               groupType.equals(LAYOUT_DIR)) &&
@@ -370,7 +372,7 @@ public abstract class ViewConfigUtil
                                          groupType,
                                          groupName);
         logger.info("EXPANDED: "+servletContext.getRealPath(fileName));
-        File file = new File(servletContext.getRealPath(fileName));
+         file = new File(servletContext.getRealPath(fileName));
 
         if (!file.exists()) {
             if (isTemplate || parentTemplateName == null) {
@@ -412,7 +414,10 @@ public abstract class ViewConfigUtil
             }
         }
         logger.debug("findExistingFile() returns: " + fileName);
-        logger.info("FINAL FILE PATH: "+fileName);
+
+        findExistingFile(path,
+                parentTemplateName, isTemplate, null,
+                groupType, groupName);
 
 
         return fileName;

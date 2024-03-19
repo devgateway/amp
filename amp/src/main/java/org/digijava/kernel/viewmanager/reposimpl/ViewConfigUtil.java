@@ -324,77 +324,98 @@ public abstract class ViewConfigUtil
                                       boolean isTemplate,
                                       String parentTemplateName,
                                       String groupType,
-                                      String groupName) throws ViewConfigException {
-        logger.debug("findExistingFile(): " + path + "," + isTemplate + "," + parentTemplateName + "," +
-                groupType + "," + groupName);
+                                      String groupName) throws
+        ViewConfigException {
+        logger.debug("findExistingFile(): " +
+                     path + "," + isTemplate + "," + parentTemplateName + "," +
+                     groupType + "," + groupName
+                     );
 
-        String realPath = servletContext.getRealPath(path);
-        File file = new File(realPath);
-
-        // Check if the file exists at the specified path
-        if (file.exists()) {
-            return path;
-        }
-
-        // Handle cases where path starts with "/"
         if (path.startsWith("/")) {
-            throw new ViewConfigException("Unable to open file " + path +
-                    " with absolute path " + realPath);
+            File file = new File(servletContext.getRealPath(path));
+            if (file.exists()) {
+                return path;
+            }
+            else {
+                throw new ViewConfigException("Unable to open file " + path +
+                                              " with absolute path " +
+                                              file.getAbsolutePath());
+            }
         }
-
-        // Handle images in module directory
-        if ((groupType == null || groupType.trim().isEmpty() || groupType.equals(LAYOUT_DIR)) &&
-                path.startsWith("module/")) {
-            logger.info("module path " + path);
+        // Workaround for images
+        if ( ( (groupType == null || groupType.trim().isEmpty()) ||
+              groupType.equals(LAYOUT_DIR)) &&
+            path.startsWith("module/")) {
+            logger.info("module path "+path);
             logger.info("normalizing call of findExistingFile()");
             String[] parts = DgUtil.fastSplit(path, '/');
             if (parts.length > 2) {
-                StringBuilder newPath = new StringBuilder(path.length());
+                StringBuffer newPath = new StringBuffer(path.length());
+                //String newPath = "";
                 for (int i = 2; i < parts.length; i++) {
                     if (i > 2) {
                         newPath.append("/");
                     }
                     newPath.append(parts[i]);
                 }
-                return findExistingFile(newPath.toString(), folderName, isTemplate, parentTemplateName, MODULE_DIR, parts[1]);
+
+                return findExistingFile(newPath.toString(), folderName,
+                                        isTemplate,
+                                        parentTemplateName, MODULE_DIR, parts[1]);
             }
         }
 
-        // Assemble path and handle template cases
-        String fileName = expandFilePath(path, folderName, isTemplate, groupType, groupName);
-        realPath = servletContext.getRealPath(fileName);
-        file = new File(realPath);
+        // Assemble path
+        String fileName = expandFilePath(path, folderName, isTemplate,
+                                         groupType,
+                                         groupName);
+        logger.info("EXPANDED: "+servletContext.getRealPath(fileName));
+        File file = new File(servletContext.getRealPath(fileName));
 
-        // Check if the file exists at the assembled path
         if (!file.exists()) {
-            // Find in the repository
             if (isTemplate || parentTemplateName == null) {
+                // Find in the repository
                 if (groupType.equals(MODULE_DIR)) {
                     String groupDir = groupName == null ? "" : "/" + groupName;
-                    fileName = "/src/main/webapp/WEB-INF/jsp" + groupDir + "/view/" + path;
-                    if (path.contains(".jsp")) {
-                        fileName = "/WEB-INF/jsp" + groupDir + "/view/" + path;
+
+                    fileName = "/src/main/webapp/WEB-INF/jsp" + groupDir + "/view/" +
+                        path;
+                    if (path.contains(".jsp"))
+                    {
+                        fileName = "/WEB-INF/jsp" + groupDir + "/view/" +
+                                path;
                     }
-                    realPath = servletContext.getRealPath(fileName);
-                    file = new File(realPath);
+                    logger.info("FILE PATH: "+servletContext.getRealPath(fileName));
+                    file = new File(servletContext.getRealPath(fileName));
 
                     if (!file.exists()) {
-                        throw new ViewConfigException("Unable to open file in the repository " +
-                                fileName + " with absolute path " +
-                                realPath);
+
+                        throw new ViewConfigException(
+                            "Unable to open file in the repository " +
+                            fileName +
+                            " with absolute path " +
+                            file.getAbsolutePath());
                     }
-                } else {
-                    throw new ViewConfigException("Unable to open file " + fileName +
-                            " with absolute path " + realPath);
                 }
-            } else {
-                fileName = findExistingFile(path, parentTemplateName, true, null, groupType, groupName);
+                else {
+                    throw new ViewConfigException("Unable to open file " +
+                                                  fileName +
+                                                  " with absolute path " +
+                                                  file.getAbsolutePath());
+                }
+            }
+            else {
+                fileName = findExistingFile(path,
+                                            parentTemplateName, true, null,
+                                            groupType, groupName);
+
             }
         }
         logger.debug("findExistingFile() returns: " + fileName);
-        logger.info("FINAL FILE PATH: " + fileName);
+        logger.info("FINAL FILE PATH: "+fileName);
+
+
         return fileName;
     }
-
 
 }

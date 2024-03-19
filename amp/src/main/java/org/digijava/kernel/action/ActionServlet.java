@@ -67,23 +67,23 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
                 File.separator + STRUTS_CONFIG_FILE);
 
         if (tmpFile.exists() && tmpFile.isFile()) {
-            retVal.append(MODULE_DIRECTORY);
+            retVal.append(getServletContext().getRealPath(MODULE_DIRECTORY));
             retVal.append("/");
             retVal.append(tmpFile.getName());
         }
 
-        for (int i = 0; i<dirList.length; i++) {
+        for (String s : dirList) {
 
-            tmpFile =  new File(configDir.getAbsolutePath() +
-                    File.separator + dirList[i] +
+            tmpFile = new File(configDir.getAbsolutePath() +
+                    File.separator + s +
                     File.separator + STRUTS_CONFIG_FILE);
 
             if (tmpFile.exists() && tmpFile.isFile()) {
 
                 retVal.append(",");
-                retVal.append(MODULE_DIRECTORY);
+                retVal.append(getServletContext().getRealPath(MODULE_DIRECTORY));
                 retVal.append("/");
-                retVal.append(dirList[i]);
+                retVal.append(s);
                 retVal.append("/");
                 retVal.append(tmpFile.getName());
 

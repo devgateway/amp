@@ -382,7 +382,7 @@ public abstract class ViewConfigUtil
 //                        path;
 //                    if (path.contains(".jsp"))
 //                    {
-                        fileName = "/jsp" + groupDir + "/view/" +
+                        fileName = "/WEB-INF/jsp" + groupDir + "/view/" +
                                 path;
 //                    }
                     file = new File(servletContext.getRealPath(fileName));
@@ -414,7 +414,6 @@ public abstract class ViewConfigUtil
             }
         }
         logger.debug("findExistingFile() returns: " + fileName);
-        logger.info("FINAL FILE PATH: "+fileName);
 
 
         return fileName;

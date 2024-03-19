@@ -1,6 +1,6 @@
 
 
-<%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %><html>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %><html>
 
 
 
@@ -25,13 +25,13 @@ var OK_to_leave = "yes";
 
 <tr>
 		<!-- header -->
-		
-		
+
+
 		<tiles:insert attribute="header" />
-		
-		
-		
-		
+
+
+
+
 
 </tr>
 

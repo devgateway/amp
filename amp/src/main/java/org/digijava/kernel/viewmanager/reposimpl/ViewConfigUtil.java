@@ -355,10 +355,11 @@ public abstract class ViewConfigUtil
             }
         }
         // Workaround for images
-        if ( ( (groupType == null || groupType.trim().length() == 0) ||
+        if ( ( (groupType == null || groupType.trim().isEmpty()) ||
               groupType.equals(LAYOUT_DIR)) &&
             path.startsWith("module/")) {
-            logger.debug("normalizing call of findExistingFile()");
+            logger.info("module path "+path);
+            logger.info("normalizing call of findExistingFile()");
             String[] parts = DgUtil.fastSplit(path, '/');
             if (parts.length > 2) {
                 StringBuffer newPath = new StringBuffer(path.length());

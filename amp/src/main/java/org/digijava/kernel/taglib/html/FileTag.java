@@ -74,7 +74,7 @@ public class FileTag
     public int doStartTag() throws JspException {
       String src;
 
-      if ( (getCache() != null && getCache().trim().length() > 0 &&
+      if ( (getCache() != null && !getCache().trim().isEmpty() &&
             getCache().equalsIgnoreCase("false") && !DgUtil.isResourceCached()))
         src = TagUtil.calculateURL(getSrc(), false, pageContext );
       else

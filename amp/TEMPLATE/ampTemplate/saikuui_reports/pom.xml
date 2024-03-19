@@ -42,7 +42,7 @@
               <goal>compress</goal>
             </goals>
           </execution>
-        </executions>        
+        </executions>
         <configuration>
           <nosuffix>true</nosuffix>
           <gzip>true</gzip>
@@ -81,7 +81,7 @@
                   <include>classes/views/OpenQuery.js</include>
                   <include>classes/views/SaveQuery.js</include>
                   <include>classes/views/OpenDialog.js</include>
-                  <include>classes/models/Repository.js</include>
+                  <include>classes/models/jsp.js</include>
                   <include>classes/models/Result.js</include>
                   <include>classes/models/QueryAction.js</include>
                   <include>classes/models/QueryScenario.js</include>
@@ -169,11 +169,11 @@
 			                <artifacts>
 			                    <artifact>
 			                        <file>target/saiku-ui-${project.version}.war</file>
-			                        <type>war</type>                           
+			                        <type>war</type>
 			                    </artifact>
 			                     <artifact>
 			                        <file>target/saiku-ui-${project.version}.zip</file>
-			                        <type>zip</type>                           
+			                        <type>zip</type>
 			                    </artifact>
 			                </artifacts>
 			            </configuration>
@@ -187,7 +187,7 @@
         <repository>
             <id>jsdoctk1</id>
             <url>http://jsdoctk-plugin.googlecode.com/svn/repo</url>
-        </repository>
+        </jsp>
     </repositories>
     <pluginRepositories>
         <pluginRepository>

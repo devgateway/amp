@@ -10,9 +10,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" href="<digi:file src="/repository/parisindicator/view/css/pi_styles.css"/>">
+<link rel="stylesheet" href="<digi:file src="/jsp/parisindicator/view/css/pi_styles.css"/>">
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="/jsp/aim/view/teamPagesHeader.jsp"  />
 
 <%
 String auxReportId = request.getParameter("reportId");
@@ -49,31 +49,31 @@ request.getParameter("print");
 		            <tr>
 		                <td class="td_right_left1">
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="3">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_3.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_3.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="4">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_4.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_4.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5a">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_5a.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_5a.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5b">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_5b.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_5b.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="6">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_6.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_6.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="7">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_7.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_7.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="9">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_9.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_9.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10a">
-                                <jsp:include page="/repository/parisindicator/view/parisindicator_10a.jsp"></jsp:include>
+                                <jsp:include page="/jsp/parisindicator/view/parisindicator_10a.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10b">
-	                        	<jsp:include page="/repository/parisindicator/view/parisindicator_10b.jsp"></jsp:include>
+	                        	<jsp:include page="/jsp/parisindicator/view/parisindicator_10b.jsp"></jsp:include>
 							</logic:equal>
 	                    </td>
 	                </tr>

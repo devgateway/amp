@@ -388,7 +388,7 @@ public abstract class ViewConfigUtil
                 if (groupType.equals(MODULE_DIR)) {
                     String groupDir = groupName == null ? "" : "/" + groupName;
 
-                    fileName = "/repository" + groupDir + "/view/" +
+                    fileName = "/jsp" + groupDir + "/view/" +
                         path;
                     file = new File(servletContext.getRealPath(fileName));
 

@@ -8,7 +8,7 @@ Feature: Executing MDX queries coming from AMP
 Modified files:
 saiku/routers/QueryRouter.js
 saiku/Settings.js
-saiku/Repository.js
+saiku/jsp.js
 
 
 Feature: Deactivated Global Toolbar

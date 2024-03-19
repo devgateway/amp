@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!-- Dependencies -->
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <script type="text/javascript">
@@ -20,7 +20,7 @@
 
 <div id="myUserFilterWrapper" style="display: none;">
 	<div id="customUser" class="invisible-item" class="content">
-		<jsp:include page="/repository/aim/view/workspacePopup.jsp" />
+		<jsp:include page="/jsp/aim/view/workspacePopup.jsp" />
 	</div>
 </div>
 
@@ -75,13 +75,13 @@ function SwitchLanguageMenu(value) {
 
 
 	function newAddActivity() {
-		selectedLevelId=0; 
-		window.location.href="/wicket/onepager/activity/new";	
+		selectedLevelId=0;
+		window.location.href="/wicket/onepager/activity/new";
 	}
-	
+
 	function addActivity() {
-		selectedLevelId=0; 
-		window.location.href="/aim/addActivity.do~pageId=1~reset=true~resetMessages=true~action=create~activityLevelId="+selectedLevelId;	
+		selectedLevelId=0;
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~resetMessages=true~action=create~activityLevelId="+selectedLevelId;
 	}
 
 function addMessage(fillTypesAndLevels) {

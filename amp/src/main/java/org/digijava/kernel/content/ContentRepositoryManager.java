@@ -29,15 +29,15 @@ import java.util.Set;
  */
 public final class ContentRepositoryManager {
     private static Logger logger = Logger.getLogger(ContentRepositoryManager.class);
-    
+
     private static final String JACKRABBIT_DIR_PATH = DgUtil.getWebInfPath("jackrabbit");
-    private static final String REPOSITORY_CONFIG_FILE_PATH = "/repository.xml";
+    private static final String REPOSITORY_CONFIG_FILE_PATH = "/jsp.xml";
 
     private static final String AMP_LABLE_NAMESPACE = "http://amp-demo.code.ro/label";
     private static final String AMP_DOC_NAMESPACE = "http://amp-demo.code.ro/ampdoc";
 
     private static final String DEFAULT_WRITE_USER_EMAIL = "admin@amp.org";
-    
+
     private static final String JCR_WRITE_SESSION = "jcr-write-session";
     private static final String JCR_READ_SESSION = "jcr-read-session";
 
@@ -55,17 +55,17 @@ public final class ContentRepositoryManager {
 
     /**
      * Get the jackrabbit repository instance.
-     * 
+     *
      * @return content repository
      */
     public static RepositoryImpl getRepositoryInstance() {
         if (repository == null) {
             initialize();
         }
-        
+
         return repository;
     }
-    
+
     /**
      * Initiate the jackrabbit repository.
      */
@@ -73,30 +73,30 @@ public final class ContentRepositoryManager {
         String appPath = DocumentManagerUtil.getApplicationPath();
         String dir = appPath + JACKRABBIT_DIR_PATH;
         String configFilePath = dir + REPOSITORY_CONFIG_FILE_PATH;
-        
+
         try {
             repository = RepositoryImpl.create(RepositoryConfig.install(new File(configFilePath), new File(dir)));
         } catch (RepositoryException | IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-    
+
     /**
      * Shuts down the repository.
      */
     public static void shutdown() {
         getRepositoryInstance().shutdown();
     }
-    
+
     /**
      * Gets a read session from current request. If it doens't exist, it will be created.
-     * 
+     *
      * @param request
      * @return logged in session
      */
     public static Session getReadSession(HttpServletRequest request) {
         Session readSession = (Session) request.getAttribute(JCR_READ_SESSION);
-        
+
         try {
             readSession = getOrCloseIfNotLive(readSession);
             if (readSession == null) {
@@ -105,15 +105,15 @@ public final class ContentRepositoryManager {
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
-        
+
         request.setAttribute(JCR_READ_SESSION, readSession);
-        
+
         return readSession;
     }
-    
+
     /**
      * Gets a write session from current request. If it doens't exist, it will be created.
-     * 
+     *
      * @param request
      * @return
      */
@@ -134,31 +134,31 @@ public final class ContentRepositoryManager {
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
-        
+
         request.setAttribute(JCR_WRITE_SESSION, writeSession);
-        
+
         return writeSession;
     }
 
     /**
      * Created the credentials used for fetching a write session.
-     * 
+     *
      * @param request
-     * @return credentials 
+     * @return credentials
      */
     private static SimpleCredentials getCredentials(HttpServletRequest request) {
         String userName = DEFAULT_WRITE_USER_EMAIL;
         TeamMember teamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-        
+
         if (teamMember != null && teamMember.getEmail() != null) {
             userName = teamMember.getEmail();
         }
 
         SimpleCredentials creden = new SimpleCredentials(userName, userName.toCharArray());
-        
+
         return creden;
     }
-    
+
     private static void registerNamespace(Session session, String namespace, String uri) {
         Workspace workspace = session.getWorkspace();
         NamespaceRegistry namespaceRegistry = null;
@@ -175,23 +175,23 @@ public final class ContentRepositoryManager {
             logger.error(e.getMessage(), e);
         }
     }
-    
+
     /**
      * Close sessions related to a request.
-     * 
+     *
      * @param request
      */
     public static void closeSessions(HttpServletRequest request) {
         closeSession((Session) request.getAttribute(JCR_WRITE_SESSION));
         request.removeAttribute(JCR_WRITE_SESSION);
-        
+
         closeSession((Session) request.getAttribute(JCR_READ_SESSION));
         request.removeAttribute(JCR_READ_SESSION);
     }
-    
+
     /**
      * Closes a <code>Session</code>. This method should be called when a <code>Session</code> is no longer needed.
-     * 
+     *
      * @param session
      */
     public static void closeSession(Session session) {
@@ -199,10 +199,10 @@ public final class ContentRepositoryManager {
             session.logout();
         }
     }
-    
+
     /**
      * Return session if is usable. Close if it is unusable and return null.
-     * 
+     *
      * @param session
      * @return
      */
@@ -211,10 +211,10 @@ public final class ContentRepositoryManager {
             closeSession(session);
             return null;
         }
-        
+
         return session;
     }
-    
+
     private static void registerObservers(Session session) {
         try {
             ObservationManager observationManager = session.getWorkspace().getObservationManager();

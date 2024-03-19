@@ -34,7 +34,7 @@
         <test>${project.basedir}/test</test>
         <etc>${project.basedir}/etc</etc>
         <deployConfigs>deployConfigs</deployConfigs>
-        <repository>${project.basedir}/repository</repository>
+        <repository>${project.basedir}/jsp</jsp>
         <jackrabbit>${project.basedir}/jackrabbit</jackrabbit>
         <ampTest>${project.basedir}/src/main/webapp/WEB-INF/amp-test</ampTest>
         <ampSelenium>${project.basedir}/src/main/webapp/WEB-INF/amp-selenium-test</ampSelenium>
@@ -68,7 +68,7 @@
             <id>central</id>
             <name>amp</name>
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
-        </repository>
+        </jsp>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -1495,7 +1495,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${repository}</outputDirectory>
+                            <outputDirectory>jsp</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${deployConfigs}/${serverName}</directory>

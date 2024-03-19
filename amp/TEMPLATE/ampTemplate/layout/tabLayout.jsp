@@ -28,7 +28,7 @@
 			String key=(title.replaceAll(" ",""));
 			%>
 			<c:set var="key">aim:pagetitle:<%=key%></c:set>
-				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn>
 				<digi:trn key="aim:pagetitle:${key}">
 					<%=title%>
 				</digi:trn>
@@ -102,7 +102,7 @@
 
 				<TD width="100%" vAlign="top" align="left">
 
-					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
+					<jsp:include page="../../../jsp/aim/view/teamPagesHeader.jsp"  />
 
 				</TD>
 

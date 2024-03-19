@@ -44,7 +44,7 @@ public abstract class PropertyListable implements Cloneable {
     
     @PropertyListableIgnore
     public String getJspFile() {
-    return "/repository/aim/view/listableBean.jsp";
+    return "/jsp/aim/view/listableBean.jsp";
     }
     
     @PropertyListableIgnore

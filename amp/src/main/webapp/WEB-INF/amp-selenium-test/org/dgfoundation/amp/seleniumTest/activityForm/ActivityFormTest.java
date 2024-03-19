@@ -9,7 +9,7 @@ import com.thoughtworks.selenium.Selenium;
 import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class ActivityFormTest extends SeleneseTestCase{
-    
+
     private static Logger logger = Logger.getLogger(ActivityFormTest.class);
     public static final String[] FUNDING_DATES = {"01/02/2008","13/06/2008","25/10/2008","10/03/2009","20/07/2009"};
     public static final String[] ACTUAL_COMMITMENTS = {"25","10","13","12","27"};
@@ -28,9 +28,9 @@ public class ActivityFormTest extends SeleneseTestCase{
     public static final String TOTAL_ACTUAL_DISBURSEMENT_2009 = "23";
     public static final String TOTAL_PLANNED_COMMITMENTS_2009 = "34";
     public static final String TOTAL_PLANNED_DISBURSEMENT_2009 = "5";
-    
-    
-    
+
+
+
     public void setUp() throws Exception {
 //      setUp("http://generic.ampdev.net", "*firefox");
 //      setUp("http://drc.ampdev.net", "*firefox");
@@ -39,12 +39,12 @@ public class ActivityFormTest extends SeleneseTestCase{
         setUp("http://senegal.staging.ampdev.net/", "*chrome");
     }
     public static void testAddActivity(LoggingSelenium selenium) throws Exception {
-        
+
         String testTime =  String.valueOf(System.currentTimeMillis());
         String activityName ="Activity for selenium test " + testTime;
         String user = "uattl@amp.org";
         String password = "abc";
-        
+
         String primarySector = "";
         String primarySubSector = "";
         String secondarySector = "";
@@ -56,16 +56,16 @@ public class ActivityFormTest extends SeleneseTestCase{
         String secondaryProgram = "";
         String secondarySubProgram = "";
         int fundingQty = 5;
-        
+
         selenium.open("/");
         selenium.type("j_username", user);
         selenium.type("j_password", password);
         selenium.click("submitButton");
         selenium.waitForPageToLoad("50000");
-        
+
         String version = selenium.getText("//div[@class=\"footerText\"]");
         version = version.substring(version.indexOf("1.1"), version.indexOf("1.1")+4);
-        
+
         selenium.click("link=UAT Team Workspace");
         selenium.waitForPageToLoad("50000");
 
@@ -204,12 +204,12 @@ public class ActivityFormTest extends SeleneseTestCase{
                         selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitAfterSelectingOrg();~PARAM_COLLECTION_NAME=selectedOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
                         //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
                         Thread.sleep(10000);
-                        selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-                       
+                        selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+
                         SeleniumTestUtil.waitForElement(selenium,"//input[@onclick='return searchOrganization()']", 90);
                         selenium.click("//input[@onclick='return searchOrganization()']");
                         SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
-                        selenium.click("selOrganisations"); 
+                        selenium.click("selOrganisations");
                         selenium.click("//input[@onclick='return selectOrganization()']");
                         selenium.selectWindow("null");
                         selenium.waitForPageToLoad("50000");
@@ -227,7 +227,7 @@ public class ActivityFormTest extends SeleneseTestCase{
             }
             //Planning
             if (SeleniumFeaturesConfiguration.getFeatureState("Planning")){
-                
+
                 if (SeleniumFeaturesConfiguration.getFieldState("Line Ministry Rank")){
                     if (selenium.isElementPresent("planning.lineMinRank")) {
                         selenium.select("planning.lineMinRank", "index=1");
@@ -354,7 +354,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                 logger.info("Feature \"Planning\" is not available.");
                //selenium.logComment("Feature \"Planning\" is not available.");
             }
-        
+
             if (selenium.isElementPresent("//a[@href='javascript:gotoStep(2)']")) {
                 selenium.click("//a[@href='javascript:gotoStep(2)']");
                 selenium.waitForPageToLoad("50000");
@@ -369,8 +369,8 @@ public class ActivityFormTest extends SeleneseTestCase{
                             selenium.click("//input[@name='submitButton' and @onclick='selectLocation()']");
                             //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
                             Thread.sleep(10000);
-                            selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-                           
+                            selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+
                             SeleniumTestUtil.waitForElement(selenium,"loc_0", 90);
                             selenium.addSelection("loc_0", "index=0");
                             selenium.click("//input[@onclick=\"submitForm()\"]");
@@ -414,7 +414,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                    //selenium.logComment("Sub Sector no found for Primary Sector");
                                 }
                                 selenium.click("addButton");
-                                selenium.waitForPageToLoad("50000");    
+                                selenium.waitForPageToLoad("50000");
                                 if (selenium.isElementPresent("activitySectors[0].sectorPercentage")) {
                                     selenium.type("activitySectors[0].sectorPercentage", "100");
                                     logger.info("Primary Sector : " + primarySector);
@@ -491,11 +491,11 @@ public class ActivityFormTest extends SeleneseTestCase{
                             if (selenium.isElementPresent("programs.selPrograms")) {
                                 selenium.select("programs.selPrograms", "index=1");
                                 Thread.sleep(5000);
-                                NPOProgram = selenium.getSelectedLabel("programs.selPrograms");                         
+                                NPOProgram = selenium.getSelectedLabel("programs.selPrograms");
                                 if (selenium.isElementPresent("//td[@id='slo2']/select")) {
                                     selenium.select("//td[@id='slo2']/select", "index=1");
                                     Thread.sleep(5000);
-                                    NPOSubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");                       
+                                    NPOSubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");
                                 } else {
                                     logger.info("Sub Programs no found for NPO");
                                    //selenium.logComment("Sub Programs no found for NPO");
@@ -509,7 +509,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                 if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addDefaultProgram()']")) {
                                     selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
                                     selenium.waitForPageToLoad("50000");
-                                } 
+                                }
                             }
                             if (selenium.isElementPresent("nationalPlanObjectivePrograms[0].programPercentage")) {
                                 selenium.type("nationalPlanObjectivePrograms[0].programPercentage", "100");
@@ -527,7 +527,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                         logger.info("Field \"Add Programs Button - National Plan Objective\" is not available.");
                        //selenium.logComment("Field \"Add Programs Button - National Plan Objective\" is not available.");
                     }
-                    
+
                     //Add Primary Program
                     if (SeleniumFeaturesConfiguration.getFieldState("Add Programs Button - Primary Programs")){
                         if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addProgram(2);']")) {
@@ -543,7 +543,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                 if (selenium.isElementPresent("//td[@id='slo2']/select")) {
                                     selenium.select("//td[@id='slo2']/select", "index=1");
                                     Thread.sleep(5000);
-                                    primarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");                       
+                                    primarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");
                                 } else {
                                     logger.info("Sub Programs no found for Primary Program");
                                    //selenium.logComment("Sub Programs no found for Primary Program");
@@ -557,7 +557,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                 if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addDefaultProgram()']")) {
                                     selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
                                     selenium.waitForPageToLoad("50000");
-                                } 
+                                }
                             }
                             if (selenium.isElementPresent("primaryPrograms[0].programPercentage")) {
                                 selenium.type("primaryPrograms[0].programPercentage", "100");
@@ -575,7 +575,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                         logger.info("Field \"Add Programs Button - Primary Programs\" is not available.");
                        //selenium.logComment("Field \"Add Programs Button - Primary Programs\" is not available.");
                     }
-                    
+
                     //Add Secondary Program
                     if (SeleniumFeaturesConfiguration.getFieldState("Add Programs Button - Secondary Programs")){
                         if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addProgram(3);']")) {
@@ -591,7 +591,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                 if (selenium.isElementPresent("//td[@id='slo2']/select")) {
                                     selenium.select("//td[@id='slo2']/select", "index=1");
                                     Thread.sleep(5000);
-                                    secondarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");                     
+                                    secondarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");
                                 } else {
                                     logger.info("Sub Programs no found for Secondary Program");
                                    //selenium.logComment("Sub Programs no found for Secondary Program");
@@ -605,7 +605,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                 if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addDefaultProgram()']")) {
                                     selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
                                     selenium.waitForPageToLoad("50000");
-                                } 
+                                }
                             }
                             if (selenium.isElementPresent("secondaryPrograms[0].programPercentage")) {
                                 selenium.type("secondaryPrograms[0].programPercentage", "100");
@@ -623,7 +623,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                         logger.info("Field \"Add Programs Button - Secondary Programs\" is not available.");
                        //selenium.logComment("Field \"Add Programs Button - Secondary Programs\" is not available.");
                     }
-                    
+
                     if (SeleniumFeaturesConfiguration.getFieldState("NPD Program Description")){
                         if (selenium.isElementPresent("programs.programDescription")) {
                             selenium.type("programs.programDescription", "ProgramDescription");
@@ -638,12 +638,12 @@ public class ActivityFormTest extends SeleneseTestCase{
                 } else {
                     logger.info("Feature \"Program\" is not available.");
                    //selenium.logComment("Feature \"Program\" is not available.");
-                }               
+                }
             } else {
                 logger.info("Step 2 is not available on Activity Form");
                //selenium.logComment("Step 2 is not available on Activity Form");
             }
-            
+
             //FUNDING
             boolean fundingAvailable = false;
             boolean allFundingOk = true;
@@ -660,7 +660,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                 /*if (SeleniumFeaturesConfiguration.getFieldState("Add Funding Button - Proposed Project Cost")){
                     if (selenium.isElementPresent("//input[@ onclick='addPropFunding()']")) {
                         selenium.click("//input[@ onclick='addPropFunding()']");
-                        selenium.selectWindow(selenium.getAllWindowTitles()[1]);            
+                        selenium.selectWindow(selenium.getAllWindowTitles()[1]);
                         SeleniumTestUtil.waitForElement(selenium,"funAmount", 90);
                         selenium.type("funAmount", "3000");
                         selenium.type("funDate", "01/02/2008");
@@ -678,24 +678,24 @@ public class ActivityFormTest extends SeleneseTestCase{
                         selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=true~PARAM_CALLBACKFUNCTION_NAME=doNothing();~PARAM_COLLECTION_NAME=fundingOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
                         //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
                         Thread.sleep(10000);
-                        selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-                       
+                        selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+
                         SeleniumTestUtil.waitForElement(selenium,"//input[@onclick='return searchOrganization()']", 90);
                         selenium.click("//input[@onclick='return searchOrganization()']");
                         SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
-                        selenium.click("selOrganisations"); 
+                        selenium.click("selOrganisations");
                         selenium.click("//input[@onclick='return selectOrganization()']");
                         selenium.selectWindow("null");
-                        selenium.waitForPageToLoad("50000");                    
+                        selenium.waitForPageToLoad("50000");
                         String val = selenium.getAttribute("selFundingOrgs@value");
                         //Add Fundings
                         for (int i = 0; i < fundingQty; i++) {
-                            selenium.click("//input[@onclick=\"addFunding('" + val + "')\"]"); 
+                            selenium.click("//input[@onclick=\"addFunding('" + val + "')\"]");
                             //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
                             Thread.sleep(10000);
-                            selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
+                            selenium.selectWindow(selenium.getAllWindowTitles()[1]);
                             Thread.sleep(4000);
-                            
+
                             //if (SeleniumFeaturesConfiguration.getFieldState("Type Of Assistance")){
                                 selenium.select("funding.assistanceType", "index=1");
                             //} else {
@@ -708,7 +708,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                //selenium.logComment("Field \"Funding Organization Id\" is not available.");
                             }
                             selenium.select("funding.modality", "index=1");
-                            
+
                             if (SeleniumFeaturesConfiguration.getFieldState("Add Commitment Button")){
                                 selenium.click("//input[@onclick='addFundingDetail(0)']"); //add a commitment (actual)
                                 SeleniumTestUtil.waitForElement(selenium,"fundingDetail[0].adjustmentType", 90);
@@ -737,7 +737,7 @@ public class ActivityFormTest extends SeleneseTestCase{
                                //selenium.logComment("Field \"Add Commitment Button\" is not available.");
                                 allFundingOk = false;
                             }
-                            
+
                             if (SeleniumFeaturesConfiguration.getFieldState("Add Disbursement Button")){
                                 selenium.click("//input[@onclick='addFundingDetail(1)']"); //add a disbursement (actual)
                                 SeleniumTestUtil.waitForElement(selenium,"fundingDetail[2].adjustmentType", 90);
@@ -767,11 +767,11 @@ public class ActivityFormTest extends SeleneseTestCase{
                                 allFundingOk = false;
                             }
                             selenium.click("//input[@onclick=\"return addFunding()\"]");
-                            
+
                             selenium.selectWindow("null");
                             selenium.waitForPageToLoad("50000");
                         }
-                        
+
                     } else {
                         logger.error("Field \"Add Donor Organization\" is active in Feature Manager but is not available.");
                         //selenium.logAssertion"assertTrue", "Field \"Add Donor Organization\" is active in Feature Manager but is not available.", "condition=false");
@@ -779,9 +779,9 @@ public class ActivityFormTest extends SeleneseTestCase{
                 } else {
                     logger.info("Field \"Add Donor Organization\" is not available.");
                    //selenium.logComment("Field \"Add Donor Organization\" is not available.");
-                    allFundingOk = false;                   
+                    allFundingOk = false;
                 }
-                
+
             } else {
                 logger.info("Feature \"Funding Information\" is not available.");
                //selenium.logComment("Feature \"Funding Information\" is not available.");
@@ -791,9 +791,9 @@ public class ActivityFormTest extends SeleneseTestCase{
             if (selenium.isElementPresent("//input[@onclick='saveClicked()']")) {
                 logger.error("Save Activity Fail");
                 //selenium.logAssertion"assertTrue", "Save Activity Fail", "condition=false");
-            }           
+            }
         }
-        
+
         //ADD TAB
         boolean addTabAvailable = false;
         if (selenium.isElementPresent("//a[contains(@href, "
@@ -805,8 +805,8 @@ public class ActivityFormTest extends SeleneseTestCase{
             logger.error("Option \"Add Tab\" is not available.");
             //selenium.logAssertion"assertTrue", "Option \"Add Tab\" is not available.", "condition=false");
         }
-        
-        if (addTabAvailable) {          
+
+        if (addTabAvailable) {
             selenium.click("//li[@id='columns_tab_label']/a/div");
             if (selenium.isElementPresent("fieldVis:4")) {
                 selenium.click("fieldVis:4");
@@ -850,64 +850,64 @@ public class ActivityFormTest extends SeleneseTestCase{
             Thread.sleep(30000);
             selenium.click("//a[@id='Tab-Test Tab " + testTime + "']/div");
             Thread.sleep(30000);
-            
+
             if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[2]").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS)){
                 logger.error("Error on TOTAL_ACTUAL_COMMITMENTS shown on tab.");
                 //selenium.logAssertion"assertTrue", "Error on TOTAL_ACTUAL_COMMITMENTS shown on tab.", "condition=false");
-            } 
+            }
             if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[3]").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT)){
                 logger.error("Error on TOTAL_ACTUAL_DISBURSEMENT shown on tab.");
                 //selenium.logAssertion"assertTrue", "Error on TOTAL_ACTUAL_DISBURSEMENT shown on tab.", "condition=false");
-            } 
-            
+            }
+
             selenium.click("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div");
             selenium.waitForPageToLoad("30000");
             //Do some validations
-            
+
             if (!selenium.isTextPresent(primarySector)){
                 logger.error("Error on Primary Sector shown.");
                 //selenium.logAssertion"assertTrue", "Error on Primary Sector shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(primarySubSector)){
                 logger.error("Error on Primary Sub Sector shown.");
                 //selenium.logAssertion"assertTrue", "Error on Primary Sub Sector shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(secondarySector)){
                 logger.error("Error on Secondary Sector shown.");
                 //selenium.logAssertion"assertTrue", "Error on Secondary Sector shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(secondarySubSector)){
                 logger.error("Error on Secondary Sub Sector shown.");
                 //selenium.logAssertion"assertTrue", "Error on Secondary Sub Sector shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(NPOProgram)){
                 logger.error("Error on NPO Program shown.");
                 //selenium.logAssertion"assertTrue", "Error on NPO Program shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(NPOSubProgram)){
                 logger.error("Error on NPO Sub Program shown.");
                 //selenium.logAssertion"assertTrue", "Error on NPO Sub Program shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(primaryProgram)){
                 logger.error("Error on Primary Program shown.");
                 //selenium.logAssertion"assertTrue", "Error on Primary Program shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(primarySubProgram)){
                 logger.error("Error on Primary Sub Program shown.");
                 //selenium.logAssertion"assertTrue", "Error on Primary Sub Program shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(secondaryProgram)){
                 logger.error("Error on Secondary Program shown.");
                 //selenium.logAssertion"assertTrue", "Error on Secondary Program shown.", "condition=false");
-            } 
+            }
             if (!selenium.isTextPresent(secondarySubProgram)){
                 logger.error("Error on Secondary Sub Program shown.");
                 //selenium.logAssertion"assertTrue", "Error on Secondary Sub Program shown.", "condition=false");
-            } 
-            
+            }
+
             /*selenium.click("//div[@id='tabs']/ul/li[2]/span/a/div");
             selenium.waitForPageToLoad("30000");
-            
+
             for (int i = 0; i < fundingQty; i++) {
                 int trCnt = 2 + i;
                 assertTrue(selenium.getText("//table[@id='dataTable']/tbody/tr[" + trCnt + "]/td[3]").equals(ActivityFormTest.ACTUAL_COMMITMENTS[i]));
@@ -920,7 +920,7 @@ public class ActivityFormTest extends SeleneseTestCase{
             */
             //selenium.click("//a[@onclick=\"javascript:fnEditProject(document.getElementById('tempActivity').value); return false;\"]");
             if (SeleniumFeaturesConfiguration.getFeatureState("Edit Activity")){
-                selenium.click("//img[@src=\"/repository/aim/images/tangopack_edit.png\"]");
+                selenium.click("//img[@src=\"/jsp/aim/images/tangopack_edit.png\"]");
                 selenium.waitForPageToLoad("30000");
                 selenium.type("identification.title", activityName + " modified");
                 selenium.click("//input[@onclick='saveClicked()']");
@@ -942,15 +942,15 @@ public class ActivityFormTest extends SeleneseTestCase{
                //selenium.logComment("Feature \"Edit Activity\" is not available.");
             }
         }
-        
+
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Activity Form Test Finished Successfully");
        //selenium.logComment("Activity Form Test Finished Successfully");
     }
-    
+
     /**
-     * 
+     *
      * @return the name of the first activity for selenium test found
      */
     public static String getFirstActivityName (Selenium selenium){
@@ -959,7 +959,7 @@ public class ActivityFormTest extends SeleneseTestCase{
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("50000");
         }
-        
+
         selenium.open("/");
         String version = selenium.getText("//div[@class=\"footerText\"]");
         version = version.substring(version.indexOf("1.1"), version.indexOf("1.1")+4);
@@ -987,5 +987,5 @@ public class ActivityFormTest extends SeleneseTestCase{
             return null;
         }
     }
-    
+
 }

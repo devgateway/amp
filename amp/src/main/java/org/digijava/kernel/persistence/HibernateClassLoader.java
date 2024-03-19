@@ -48,7 +48,7 @@ import java.util.List;
 
 /**
  * Hibernate Class loader, see digi.xml file for more details.
- * 
+ *
  * @author Lasha Dolidze
  * @version 1.0
  */
@@ -69,7 +69,7 @@ public class HibernateClassLoader {
      * get Hibernate SessionFactory object, you will call openSession(); to
      * obtain a JDBC connection and instantiate a new Session. form example:
      * Session session = HibernateClassLoader.getSessionFactory().openSession();
-     * 
+     *
      * @return hibernate SessionFactory object
      * @throws HibernateException
      */
@@ -84,7 +84,7 @@ public class HibernateClassLoader {
     /**
      * initialize hibernate classes for kernel see module configuration file for
      * more details
-     * 
+     *
      */
     public static void initialize(DigiConfig config) {
 
@@ -94,7 +94,7 @@ public class HibernateClassLoader {
     /**
      * initialize hibernate classes for module see module configuration file for
      * more details
-     * 
+     *
      * @param config
      */
     public static void initialize(HashMap config) {
@@ -120,7 +120,7 @@ public class HibernateClassLoader {
         /*
          * only register classes within package
          * org.digijava.kernel.ampapi.postgis.entity need to take the
-         * configuration file /repository/hibernate-annotated.xml
+         * configuration file /jsp/hibernate-annotated.xml
          */
 
         for (BeanDefinition bd : scanner
@@ -136,7 +136,7 @@ public class HibernateClassLoader {
     }
 
     /**
-     * 
+     *
      * @param classes
      */
     public static void loadHibernateClasses(HibernateClasses classes) {

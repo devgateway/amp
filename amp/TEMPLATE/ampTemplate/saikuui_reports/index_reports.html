@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript"> 
-    	if (!window.console) console = {log: function() {}, warn: function() {}, error: function() {}, info: function(){}}; 
+    <script type="text/javascript">
+    	if (!window.console) console = {log: function() {}, warn: function() {}, error: function() {}, info: function(){}};
     	console.log('START!!!!');
     	window.saiku_time = new Date().getTime();
     </script>
@@ -16,7 +16,7 @@
 
     <title>Aid Management Platform - Reports</title>
 
-    <!-- Start of changes for AMP Filters -->	
+    <!-- Start of changes for AMP Filters -->
 	<link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
@@ -133,7 +133,7 @@ setNoCacheForIExlorer();
 <script type="text/javascript" src="js/saiku/views/Table.js"></script>
 <script type="text/javascript" src="js/saiku/views/Workspace.js"></script>
 <script type="text/javascript" src="js/saiku/views/Tab.js"></script>
-<script type="text/javascript" src="js/saiku/models/Repository.js"></script>
+<script type="text/javascript" src="js/saiku/models/jsp.js"></script>
 <script type="text/javascript" src="js/saiku/models/Result.js"></script>
 <script type="text/javascript" src="js/saiku/plugins/AMPFilters/FilterUtils.js"></script>
 <script type="text/javascript" src="js/saiku/plugins/AMPDirection/plugin.js"></script>
@@ -169,10 +169,10 @@ setNoCacheForIExlorer();
 <script type="text/x-jquery-tmpl" id="template-upgrade">
 </script>
 
-<script type="text/x-jquery-tmpl" id="template-cubes">           
+<script type="text/x-jquery-tmpl" id="template-cubes">
 </script>
 
-<script type="text/x-jquery-tmpl" id="template-dimensions">       
+<script type="text/x-jquery-tmpl" id="template-dimensions">
 </script>
 
 <script type="text/x-jquery-tmpl" id="template-measures">
@@ -216,20 +216,20 @@ setNoCacheForIExlorer();
 <script type="text/x-jquery-tmpl" id="template-workspace-toolbar">
         <ul>
            <!-- Start Custom Code for Pagination -->
-           <li class="seperator"><a href="#first_page" 
-           		class="i18n first_page button disabled_toolbar pagination_sprite" 
+           <li class="seperator"><a href="#first_page"
+           		class="i18n first_page button disabled_toolbar pagination_sprite"
                 title="First Page"></a></li>
-            <li><a href="#prev_page" 
-                class="i18n prev_page button disabled_toolbar pagination_sprite" 
+            <li><a href="#prev_page"
+                class="i18n prev_page button disabled_toolbar pagination_sprite"
                 title="Prev Page"></a></li>
 			<li>
 				<input type="text" class="pagination_info" disabled style="display:none"></input>
 			</li>
-            <li><a href="#next_page" 
-                class="i18n next_page button disabled_toolbar pagination_sprite" 
+            <li><a href="#next_page"
+                class="i18n next_page button disabled_toolbar pagination_sprite"
                 title="Next Page"></a></li>
-            <li><a href="#last_page" 
-                class="i18n last_page button disabled_toolbar pagination_sprite" 
+            <li><a href="#last_page"
+                class="i18n last_page button disabled_toolbar pagination_sprite"
                 title="Last Page"></a></li>
 			<!-- End Custom Code for Pagination -->
 
@@ -277,7 +277,7 @@ setNoCacheForIExlorer();
 
 <script type="text/x-jquery-tmpl" id="template-selections">
 </script>
-        
+
 <script type="text/x-jquery-tmpl" id="template-selections-options">
 </script>
 
@@ -289,10 +289,10 @@ setNoCacheForIExlorer();
 
 <script type="text/x-jquery-tmpl" id="template-drillthrough">
 </script>
-        
+
 <script type="text/x-jquery-tmpl" id="template-drillthrough-list">
 </script>
-        
+
 <script type="text/x-jquery-tmpl" id="template-drillthrough-dimensions">
 </script>
 
@@ -305,7 +305,7 @@ setNoCacheForIExlorer();
 				<tr style='width: 100%;'>
 					<td style='width: 100%;'>
 						<span>
-							Hierarchy Level:					
+							Hierarchy Level:
 							<select id='levelPicked'>
 								<% _.each(hierarchies, function(hierarchy) { %>
                            			<option id='<%= hierarchy.entityName %>'><%= hierarchy.textValue %></option>
@@ -317,7 +317,7 @@ setNoCacheForIExlorer();
 				<tr style='width: 100%;'>
 					<td style='width: 100%;'>
 						<span>
-							Sort By:					
+							Sort By:
 							<select id='levelSorter'>
 								<% _.each(columns, function(column) { %>
                            			<option id='<%= column.entityName %>'><%= column.columnName %></option>
@@ -329,7 +329,7 @@ setNoCacheForIExlorer();
 				<tr style='width: 100%;'>
 					<td style='width: 100%;'>
 						<span>
-							Sort Order:					
+							Sort Order:
 							<select name="levelSortOrder" class="dropdwn_sm">
 								<option value="ascending">Ascending</option>
 								<option value="descending">Descending</option>
@@ -340,17 +340,17 @@ setNoCacheForIExlorer();
 			</table>
 		</div>
     </script>
-    
+
 	<!-- Start of changes for AMP Filters. Move this to the plugin functionality -->
 	<div id='filter-popup' class='panel panel-primary' style="display:none;"></div>
-	<div id='settings-popup' class='panel panel-primary' style="display:none;"></div>	
+	<div id='settings-popup' class='panel panel-primary' style="display:none;"></div>
 	<!-- End of changes for AMP Filters -->
     <div id="deflated-currencies-container" class="panel panel-primary">
         <div class="panel-heading">
             <button type="button" class="close cancel" aria-hidden="true">×</button>
             <h3 class="panel-title i18n">Settings</h3>
         </div>
-        <div class="panel-body">        
+        <div class="panel-body">
             <table align="center">
                 <tbody>
                     <tr>

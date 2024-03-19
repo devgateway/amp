@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %> 
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
@@ -14,7 +14,7 @@
 		String key=(title.replaceAll(" ",""));
 		%>
 			<c:set var="key">aim:pagetitle:<%=key%></c:set>
-			<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+			<digi:trn key="aim:pagetitle:amp">AMP </digi:trn>
 			<digi:trn key="${key}">
 				<%=title%>
 			</digi:trn>
@@ -51,15 +51,15 @@
      	</TD>
 	</TR>
   	<TR background="<%= digiContext %>/TEMPLATE/ampTemplate/images/bg-header.gif">
-    	<TD background="<%= digiContext %>/TEMPLATE/ampTemplate/images/bg-header.gif" 
+    	<TD background="<%= digiContext %>/TEMPLATE/ampTemplate/images/bg-header.gif"
     	colSpan=2 height=66>
-			<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
+			<jsp:include page="../../../jsp/aim/view/teamPagesHeader.jsp"  />
 		</TD>
 	</TR>
 	</TBODY>
 </TABLE>
 
-         	
+
 <TABLE width="789" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
   	<TR>
 	   	<TD class="r-dotted-lg">&nbsp;</TD>

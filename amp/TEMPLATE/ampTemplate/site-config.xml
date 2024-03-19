@@ -133,7 +133,7 @@
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayoutPledges"/>
-			<put-item name="body" file="/repository/aim/view/addPledge.jsp"/>
+			<put-item name="body" file="/jsp/aim/view/addPledge.jsp"/>
 		</layout>
 		<layout name="logoutLayout" file="logoutLayout.jsp">
 			<put-item name="logout" module="aim" instance="default" teaser="logout"/>

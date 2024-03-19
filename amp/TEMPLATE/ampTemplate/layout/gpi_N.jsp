@@ -12,7 +12,7 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" href="<digi:file src="/static/gpi/view/css/gpi_styles.css"/>">
 
-<jsp:include page="/WEB_INF/jsp/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
 
 <%
 String auxReportId = request.getParameter("reportId");
@@ -49,7 +49,7 @@ request.getParameter("print");
 		            <tr>
 		                <td class="td_right_left1">
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="1">
-                                <jsp:include page="//WEB_INF/jsp/gpi/view/gpi_1.jsp"></jsp:include>
+                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_1.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5a">
                                 <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_5a.jsp"></jsp:include>

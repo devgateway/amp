@@ -7,7 +7,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -21,17 +20,16 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -81,19 +79,19 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
         add(riskSelect);
 
-        final AmpIndicatorGlobalValue globalBaseVal = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.BASE);
-        final AmpIndicatorGlobalValue globalTargetVal = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.TARGET);
+        final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+        final AmpIndicatorValue targetVal = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
 
         final Model<Boolean> valuesSet = new Model<Boolean>(false);
 
-        for (AmpIndicatorGlobalValue val : indicator.getObject().getIndicatorValues()){
+        for (AmpIndicatorValue val : values.getObject()){
 
-            switch (val.getType()) {
+            switch (val.getValueType()) {
                 case AmpIndicatorValue.BASE:
-                    val.copyValuesTo(globalBaseVal);
+                    val.copyValuesTo(baseVal);
                     break;
                 case AmpIndicatorValue.TARGET:
-                    val.copyValuesTo(globalTargetVal);
+                    val.copyValuesTo(targetVal);
                     valuesSet.setObject(true);
                     break;
                 default:
@@ -101,46 +99,16 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             }
         }
 
-        final Label indicatorBaseValueLabel = new Label("base", new LoadableDetachableModel<String>() {
-            @Override
-            protected String load() {
-                return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
-            }
-        });
+        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<String>(baseVal, "value"));
         add(indicatorBaseValueLabel);
 
-        final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
-            @Override
-            protected String load() {
-                if (globalBaseVal.getOriginalValueDate() != null) {
-                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
-                    return format.format(globalBaseVal.getOriginalValueDate());
-                } else {
-                    return "N/A";
-                }
-            }
-        });
+        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<String>(baseVal, "valueDate"));
         add(indicatorBaseDateLabel);
 
-        final Label indicatorTargetValueLabel = new Label("target", new LoadableDetachableModel<String>() {
-            @Override
-            protected String load() {
-                return globalTargetVal.getOriginalValue() != null ? String.valueOf(globalTargetVal.getOriginalValue()) : "N/A";
-            }
-        });
+        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<String>(targetVal, "value"));
         add(indicatorTargetValueLabel);
 
-        final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
-            @Override
-            protected String load() {
-                if (globalTargetVal.getOriginalValueDate() != null) {
-                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
-                    return format.format(globalTargetVal.getOriginalValueDate());
-                } else {
-                    return "N/A";
-                }
-            }
-        });
+        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<String>(targetVal, "valueDate"));
         add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7);

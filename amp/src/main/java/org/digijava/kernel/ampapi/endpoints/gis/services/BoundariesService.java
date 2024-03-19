@@ -19,11 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
+
 public class BoundariesService {
 
     protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-    private static final String BOUNDARY_PATH = "/gis" + File.separator + "boundaries" + File.separator;
+    private static final String BOUNDARY_PATH = getServletContext().getRealPath( "/gis" + File.separator + "boundaries" + File.separator);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

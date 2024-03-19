@@ -382,8 +382,8 @@ public abstract class ViewConfigUtil
 //                        path;
 //                    if (path.contains(".jsp"))
 //                    {
-                        fileName = servletContext.getRealPath("/WEB-INF/jsp" + groupDir + "/view/" +
-                                path);
+                        fileName = "./src/main/webapp/WEB-INF/jsp" + groupDir + "/view/" +
+                                path;
 //                    }
                     file = new File(servletContext.getRealPath(fileName));
 

@@ -406,7 +406,7 @@ public abstract class ViewConfigUtil
             }
             else {
                 fileName = findExistingFile(path,
-                                            parentTemplateName, true, null,
+                                            parentTemplateName, false, null,
                                             groupType, groupName);
 
             }

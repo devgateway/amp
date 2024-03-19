@@ -60,14 +60,13 @@ public abstract class ViewConfigUtil
 
         String templateName = null;
         if (currentConfig.getTemplate() != null &&
-            currentConfig.getTemplate().trim().length() != 0) {
+                !currentConfig.getTemplate().trim().isEmpty()) {
             templateName = currentConfig.getTemplate().trim();
         }
 
         if (!isTemplate && templateName != null) {
-            SiteConfig parentConfig = createConfiguration(templateName, true);
 
-            siteConfig = parentConfig;
+            siteConfig = createConfiguration(templateName, true);
             siteConfig.merge(currentConfig);
             expandLayoutsFromRepository(currentConfig);
             expandLayoutInheritance(siteConfig);
@@ -98,7 +97,7 @@ public abstract class ViewConfigUtil
     protected RepositoryLayout addComponentsFile(String moduleName) throws
         ViewConfigException {
         File configFile;
-        configFile = new File(servletContext.getRealPath("/repository/" +
+        configFile = new File(servletContext.getRealPath("/WEB-INF/moduleConfig/" +
             moduleName + "/components.xml"));
 
         RepositoryLayout componentsFile = null;
@@ -146,59 +145,52 @@ public abstract class ViewConfigUtil
         boolean systemWideDefaultDefined = false;
         for (int i = 0; i < 3; i++) {
             Collection pageGroups = siteConfig.getSiteLayout().getPageGroups();
-            Iterator pageGrpIter = pageGroups.iterator();
-            while (pageGrpIter.hasNext()) {
-                PageGroup pageGroup = (PageGroup) pageGrpIter.next();
+            for (Object group : pageGroups) {
+                PageGroup pageGroup = (PageGroup) group;
                 // durind the third step, process system-wide page groups
                 if (pageGroup.getModulePageGroups().size() == 0 && i == 2) {
                     if (systemWideDefaultDefined) {
                         logger.error(
-                            "two or more system-wide page groups are defined in site-config.xml!");
-                    }
-                    else {
-                        Iterator layoutOwnerIter = layoutOwners.keySet().
-                            iterator();
-                        while (layoutOwnerIter.hasNext()) {
-                            String moduleName = (String) layoutOwnerIter.next();
+                                "two or more system-wide page groups are defined in site-config.xml!");
+                    } else {
+                        for (Object o : layoutOwners.keySet()) {
+                            String moduleName = (String) o;
                             HashMap sPages = (HashMap) layoutOwners.get(
-                                moduleName);
+                                    moduleName);
                             layouts.putAll(generateLayouts(pageGroup,
-                                moduleName, sPages.values()));
+                                    moduleName, sPages.values()));
                         }
                         layoutOwners.clear();
                     }
-                }
-                else {
-                    Iterator modPageGrpIter = pageGroup.getModulePageGroups().
-                        values().iterator();
-                    while (modPageGrpIter.hasNext()) {
+                } else {
+                    for (Object o : pageGroup.getModulePageGroups().
+                            values()) {
                         ModulePageGroup modPageGrp = (ModulePageGroup)
-                            modPageGrpIter.next();
+                                o;
                         String moduleName = modPageGrp.getModuleName();
                         HashMap sPages = (HashMap) layoutOwners.get(
-                            moduleName);
+                                moduleName);
                         if (modPageGrp.getPages().size() == 0 && i == 1) {
                             if (sPages != null) {
                                 layouts.putAll(generateLayouts(pageGroup,
-                                    moduleName, sPages.values()));
+                                        moduleName, sPages.values()));
                             }
                             layoutOwners.remove(moduleName);
 
-                        }
-                        else {
+                        } else {
                             Iterator secPagesIter = modPageGrp.getPages().
-                                values().iterator();
+                                    values().iterator();
                             while (secPagesIter.hasNext()) {
                                 GroupedPage gPage = (GroupedPage) secPagesIter.
-                                    next();
+                                        next();
                                 if (sPages != null) {
                                     SecondaryPage sPage = (SecondaryPage)
-                                        sPages.get(gPage.getName());
+                                            sPages.get(gPage.getName());
 
                                     if (sPage != null) {
                                         Layout layout = generateLayout(
-                                            pageGroup,
-                                            moduleName, sPage);
+                                                pageGroup,
+                                                moduleName, sPage);
                                         layouts.put(layout.getName(), layout);
                                     }
                                     sPages.remove(gPage.getName());
@@ -213,14 +205,12 @@ public abstract class ViewConfigUtil
 
         // generate single-page layouts
         if (!systemWideDefaultDefined) {
-            Iterator layoutOwnerIter = layoutOwners.keySet().
-                iterator();
-            while (layoutOwnerIter.hasNext()) {
-                String moduleName = (String) layoutOwnerIter.next();
+            for (Object o : layoutOwners.keySet()) {
+                String moduleName = (String) o;
                 HashMap sPages = (HashMap) layoutOwners.get(
-                    moduleName);
+                        moduleName);
                 layouts.putAll(generateLayouts(null,
-                                               moduleName, sPages.values()));
+                        moduleName, sPages.values()));
             }
 
         }
@@ -230,9 +220,8 @@ public abstract class ViewConfigUtil
     private Map generateLayouts(PageGroup pageGroup, String moduleName,
                                 Collection secondaryPages) {
         HashMap layouts = new HashMap();
-        Iterator sPagesIter = secondaryPages.iterator();
-        while (sPagesIter.hasNext()) {
-            SecondaryPage sPage = (SecondaryPage) sPagesIter.next();
+        for (Object secondaryPage : secondaryPages) {
+            SecondaryPage sPage = (SecondaryPage) secondaryPage;
             Layout layout = generateLayout(pageGroup, moduleName, sPage);
             if (layout != null) {
                 layouts.put(layout.getName(), layout);
@@ -295,9 +284,8 @@ public abstract class ViewConfigUtil
             siteConfig.setModuleLayout(new ModuleLayout());
         }
         HashMap modules = siteConfig.getModuleLayout().getModule();
-        Iterator repositoryIter = repository.entrySet().iterator();
-        while (repositoryIter.hasNext()) {
-            Map.Entry entry = (Map.Entry) repositoryIter.next();
+        for (Object o : repository.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
 
             RepositoryLayout components = (RepositoryLayout) entry.getValue();
             String moduleName = (String) entry.getKey();
@@ -311,7 +299,7 @@ public abstract class ViewConfigUtil
                     newModule.setTeaserFile(repositoryModule.getTeaserFile());
 
                     Iterator reposModIter = repositoryModule.getTeaser().values().
-                        iterator();
+                            iterator();
                     while (reposModIter.hasNext()) {
                         Teaser item = (Teaser) reposModIter.next();
                         newModule.addTeaser(item);
@@ -324,8 +312,7 @@ public abstract class ViewConfigUtil
                     }
 
                     siteConfig.getModuleLayout().addModule(newModule);
-                }
-                else {
+                } else {
                     siteConfModule.merge(repositoryModule);
                 }
             }
@@ -356,10 +343,11 @@ public abstract class ViewConfigUtil
             }
         }
         // Workaround for images
-        if ( ( (groupType == null || groupType.trim().length() == 0) ||
+        if ( ( (groupType == null || groupType.trim().isEmpty()) ||
               groupType.equals(LAYOUT_DIR)) &&
             path.startsWith("module/")) {
-            logger.debug("normalizing call of findExistingFile()");
+            logger.info("module path "+path);
+            logger.info("normalizing call of findExistingFile()");
             String[] parts = DgUtil.fastSplit(path, '/');
             if (parts.length > 2) {
                 StringBuffer newPath = new StringBuffer(path.length());
@@ -381,6 +369,7 @@ public abstract class ViewConfigUtil
         String fileName = expandFilePath(path, folderName, isTemplate,
                                          groupType,
                                          groupName);
+        logger.info("EXPANDED: "+servletContext.getRealPath(fileName));
         File file = new File(servletContext.getRealPath(fileName));
 
         if (!file.exists()) {
@@ -389,8 +378,13 @@ public abstract class ViewConfigUtil
                 if (groupType.equals(MODULE_DIR)) {
                     String groupDir = groupName == null ? "" : "/" + groupName;
 
-                    fileName = "/repository" + groupDir + "/view/" +
+                    fileName = "/static" + groupDir + "/view/" +
                         path;
+                    if (path.contains(".jsp"))
+                    {
+                        fileName = "/WEB-INF/jsp" + groupDir + "/view/" +
+                                path;
+                    }
                     file = new File(servletContext.getRealPath(fileName));
 
                     if (!file.exists()) {
@@ -401,6 +395,9 @@ public abstract class ViewConfigUtil
                             " with absolute path " +
                             file.getAbsolutePath());
                     }
+                    logger.info("FILE PATH: "+fileName);
+
+                    return fileName;
                 }
                 else {
                     throw new ViewConfigException("Unable to open file " +
@@ -417,6 +414,7 @@ public abstract class ViewConfigUtil
             }
         }
         logger.debug("findExistingFile() returns: " + fileName);
+
 
         return fileName;
     }

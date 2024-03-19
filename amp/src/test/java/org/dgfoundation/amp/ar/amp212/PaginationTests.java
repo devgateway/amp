@@ -5,15 +5,15 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 
+ *
  * testcases for the fetching states of AMP + the AMP schema
- * 
+ *
  * @author Constantin Dolghier
  *
  */
@@ -173,7 +173,7 @@ public class PaginationTests extends ReportingTestCase {
                   new PaginatedReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Administrative Level 1", "Chisinau County", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2014-Actual Commitments", "3,300,000", "Totals-Actual Commitments", "5,000,000").withCounts(1, -1),
                   new PaginatedReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Administrative Level 1", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000").withCounts(1, -1),
                   new PaginatedReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Administrative Level 1", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000").withCounts(1, -1)    );
-        
+
         compareBodies("mid flat", cor, initFlatReport.getPage(15, 12));
     }
 
@@ -679,7 +679,7 @@ public class PaginationTests extends ReportingTestCase {
                     new PaginatedReportAreaForTests(new AreaOwner("Primary Sector", "Primary Sector: Undefined")).withCounts(1, 1).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "12,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "12,000", "Totals-Actual Disbursements", "0", "Primary Sector", "Primary Sector: Undefined")
                     .withChildren(
                       new PaginatedReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000").withCounts(1, -1))));
-        
+
         compareBodies("full double hier", cor, initDoubleHierReport.getPage(0, 150));
     }
 

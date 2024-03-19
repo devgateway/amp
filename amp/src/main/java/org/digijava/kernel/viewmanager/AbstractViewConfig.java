@@ -28,6 +28,7 @@ import org.digijava.kernel.siteconfig.Layout;
 import org.digijava.kernel.siteconfig.PutItem;
 import org.digijava.kernel.siteconfig.SiteConfig;
 import org.digijava.kernel.siteconfig.SiteLayout;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteCache;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -56,7 +57,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
     public static final String MODULE_DIR = "module";
     public static final String LAYOUT_DIR = "layout";
     public static final String TEMPLATE_DIR = "TEMPLATE";
-    public static final String SITE_DIR = "SITE";
+    public static final String SITE_DIR = "WEB-INF/SITE";
     public static final String BLANK_TEMPLATE_NAME = "blank";
 
 
@@ -78,7 +79,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
                                         boolean isTemplate, String groupType,
                                         String groupName) {
         String expandedPath = null;
-        if ( (path != null) && (path.trim().length() != 0) &&
+        if ( (path != null) && (!path.trim().isEmpty()) &&
             !path.startsWith("/")) {
 
             String groupDir = groupName == null ? "" : "/" + groupName;
@@ -93,11 +94,11 @@ public abstract class AbstractViewConfig implements ViewConfig{
             }
             else {
                 if( !groupType.equalsIgnoreCase("") ) {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
+                    expandedPath = "/"+ SITE_DIR + "/" + folderName + "/" + groupType + groupDir +
                         "/" +
                         path;
                 } else {
-                    expandedPath = "/" + SITE_DIR + "/" + folderName + groupDir +
+                    expandedPath = "/"+SITE_DIR + "/" + folderName + groupDir +
                         "/" +
                         path;
                 }
@@ -116,8 +117,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
                 folderName + "/site-config.xml"));
         }
         else {
-            configFile = new File(servletContext.getRealPath("/" +
-                SITE_DIR + "/" + folderName + "/site-config.xml"));
+            configFile = new File(servletContext.getRealPath(SITE_DIR +
+              "/"+folderName + "/site-config.xml"));
         }
 
         SiteConfig siteConfig = null;
@@ -134,9 +135,8 @@ public abstract class AbstractViewConfig implements ViewConfig{
 
             SiteLayout siteLayout = siteConfig.getSiteLayout();
             if (siteLayout != null) {
-                Iterator iter = siteLayout.getLayout().values().iterator();
-                while (iter.hasNext()) {
-                    Layout layout = (Layout) iter.next();
+                for (Object o : siteLayout.getLayout().values()) {
+                    Layout layout = (Layout) o;
                     layout.setFileBlank(layout.getFile() == null);
                 }
             }

@@ -4,7 +4,7 @@ import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 /**

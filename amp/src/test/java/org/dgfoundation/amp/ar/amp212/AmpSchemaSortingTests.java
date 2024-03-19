@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.experimental.categories.Category;
 
 import java.util.Arrays;

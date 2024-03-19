@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.AbstractIntegrationTest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceMember;
 import org.digijava.kernel.ampapi.endpoints.security.services.WorkspaceMemberService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;

@@ -8,7 +8,7 @@ import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.ApprovalStatusConstraint;
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
@@ -40,7 +40,6 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
         PowerMockito.mockStatic(FeaturesUtil.class);
         PowerMockito.mockStatic(DbUtil.class);
     }
-
     @Test
     public void testNotAppliedInHibernate() {
         AmpActivity activity = new AmpActivity();

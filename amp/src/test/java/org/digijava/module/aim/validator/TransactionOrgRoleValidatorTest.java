@@ -7,7 +7,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRoleValidator;
 import org.hamcrest.Matcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;

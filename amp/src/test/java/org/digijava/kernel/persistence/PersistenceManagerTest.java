@@ -8,12 +8,14 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.experimental.categories.Category;
 
+import javax.validation.ConstraintViolationException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Octavian Ciubotaru
@@ -60,9 +62,11 @@ public class PersistenceManagerTest {
         PersistenceManager.inTransaction(() -> assertFalse(testReportExists()));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testGetSessionNotAllowedOutsideInTransactionMethod() {
-        PersistenceManager.getSession();
+        assertThrows(IllegalStateException.class,()-> {
+            PersistenceManager.getSession();
+        });
     }
 
     @Test

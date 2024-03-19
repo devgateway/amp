@@ -14,7 +14,7 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Identifiable;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;

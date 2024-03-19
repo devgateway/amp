@@ -14,7 +14,7 @@ import org.dgfoundation.amp.nireports.testcases.generic.HardcodedActivities;
 import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.digijava.module.aim.util.DbUtil;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.experimental.categories.Category;
 
 import java.time.LocalDate;

@@ -1,5 +1,5 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c"%>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <digi:context name="url" property="context/module/moduleinstance/"/>
 <TABLE width="100%" height="100%" cellpadding="4" cellspacing="2" border="0" class="help_body_table">
 <TR height="100%" valign="top">

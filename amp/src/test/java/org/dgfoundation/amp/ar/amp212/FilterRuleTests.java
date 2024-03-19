@@ -2,7 +2,7 @@ package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;

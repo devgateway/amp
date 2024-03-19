@@ -19,7 +19,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;

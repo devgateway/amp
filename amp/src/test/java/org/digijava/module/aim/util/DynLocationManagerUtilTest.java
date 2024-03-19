@@ -11,7 +11,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

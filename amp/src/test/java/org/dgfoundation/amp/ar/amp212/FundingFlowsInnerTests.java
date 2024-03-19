@@ -14,7 +14,7 @@ import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSche
 import org.dgfoundation.amp.nireports.testcases.generic.dimensions.OrganizationsTestDimension;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.module.aim.helper.Constants;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;

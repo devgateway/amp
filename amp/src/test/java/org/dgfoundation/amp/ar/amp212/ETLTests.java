@@ -5,7 +5,7 @@ import org.dgfoundation.amp.currencyconvertor.DateRateInfo;
 import org.dgfoundation.amp.currencyconvertor.ExchangeRates;
 import org.dgfoundation.amp.currencyconvertor.OneCurrencyCalculator;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;

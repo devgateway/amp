@@ -3,7 +3,7 @@ package org.dgfoundation.amp.ar.legacy;
 
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.digijava.module.categorymanager.util.CategoryConstants.*;
 

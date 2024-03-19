@@ -17,7 +17,7 @@
 /**
  * Repository query
  */
-var RepositoryUrl = "api/repository";
+var RepositoryUrl = "api/jsp";
 var repoPathUrl = function() {   
     return  RepositoryUrl;
 }

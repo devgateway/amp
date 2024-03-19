@@ -1,0 +1,89 @@
+/************************************************************************************************************
+*	DHTML image enlarger	(CSS for the DHTMLSuite.imageEnlarger class)
+*
+*			
+*
+* 	Update log:
+*
+************************************************************************************************************/
+
+.DHTMLSuite_imageEnlarger_transparentDivs{	
+	filter:alpha(opacity=50);	/* Transparency */
+	opacity:0.5;	/* Transparency */
+	-moz-opacity:0.5;	/* Transparency */
+	background-color:#000;
+	z-index:1;
+	position:absolute; /* Always needed	*/
+	z-index:100000;
+	top:0px;
+	left:0px;
+}
+.DHTMLSuite_imageEnlarger_iframe{
+	z-index:100010;
+	position:absolute;
+	background-color:#FFF;
+	left:0px;
+	top:0px;	
+}
+.DHTMLSuite_imageEnlarger{	/* Main div - no layout on this */
+	position:absolute;
+	z-index:100017;
+	left:50%;
+	top:50%;
+}
+
+.DHTMLSuite_imageEnlarger_imageBox{	/* div element inside main div - This is the place to add layout */
+	position:absolute;
+	z-index:100020;
+	background-color:#000;
+	border:8px solid #000;
+	
+}
+.DHTMLSuite_imageEnlarger_caption{	/* Image caption */
+	background-color:#000;
+	color:#FFF;
+	padding:5px;
+	text-align:center;
+}
+.DHTMLSuite_imageEnlarger_close,.DHTMLSuite_imageEnlarger_closeOver{	/* Close button */
+	position:absolute;
+	top:0px;
+	right:0px;	
+	background-repeat:no-repeat;
+	background-position:top right;
+	width:15px;
+	height:15px;
+	cursor:pointer;	
+}
+.DHTMLSuite_imageEnlarger_closeOver{		/* Close button - mouse over */
+	background-image:url('../images_dhtmlsuite/imageEnlarger_close_over.png');
+}
+.DHTMLSuite_imageEnlarger_close{	/* Close button */
+	background-image:url('../images_dhtmlsuite/imageEnlarger_close.png');
+}
+
+span.DHTMLSuite_imageEnlarger_captionTitle{	/* Image caption - title */
+	display:block;
+	font-weight:bold;
+	font-style:italic;
+}
+span.DHTMLSuite_imageEnlarger_captionDescription{	/* Image caption - the caption */
+	display:block;
+}
+a.DHTMLSuite_imageEnlarger_closeLink{	/* Close link below the caption - If you don't want it, just set display:none as a new css rule for this class */
+	text-align:center;
+	display:block;
+	color:red;
+	text-decoration:underline;
+}
+
+/* THIS SHADOW DIV HAS NOT BEEN IMPLEMENTED */
+.DHTMLSuite_imageEnlarger_shadow{
+	position:absolute;
+	background-color:#000;
+	filter:alpha(opacity=70);	/* Transparency */
+	opacity:0.7;	/* Transparency */
+	-moz-opacity:0.7;	/* Transparency */
+	z-index:100019;	
+
+}

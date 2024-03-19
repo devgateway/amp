@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-tiles.tld" prefix="tiles" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/featureVisibility.tld" prefix="feature" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/moduleVisibility.tld" prefix="module" %>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://digijava.org/fields" prefix="field" %>
+<%@ taglib uri="http://digijava.org/features" prefix="feature" %>
+<%@ taglib uri="http://digijava.org/modules" prefix="module" %>
 <html>
 	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge" />
 	<digi:base />
@@ -20,7 +20,7 @@
 			String key=(title.replaceAll(" ",""));
 			%>
 			<c:set var="key">aim:pagetitle:<%=key%></c:set>
-				<digi:trn neverShowLinks = "true">Aid Management Platform </digi:trn> 
+				<digi:trn neverShowLinks = "true">Aid Management Platform </digi:trn>
 				<digi:trn key="${key}" neverShowLinks = "true">
 					<%=title%>
 				</digi:trn>
@@ -28,23 +28,23 @@
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="Expires" CONTENT="0">
 		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
-		
+
 		<!-- FIX ANNOYING ISSUE WITH IE 8-9 -->
 		<script type="text/javascript"> if (!window.console) console = {log: function() {}, warn: function() {}, error: function() {}, info: function(){}}; </script>
-        
+
         <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
-        
+
         <!-- START LOADING NEW TABS NECESSARY FILES -->
-        
+
         <!-- Open Sans -->
 		<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 		<!-- Icon Font - Font Awesome -->
 		<link href="tabs/fonts/font-awesome.min.css" rel="stylesheet">
-        
+
 		<link rel="stylesheet" href="tabs/css/bootstrap.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
 		<link rel="stylesheet" href="tabs/css/jquery-ui.css">
-		<link rel="stylesheet" href="tabs/js/lib/jqgrid-4.6.0/css/ui.jqgrid.css">		
+		<link rel="stylesheet" href="tabs/js/lib/jqgrid-4.6.0/css/ui.jqgrid.css">
 		<link rel="stylesheet" href="tabs/css/settings.css">
 		<link rel="stylesheet" href="node_modules/amp-filter/dist/amp-filter.css">
 		<link rel="stylesheet" href="node_modules/amp-settings/dist/amp-settings.css">
@@ -57,24 +57,24 @@
 		    };
 		    window.currentLocale = '<%= request.getAttribute("currentLocale") %>';
 		    //alert('currentLocale: ' + currentLocale);
-		</script>		
-		
+		</script>
+
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/lib/object_hash.js"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate//tabs/js/lib/jquery.min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/tabs/js/lib/jquery-ui.min.js"/>"></script>	
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/tabs/js/lib/jquery-ui.min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/CommonFilterUtils.js"/>"></script>
-        			
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>		
+
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
         <script type="text/javascript">
          $.noConflict(true);
         </script>
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings.js"/>"></script> 
-		
-        
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings.js"/>"></script>
+
+
 	</head>
-     	
+
 	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 	<div id="amp-header"></div>
 <%-- 	 <digi:secure authenticated="false"> --%>
@@ -102,27 +102,27 @@
 							<img src="img_2/close_panel_notxt.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px;-webkit-box-sizing:content-box;box-sizing:content-box;">
 						</digi:secure>
 					</a>
-					<img src="img_2/t.gif" width="20" height="1"> 
+					<img src="img_2/t.gif" width="20" height="1">
 				</td>
 				<td valign="top" width="1px" id="right-column">
 					<digi:secure authenticated="true">
 					<div id="rightpanel">
 						<feature:display name="Desktop Search form" module="Tools">
-							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>
+							<jsp:include page="/WEB-INF/jsp/search/view/desktopsearch.jsp" flush="true"/>
 						</feature:display>
 						<logic:present name="currentMember">
 							<digi:insert attribute="myLastVersions"/>
 							<digi:insert attribute="myReports"/>
-							
+
 							<%-- <digi:insert attribute="myLinks" /> --%>
 							<c:set var="translation">
 								<digi:trn key="aim:clickToViewMoreResources">Click here to view more resources</digi:trn>
 							</c:set>
 							<module:display name="Content Repository" parentModule="Resources">
 								<div id='resources-widget-container'></div>
-							</module:display>							
-							
-							<digi:insert attribute="myMessages"/>																		
+							</module:display>
+
+							<digi:insert attribute="myMessages"/>
 						</logic:present>
 					</div>
 					</digi:secure>
@@ -131,11 +131,11 @@
 			</tbody>
 		</table>
 	</div>
-		<digi:insert attribute="footer" />		
-		
-		
+		<digi:insert attribute="footer" />
+
+
     </body>
-</html>	
+</html>
 <script data-main="tabs/js/main.js" src="tabs/js/lib/require_2.1.14.js"></script>
 <script type="text/javascript">
 
@@ -155,13 +155,13 @@ var attachClosePanelEvent = function() {
 			if($("#closepanel").attr("src") == 'img_2/close_panel_notxt.gif') {
 	    		$("#closepanel").attr('src','img_2/open_panel_notxt.gif');
 	    		app.TabsApp.resizePanel(originalWidth, true);
-	    		return false;    
+	    		return false;
 	 	    }
 			if($("#closepanel").attr("src") == 'img_2/open_panel_notxt.gif') {
 				$("#closepanel").attr('src','img_2/close_panel_notxt.gif');
 				app.TabsApp.resizePanel(originalWidth, false);
-				return false;    
-	 	    }			
+				return false;
+	 	    }
 		});
     });
 };
@@ -173,6 +173,6 @@ YAHOO.util.Event.addListener(window, 'load', function(){
 
 	function showlegend() {
 		var contentId = document.getElementById("show_legend_pop_box");
-  		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
+  		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block";
 	}
 </script>

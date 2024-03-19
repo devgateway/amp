@@ -9,7 +9,7 @@ import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.joda.time.DateTime;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Date;

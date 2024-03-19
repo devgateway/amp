@@ -13,7 +13,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 

@@ -1,0 +1,22 @@
+<c:if test="${subColumn.namePath == columnReport.sorterColumn}">
+	<logic:equal name="columnReport" property="sortAscending" value="false">
+		<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	</logic:equal>
+	<logic:equal name="columnReport" property="sortAscending" value="true">
+		<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	</logic:equal>
+</c:if>
+<c:if test="${subColumn.namePath != columnReport.sorterColumn}">
+	<c:forEach items="${columnReport.levelSorterPaths}" var="sorterPath" varStatus="status" >
+		<c:if test="${subColumn.namePath == sorterPath.key && !subColumn.namePath.contains('/')}">
+			<c:choose>
+				<c:when test="${ sorterPath.value == 'ascending'}">
+					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red${status.count-1}.gif" align="absmiddle" border="0"/>
+				</c:when>
+				<c:otherwise>
+					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down_red${status.count-1}.gif" align="absmiddle" border="0"/>
+				</c:otherwise>
+			</c:choose>
+		</c:if>
+	</c:forEach>
+</c:if>

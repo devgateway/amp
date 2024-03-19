@@ -1,11 +1,11 @@
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/digijava.tld" prefix="digi" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/c.tld" prefix="c"%>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/fieldVisibility.tld" prefix="field" %>
-<%@ taglib uri="/src/main/webapp/WEB-INF/tld/featureVisibility.tld" prefix="feature" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="http://digijava.org/fields" prefix="field" %>
+<%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 
 
 <digi:secure authenticated="false">
@@ -94,7 +94,7 @@
         <c:set var="title">
           <digi:trn>Click here to change your password</digi:trn>
         </c:set>
-        <digi:link style="text-align: center;" href="/showChangePassword.do" title="${title}" module="aim">
+        <digi:link href="/showChangePassword.do" title="${title}" module="aim">
           <digi:trn> Change Password</digi:trn>
         </digi:link>
         <br/>

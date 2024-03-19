@@ -7,7 +7,7 @@ import org.digijava.module.aim.validator.user.MatchExistingCreator;
 import org.digijava.module.aim.validator.user.MatchExistingCreatorConstraint;
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;

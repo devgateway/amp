@@ -34,7 +34,7 @@
         <test>${project.basedir}/test</test>
         <etc>${project.basedir}/etc</etc>
         <deployConfigs>deployConfigs</deployConfigs>
-        <repository>${project.basedir}/src/main/webapp/repository</repository>
+        <repository>${project.basedir}/jsp</repository>
         <jackrabbit>${project.basedir}/jackrabbit</jackrabbit>
         <ampTest>${project.basedir}/src/main/webapp/WEB-INF/amp-test</ampTest>
         <ampSelenium>${project.basedir}/src/main/webapp/WEB-INF/amp-selenium-test</ampSelenium>
@@ -681,6 +681,12 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>2.42.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.testng</groupId>
+                    <artifactId>testng</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -1222,6 +1228,12 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>2.37.0</version> <!-- Or the latest version -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.testng</groupId>
+                    <artifactId>testng</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- WebDriver -->
@@ -1249,27 +1261,38 @@
     </dependencyManagement>
 
     <build>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
         <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
 <!--        <outputDirectory>${project.basedir}/target</outputDirectory>-->
 
         <finalName>${project.artifactId}</finalName>
 
         <resources>
-<!--            <resource>-->
-<!--                <directory>src/main/java</directory>-->
-<!--                <includes>-->
-<!--                    <include>**</include>-->
-<!--                </includes>-->
-<!--            </resource>-->
-<!--            <resource>-->
+            <resource>
+                <filtering>false</filtering>
+                <directory>${project.basedir}/src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
 
-<!--                <directory>${project.basedir}/src/main/java</directory>-->
-<!--                <excludes>-->
-<!--                    <exclude>**/*.java</exclude>-->
-<!--                </excludes>-->
-<!--            </resource>-->
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>${project.basedir}/src/main/webapp</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
@@ -1294,12 +1317,12 @@
                             <sources>
 
                                 <source>
-                                    doc/translation.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/translation.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
                             <clearOutputDir>false</clearOutputDir>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                         </configuration>
                     </execution>
 
@@ -1312,11 +1335,11 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./doc/help.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/help.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
@@ -1331,11 +1354,11 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./src/main/resources/schemas/report.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/report.xsd
                                 </source>
                             </sources>
                             <packageName>org.dgfoundation.amp.reports.xml</packageName>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
@@ -1349,17 +1372,14 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./doc/xmlpatcher.xsd
+                                    ./src/main/webapp/WEB-INF/schemas/xmlpatcher.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
-
-
-
                 </executions>
             </plugin>
 
@@ -1375,6 +1395,7 @@
                 <version>2.3</version>
 
                 <configuration>
+
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1383,6 +1404,7 @@
                             <Implementation-Vendor>Development Gateway</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
+
 
                     <webResources>
                         <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
@@ -1393,6 +1415,22 @@
                             </includes>
                             <filtering>true</filtering>
                             <targetPath>/TEMPLATE/ampTemplate</targetPath>
+                        </resource>
+
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </resource>
+
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
                         </resource>
                         <resource>
                         <directory>${project.basedir}</directory>
@@ -1457,7 +1495,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${repository}</outputDirectory>
+                            <outputDirectory>jsp</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${deployConfigs}/${serverName}</directory>
@@ -1467,6 +1505,7 @@
                                 </resource>
                                 <!-- Add more resources as needed -->
                             </resources>
+
                         </configuration>
                     </execution>
 
@@ -1664,7 +1703,7 @@
                     <configuration>
                         <filesets>
                             <fileset>
-                                <directory>${repository}</directory>
+                                <directory>${project.basedir}/src/main/webapp/WEB-INF/moduleConfig</directory>
                                 <includes>
                                     <include>digi.xml</include>
                                 </includes>
@@ -2086,11 +2125,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M2</version>
                 <configuration>
+                    <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>
                     <includes>
                         <include>**/Test*.java</include>
                         <include>**/*Test.java</include>
                         <include>**/*Testcases.java</include>
-                        <include>**/*Tests*.java</include>
+                        <include>**/*Test*.java</include>
                     </includes>
                     <excludes>
                         <!--suites are running tests twice-->

@@ -118,7 +118,7 @@ public abstract class AbstractViewConfig implements ViewConfig{
         }
         else {
             configFile = new File(servletContext.getRealPath(SITE_DIR +
-              folderName + "/site-config.xml"));
+              "/"+folderName + "/site-config.xml"));
         }
 
         SiteConfig siteConfig = null;

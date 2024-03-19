@@ -59,7 +59,7 @@
 		//var element5 = document.getElementById("myPOverviewframe");
 		//element5.appendChild(contentLocal);
 
-		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/jsp/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
+		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/static/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
 		//contentLocal.parentElement = element5;
 		//if (panelFirstShow == 1){
 			contentLocal.style.display = "inline";

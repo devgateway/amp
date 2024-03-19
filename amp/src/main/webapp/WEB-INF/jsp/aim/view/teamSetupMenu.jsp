@@ -34,7 +34,7 @@ function putLoading(){
 	var subtabs = document.getElementById("subtabs");
 
 	if(mainDiv[0]){
-		loadstatustext='&nbsp;&nbsp;&nbsp;<img src="/jsp/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
+		loadstatustext='&nbsp;&nbsp;&nbsp;<img src="/static/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
 		mainDiv[0].innerHTML = loadstatustext;
 	}
 	if(subtabs){

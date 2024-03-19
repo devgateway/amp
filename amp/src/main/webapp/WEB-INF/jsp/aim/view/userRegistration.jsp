@@ -6,7 +6,7 @@
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:include page="/jsp/aim/view/strongPassword.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <script language="JavaScript">
 
@@ -249,7 +249,7 @@ Please do not attempt to use the Notification Email as user login.
                     </logic:iterate>
                   </ul>
                   </font>
-                  <jsp:include page="/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
+                  <jsp:include page="/WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
                 </td>
               </tr>
             </logic:notEmpty>

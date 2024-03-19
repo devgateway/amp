@@ -16,7 +16,7 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
 
 </script>
 
-<digi:ref href="/jsp/budgetexport/view/css/budgetexport.css" type="text/css" rel="stylesheet" />
+<digi:ref href="/static/budgetexport/view/css/budgetexport.css" type="text/css" rel="stylesheet" />
 
 
 	<span><a href="/aim/admin.do" class="comment" title="<digi:trn>Click here to goto Admin Home</digi:trn>"><digi:trn>Admin Home</digi:trn></a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="<digi:trn>Click here to goto Project List</digi:trn>"><digi:trn>Budget Export Projects</digi:trn></a>&nbsp;&gt;&nbsp;<digi:trn>Manage Mapings</digi:trn></span>
@@ -238,4 +238,4 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
 
 </digi:form>
 
-<script language="JavaScript" src="/jsp/budgetexport/view/js/budgetexport.js"></script>
+<script language="JavaScript" src="/static/budgetexport/view/js/budgetexport.js"></script>

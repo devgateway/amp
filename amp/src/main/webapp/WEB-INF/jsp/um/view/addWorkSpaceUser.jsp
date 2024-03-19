@@ -362,7 +362,7 @@
 										<c:out value="${assignedWS.ampMemberRole.description}"/>
 										</td>
 										<td align="center">
-										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteUserFromWS">Click on this icon to remove user from the workspace</digi:trn>"><img  src="/jsp/message/view/images/trash_12.gif" border="0" hspace="2"/></a>
+										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteUserFromWS">Click on this icon to remove user from the workspace</digi:trn>"><img  src="/static/message/view/images/trash_12.gif" border="0" hspace="2"/></a>
 										</td>
 										</tr>
 										</logic:iterate>

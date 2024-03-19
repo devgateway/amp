@@ -111,7 +111,7 @@
 
 									<br>
 									<div id="private">
-										<img src= "/jsp/contentrepository/view/images/make_public.gif">
+										<img src="/static/contentrepository/view/images/make_public.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<digi:trn key="aim:teamReportListViewableByAllWorkspaceMembers">
 												Indicates the report is viewable by all team members.
@@ -126,7 +126,7 @@
 										<digi:trn key="aim:clicktomakethisprivate">Click here to make this team-invisible</digi:trn>
 									</div>
 									<div id="private">
-										<img src= "/jsp/contentrepository/view/images/make_private.gif">
+										<img src="/static/contentrepository/view/images/make_private.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<digi:trn>Indicates the report is only viewable by the owner</digi:trn>
 										</c:if>
@@ -335,7 +335,7 @@
 																	<c:set target="${urlParams}" property="tempNumResults">${aimTeamReportsForm.tempNumResults}</c:set>
 
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this team-visible</digi:trn>" src= "/jsp/contentrepository/view/images/make_private.gif" border="0">
+																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this team-visible</digi:trn>" src="/static/contentrepository/view/images/make_private.gif" border="0">
 																	</digi:link>
 															</logic:equal>
 
@@ -354,7 +354,7 @@
 																	</c:if>
 
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this team-invisible</digi:trn>" src= "/jsp/contentrepository/view/images/make_public.gif" border="0">
+																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this team-invisible</digi:trn>" src="/static/contentrepository/view/images/make_public.gif" border="0">
 																	</digi:link>
 															</logic:equal>
 

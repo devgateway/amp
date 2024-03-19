@@ -220,7 +220,7 @@
 </digi:form>
 
 
-<script language="JavaScript" type="text/javascript" src="/jsp/aim/view/scripts/common.js"></script>
+<script language="JavaScript" type="text/javascript" src="/static/aim/view/scripts/common.js"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scorecard.js"/>"></script>
 
 <script type="text/javascript">

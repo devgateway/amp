@@ -506,7 +506,7 @@
 //        addLoadEvent(delBody);
 </script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<jsp:include page="/jsp/aim/view/addOrganizationPopin.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/addOrganizationPopin.jsp"  />
 <!-- Individual YUI CSS files -->
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">

@@ -43,7 +43,7 @@
 
 	<!-- Scripts  -->
 
-	<script language="JavaScript" type="text/javascript" src="/jsp/aim/view/scripts/common.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/static/aim/view/scripts/common.js"></script>
 	<digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
 	<link rel="stylesheet" href="tabs/css/bootstrap.css">
 	<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">

@@ -106,7 +106,7 @@ function banUser(txt) {
 					<tr>
 						<td align="left" colspan=8>
 								<jsp:include
-									page="/jsp/aim/view/adminXSLExportToolbar.jsp" />
+									page="/WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 						</td>
 					</tr>
 					<tr style="background-color: #F2F2F2; padding: 5px;">
@@ -243,10 +243,10 @@ function banUser(txt) {
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameAscending'}">
-																									<img src="/jsp/aim/images/up.gif" />
+																									<img src="/static/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameDescending'}">
-																									<img src="/jsp/aim/images/down.gif" />
+																									<img src="/static/aim/images/down.gif" />
 																								</c:if></td>
 																							<td height="30" width="220"><c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='emailAscending'}">
@@ -264,10 +264,10 @@ function banUser(txt) {
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}">
-																									<img src="/jsp/aim/images/up.gif" />
+																									<img src="/static/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailDescending'}">
-																									<img src="/jsp/aim/images/down.gif" />
+																									<img src="/static/aim/images/down.gif" />
 																								</c:if></td>
 																							<td height="30" width="220"><b> <digi:trn
 																										key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn>

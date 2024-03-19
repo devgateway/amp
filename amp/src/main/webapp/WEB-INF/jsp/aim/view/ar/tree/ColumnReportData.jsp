@@ -52,5 +52,5 @@
 
 <div style='position:relative;display:none;' id='<bean:write name="columnReport" property="absoluteReportNameMD5"/>'>
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
-<jsp:include page="/jsp/aim/view/ar/print/TrailCells.jsp"/>
+<jsp:include page="/WEB-INF/jsp/aim/view/ar/print/TrailCells.jsp"/>
 </div>

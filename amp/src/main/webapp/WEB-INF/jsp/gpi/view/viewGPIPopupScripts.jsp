@@ -5,7 +5,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ include file="/jsp/aim/view/scripts/newCalendar.jsp"%>
+<%@ include file="/WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"%>
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 
 
@@ -42,7 +42,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
-<link rel="stylesheet" href="/jsp/aim/view/css/css_dhtmlsuite/modal-message.css" />
+<link rel="stylesheet" href="/static/aim/view/css/css_dhtmlsuite/modal-message.css" />
 <%-- <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>"> --%>
 
 

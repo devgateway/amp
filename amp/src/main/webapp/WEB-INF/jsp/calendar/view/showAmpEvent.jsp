@@ -26,7 +26,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 
-<jsp:include page="/jsp/aim/view/addOrganizationPopin.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/addOrganizationPopin.jsp"  />
 
 <style>
 <!--
@@ -345,7 +345,7 @@ function submitForm() {
 </script>
 
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp"  />
-<jsp:include page="/jsp/calendar/view/scripts/calendarEventScript.jsp"/>
+<jsp:include page="/WEB-INF/jsp/calendar/view/scripts/calendarEventScript.jsp"/>
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
 
 <script language="JavaScript" type="text/javascript">

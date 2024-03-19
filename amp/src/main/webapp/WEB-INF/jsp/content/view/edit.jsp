@@ -14,7 +14,7 @@
 <%@ taglib uri="http://digijava.org/fields" prefix="field" %>
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>
-<jsp:include page="/jsp/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
 
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
 <style>
@@ -258,22 +258,22 @@ div.fakefile2 input {
                           <table cellpadding="5" cellspacing="5">
                             <tr>
                               <td align="center">
-                              <img src="/jsp/content/view/layout_1.png"/><br />
+                              <img src="/static/content/view/layout_1.png"/><br />
                               <html:radio name="contentForm" property="contentLayout" value="1" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
-                              <img src="/jsp/content/view/layout_2.png" /><br />
+                              <img src="/static/content/view/layout_2.png" /><br />
                               <html:radio property="contentLayout" value="2" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
-                              <img src="/jsp/content/view/layout_3.png" /><br />
+                              <img src="/static/content/view/layout_3.png" /><br />
                               <html:radio property="contentLayout" value="3" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
-                              <img src="/jsp/content/view/layout_4.png" /><br />
+                              <img src="/static/content/view/layout_4.png" /><br />
                               <html:radio property="contentLayout" value="4" disabled="false" />
                               <br />
                               </td>
@@ -310,7 +310,7 @@ div.fakefile2 input {
                         </c:choose>
                     </c:set>
                     <div style="width:1000px;background-color:#ffffff;${displayLayout}" id="layout_${layoutNumber}" name="layoutGroup">
-                    <c:import url="/jsp/content/view/layout_${layoutNumber}.jsp">
+                    <c:import url="/WEB-INF/jsp/content/view/layout_${layoutNumber}.jsp">
 					  <c:param name="pageCode" value="${contentForm.pageCode}"/>
                       <c:param name="htmlblock_1" value="${contentForm.htmlblock_1}"/>
                       <c:param name="htmlblock_2" value="${contentForm.htmlblock_2}"/>

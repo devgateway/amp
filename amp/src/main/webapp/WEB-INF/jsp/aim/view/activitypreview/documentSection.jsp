@@ -66,7 +66,7 @@
                                                     <digi:trn>Click here to download document</digi:trn>
                                                 </c:set>
                                                 <a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
-                                                    <img src="/jsp/contentrepository/view/images/check_out.gif" border="0">
+                                                    <img src="/static/contentrepository/view/images/check_out.gif" border="0">
                                                 </a>
                                                 <logic:notEmpty name="crDoc" property="description">
                                                     <br/>&nbsp;

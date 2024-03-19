@@ -21,7 +21,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 
-<script type="text/javascript" src="/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="/static/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <style type="text/css">
     .mask {

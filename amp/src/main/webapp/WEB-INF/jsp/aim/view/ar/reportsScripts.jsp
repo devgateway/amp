@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
-<%@ include file="/jsp/aim/view/scripts/newCalendar.jsp"  %>
+<%@ include file="/WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"  %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTableReports.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
@@ -42,7 +42,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
-<link rel="stylesheet" href="/jsp/aim/view/css/css_dhtmlsuite/modal-message.css"/>
+<link rel="stylesheet" href="/static/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class

@@ -29,7 +29,7 @@
 				<c:if test="${myForm.hasAddParticipatingOrgRights}">
 					<img onClick="deleteDocToOrgObj('${myForm.uuidForOrgsShown}', ${org.ampOrgId});"  style="cursor:pointer; text-decoration:underline;"
 					title="<digi:trn>Click here to remove this organisation</digi:trn>"
-					hspace="2" src= "/jsp/contentrepository/view/images/trash_12.gif" border="0" />
+					hspace="2" src="/static/contentrepository/view/images/trash_12.gif" border="0" />
 				</c:if>
 			</li>
 		</c:forEach>

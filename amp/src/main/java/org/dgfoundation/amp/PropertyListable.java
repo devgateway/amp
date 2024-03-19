@@ -18,7 +18,7 @@ import java.util.*;
 
 /**
  * PropertyListable.java Implemented by Beans that can have their properties Listable
- * 
+ *
  * @author mihai
  * @package org.dgfoundation.amp
  * @since 09.09.2007
@@ -26,27 +26,27 @@ import java.util.*;
 public abstract class PropertyListable implements Cloneable {
 
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface PropertyListableIgnore {      
+    public @interface PropertyListableIgnore {
     }
-    
 
-    
+
+
     @Override
     public Object clone() throws CloneNotSupportedException {
     return super.clone();
     }
-    
+
     protected static Logger logger = Logger.getLogger(PropertyListable.class);
-    
-    
+
+
     public abstract String getBeanName();
-    
-    
+
+
     @PropertyListableIgnore
     public String getJspFile() {
-    return "/jsp/aim/view/listableBean.jsp";
+    return "/WEB-INF/jsp/aim/view/listableBean.jsp";
     }
-    
+
     @PropertyListableIgnore
     public Map getPersistencePropertiesMap() {
         ArrayList<Class> annotations    = new ArrayList<Class>();
@@ -54,7 +54,7 @@ public abstract class PropertyListable implements Cloneable {
         annotations.add( IgnorePersistence.class );
         return this.generatePropertiesMap( annotations );
     }
-    
+
     @PropertyListableIgnore
     public String getStringRepresentation()
     {
@@ -64,9 +64,9 @@ public abstract class PropertyListable implements Cloneable {
             bld.append(String.format("key: %s has value: %s\n", key, map.get(key)));
         return bld.toString();
     }
-    
+
     /**
-     * provides a way to display this bean in HTML. 
+     * provides a way to display this bean in HTML.
      */
     @PropertyListableIgnore
     public Map<String, Object> getPropertiesMap() {
@@ -74,13 +74,13 @@ public abstract class PropertyListable implements Cloneable {
         annotations.add( PropertyListableIgnore.class );
         return this.generatePropertiesMap( annotations );
     }
-    
+
     /**
          * Properties are automatically returned along with their values.
-         * CollectionS are unfolded and excluded properties (internally used) are not shown. You may provide a collection of annotations  
+         * CollectionS are unfolded and excluded properties (internally used) are not shown. You may provide a collection of annotations
          * in order to ignore the getters for the properties you may not want to list externally
          */
-    
+
     @PropertyListableIgnore
     private Map<String, Object> generatePropertiesMap(Collection<Class> annonations) {
     Map<String, Object> ret = new TreeMap<String, Object>();
@@ -88,13 +88,13 @@ public abstract class PropertyListable implements Cloneable {
     try {
         beanInfo = Introspector.getBeanInfo(this.getClass());
         PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-        
-        for (int i = 0; i < propertyDescriptors.length; i++) {  
+
+        for (int i = 0; i < propertyDescriptors.length; i++) {
             if(propertyDescriptors[i].getName().equals("class")) continue;
             Method m = propertyDescriptors[i].getReadMethod();
             //if(m.isAnnotationPresent(PropertyListableIgnore.class))continue;
             Iterator<Class> iter    = annonations.iterator();
-            
+
             boolean skip        = false;
             while ( iter.hasNext() ) {
                 if ( m.isAnnotationPresent(iter.next()) ) {
@@ -104,9 +104,9 @@ public abstract class PropertyListable implements Cloneable {
             }
             if ( skip )
                     continue;
-            
+
             Object object = m.invoke(this, new Object[] {});
-            
+
             if ((object == null) || (object instanceof String)
                             && ("".equalsIgnoreCase((String) object))) continue;
             if ( object instanceof Collection && ((Collection)object).size() == 0 )

@@ -9,7 +9,7 @@
 
 <digi:instance property="crDocumentManagerForm" />
 
-<jsp:include page="/jsp/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
 
 <%@include file="addDocumentPanel.jsp" %>
 

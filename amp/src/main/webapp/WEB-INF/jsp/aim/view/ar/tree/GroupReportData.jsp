@@ -32,7 +32,7 @@
 <c:if test="${!(groupReport.name == groupReport.parent.name)}">
 <div style='position:relative;display:none;' id='<bean:write name="groupReport" property="absoluteReportNameMD5"/>'>
 <bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
-<jsp:include page="/jsp/aim/view/ar/print/TrailCells.jsp"/>
+<jsp:include page="/WEB-INF/jsp/aim/view/ar/print/TrailCells.jsp"/>
 </div>
 <li noDrag="true">
 <a onMouseOver="stm(['Totals for <bean:write name="groupReport" property="name"/>',document.getElementById('<bean:write name="groupReport" property="absoluteReportNameMD5"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="groupReport" property="name"/></a>

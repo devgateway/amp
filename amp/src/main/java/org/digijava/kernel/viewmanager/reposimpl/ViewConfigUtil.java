@@ -378,7 +378,7 @@ public abstract class ViewConfigUtil
                 if (groupType.equals(MODULE_DIR)) {
                     String groupDir = groupName == null ? "" : "/" + groupName;
 
-                    fileName = "/jsp" + groupDir + "/view/" +
+                    fileName = "/static" + groupDir + "/view/" +
                         path;
                     if (path.contains(".jsp"))
                     {

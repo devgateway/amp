@@ -14,21 +14,21 @@
 
     <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
 
-    <link href="/jsp/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
-    <link href="/jsp/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
-    <link href="/jsp/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
-<!-- <link href="/jsp/bootstrap/lightbox/ekko-lightbox.min.css" media="all" rel="stylesheet" type="text/css" />  -->
-    <link href="/jsp/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
-    <link href="/jsp/bootstrap/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="/jsp/bootstrap/upload/jquery.fileupload.css" rel="stylesheet" type="text/css" />
-    <link href="/jsp/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
+    <link href="/static/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/static/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
+<!-- <link href="/static/bootstrap/lightbox/ekko-lightbox.min.css" media="all" rel="stylesheet" type="text/css" />  -->
+    <link href="/static/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/bootstrap/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/bootstrap/upload/jquery.fileupload.css" rel="stylesheet" type="text/css" />
+    <link href="/static/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
 
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/jsp/bootstrap/amp-bootstrap.js" type="text/javascript"></script>
-    <script src="/jsp/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
-    <script src="/jsp/aim/view/bootstrap/amp_validation.js" type="text/javascript"></script>
-	<script src="/jsp/aim/view/bootstrap/forms.js" type="text/javascript"></script>
+	<script src="/static/bootstrap/amp-bootstrap.js" type="text/javascript"></script>
+    <script src="/static/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
+    <script src="/static/aim/view/bootstrap/amp_validation.js" type="text/javascript"></script>
+	<script src="/static/aim/view/bootstrap/forms.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var please_enter_phone_number_message = '<digi:trn jsFriendly="true">Please enter phone</digi:trn>';
 		var please_enter_email_message = '<digi:trn jsFriendly="true">Please enter email</digi:trn>';
@@ -93,8 +93,8 @@
 			</aim:renderFormSubsection>
 		</feature:display>
 
-		<jsp:include page="/jsp/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
-		<jsp:include page="/jsp/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/jsp/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/jsp/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
 
 		<div class="big-form-buttons">
 			<button type="button" onclick="pledge_form_submit('#pledge_form_big_div');" class="btn btn-primary" id='pledgeForm_submit'><digi:trn>Submit</digi:trn></button>
@@ -109,15 +109,15 @@
 	</script>
 </logic:notPresent>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/jsp/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/jsp/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
-    <script src="/jsp/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
-    <script src="/jsp/bootstrap/jquery.ui.widget.js" type="text/javascript"></script>
-	<script src="/jsp/bootstrap/upload/jquery.iframe-transport.js" type="text/javascript"></script>
-    <script src="/jsp/bootstrap/upload/jquery.fileupload.js" type="text/javascript"></script>
+    <script src="/static/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/static/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
+    <script src="/static/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
+    <script src="/static/bootstrap/jquery.ui.widget.js" type="text/javascript"></script>
+	<script src="/static/bootstrap/upload/jquery.iframe-transport.js" type="text/javascript"></script>
+    <script src="/static/bootstrap/upload/jquery.fileupload.js" type="text/javascript"></script>
 
-    <script src="/jsp/bootstrap/datetimepicker/moment-with-langs.min.js" type="text/javascript"></script>
-    <script src="/jsp/bootstrap/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
-    <script src="/jsp/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
- <!--   <script src="/jsp/bootstrap/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>  -->
+    <script src="/static/bootstrap/datetimepicker/moment-with-langs.min.js" type="text/javascript"></script>
+    <script src="/static/bootstrap/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+    <script src="/static/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
+ <!--   <script src="/static/bootstrap/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>  -->
 

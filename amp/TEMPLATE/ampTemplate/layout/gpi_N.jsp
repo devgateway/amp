@@ -10,9 +10,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" href="<digi:file src="/jsp/gpi/view/css/gpi_styles.css"/>">
+<link rel="stylesheet" href="<digi:file src="/static/gpi/view/css/gpi_styles.css"/>">
 
-<jsp:include page="/jsp/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="/WEB_INF/jsp/aim/view/teamPagesHeader.jsp"  />
 
 <%
 String auxReportId = request.getParameter("reportId");
@@ -49,16 +49,16 @@ request.getParameter("print");
 		            <tr>
 		                <td class="td_right_left1">
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="1">
-                                <jsp:include page="/jsp/gpi/view/gpi_1.jsp"></jsp:include>
+                                <jsp:include page="//WEB_INF/jsp/gpi/view/gpi_1.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5a">
-                                <jsp:include page="/jsp/gpi/view/gpi_5a.jsp"></jsp:include>
+                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_5a.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="6">
-                                <jsp:include page="/jsp/gpi/view/gpi_6.jsp"></jsp:include>
+                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_6.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9b">
-                                <jsp:include page="/jsp/gpi/view/gpi_9b.jsp"></jsp:include>
+                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_9b.jsp"></jsp:include>
                             </logic:equal>
 	                    </td>
 	                </tr>

@@ -225,7 +225,7 @@
 
                     <td noWrap align=center valign="middle">
                       	<jsp:include
-									page="/jsp/aim/view/adminXSLExportToolbar.jsp" />
+									page="/WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
         </td>
     </tr>
 </table></td>
@@ -328,10 +328,10 @@
 	                                                                            </digi:trn>
 																</digi:link>  --%></b>
 																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/jsp/aim/images/up.gif" alt="up" />
+																		<img src="/static/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/jsp/aim/images/down.gif" alt="down" />
+																		<img src="/static/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>
@@ -350,10 +350,10 @@
 	                                                                            </digi:trn>
 																</digi:link>  --%></b>
 																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/jsp/aim/images/up.gif" alt="up" />
+																		<img src="/static/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/jsp/aim/images/down.gif" alt="down" />
+																		<img src="/static/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>
@@ -373,10 +373,10 @@
 	                                                                            </digi:trn>
 																</digi:link> --%> </b>
 																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/jsp/aim/images/up.gif" alt="up" />
+																		<img src="/static/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/jsp/aim/images/down.gif" alt="down" />
+																		<img src="/static/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>

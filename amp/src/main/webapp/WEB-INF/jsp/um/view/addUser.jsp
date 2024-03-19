@@ -15,7 +15,7 @@
 <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 <%@ taglib uri="http://digijava.org/modules" prefix="module" %>
 
-<jsp:include page="/jsp/aim/view/strongPassword.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <style  type="text/css">
 <!--
@@ -303,7 +303,7 @@
 													</ul>
 													</font>
 												</logic:notEmpty>
-													<jsp:include page="/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
+													<jsp:include page="/WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
 												</td>
 											</tr>
                                             <tr>

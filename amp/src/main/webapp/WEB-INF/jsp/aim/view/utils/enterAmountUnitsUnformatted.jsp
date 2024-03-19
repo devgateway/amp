@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://digijava.org/GlobalSettings" prefix="gs" %>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="1" onTrueEvalBody="true">
 	<logic:present scope="request" name="amount_prefix"><%= request.getAttribute("amount_prefix") %></logic:present>

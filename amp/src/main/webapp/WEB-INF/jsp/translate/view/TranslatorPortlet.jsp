@@ -2,19 +2,19 @@
 <%@ page import="org.digijava.kernel.user.User"%>
 <%@ page import="org.digijava.kernel.util.DgUtil"%>
 <%@ page import="org.digijava.kernel.translator.form.TranslatorForm"%>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/WEB-INF/digijava.tld" prefix="dgcs"%>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
+<%@ taglib uri="http://digijava.org/digi" prefix="dgcs"%>
 
 
 <script>
 <dgcs:instance id="tForm" property="TranslatorForm"/>
 
 function submitForm(){
-	
+
 	var key='<%=request.getParameter("key")%>';
-	
+
 	document.forms[0].key.value = key;
 
 	document.forms[0].action = "translate/TranslatorNavigation.do";
@@ -62,7 +62,7 @@ String strA = request.getParameter("key");
 </tr>
 <tr>
   <td>
-  
+
 
 <input type="hidden" name="back_url" value='<%=request.getParameter("back_url")%>'>
 
@@ -70,16 +70,16 @@ String strA = request.getParameter("key");
 <%String strLinker="(Choose a different language)";%>
 
 <html:hidden name="tForm" property="destLocale" value="<%=DgUtil.determineLanguage(request).getCode()%>"/>
-			
+
 			<%String val = "ln:" + DgUtil.determineLanguage(request).getCode();%>
 			<dgcs:trn key="<%=val%>"> </dgcs:trn>&nbsp;<a href="javascript:submitForm();"><%=strLinker%></a>
-			
+
 			<input type="hidden" name="lang" value="<%=DgUtil.determineLanguage(request).getCode()%>"/>
-			
+
 			<!--<input type="hidden" name="locale" value="<bean:write name="tForm" property="destLocale"/>"/>
 			<input type="hidden" name="language" value="<bean:write name="tForm" property="destLocale"/>"/>
 			-->
-	
+
 
   </td>
 
@@ -107,18 +107,18 @@ String strA = request.getParameter("key");
 
 
 	<%
-		
-		
+
+
 		String sLocale;
 
 		if(user.getUserLangPreferences() != null){
-		
+
 			if(user.getUserLangPreferences().getNavigationLanguage() != null){
 			 	sLocale = user.getUserLangPreferences().getNavigationLanguage().getCode().substring(0,2);
 			}else{
 				sLocale="en";
 			}
-							
+
 		}else{
 			 sLocale="en";
 		}

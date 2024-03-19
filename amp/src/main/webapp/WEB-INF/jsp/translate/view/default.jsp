@@ -4,20 +4,20 @@
 <%@ page import="org.digijava.kernel.user.User"%>
 <%@ page import="org.digijava.kernel.util.DgUtil"%>
 <%@ page import="org.digijava.kernel.translator.form.TranslatorForm"%>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/WEB-INF/digijava.tld" prefix="dgcs"%>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
+<%@ taglib uri="http://digijava.org/digi" prefix="dgcs"%>
 
 
 <script>
 <dgcs:instance id="tForm" property="TranslatorForm"/>
 
 function submitForm(){
-	
+
 	var key='<%=request.getParameter("key")%>';
 	var url= document.forms[0].back_url.value;
-	var back_url = '<%=request.getRequestURL()%>';	
+	var back_url = '<%=request.getRequestURL()%>';
 	document.forms[0].back_url.value = back_url;
 	document.forms[0].url.value = url;
 	document.forms[0].key.value = key;
@@ -37,7 +37,7 @@ function submitForm(){
 <%
 
 	User user = (User)DgUtil.getCurrentUser(request);
-					
+
 	session.setAttribute("user_lang",user.getUserLangPreferences().getNavigationLanguage().getCode().substring(0,2));
 %>
 
@@ -126,13 +126,13 @@ String strA = request.getParameter("key");
 <%String strLinker="(Choose a different language)";%>
 
 
-	
+
 			<bean:write name="tForm" property="destLocale"/>&nbsp;<a href="javascript:submitForm();"><%=strLinker%></a>
 
 			<!--<input type="hidden" name="locale" value="<bean:write name="tForm" property="destLocale"/>"/>
 			<input type="hidden" name="language" value="<bean:write name="tForm" property="destLocale"/>"/>
 			-->
-	
+
 
   </td>
 
@@ -158,14 +158,14 @@ String strA = request.getParameter("key");
 </tr>
 
 	<%
-		
-		
+
+
 		String sLocale;
 
 		if(user.getUserLangPreferences().getNavigationLanguage().getCode().substring(0,2) != null){
-		
+
 			 sLocale = user.getUserLangPreferences().getNavigationLanguage().getCode().substring(0,2);
-							
+
 		}else{
 			 sLocale="en";
 		}

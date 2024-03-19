@@ -37,10 +37,10 @@
 %>
 
 
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/digijava.tld" prefix="dgcs" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="dgcs" %>
 
 <link href="css/global.css" rel="stylesheet" type="text/css">
 
@@ -76,17 +76,17 @@
 			</logic:iterate>
 
 	<%
-	
+
 	String url="";
 	if(request.getParameter("key") != null){
 		url = "/showLayout.do?layout=TranslatorPortlet&key=" + request.getParameter("key") + "&type=" + request.getParameter("type") + "&back_url=" + request.getParameter("back_url");
 	}else{
 		url = request.getParameter("back_url");
 	}
-	
+
 	%>
 	<input type="hidden" name="back_url" value='<%=url%>'>
-			
+
 
 			<!--&nbsp;<br>
 			<span style="color:red">Attention</span>
@@ -102,9 +102,9 @@
 
 				<input type='checkbox' name='checkbox_locale' value='us' checked> English</br>
 
-				<input type='checkbox' name='checkbox_locale' value='e' checked> Español</br>
+				<input type='checkbox' name='checkbox_locale' value='e' checked> Espaï¿½ol</br>
 
-				<input type='checkbox' name='checkbox_locale' value='f' checked> Français</br>
+				<input type='checkbox' name='checkbox_locale' value='f' checked> Franï¿½ais</br>
 
 				<input type='checkbox' name='checkbox_locale' value='el' checked> Greek</br>
 
@@ -114,7 +114,7 @@
 
 				<input type='checkbox' name='checkbox_locale' value='ko' checked> Korean</br>
 
-				<input type='checkbox' name='checkbox_locale' value='pt' checked> Português</br>
+				<input type='checkbox' name='checkbox_locale' value='pt' checked> Portuguï¿½s</br>
 
 				<input type='checkbox' name='checkbox_locale' value='ru' checked> Russian</br>
 

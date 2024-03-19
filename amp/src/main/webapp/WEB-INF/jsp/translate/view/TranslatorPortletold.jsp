@@ -1,19 +1,19 @@
 <%@ page import="java.util.Locale"%>
 <%@ page import="org.developmentgateway.aida.form.LocaleForm"%>
 <%@ page import="org.developmentgateway.core.entity.User"%>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/dgcs.tld" prefix="dgcs"%>
 
 
 <script>
 
 function submitForm(){
-	
+
 	var key='<%=request.getParameter("key")%>';
 	var url= document.forms[0].back_url.value;
-	var back_url = '<%=request.getRequestURL()%>';	
+	var back_url = '<%=request.getRequestURL()%>';
 	document.forms[0].back_url.value = back_url;
 	document.forms[0].url.value = url;
 	document.forms[0].key.value = key;
@@ -132,7 +132,7 @@ String strA = request.getParameter("key");
 		<logic:equal scope="session" name="user_lang" value="es">
 
 				<bean:message key="ln:es"/>&nbsp;<a href="javascript:submitForm();"><%=strLinker%></a>
-	
+
 			<input type="hidden" name="language" value="es"/>
 
 				<input type="hidden" name="locale" value="es"/>
@@ -140,7 +140,7 @@ String strA = request.getParameter("key");
 		<logic:equal scope="session" name="user_lang" value="fr">
 
 			<bean:message key="ln:fr"/>&nbsp;<a href="javascript:submitForm();"><%=strLinker%></a>
-	
+
 			<input type="hidden" name="language" value="fr"/>
 				<input type="hidden" name="locale" value="fr"/>
 		</logic:equal>
@@ -180,14 +180,14 @@ String strA = request.getParameter("key");
 </tr>
 
 	<%
-		
-		
+
+
 		String sLocale;
 
 		if(user.getLanguagePreference() != null){
-		
+
 			 sLocale = user.getLanguagePreference();
-							
+
 		}else{
 			 sLocale="en";
 		}

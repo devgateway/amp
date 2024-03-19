@@ -23,13 +23,13 @@ public class BoundariesService {
 
     protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-    private static final String BOUNDARY_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/src/main/webapp/WEB-INF/gis" + File.separator + "boundaries" + File.separator);
+    private static final String BOUNDARY_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/src/main/resources" + File.separator + "boundaries" + File.separator);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
      * Return the list .json files for this country as a JSONArray object.
-     * 
+     *
      * @return
      */
     public static List<Boundary> getBoundaries() {
@@ -47,7 +47,7 @@ public class BoundariesService {
     /**
      * Return the list of .json files for this country as a Map with the adm-N
      * for key.
-     * 
+     *
      * @return
      */
     public static Map<String, Boundary> getBoundariesAsList() {

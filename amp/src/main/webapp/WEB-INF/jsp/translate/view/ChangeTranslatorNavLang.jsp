@@ -37,9 +37,9 @@
 %>
 
 
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/dgcs.tld" prefix="dgcs" %>
 
 <link href="css/global.css" rel="stylesheet" type="text/css">
@@ -113,9 +113,9 @@
 
 				<input type='checkbox' name='checkbox_locale' value='us' checked> English</br>
 
-				<input type='checkbox' name='checkbox_locale' value='e' checked> Español</br>
+				<input type='checkbox' name='checkbox_locale' value='e' checked> Espaï¿½ol</br>
 
-				<input type='checkbox' name='checkbox_locale' value='f' checked> Français</br>
+				<input type='checkbox' name='checkbox_locale' value='f' checked> Franï¿½ais</br>
 
 				<input type='checkbox' name='checkbox_locale' value='el' checked> Greek</br>
 
@@ -125,7 +125,7 @@
 
 				<input type='checkbox' name='checkbox_locale' value='ko' checked> Korean</br>
 
-				<input type='checkbox' name='checkbox_locale' value='pt' checked> Português</br>
+				<input type='checkbox' name='checkbox_locale' value='pt' checked> Portuguï¿½s</br>
 
 				<input type='checkbox' name='checkbox_locale' value='ru' checked> Russian</br>
 

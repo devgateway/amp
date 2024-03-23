@@ -299,7 +299,7 @@ public class ActivityUtil {
             if (a.getAmpActivityId() == null)
                 session.save(a);
             else {
-               cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
+                cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
                 session.saveOrUpdate(a);
             }
         } else {
@@ -329,12 +329,6 @@ public class ActivityUtil {
         {
             session.evict(object);
         }
-    }
-    private static void updateFunding(AmpActivityVersion ampActivityVersion)
-    {
-    Session session = PersistenceManager.getRequestDBSession();
-    List<AmpFunding> fundings = session.createQuery("FROM "+ AmpFunding.class.getName()+" af WHERE af.ampActivityId=:activityId",AmpFunding.class).setParameter("activityId",ampActivityVersion.getAmpActivityId(), LongType.INSTANCE).list();
-
     }
 
     private static void updateMultiStakeholderField(AmpActivityVersion a) {
@@ -393,7 +387,7 @@ public class ActivityUtil {
             try {
                 AuditLoggerUtil.logObject(tm, activity, "add", additionalDetails);
             } catch (DgException e) {
-                e.printStackTrace();
+                logger.error("Error",e);
             }
         }
     }
@@ -405,12 +399,12 @@ public class ActivityUtil {
         String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamId);
 
         if (activity.getDraft() != null) {
-            if (!activity.getDraft() && !(Constants.PROJECT_VALIDATION_OFF.equals(validation))) {
+            if (!Boolean.TRUE.equals(activity.getDraft()) && !(Constants.PROJECT_VALIDATION_OFF.equals(validation))) {
                 if (!isApproved(activity)
                         && (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equals(validation) || newActivity)) {
                     additionalDetails = "pending approval";
                 }
-            } else if (activity.getDraft()) {
+            } else if (Boolean.TRUE.equals(activity.getDraft())) {
                 additionalDetails = "draft";
             }
         }
@@ -546,7 +540,7 @@ public class ActivityUtil {
                          * where TL/AP is logged but cross team validation is on
                          * set it validated
                          */
-                        if (crossTeamValidation) {
+                        if (Boolean.TRUE.equals(crossTeamValidation)) {
                             a.setApprovalStatus(ApprovalStatus.approved);
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
@@ -749,11 +743,10 @@ public class ActivityUtil {
         }
 
         for (AmpComponent ampComponent : components) {
-            if (Hibernate.isInitialized(ampComponent.getFundings())) {
-                if (ampComponent.getFundings() != null) {
+            if (Hibernate.isInitialized(ampComponent.getFundings()) && (ampComponent.getFundings() != null)) {
 
-                    ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
-                }
+                ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
+
             }
         }
     }
@@ -1143,12 +1136,12 @@ public class ActivityUtil {
     private static void populateTranslatedTitles(TemporaryActivityDocument d, NodeWrapper nw) {
         List<ResourceTranslation> translatedTitles = d.getTranslatedTitleList();
         if (translatedTitles == null) {
-            translatedTitles = new ArrayList<ResourceTranslation>();
+            translatedTitles = new ArrayList<>();
         }
         List<String> languages = TranslatorUtil.getLocaleCache();
         for (String locale : languages) {
             String translation = nw.getTranslatedTitleByLang(locale);
-            if (translation != null && locale != TLSUtils.getLangCode()) {
+            if (translation != null && !Objects.equals(locale, TLSUtils.getLangCode())) {
                 ResourceTranslation resource = new ResourceTranslation(d.getExistingDocument()
                         .getUuid(), translation, locale);
                 translatedTitles.add(resource);
@@ -1292,7 +1285,7 @@ public class ActivityUtil {
             if (checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()) {
                 //List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
                 List<Long> activityDbContactsIds = ContactInfoUtil.getActivityContactIds(oldActivityId);
-                if (activityDbContactsIds != null && activityDbContactsIds.size() > 0) {
+                if (activityDbContactsIds != null && !activityDbContactsIds.isEmpty()) {
                     for (Long actContactId : activityDbContactsIds) {
                         int count = 0;
                         if (activityContacts != null) {
@@ -1324,7 +1317,7 @@ public class ActivityUtil {
         }
         try {
             //add or edit activity contact and amp contact
-            if (activityContacts != null && activityContacts.size() > 0) {
+            if (activityContacts != null && !activityContacts.isEmpty()) {
                 for (AmpActivityContact activityContact : activityContacts) {
                     Long contactId = activityContact.getContact().getId();
                     // if the contact already exists on the DB, and was not saved
@@ -1456,11 +1449,19 @@ public class ActivityUtil {
     public static boolean hasProgramIndicatorsInActivity(AmpActivityVersion activity, AmpActivityProgram program) {
         Set<IndicatorActivity> indicators = activity.getIndicators();
         for (IndicatorActivity indicator : indicators) {
-            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+            AmpIndicator ind = PersistenceManager.getSession()
                     .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+
             Long programId = ind.getProgram().getAmpThemeId();
             if (programId.equals(program.getProgram().getAmpThemeId())) {
                 return true;
+            }
+            // Also check if the indicators have the parent theme/program that is being deleted
+            AmpTheme getParentTheme = ind.getProgram().getParentThemeId();
+            if(getParentTheme != null){
+                if(getParentTheme.getAmpThemeId().equals(program.getProgram().getAmpThemeId())){
+                    return true;
+                }
             }
         }
 

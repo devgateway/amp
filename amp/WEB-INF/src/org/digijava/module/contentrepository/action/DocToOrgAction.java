@@ -3,17 +3,6 @@
  */
 package org.digijava.module.contentrepository.action;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
-
-import javax.jcr.Node;
-import javax.jcr.version.Version;
-import javax.jcr.version.VersionHistory;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -25,9 +14,19 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
 import org.digijava.module.contentrepository.form.DocToOrgForm;
-import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
+
+import javax.jcr.Node;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author Alex Gartner

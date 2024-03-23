@@ -7,13 +7,12 @@
 
 package org.digijava.module.digifeed.feeds.ar.schema.impl.runtime;
 
-import java.io.IOException;
-
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.UnmarshallerHandler;
-import javax.xml.bind.helpers.AbstractUnmarshallerImpl;
-
+import com.sun.xml.bind.DatatypeConverterImpl;
+import com.sun.xml.bind.unmarshaller.DOMScanner;
+import com.sun.xml.bind.unmarshaller.InterningXMLReader;
+import com.sun.xml.bind.validator.DOMLocator;
+import com.sun.xml.bind.validator.Locator;
+import com.sun.xml.bind.validator.SAXLocator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,12 +21,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.sun.xml.bind.DatatypeConverterImpl;
-import com.sun.xml.bind.unmarshaller.DOMScanner;
-import com.sun.xml.bind.unmarshaller.InterningXMLReader;
-import com.sun.xml.bind.validator.DOMLocator;
-import com.sun.xml.bind.validator.Locator;
-import com.sun.xml.bind.validator.SAXLocator;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshallerHandler;
+import javax.xml.bind.helpers.AbstractUnmarshallerImpl;
+import java.io.IOException;
 
 /**
  * Default Unmarshall implementation.

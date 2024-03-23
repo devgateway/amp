@@ -3,10 +3,10 @@
  */
 package org.digijava.module.aim.util;
 
-import java.util.List;
-
 import org.dgfoundation.amp.visibility.data.RuleBasedData;
 import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.util.List;
 
 
 /**

@@ -1,8 +1,8 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.util.Identifiable;
+
+import java.io.Serializable;
 
 public class AmpLocation implements Serializable, Cloneable, Identifiable
 {

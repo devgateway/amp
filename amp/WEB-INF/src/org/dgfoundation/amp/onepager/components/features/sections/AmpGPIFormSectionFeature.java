@@ -4,12 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -21,6 +15,8 @@ import org.dgfoundation.amp.onepager.helper.GPIFormSectionSurveyComparator;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
+
+import java.util.*;
 
 /**
  * GPI section

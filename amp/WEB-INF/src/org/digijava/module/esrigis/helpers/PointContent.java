@@ -1,9 +1,9 @@
 package org.digijava.module.esrigis.helpers;
 
+import org.digijava.module.aim.helper.ActivitySector;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.module.aim.helper.ActivitySector;
 
 public class PointContent {
 

@@ -1,13 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import io.swagger.annotations.ApiModel;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A simple { "code": "translated text" } translations store that is serialized unwrapped

@@ -3,9 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.text.NumberFormat;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -13,7 +10,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentAnnualBudgetSubsectionFeature;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
@@ -22,8 +18,9 @@ import org.dgfoundation.amp.onepager.models.ProposedProjectCostModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.Set;
 
 
 

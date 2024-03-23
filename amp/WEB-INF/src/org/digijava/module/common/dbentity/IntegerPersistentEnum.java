@@ -1,16 +1,16 @@
 package org.digijava.module.common.dbentity;
 
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.usertype.ParameterizedType;
+import org.hibernate.usertype.UserType;
+
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Properties;
-
-import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.usertype.ParameterizedType;
-import org.hibernate.usertype.UserType;
 
 /**
  * The class persists enumerations as integer values.
@@ -65,7 +65,6 @@ public class IntegerPersistentEnum implements UserType, ParameterizedType{
 
 
 
-
     /**
      * @see org.hibernate.usertype.UserType#deepCopy(java.lang.Object)
      */
@@ -101,22 +100,38 @@ public class IntegerPersistentEnum implements UserType, ParameterizedType{
         return original;
     }
 
+//    @Override
+//    public Object nullSafeGet(ResultSet rs, String[] names,
+//            SessionImplementor session, Object owner)
+//            throws HibernateException, SQLException {
+//        int value = rs.getInt(names[0]);
+//        return rs.wasNull() ? null : Enum.get(value);
+//    }
+
+//    @Override
+//    public void nullSafeSet(PreparedStatement st, Object value, int index,
+//            SessionImplementor session) throws HibernateException, SQLException {
+//        if (value == null) {
+//            st.setNull(index, Types.INTEGER);
+//        } else {
+//            st.setInt(index, ((Enum)value).getValue());
+//        }
+//
+//    }
+
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names,
-            SessionImplementor session, Object owner)
-            throws HibernateException, SQLException {
-        int value = rs.getInt(names[0]);
-        return rs.wasNull() ? null : Enum.get(value);
+    public Object nullSafeGet(ResultSet resultSet, String[] strings, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
+        int value = resultSet.getInt(strings[0]);
+        return resultSet.wasNull() ? null : Enum.get(value);
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index,
-            SessionImplementor session) throws HibernateException, SQLException {
-        if (value == null) {
-            st.setNull(index, Types.INTEGER);
+    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+        if (o == null) {
+            preparedStatement.setNull(i, Types.INTEGER);
         } else {
-            st.setInt(index, ((Enum)value).getValue());
+            preparedStatement.setInt(i, ((Enum)o).getValue());
         }
-
     }
+
 }

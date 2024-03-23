@@ -4,8 +4,8 @@
 	<class name="org.digijava.kernel.user.GroupPermission" table="DG_GROUP_PERMISSION">
 		<cache usage="read-write" />
 		<id column="GROUP_PERMISSION_ID" name="groupPermissionId" type="long" unsaved-value="0">
-			<generator class="native">
-				<param name="sequence">dg_group_permission_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_group_permission_seq</param>
 			</generator>
 		</id>
 		<property name="permissionType" column="PERMISSION_TYPE" type="int" />

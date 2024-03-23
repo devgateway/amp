@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.contentrepository.dbentity.filter.DocumentFilter" table="CR_DOCUMENT_FILTER">
 
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">CR_DOCUMENT_FILTER_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">CR_DOCUMENT_FILTER_seq</param>
 			</generator>
 		</id>
 

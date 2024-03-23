@@ -22,26 +22,16 @@
 
 package org.digijava.kernel.robots;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.robots.config.RobotsConfig;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.util.SiteCache;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import javax.servlet.ServletContext;
-import java.io.BufferedReader;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 
 public class RobotsTxtGenerator
     extends HttpServlet implements Filter {

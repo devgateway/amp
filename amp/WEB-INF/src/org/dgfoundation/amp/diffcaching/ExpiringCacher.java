@@ -1,11 +1,10 @@
 package org.dgfoundation.amp.diffcaching;
 
+import org.apache.log4j.Logger;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
-
-import org.apache.log4j.Logger;
 
 /**
  * a cache which invalidates every time a timeout happens OR one of the resetting queries happens

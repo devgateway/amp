@@ -5,8 +5,8 @@
 		table="AMP_ME_INDICATOR_VALUE">
 		<cache usage="read-write" />
 		<id name="ampMeIndValId" column="amp_me_indicator_val_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ME_INDICATOR_VALUE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ME_INDICATOR_VALUE_seq</param>
 			</generator>
 		</id>
 
@@ -33,7 +33,7 @@
 		<property name="comments" column="Comments" type="java.lang.String" />
 
 		<many-to-one name="activityId" column="activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 		<!-- 
 			<many-to-one name="meIndicatorId" column="me_indicator_id" 
 			class="org.digijava.module.aim.dbentity.AmpMEIndicators" cascade="none"/>	

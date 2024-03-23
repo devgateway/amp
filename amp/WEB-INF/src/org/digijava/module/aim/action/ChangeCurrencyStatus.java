@@ -1,13 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -16,6 +8,13 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.util.CurrencyUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class ChangeCurrencyStatus extends Action {
     

@@ -5,18 +5,15 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
-import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
@@ -28,15 +25,12 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_SECOND_REPORTING_ORGANIZATION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
 /**
  * @author aartimon@dginternational.org 

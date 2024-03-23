@@ -22,21 +22,19 @@
 
 package org.digijava.module.um.action;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.kernel.Constants;
-import org.digijava.module.um.form.LogonForm;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.um.form.LogonForm;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * <p>Title: </p>

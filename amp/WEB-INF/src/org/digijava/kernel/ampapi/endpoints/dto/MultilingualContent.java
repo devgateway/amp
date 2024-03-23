@@ -1,15 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.serializers.MultilingualContentDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.MultilingualContentSerializer;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Nadejda Mandrescu

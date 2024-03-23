@@ -1,14 +1,10 @@
 package org.digijava.kernel.ampapi.helpers.geojson;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * A Bean representation of a GeoJSON base object.

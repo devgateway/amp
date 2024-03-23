@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.dgfoundation.amp.newreports.ReportRenderWarning;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
  * Measure defined as a linear combination of context measures (instances of {@link NiCombinationContextTransactionMeasure}). <br />

@@ -22,10 +22,6 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.StringTokenizer;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -33,21 +29,24 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.DigiSecurityManager;
+import org.digijava.kernel.security.ModuleInstancePermission;
+import org.digijava.kernel.security.ResourcePermission;
+import org.digijava.kernel.security.SitePermission;
+import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.GroupPermission;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.admin.form.GroupPermissionsForm;
 import org.digijava.module.admin.util.DbUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.security.DigiSecurityManager;
-import org.digijava.kernel.security.principal.GroupPrincipal;
-import java.security.PermissionCollection;
-import java.util.*;
+
 import java.security.Permission;
-import org.digijava.kernel.security.ResourcePermission;
-import org.digijava.kernel.security.ModuleInstancePermission;
-import org.digijava.kernel.security.SitePermission;
+import java.security.PermissionCollection;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 public class ShowPermissions
     extends Action {

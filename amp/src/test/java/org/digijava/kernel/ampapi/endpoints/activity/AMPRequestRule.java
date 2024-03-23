@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -15,6 +10,11 @@ import org.digijava.kernel.request.TLSUtils;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Octavian Ciubotaru

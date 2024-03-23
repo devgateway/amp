@@ -6,16 +6,15 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.DateCell;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
 
 /**
  * 

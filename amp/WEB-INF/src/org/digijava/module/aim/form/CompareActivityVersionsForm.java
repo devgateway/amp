@@ -1,13 +1,12 @@
 package org.digijava.module.aim.form;
 
+import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class CompareActivityVersionsForm extends ActionForm {
 

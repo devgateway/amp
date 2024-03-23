@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Arrays;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -14,6 +12,8 @@ import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.models.ActivityBudgetModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+
+import java.util.Arrays;
 
 /**
  * Activity Budget Field

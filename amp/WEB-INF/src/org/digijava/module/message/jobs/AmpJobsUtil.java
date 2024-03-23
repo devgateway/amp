@@ -1,10 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -13,6 +8,11 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.jdbc.Work;
 import org.quartz.JobExecutionException;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public final class AmpJobsUtil {

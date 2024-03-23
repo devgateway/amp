@@ -1,30 +1,10 @@
 package org.digijava.module.aim.action;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.dgfoundation.amp.visibility.data.DataVisibility;
 import org.dgfoundation.amp.visibility.feed.fm.schema.VisibilityTemplates;
@@ -35,12 +15,24 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.*;
 
 public class VisibilityManager extends MultiAction {
 
@@ -50,7 +42,7 @@ public class VisibilityManager extends MultiAction {
     
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         //generateAllFieldsInFile();
-        HttpSession session         = request.getSession();
+        HttpSession session = request.getSession();
         if (session.getAttribute("ampAdmin") == null) {
             return mapping.findForward("index");
         } else {
@@ -139,6 +131,7 @@ public class VisibilityManager extends MultiAction {
         vForm.setModules(modules);
         vForm.setFmTemplate(null);
         vForm.setFmTemplateList(FeaturesUtil.getAMPTemplatesVisibility());
+        PersistenceManager.getRequestDBSession().flush();
         return mapping.findForward("forward");
     }
 
@@ -153,12 +146,12 @@ public class VisibilityManager extends MultiAction {
         
         // Create a new Collection only with AmpModulesVisibility object not repeated (can't change the query because is used elsewhere). 
         Collection modulesGrouped = new ArrayList<AmpModulesVisibility>();
-        Iterator iter = modules.iterator();
         String nameAux = "";
-        while(iter.hasNext()){
-            AmpModulesVisibility auxAmp = (AmpModulesVisibility) iter.next();
+
+        for (Object module : modules) {
+            AmpModulesVisibility auxAmp = (AmpModulesVisibility) module;
             // Assuming the query is ordered by name.
-            if(!nameAux.equals(auxAmp.getName())){
+            if (!nameAux.equals(auxAmp.getName())) {
                 modulesGrouped.add(auxAmp);
                 nameAux = auxAmp.getName();
             }
@@ -183,7 +176,7 @@ public class VisibilityManager extends MultiAction {
     {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         vForm.setMode("step2clean");
-        logger.info("Step 2 of the wizzard...");
+        logger.info("Step 2 of the wizard...");
         return modeCleanUp( mapping,form, request, response);
         //return mapping.findForward("cleaning");
     }
@@ -225,34 +218,26 @@ public class VisibilityManager extends MultiAction {
         ArrayList<Long> allModulesId=(ArrayList<Long>) FeaturesUtil.getAllModulesId();
 
         logger.info("Deleting all fields...");
-        for (Iterator<Long> it = allFieldsId.iterator(); it.hasNext();) 
-        {
-            Long idf = (Long) it.next();
+        for (Long idf : allFieldsId) {
             FeaturesUtil.deleteOneField(idf);
 
         }
-        logger.info("       ....finished to delete all fields!");
+        logger.info("...finished to delete all fields!");
         logger.info("Deleting all features...");
-        for (Iterator<Long> it = allFeaturesId.iterator(); it.hasNext();) 
-        {
-            Long idf = (Long) it.next();
+        for (Long idf : allFeaturesId) {
             FeaturesUtil.deleteOneFeature(idf);
 
         }
         logger.info("       ....finished to delete all features!");
         logger.info("Deleting all modules...");
-        for (Iterator<Long> it = allModulesId.iterator(); it.hasNext();) 
-        {
-            Long idf = (Long) it.next();
+        for (Long idf : allModulesId) {
             FeaturesUtil.deleteOneModule(idf);
 
         }
         logger.info("       ....finished to delete all modules!");
         allModulesId=(ArrayList<Long>) FeaturesUtil.getAllModulesId();
         logger.info("Deleting all modules...PART 2 :)");
-        for (Iterator<Long> it = allModulesId.iterator(); it.hasNext();) 
-        {
-            Long idf = (Long) it.next();
+        for (Long idf : allModulesId) {
             FeaturesUtil.deleteModule(idf);
 
         }
@@ -273,8 +258,8 @@ public class VisibilityManager extends MultiAction {
         vForm.setAllModules(modules);
         vForm.setAllFeatures(features);
         vForm.setAllFields(fields);
-
         vForm.setMode("step2clean");
+        PersistenceManager.getRequestDBSession().flush();
         return mapping.findForward("cleaning");
     }
 
@@ -304,6 +289,7 @@ public class VisibilityManager extends MultiAction {
         Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
         vForm.setTemplates(templates);
         vForm.setMode("manageTemplates");
+        PersistenceManager.getRequestDBSession().flush();
         return mapping.findForward("forward");
     }
 
@@ -313,7 +299,7 @@ public class VisibilityManager extends MultiAction {
         Long templateId = null;
         HttpSession session=request.getSession();
         if(request.getParameter("templateId")!=null)
-            templateId=new Long(Long.parseLong(request.getParameter("templateId")));
+            templateId= Long.parseLong(request.getParameter("templateId"));
         if(templateId==null) templateId=(Long)request.getAttribute("templateId");
 
         String templateName=FeaturesUtil.getTemplateNameVisibility(templateId);
@@ -340,6 +326,7 @@ public class VisibilityManager extends MultiAction {
             Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
             vForm.setTemplates(templates);
         }
+        PersistenceManager.getRequestDBSession().flush();
         return mapping.findForward("forward");
     }
 
@@ -352,15 +339,13 @@ public class VisibilityManager extends MultiAction {
         String templateName=FeaturesUtil.getTemplateNameVisibility(templateId);
         session.setAttribute("templateName", templateName);
         Collection allAmpModules=FeaturesUtil.getAMPModules();
-        Collection newTemplateModulesList=new ArrayList();
-        for(Iterator it=allAmpModules.iterator();it.hasNext();)
-        {
+        Collection newTemplateModulesList=new ArrayList<>();
+        for (Object allAmpModule : allAmpModules) {
 
-            AmpModulesVisibility ampModule=(AmpModulesVisibility)it.next();
-            String existentModule=ampModule.getName().replaceAll(" ","");
-            if(request.getParameter("moduleVis:"+existentModule)!=null)
-                if(request.getParameter("moduleVis:"+existentModule).compareTo("enable")==0)
-                {
+            AmpModulesVisibility ampModule = (AmpModulesVisibility) allAmpModule;
+            String existentModule = ampModule.getName().replaceAll(" ", "");
+            if (request.getParameter("moduleVis:" + existentModule) != null)
+                if (request.getParameter("moduleVis:" + existentModule).compareTo("enable") == 0) {
                     newTemplateModulesList.add(ampModule);
                 }
         }
@@ -371,12 +356,13 @@ public class VisibilityManager extends MultiAction {
         }
 
         vForm.addMessage("aim:ampfeaturemanager:updatedTemplate", "Template was updated");
+        PersistenceManager.getRequestDBSession().flush();
         return mapping.findForward("forward");
     }
 
     public ActionForward modeDeleteTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        FeaturesUtil.deleteTemplateVisibility(new Long(Long.parseLong(request.getParameter("templateId"))));
+        FeaturesUtil.deleteTemplateVisibility(Long.parseLong(request.getParameter("templateId")));
         ((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
 //      return modeManageTemplates(mapping, form, request, response);
         
@@ -392,9 +378,9 @@ public class VisibilityManager extends MultiAction {
 
     public ActionForward modeDeleteFFM(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Session hbsession = PersistenceManager.getRequestDBSession();
-        if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
-        if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(new Long(Long.parseLong(request.getParameter("featureId"))),hbsession);//delete feature
-        if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(new Long(Long.parseLong(request.getParameter("moduleId"))),hbsession);//delete module
+        if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(Long.parseLong(request.getParameter("fieldId")),hbsession);//delete field
+        if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(Long.parseLong(request.getParameter("featureId")),hbsession);//delete feature
+        if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(Long.parseLong(request.getParameter("moduleId")),hbsession);//delete module
         this.updateAmpContext(new AmpTreeVisibility(), hbsession, request.getSession());
         return modeViewFields(mapping, form, request, response);
     }
@@ -417,16 +403,12 @@ public class VisibilityManager extends MultiAction {
             TreeSet<AmpFeaturesVisibility> features = new TreeSet<>();
             TreeSet<AmpFieldsVisibility> fields = new TreeSet<>();
 
-            AmpTreeVisibility x=ampTreeVisibility;
-            for(Iterator it=x.getItems().values().iterator();it.hasNext();)
-            {
-                Object obj=it.next();
-                AmpTreeVisibility treeNode=(AmpTreeVisibility)obj;
-                if (treeNode.getRoot() instanceof AmpModulesVisibility)
-                    if(request.getParameter("moduleVis:" + treeNode.getRoot().getId()) != null) {
-                        modules.add((AmpModulesVisibility) treeNode.getRoot());
+            for (AmpTreeVisibility obj : ampTreeVisibility.getItems().values()) {
+                if (obj.getRoot() instanceof AmpModulesVisibility)
+                    if (request.getParameter("moduleVis:" + obj.getRoot().getId()) != null) {
+                        modules.add((AmpModulesVisibility) obj.getRoot());
                     }
-                recursivelyParseFMTree(treeNode, modules, features, fields, request);
+                recursivelyParseFMTree(obj, modules, features, fields, request);
             }
 
             FeaturesUtil.updateAmpTemplateNameTreeVisibility(request.getParameter("templateName"), templateId, hbsession);
@@ -480,79 +462,73 @@ public class VisibilityManager extends MultiAction {
     public String trimString(String s)
     {
         StringTokenizer st = new StringTokenizer(s);
-        String result="";
+        StringBuilder result= new StringBuilder();
         while (st.hasMoreTokens()) 
-            result+=st.nextToken()+" ";
-        return result;
+            result.append(st.nextToken()).append(" ");
+        return result.toString();
 
     }
 
 
     public int getAllPatchesFiles(String abstractPatchesLocation, TreeSet<String> modules, TreeSet<String> features, TreeSet<String> fields)
     {
-        String path=abstractPatchesLocation;
-        File dir = new File(path);
+        File dir = new File(abstractPatchesLocation);
         String[] files = dir.list();
 
         if(files!=null)
             if(files.length>0)
                 try {
-                    for (int i = 0; i < files.length; i++) {
-                        File f = new File(dir, files[i]);
+                    for (String file : files) {
+                        File f = new File(dir, file);
 
-                        if (f.isDirectory())
-                        {
-                            getAllPatchesFiles(f.getAbsolutePath(), modules,features,fields);
+                        if (f.isDirectory()) {
+                            getAllPatchesFiles(f.getAbsolutePath(), modules, features, fields);
                         }
-                        if(!f.isDirectory() && f.getName().contains(".jsp") && !f.getName().contains("allVisibilityTagsComputed"))
-                        {
+                        if (!f.isDirectory() && f.getName().contains(".jsp") && !f.getName().contains("allVisibilityTagsComputed")) {
                             Scanner scanner = new Scanner(f);
-                            scanner.useDelimiter (System.getProperty("line.separator"));
-                            while(scanner.hasNext()) {
-                                String s=scanner.next();
-                                if(s.indexOf("<module:display")>=0)
-                                {
-                                    String aux="";
-                                    if(s.indexOf(">",(s.indexOf("<module:display"))+1)<0)
-                                    {
-                                        aux=scanner.next();
+                            scanner.useDelimiter(System.getProperty("line.separator"));
+                            while (scanner.hasNext()) {
+                                String s = scanner.next();
+                                if (s.contains("<module:display")) {
+                                    String aux = "";
+                                    if (s.indexOf(">", (s.indexOf("<module:display")) + 1) < 0) {
+                                        aux = scanner.next();
                                     }
-                                    String module="";
-                                    if("".equals(aux)) module=s.substring(s.indexOf("<module:display"), s.indexOf(">",(s.indexOf("<module:display"))+1)+1);
-                                    else module=s.substring(s.indexOf("<module:display"), s.length())+aux;
-                                    if(!module.contains("${"))
-                                        modules.add(trimString(module+"</module:display>")+"\n");
+                                    String module = "";
+                                    if ("".equals(aux))
+                                        module = s.substring(s.indexOf("<module:display"), s.indexOf(">", (s.indexOf("<module:display")) + 1) + 1);
+                                    else module = s.substring(s.indexOf("<module:display"), s.length()) + aux;
+                                    if (!module.contains("${"))
+                                        modules.add(trimString(module + "</module:display>") + "\n");
 
 
                                 }
-                                if(s.indexOf("<field:display")>=0)
-                                {
-                                    String aux="";
-                                    if(s.indexOf(">",(s.indexOf("<field:display"))+1)<0)
-                                    {
-                                        aux=scanner.next();
-                                        if(aux.indexOf(">",(aux.indexOf("<field:display"))+1)<0)
-                                            aux+=scanner.next();
+                                if (s.contains("<field:display")) {
+                                    String aux = "";
+                                    if (s.indexOf(">", (s.indexOf("<field:display")) + 1) < 0) {
+                                        aux = scanner.next();
+                                        if (aux.indexOf(">", (aux.indexOf("<field:display")) + 1) < 0)
+                                            aux += scanner.next();
                                     }
-                                    String module="";
-                                    if("".equals(aux)) module=s.substring(s.indexOf("<field:display"), s.indexOf(">",(s.indexOf("<field:display"))+1)+1);
-                                    else module=s.substring(s.indexOf("<field:display"), s.length())+aux;
-                                    if(!module.contains("${"))
-                                        fields.add(trimString(module+"</field:display>")+"\n");
+                                    String module = "";
+                                    if ("".equals(aux))
+                                        module = s.substring(s.indexOf("<field:display"), s.indexOf(">", (s.indexOf("<field:display")) + 1) + 1);
+                                    else module = s.substring(s.indexOf("<field:display"), s.length()) + aux;
+                                    if (!module.contains("${"))
+                                        fields.add(trimString(module + "</field:display>") + "\n");
                                 }
 
-                                if(s.indexOf("<feature:display")>=0)
-                                {
-                                    String aux="";
-                                    if(s.indexOf(">",(s.indexOf("<feature:display"))+1)<0)
-                                    {
-                                        aux=scanner.next();
+                                if (s.contains("<feature:display")) {
+                                    String aux = "";
+                                    if (s.indexOf(">", (s.indexOf("<feature:display")) + 1) < 0) {
+                                        aux = scanner.next();
                                     }
-                                    String module="";
-                                    if("".equals(aux)) module=s.substring(s.indexOf("<feature:display"), s.indexOf(">",(s.indexOf("<feature:display"))+1)+1);
-                                    else module=s.substring(s.indexOf("<feature:display"), s.length())+aux;
-                                    if(!module.contains("${"))
-                                        features.add(trimString(module+"</feature:display>")+"\n");
+                                    String module = "";
+                                    if ("".equals(aux))
+                                        module = s.substring(s.indexOf("<feature:display"), s.indexOf(">", (s.indexOf("<feature:display")) + 1) + 1);
+                                    else module = s.substring(s.indexOf("<feature:display"), s.length()) + aux;
+                                    if (!module.contains("${"))
+                                        features.add(trimString(module + "</feature:display>") + "\n");
                                 }
 
                             }
@@ -596,16 +572,13 @@ public class VisibilityManager extends MultiAction {
 
             out.append(outHeader);
 
-            for (Iterator<String> iter = modules.iterator(); iter.hasNext();) {
-                String s = (String) iter.next();
+            for (String s : modules) {
                 out.append(s);
             }
-            for (Iterator<String> iter = features.iterator(); iter.hasNext();) {
-                String s = (String) iter.next();
+            for (String s : features) {
                 out.append(s);
             }
-            for (Iterator<String> iter = fields.iterator(); iter.hasNext();) {
-                String s = (String) iter.next();
+            for (String s : fields) {
                 out.append(s);
             }
 

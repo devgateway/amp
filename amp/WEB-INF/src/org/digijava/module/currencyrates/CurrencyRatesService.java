@@ -1,10 +1,5 @@
 package org.digijava.module.currencyrates;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
@@ -13,6 +8,11 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 
 public class CurrencyRatesService extends AbstractServiceImpl {
 

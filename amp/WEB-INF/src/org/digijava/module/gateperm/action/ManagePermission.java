@@ -3,20 +3,7 @@
  */
 package org.digijava.module.gateperm.action;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.utils.MultiAction;
@@ -25,14 +12,18 @@ import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.form.PermissionForm;
 import org.digijava.module.gateperm.util.ActionUtil;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * ManagePermission.java TODO description here

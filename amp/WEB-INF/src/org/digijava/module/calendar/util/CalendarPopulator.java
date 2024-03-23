@@ -22,13 +22,13 @@
 
 package org.digijava.module.calendar.util;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import org.apache.commons.lang.StringUtils;
 import org.digijava.module.calendar.dbentity.Calendar.TBD;
 import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.form.CalendarItemForm.DateForm;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * This class returns start date and end date for given <code>CalendarItemForm</code> instance.

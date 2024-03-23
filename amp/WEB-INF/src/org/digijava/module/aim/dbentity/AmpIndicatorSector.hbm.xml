@@ -6,8 +6,8 @@
 		table="AMP_INDICATOR_SECTOR">
 		<cache usage="read-write" />
 		<id name="ampIndicatorSectorId" column="amp_indicator_sector_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_INDICATOR_SECTOR_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_INDICATOR_SECTOR_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="themeIndicatorId" column="amp_theme_ind_id"

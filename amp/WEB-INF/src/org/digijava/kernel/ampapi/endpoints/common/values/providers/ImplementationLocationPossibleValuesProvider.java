@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.ImplementationLocationExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
@@ -12,6 +7,11 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Nadejda Mandrescu

@@ -22,39 +22,6 @@
 
 package org.digijava.kernel.security;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.io.StringBufferInputStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.security.CodeSource;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.Permissions;
-import java.security.Policy;
-import java.security.Principal;
-import java.security.ProtectionDomain;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.cache.AbstractCache;
@@ -66,6 +33,19 @@ import org.digijava.kernel.security.permission.AdditivePermission;
 import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.security.*;
+import java.sql.SQLException;
+import java.util.*;
 
 public class DigiPolicy
     extends Policy{

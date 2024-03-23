@@ -1,16 +1,15 @@
 package org.digijava.kernel.web.gzip;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.zip.GZIPInputStream;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-
-import org.springframework.web.util.WebUtils;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.zip.GZIPInputStream;
 
 /**
  * A wrapper for HttpServletRequest that decompresses underlying input stream.

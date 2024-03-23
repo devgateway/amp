@@ -1,20 +1,19 @@
 package org.digijava.module.contentrepository.listeners;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.function.Consumer;
-
-import javax.jcr.RepositoryException;
-import javax.jcr.observation.Event;
-import javax.jcr.observation.EventIterator;
-import javax.jcr.observation.EventListener;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.observation.Event;
+import javax.jcr.observation.EventIterator;
+import javax.jcr.observation.EventListener;
+import java.util.Date;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Remember removed nodes in order to enable resources synchronization.

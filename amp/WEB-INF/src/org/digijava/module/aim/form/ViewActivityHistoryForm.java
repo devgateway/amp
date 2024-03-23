@@ -1,10 +1,10 @@
 package org.digijava.module.aim.form;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.helper.ActivityHistory;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class ViewActivityHistoryForm extends ActionForm implements Serializable {
 

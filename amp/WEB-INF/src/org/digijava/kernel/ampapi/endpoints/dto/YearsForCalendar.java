@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

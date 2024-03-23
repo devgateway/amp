@@ -1,26 +1,19 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.GPIDefaultFilters;
 import org.digijava.module.aim.dbentity.GPISetup;
 import org.digijava.module.aim.form.ManageGPIForm;
-import org.digijava.module.aim.form.ViewAhSurveisForm;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.GPISetupUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
+import java.util.Map;
 
 public class ManageGPI extends DispatchAction {
 

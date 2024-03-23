@@ -3,16 +3,11 @@
  */
 package org.dgfoundation.amp.newreports.pagination;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+
+import java.util.*;
 
 import static java.util.stream.Collectors.toSet;
 

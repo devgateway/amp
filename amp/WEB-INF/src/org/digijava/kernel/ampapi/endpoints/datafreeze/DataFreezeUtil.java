@@ -1,15 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
@@ -22,9 +12,16 @@ import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.AmpDateUtils;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public final class DataFreezeUtil {
     private static Logger logger = Logger.getLogger(DataFreezeUtil.class);
@@ -61,7 +58,8 @@ public final class DataFreezeUtil {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select count(*) from " + AmpDataFreezeSettings.class.getName();
         Query query = dbSession.createQuery(queryString);
-        return (Integer) query.uniqueResult();
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue();
     }
 
     public static AmpDataFreezeSettings getLatestFreezingConfiguration() {
@@ -80,7 +78,7 @@ public final class DataFreezeUtil {
                 + " and ampActivityFrozen.frozen=true and "
                 + " (ampActivityFrozen.deleted = false or ampActivityFrozen.deleted = null)";
         Query query = createHibernateQuery(queryString);
-        query.setLong("ampActivityId", ampActivityId);
+        query.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
         return (AmpActivityFrozen) query.uniqueResult();
     }
 

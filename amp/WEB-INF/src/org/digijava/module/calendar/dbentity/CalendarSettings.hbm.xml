@@ -6,8 +6,8 @@
 		table="DG_CALENDAR_SETTINGS">
 		<!--<cache usage="read-write"/>-->
 		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">dg_calendar_settings_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_calendar_settings_seq</param>
 			</generator>
 		</id>
 

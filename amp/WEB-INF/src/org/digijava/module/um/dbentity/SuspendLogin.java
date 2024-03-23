@@ -3,7 +3,9 @@ package org.digijava.module.um.dbentity;
 import org.digijava.kernel.user.User;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * Created with IntelliJ IDEA.

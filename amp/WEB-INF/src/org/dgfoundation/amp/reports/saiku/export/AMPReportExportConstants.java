@@ -1,10 +1,9 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
+import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.ws.rs.core.MediaType;
 
 public class AMPReportExportConstants {
 

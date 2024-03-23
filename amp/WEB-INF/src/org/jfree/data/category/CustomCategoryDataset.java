@@ -1,13 +1,13 @@
 package org.jfree.data.category;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.ArrayList;
-
 import org.jfree.data.DefaultKeyedValues2D;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.DatasetChangeEvent;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A custom implementation of the {@link CategoryDataset} interface.

@@ -1,16 +1,15 @@
 package org.digijava.module.aim.multistepwizard;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.aim.multistepwizard.exception.ClassNotAllowedForCheckbox;
+
+import javax.servlet.http.HttpServletRequest;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 /**
  * This ActionForm should be used for multi-step wizards where the scope of the form is "session". More 
  * specifically it is intended address the problem of checkboxes in session-scoped forms. 

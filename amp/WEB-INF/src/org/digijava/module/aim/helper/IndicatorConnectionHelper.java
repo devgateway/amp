@@ -1,15 +1,9 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.module.aim.dbentity.AmpActivityVersion ;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.digijava.module.aim.dbentity.IndicatorConnection;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
 
 /**
  * Indicator connection helper bean.

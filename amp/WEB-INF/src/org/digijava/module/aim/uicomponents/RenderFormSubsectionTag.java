@@ -1,12 +1,11 @@
 package org.digijava.module.aim.uicomponents;
 
-import java.io.IOException;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-
-import org.digijava.kernel.translator.TranslatorWorker;
+import java.io.IOException;
 
 public class RenderFormSubsectionTag extends BodyTagSupport {
     private static final long serialVersionUID = 1L;

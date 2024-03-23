@@ -1,11 +1,5 @@
 package org.digijava.module.aim.uicomponents;
 
-import java.lang.reflect.Field;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -13,6 +7,11 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm;
 import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
+import java.util.Date;
 
 public class ProjectIdPostProcessDelegate implements IPostProcessDelegate {
 

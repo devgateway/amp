@@ -7,8 +7,8 @@
 		<cache usage="read-write" />
 		<id name="ampFundingMTEFProjectionId" column="amp_fund_mtef_projection_id"
 			type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_funding_mtef_projection_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_funding_mtef_projection_seq</param>
 			</generator>
 		</id>
 

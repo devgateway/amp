@@ -1,16 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.activity.utils;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class ApiFieldStructuralServiceTest {
     

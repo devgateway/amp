@@ -22,13 +22,12 @@
 
 package org.digijava.kernel.translator.form;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 /**
  *

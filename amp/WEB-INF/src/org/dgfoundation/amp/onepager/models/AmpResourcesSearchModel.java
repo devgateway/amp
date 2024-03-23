@@ -4,20 +4,19 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.jcr.Node;
-import javax.jcr.Session;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.Node;
+import javax.jcr.Session;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author aartimon@dginternational.org

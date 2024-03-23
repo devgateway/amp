@@ -3,14 +3,6 @@
  */
 package org.digijava.module.contentrepository.helper;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import javax.jcr.Node;
-import javax.jcr.Session;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -18,6 +10,13 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.Node;
+import javax.jcr.Session;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * @author Alex Gartner

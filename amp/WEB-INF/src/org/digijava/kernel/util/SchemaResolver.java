@@ -23,12 +23,12 @@
 package org.digijava.kernel.util;
 
 
-import java.io.InputStream;
-import java.util.HashMap;
-
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import java.io.InputStream;
+import java.util.HashMap;
 
 public class SchemaResolver implements EntityResolver {
 

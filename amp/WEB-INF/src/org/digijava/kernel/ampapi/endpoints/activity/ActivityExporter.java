@@ -1,14 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class used for exporting an activity as a JSON

@@ -5,8 +5,8 @@
 		table="AMP_TEAM_MEMBER_ROLES" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampTeamMemRoleId" column="amp_team_mem_role_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_TEAM_MEMBER_ROLES_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_TEAM_MEMBER_ROLES_seq</param>
 			</generator>
 		</id>
 

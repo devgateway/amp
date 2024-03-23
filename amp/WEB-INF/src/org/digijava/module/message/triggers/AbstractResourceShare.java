@@ -1,12 +1,11 @@
 package org.digijava.module.message.triggers;
 
-import java.net.URLDecoder;
-
-import javax.jcr.Node;
-
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.helper.Event;
+
+import javax.jcr.Node;
+import java.net.URLDecoder;
 
 public abstract class AbstractResourceShare extends Trigger {
     

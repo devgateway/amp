@@ -1,10 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -24,6 +19,11 @@ import org.digijava.module.aim.dbentity.AmpGPINiIndicator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion;
 import org.digijava.module.aim.dbentity.AmpGPINiSurvey;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The panel of the GPI Ni Survey Indicator

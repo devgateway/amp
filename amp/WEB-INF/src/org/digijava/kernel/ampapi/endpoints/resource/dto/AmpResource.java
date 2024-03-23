@@ -1,22 +1,19 @@
 package org.digijava.kernel.ampapi.endpoints.resource.dto;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.kernel.validators.resource.ResourceRequiredValidator;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty.AccessMode;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.kernel.validators.resource.ResourceRequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -24,8 +21,9 @@ import org.digijava.module.aim.annotations.interchange.ResourceFieldsConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiModelProperty.AccessMode;
+import java.util.Date;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
 /**
  *

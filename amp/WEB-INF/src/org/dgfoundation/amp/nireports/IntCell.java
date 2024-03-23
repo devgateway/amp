@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.Optional;
-
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+
+import java.util.Optional;
 
 /**
  * a {@link Cell} holding a long value. Coordinates are empty unless it has a mainLevel (in which case it will have exactly one coordinate, as per the general contract of {@link Cell})

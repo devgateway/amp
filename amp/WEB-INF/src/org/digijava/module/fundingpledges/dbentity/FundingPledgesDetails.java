@@ -3,11 +3,7 @@ package org.digijava.module.fundingpledges.dbentity;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.FundingInformationItem;
-import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;

@@ -1,14 +1,14 @@
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.text.DecimalFormat;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.DecimalFormat;
 
 public class CurrencyWorker {
     private static Logger logger = Logger.getLogger(CurrencyWorker.class);

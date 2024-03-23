@@ -3,8 +3,8 @@
 <hibernate-mapping>
     <class name="org.digijava.module.um.dbentity.SuspendLogin" table="DG_SUSPEND_LOGIN" lazy="false">
         <id name="id" column="id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">dg_suspend_login_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">dg_suspend_login_seq</param>
             </generator>
         </id>
         <property column="name" name="name" type="java.lang.String" />

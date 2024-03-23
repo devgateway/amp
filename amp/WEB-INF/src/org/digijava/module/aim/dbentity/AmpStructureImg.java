@@ -1,8 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.apache.log4j.Logger;
+
+import java.io.Serializable;
 
 /**
  * Persistent class for Structure Images

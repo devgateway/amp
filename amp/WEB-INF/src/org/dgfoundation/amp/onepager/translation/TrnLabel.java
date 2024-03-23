@@ -4,12 +4,10 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
-import java.util.Iterator;
-import java.util.List;
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -18,6 +16,9 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Translatable label

@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.text.NumberFormat;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -14,6 +12,8 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.digijava.module.aim.helper.FormatHelper;
+
+import java.text.NumberFormat;
 
 /**
  * This wraps an {@link AmpTextFieldPanel} to encapsulate a Percentage field

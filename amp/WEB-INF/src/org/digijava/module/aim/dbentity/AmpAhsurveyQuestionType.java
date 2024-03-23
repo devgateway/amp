@@ -8,8 +8,6 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-
 public class AmpAhsurveyQuestionType implements Serializable{
 //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID", id = true)

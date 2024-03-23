@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.performance;
 
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+
+import java.util.List;
 
 public class PerformanceIssue {
 

@@ -1,15 +1,13 @@
 package org.dgfoundation.amp.onepager.util;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FMFormCache {
     

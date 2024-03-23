@@ -3,18 +3,17 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeModel;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.extensions.markup.html.tree.BaseTree;
 import org.apache.wicket.extensions.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.extensions.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMTreeField;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeModel;
 
 /**
  * @author dan

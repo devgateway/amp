@@ -1,21 +1,14 @@
 package org.digijava.module.aim.validator;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.describedAs;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.sameInstance;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
+import org.hamcrest.Matcher;
+import org.hamcrest.collection.IsIterableContainingInOrder;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
+import java.lang.annotation.Annotation;
+import java.util.List;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.collection.IsIterableContainingInOrder;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Matchers for Bean Validation classes.

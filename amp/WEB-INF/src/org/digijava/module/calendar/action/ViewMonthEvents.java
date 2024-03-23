@@ -22,12 +22,6 @@
 
 package org.digijava.module.calendar.action;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -42,6 +36,12 @@ import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.common.util.ModuleUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Action displayes events in Month View

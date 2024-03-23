@@ -22,25 +22,19 @@
 
 package org.digijava.module.admin.action;
 
+import org.apache.log4j.Logger;
+import org.apache.struts.action.*;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.module.admin.form.SiteInstancesForm;
+import org.digijava.module.admin.util.DbUtil;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.admin.form.SiteInstancesForm;
-import org.digijava.module.admin.util.DbUtil;
-import org.digijava.kernel.util.RequestUtils;
 
 public class SaveInstances extends Action {
 

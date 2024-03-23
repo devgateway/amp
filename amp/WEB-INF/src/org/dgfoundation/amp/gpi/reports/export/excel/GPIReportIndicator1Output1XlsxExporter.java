@@ -1,36 +1,21 @@
 package org.dgfoundation.amp.gpi.reports.export.excel;
 
-import static java.util.stream.Collectors.groupingBy;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.gpi.reports.GPIDocument;
-import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
-import org.dgfoundation.amp.gpi.reports.GPIRemark;
-import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
-import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.gpi.reports.*;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * @author Viorel Chihai

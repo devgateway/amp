@@ -22,12 +22,12 @@
 
 package org.digijava.kernel.util.resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 public class Handler

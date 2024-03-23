@@ -1,9 +1,9 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.IndicatorTheme;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.module.aim.dbentity.IndicatorTheme;
 
 /**
  * Represents one row on the NPD table view.

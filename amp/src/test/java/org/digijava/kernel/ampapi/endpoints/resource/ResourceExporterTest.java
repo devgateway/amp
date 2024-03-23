@@ -1,22 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
-import static org.hamcrest.Matchers.hasEntry;
-import static org.junit.Assert.assertThat;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import org.dgfoundation.amp.testutils.TransactionUtil;
-import org.digijava.kernel.ampapi.endpoints.activity.AMPRequestRule;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.NoTranslatedFieldReader;
-import org.digijava.kernel.ampapi.endpoints.activity.TestFMService;
-import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.activity.*;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -28,6 +15,13 @@ import org.digijava.kernel.request.TLSUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import static org.hamcrest.Matchers.hasEntry;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Nadejda Mandrescu

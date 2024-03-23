@@ -1,30 +1,22 @@
 package org.digijava.module.parisindicator.model;
 
-import java.util.*;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRAbstractExporter;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-
 import org.apache.struts.action.ActionServlet;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.ResponseUtil;
-import org.digijava.module.parisindicator.helper.*;
 import org.digijava.module.parisindicator.helper.export.*;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
-import org.digijava.module.parisindicator.util.*;
+import org.digijava.module.parisindicator.util.PIConstants;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 
 public class PIExportUseCase {
 

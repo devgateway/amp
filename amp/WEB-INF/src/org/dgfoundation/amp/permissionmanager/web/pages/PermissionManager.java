@@ -3,27 +3,22 @@
  */
 package org.dgfoundation.amp.permissionmanager.web.pages;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpSession;
-
-import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.authroles.authentication.pages.SignInPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.flow.RedirectToUrlException;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.apache.wicket.util.tester.DummyHomePage;
 import org.dgfoundation.amp.permissionmanager.components.features.PermissionManagerFormFeature;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.um.exception.UMException;
+
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author dan

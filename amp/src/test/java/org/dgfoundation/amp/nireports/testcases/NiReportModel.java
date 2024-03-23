@@ -1,12 +1,11 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.List;
-
 import junit.framework.TestCase;
-
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaDescriber;
 import org.dgfoundation.amp.newreports.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.ReportArea;
+
+import java.util.List;
 
 /**
  * a fully-rendered-to-text textual representation of a report NiReportData

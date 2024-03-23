@@ -1,13 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,6 +10,13 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.NpdForm;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Displays NPD options window.

@@ -1,11 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
@@ -15,6 +9,9 @@ import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.util.Date;
+import java.util.List;
 
 public class ActivityCurrentCompletionDateJob extends ConnectionCleaningJob implements StatefulJob {
     

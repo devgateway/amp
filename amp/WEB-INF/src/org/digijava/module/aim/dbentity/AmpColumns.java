@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.reports.Identificator;
+
+import java.io.Serializable;
+import java.util.Set;
 
 public class AmpColumns implements Serializable, Comparable<AmpColumns>
 {

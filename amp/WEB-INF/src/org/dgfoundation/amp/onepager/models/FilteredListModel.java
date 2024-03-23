@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class FilteredListModel<T> extends LoadableDetachableModel<List<T>> {
     private static final long serialVersionUID = 1L;

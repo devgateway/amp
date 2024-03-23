@@ -1,13 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.struts.action.Action;
@@ -20,8 +12,6 @@ import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
@@ -36,6 +26,12 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.CategoryDataset;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
 
 /**
  * Creates Excel file from Indicators list

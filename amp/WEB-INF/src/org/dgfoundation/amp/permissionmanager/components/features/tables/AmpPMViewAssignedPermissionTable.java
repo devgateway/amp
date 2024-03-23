@@ -3,17 +3,12 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.tables;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.IPageable;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -22,6 +17,9 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMPermContentBean;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

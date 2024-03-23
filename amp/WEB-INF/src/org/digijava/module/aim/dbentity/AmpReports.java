@@ -5,15 +5,6 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -26,16 +17,14 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.AdvancedReportUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.LoggerIdentifiable;
-import org.digijava.module.aim.util.ObjectUtil4Amp;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.io.Serializable;
+import java.util.*;
 
 @TranslatableClass (displayName = "Report")
 public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, Identifiable, Cloneable,

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.reports.saiku;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

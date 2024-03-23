@@ -1,33 +1,33 @@
     package org.dgfoundation.amp.onepager.components.fields;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Set;
+    import org.apache.wicket.AttributeModifier;
+    import org.apache.wicket.Component;
+    import org.apache.wicket.ajax.AjaxRequestTarget;
+    import org.apache.wicket.behavior.AttributeAppender;
+    import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+    import org.apache.wicket.markup.html.WebMarkupContainer;
+    import org.apache.wicket.markup.html.basic.Label;
+    import org.apache.wicket.markup.html.form.FormComponent;
+    import org.apache.wicket.markup.html.list.ListItem;
+    import org.apache.wicket.markup.html.list.ListView;
+    import org.apache.wicket.markup.html.panel.Panel;
+    import org.apache.wicket.model.AbstractReadOnlyModel;
+    import org.apache.wicket.model.IModel;
+    import org.apache.wicket.model.Model;
+    import org.apache.wicket.model.PropertyModel;
+    import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
+    import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
+    import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
+    import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+    import org.dgfoundation.amp.onepager.util.AttributePrepender;
+    import org.dgfoundation.amp.onepager.web.pages.OnePager;
+    import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+    import org.digijava.module.aim.annotations.translation.TranslatableField;
+    import org.digijava.module.translation.util.ContentTranslationUtil;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
-import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
-import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.onepager.util.AttributePrepender;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.translation.util.ContentTranslationUtil;
+    import java.lang.reflect.Field;
+    import java.util.List;
+    import java.util.Set;
 
 /**
  * @author aartimon@developmentgateway.org

@@ -3,14 +3,12 @@
  */
 package org.digijava.module.budgetexport.reports.implementation;
 
-import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
-import org.digijava.module.budgetexport.form.Encoder;
-import org.digijava.module.budgetexport.util.BudgetExportConstants;
 import org.digijava.module.budgetexport.util.MappingEncoder;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Alex Gartner

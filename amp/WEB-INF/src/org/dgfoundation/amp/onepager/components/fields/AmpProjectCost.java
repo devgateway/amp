@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
@@ -28,6 +22,12 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Common Project Cost part, moved from {@link AmpProposedProjectCost}

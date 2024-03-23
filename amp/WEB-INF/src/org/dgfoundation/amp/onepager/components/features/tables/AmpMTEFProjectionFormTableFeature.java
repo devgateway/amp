@@ -4,9 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -20,6 +17,9 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 5, 2010

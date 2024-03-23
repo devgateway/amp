@@ -3,10 +3,10 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import org.dgfoundation.amp.visibility.AmpVisibilityRuleType;
+
 import java.io.Serializable;
 import java.util.Set;
-
-import org.dgfoundation.amp.visibility.AmpVisibilityRuleType;
 
 /**
  * Defines visibility rule of a given type (ANY/ALL) that can consist of other rules or fields, features, modules, etc  
@@ -131,8 +131,8 @@ public class AmpVisibilityRule implements Serializable {
         this.modules = modules;
     }
     
-    @Override
-    public String toString() {
-        return String.format("[id: %d, type: %d, modules: %s, features: %s, fields: %s, children: %s]", this.id, this.type, this.modules, this.features, this.fields, this.children);
-    }
+//    @Override
+//    public String toString() {
+//        return String.format("[id: %d, type: %d, modules: %s, features: %s, fields: %s, children: %s]", this.id, this.type, this.modules, this.features, this.fields, this.children);
+//    }
 }

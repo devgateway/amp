@@ -7,13 +7,14 @@
 
 package org.digijava.module.gateperm.feed.schema.impl.runtime;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import com.sun.xml.bind.DatatypeConverterImpl;
+import com.sun.xml.bind.JAXBAssertionError;
+import com.sun.xml.bind.marshaller.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.LocatorImpl;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBException;
@@ -27,25 +28,7 @@ import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.LocatorImpl;
-
-import com.sun.xml.bind.DatatypeConverterImpl;
-import com.sun.xml.bind.JAXBAssertionError;
-import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
-import com.sun.xml.bind.marshaller.DataWriter;
-import com.sun.xml.bind.marshaller.DumbEscapeHandler;
-import com.sun.xml.bind.marshaller.Messages;
-import com.sun.xml.bind.marshaller.MinimumEscapeHandler;
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
-import com.sun.xml.bind.marshaller.NioEscapeHandler;
-import com.sun.xml.bind.marshaller.SAX2DOMEx;
-import com.sun.xml.bind.marshaller.SchemaLocationFilter;
-import com.sun.xml.bind.marshaller.XMLWriter;
+import java.io.*;
 
 /**
  * Implementation of {@link Marshaller} interface for JAXB RI.

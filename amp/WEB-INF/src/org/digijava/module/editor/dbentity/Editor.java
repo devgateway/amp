@@ -22,9 +22,6 @@
 
 package org.digijava.module.editor.dbentity;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
@@ -32,10 +29,12 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>Title: DiGiJava</p>

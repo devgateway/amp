@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
+import org.digijava.kernel.persistence.PersistenceManager;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.function.Consumer;
-
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * a class which encapsulates a ResultSet and its generated statement and which closes them both

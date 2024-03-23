@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.onepager.components;
 
-import java.util.Comparator;
-import java.util.Set;
-
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -11,6 +8,9 @@ import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.Comparator;
+import java.util.Set;
 
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.FUNDING_ITEM_LIST_EXPANDABLE;
 

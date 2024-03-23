@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Map;
 
 /**
  * Funny object for the sole purpose of having a reference to filters.

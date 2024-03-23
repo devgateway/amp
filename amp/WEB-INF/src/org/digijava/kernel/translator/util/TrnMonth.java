@@ -22,8 +22,8 @@
 
 package org.digijava.kernel.translator.util;
 
-import java.util.HashMap;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 /**
  * Wrapper object for cached months, translated to particular language

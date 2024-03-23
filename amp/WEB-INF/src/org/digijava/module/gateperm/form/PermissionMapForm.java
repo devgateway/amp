@@ -3,14 +3,14 @@
  */
 package org.digijava.module.gateperm.form;
 
+import org.apache.struts.action.ActionForm;
+import org.digijava.module.gateperm.core.Permission;
+import org.digijava.module.gateperm.core.PermissionMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.struts.action.ActionForm;
-import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
 
 /**
  * PermissionForm.java TODO description here

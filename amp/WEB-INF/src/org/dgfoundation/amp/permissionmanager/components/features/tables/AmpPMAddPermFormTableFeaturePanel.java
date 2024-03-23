@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.tables;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.basic.Label;
@@ -21,7 +17,10 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
-import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMAssignFieldPermissionComponentPanel;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

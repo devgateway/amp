@@ -6,23 +6,17 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleCellException;
 import org.dgfoundation.amp.ar.helper.ReportHeadingLayoutCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * 

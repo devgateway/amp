@@ -4,18 +4,17 @@
 */
 package org.dgfoundation.amp.onepager.models;
 
+import org.apache.wicket.Session;
+import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategoryFieldPanel;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.wicket.Session;
-import org.apache.wicket.model.IModel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategoryFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * Model for retrieving and writing {@link AmpCategoryValue}S of a specific {@link AmpCategoryClass} to a collection that can have values from multiple {@link AmpCategoryClass}S

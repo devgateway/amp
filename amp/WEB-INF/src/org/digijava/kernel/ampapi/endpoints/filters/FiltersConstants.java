@@ -2,11 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import org.digijava.module.aim.helper.Constants;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Filters Constants
@@ -205,6 +201,8 @@ public class FiltersConstants {
     public static final String QUINARY_SECTOR_SUB_SUB_SECTOR = "quinary-sector-sub-sub-sector";
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
+
+    public static final String INDICATOR_NAME = "indicator-name";
 
     /** filters IDs to Name mapping */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{

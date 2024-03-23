@@ -22,10 +22,11 @@
 
 package org.digijava.kernel.viewmanager.impl;
 
-import org.digijava.kernel.viewmanager.AbstractViewConfig;
-import javax.servlet.ServletContext;
-import org.digijava.kernel.viewmanager.ViewConfigException;
 import org.digijava.kernel.siteconfig.SiteConfig;
+import org.digijava.kernel.viewmanager.AbstractViewConfig;
+import org.digijava.kernel.viewmanager.ViewConfigException;
+
+import javax.servlet.ServletContext;
 
 public abstract class DefaultViewConfigUtil
     extends AbstractViewConfig {

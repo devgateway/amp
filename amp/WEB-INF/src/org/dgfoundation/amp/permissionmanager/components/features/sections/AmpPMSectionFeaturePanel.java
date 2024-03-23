@@ -4,14 +4,14 @@
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 
 /**

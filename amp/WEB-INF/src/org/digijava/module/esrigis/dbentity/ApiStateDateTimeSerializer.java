@@ -1,11 +1,5 @@
 package org.digijava.module.esrigis.dbentity;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -14,6 +8,12 @@ import io.swagger.models.properties.Property;
 import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author Octavian Ciubotaru

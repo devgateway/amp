@@ -24,7 +24,6 @@ package org.digijava.kernel.siteconfig;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import org.digijava.kernel.config.*;
 
 /**
  * Data class, used by Digester to parse site-config.xml.

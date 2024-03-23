@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Collection;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
+
+import java.util.Collection;
 
 /**
  * @author mihai

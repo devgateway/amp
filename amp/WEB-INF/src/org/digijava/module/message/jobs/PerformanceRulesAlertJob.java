@@ -1,13 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
@@ -21,6 +13,8 @@ import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.util.*;
 
 public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements StatefulJob {
     

@@ -2,15 +2,16 @@ package org.digijava.kernel.ampapi.endpoints.test;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.Random;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import java.util.Random;
 
 /**
  * 

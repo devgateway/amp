@@ -4,41 +4,28 @@
 
 package org.digijava.module.message.jobs;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.mail.internet.InternetAddress;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.message.dbentity.AmpEmail;
-import org.digijava.module.message.dbentity.AmpEmailReceiver;
-import org.digijava.module.message.helper.MessageConstants;
-import org.digijava.module.message.util.AmpMessageUtil;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import javax.mail.internet.InternetAddress;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class SendReminderEmailJob extends ConnectionCleaningJob implements StatefulJob{
     private static Logger logger = Logger.getLogger(SendReminderEmailJob.class);

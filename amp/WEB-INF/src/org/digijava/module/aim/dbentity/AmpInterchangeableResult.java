@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Created by esoliani on 17/06/16.
@@ -93,7 +94,7 @@ public class AmpInterchangeableResult {
 
         AmpInterchangeableResult that = (AmpInterchangeableResult) o;
 
-        return id != null ? id.equals(that.id) : that.id == null;
+        return Objects.equals(id, that.id);
 
     }
 

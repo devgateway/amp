@@ -1,6 +1,5 @@
 package org.digijava.module.aim.services.publicview;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.services.publicview.conf.Configuration;
@@ -9,7 +8,6 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
-import org.xml.sax.InputSource;
 
 import javax.servlet.ServletContext;
 import javax.xml.bind.JAXBException;
@@ -19,8 +17,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

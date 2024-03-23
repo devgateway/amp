@@ -4,10 +4,6 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
@@ -22,6 +18,10 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Set;
 
 @TranslatableClass (displayName = "Team")
 @JsonSerialize(using = AmpTeamSerializer.class)
@@ -210,9 +210,9 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
         return ampTeamId.compareTo(((AmpTeam)o).getAmpTeamId());
     }
     
-    public String toString() {
-        return name;
-    }
+//    public String toString() {
+//        return name;
+//    }
 
     public Object getIdentifier() {
         return this.getAmpTeamId();

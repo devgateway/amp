@@ -4,16 +4,15 @@
  */
 package org.digijava.module.gateperm.core;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyTagSupport;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.util.PermissionUtil;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * This tag sets an object in the permission scope. If the tag has a body then the object is

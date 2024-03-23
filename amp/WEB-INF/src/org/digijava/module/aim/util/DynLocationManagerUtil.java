@@ -1,27 +1,8 @@
 package org.digijava.module.aim.util;
 
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
@@ -32,12 +13,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.exception.DynLocationStructuralException;
 import org.digijava.module.aim.exception.DynLocationStructureStringException;
@@ -49,8 +25,15 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.NonUniqueResultException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class DynLocationManagerUtil {
     public static final int NON_HIERARCHY_CELLS_CNT = 6;
@@ -146,9 +129,7 @@ public class DynLocationManagerUtil {
             Query qry = dbSession.createQuery(queryString);
             locations = qry.list();
 
-            Iterator<AmpCategoryValueLocations> iter = locations.iterator();
-            while (iter.hasNext()) {
-                AmpCategoryValueLocations loc = iter.next();
+            for (AmpCategoryValueLocations loc : locations) {
                 locationsMap.put(loc.getId(), loc);
             }
 
@@ -421,12 +402,11 @@ public class DynLocationManagerUtil {
             }
             Query qry = dbSession.createQuery(queryString);
             if (cvLocationLayer != null) {
-                qry.setLong("cvId", cvLocationLayer.getId());
+                qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
             }
-            qry.setString("iso3", locationIso3);
-            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
+            qry.setParameter("iso3", locationIso3, StringType.INSTANCE);
+            return (AmpCategoryValueLocations) qry
                     .uniqueResult();
-            return loc;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -455,10 +435,10 @@ public class DynLocationManagerUtil {
                 queryString += "AND (loc.parentLocation=:parentLocationId) ";
             }
             Query qry = dbSession.createQuery(queryString);
-            qry.setLong("cvId", cvLocationLayer.getId());
-            qry.setString("name", locationName);
+            qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
+            qry.setParameter("name", locationName,StringType.INSTANCE);
             if (parentLocation != null)
-                qry.setLong("parentLocationId", parentLocation.getId());
+                qry.setParameter("parentLocationId", parentLocation.getId(), LongType.INSTANCE);
 
             Collection<AmpCategoryValueLocations> locations = qry.list();
             if (locations != null && locations.size() > 0) {
@@ -486,8 +466,8 @@ public class DynLocationManagerUtil {
                     + " loc where (" + locationNameHql + "=:name) "
                     + " AND (loc.parentCategoryValue=:cvId) ";
             Query qry = dbSession.createQuery(queryString);
-            qry.setLong("cvId", cvLocationLayer.getId());
-            qry.setString("name", locationName);
+            qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
+            qry.setParameter("name", locationName,StringType.INSTANCE);
             Collection<AmpCategoryValueLocations> locations = qry.list();
             if (locations != null && locations.size() > 0) {
                 return locations.toArray(new AmpCategoryValueLocations[0])[0];
@@ -552,12 +532,11 @@ public class DynLocationManagerUtil {
             Query qry = dbSession.createQuery(queryString);
             qry.setCacheable(true);
             if (cvLocationLayer != null) {
-                qry.setLong("cvId", cvLocationLayer.getId());
+                qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
             }
-            qry.setString("iso", locationIso.toLowerCase());
-            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
+            qry.setParameter("iso", locationIso.toLowerCase(),StringType.INSTANCE);
+            return (AmpCategoryValueLocations) qry
                     .uniqueResult();
-            return loc;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -572,9 +551,8 @@ public class DynLocationManagerUtil {
             + AmpCategoryValueLocations.class.getName()
             + " loc where (loc.id=:id)" ;                   
             Query qry = dbSession.createQuery(queryString);
-            qry.setLong("id", id);
-            AmpCategoryValueLocations returnLoc = (AmpCategoryValueLocations)qry.uniqueResult();
-            return returnLoc;
+            qry.setParameter("id", id, LongType.INSTANCE);
+            return (AmpCategoryValueLocations)qry.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -614,12 +592,11 @@ public class DynLocationManagerUtil {
             }
             Query qry = dbSession.createQuery(queryString);
             if (cvLocationLayer != null) {
-                qry.setLong("cvId", cvLocationLayer.getId());
+                qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
             }
-            qry.setString("code", locationCode);
-            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
+            qry.setParameter("code", locationCode,StringType.INSTANCE);
+            return (AmpCategoryValueLocations) qry
                     .uniqueResult();
-            return loc;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -953,9 +930,9 @@ public class DynLocationManagerUtil {
                         + " loc where (loc.parentCategoryValue=:cvId)";
                 Query qry = dbSession.createQuery(queryString);
                 qry.setCacheable(true);
-                qry.setLong("cvId", cvLocationType.getId());
-                int returnValue = (Integer) qry.uniqueResult();
-                return returnValue;
+                qry.setParameter("cvId", cvLocationType.getId(), LongType.INSTANCE);
+                Long longValue = (Long) qry.uniqueResult();
+                return longValue.intValue();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1298,7 +1275,7 @@ public class DynLocationManagerUtil {
         String queryString = "select ind from "
                 + AmpIndicatorLayer.class.getName() + " ind where name=:name";
         Query qry = dbSession.createQuery(queryString);
-        qry.setString("name", name);
+        qry.setParameter("name", name,StringType.INSTANCE);
         if (qry.list().size() > 0)
             return (AmpIndicatorLayer) qry.list().get(0);
         else
@@ -1313,7 +1290,7 @@ public class DynLocationManagerUtil {
                 + " value where value.location.id=:id)";
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
-        qry.setLong("id", location.getId());
+        qry.setParameter("id", location.getId(), LongType.INSTANCE);
         return qry.list(); 
  }
 
@@ -1326,8 +1303,8 @@ public class DynLocationManagerUtil {
 
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
-        qry.setLong("id", location.getId());
-        qry.setString("name", name);
+        qry.setParameter("id", location.getId(), LongType.INSTANCE);
+        qry.setParameter("name", name,StringType.INSTANCE);
         return qry.list();
     }
 
@@ -1340,8 +1317,8 @@ public class DynLocationManagerUtil {
 
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
-        qry.setLong("id", location.getId());
-        qry.setLong("indicatorId", indicator.getId());
+        qry.setParameter("id", location.getId(),LongType.INSTANCE);
+        qry.setParameter("indicatorId", indicator.getId(), LongType.INSTANCE);
         return qry.list();
  }
  
@@ -1352,7 +1329,7 @@ public class DynLocationManagerUtil {
                 + "  where indicator.id=:indicatorLayerId";
     
      Query qry = dbSession.createQuery(queryString);
-     qry.setLong("indicatorLayerId", indLayer.getId());
+     qry.setParameter("indicatorLayerId", indLayer.getId(), LongType.INSTANCE);
      qry.executeUpdate();
      dbSession.delete(indLayer);
  }
@@ -1364,8 +1341,8 @@ public class DynLocationManagerUtil {
                 + " value where value.location.id=:locationId and value.indicator.id=:indicatorId)";
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
-        qry.setLong("locationId", location);
-        qry.setLong("indicatorId", indicator);
+        qry.setParameter("locationId", location,LongType.INSTANCE);
+        qry.setParameter("indicatorId", indicator, LongType.INSTANCE);
         return (AmpLocationIndicatorValue)qry.uniqueResult(); 
  }
 
@@ -1392,12 +1369,11 @@ public class DynLocationManagerUtil {
             }
             Query qry = dbSession.createQuery(queryString);
             if (cvLocationLayer != null) {
-                qry.setLong("cvId", cvLocationLayer.getId());
+                qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
             }
-            qry.setLong("id", id);
-            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
+            qry.setParameter("id", id, LongType.INSTANCE);
+            return (AmpCategoryValueLocations) qry
                     .uniqueResult();
-            return loc;
         } catch (Exception e) {
             logger.error("Exception getting AmpCategoryValueLocations by ID: " + id,e);
         }
@@ -1428,7 +1404,7 @@ public class DynLocationManagerUtil {
     public static int setIndicatorLayersPopulation(boolean isPopulation, List<Long> ids) {
         String whereIds = (ids == null || ids.isEmpty()) ? "" : " where o.id in (" + Util.toCSString(ids) + ")";
         return PersistenceManager.getSession().createQuery("update " + AmpIndicatorLayer.class.getName() + " o "
-                + "set o.population=:isPopulation" + whereIds).setBoolean("isPopulation", isPopulation).executeUpdate();
+                + "set o.population=:isPopulation" + whereIds).setParameter("isPopulation", isPopulation, BooleanType.INSTANCE).executeUpdate();
     }
     
     public static List<Long> getIndicatorLayersIdsByTypeExcludeAdm(Long indicatorTypeId, Long implLocIdToExclude) {

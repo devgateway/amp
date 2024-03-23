@@ -4,35 +4,19 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.List;
-
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpFreezingValidatorTransactionDateField;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetailComparator;
-import org.digijava.module.fundingpledges.dbentity.FundingPledges;
-import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010

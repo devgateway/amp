@@ -1,6 +1,7 @@
 package org.digijava.module.translation.util;
 
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+
 import java.util.HashMap;
 
 /**

@@ -2,7 +2,6 @@ package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 public class CapitalExpenditureCellGenerator extends SyntheticCellGenerator {
 

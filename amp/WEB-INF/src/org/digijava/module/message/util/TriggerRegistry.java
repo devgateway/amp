@@ -1,13 +1,9 @@
 package org.digijava.module.message.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.message.triggers.Trigger;
+
+import java.util.*;
 /**
  * @author Dare
  */

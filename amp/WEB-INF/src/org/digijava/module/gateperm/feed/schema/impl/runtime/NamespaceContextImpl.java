@@ -7,19 +7,12 @@
 
 package org.digijava.module.gateperm.feed.schema.impl.runtime;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.XMLConstants;
-
-import org.xml.sax.SAXException;
-
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 import com.sun.xml.bind.marshaller.NamespaceSupport;
+import org.xml.sax.SAXException;
+
+import javax.xml.XMLConstants;
+import java.util.*;
 
 /**
  * Implementation of the NamespaceContext2.

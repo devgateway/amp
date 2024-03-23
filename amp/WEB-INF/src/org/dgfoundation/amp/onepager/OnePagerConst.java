@@ -4,24 +4,17 @@
 */
 package org.dgfoundation.amp.onepager;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 import org.apache.wicket.MetaDataKey;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslationStore;
 import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
-import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.digijava.kernel.startup.AmpSessionListener;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityFrozen;
-import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import org.digijava.module.aim.dbentity.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * One Pager Constants

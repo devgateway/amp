@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.service;
 
+import javax.servlet.ServletContext;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Set;
-import javax.servlet.ServletContext;
 
 public class WebappServiceContext implements ServiceContext {
     private ServletContext servletContext;

@@ -1,10 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators.mapping;
 
-import java.util.function.Function;
+import org.apache.commons.lang3.NotImplementedException;
 
 import javax.validation.ConstraintViolation;
-
-import org.apache.commons.lang3.NotImplementedException;
+import java.util.function.Function;
 
 /**
  * Default implementation throws NotImplementedException.

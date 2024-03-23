@@ -1,11 +1,5 @@
 package org.digijava.module.help.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,6 +12,11 @@ import org.digijava.module.help.form.GlossaryForm;
 import org.digijava.module.help.helper.HelpTopicTreeNode;
 import org.digijava.module.help.util.GlossaryUtil;
 import org.digijava.module.help.util.HelpTopicTreeNodeWorker;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Shows glossary page.

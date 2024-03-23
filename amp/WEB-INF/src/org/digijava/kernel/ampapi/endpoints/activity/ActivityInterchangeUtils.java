@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -11,11 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
+import org.digijava.kernel.ampapi.endpoints.errors.*;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
@@ -25,34 +20,18 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.util.ValidationStatus;
+import org.digijava.module.aim.util.*;
+import org.glassfish.jersey.server.ContainerRequest;
 import org.hibernate.CacheMode;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.PathSegment;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.ACTIVITY_DOCUMENTS;
@@ -157,7 +136,7 @@ public final class ActivityInterchangeUtils {
     }
 
     private static Long getRequestId(ContainerRequest containerReq) {
-        List<PathSegment> paths = containerReq.getPathSegments();
+        List<PathSegment> paths = containerReq.getUriInfo().getPathSegments();
         Long id = null;
         if (paths != null && paths.size() > 0) {
             PathSegment segment = paths.get(paths.size() - 1);
@@ -306,8 +285,9 @@ public final class ActivityInterchangeUtils {
      */
     public static Map<String, Object> getActivity(Long projectId, boolean isOfflineClientCall) {
         Map<String, Object> activity = getActivity(projectId, null);
+
         if (!isOfflineClientCall
-                && FeaturesUtil.isVisibleModule("/REPORTING/Activity Preview/Hide Documents if no donor")) {
+                && FeaturesUtil.isVisibleModule("Hide Documents if No Donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
         }
             return activity;
@@ -322,11 +302,11 @@ public final class ActivityInterchangeUtils {
                 if (user.getAssignedOrgs() != null && !user.getAssignedOrgs().isEmpty()) {
                     if (!userBelongToExemptOrgForDocumentVisualization(user)) {
                         List organizationIds = user.getAssignedOrgs().stream()
-                                .map(ampOrganisation -> ampOrganisation.getAmpOrgId()).collect(Collectors.toList());
+                                .map(AmpOrganisation::getAmpOrgId).collect(Collectors.toList());
                         List<AmpOrgRole> ampOrgRoles =
                                 ActivityUtil.getAmpRolesForActivityAndOrganizationsAndRole(projectId,
                                         organizationIds, donorRole);
-                        if (ampOrgRoles == null || ampOrgRoles.size() == 0) {
+                        if (ampOrgRoles == null || ampOrgRoles.isEmpty()) {
                             activity.replace(ACTIVITY_DOCUMENTS, null);
                         }
                     }
@@ -338,16 +318,14 @@ public final class ActivityInterchangeUtils {
     }
 
     private static boolean userBelongToExemptOrgForDocumentVisualization(User user) {
-        return user.getAssignedOrgs().stream()
-                .filter(ampOrganisation
-                        -> ampOrganisation.getIdentifier().equals(
-                                FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_DOCUMENTS)))
-                .count() > 0;
+        return user.getAssignedOrgs().stream().anyMatch(ampOrganisation
+                -> ampOrganisation.getIdentifier().equals(
+                FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_DOCUMENTS)));
     }
 
     public static AmpActivityVersion loadActivity(Long actId) {
         try {
-            if (PersistenceManager.getSession().get(AmpActivityVersion.class, actId) == null) {
+            if (PersistenceManager.getRequestDBSession().get(AmpActivityVersion.class, actId) == null) {
                 ApiErrorResponseService.reportResourceNotFound(
                         ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(actId.toString()));
             }

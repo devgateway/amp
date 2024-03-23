@@ -1,38 +1,30 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.ampapi.endpoints.dto.Org;
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
-import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
-import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
-import org.hibernate.Query;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class GPIUtils {
     private static Logger logger = Logger.getLogger(GPIUtils.class);
@@ -63,7 +55,8 @@ public class GPIUtils {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select count(*) from " + AmpGPINiAidOnBudget.class.getName();
         Query query = dbSession.createQuery(queryString);
-        return (Integer) query.uniqueResult();
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue();
     }   
 
     public static AmpOrganisation getOrganisation(Long id) {
@@ -147,8 +140,9 @@ public class GPIUtils {
         String queryString = "select count(*) from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds) and indicatorCode = :indicatorCode";
         Query query = dbSession.createQuery(queryString);
         query.setParameterList("donorIds", getVerifiedOrgsList());
-        query.setString("indicatorCode", indicatorCode);
-        return (Integer) query.uniqueResult();
+        query.setParameter("indicatorCode", indicatorCode, StringType.INSTANCE);
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue();
     }
     
     public static List<AmpGPINiDonorNotes> getDonorNotesList(Integer offset, Integer count, String orderBy,
@@ -166,7 +160,7 @@ public class GPIUtils {
         query.setFirstResult(startAt);
         query.setMaxResults(maxResults);
         query.setParameterList("donorIds", getVerifiedOrgsList());
-        query.setString("indicatorCode", indicatorCode);
+        query.setParameter("indicatorCode", indicatorCode,StringType.INSTANCE);
         return query.list();
     }   
 
@@ -175,7 +169,7 @@ public class GPIUtils {
         String queryString = "SELECT donorNotes FROM " + AmpGPINiDonorNotes.class.getName() + " donorNotes "
                 + "WHERE indicatorCode = :indicatorCode ";
         Query query = dbSession.createQuery(queryString);
-        query.setString("indicatorCode", code);
+        query.setParameter("indicatorCode", code,StringType.INSTANCE);
         return query.list();
     }
     

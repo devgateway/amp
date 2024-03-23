@@ -1,16 +1,15 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public class AddressBookForm   extends ActionForm {
     

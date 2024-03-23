@@ -1,8 +1,8 @@
 package org.digijava.module.message.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+
+import java.io.Serializable;
 
 public class AmpMessageState implements Serializable{
     

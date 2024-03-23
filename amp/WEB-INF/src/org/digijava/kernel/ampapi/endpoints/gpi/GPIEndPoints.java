@@ -1,21 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,11 +8,7 @@ import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
-import org.digijava.kernel.ampapi.endpoints.dto.DateConversionResult;
-import org.digijava.kernel.ampapi.endpoints.dto.Org;
-import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
-import org.digijava.kernel.ampapi.endpoints.dto.YearsForCalendar;
-import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
+import org.digijava.kernel.ampapi.endpoints.dto.*;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -36,6 +16,13 @@ import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Path("gpi")

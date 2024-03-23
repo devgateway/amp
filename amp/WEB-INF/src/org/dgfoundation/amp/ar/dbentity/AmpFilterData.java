@@ -1,26 +1,20 @@
 package org.dgfoundation.amp.ar.dbentity;
 
-import java.beans.PropertyDescriptor;
-import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.util.Identifiable;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+
+import java.beans.PropertyDescriptor;
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class AmpFilterData implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -106,14 +100,12 @@ public class AmpFilterData implements Serializable {
             Object ret      = session.load(myClass, Long.parseLong(this.value) );
             return ret;
         }
-        
-        Iterator<String> iter       = AmpFilterData.primitiveTypesList.iterator();
-        while ( iter.hasNext() ) {
-            String primitiveClassString     = iter.next();
-            if ( primitiveClassString.toLowerCase().contains(myClass.getName().toLowerCase()) ) {
-                Class primitiveClass    = Class.forName( primitiveClassString );
-                Constructor constructor = primitiveClass.getConstructor( String.class );
-                Object ret              = constructor.newInstance( this.value );
+
+        for (String primitiveClassString : AmpFilterData.primitiveTypesList) {
+            if (primitiveClassString.toLowerCase().contains(myClass.getName().toLowerCase())) {
+                Class primitiveClass = Class.forName(primitiveClassString);
+                Constructor constructor = primitiveClass.getConstructor(String.class);
+                Object ret = constructor.newInstance(this.value);
                 return ret;
             }
         }
@@ -132,13 +124,19 @@ public class AmpFilterData implements Serializable {
         HashSet<AmpFilterData> fdSet        = new HashSet<AmpFilterData>();
         
         if ( fields != null && fields.length > 0 ) {
-            for (int i=0; i<fields.length; i++) {
-                Class fieldClass        = fields[i].getType();
+            /**
+             * We check here if this field's getter is annotated with PropertyListableIgnore. On true -> skip
+             */
+            /**
+             * We check here if the field is actually a collection of objects, like sectors for example
+             */
+            for (Field field : fields) {
+                Class fieldClass = field.getType();
                 PropertyDescriptor pd;
                 Object fieldObj;
                 try {
-                    pd              = new PropertyDescriptor(fields[i].getName(), srcObj.getClass() );
-                    fieldObj        = pd.getReadMethod().invoke(srcObj, new Object[0]);
+                    pd = new PropertyDescriptor(field.getName(), srcObj.getClass());
+                    fieldObj = pd.getReadMethod().invoke(srcObj, new Object[0]);
                     if (fieldObj == null)
                         continue;
                 } catch (Exception e) {
@@ -149,47 +147,42 @@ public class AmpFilterData implements Serializable {
                 /**
                  * We check here if this field's getter is annotated with PropertyListableIgnore. On true -> skip
                  */
-                Method readMethod   = pd.getReadMethod();
-                if ( readMethod.getAnnotation(PropertyListableIgnore.class) != null || 
-                        readMethod.getAnnotation(IgnorePersistence.class) != null ) 
+                Method readMethod = pd.getReadMethod();
+                if (readMethod.getAnnotation(PropertyListableIgnore.class) != null ||
+                        readMethod.getAnnotation(IgnorePersistence.class) != null)
                     continue;
-                /** 
+                /**
                  * We check here if the field is actually a collection of objects, like sectors for example
                  */
-                if ( fieldObj instanceof Collection ) {
-                    Iterator<? extends Object> iter = ((Collection<? extends Object>)fieldObj).iterator();
-                    while (iter.hasNext()) {
-                        Object element  = iter.next();
+                if (fieldObj instanceof Collection) {
+                    for (Object element : (Collection<?>) fieldObj) {
                         if (element != null) {
-                            String elClassName  = element.getClass().getName();
-                            int indexOfDollar   = elClassName.indexOf("_$$");
-                            if ( indexOfDollar < 0)
-                                indexOfDollar   = elClassName.indexOf("$$");
-                                
-                            if ( indexOfDollar >= 0 )
-                                elClassName     = elClassName.substring(0, indexOfDollar); 
-                            
-                            AmpFilterData fd    = fds.newAmpFilterData( fds, fields[i].getName(), 
-                                    fieldObj.getClass().getName(), elClassName, 
-                                    objectValue(element) );
-                            fdSet.add( fd );
+                            String elClassName = element.getClass().getName();
+                            int indexOfDollar = elClassName.indexOf("_$$");
+                            if (indexOfDollar < 0)
+                                indexOfDollar = elClassName.indexOf("$$");
+
+                            if (indexOfDollar >= 0)
+                                elClassName = elClassName.substring(0, indexOfDollar);
+
+                            AmpFilterData fd = fds.newAmpFilterData(fds, field.getName(),
+                                    fieldObj.getClass().getName(), elClassName,
+                                    objectValue(element));
+                            fdSet.add(fd);
                         }
                     }
                 }
-                
-                if ( fieldObj instanceof Identifiable) {
-                    AmpFilterData fd = fds.newAmpFilterData ( fds, fields[i].getName(), fieldObj.getClass().getName(), 
-                            null, objectValue(fieldObj) ) ;
-                    fdSet.add( fd );
+
+                if (fieldObj instanceof Identifiable) {
+                    AmpFilterData fd = fds.newAmpFilterData(fds, field.getName(), fieldObj.getClass().getName(),
+                            null, objectValue(fieldObj));
+                    fdSet.add(fd);
+                } else if (primitiveTypesList.contains(fieldObj.getClass().getName())) {
+                    AmpFilterData fd = fds.newAmpFilterData(fds, field.getName(), fieldObj.getClass().getName(),
+                            null, objectValue(fieldObj));
+                    fdSet.add(fd);
                 }
-                
-                else 
-                    if ( primitiveTypesList.contains(fieldObj.getClass().getName()) ) {
-                        AmpFilterData fd = fds.newAmpFilterData ( fds, fields[i].getName(), fieldObj.getClass().getName(), 
-                        null, objectValue(fieldObj) ) ;
-                        fdSet.add( fd );
-                    }
-                
+
             }
         }
         return fdSet;
@@ -213,7 +206,7 @@ public class AmpFilterData implements Serializable {
             String qryStr   = "select a from "
                 + AmpFilterData.class.getName() + " a "
                 + "where (a.filterRelObj=:report)";
-            Query query     = PersistenceManager.getSession().createQuery(qryStr).setLong("report", ampReportId);
+            Query query     = PersistenceManager.getSession().createQuery(qryStr).setParameter("report", ampReportId, LongType.INSTANCE);
             List<AmpFilterData> results = query.list();
             
             boolean cleared = false;

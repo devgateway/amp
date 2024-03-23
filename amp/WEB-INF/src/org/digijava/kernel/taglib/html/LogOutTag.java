@@ -22,9 +22,6 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.Constants;
@@ -33,6 +30,9 @@ import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
 
 /**
  * <p>Title: </p>

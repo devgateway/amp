@@ -1,31 +1,18 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.function.BiFunction;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.nireports.output.CellFormatter;
-import org.dgfoundation.amp.nireports.output.NiColumnReportData;
-import org.dgfoundation.amp.nireports.output.NiGroupReportData;
-import org.dgfoundation.amp.nireports.output.NiReportData;
-import org.dgfoundation.amp.nireports.output.NiReportDataVisitor;
-import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
-import org.dgfoundation.amp.nireports.output.NiReportRunResult;
-import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
-import org.dgfoundation.amp.nireports.output.NiRowId;
+import org.dgfoundation.amp.nireports.output.*;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
+import java.util.function.BiFunction;
 
 import static org.dgfoundation.amp.algo.AmpCollections.relist;
 

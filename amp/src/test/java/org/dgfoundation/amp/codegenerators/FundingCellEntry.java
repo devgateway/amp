@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.codegenerators;
 
+import org.dgfoundation.amp.nireports.CategAmountCell;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import org.dgfoundation.amp.nireports.CategAmountCell;
 
 import static org.dgfoundation.amp.codegenerators.CodeGenerator.escape;
 import static org.dgfoundation.amp.codegenerators.CodeGenerator.pad;

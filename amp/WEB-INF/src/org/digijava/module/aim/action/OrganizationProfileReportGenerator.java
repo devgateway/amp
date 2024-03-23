@@ -1,19 +1,7 @@
 package org.digijava.module.aim.action;
 
-import java.lang.reflect.Method;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts.action.ActionForm;
@@ -29,14 +17,13 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgProfileReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.donorReport.DonorReportHelper;
-import org.digijava.module.aim.helper.donorReport.OrgProfileReportHelper;
-import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
-import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
-import org.digijava.module.aim.helper.donorReport.OrganizationReportRecord;
-import org.digijava.module.aim.helper.donorReport.PropertyType;
-import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
+import org.digijava.module.aim.helper.donorReport.*;
 import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class OrganizationProfileReportGenerator extends DispatchAction {
 

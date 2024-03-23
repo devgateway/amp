@@ -3,10 +3,10 @@
  */
 package org.dgfoundation.amp.newreports;
 
-import java.text.DecimalFormat;
-
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+
+import java.text.DecimalFormat;
 
 /**
  * Report Settings mutable implementation

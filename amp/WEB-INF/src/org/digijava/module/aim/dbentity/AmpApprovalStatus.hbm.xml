@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpApprovalStatus" table="AMP_APPROVAL_STATUS">
 		<cache usage="read-write" />
 		<id name="ampApprovalStatusId" column="amp_approval_status_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_approval_status_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_approval_status_seq</param>
 			</generator>
 		</id>
 

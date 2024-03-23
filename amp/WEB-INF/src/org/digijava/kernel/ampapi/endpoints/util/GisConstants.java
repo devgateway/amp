@@ -3,15 +3,15 @@
  */
 package org.digijava.kernel.ampapi.endpoints.util;
 
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  * GIS related constants

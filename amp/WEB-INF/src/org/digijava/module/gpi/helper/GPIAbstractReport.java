@@ -1,8 +1,8 @@
 package org.digijava.module.gpi.helper;
 
-import java.util.Collection;
-
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
+
+import java.util.Collection;
 
 public abstract class GPIAbstractReport implements GPIOperations {
 

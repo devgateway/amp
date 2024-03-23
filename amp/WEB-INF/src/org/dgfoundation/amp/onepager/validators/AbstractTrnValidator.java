@@ -3,16 +3,10 @@
  */
 package org.dgfoundation.amp.onepager.validators;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;

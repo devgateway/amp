@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpActivityFrozen" table="AMP_ACTIVITY_FROZEN">
 		<cache usage="read-write" />
 		<id name="ampActivityFrozenid" column="amp_data_freeze_exclusion_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_FROZEN_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_FROZEN_seq</param>
 			</generator>
 		</id>
 		

@@ -1,11 +1,12 @@
 package org.digijava.module.aim.util.caching;
 
-import java.util.*;
-
-import javax.servlet.http.HttpSession;
-
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * various caching stuff. <b> Only cache seldomly-changing data here</b><br />They are put together in a class to be easy to find out what to invalidate in case some global stuff changes

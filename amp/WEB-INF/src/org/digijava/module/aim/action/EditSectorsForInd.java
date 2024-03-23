@@ -6,18 +6,15 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.NewIndicatorForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
+
+import java.util.Collection;
 
 public class EditSectorsForInd extends Action {
 

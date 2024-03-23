@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpSectorScheme" table="AMP_SECTOR_SCHEME">
 		<cache usage="read-write" />
 		<id name="ampSecSchemeId" column="amp_sec_scheme_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_SECTOR_SCHEME_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_SECTOR_SCHEME_seq</param>
 			</generator>
 		</id>
 

@@ -1,16 +1,12 @@
 package org.dgfoundation.amp.ar;
 
-import java.sql.SQLException;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 /**
  * ActivityEraser.java

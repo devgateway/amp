@@ -3,9 +3,9 @@ package org.digijava.module.message.triggers;
 
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.message.helper.Event;
 
 import java.util.Date;
-import org.digijava.module.message.helper.Event;
 
 public class ApprovedActivityTrigger extends Trigger {
 

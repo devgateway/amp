@@ -22,16 +22,15 @@
 
 package org.digijava.module.um.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest; //
-
-//
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 import org.digijava.kernel.entity.Interests;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * <p>Title: DiGiJava</p>

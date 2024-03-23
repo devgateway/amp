@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.TYPE_VARCHAR;
+import com.google.common.collect.ImmutableSet;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 
 import java.lang.reflect.Field;
 
-import com.google.common.collect.ImmutableSet;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.TYPE_VARCHAR;
 
 /**
  * @author Octavian Ciubotaru

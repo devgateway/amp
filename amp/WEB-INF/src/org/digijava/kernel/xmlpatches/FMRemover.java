@@ -1,11 +1,11 @@
 package org.digijava.kernel.xmlpatches;
 
 
-import java.util.function.Consumer;
-
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
+
+import java.util.function.Consumer;
 
 /**
  * FM entry remover.

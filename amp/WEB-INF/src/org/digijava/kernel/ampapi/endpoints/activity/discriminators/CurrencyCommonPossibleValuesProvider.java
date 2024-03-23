@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.activity.CurrencyExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
@@ -10,6 +7,9 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyEPConstants;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CurrencyCommonPossibleValuesProvider implements PossibleValuesProvider {
     

@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.List;
 
 /**
  * Stores a generic setting configuration  

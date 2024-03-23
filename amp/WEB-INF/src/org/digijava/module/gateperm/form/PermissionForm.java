@@ -4,17 +4,15 @@
  */
 package org.digijava.module.gateperm.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Permission;
 import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * PermissionForm.java

@@ -5,15 +5,10 @@
  */
 package org.digijava.module.xmlpatcher.scheduler;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
+
+import java.util.*;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

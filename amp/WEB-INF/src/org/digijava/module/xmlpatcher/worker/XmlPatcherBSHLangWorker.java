@@ -5,6 +5,8 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
+import bsh.EvalError;
+import bsh.Interpreter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.WrappedCheckedException;
@@ -12,9 +14,6 @@ import org.digijava.module.xmlpatcher.exception.XmlPatcherLangWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.hibernate.Session;
-
-import bsh.EvalError;
-import bsh.Interpreter;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Provides support to

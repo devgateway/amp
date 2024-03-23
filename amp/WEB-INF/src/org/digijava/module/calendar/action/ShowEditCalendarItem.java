@@ -22,15 +22,11 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -39,7 +35,10 @@ import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.CalendarUtil;
 import org.digijava.module.calendar.util.DbUtil;
-import org.digijava.kernel.translator.util.TrnCountry;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Action renders form, whith which existing event item identified by activeCalendarItem identity (if not null) can be updated

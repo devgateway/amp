@@ -1,10 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
-
-import java.util.Collection;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
@@ -16,6 +11,11 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+
+import java.util.Collection;
+import java.util.Map;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
 
 /**
  * Organization group of the donor funding must match organization group of the linked pledges.

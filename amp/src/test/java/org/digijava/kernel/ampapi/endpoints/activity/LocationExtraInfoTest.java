@@ -1,14 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.io.IOException;
-
-import javax.ws.rs.core.MediaType;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.junit.Assert;
 import org.junit.Test;
+
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 
 /**
  * @author Octavian Ciubotaru

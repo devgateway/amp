@@ -1,16 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -28,6 +17,10 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 public class ShowUserRegister extends Action {
 

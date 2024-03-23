@@ -1,12 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.module.aim.annotations.reports.Identificator;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GPISetup implements Serializable, Comparable {
 

@@ -1,12 +1,11 @@
 package org.dgfoundation.amp.ar;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.collections.map.LRUMap;
 import org.digijava.kernel.request.TLSUtils;
-import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * per-HttpSession LRU cache holding GroupReportData instances, which knows how to regenerate them.<br />

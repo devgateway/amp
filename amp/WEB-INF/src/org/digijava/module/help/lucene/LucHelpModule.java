@@ -1,10 +1,5 @@
 package org.digijava.module.help.lucene;
 
-import java.io.IOException;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -19,6 +14,11 @@ import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.help.helper.HelpTopicHelper;
 import org.digijava.module.help.util.HelpUtil;
+
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**

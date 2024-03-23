@@ -1,14 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -17,8 +8,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.springframework.util.FileCopyUtils;
+
+import java.io.OutputStream;
 
 public class DownloadFileFromHome extends Action {
     

@@ -3,24 +3,23 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
-import java.io.Serializable;
-import java.util.Enumeration;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.extensions.markup.html.tree.BaseTree;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.util.io.IClusterable;
+import org.apache.wicket.util.lang.EnumeratedType;
+import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMCheckBoxIconPanel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.util.io.IClusterable;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.extensions.markup.html.tree.BaseTree;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.util.lang.EnumeratedType;
-import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMCheckBoxIconPanel;
+import java.io.Serializable;
+import java.util.Enumeration;
 
 /**
  * @author dan

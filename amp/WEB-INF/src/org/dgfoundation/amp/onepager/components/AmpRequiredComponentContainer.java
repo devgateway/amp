@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.onepager.components;
 
-import java.util.List;
-
 import org.apache.wicket.markup.html.form.FormComponent;
+
+import java.util.List;
 
 
 /**

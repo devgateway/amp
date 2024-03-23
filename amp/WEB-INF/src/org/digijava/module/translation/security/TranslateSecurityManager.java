@@ -22,16 +22,17 @@
 
 package org.digijava.module.translation.security;
 
-import org.digijava.kernel.security.AbstractObjectSecurityManager;
-import org.digijava.kernel.security.permission.ObjectPermission;
-import javax.servlet.http.HttpServletRequest;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.AbstractObjectSecurityManager;
 import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.security.SitePermission;
-import java.security.Principal;
+import org.digijava.kernel.security.permission.ObjectPermission;
+import org.digijava.kernel.util.RequestUtils;
+
 import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 public class TranslateSecurityManager
     extends AbstractObjectSecurityManager {

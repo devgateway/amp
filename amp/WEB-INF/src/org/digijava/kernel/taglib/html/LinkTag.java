@@ -22,9 +22,6 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -33,11 +30,10 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.taglib.util.TagUtil;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteConfigUtils;
-import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
 
 public class LinkTag
     extends org.apache.struts.taglib.html.LinkTag {

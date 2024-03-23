@@ -22,10 +22,10 @@
 
 package org.digijava.module.common.util;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * @author irakli

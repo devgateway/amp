@@ -18,23 +18,21 @@
 
 package org.digijava.module.editor.taglib;
 
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.tagext.BodyTagSupport;
-
 import org.apache.log4j.Logger;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.BodyContent;
+import java.io.IOException;
 
 public class EditTag
     extends javax.servlet.jsp.tagext.BodyTagSupport {

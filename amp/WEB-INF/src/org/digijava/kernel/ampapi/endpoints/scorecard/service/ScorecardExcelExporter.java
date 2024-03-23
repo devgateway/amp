@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard.service;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -12,6 +9,9 @@ import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class in charge of generating the scorecard excel file.

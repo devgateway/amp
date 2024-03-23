@@ -2,8 +2,6 @@ package org.dgfoundation.amp.newreports;
 
 import java.util.Comparator;
 
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-
 public class SimplifiedROCComparator implements Comparator<ReportOutputColumn> {
 
     @Override

@@ -1,13 +1,13 @@
 package org.digijava.kernel.xmlpatches;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.util.Map;
-
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

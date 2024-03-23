@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.common.fm;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import io.swagger.annotations.ApiModelProperty;
 
 public class FMSettingsFlat {
     

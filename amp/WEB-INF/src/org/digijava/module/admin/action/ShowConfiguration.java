@@ -23,19 +23,17 @@
 package org.digijava.module.admin.action;
 
 
-
-
-import java.io.*;
-
-import org.apache.struts.action.*;
-import org.digijava.module.admin.form.*;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.DgUtil;
-import javax.servlet.ServletException;
-import org.apache.struts.tiles.ComponentContext;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.admin.form.ConfigurationForm;
+
+import javax.servlet.ServletException;
 
 public class ShowConfiguration extends Action {
 

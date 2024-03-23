@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.currency;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_CURRENCY_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_CURRENCY_ID;
 
 /**
  * Errors reported for Currency API

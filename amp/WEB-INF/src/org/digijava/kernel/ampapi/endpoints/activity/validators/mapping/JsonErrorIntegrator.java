@@ -1,15 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators.mapping;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import javax.validation.ConstraintViolation;
 import java.lang.annotation.ElementType;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
-import javax.validation.ConstraintViolation;
-
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
  * Puts JsonConstraintViolations into json object.

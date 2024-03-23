@@ -22,10 +22,6 @@
 
 package org.digijava.kernel.quartz;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
@@ -34,8 +30,11 @@ import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
-import org.digijava.kernel.quartz.StartupJob;
 
 public class SchedulerService
     extends AbstractServiceImpl {

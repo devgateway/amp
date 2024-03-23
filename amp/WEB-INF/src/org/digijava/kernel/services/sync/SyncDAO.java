@@ -1,23 +1,18 @@
 package org.digijava.kernel.services.sync;
 
-import static java.util.Collections.singletonMap;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.ACTIVITY_PROGRAM_SETTINGS;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
-
-import java.sql.Timestamp;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 import com.google.common.collect.ImmutableList;
 import org.digijava.module.aim.helper.Constants;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import java.sql.Timestamp;
+
+import static java.util.Collections.singletonMap;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
 
 /**
  * @author Octavian Ciubotaru

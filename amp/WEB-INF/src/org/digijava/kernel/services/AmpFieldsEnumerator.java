@@ -1,9 +1,5 @@
 package org.digijava.kernel.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumeratorFactory;
@@ -13,6 +9,10 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

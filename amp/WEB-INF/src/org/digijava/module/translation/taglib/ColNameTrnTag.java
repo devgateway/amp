@@ -1,14 +1,13 @@
 package org.digijava.module.translation.taglib;
 
-import java.io.IOException;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyTagSupport;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import java.io.IOException;
 
 /**
  * @author Octavian Ciubotaru

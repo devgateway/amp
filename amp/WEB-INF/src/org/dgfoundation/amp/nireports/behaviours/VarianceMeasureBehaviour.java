@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
-
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
@@ -11,6 +7,10 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * the behaviour of an entity which equals max(cell) - min(cell)

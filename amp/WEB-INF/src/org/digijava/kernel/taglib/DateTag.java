@@ -22,18 +22,6 @@
 
 package org.digijava.kernel.taglib;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.entity.Locale;
@@ -44,6 +32,17 @@ import org.digijava.kernel.text.DgDateFormatSymbols;
 import org.digijava.kernel.text.LocalizationUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class DateTag
     extends TagSupport {

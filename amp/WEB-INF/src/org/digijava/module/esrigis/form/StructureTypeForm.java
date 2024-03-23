@@ -1,10 +1,10 @@
 package org.digijava.module.esrigis.form;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class StructureTypeForm extends ActionForm{
 

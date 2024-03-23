@@ -1,23 +1,19 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *  The matcher checks if the activity is in a certain status after certain period has passed 

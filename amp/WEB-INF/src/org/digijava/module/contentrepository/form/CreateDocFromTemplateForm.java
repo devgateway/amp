@@ -1,10 +1,10 @@
 package org.digijava.module.contentrepository.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.contentrepository.dbentity.template.TemplateDoc;
 import org.digijava.module.contentrepository.dbentity.template.TemplateField;
+
+import java.util.List;
 
 public class CreateDocFromTemplateForm extends ActionForm {
     

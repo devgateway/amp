@@ -17,10 +17,11 @@
  *************************************************************************/
 package org.digijava.module.common.action;
 
-import javax.servlet.http.HttpServletRequest;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
-import org.apache.struts.action.ActionErrors;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

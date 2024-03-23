@@ -1,16 +1,12 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * a flattened leaf region of a report output (see {@link ColumnReportData})

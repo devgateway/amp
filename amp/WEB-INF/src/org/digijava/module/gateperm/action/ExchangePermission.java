@@ -3,25 +3,6 @@
  */
 package org.digijava.module.gateperm.action;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -31,22 +12,25 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.gateperm.core.ClusterIdentifiable;
-import org.digijava.module.gateperm.core.CompositePermission;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.core.GatePermission;
-import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
-import org.digijava.module.gateperm.feed.schema.AssignedObjIdType;
-import org.digijava.module.gateperm.feed.schema.CompositePermType;
-import org.digijava.module.gateperm.feed.schema.GatePermType;
-import org.digijava.module.gateperm.feed.schema.ObjectFactory;
-import org.digijava.module.gateperm.feed.schema.Permissions;
+import org.digijava.module.gateperm.core.*;
+import org.digijava.module.gateperm.feed.schema.*;
 import org.digijava.module.gateperm.form.ExchangePermissionForm;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * @author mihai

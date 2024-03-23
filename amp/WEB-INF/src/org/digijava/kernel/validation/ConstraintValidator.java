@@ -1,9 +1,9 @@
 package org.digijava.kernel.validation;
 
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import java.util.Map;
 
 /**
  * Validates if the value satisfies one or more constraints.

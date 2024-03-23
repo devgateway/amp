@@ -3,14 +3,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
@@ -31,6 +24,8 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.util.DbUtil;
+
+import java.util.*;
 
 /**
  * @author dan

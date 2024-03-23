@@ -1,9 +1,5 @@
 package org.digijava.module.help.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.util.SystemOutLogger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -12,6 +8,9 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.util.HelpUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class ViewHelpTopics extends TilesAction {
     

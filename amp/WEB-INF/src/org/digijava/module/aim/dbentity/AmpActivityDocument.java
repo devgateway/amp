@@ -1,8 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -10,6 +7,9 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * 

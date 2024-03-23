@@ -1,17 +1,16 @@
 package org.digijava.module.calendar.entity;
 
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.util.CalendarThread;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateBreakDown {
     private int type;

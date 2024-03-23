@@ -1,16 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -18,6 +7,10 @@ import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportRenderWarningType;
 import org.dgfoundation.amp.nireports.NiUtils;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * a corrector for null percentages and denormalized percentages sums.

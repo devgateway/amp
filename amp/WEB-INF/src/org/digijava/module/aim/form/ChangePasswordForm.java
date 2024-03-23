@@ -1,10 +1,10 @@
 package org.digijava.module.aim.form;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ChangePasswordForm extends ValidatorForm {
 

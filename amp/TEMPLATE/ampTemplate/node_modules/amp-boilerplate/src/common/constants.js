@@ -1,6 +1,0 @@
-var ARABIC_CODE = 'ar';
-var CONSTANTS = {
-		RTL_LANGUAGES: [ARABIC_CODE],
-};
-
-module.exports = CONSTANTS;

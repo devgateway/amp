@@ -1,10 +1,5 @@
 package org.digijava.module.contentrepository.action;
 
-import javax.jcr.Session;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.struts.action.Action;
@@ -15,6 +10,11 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.Session;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 /**
  * Used to check where given type of documents exist
  * @author Dare

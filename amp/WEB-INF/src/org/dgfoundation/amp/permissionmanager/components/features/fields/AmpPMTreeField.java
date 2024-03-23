@@ -3,14 +3,13 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.fields;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * @author dan

@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -12,9 +9,12 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * the abstract behaviour of a computed measure/column. Defines all the common behaviour so that subclasses can focus on implementing the business logic

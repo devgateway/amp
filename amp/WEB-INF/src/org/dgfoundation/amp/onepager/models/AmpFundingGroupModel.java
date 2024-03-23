@@ -1,17 +1,11 @@
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+
+import java.util.*;
 
 public class AmpFundingGroupModel implements IModel<Set<AmpOrgRole>> {
     private static final long serialVersionUID = 1L;

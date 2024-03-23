@@ -144,6 +144,12 @@ public class AmpGeneralSettings {
     @JsonProperty(SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE)
     private String reportDefaultMinYearRange;
 
+    @JsonProperty(SettingsConstants.INDICATOR_FILTER_BY_SECTOR)
+    private Boolean indicatorFilterBySector;
+
+    @JsonProperty(SettingsConstants.INDICATOR_FILTER_BY_PROGRAM)
+    private Boolean indicatorFilterByProgram;
+
     public Boolean getUseIconsForSectorsInProjectList() {
         return useIconsForSectorsInProjectList;
     }
@@ -519,5 +525,21 @@ public class AmpGeneralSettings {
 
     public String getReportDefaultMinYearRange() {
         return reportDefaultMinYearRange;
+    }
+
+    public Boolean getIndicatorFilterBySector() {
+        return indicatorFilterBySector;
+    }
+
+    public void setIndicatorFilterBySector(Boolean indicatorFilterBySector) {
+        this.indicatorFilterBySector = indicatorFilterBySector;
+    }
+
+    public Boolean getIndicatorFilterByProgram() {
+        return indicatorFilterByProgram;
+    }
+
+    public void setIndicatorFilterByProgram(Boolean indicatorFilterByProgram) {
+        this.indicatorFilterByProgram = indicatorFilterByProgram;
     }
 }

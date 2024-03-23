@@ -1,10 +1,10 @@
 package org.digijava.kernel.util;
 
-import javax.servlet.ServletContext;
-
 import org.digijava.kernel.request.TLSUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import javax.servlet.ServletContext;
 
 /**
  * @author Octavian Ciubotaru

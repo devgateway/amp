@@ -6,16 +6,6 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
@@ -29,6 +19,15 @@ import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.budgetexport.util.MappingEncoder;
+
+import javax.servlet.http.HttpSession;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**

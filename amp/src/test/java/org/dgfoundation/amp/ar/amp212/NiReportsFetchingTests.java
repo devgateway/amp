@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.sql.Connection;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.dgfoundation.amp.algo.AmpCollections.sorted;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -21,6 +13,14 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.junit.Test;
+
+import java.sql.Connection;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
 /**
  * 

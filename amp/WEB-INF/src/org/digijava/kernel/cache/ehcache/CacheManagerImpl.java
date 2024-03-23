@@ -1,10 +1,10 @@
 package org.digijava.kernel.cache.ehcache;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.cache.CacheManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This implementation will work with EHCache. 

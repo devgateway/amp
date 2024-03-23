@@ -5,27 +5,14 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.Categorizable;
-import org.dgfoundation.amp.ar.CellColumn;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.CommitmentGapCellGenerator;
-import org.dgfoundation.amp.ar.FundingTypeSortedString;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.MetaInfoSet;
+import org.dgfoundation.amp.ar.*;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
-import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.helper.Constants;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 

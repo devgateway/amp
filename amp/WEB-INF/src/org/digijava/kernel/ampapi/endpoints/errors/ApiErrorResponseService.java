@@ -3,14 +3,13 @@
  */
 package org.digijava.kernel.ampapi.endpoints.errors;
 
+import org.apache.log4j.Logger;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * Provides an API Error response 

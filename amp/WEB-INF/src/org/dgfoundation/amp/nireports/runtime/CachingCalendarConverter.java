@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.nireports.TranslatedDate;
+
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-
-import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.nireports.TranslatedDate;
 
 /**
  * a wrapper for a {@link CalendarConverter} which caches the result of calling an underlying {@link CalendarConverter}.<br />

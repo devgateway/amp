@@ -1,11 +1,5 @@
 package org.digijava.module.aim.services.auditcleaner;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -13,14 +7,15 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * 

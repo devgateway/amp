@@ -3,8 +3,6 @@
  */
 package org.digijava.module.contentrepository.form;
 
-import java.util.Set;
-
 import org.apache.struts.action.ActionForm;
 
 /**

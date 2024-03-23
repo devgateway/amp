@@ -1,15 +1,15 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.OrgManagerForm;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
 
 public class OrganisationSearch extends Action {
     

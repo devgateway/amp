@@ -22,12 +22,12 @@
 
 package org.digijava.kernel.security.permission;
 
-import java.io.Serializable;
-import java.security.Permission;
-
 import org.digijava.kernel.security.AbstractObjectSecurityManager;
 import org.digijava.kernel.security.ObjectSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
+
+import java.io.Serializable;
+import java.security.Permission;
 
 public class ObjectPermission
     extends ResourcePermission implements Serializable {

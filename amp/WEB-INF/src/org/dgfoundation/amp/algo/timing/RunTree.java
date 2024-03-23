@@ -1,12 +1,8 @@
 package org.dgfoundation.amp.algo.timing;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.nireports.NiUtils;
+
+import java.util.*;
 
 public class RunTree implements RunNode {
     protected final String name;

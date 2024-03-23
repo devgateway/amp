@@ -1,35 +1,11 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
@@ -46,6 +22,13 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.joda.time.DateTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class GPIReportUtils {
     

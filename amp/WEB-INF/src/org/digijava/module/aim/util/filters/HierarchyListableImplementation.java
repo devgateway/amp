@@ -1,10 +1,10 @@
 package org.digijava.module.aim.util.filters;
 
+import org.digijava.module.aim.util.HierarchyListable;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.digijava.module.aim.util.HierarchyListable;
 
 /**
  * @author Alex Gartner

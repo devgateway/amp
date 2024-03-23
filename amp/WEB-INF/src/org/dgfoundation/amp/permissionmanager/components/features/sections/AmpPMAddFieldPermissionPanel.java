@@ -3,14 +3,14 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.Set;
-
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
+
+import java.util.Set;
 
 /**
  * @author dan

@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -13,6 +10,9 @@ import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * the Reports API entry point for NiReports, used for generating & formatting a report and also logging reports runtime (if configured through {@link #logReport})

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpFeature" table="AMP_FEATURE">
 		<cache usage="read-write" />
 		<id name="ampFeatureId" column="amp_feature_id" type="java.lang.Integer">
-			<generator class="native">
-				<param name="sequence">AMP_FEATURE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FEATURE_seq</param>
 			</generator>
 		</id>
 

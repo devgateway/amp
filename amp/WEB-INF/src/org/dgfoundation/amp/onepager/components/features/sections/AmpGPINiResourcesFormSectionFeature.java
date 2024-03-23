@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.HashSet;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -13,6 +10,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpNewGPINiResourceFieldP
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+
+import java.util.HashSet;
+import java.util.List;
 
 public class AmpGPINiResourcesFormSectionFeature extends AmpFeaturePanel<AmpGPINiSurveyResponse> {
 

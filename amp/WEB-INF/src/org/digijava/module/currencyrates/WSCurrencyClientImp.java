@@ -1,16 +1,14 @@
 package org.digijava.module.currencyrates;
 
 
-import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.xml.rpc.ServiceException;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.currencyrates.NET.webserviceX.www.Currency;
 import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorLocator;
 import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSoap;
+
+import javax.xml.rpc.ServiceException;
+import java.rmi.RemoteException;
+import java.util.HashMap;
 
 /**
  * 

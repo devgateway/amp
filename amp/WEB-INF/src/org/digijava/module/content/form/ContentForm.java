@@ -1,16 +1,13 @@
 package org.digijava.module.content.form;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ContentForm extends ActionForm {
 

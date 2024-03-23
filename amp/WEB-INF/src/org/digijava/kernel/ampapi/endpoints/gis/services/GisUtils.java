@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
-import java.util.List;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -12,6 +10,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.type.StandardBasicTypes;
+
+import java.util.List;
 
 public final class GisUtils {
     
@@ -33,7 +33,7 @@ public final class GisUtils {
         
         final String performanceIssuesQuery = "SELECT amp_activity_id FROM v_performance_alert_level";
         
-        List<String> actIds = session.createSQLQuery(performanceIssuesQuery)
+        List<String> actIds = session.createNativeQuery(performanceIssuesQuery)
                             .addScalar("amp_activity_id", StandardBasicTypes.STRING)
                              .list();
         

@@ -3,13 +3,14 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.menu.AmpView;
 import org.digijava.kernel.user.Group;
 import org.hibernate.annotations.DiscriminatorOptions;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Stores one menu entry details
@@ -28,7 +29,7 @@ public class AmpMenuEntry implements Serializable {
     private int position = 0;
     private String requestUrl;
     private Set<AmpMenuEntry> items;
-    private Set<Group> groups;
+    private Set<Group> groups= new HashSet<>();
     private Map<AmpView, AmpVisibilityRule> viewVisibilityMap;
     private Map<AmpView, String> viewURLMap;
     

@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.currency.dto;
 
-import java.util.List;
-
-import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

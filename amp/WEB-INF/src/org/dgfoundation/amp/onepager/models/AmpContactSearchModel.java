@@ -53,7 +53,7 @@ public class AmpContactSearchModel extends
             }
             crit.addOrder(Order.asc("name"));
             Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
-            if (maxResults != null && maxResults.intValue() != 0) {
+            if (maxResults != null && maxResults != 0) {
                 crit.setMaxResults(maxResults);
             }
 

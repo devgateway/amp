@@ -1,8 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.SaveContext;
@@ -23,6 +20,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Octavian Ciubotaru

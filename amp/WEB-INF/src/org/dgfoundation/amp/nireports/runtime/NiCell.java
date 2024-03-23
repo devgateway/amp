@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -16,6 +8,10 @@ import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * An immutable {@link Cell} wrapper which has identity and is not shared between reports or columns.

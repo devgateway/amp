@@ -18,16 +18,14 @@
 
 package org.digijava.module.um.form;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * <p>Title: DiGiJava</p>

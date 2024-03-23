@@ -1,15 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable {
     //IATI-check: to be ignored

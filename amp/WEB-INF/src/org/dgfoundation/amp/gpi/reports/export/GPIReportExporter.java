@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.gpi.reports.export;
 
+import org.dgfoundation.amp.gpi.reports.GPIReport;
+import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+import org.digijava.kernel.translator.TranslatorWorker;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
-import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * @author Viorel Chihai

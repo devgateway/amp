@@ -1,12 +1,5 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Stream;
-
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -14,6 +7,13 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.springframework.web.util.HtmlUtils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Stream;
 
 /** Renders the report to HTML used for PDF export. See {@link SaikuReportPdfExporter}
  * @author Viorel Chihai

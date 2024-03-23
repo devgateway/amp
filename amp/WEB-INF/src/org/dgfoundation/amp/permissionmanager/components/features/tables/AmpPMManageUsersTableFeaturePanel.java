@@ -3,23 +3,23 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSearchOrganizationsFeaturePanel;
 import org.digijava.kernel.user.User;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

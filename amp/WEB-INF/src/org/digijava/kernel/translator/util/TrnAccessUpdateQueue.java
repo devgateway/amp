@@ -1,12 +1,12 @@
 package org.digijava.kernel.translator.util;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.Message;
+
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.entity.Message;
 
 /**
  * Queue for updating message records when they are accessed.

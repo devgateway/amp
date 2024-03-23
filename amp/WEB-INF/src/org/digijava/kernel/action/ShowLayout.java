@@ -22,10 +22,6 @@
 
 package org.digijava.kernel.action;
 
-import java.util.Map;
-
-import javax.servlet.ServletException;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -37,6 +33,9 @@ import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.ServletException;
+import java.util.Map;
 
 /**
  * Struts action, which shows site's layout if "layout" parameter is set, then

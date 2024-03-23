@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
-import java.util.Set;
-
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.IdValuePair;
@@ -16,6 +10,12 @@ import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.digijava.kernel.translator.LocalizableLabel;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

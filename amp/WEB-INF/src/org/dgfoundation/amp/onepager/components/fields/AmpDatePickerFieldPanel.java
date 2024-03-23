@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Date;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,6 +16,8 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.Date;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 5, 2010

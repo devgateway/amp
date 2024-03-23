@@ -6,15 +6,15 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedDateCell;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ComputedDateColWorker extends ColumnWorker {
 

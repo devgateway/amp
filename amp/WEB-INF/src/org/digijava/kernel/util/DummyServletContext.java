@@ -22,6 +22,8 @@
 
 package org.digijava.kernel.util;
 
+import javax.servlet.*;
+import javax.servlet.descriptor.JspConfigDescriptor;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -29,9 +31,6 @@ import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.*;
-import javax.servlet.descriptor.JspConfigDescriptor;
 
 
 public class DummyServletContext implements ServletContext {

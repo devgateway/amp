@@ -4,12 +4,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,15 +12,16 @@ import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.form.FieldPermissionsForm;
-import org.digijava.module.gateperm.core.CompositePermission;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.core.GatePermission;
-import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
+import org.digijava.module.gateperm.core.*;
 import org.digijava.module.gateperm.gates.OrgRoleGate;
 import org.digijava.module.gateperm.gates.UserLevelGate;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * AssignFieldPermissions.java

@@ -5,14 +5,6 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
-import java.sql.BatchUpdateException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherLangWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
@@ -20,7 +12,9 @@ import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.hibernate.HibernateException;
 
-import com.itextpdf.text.List;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

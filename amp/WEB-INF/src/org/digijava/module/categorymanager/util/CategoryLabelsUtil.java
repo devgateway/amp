@@ -1,19 +1,13 @@
 package org.digijava.module.categorymanager.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
+
+import java.util.*;
 
 public class CategoryLabelsUtil {
     private static Logger logger = Logger.getLogger(CategoryLabelsUtil.class);

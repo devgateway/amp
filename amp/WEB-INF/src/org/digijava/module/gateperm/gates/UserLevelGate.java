@@ -3,9 +3,6 @@
  */
 package org.digijava.module.gateperm.gates;
 
-import java.util.Map;
-import java.util.Queue;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -14,6 +11,9 @@ import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 import org.hibernate.Session;
+
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * @author mihai

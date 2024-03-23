@@ -1,12 +1,11 @@
 package org.dgfoundation.amp.algo;
 
+import org.digijava.module.aim.util.Identifiable;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import org.digijava.module.aim.util.Identifiable;
 
 
 /**

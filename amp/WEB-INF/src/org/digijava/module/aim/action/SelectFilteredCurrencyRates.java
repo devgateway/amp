@@ -3,18 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate;
@@ -22,6 +11,12 @@ import org.digijava.module.aim.form.SelectFilteredCurrencyRatesForm;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FilteredCurrencyRateUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Alex Gartner

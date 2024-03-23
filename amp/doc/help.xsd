@@ -8,8 +8,8 @@
 <!-- ************************************************** -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-		     xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
-		     xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0" >
+           xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
+           jaxb:version="1.0">
 
 
  <!--Convert XMLGregorianCalendar to java.util.Calendar-->

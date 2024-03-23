@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 
-import java.util.List;
-import java.util.function.Function;
-
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.DisbursementsAfterActivityDateMatcher;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * matcher definition - if there are disbursements happened after a selected activity date 

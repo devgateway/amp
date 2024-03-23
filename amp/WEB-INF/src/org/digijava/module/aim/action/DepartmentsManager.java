@@ -1,19 +1,15 @@
 package org.digijava.module.aim.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.form.DepartmentsManagerForm;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.helper.BudgetDbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class DepartmentsManager extends MultiAction{
 

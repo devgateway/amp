@@ -1,24 +1,16 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
-import org.dgfoundation.amp.Util;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.apache.log4j.Logger;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * a {@link ViewFetcher} for fetching data from a real database, either with or without postprocessing

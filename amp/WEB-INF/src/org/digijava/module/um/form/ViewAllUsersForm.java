@@ -1,12 +1,11 @@
 package org.digijava.module.um.form;
 
-import java.util.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.helper.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.*;
-import org.digijava.kernel.user.User;
-import org.digijava.module.aim.helper.UserBean;
+import java.util.Collection;
 
 public class ViewAllUsersForm
     extends ActionForm {

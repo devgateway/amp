@@ -29,11 +29,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.ResponseUtil;
+import org.digijava.module.common.util.ImageInfo;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
-import org.digijava.module.common.util.ImageInfo;
 
 /**
  * <p>Title: DiGiJava</p>

@@ -6,8 +6,6 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.regex.Pattern;
-import java.util.*;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;

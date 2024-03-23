@@ -22,30 +22,17 @@
 
 package org.digijava.kernel.viewmanager.reposimpl;
 
-import org.digijava.kernel.viewmanager.AbstractViewConfig;
-import javax.servlet.ServletContext;
-import org.digijava.kernel.viewmanager.ViewConfigException;
-import org.digijava.kernel.siteconfig.SiteConfig;
-import java.util.HashMap;
-import java.io.File;
-import org.digijava.kernel.siteconfig.RepositoryLayout;
-import org.digijava.kernel.viewmanager.RepositoryParser;
-import java.util.*;
-import org.digijava.kernel.util.DigiConfigManager;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.siteconfig.*;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.siteconfig.ModuleLayout;
-import org.digijava.kernel.siteconfig.Module;
-import org.digijava.kernel.siteconfig.Teaser;
-import org.digijava.kernel.siteconfig.Page;
-import org.digijava.kernel.siteconfig.SiteLayout;
-import org.digijava.kernel.siteconfig.SecondaryPage;
-import org.digijava.kernel.siteconfig.ModulePageGroup;
-import org.digijava.kernel.siteconfig.PageGroup;
-import org.digijava.kernel.siteconfig.Layout;
-import org.digijava.kernel.siteconfig.Put;
-import org.digijava.kernel.siteconfig.PutItem;
-import org.digijava.kernel.siteconfig.GroupedPage;
+import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.kernel.viewmanager.AbstractViewConfig;
+import org.digijava.kernel.viewmanager.RepositoryParser;
+import org.digijava.kernel.viewmanager.ViewConfigException;
+
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.util.*;
 
 public abstract class ViewConfigUtil
     extends AbstractViewConfig {

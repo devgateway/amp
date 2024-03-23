@@ -22,8 +22,9 @@
 
 package org.digijava.module.calendar.form;
 
-import java.util.Date;
 import org.digijava.kernel.util.DgUtil;
+
+import java.util.Date;
 
 /**
  * <p>Title: </p>

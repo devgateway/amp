@@ -3,13 +3,14 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.validators.AmpUniqueCollectionValidator;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.validators.AmpUniqueCollectionValidator;
 
 /**
  * @author mihai

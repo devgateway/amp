@@ -3,10 +3,6 @@ package org.digijava.kernel.geocoding.client;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -16,22 +12,18 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
 
-/**
- * @author Octavian Ciubotaru
- */
 public class GeoCoderClient {
 
     private final Client client;
@@ -50,7 +42,7 @@ public class GeoCoderClient {
     private static final String PATH_AMP_LOCATIONS = "amp/locations";
 
     public GeoCoderClient() {
-        client = Client.create();
+        client = ClientBuilder.newClient();
     }
 
     public String getBaseUrl() {
@@ -72,10 +64,9 @@ public class GeoCoderClient {
 
         URI uri = UriBuilder.fromUri(getBaseUrl()).path(PATH_ACTIVITY_PROCESS).build();
 
-        List<Map<String, Object>> response = client.resource(uri)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(new GenericType<List<Map<String, Object>>>() { }, jsonActivities);
+        List<Map<String, Object>> response = client.target(uri)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(jsonActivities, MediaType.APPLICATION_JSON_TYPE), new GenericType<List<Map<String, Object>>>() {});
 
         List<Long> queueIds = new ArrayList<>();
         for (Map<String, Object> queue : response) {
@@ -104,9 +95,10 @@ public class GeoCoderClient {
                     .queryParam("id", queueId)
                     .build();
 
-            GeoCodingOperation operation = client.resource(uri)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .get(new GenericType<GeoCodingOperation>() { });
+            Invocation.Builder requestBuilder = client.target(uri)
+                    .request(MediaType.APPLICATION_JSON_TYPE);
+
+            GeoCodingOperation operation = requestBuilder.get(new GenericType<GeoCodingOperation>() {});
 
             if (operation.state.equals("PENDING") || operation.state.equals("PROCESSING")) {
                 throw new GeoCodingNotProcessedException();
@@ -117,12 +109,10 @@ public class GeoCoderClient {
             }
 
             return operation.extractData;
-        } catch (UniformInterfaceException e) {
-            if (e.getResponse().getStatus() == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
-                throw new GeoCodingNotFoundException();
-            } else {
-                throw new RuntimeException("Failed to obtain geo coding results", e);
-            }
+        } catch (javax.ws.rs.NotFoundException e) {
+            throw new GeoCodingNotFoundException();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to obtain geo coding results", e);
         }
     }
 

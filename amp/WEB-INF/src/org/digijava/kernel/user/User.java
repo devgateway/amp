@@ -22,34 +22,25 @@
 
 package org.digijava.kernel.user;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.Entity;
-import org.digijava.kernel.entity.Image;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
-import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.util.Identifiable;
 
+import javax.security.auth.Subject;
+import java.io.Serializable;
+import java.util.*;
+
 @InterchangeableValue(UserValueProvider.class)
 public class User
     extends Entity implements Serializable, Comparable, Identifiable {
-
+    private static final long serialVersionUID = 4467118985120179660L;
     private Subject subject;
     private String firstNames;
     private String lastName;
@@ -75,7 +66,7 @@ public class User
     private Country country;
     private AmpCategoryValueLocations region;
     private HashMap sitePreferences;
-    private Set groups;
+    private Set<Group> groups= new HashSet<>();
     private HashMap siteContentLocales;
     private String address;
     private Image photo;
@@ -93,7 +84,8 @@ public class User
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String email, String firstNames, String lastName) {
         /**
@@ -251,7 +243,7 @@ public class User
         return registeredThrough;
     }
 
-    public Set getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
@@ -315,7 +307,7 @@ public class User
         this.banned = banned;
     }
 
-    public void setGroups(Set groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 
@@ -452,10 +444,8 @@ public class User
     public boolean hasVerifiedOrganizationId(Long ampOrgId) {
         if(ampOrgId == null) return false;
         //If it's not there, check in the Set<AmpOrganisation> assignedOrgs
-        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-        while(it.hasNext()){
-            AmpOrganisation currentOrganization = it.next();
-            if(currentOrganization.getAmpOrgId().equals(ampOrgId))
+        for (AmpOrganisation currentOrganization : this.assignedOrgs) {
+            if (currentOrganization.getAmpOrgId().equals(ampOrgId))
                 return true;
         }
         return false;
@@ -553,5 +543,4 @@ public class User
         
         return email;
     }
-
 }

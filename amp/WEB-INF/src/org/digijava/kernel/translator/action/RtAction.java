@@ -22,25 +22,22 @@
 
 package org.digijava.kernel.translator.action;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.form.TranslatorForm;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 /* Controller Class that's called by Struts or Tiles ActionServlet... See the definitions in

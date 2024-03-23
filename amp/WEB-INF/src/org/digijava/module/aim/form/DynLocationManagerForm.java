@@ -1,13 +1,13 @@
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DynLocationManagerForm extends ActionForm {
     public enum Option{

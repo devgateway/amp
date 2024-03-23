@@ -4,8 +4,8 @@
     <class name="org.digijava.module.aim.dbentity.AmpOrgStaffInformation" table="AMP_STAFF_INFO">
         <cache usage="read-write" />
         <id name="id" column="amp_staff_info_id" type="java.lang.Long" unsaved-value="null">
-            <generator class="native">
-                <param name="sequence">AMP_STAFF_INFO_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_STAFF_INFO_seq</param>
             </generator>
         </id>
 

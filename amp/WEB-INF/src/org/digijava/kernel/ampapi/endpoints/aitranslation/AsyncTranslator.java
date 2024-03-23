@@ -1,15 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.aitranslation;
 
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_ENABLED;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
-import javax.ws.rs.core.Response;
-
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.dgfoundation.amp.aitranslation.CachedMachineTranslationService;
@@ -17,6 +7,15 @@ import org.dgfoundation.amp.aitranslation.GoogleMachineTranslationService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.ws.rs.core.Response;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_ENABLED;
 
 /**
  * Keeps track of all currently running translation operations.

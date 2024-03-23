@@ -1,33 +1,28 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import static java.util.Collections.emptyMap;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.fm.*;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMMemberSettingsResult;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMService;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsFlat;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsResult;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsTree;
-import org.digijava.kernel.services.AmpFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import static java.util.Collections.emptyMap;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Common Endpoint provides various settings (FM, settings)

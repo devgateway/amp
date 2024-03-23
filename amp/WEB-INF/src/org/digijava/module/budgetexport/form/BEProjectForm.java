@@ -1,7 +1,6 @@
 package org.digijava.module.budgetexport.form;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.digijava.module.budgetexport.util.AmpEntityNameIdPair;
 
 import java.util.List;

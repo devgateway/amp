@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
-
-
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
@@ -10,6 +7,8 @@ import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
 /**
  * testcases for new features added into the old reports engine in AMP 2.11

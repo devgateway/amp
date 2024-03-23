@@ -4,9 +4,6 @@
  */
 package org.digijava.module.gateperm.gates;
 
-import java.util.Map;
-import java.util.Queue;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -14,6 +11,9 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * Returns true if the current activity is of the given paremterized budget type

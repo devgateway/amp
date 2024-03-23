@@ -1,18 +1,9 @@
 package org.digijava.module.gpi.model;
 
-import java.util.Collection;
-
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
-import org.digijava.module.gpi.util.GPIUtils;
+
+import java.util.Collection;
 
 public class GPIFilter {
 

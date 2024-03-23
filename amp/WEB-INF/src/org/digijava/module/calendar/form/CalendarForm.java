@@ -22,11 +22,11 @@
 
 package org.digijava.module.calendar.form;
 
-import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 public class CalendarForm
     extends ActionForm {

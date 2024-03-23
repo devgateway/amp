@@ -1,11 +1,5 @@
 package org.digijava.kernel.xmlpatches;
 
-import java.sql.Connection;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -14,6 +8,12 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

@@ -2,40 +2,20 @@
 package org.digijava.module.aim.form.helpers;
 
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FilterParams;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.Funding;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * funding digest for a full activity
@@ -140,31 +120,29 @@ public class ActivityFundingDigest {
      * @param debug - whether to output debugging information to the results strings
      */
     public void populateFromFundings(AmpActivityVersion activity, String toCurrCode, TeamMember tm, boolean debug) {
-        Collection<AmpFunding> fundings = activity.getFunding();
+        Set<AmpFunding> fundings = activity.getFunding();
         FundingCalculationsHelper activityTotalCalculations = new FundingCalculationsHelper();
         activityTotalCalculations.setDebug(debug);
-        Set<Long> fundingOrgIds = new HashSet<Long>();
-        ArrayList<FundingOrganization> fundingOrgs = new ArrayList<FundingOrganization>();
-        Iterator<AmpFunding> fundItr = fundings.iterator();
-        
-        while (fundItr.hasNext()) {
-            AmpFunding ampFunding = fundItr.next();
+        Set<Long> fundingOrgIds = new HashSet<>();
+        ArrayList<FundingOrganization> fundingOrgs = new ArrayList<>();
+
+        for (AmpFunding ampFunding : fundings) {
             AmpRole fundingSourceRole = ampFunding.getSourceRole();
             if (fundingSourceRole != null &&
                     (Constants.FUNDING_AGENCY.equals(fundingSourceRole.getRoleCode()) ||
-                    !ampFunding.getFundingDetails().isEmpty())) {
+                            !ampFunding.getFundingDetails().isEmpty())) {
                 AmpOrganisation org = ampFunding.getAmpDonorOrgId();
                 if (org == null || org.getAmpOrgId() == null) continue;
                 FundingOrganization fundOrg = new FundingOrganization(ampFunding);
                 Funding fund = new Funding(ampFunding, activityTotalCalculations, toCurrCode, false /*isPreview*/, tm);
                 if (fund.getFundingDetails() != null && fund.getFundingDetails().size() > 0) {
-                    if (this.getFundingDetails() == null) this.setFundingDetails(new ArrayList<FundingDetail>());
-                    this.getFundingDetails().addAll(new ArrayList<FundingDetail>(fund.getFundingDetails()));
+                    if (this.getFundingDetails() == null) this.setFundingDetails(new ArrayList<>());
+                    this.getFundingDetails().addAll(new ArrayList<>(fund.getFundingDetails()));
                 }
                 int index = fundingOrgs.indexOf(fundOrg);
-                
+
                 if (index > -1) {
-                    fundOrg = (FundingOrganization)fundingOrgs.get(index);
+                    fundOrg = fundingOrgs.get(index);
                 }
                 if (fundOrg.getFundings() == null) fundOrg.setFundings(new ArrayList<Funding>());
                 fundOrg.getFundings().add(fund);
@@ -186,7 +164,7 @@ public class ActivityFundingDigest {
                 FundingOrganization fundingOrganization = new FundingOrganization();
                 fundingOrganization.setAmpOrgId(aor.getOrganisation().getAmpOrgId());
                 fundingOrganization.setOrgName(aor.getOrganisation().getName());
-                fundingOrganization.setFundings(new ArrayList<Funding>());
+                fundingOrganization.setFundings(new ArrayList<>());
                 fundingOrgs.add(fundingOrganization);
                 fundingOrgIds.add(aor.getAmpOrgRoleId());
             }

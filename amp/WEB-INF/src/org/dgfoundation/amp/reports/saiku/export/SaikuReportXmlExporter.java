@@ -1,16 +1,13 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
-import java.io.ByteArrayOutputStream;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.reports.converters.GeneratedReportToXmlConverter;
 import org.dgfoundation.amp.reports.xml.ObjectFactory;
 import org.dgfoundation.amp.reports.xml.Report;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import java.io.ByteArrayOutputStream;
 
 /**
  * @author Viorel Chihai

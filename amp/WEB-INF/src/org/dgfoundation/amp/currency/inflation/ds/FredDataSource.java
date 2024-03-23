@@ -3,18 +3,6 @@
  */
 package org.dgfoundation.amp.currency.inflation.ds;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.IRFrequency;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
@@ -22,6 +10,11 @@ import org.digijava.kernel.restclient.RestClient;
 import org.digijava.kernel.restclient.RestClient.Type;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Use of FRED®API 

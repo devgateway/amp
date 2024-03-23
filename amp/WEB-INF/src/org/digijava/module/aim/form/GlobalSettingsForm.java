@@ -1,17 +1,15 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 public class GlobalSettingsForm extends ActionForm {
     Collection<AmpGlobalSettings> gsfCol = null;
     Collection countryNameCol = null;

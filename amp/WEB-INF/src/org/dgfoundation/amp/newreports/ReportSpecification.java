@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.newreports;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * this defines a report specification, e.g. the requested structure of a report. 

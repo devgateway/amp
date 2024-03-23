@@ -3,8 +3,6 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -12,6 +10,8 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.module.aim.form.AdvancedReportForm;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author mmoras

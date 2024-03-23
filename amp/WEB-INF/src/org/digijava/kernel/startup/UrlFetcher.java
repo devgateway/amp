@@ -22,9 +22,12 @@
 
 package org.digijava.kernel.startup;
 
-import java.net.*;
-import java.io.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
+
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * This class is used to fetch an HTML of a page from a given URL.

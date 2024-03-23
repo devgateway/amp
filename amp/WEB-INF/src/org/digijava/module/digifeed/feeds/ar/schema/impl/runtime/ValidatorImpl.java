@@ -7,18 +7,12 @@
 
 package org.digijava.module.digifeed.feeds.ar.schema.impl.runtime;
 
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.bind.PropertyException;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
-import javax.xml.bind.ValidationException;
-import javax.xml.bind.Validator;
-import javax.xml.bind.helpers.DefaultValidationEventHandler;
-
-import org.xml.sax.SAXException;
-
 import com.sun.xml.bind.DatatypeConverterImpl;
 import com.sun.xml.bind.validator.Messages;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.*;
+import javax.xml.bind.helpers.DefaultValidationEventHandler;
 
 /*
     TODO:

@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.newreports;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 /**
  * a @link {@link ReportCell} containing an amount

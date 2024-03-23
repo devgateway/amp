@@ -1,9 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.dto.gis;
 
-import static org.dgfoundation.amp.ar.ColumnConstants.ACTIVITY_ID;
-import static org.dgfoundation.amp.ar.ColumnConstants.SSC_MODALITIES;
-import static org.dgfoundation.amp.ar.ColumnConstants.PRIMARY_SECTOR;
-import static org.dgfoundation.amp.ar.ColumnConstants.DONOR_COUNTRY;
+import static org.dgfoundation.amp.ar.ColumnConstants.*;
 
 public final class SscDashboardObjectFactory {
 

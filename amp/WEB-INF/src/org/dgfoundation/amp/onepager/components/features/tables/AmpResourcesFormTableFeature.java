@@ -3,16 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.jcr.Node;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -47,6 +37,10 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import javax.jcr.Node;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author aartimon@dginternational.org

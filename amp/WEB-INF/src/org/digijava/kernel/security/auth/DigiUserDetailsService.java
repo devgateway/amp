@@ -22,28 +22,14 @@
 
 package org.digijava.kernel.security.auth;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.UserUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,6 +37,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.*;
 
 public class DigiUserDetailsService
     implements UserDetailsService {
@@ -74,8 +62,8 @@ public class DigiUserDetailsService
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from " + User.class.getName() +
-                                          " u where lower(u.email) =? ");
-            q.setString(0, email.toLowerCase());
+                                          " u where lower(u.email) =:email ");
+            q.setParameter("email", email.toLowerCase(), StringType.INSTANCE);
             q.setCacheable(true);
 
             List results = q.list();

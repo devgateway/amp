@@ -3,21 +3,16 @@
  */
 package org.dgfoundation.amp.currency.inflation;
 
-import java.sql.Date;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.collections.MapIterator;
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
+
+import java.sql.Date;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Generates Inflation Rates 

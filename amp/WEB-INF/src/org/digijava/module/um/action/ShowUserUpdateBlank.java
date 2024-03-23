@@ -22,28 +22,22 @@
 
 package org.digijava.module.um.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.translator.util.TrnLocale;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.um.form.UserUpdateForm;
 import org.digijava.module.um.util.DbUtil;
-import java.util.Iterator;
-import java.util.Set;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.translator.util.TrnUtil;
-import java.util.HashMap;
-import org.digijava.kernel.translator.util.TrnLocale;
-import java.util.Collections;
 import org.digijava.module.um.util.UmUtil;
-import org.digijava.kernel.util.SiteUtils;
+
+import java.util.*;
 
 public class ShowUserUpdateBlank
     extends Action {

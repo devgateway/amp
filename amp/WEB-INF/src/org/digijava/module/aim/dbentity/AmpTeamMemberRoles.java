@@ -6,9 +6,9 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.io.Serializable;
 
 public class AmpTeamMemberRoles implements Serializable {
     

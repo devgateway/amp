@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.gpi.GpiFormParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
+
+import java.util.Map;
 
 /**
  * Report model used for GPI Reports

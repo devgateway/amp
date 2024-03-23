@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.security.serializers;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -15,6 +12,9 @@ import io.swagger.models.properties.StringProperty;
 import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author Octavian Ciubotaru

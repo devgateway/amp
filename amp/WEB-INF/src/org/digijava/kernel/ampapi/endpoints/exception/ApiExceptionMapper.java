@@ -1,5 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.exception;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -8,14 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 
 /**
  * Builds the generic response with error code 500 for all unhandled exceptions

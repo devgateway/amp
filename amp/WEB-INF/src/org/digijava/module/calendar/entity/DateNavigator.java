@@ -1,15 +1,14 @@
 package org.digijava.module.calendar.entity;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.util.AmpUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class DateNavigator {
     private int leftTimestamp;

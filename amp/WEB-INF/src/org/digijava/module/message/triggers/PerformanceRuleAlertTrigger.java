@@ -1,13 +1,13 @@
 package org.digijava.module.message.triggers;
 
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
 import org.digijava.module.message.helper.MessageConstants;
+
+import java.util.List;
+import java.util.Map;
 
 public class PerformanceRuleAlertTrigger extends Trigger {
 

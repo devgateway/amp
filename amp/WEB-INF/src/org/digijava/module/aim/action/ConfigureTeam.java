@@ -1,11 +1,11 @@
 package org.digijava.module.aim.action;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import javax.servlet.http.HttpSession;
 
 public class ConfigureTeam extends Action {
 

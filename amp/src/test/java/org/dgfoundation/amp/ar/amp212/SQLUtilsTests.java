@@ -1,16 +1,15 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.LinkedHashMap;
-import java.util.Set;
-
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  * ETL Testcases

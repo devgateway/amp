@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
-
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -23,6 +15,9 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.COMPUTED_MANAGEMENT_WORKSPACES;
 
@@ -217,7 +212,7 @@ public final class WorkspaceFilter {
     public static boolean isActivityWithinWorkspace(long ampActivityId) {
         String str = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
         String query = String.format("SELECT (%d IN (%s)) AS rs", ampActivityId, str);
-        java.util.List<?> res = PersistenceManager.getSession().createSQLQuery(query).list();
+        java.util.List<?> res = PersistenceManager.getSession().createNativeQuery(query).list();
         return (Boolean) res.get(0);
     }
 
@@ -248,11 +243,11 @@ public final class WorkspaceFilter {
      */
     public static Set<AmpTeam> getComputedRelatedWorkspaces() {
         String wsQuery = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-        List res = PersistenceManager.getSession().createSQLQuery(wsQuery).list();
+        List res = PersistenceManager.getSession().createNativeQuery(wsQuery).list();
         if (res != null && !res.isEmpty()) {
             String activitiesQuery = "select amp_team_id from amp_activity_Version where amp_activity_id IN (" +
                     Joiner.on(',').join(res) + ")";
-            List<Number> teamIds = PersistenceManager.getSession().createSQLQuery(activitiesQuery).list();
+            List<Number> teamIds = PersistenceManager.getSession().createNativeQuery(activitiesQuery).list();
             return TeamUtil.getRelatedTeamsForTeamsById(teamIds);
         }
 

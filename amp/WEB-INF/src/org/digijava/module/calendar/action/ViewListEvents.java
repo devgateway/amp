@@ -22,10 +22,6 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,6 +34,10 @@ import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.CalendarUtil;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Action displayes events in List View

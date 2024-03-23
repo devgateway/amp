@@ -22,11 +22,11 @@
 
 package org.digijava.kernel.syndication.aggregator;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.digijava.kernel.syndication.digester.Rss;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * <p>Title: </p>

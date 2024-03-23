@@ -1,8 +1,8 @@
 package org.digijava.kernel.validation;
 
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
+
+import java.util.Map;
 
 /**
  * Used for fields that are persisted in {@link MultilingualContent}.

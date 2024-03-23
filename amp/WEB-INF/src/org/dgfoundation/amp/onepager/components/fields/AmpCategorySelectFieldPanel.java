@@ -4,20 +4,18 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.util.SetModel;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.Set;
 
 /**
  * Implements a category select/multiselect field aspect. This component shows a

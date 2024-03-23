@@ -1,34 +1,23 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class AmpComponentFormTableAnnualBudget
         extends

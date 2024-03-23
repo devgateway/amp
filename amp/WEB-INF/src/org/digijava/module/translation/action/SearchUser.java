@@ -22,10 +22,6 @@
 
 package org.digijava.module.translation.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -33,6 +29,10 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.translation.form.TranslationAdminForm;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class SearchUser
       extends Action {

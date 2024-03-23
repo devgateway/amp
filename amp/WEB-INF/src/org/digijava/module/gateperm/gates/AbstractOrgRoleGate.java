@@ -1,10 +1,5 @@
 package org.digijava.module.gateperm.gates;
 
-import java.util.Map;
-import java.util.Queue;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.user.User;
@@ -15,6 +10,10 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+import java.util.Queue;
 
 public abstract class AbstractOrgRoleGate extends Gate {
     public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };

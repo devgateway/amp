@@ -1,20 +1,7 @@
 package org.digijava.module.aim.action;
 
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -30,7 +17,12 @@ import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.um.util.AmpUserUtil;
-import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.OutputStreamWriter;
+import java.util.*;
 
 public class GetAvailableUsersForWorkspaceJSON extends Action {
     

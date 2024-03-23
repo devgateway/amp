@@ -1,13 +1,5 @@
 package org.digijava.module.gpi.action;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -18,6 +10,10 @@ import org.digijava.module.gpi.form.GPIForm;
 import org.digijava.module.gpi.helper.GPIAbstractReport;
 import org.digijava.module.gpi.model.GPIExportUseCase;
 import org.digijava.module.gpi.model.GPIUseCase;
+
+import javax.servlet.ServletContext;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GPIAction extends Action {
 

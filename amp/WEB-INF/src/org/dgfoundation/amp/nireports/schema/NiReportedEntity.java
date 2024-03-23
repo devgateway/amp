@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.List;
-
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.digijava.kernel.translator.LocalizableLabel;
+
+import java.util.List;
 
 /**
  * specifies an entity a report can be run on, e.g. a measure or a column

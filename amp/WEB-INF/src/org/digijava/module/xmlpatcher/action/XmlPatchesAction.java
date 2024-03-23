@@ -5,14 +5,6 @@
  */
 package org.digijava.module.xmlpatcher.action;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -20,6 +12,13 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

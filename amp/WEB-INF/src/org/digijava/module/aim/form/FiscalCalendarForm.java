@@ -1,9 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+
+import java.util.Collection;
 
 public class FiscalCalendarForm extends ActionForm {
 

@@ -1,13 +1,13 @@
 package org.digijava.module.help.dbentity;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.help.helper.HelpContent;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class HelpTopic implements Serializable{
     

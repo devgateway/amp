@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>GGW-162</jira>
+    <keyword>fix report generator urls</keyword>
+    <author>timothygachengo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                VALUES (nextval('amp_modules_visibility_seq'), 'Filter By Sector', 'Filter By Sector', null, (SELECT id from amp_modules_visibility WHERE name='Indicator Manager'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                VALUES (nextval('amp_modules_visibility_seq'), 'Filter By Program', 'Filter By Program', null, (SELECT id from amp_modules_visibility WHERE name='Indicator Manager'));
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

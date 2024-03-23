@@ -11,7 +11,6 @@ import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UpdateAppSettingsForm;

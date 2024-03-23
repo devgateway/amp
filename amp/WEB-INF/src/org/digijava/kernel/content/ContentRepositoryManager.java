@@ -1,23 +1,5 @@
 package org.digijava.kernel.content;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.jcr.NamespaceException;
-import javax.jcr.NamespaceRegistry;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
-import javax.jcr.Workspace;
-import javax.jcr.observation.Event;
-import javax.jcr.observation.ObservationManager;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.log4j.Logger;
@@ -28,6 +10,17 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.listeners.NodeRemovalListener;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.*;
+import javax.jcr.observation.Event;
+import javax.jcr.observation.ObservationManager;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Viorel Chihai

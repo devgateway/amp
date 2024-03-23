@@ -1,7 +1,5 @@
 package org.digijava.kernel.validators.resource;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -12,6 +10,8 @@ import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
 import org.digijava.module.aim.annotations.interchange.ResourceFieldsConstants;
+
+import java.util.Map;
 
 /**
  * Require web link or file name depending on the type of the resource.

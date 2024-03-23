@@ -22,8 +22,6 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -34,6 +32,8 @@ import org.digijava.module.calendar.dbentity.CalendarSettings;
 import org.digijava.module.calendar.form.CalendarAdminForm;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
+
+import java.util.ArrayList;
 
 /**
  * Action displayes Calendar Settings page

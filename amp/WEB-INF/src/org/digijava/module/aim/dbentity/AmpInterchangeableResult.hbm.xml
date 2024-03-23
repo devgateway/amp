@@ -4,8 +4,8 @@
     <class name="org.digijava.module.aim.dbentity.AmpInterchangeableResult" table="AMP_INTERCHANGEABLE_RESULT" >
         <cache usage="read-write" />
         <id name="id" column="id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">AMP_INTERCHANGEABLE_RESULT_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_INTERCHANGEABLE_RESULT_seq</param>
             </generator>
         </id>
         <property column="date" name="date" type="java.sql.Date" />

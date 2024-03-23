@@ -10,11 +10,11 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.parser.filter.WicketTagIdentifier;
 import org.apache.wicket.markup.resolver.IComponentResolver;
-import org.dgfoundation.amp.onepager.components.TransparentFMWebMarkupContainer;
-import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.components.TransparentFMWebMarkupContainer;
 
 /**
  * @author aartimon@dginternational.org

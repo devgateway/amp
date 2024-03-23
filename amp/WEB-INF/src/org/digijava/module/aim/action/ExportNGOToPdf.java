@@ -1,29 +1,18 @@
 package org.digijava.module.aim.action;
 
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrgRecipient;
-import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Constants;
@@ -33,21 +22,20 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 public class ExportNGOToPdf extends Action {
     
-    private static final com.lowagie.text.Font plainFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.NORMAL);
-    private static final com.lowagie.text.Font titleFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.BOLD);
-    private static final com.lowagie.text.Font headingsFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 12,Font.BOLD, Color.BLUE);
-    private static final com.lowagie.text.Font contactTableHeaderFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.BOLD,Color.WHITE);
+    private static final Font plainFont = new Font(Font.FontFamily.COURIER, 11,Font.NORMAL);
+    private static final Font titleFont = new Font(Font.FontFamily.COURIER, 11,Font.BOLD);
+    private static final Font headingsFont = new Font(Font.FontFamily.COURIER, 12,Font.BOLD, BaseColor.BLUE);
+    private static final Font contactTableHeaderFont = new Font(Font.FontFamily.COURIER, 11,Font.BOLD,BaseColor.WHITE);
     private final static char BULLETCHAR = '\u2022';
     private final static char NEWLINECHAR = '\n';
     
@@ -55,7 +43,7 @@ public class ExportNGOToPdf extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
         
-        com.lowagie.text.Font headerFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11, Font.BOLD, new Color(255, 255, 255));
+        Font headerFont = new Font(Font.FontFamily.COURIER, 11, Font.BOLD, new BaseColor(255, 255, 255));
         Paragraph p1=null;
         String columnName="";
         String columnVal="";
@@ -74,7 +62,7 @@ public class ExportNGOToPdf extends Action {
         p1.setAlignment(Element.ALIGN_CENTER);
         titleCell.addElement(p1);
         titleCell.setColspan(4);
-        titleCell.setBackgroundColor(new Color(0,102,153));
+        titleCell.setBackgroundColor(new BaseColor(0,102,153));
         mainLayout.addCell(titleCell);
         
         //name
@@ -247,7 +235,7 @@ public class ExportNGOToPdf extends Action {
         p1.setAlignment(Element.ALIGN_LEFT);
         cell1.addElement(p1);
         cell1.setBorder(0);
-        cell1.setBackgroundColor(new Color(34, 46, 93));
+        cell1.setBackgroundColor(new BaseColor(34, 46, 93));
         contactInfoTable.addCell(cell1);
     }
 
@@ -386,14 +374,12 @@ public class ExportNGOToPdf extends Action {
         String organizations="";
         String currentRecord = null;
         if(orgs!=null){
-            Iterator<AmpOrgRecipient> orgIter=orgs.iterator();
-            while(orgIter.hasNext()){
-                AmpOrgRecipient organisation=orgIter.next();
-                currentRecord= BULLETCHAR+organisation.getOrganization().getName();
-                if(organisation.getDescription()!=null&&!organisation.getDescription().trim().equals("")){
-                    currentRecord+=" ("+organisation.getDescription()+")";
+            for (AmpOrgRecipient organisation : orgs) {
+                currentRecord = BULLETCHAR + organisation.getOrganization().getName();
+                if (organisation.getDescription() != null && !organisation.getDescription().trim().equals("")) {
+                    currentRecord += " (" + organisation.getDescription() + ")";
                 }
-                organizations+= currentRecord+NEWLINECHAR;
+                organizations += currentRecord + NEWLINECHAR;
 
             }
         }       
@@ -408,17 +394,15 @@ public class ExportNGOToPdf extends Action {
          
         columnName= TranslatorWorker.translateText("Sector Prefernces");
         Collection<ActivitySector> activitySectors=editForm.getSectors();
-        String sectors="";
+        StringBuilder sectors= new StringBuilder();
         currentRecord = null;
         if(activitySectors!=null){
-            Iterator<ActivitySector> activitySectorsIter=activitySectors.iterator();
-            while(activitySectorsIter.hasNext()){
-                ActivitySector activitySector=activitySectorsIter.next();
-                currentRecord = BULLETCHAR+activitySector.getSectorName(); 
-                sectors+= currentRecord + NEWLINECHAR;
+            for (ActivitySector activitySector : activitySectors) {
+                currentRecord = BULLETCHAR + activitySector.getSectorName();
+                sectors.append(currentRecord).append(NEWLINECHAR);
             }
         }
-        createGeneralInfoRow(generalInformationTable,columnName,sectors,null);
+        createGeneralInfoRow(generalInformationTable,columnName, sectors.toString(),null);
         
         buildEmptyCell(generalInformationTable, 2);
         
@@ -450,17 +434,15 @@ public class ExportNGOToPdf extends Action {
         
         columnName= TranslatorWorker.translateText("Organization Intervention Location");
         Collection<Location> selectedLocations=editForm.getSelectedLocs();
-        String locations="";
+        StringBuilder locations= new StringBuilder();
         currentRecord = null;   
         if(selectedLocations!=null){
-            Iterator<Location> locationIter=selectedLocations.iterator();
-            while(locationIter.hasNext()){
-                Location location=locationIter.next();
-                currentRecord = BULLETCHAR+location.getAmpCVLocation().getName() +" ("+location.getPercent()+"%) "; 
-                locations+= currentRecord +NEWLINECHAR;             
+            for (Location location : selectedLocations) {
+                currentRecord = BULLETCHAR + location.getAmpCVLocation().getName() + " (" + location.getPercent() + "%) ";
+                locations.append(currentRecord).append(NEWLINECHAR);
             }
         }
-        createGeneralInfoRow(generalInformationTable,columnName,locations,null);
+        createGeneralInfoRow(generalInformationTable,columnName, locations.toString(),null);
         
         generalInformationCell.addElement(generalInformationTable);     
         mainLayout.addCell(generalInformationCell);

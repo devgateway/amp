@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author Octavian Ciubotaru

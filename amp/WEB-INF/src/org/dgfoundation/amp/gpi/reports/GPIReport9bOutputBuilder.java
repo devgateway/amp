@@ -1,29 +1,16 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 9b

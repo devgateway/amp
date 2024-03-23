@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 /**
  * 

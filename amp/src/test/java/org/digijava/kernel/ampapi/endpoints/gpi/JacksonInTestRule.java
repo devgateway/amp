@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.util.function.Function;
-
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import org.digijava.module.aim.dbentity.EntityResolver;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import java.util.function.Function;
 
 /**
  * A JUnit rule to provide context for serializing/deserializing with jackson and without having access to a

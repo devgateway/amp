@@ -3,13 +3,6 @@
 package org.digijava.module.aim.util;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
-
-import org.dgfoundation.amp.Util;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  *

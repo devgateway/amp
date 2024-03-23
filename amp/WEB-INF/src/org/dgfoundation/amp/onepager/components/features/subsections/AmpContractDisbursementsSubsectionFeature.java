@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -17,7 +13,6 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -25,6 +20,10 @@ import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author aartimon@dginternational.org

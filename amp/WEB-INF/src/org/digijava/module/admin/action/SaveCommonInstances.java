@@ -22,10 +22,6 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -36,6 +32,10 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.admin.form.CommonInstancesForm;
 import org.digijava.module.admin.util.DbUtil;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class SaveCommonInstances
       extends Action {

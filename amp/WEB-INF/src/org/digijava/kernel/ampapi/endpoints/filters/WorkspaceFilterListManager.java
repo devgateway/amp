@@ -1,12 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
@@ -18,6 +11,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import java.util.*;
 
 /**
  * This class generates the filter list (tree) object for workspaces

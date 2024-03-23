@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.DoubleCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

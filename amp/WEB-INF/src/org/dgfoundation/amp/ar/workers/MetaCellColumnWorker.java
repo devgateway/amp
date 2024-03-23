@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.MetaInfo;
@@ -11,6 +7,10 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 
 public abstract class MetaCellColumnWorker extends ColumnWorker {

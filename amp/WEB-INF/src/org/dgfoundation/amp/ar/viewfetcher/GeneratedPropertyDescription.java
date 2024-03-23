@@ -1,11 +1,10 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Map;
 
 
 /**

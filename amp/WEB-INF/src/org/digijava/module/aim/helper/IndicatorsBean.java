@@ -1,12 +1,12 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
-
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 
 public class IndicatorsBean {
     private Long id;

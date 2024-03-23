@@ -3,18 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.ws.rs.core.Response;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -24,6 +12,10 @@ import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import javax.ws.rs.core.Response;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Handles designation of some indicator layers as population layers

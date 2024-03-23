@@ -1,23 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.activity.utils;
 
+import org.apache.commons.lang3.StringUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.lang3.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
-
-import org.digijava.kernel.services.AmpFieldsEnumerator;
-
-import static org.digijava.kernel.services.AmpFieldsEnumerator.TYPE_ACTIVITY;
-import static org.digijava.kernel.services.AmpFieldsEnumerator.TYPE_CONTACT;
-import static org.digijava.kernel.services.AmpFieldsEnumerator.TYPE_RESOURCE;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_ACTIVITY;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_CONTACT;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_RESOURCE;
+import static org.digijava.kernel.services.AmpFieldsEnumerator.*;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
 
 /**
  * Utility class used for detecting structural changes of api fields during AMP offline synchronization

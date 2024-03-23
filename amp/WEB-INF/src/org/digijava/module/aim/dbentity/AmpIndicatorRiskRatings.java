@@ -1,8 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.util.Identifiable;
+
+import java.io.Serializable;
 
 public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
     //IATI-check: to be ignored

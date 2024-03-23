@@ -22,12 +22,12 @@
 
 package org.digijava.module.um.form;
 
-import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 /**
  * <p>Title: DiGiJava</p>

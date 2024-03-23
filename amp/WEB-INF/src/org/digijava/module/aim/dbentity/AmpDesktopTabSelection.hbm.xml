@@ -5,8 +5,8 @@
 		table="AMP_DESKTOP_TAB_SELECTION">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_DESKTOP_TAB_SELECTION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_DESKTOP_TAB_SELECTION_seq</param>
 			</generator>
 		</id>
 

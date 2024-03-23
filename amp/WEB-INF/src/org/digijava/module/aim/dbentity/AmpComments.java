@@ -4,15 +4,11 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class AmpComments implements Serializable, Cloneable, Versionable {
     

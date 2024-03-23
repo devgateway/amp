@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.swagger.converters;
 
-import java.lang.reflect.Type;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.databind.JavaType;
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
@@ -12,6 +9,9 @@ import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.util.Json;
 import org.digijava.kernel.services.AmpOfflineVersion;
+
+import java.lang.reflect.Type;
+import java.util.Iterator;
 
 /**
  * @author Octavian Ciubotaru

@@ -3,12 +3,11 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.NotNull;
-
 import org.dgfoundation.amp.currency.IRFrequency;
 import org.digijava.module.aim.util.Identifiable;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * Inflation Rates Data Source

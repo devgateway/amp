@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
-import java.util.Arrays;
-
 import org.dgfoundation.amp.nireports.testcases.IHardcodedNames;
+
+import java.util.Arrays;
 
 /**
  * Contains the hardcoded mapping of some funding categories and columns, used by hardcoded funding cells.

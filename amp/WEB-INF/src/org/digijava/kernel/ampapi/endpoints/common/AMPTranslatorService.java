@@ -1,13 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import static java.util.stream.Collectors.toMap;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -19,6 +11,14 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,19 +1,5 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -22,6 +8,14 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.jdbc.Work;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 1 Output 1

@@ -3,18 +3,12 @@
  */
 package org.dgfoundation.amp.utils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * General purpose constants utility class

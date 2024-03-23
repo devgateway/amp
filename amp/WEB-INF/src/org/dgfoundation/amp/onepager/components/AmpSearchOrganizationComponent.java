@@ -1,9 +1,6 @@
 package org.dgfoundation.amp.onepager.components;
 
 
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -22,6 +19,8 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.DbUtil;
+
+import java.util.List;
 
 
 

@@ -1,12 +1,5 @@
 package org.dgfoundation.amp.onepager.helper;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Locale;
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
@@ -16,11 +9,17 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
 
 public class DownloadResourceStream<T extends ObjectReferringDocument> implements IResourceStream {
     private static final Logger logger = Logger.getLogger(DownloadResourceStream.class);

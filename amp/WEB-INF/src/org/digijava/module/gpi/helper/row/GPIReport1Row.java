@@ -1,7 +1,5 @@
 package org.digijava.module.gpi.helper.row;
 
-import java.math.BigDecimal;
-
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 
 /**

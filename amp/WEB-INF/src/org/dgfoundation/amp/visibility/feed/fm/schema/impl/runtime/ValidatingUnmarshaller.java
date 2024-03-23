@@ -7,19 +7,18 @@
 
 package org.dgfoundation.amp.visibility.feed.fm.schema.impl.runtime;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.ValidationEvent;
-
-import org.iso_relax.verifier.impl.ForkContentHandler;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import com.sun.msv.grammar.Grammar;
 import com.sun.msv.verifier.Verifier;
 import com.sun.msv.verifier.VerifierFilter;
 import com.sun.msv.verifier.regexp.REDocumentDeclaration;
 import com.sun.xml.bind.validator.Locator;
+import org.iso_relax.verifier.impl.ForkContentHandler;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.ValidationEvent;
 
 /**
  * Filter implementation of SAXUnmarshallerHandler.

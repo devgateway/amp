@@ -5,6 +5,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportRequest;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.hibernate.type.StringType;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ReportUniqueNameValidator implements ReportValidator {
                         + AmpReports.hqlStringForName("r") + "=:reportName";
                 List<AmpReports> conflicts = PersistenceManager.getSession()
                         .createQuery(queryStr)
-                        .setString("reportName", reportRequest.getName().getOrBuildText())
+                        .setParameter("reportName", reportRequest.getName().getOrBuildText(), StringType.INSTANCE)
                         .list();
 
                 return !conflicts.stream()

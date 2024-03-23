@@ -22,9 +22,6 @@
 
 package org.digijava.module.translation.action;
 
-import java.util.List;
-import javax.security.auth.Subject;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -35,6 +32,9 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.translation.form.TranslationPermissionsForm;
 import org.digijava.module.translation.util.TranslationManager;
+
+import javax.security.auth.Subject;
+import java.util.List;
 
 public class ShowGroupAdministration
     extends Action {

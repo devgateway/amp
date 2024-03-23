@@ -1,9 +1,9 @@
 package org.digijava.module.aim.services.auditcleaner;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.currencyrates.DailyCurrencyRateSingleton;
+
+import java.util.Date;
 
 /**
  * 

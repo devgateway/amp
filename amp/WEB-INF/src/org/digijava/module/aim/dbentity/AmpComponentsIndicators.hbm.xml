@@ -5,8 +5,8 @@
 		table="AMP_COMPONENTS_INDICATORS">
 		<cache usage="read-write" />
 		<id name="ampCompIndId" column="amp_component_indicator_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_COMPONENTS_INDICATORS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COMPONENTS_INDICATORS_seq</param>
 			</generator>
 		</id>
 

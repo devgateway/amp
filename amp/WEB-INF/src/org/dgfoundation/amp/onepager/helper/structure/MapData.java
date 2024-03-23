@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.onepager.helper.structure;
 
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
+
+import java.util.List;
 
 public class MapData {
     

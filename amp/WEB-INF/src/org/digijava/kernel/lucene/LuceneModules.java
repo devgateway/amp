@@ -1,10 +1,10 @@
 package org.digijava.kernel.lucene;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.help.util.HelpUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is temporary, fast solution, it should come from configurations 

@@ -1,16 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.SortedSet;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
+
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
 
 /**
  * @author Octavian Ciubotaru

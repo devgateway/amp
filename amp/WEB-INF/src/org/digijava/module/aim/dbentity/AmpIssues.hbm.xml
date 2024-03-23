@@ -4,14 +4,14 @@
 	<class name="org.digijava.module.aim.dbentity.AmpIssues" table="AMP_ISSUES">
 		<cache usage="read-write" />
 		<id name="ampIssueId" column="amp_issue_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ISSUES_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ISSUES_seq</param>
 			</generator>
 		</id>
 		<property column="name" name="name" type="text" />
 		<property column="issueDate" name="issueDate" type="java.util.Date" />
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 		<set name="measures" cascade="all" inverse="true" order-by="amp_measure_id asc">
 			<cache usage="read-write" />
 			<key column="amp_issue_id" />

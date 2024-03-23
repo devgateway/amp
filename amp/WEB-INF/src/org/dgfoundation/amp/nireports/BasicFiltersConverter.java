@@ -1,32 +1,21 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeSet;
-import java.util.Set;
+import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportWarning;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
-import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import static java.util.stream.Collectors.toList;
-
-import java.util.ArrayList;
 
 /**
  * a NiFilters converter which does the job (through subclasses, if necessary) in Basic or AMP-like filtering schemas.

@@ -5,8 +5,8 @@
 		table="AMP_GPI_DEFAULT_FILTERS" lazy="false">
 		<cache usage="read-write" />
 		<id name="gpiDefaultFiltersId" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_GPI_DEFAULT_FILTERS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_DEFAULT_FILTERS_seq</param>
 			</generator>
 		</id>
 

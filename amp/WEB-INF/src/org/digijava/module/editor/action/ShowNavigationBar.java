@@ -22,10 +22,6 @@
 
 package org.digijava.module.editor.action;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -37,6 +33,10 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.form.EditorForm;
 import org.digijava.module.editor.util.Constants;
 import org.digijava.module.editor.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public class ShowNavigationBar
     extends TilesAction {

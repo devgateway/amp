@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -21,6 +13,10 @@ import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * the Forecast Execution Rate behaviour

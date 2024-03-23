@@ -1,14 +1,14 @@
 package org.dgfoundation.amp.codegenerators;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Code generator for NiTextColumn cells. 

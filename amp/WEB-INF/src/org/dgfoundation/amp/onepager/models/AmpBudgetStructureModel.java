@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.Set;
-
 import org.apache.wicket.model.IModel;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
+
+import java.util.Set;
 
 public class AmpBudgetStructureModel implements IModel{
 

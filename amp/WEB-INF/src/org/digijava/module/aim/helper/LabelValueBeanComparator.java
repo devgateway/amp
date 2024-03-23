@@ -1,8 +1,9 @@
 package org.digijava.module.aim.helper;
 
+import org.apache.struts.util.LabelValueBean;
+
 import java.text.Collator;
 import java.util.Comparator;
-import org.apache.struts.util.LabelValueBean;
 
 /**
  * Class is used to compare LabelValueBean

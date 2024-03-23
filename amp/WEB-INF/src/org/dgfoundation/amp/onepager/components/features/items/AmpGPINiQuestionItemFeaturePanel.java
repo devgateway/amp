@@ -1,12 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -37,6 +30,8 @@ import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestionOption;
 import org.digijava.module.aim.dbentity.AmpGPINiSurvey;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
+
+import java.util.*;
 
 /**
  *  Class implementing behavior for GPI Ni Question panel

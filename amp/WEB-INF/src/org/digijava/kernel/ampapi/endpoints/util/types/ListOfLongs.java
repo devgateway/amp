@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.util.types;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.swagger.annotations.ApiModel;
 import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

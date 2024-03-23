@@ -1,16 +1,16 @@
 package org.dgfoundation.amp.asciidoc;
 
+import org.apache.commons.io.FileUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorCollector;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorCollector;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
  * Class used to generate the ascii doc used in swagger documentation. The class is executed from mvn

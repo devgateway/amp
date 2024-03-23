@@ -1,16 +1,12 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /** Class containing the styles for the excel file. See {@link SaikuReportXlsxExporter}
  * @author Viorel Chihai

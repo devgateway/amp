@@ -24,15 +24,14 @@ package org.digijava.kernel.util;
 
 import org.springframework.util.FileCopyUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * General servlet response utility in Digi framework.

@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import org.dgfoundation.amp.newreports.ReportColumn;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.dgfoundation.amp.newreports.ReportColumn;
 
 /**
  * @author Octavian Ciubotaru

@@ -4,14 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -24,6 +16,8 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
+
+import java.util.*;
 
 /**
  * @author aartimon@dginternational.org 

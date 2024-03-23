@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.time.LocalDate;
-
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.time.LocalDate;
 
 /**
  * passive structure holding data regarding the selected year and its timestamps  

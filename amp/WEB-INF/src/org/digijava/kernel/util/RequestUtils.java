@@ -22,18 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -45,6 +33,16 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class contains user-related utility functions. User must be
@@ -367,11 +365,9 @@ public class RequestUtils {
 
         if (includeLocal) {
             return ipAddress;
-        } else {
-            /**
-             * @todo verify for local address
-             */
-        }
+        }  /**
+         * @todo verify for local address
+         */
 
         return ipAddress;
     }
@@ -385,7 +381,7 @@ public class RequestUtils {
      */
     public static String getFullModuleUrl(HttpServletRequest request) {
 
-        StringBuffer url = new StringBuffer(1024);
+        StringBuilder url = new StringBuilder(1024);
 
         ModuleInstance moduleInstance = getModuleInstance(request);
         String rootUrl = DgUtil.getCurrRootUrl(request);

@@ -3,13 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.swing.tree.TreeModel;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -39,6 +32,12 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.PermissionMap;
+
+import javax.swing.tree.TreeModel;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author dan

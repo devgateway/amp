@@ -4,8 +4,8 @@
 	<class name="org.digijava.kernel.entity.geocoding.GeoCodedLocation" table="AMP_GEO_CODED_LOCATION" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" type="long">
-			<generator class="native">
-				<param name="sequence">AMP_GEO_CODED_LOCATION_SEQ</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GEO_CODED_LOCATION_SEQ</param>
 			</generator>
 		</id>
 		<many-to-one name="activity" column="GEO_CODED_ACTIVITY_ID"

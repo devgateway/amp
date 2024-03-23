@@ -1,18 +1,13 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class SyntheticCellGenerator {
     private final String metaDataName;

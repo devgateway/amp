@@ -1,14 +1,10 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.newreports.*;
+
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
-
-import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
 
 /**
  * @author Viorel Chihai

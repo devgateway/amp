@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * a (probably caching) builder of {@link IdsAcceptor} 

@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.amp.dimensions;
 
-import java.util.Arrays;
-
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector;
 import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+
+import java.util.Arrays;
 
 /**
  * 

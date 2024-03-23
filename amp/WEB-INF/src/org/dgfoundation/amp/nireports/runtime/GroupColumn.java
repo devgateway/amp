@@ -1,14 +1,14 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import org.dgfoundation.amp.nireports.NiUtils;
+import org.digijava.kernel.translator.LocalizableLabel;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import org.digijava.kernel.translator.LocalizableLabel;
-import org.dgfoundation.amp.nireports.NiUtils;
 
 /**
  * a column with subcolumns. The column has no cells of its own.

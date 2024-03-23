@@ -1,13 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResourceTypePossibleValuesProvider implements PossibleValuesProvider {
 

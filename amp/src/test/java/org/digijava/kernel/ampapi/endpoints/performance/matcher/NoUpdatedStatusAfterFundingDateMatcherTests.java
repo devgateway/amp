@@ -1,14 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import org.dgfoundation.amp.activity.builder.ActivityBuilder;
-import org.dgfoundation.amp.activity.builder.CategoryClassBuilder;
-import org.dgfoundation.amp.activity.builder.CategoryValueBuilder;
-import org.dgfoundation.amp.activity.builder.FundingBuilder;
-import org.dgfoundation.amp.activity.builder.OrganisationBuilder;
+import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.activity.builder.*;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedStatusAfterFundingDateMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -22,7 +15,7 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableSet;
+import static org.junit.Assert.*;
 
 /**
  * 3 months went by after the contract signature date and the project status was not modified from planned to ongoing

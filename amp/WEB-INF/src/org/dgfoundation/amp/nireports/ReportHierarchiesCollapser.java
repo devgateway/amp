@@ -1,24 +1,13 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
+import org.dgfoundation.amp.nireports.runtime.*;
+
+import java.util.*;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
-
-import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
-import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.runtime.GroupReportData;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.ReportData;
-import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 
 /**
  * a visitor which implements the instructions contained in {@link ReportCollapsingStrategy}.

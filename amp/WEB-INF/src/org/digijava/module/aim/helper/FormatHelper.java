@@ -1,5 +1,12 @@
 package org.digijava.module.aim.helper;
 
+import org.apache.log4j.Logger;
+import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -9,13 +16,6 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import org.apache.log4j.Logger;
-import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 /**
  * @author Sebastian Dimunzio 

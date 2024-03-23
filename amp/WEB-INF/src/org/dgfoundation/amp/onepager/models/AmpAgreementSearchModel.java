@@ -4,16 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.hibernate.Criteria;
@@ -22,6 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+
+import java.util.*;
 
 /**
  * @author aartimon@developmentgateway.org

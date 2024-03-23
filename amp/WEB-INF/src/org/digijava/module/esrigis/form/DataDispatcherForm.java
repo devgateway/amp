@@ -1,10 +1,10 @@
 package org.digijava.module.esrigis.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.MapFilter;
+
+import java.util.List;
 
 public class DataDispatcherForm extends ActionForm {
 

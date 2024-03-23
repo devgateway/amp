@@ -5,7 +5,6 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.validators.AmpMaxSizeCollectionValidator;
-import org.dgfoundation.amp.onepager.validators.AmpMinSizeCollectionValidator;
 
 import java.util.Collection;
 

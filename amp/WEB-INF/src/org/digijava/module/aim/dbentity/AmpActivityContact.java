@@ -1,20 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.TreeSet;
-
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.values.providers.ContactPossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.TreeSet;
 
 @TranslatableClass (displayName="ActivityContact")
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.config;
 
-import java.util.List;
-
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+
+import java.util.List;
 
 public class ConfigGlobalSettings {
     

@@ -5,10 +5,10 @@
 
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 public class Location implements Serializable
 {

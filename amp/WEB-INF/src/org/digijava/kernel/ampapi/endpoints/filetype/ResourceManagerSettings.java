@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.filetype;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import io.swagger.annotations.ApiModelProperty;
 
 public class ResourceManagerSettings {
     

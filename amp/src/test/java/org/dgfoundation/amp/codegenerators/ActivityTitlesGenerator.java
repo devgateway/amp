@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
-
 public class ActivityTitlesGenerator extends CodeGenerator {
 
     public ActivityTitlesGenerator() {

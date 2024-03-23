@@ -1,11 +1,5 @@
 package org.digijava.module.content.dbentity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.dgfoundation.amp.ar.cell.AmountCell;
-
 public class AmpContentItemThumbnail implements Comparable {
 
     private Long ampContentItemThumbnailId;

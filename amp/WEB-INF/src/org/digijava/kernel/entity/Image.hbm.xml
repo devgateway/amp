@@ -4,8 +4,8 @@
 	<class name="org.digijava.kernel.entity.Image" table="DG_IMAGE"
 		proxy="org.digijava.kernel.entity.Image">
 		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">dg_image_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_image_seq</param>
 			</generator>
 		</id>
 		<property name="name" column="NAME" type="java.lang.String" />

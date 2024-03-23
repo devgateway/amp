@@ -1,13 +1,9 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
+
+import java.util.*;
 
 public class ColorRampUtil {
 

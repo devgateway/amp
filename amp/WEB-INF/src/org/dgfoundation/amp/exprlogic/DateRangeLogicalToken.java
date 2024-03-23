@@ -1,12 +1,10 @@
 package org.dgfoundation.amp.exprlogic;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
+
+import java.util.Date;
 
 public class DateRangeLogicalToken extends LogicalToken {
 

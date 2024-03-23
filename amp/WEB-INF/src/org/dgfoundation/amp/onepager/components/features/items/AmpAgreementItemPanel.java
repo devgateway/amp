@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.*;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -13,13 +11,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpEditLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpAgreementSearchModel;
 import org.dgfoundation.amp.onepager.models.AutocompleteAcronymTitleModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -28,6 +20,8 @@ import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.DbUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
 
 public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
     private static final long serialVersionUID = 1L;

@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.onepager.helper;
 
-import java.io.Serializable;
-import java.util.Calendar;
-
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+
+import java.io.Serializable;
+import java.util.Calendar;
 /**
  * 
  * @author aartimon@dginternational.org

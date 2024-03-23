@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import static org.junit.Assert.assertEquals;
-
-import java.time.LocalDate;
-
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.nireports.amp.SelectedYearBlock;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Test;
+
+import java.time.LocalDate;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * 

@@ -1,17 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.common.values;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Nadejda Mandrescu

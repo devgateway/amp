@@ -1,6 +1,10 @@
 package org.dgfoundation.amp.nireports.output;
 
-import static org.dgfoundation.amp.algo.AmpCollections.any;
+import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
+import org.dgfoundation.amp.nireports.output.nicells.*;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -10,24 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.newreports.DateCell;
-import org.dgfoundation.amp.newreports.IntCell;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportSettings;
-import org.dgfoundation.amp.newreports.TextCell;
-import org.dgfoundation.amp.nireports.NumberedCell;
-import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
-import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiIntCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 /**
  * a {@link CellVisitor} used to transform instances of {@link NiOutCell} into instances of {@link ReportCell}

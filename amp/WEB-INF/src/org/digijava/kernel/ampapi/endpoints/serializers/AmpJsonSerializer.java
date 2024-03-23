@@ -3,10 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.serializers;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashSet;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -16,6 +12,10 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.exception.EditorException;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.HashSet;
 
 /**
  * Common base for AMP identifiable entities serialization

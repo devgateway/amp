@@ -1,30 +1,26 @@
 package org.digijava.module.aim.ar.util;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.util.*;
-import java.util.Map.Entry;
-
-import org.apache.batik.gvt.renderer.DynamicRenderer;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnFilterGenerator;
 import org.dgfoundation.amp.ar.ViewDonorFilteringInfo;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * various utils for reports
@@ -96,15 +92,15 @@ public class ReportsUtil {
                     "WHERE ao.amp_org_id IN (" + orgIdsSource + ") AND " +
                     "(ao.deleted is null or ao.deleted = false) ";
 
-            Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
+            Query qry = session.createNativeQuery(queryString).addEntity(AmpOrganisation.class);
             qry.setCacheable(true);
             
             if (roleCodeNeededInQuery)
-                qry = qry.setString("roleCode", roleCode);
+                qry = qry.setParameter("roleCode", roleCode, StringType.INSTANCE);
             
             col = qry.list();
 
-            Collections.sort(col, new Comparator<AmpOrganisation>() {
+            col.sort(new Comparator<AmpOrganisation>() {
                 public int compare(AmpOrganisation o1, AmpOrganisation o2) {
                     return o1.getName().trim().compareTo(o2.getName().trim());
                 }
@@ -157,7 +153,7 @@ public class ReportsUtil {
                     + "WHERE ao.amp_org_id IN (" + orgIdsSource + ") AND "
                     + "(ao.deleted is null or ao.deleted = false) order by name ";
 
-            Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
+            Query qry = session.createNativeQuery(queryString).addEntity(AmpOrganisation.class);
             qry.setCacheable(true);
 
             col = qry.list();
@@ -217,7 +213,7 @@ public class ReportsUtil {
         
         logger.debug("Database sanity check - in progress...");
         
-        List<?> res = session.createSQLQuery("SELECT amp_activity_id FROM amp_activity "
+        List<?> res = session.createNativeQuery("SELECT amp_activity_id FROM amp_activity "
                 + "WHERE amp_id IN (SELECT amp_id FROM (SELECT amp_id, "
                 + "ROW_NUMBER() OVER(PARTITION BY amp_id ORDER BY amp_activity_id asc) AS Row "
                 + "FROM amp_activity) dups WHERE dups.row > 1)")
@@ -228,13 +224,13 @@ public class ReportsUtil {
             + System.lineSeparator();
         }
 
-        res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE "
+        res = session.createNativeQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE "
                 + "(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id "
                 + "AND arc2.columnid = arc.columnid) > 1").list();
         if (!res.isEmpty())
             errMsg += "The following reports have a column repeated at least twice each: amp_report_id IN (" + Util.toCSString(res) + ")" + System.lineSeparator();
         
-        res = session.createSQLQuery("select DISTINCT(columnname) from amp_columns col WHERE " + 
+        res = session.createNativeQuery("select DISTINCT(columnname) from amp_columns col WHERE " + 
                 "(SELECT count(*) FROM amp_columns col2 WHERE col.columnname = col2.columnname) > 1").list();
         if (!res.isEmpty())
             errMsg += "The following column(s) are defined at least twice in amp_columns: (" + Util.toCSString(res) + ")" + System.lineSeparator();
@@ -243,7 +239,7 @@ public class ReportsUtil {
         if (!res.isEmpty())
             errMsg +="Duplicate measurenames are found in AMP_MEASURES tables: (" + Util.toCSString(res) + ")" + System.lineSeparator();
 
-        res = session.createSQLQuery("select currency_code from amp_currency ac where (select count(*) from amp_currency t where t.currency_code = ac.currency_code) != 1").list();
+        res = session.createNativeQuery("select currency_code from amp_currency ac where (select count(*) from amp_currency t where t.currency_code = ac.currency_code) != 1").list();
         if (!res.isEmpty())
             errMsg += "Duplicate currency codes are found in amp_currency: " + Util.toCSString(res) + System.lineSeparator();
         
@@ -295,7 +291,7 @@ public class ReportsUtil {
                     "FROM amp_columns_filters acf JOIN amp_columns ac ON ac.columnid = acf.column_id " + 
                     "ORDER BY extractorview";
         
-        List<Object[]> l = session.createSQLQuery(query).list();
+        List<Object[]> l = session.createNativeQuery(query).list();
         Map<String, List<List<String>>> res = new HashMap<>();
         for(Object[] line:l) {
             String ampColumnName = line[0].toString();

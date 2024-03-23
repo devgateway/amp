@@ -1,8 +1,8 @@
 package org.digijava.module.aim.util;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
 
 public class Output {
 

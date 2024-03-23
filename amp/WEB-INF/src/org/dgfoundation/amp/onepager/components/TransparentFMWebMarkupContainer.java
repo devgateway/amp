@@ -3,22 +3,15 @@
 */
 package org.dgfoundation.amp.onepager.components;
 
-import java.util.LinkedList;
-import java.util.StringTokenizer;
-
-import javax.servlet.ServletContext;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.WicketParseException;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerApp;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -27,6 +20,10 @@ import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.util.FMUtil.PathException;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.ServletContext;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
 
 /**
  * Component used by the wicket:fm tag in order to

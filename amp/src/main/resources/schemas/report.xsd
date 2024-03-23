@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
-	targetNamespace="http://www.developmentgateway.org/amp/reports"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:tns="http://www.developmentgateway.org/amp/reports"
-	xmlns="http://www.developmentgateway.org/amp/reports">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           targetNamespace="http://www.developmentgateway.org/amp/reports"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.developmentgateway.org/amp/reports">
   
   <xs:element type="reportParameter" name="reportParameter" xmlns="http://www.developmentgateway.org/amp/reports" />
   

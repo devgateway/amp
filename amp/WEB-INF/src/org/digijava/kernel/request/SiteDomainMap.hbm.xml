@@ -4,8 +4,8 @@
 	<!-- org.digijava.kernel.request.SiteDomainMap root -->
 	<class name="org.digijava.kernel.request.SiteDomainMap" table="SiteDomainMap" mutable="false">
 		<id name="id" type="long" column="id">
-			<generator class="native">
-				<param name="sequence">SiteDomainMap_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">SiteDomainMap_seq</param>
 			</generator>
 		</id>
 		<property name="domain" column="domain" type="string" />

@@ -8,12 +8,12 @@
 <!-- ************************************************** -->
 
 <xs:schema targetNamespace="http://digijava.org/module/digifeed/feeds/ar/schema.xml"
-	xmlns="http://digijava.org/module/digifeed/feeds/ar/schema.xml"
-	xmlns:ar="http://digijava.org/module/digifeed/feeds/ar/schema.xml"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
-	id="ar"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0">
+           xmlns="http://digijava.org/module/digifeed/feeds/ar/schema.xml"
+           xmlns:ar="http://digijava.org/module/digifeed/feeds/ar/schema.xml"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
+           id="ar"
+           jaxb:version="1.0">
 
 	<xs:element name="reports" msdata:IsDataSet="true">
 		<xs:complexType>

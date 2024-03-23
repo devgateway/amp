@@ -3,15 +3,15 @@
  */
 package org.digijava.module.contentrepository.form;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.TeamMemberMail;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Alex Gartner

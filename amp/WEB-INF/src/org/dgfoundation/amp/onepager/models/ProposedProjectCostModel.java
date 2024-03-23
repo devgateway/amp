@@ -1,14 +1,14 @@
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.Date;
-import java.util.Set;
-
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.util.DecimalWraper;
+
+import java.util.Date;
+import java.util.Set;
 
 public class ProposedProjectCostModel implements IModel {
 

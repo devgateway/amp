@@ -1,14 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.SectorUtil;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AmpClassificationConfiguration implements Serializable, Identifiable {
     

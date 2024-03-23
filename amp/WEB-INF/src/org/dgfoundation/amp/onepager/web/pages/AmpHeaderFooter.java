@@ -18,13 +18,11 @@ import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;

@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.output.nicells;
 
-import java.math.BigDecimal;
-
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
+import java.math.BigDecimal;
 
 /**
  * a {@link NiOutCell} holding an arbitrary-precision amount

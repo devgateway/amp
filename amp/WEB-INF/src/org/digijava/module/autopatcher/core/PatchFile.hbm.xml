@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.autopatcher.core.PatchFile" table="PATCH_FILE">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">patch_file_SEQ</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">patch_file_SEQ</param>
 			</generator>
 		</id>
 

@@ -3,10 +3,6 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
@@ -18,6 +14,10 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Simple Funding Amount
@@ -150,11 +150,8 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     public boolean equalsForVersioning(Object obj) {
         AmpFundingAmount aux = (AmpFundingAmount) obj;
         String original = getVersionableStr();
-        String copy = "" + aux.funAmount + "-" + aux.currency.getCurrencyCode() + "-" + aux.funDate;
-        if (original.equals(copy)) {
-            return true;
-        }
-        return false;
+        String copy = aux.funAmount + "-" + aux.currency.getCurrencyCode() + "-" + aux.funDate;
+        return original.equals(copy);
     }
     
     protected String getVersionableStr() {
@@ -169,7 +166,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     @Override
     public Output getOutput() {
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         if (funType != null) {
             out.getOutputs().add(new Output(null, new String[]{"Type"}, new Object[]{
                     StringUtils.capitalize(StringUtils.lowerCase(funType.name()))}));

@@ -22,13 +22,10 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.Iterator;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.module.admin.form.SiteInstancesForm;
 
 public class ChangeInstanceModule

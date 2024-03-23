@@ -1,17 +1,13 @@
 package org.digijava.module.aim.startup;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.*;
 
 public class FixPercentageOfTotalDisbursements {
     
@@ -52,7 +48,7 @@ public class FixPercentageOfTotalDisbursements {
      */
     protected long getMeasureId(String measureName) {
         String measureGettingQuery = "SELECT measureid FROM amp_measures WHERE measurename = '" + SQLUtils.sqlEscapeStr(measureName) + "'";
-        List<?> ids = PersistenceManager.getSession().createSQLQuery(measureGettingQuery).list();
+        List<?> ids = PersistenceManager.getSession().createNativeQuery(measureGettingQuery).list();
         
         if (ids.size() > 1) throw new Error(String.format("the database has %d measures with the name '%s'. Fix your database!", ids.size(), measureName));
         if (ids.isEmpty()) return -1;
@@ -67,7 +63,7 @@ public class FixPercentageOfTotalDisbursements {
         }
         
         logger.error(String.format("inserting Measure <%s> in amp_measures...", toMeasure));
-        PersistenceManager.getSession().createSQLQuery(
+        PersistenceManager.getSession().createNativeQuery(
                 String.format("INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression) VALUES (nextval('amp_measures_seq'), '%s', '%s', 'A', '%s')", 
                         toMeasure, toMeasure, measureExpression)).executeUpdate();
         
@@ -77,16 +73,16 @@ public class FixPercentageOfTotalDisbursements {
     protected void replaceMeasureReferences(long oldMeasId, long toMeasure) {
         if (oldMeasId <= 0) return; // nothing to do
         logger.error(String.format("replacing all references to measure id %d with references to measure_id %d", oldMeasId, toMeasure));
-        int updated = PersistenceManager.getSession().createSQLQuery("UPDATE amp_report_measures SET measureid = " + toMeasure + " where measureid = " + oldMeasId).executeUpdate();
-        int deleted = PersistenceManager.getSession().createSQLQuery("DELETE FROM amp_measures WHERE measureid = " + oldMeasId).executeUpdate();        
+        int updated = PersistenceManager.getSession().createNativeQuery("UPDATE amp_report_measures SET measureid = " + toMeasure + " where measureid = " + oldMeasId).executeUpdate();
+        int deleted = PersistenceManager.getSession().createNativeQuery("DELETE FROM amp_measures WHERE measureid = " + oldMeasId).executeUpdate();        
         logger.error(String.format("replaced references in %d reports, deleted entry from amp_measures: %d", updated, deleted));
     }
     
     protected void ensureMeasuresUniqueness() {
         long measuresModuleId = PersistenceManager.getLong(
-                PersistenceManager.getSession().createSQLQuery("SELECT id FROM amp_modules_visibility where name='Measures'").uniqueResult());
+                PersistenceManager.getSession().createNativeQuery("SELECT id FROM amp_modules_visibility where name='Measures'").uniqueResult());
         
-        List<Object[]> ids = PersistenceManager.getSession().createSQLQuery(
+        List<Object[]> ids = PersistenceManager.getSession().createNativeQuery(
                 String.format("SELECT afv.id, afv.name FROM amp_features_visibility afv WHERE afv.parent = %d AND (select count(*) from amp_features_visibility afv2 where afv2.name = afv.name and afv2.parent = afv.parent and afv2.id > afv.id) > 0",
                         measuresModuleId)).list();
         
@@ -96,7 +92,7 @@ public class FixPercentageOfTotalDisbursements {
             logger.error(
                     String.format("deleting measure-in-fm with id = %d and name = <%s>, because an another with the same name but with a lower ID exists", id, name));
             FeaturesUtil.deleteFeatureVisibility(id, PersistenceManager.getSession());
-            //PersistenceManager.getSession().createSQLQuery("DELETE FROM amp_features_templates WHERE )
+            //PersistenceManager.getSession().createNativeQuery("DELETE FROM amp_features_templates WHERE )
         }
     }
 }

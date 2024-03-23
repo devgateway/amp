@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +10,12 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,21 +1,5 @@
 package org.digijava.module.aim.uicomponents.action;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.Vector;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -26,6 +10,15 @@ import org.digijava.module.aim.uicomponents.AddOrganizationButton;
 import org.digijava.module.aim.uicomponents.IPostProcessDelegate;
 import org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm;
 import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class selectOrganizationComponent extends Action {
     

@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.testutils;
 
-import java.util.*;
-
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**

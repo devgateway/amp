@@ -22,16 +22,16 @@
 
 package org.digijava.kernel.service;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.config.ServiceConfig;
+import org.digijava.kernel.util.DigiConfigManager;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.config.ServiceConfig;
-import org.digijava.kernel.util.DigiConfigManager;
 
 public class ServiceManager {
     private static Logger logger = Logger.getLogger(ServiceManager.class);

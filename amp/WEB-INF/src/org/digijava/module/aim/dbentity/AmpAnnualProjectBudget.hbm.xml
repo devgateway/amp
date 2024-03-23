@@ -7,14 +7,14 @@
                 <cache usage="read-write" />
                 <id name="ampAnnualProjectBudgetId" column="amp_annual_project_budget_id"
                         type="java.lang.Long">
-                        <generator class="native">
-                                <param name="sequence">amp_annual_project_budget_seq</param>
+                        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                                <param name="sequence_name">amp_annual_project_budget_seq</param>
                         </generator>
                 </id>
  
                 <many-to-one name="activity" column="amp_activity_id"
                         class="org.digijava.module.aim.dbentity.AmpActivityVersion"
-                         cascade="none" not-null="true" />
+                         cascade="delete" not-null="true" />
                 
                 <property name="year" column="year" type="java.util.Date" />
                 <property access="field" name="amount" column="amount" type="java.lang.Double" />

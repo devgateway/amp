@@ -22,9 +22,6 @@
 
 package org.digijava.module.um.util;
 
-import java.io.Serializable;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.validator.Field;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.commons.validator.ValidatorAction;
@@ -33,6 +30,9 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.validator.Resources;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
 /**
  * <p>Title: </p>

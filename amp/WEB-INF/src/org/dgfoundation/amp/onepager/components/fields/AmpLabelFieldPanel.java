@@ -4,7 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import org.apache.ecs.xhtml.label;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;

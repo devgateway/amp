@@ -1,35 +1,24 @@
 package org.digijava.module.esrigis.action;
 
+import au.com.bytecode.opencsv.CSVReader;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.*;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.esrigis.form.StructuresImporterForm;
+import org.digijava.module.esrigis.helpers.DbHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.categorymanager.action.CategoryManager;
-import org.digijava.module.esrigis.form.StructuresImporterForm;
-import org.digijava.module.esrigis.helpers.DbHelper;
-
 import java.util.Collections;
-import java.util.HashSet;
-
-import au.com.bytecode.opencsv.CSVReader;
+import java.util.List;
 
 public class StructuresImporter extends Action {
 

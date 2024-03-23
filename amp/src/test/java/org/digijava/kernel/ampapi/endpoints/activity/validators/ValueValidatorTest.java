@@ -1,22 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.SaveMode;
+import org.digijava.kernel.ampapi.endpoints.activity.*;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
@@ -25,6 +9,15 @@ import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru

@@ -4,8 +4,8 @@
     <class name="org.digijava.module.aim.dbentity.AmpColorThreshold" table="AMP_COLOR_THRESHOLD" lazy="false">
         <cache usage="read-write" />
         <id name="ampColorThresholdId" column="amp_color_threshold_id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">AMP_COLOR_THRESHOLD_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_COLOR_THRESHOLD_seq</param>
             </generator>
         </id>
 

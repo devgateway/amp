@@ -1,9 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+
+import java.util.Collection;
 
 public class CurrencyForm extends ActionForm {
 

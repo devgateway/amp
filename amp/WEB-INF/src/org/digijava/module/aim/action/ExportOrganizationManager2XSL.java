@@ -1,19 +1,7 @@
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -26,7 +14,9 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgManagerForm;
 import org.digijava.module.aim.util.AdminXSLExportUtil;
-import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpSession;
+import java.util.Collection;
 
 public class ExportOrganizationManager2XSL  extends Action {
      private static Logger logger = Logger.getLogger(ExportOrganizationManager2XSL.class);

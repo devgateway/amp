@@ -22,10 +22,11 @@
 
 package org.digijava.kernel.taglib.html;
 
+import org.apache.log4j.Logger;
+
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.util.List;
-import javax.servlet.jsp.JspException;
-import org.apache.log4j.Logger;
 
 public class DropdownTag
     extends TagSupport {

@@ -1,32 +1,19 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.jdbc.ReturningWork;
-import org.hibernate.jdbc.Work;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Exports a list of tuples {activity, structure} 

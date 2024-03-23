@@ -1,16 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.core.Response;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
@@ -19,9 +8,9 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
-import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -36,6 +25,11 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+
+import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class IndicatorUtils {
     protected static final Logger logger = Logger.getLogger(IndicatorUtils.class);

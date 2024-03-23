@@ -22,26 +22,6 @@
 
 package org.digijava.module.translation.util;
 
-import java.net.URLEncoder;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.Principal;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.entity.Locale;
@@ -67,8 +47,20 @@ import org.digijava.module.translation.security.TranslateObject;
 import org.digijava.module.translation.security.TranslatePermission;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+import org.hibernate.type.TimestampType;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Principal;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TranslationManager {
     private static Logger logger = Logger.getLogger(TranslationManager.class);
@@ -471,12 +463,12 @@ public class TranslationManager {
 
             query.setParameter("localeId", srcLocale);
             if (prefix != null) {
-                query.setString("prefix", prefix + ":%");
+                query.setParameter("prefix", prefix + ":%", StringType.INSTANCE);
             }
-            query.setTimestamp("stamp", expTimestamp);
+            query.setParameter("stamp", expTimestamp, TimestampType.INSTANCE);
 
             if (keyPattern != null) {
-                query.setString("keyPattern", "%" + keyPattern + "%");
+                query.setParameter("keyPattern", "%" + keyPattern + "%",StringType.INSTANCE);
             }
 
             keys = query.list();
@@ -663,7 +655,7 @@ public class TranslationManager {
         logger.debug(queryString);
 
         Query query = session.createQuery(queryString);
-        query.setCacheable(true);
+//        query.setCacheable(true);
 
         List<Object[]> locales = query.list();
         List<String[]> res = new ArrayList<>();

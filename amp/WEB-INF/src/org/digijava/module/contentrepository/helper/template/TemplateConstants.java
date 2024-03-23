@@ -1,12 +1,6 @@
 package org.digijava.module.contentrepository.helper.template;
 
-import org.digijava.module.contentrepository.dbentity.template.CheckboxField;
-import org.digijava.module.contentrepository.dbentity.template.DropDownField;
-import org.digijava.module.contentrepository.dbentity.template.MultiboxField;
-import org.digijava.module.contentrepository.dbentity.template.MultipleSelect;
-import org.digijava.module.contentrepository.dbentity.template.StaticTextField;
-import org.digijava.module.contentrepository.dbentity.template.TextAreaField;
-import org.digijava.module.contentrepository.dbentity.template.TextBoxField;
+import org.digijava.module.contentrepository.dbentity.template.*;
 
 /**
  * Constants for Template Document fields

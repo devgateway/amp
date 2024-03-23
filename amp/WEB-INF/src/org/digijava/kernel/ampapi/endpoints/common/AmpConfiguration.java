@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.common;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import com.google.common.net.HttpHeaders;
-import com.sun.jersey.core.header.ContentDisposition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

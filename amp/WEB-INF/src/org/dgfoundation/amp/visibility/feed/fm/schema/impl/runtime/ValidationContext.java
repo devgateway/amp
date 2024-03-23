@@ -7,22 +7,20 @@
 
 package org.dgfoundation.amp.visibility.feed.fm.schema.impl.runtime;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import com.sun.xml.bind.ProxyGroup;
+import com.sun.xml.bind.serializer.AbortSerializationException;
+import com.sun.xml.bind.validator.Messages;
+import org.xml.sax.SAXException;
 
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.bind.helpers.NotIdentifiableEventImpl;
 import javax.xml.bind.helpers.ValidationEventImpl;
 import javax.xml.bind.helpers.ValidationEventLocatorImpl;
-
-import org.xml.sax.SAXException;
-
-import com.sun.xml.bind.ProxyGroup;
-import com.sun.xml.bind.serializer.AbortSerializationException;
-import com.sun.xml.bind.validator.Messages;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Maintains information that needs to be stored across

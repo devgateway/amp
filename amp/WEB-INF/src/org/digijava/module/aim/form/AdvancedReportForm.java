@@ -1,10 +1,5 @@
 package org.digijava.module.aim.form ;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -12,6 +7,11 @@ import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.helper.AmpFund;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 public class AdvancedReportForm extends ActionForm 
 {

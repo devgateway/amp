@@ -1,14 +1,13 @@
 package org.digijava.module.aim.auth;
 
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 
 public class AmpAuthenticationStatus extends Action {

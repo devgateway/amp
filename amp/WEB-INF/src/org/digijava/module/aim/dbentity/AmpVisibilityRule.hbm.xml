@@ -4,8 +4,8 @@
     <class name="org.digijava.module.aim.dbentity.AmpVisibilityRule" table="AMP_VISIBILITY_RULE" lazy="false">
         <cache usage="read-write" />
         <id name="id" column="id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">AMP_VISIBILITY_RULE_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_VISIBILITY_RULE_seq</param>
             </generator>
         </id>
 

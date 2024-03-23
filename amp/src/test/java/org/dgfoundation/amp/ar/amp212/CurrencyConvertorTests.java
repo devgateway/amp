@@ -1,12 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.time.LocalDate;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.newreports.AmpReportingTestCase;
@@ -15,6 +8,13 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Test;
+
+import java.time.LocalDate;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Arrays;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * 

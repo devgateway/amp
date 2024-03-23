@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.nireports.amp;
 
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 
 /**

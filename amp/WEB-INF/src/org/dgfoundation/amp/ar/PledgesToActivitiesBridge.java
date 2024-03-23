@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.HashMap;
-
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PledgesToActivitiesBridge {
     

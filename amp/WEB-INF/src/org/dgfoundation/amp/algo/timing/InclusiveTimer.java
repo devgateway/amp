@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.algo.timing;
 
+import org.dgfoundation.amp.algo.ExceptionRunnable;
+import org.dgfoundation.amp.algo.VivificatingMap;
+
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Stack;
-
-import org.dgfoundation.amp.algo.ExceptionRunnable;
-import org.dgfoundation.amp.algo.VivificatingMap;
 
 /**
  * reentrant, multiple-threads-safe timer which can track how much a task and its subtasks took by modelling the runtime through a tree

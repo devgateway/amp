@@ -1,20 +1,18 @@
 package org.digijava.module.translation.action;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.translation.util.ListChangesBuffer;
 import org.digijava.module.translation.util.ListChangesBuffer.ChangedItem;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Returns HTML for changes list of translation.

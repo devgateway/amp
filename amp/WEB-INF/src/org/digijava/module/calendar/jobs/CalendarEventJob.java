@@ -1,11 +1,5 @@
 package org.digijava.module.calendar.jobs;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.util.AmpDbUtil;
@@ -16,6 +10,9 @@ import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.util.Date;
+import java.util.List;
 
 public class CalendarEventJob extends ConnectionCleaningJob implements StatefulJob { 
     

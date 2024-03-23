@@ -5,10 +5,6 @@
   
 package org.digijava.module.aim.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +15,10 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /***
  * Fetch the Document and activity details provided the document Id and activity Id 

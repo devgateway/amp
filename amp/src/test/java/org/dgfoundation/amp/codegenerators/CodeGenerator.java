@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.codegenerators;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -16,6 +8,14 @@ import org.dgfoundation.amp.nireports.NiReportsEngineForTesting;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Abstract scaffold for classes that generate data for hardcoded reports schema. 

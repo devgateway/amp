@@ -1,12 +1,13 @@
 package org.dgfoundation.amp.oracle;
 
-import java.util.Properties;
-
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.id.SequenceGenerator;
+import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
+
+import java.util.Properties;
 
 
 /**
@@ -76,12 +77,12 @@ public class AMPSequenceGenerator extends SequenceGenerator {
     private String tableName;
     private String pkColumnName;
 
-    public void configure(Type type, Properties params, Dialect dialect) throws MappingException {
+    public void configure(Type type, Properties params, ServiceRegistry serviceRegistry) throws MappingException {
         this.parameters = params.getProperty(PARAMETERS);
         this.sequenceName = null;// THIS CLASS IS DEPRECATED, does not worth fixing PropertiesHelper.getString(SEQUENCE, params, "hibernate_sequence");
         this.tableName = params.getProperty(SequenceGenerator.TABLE);
         this.pkColumnName = params.getProperty(SequenceGenerator.PK);
-        super.configure(type, params, dialect);
+        super.configure(type, params, serviceRegistry);
     }
 
     public String[] sqlCreateStrings(Dialect dialect) throws HibernateException {

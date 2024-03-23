@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.output.sorting;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * a class which knows how to compare two ids which denote two entities (e.g. activities) 

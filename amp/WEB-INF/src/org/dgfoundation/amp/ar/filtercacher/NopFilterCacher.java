@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.ar.filtercacher;
 
-import java.sql.SQLException;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 
 /**

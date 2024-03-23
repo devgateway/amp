@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.Set;
-
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
@@ -19,6 +17,8 @@ import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+
+import java.util.Set;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is

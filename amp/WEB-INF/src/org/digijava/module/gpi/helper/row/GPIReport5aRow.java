@@ -1,8 +1,8 @@
 package org.digijava.module.gpi.helper.row;
 
-import java.math.BigDecimal;
-
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+
+import java.math.BigDecimal;
 
 /**
  * This class represents each row in the GPI 5a report.

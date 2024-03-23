@@ -1,15 +1,13 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyEPConstants;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * https://jira.dgfoundation.org/browse/AMP-20534, https://jira.dgfoundation.org/browse/AMP-20923

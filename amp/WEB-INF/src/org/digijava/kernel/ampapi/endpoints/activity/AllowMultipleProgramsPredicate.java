@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 
-import java.util.function.Function;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import java.util.function.Function;
 
 /**
  * Return true if an activity can link to multiple programs for the specified program setting name.

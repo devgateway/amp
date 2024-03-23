@@ -6,10 +6,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +15,10 @@ import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.SectorUtil;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class SectorSelectedForIndicator extends Action {
 
@@ -95,9 +95,8 @@ public class SectorSelectedForIndicator extends Action {
             }else if(prevSelSectors.size()==0){
                     actSect.setSectorPercentage(FormatHelper.formatPercentage(new Float(100)));
             }else if(prevSelSectors.size()==1){
-                Iterator prevItr = prevSelSectors.iterator();
-                while(prevItr.hasNext()) {
-                    ActivitySector oldSect = (ActivitySector) prevItr.next();
+                for (Object prevSelSector : prevSelSectors) {
+                    ActivitySector oldSect = (ActivitySector) prevSelSector;
 //                        if(oldSect.getSectorPercentage().equals("100")){
 //                            oldSect.setSectorPercentage(null);
 //                        }

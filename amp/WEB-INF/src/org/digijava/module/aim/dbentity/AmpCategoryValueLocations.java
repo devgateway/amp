@@ -1,8 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -15,6 +12,9 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author medea
@@ -172,23 +172,6 @@ public class AmpCategoryValueLocations implements Identifiable,
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof AmpCategoryValueLocations)) {
-            return false;
-        }
-        AmpCategoryValueLocations that = (AmpCategoryValueLocations) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
     public Object getIdentifier() {
         return this.id;
     }
@@ -317,4 +300,14 @@ public class AmpCategoryValueLocations implements Identifiable,
     public static String hqlStringForName(String idSource) {
         return InternationalizedModelDescription.getForProperty(AmpCategoryValueLocations.class, "name").getSQLFunctionCall(idSource + ".id");
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpCategoryValueLocations that = (AmpCategoryValueLocations) o;
+        return Objects.equals(id, that.id);
+    }
+
+
 }

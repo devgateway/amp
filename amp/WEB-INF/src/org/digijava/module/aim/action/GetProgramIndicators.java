@@ -1,44 +1,24 @@
 package org.digijava.module.aim.action;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
-import org.digijava.module.aim.dbentity.NpdSettings;
-import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.form.NpdForm;
-import org.digijava.module.aim.helper.ActivityItem;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FilteredAmpTheme;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class GetProgramIndicators extends Action {
     private static Logger logger = Logger.getLogger(GetProgramIndicators.class);

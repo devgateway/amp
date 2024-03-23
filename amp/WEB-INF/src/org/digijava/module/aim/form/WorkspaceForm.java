@@ -1,11 +1,10 @@
 package org.digijava.module.aim.form;
 
+import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.form.helpers.WorkspaceDataSelection;
+
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.form.helpers.WorkspaceDataSelection;
 
 public class WorkspaceForm extends ActionForm {
 

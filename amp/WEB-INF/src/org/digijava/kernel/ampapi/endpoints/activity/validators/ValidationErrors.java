@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_VALIDATION_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_VALIDATION_ID;
 
 /**
  * Defines validation errors

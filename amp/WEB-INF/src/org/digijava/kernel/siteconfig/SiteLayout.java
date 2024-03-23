@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.siteconfig;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Collection;
-import java.util.ArrayList;
 
 /**
  * Data class, used by Digester to parse site-config.xml.

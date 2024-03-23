@@ -1,16 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,6 +8,11 @@ import org.digijava.kernel.ampapi.endpoints.gpi.ApplyThousandsForEntryConverter;
 import org.digijava.kernel.ampapi.endpoints.gpi.ApplyThousandsForVisibilityConverter;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpGPINiAidOnBudget implements Serializable {

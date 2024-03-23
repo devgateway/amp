@@ -1,13 +1,13 @@
 package org.digijava.kernel.xmlpatches;
 
-import java.sql.Connection;
-
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.jobs.RegisterWithAmpRegistryJob;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
 
 /**
  * This class is used by XML Patcher to update amp offline global settings when the enviroment is dev

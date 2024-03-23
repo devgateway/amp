@@ -8,12 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.sync.model.SyncConstants;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpIndirectTheme;
-import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeMapping;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -25,11 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_LEVEL;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.PRIMARY_PROGRAM;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.*;
 import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 
 /**

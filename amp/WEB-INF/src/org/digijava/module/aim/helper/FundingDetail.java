@@ -1,16 +1,16 @@
 package org.digijava.module.aim.helper;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Date;
-
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
 /**
  * @author jose
  *

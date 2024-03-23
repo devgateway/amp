@@ -1,11 +1,11 @@
 package org.digijava.module.digifeed.core;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
+
+import java.util.Iterator;
 
 /**
  * DigifeedService.java

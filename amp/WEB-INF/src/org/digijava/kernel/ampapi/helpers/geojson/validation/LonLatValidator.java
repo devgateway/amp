@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.helpers.geojson.validation;
 
-import java.util.List;
-
 import org.digijava.kernel.ampapi.helpers.geojson.PositionValidator;
+
+import java.util.List;
 
 public class LonLatValidator implements PositionValidator
 {

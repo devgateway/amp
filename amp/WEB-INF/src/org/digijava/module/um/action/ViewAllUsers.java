@@ -1,10 +1,4 @@
 package org.digijava.module.um.action;
-    
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -21,6 +15,11 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.util.AmpUtil;
 import org.digijava.module.um.form.ViewAllUsersForm;
 import org.digijava.module.um.util.AmpUserUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
     
     public class ViewAllUsers
         extends Action {

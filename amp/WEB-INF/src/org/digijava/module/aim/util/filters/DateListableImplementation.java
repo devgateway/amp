@@ -3,9 +3,9 @@
  */
 package org.digijava.module.aim.util.filters;
 
-import java.util.Collection;
-
 import org.digijava.module.aim.util.HierarchyListable;
+
+import java.util.Collection;
 
 /**
  * @author alex

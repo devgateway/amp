@@ -1,16 +1,15 @@
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.IPAContractAmendment;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.helper.FundingDetail;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author mihai

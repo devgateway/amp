@@ -22,15 +22,6 @@
 
 package org.digijava.module.calendar.util;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -43,15 +34,16 @@ import org.digijava.module.calendar.dbentity.CalendarSettings;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.hibernate.type.CalendarType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 public class DbUtil {
 
@@ -973,8 +965,8 @@ public class DbUtil {
 
             String queryString = "from " + CalendarSettings.class.getName() + " rs where rs.siteId=:siteId and rs.instanceId=:instanceId";
             Query query = session.createQuery(queryString);
-            query.setString("siteId", siteId);
-            query.setString("instanceId", instanceId);
+            query.setParameter("siteId", siteId,StringType.INSTANCE);
+            query.setParameter("instanceId", instanceId,StringType.INSTANCE);
 
             iter = query.iterate();
 
@@ -1210,13 +1202,11 @@ public class DbUtil {
 
             if (status != null)
                 q.setParameter("status", status, StringType.INSTANCE);
-
-            Integer uniqueResult = ( (Integer) q.uniqueResult());
+            Long longValue = (Long) q.uniqueResult();
+            Integer uniqueResult = longValue.intValue();
             logger.debug("uniquie result:" + uniqueResult);
 
-            if (uniqueResult != null) {
-                result = uniqueResult.intValue();
-            }
+            result = uniqueResult;
 
         }
         catch (Exception ex) {
@@ -1265,7 +1255,8 @@ public class DbUtil {
             .add(Restrictions.or(Restrictions.idEq(null), Restrictions.ne("id", id)));
             criteria.setProjection(Projections.rowCount());
             criteria.list();
-            retValue =(Integer) criteria.uniqueResult();
+            Long longValue = (Long) criteria.uniqueResult();
+            retValue= longValue.intValue();
             } catch (Exception e) {
             e.printStackTrace();
         }

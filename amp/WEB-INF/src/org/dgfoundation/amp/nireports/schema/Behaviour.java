@@ -1,35 +1,21 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import static java.util.stream.Collectors.toSet;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.Predicate;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.DatedCell;
-import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.runtime.GroupReportData;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
+import org.dgfoundation.amp.nireports.runtime.*;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * a specification of the behaviour of a given {@link NiReportColumn} / {@link NiReportMeasure}

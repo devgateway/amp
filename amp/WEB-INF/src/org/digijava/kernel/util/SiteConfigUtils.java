@@ -22,14 +22,13 @@
 
 package org.digijava.kernel.util;
 
-import org.digijava.kernel.config.DigiConfig;
-import javax.servlet.http.HttpServletRequest;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.request.SiteDomain;
+import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.security.HttpLoginManager;
+import org.digijava.kernel.config.DigiConfig;
+import org.digijava.kernel.request.SiteDomain;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Helper class, which provides some useful methods to simplify access to site

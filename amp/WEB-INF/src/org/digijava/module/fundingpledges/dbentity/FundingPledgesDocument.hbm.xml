@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument" table="AMP_FUNDING_PLEDGES_DOCUMENT">
 		<id name="id" column="id" type="java.lang.Long"
 			unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">AMP_FUNDING_PLEDGES_DOCUMENT_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_PLEDGES_DOCUMENT_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges" lazy="false"/>

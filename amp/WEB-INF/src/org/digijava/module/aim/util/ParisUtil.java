@@ -1,24 +1,16 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.helper.ParisIndicatorReportHelper;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 
 /**
@@ -176,10 +168,8 @@ public class ParisUtil {
                                 + "where (name like '" + name + "' && indicator_code like '" + code + "')";
             qry = session.createQuery(queryString);
             col = qry.list();
-            Iterator itr = col.iterator();
-            while(itr.hasNext())
-            {
-                piInd = (AmpAhsurveyIndicator) itr.next();
+            for (Object o : col) {
+                piInd = (AmpAhsurveyIndicator) o;
             }
         }
         catch(Exception e)

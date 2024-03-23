@@ -1,18 +1,14 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * visitor which makes the final cleanup of data for the NiReports outputs.

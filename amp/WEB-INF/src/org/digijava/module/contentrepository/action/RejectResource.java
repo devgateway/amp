@@ -1,10 +1,5 @@
 package org.digijava.module.contentrepository.action;
 
-import javax.jcr.Node;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -17,6 +12,11 @@ import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
+
+import javax.jcr.Node;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class RejectResource extends DispatchAction {
     

@@ -4,12 +4,11 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpContactsFromTableFeature;
 import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
-import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * @author dan

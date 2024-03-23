@@ -1,9 +1,10 @@
 package org.dgfoundation.amp.onepager.models;
+
+import org.apache.wicket.model.IModel;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.wicket.model.IModel;
 
 public class ActivityFYModel implements IModel<List<String>> {
     private static final long serialVersionUID = 1L;

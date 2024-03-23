@@ -1,9 +1,8 @@
 package org.digijava.module.aim.util;
 
-import java.util.Collection;
-
-import org.digijava.module.aim.util.time.StopWatch;
 import org.hibernate.LazyInitializationException;
+
+import java.util.Collection;
 
 public class HierarchyListableUtil {
 

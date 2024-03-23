@@ -22,11 +22,11 @@
 
 package org.digijava.kernel.taglib;
 
+import org.digijava.kernel.taglib.util.TagUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import org.digijava.kernel.taglib.util.TagUtil;
 
 /**
  * <p>Title: </p>

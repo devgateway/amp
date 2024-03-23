@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.reports;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Stores various groupings of Columns and Measures that require a special treatment

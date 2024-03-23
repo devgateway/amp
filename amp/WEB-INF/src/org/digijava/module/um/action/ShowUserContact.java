@@ -22,23 +22,16 @@
 
 package org.digijava.module.um.action;
 
-import java.io.IOException;
+import org.apache.struts.action.*;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.um.exception.UMException;
+import org.digijava.module.um.form.UserContactForm;
+import org.digijava.module.um.util.DbUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.user.User;
-import org.digijava.module.um.exception.UMException;
-import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.um.form.UserContactForm;
-import org.digijava.kernel.util.RequestUtils;
+import java.io.IOException;
 
 /**
  * <p>Title: DiGiJava</p>

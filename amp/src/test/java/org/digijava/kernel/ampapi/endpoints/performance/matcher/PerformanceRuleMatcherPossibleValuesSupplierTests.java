@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 import org.digijava.module.aim.helper.Constants;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class PerformanceRuleMatcherPossibleValuesSupplierTests {
 

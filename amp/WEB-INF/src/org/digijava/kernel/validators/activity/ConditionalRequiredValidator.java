@@ -1,9 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
@@ -11,6 +7,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Validate fields marked with specific dependency to be required under certain conditions. Only fields that

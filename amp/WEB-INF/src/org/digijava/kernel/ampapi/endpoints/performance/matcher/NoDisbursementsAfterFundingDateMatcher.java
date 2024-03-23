@@ -1,20 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
-import org.digijava.module.aim.helper.Constants;
 
 /**
  * The matcher checks if no disbursments were entered after certain period has passed from the selected funding date

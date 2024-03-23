@@ -21,36 +21,31 @@
  */
 
 package org.digijava.kernel.translator.action;
-import java.io.IOException;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorBean;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.ValueBean;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.kernel.util.SiteUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.sql.Timestamp;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.actions.DispatchAction;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.translator.TranslatorBean;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.ValueBean;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
 
 /**
  * This class is used for complete/global translations
@@ -640,10 +635,10 @@ public class CompleteTranslationAction extends DispatchAction
         }catch(WorkerException we){
             logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
-        Iterator<String> it = ls.iterator();
         int c=0;
         int startFrom = 0;
         int count = 0;
+        Iterator<String> it = ls.iterator();
         while(it.hasNext())
         {
             c=c+1;
@@ -652,7 +647,7 @@ public class CompleteTranslationAction extends DispatchAction
                 String key1 = it.next().toString();
 
                 if(request.getParameter("startFrom") != null)
-                     startFrom = new Integer(request.getParameter("startFrom")).intValue();
+                     startFrom = new Integer(request.getParameter("startFrom"));
                 else
                   startFrom = 0;
                 List<TranslatorBean> sm = new ArrayList<TranslatorBean>();
@@ -667,46 +662,39 @@ public class CompleteTranslationAction extends DispatchAction
                 }catch(WorkerException we){
                     logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
                 }
-                for(int i=0 ; i<sm.size();i++)
-                {
-
-                    TranslatorBean tb = (TranslatorBean)sm.get(i);
+                for (TranslatorBean translatorBean : sm) {
 
                     Message source = new Message();
                     Message target = new Message();
 
-                    if(tb.getSrcMsg() != null)
-                        source = tb.getSrcMsg();
+                    if (translatorBean.getSrcMsg() != null)
+                        source = translatorBean.getSrcMsg();
 
-                    if(tb.getTragetMsg() != null)
-                        target = tb.getTragetMsg();
+                    if (translatorBean.getTragetMsg() != null)
+                        target = translatorBean.getTragetMsg();
                     long time = 0;
-                    if(source.getCreated()!=null)
+                    if (source.getCreated() != null)
                         time = source.getCreated().getTime();
 
-                    if(target.getMessage() == null){
-                        //System.out.println("TARGET MESSAGE IS NULL");
-                    }
+                    //System.out.println("TARGET MESSAGE IS NULL");
 
-                    if(source.getMessage() == null){
-                        //System.out.println("SOURCE MESSAGE IS NULL");
-                    }
+                    //System.out.println("SOURCE MESSAGE IS NULL");
 
-                    if((source.getMessage()!=null)&&((time>=0)||(source.getCreated()==null))){
+                    if ((source.getMessage() != null) && ((time >= 0) || (source.getCreated() == null))) {
                         String targetSiteId = target.getSiteId();
                         String sourceSiteId = source.getSiteId();
 
-                        if(sourceSiteId == null){
-                            sourceSiteId="";
+                        if (sourceSiteId == null) {
+                            sourceSiteId = "";
                         }
-                        if(targetSiteId == null){
-                            targetSiteId="";
+                        if (targetSiteId == null) {
+                            targetSiteId = "";
                         }
 
-                        if(target.getMessage() == null){
-                            message.add(new ValueBean(source.getKey(),source.getMessage(),"",sourceSiteId,targetSiteId, tb.isNeedsUpdate()));
-                        }else{
-                            message.add(new ValueBean(source.getKey(),source.getMessage(),target.getMessage(),sourceSiteId,targetSiteId,tb.isNeedsUpdate()));
+                        if (target.getMessage() == null) {
+                            message.add(new ValueBean(source.getKey(), source.getMessage(), "", sourceSiteId, targetSiteId, ((TranslatorBean) translatorBean).isNeedsUpdate()));
+                        } else {
+                            message.add(new ValueBean(source.getKey(), source.getMessage(), target.getMessage(), sourceSiteId, targetSiteId, ((TranslatorBean) translatorBean).isNeedsUpdate()));
                         }
                     }
 

@@ -1,6 +1,6 @@
 package org.digijava.module.aim.form;
+
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
 
 /**

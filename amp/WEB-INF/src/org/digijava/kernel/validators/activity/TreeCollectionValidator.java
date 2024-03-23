@@ -1,10 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -12,6 +7,11 @@ import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.TreeNodeAware;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Ensure that a node is not included twice via its ancestors.

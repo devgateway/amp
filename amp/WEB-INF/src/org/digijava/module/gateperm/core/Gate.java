@@ -3,16 +3,16 @@
  */
 package org.digijava.module.gateperm.core;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.PropertyListable;
+import org.dgfoundation.amp.ar.MetaInfo;
+import org.digijava.module.gateperm.exception.NotBoundGateInputException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.PropertyListable;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.module.gateperm.exception.NotBoundGateInputException;
 
 /**
  * Gate.java TODO description here

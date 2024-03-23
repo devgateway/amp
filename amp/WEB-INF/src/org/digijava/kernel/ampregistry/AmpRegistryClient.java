@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampregistry;
 
+import org.digijava.module.aim.dbentity.AmpOfflineRelease;
+
 import java.io.InputStream;
 import java.util.List;
-
-import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 
 /**
  * @author Octavian Ciubotaru

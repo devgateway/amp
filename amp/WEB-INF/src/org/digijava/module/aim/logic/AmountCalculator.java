@@ -1,8 +1,8 @@
 package org.digijava.module.aim.logic;
 
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
+
+import java.util.Set;
 
 /**
  * 

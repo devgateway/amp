@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 
 /**
  * Defines input validation chain and executes it

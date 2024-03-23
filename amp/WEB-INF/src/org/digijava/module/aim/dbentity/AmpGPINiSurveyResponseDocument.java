@@ -1,8 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+
+import java.io.Serializable;
 
 public class AmpGPINiSurveyResponseDocument extends ObjectReferringDocument implements Serializable, Cloneable {
 

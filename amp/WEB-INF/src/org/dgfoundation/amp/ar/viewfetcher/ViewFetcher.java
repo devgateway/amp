@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.ar.FilterParam;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.function.Consumer;
-
-import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.ar.FilterParam;
 
 /**
  * a generic datasource for fetching a view. Could fetch data from a real database or from a dummy source (for testcases, for example)

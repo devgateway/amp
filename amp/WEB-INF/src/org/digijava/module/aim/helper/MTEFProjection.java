@@ -1,9 +1,9 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.AmpFunding;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import org.digijava.module.aim.dbentity.AmpFunding;
 
 public class MTEFProjection implements Serializable, Comparable<MTEFProjection> {
 

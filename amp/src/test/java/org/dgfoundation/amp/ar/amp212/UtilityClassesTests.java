@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 

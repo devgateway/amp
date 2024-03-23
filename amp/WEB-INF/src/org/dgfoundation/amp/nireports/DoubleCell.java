@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Optional;
-
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,22 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.sync;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,6 +18,17 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.TeamUtil;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
 
 /**
  * @author Octavian Ciubotaru

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpComments" table="AMP_COMMENTS">
 		<cache usage="read-write" />
 		<id name="ampCommentId" column="amp_comment_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_COMMENTS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COMMENTS_seq</param>
 			</generator>
 		</id>
 		<property name="comment" column="comment_" type="text" />
@@ -13,7 +13,7 @@
 		<property name="commentDate" column="comment_date" type="java.util.Date" />
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 		<many-to-one name="ampFieldId" column="amp_field_id"
 			class="org.digijava.module.aim.dbentity.AmpField" cascade="none" />
 		<many-to-one name="memberId" column="member_id"

@@ -1,13 +1,12 @@
 package org.digijava.module.help.helper;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.help.dbentity.HelpTopic;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Helper for help topic tree node.

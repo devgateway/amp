@@ -7,13 +7,13 @@
 
 package org.digijava.module.message.jaxb.impl.runtime;
 
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.helpers.ValidationEventImpl;
-import javax.xml.bind.helpers.ValidationEventLocatorImpl;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.helpers.ValidationEventImpl;
+import javax.xml.bind.helpers.ValidationEventLocatorImpl;
 
 /**
  * Redirects events to another SAX ContentHandler.

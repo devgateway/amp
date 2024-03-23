@@ -22,27 +22,18 @@
 
 package org.digijava.module.editor.action.admin;
 
-import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.*;
+import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.form.EditorAdminForm;
-import org.digijava.module.editor.util.Constants;
 import org.digijava.module.editor.util.DbUtil;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionMessage;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 

@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
-import java.util.List;
-
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+
+import java.util.List;
 
 public class HardcodedColumn<K extends Cell> extends NiReportColumn<K> {
     protected List<K> cells;

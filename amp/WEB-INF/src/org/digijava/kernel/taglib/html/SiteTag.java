@@ -22,20 +22,17 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.io.IOException;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
+import java.io.IOException;
 
 /**
  * <p>Title: DiGiJava</p>

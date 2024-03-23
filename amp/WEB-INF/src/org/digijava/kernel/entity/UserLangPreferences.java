@@ -22,10 +22,11 @@
 
 package org.digijava.kernel.entity;
 
-import java.util.Set;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.user.User;
+
 import java.io.Serializable;
+import java.util.Set;
 
 public class UserLangPreferences implements Serializable{
 

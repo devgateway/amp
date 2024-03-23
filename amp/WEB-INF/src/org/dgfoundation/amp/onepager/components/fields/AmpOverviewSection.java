@@ -1,10 +1,5 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -34,6 +29,11 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRequiredComponentContainer {
     private static final long serialVersionUID = 3042844165981373432L;

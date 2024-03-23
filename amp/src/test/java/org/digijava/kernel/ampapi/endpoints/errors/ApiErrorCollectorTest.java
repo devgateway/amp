@@ -1,15 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_TEST_ID;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import static java.util.Collections.singletonList;
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_TEST_ID;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_GPI_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_GPI_ID;
 
 public final class GPIErrors {
     

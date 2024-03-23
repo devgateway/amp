@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+
+import java.util.Objects;
 
 /**
  * @author Nadejda Manndrescu

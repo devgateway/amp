@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports.output;
 
+import org.dgfoundation.amp.algo.timing.RunNode;
+import org.dgfoundation.amp.newreports.ReportWarning;
+
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
-
-import org.dgfoundation.amp.algo.timing.RunNode;
-import org.dgfoundation.amp.newreports.ReportWarning;
 
 /**
  * @author Octavian Ciubotaru

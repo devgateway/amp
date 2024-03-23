@@ -1,9 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.lib.ErrorGatherer;
+import net.sf.saxon.s9api.*;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.reports.converters.GeneratedReportToXmlConverter;
+import org.dgfoundation.amp.reports.xml.Report;
+import org.dgfoundation.amp.reports.xml.ReportParameter;
+import org.dgfoundation.amp.reports.xml.XmlReportUtil;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
@@ -12,23 +18,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-
-import net.sf.saxon.Configuration;
-import net.sf.saxon.lib.ErrorGatherer;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.StaticError;
-import net.sf.saxon.s9api.XsltCompiler;
-import net.sf.saxon.s9api.XsltExecutable;
-import net.sf.saxon.s9api.XsltTransformer;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.reports.converters.GeneratedReportToXmlConverter;
-import org.dgfoundation.amp.reports.xml.Report;
-import org.dgfoundation.amp.reports.xml.ReportParameter;
-import org.dgfoundation.amp.reports.xml.XmlReportUtil;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides an API for manipulating xml reports

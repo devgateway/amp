@@ -1,25 +1,8 @@
 package org.digijava.module.parisindicator.helper;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
@@ -30,13 +13,12 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.parisindicator.helper.row.PIReport7Row;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
-import org.digijava.module.parisindicator.model.PIUseCase;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
-import java.util.Collections;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 public class PIReport7 extends PIAbstractReport {
 

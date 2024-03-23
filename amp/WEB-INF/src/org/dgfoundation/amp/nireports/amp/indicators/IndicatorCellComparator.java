@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.amp.indicators;
 
-import java.util.Comparator;
-
 import org.apache.commons.collections.ComparatorUtils;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.util.Comparator;
 
 /**
  * NiCell comparator for indicator values.

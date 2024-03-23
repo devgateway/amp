@@ -1,24 +1,17 @@
 package org.digijava.module.message.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.digijava.module.message.dbentity.AmpAlert;
-import org.digijava.module.message.dbentity.AmpMessage;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
-import org.digijava.module.message.dbentity.AmpMessageState;
-import org.digijava.module.message.dbentity.Approval;
-import org.digijava.module.message.dbentity.CalendarEvent;
-import org.digijava.module.message.dbentity.UserMessage;
+import org.digijava.module.message.dbentity.*;
 import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.util.AmpMessageUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MsgSettingsAction extends DispatchAction {
     

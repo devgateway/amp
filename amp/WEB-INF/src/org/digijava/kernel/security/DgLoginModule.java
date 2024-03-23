@@ -23,25 +23,6 @@
 package org.digijava.kernel.security;
 
 /* Java imports */
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.security.auth.Subject;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.NameCallback;
-import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.login.FailedLoginException;
-import javax.security.auth.login.LoginException;
-import javax.security.auth.spi.LoginModule;
-
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -51,6 +32,24 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.kernel.util.UnixCrypt;
 import org.digijava.kernel.util.UserUtils;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
+import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginException;
+import javax.security.auth.spi.LoginModule;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class DgLoginModule
     implements LoginModule {
@@ -387,7 +386,7 @@ public class DgLoginModule
                              " u where lower(u.email) = :email";
             
         Query query = session.createQuery(queryString);
-        query.setString("email", email.toLowerCase());
+        query.setParameter("email", email.toLowerCase(), StringType.INSTANCE);
             
         list = query.list();
 

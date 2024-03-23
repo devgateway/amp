@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.viewmanager.impl;
 
-import java.util.Map;
-import javax.servlet.ServletContext;
-
 import org.digijava.kernel.viewmanager.ViewConfigException;
+
+import javax.servlet.ServletContext;
+import java.util.Map;
 
 public class DefaultTemplateViewConfigImpl extends DefaultViewConfigUtil {
     private String template;

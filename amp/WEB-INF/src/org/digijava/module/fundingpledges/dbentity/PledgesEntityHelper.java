@@ -1,11 +1,5 @@
 package org.digijava.module.fundingpledges.dbentity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -13,15 +7,17 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.fundingpledges.form.PledgeForm;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 
@@ -41,13 +37,15 @@ public class PledgesEntityHelper {
         for(int i = 0; i < n / 2; i++) 
         {
             String fieldName = (String) values[2 * i];
-            queryBld.append(" AND (p." + fieldName + " = ?)");
+            queryBld.append(" AND (p.").append(fieldName).append(" = :value").append(i).append(")");
         }
-        
+
+        logger.info("Pledges Query: "+ queryBld);
         Query query = PersistenceManager.getSession().createQuery(queryBld.toString());
         for(int i = 0; i < n / 2; i++)
             setParameter(query, i, values[i * 2 + 1]);
-        return new ArrayList<T>(query.list());
+        List res = query.list();
+        return new ArrayList<T>(res);
     }
     
     /**
@@ -59,12 +57,12 @@ public class PledgesEntityHelper {
     private static void setParameter(Query query, int i, Object val)
     {
         if (val instanceof Long)
-            query.setLong(i, (Long) val);
+            query.setParameter("value"+i, (Long) val, LongType.INSTANCE);
         else
             if (val instanceof String)
-                query.setString(i, (String) val);
+                query.setParameter("value"+i, (String)val, StringType.INSTANCE);
         else
-            query.setParameter(i, val); // hope for the best
+            query.setParameter("value"+i, val); // hope for the best
     }
     
     public static List<FundingPledges> getPledges()

@@ -1,19 +1,14 @@
 package org.digijava.module.gpi.helper.export;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gpi.helper.row.GPIReport6Row;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.util.GPIConstants;
+
+import java.util.*;
 
 public class GPIReport6Export extends GPIAbstractExport {
 

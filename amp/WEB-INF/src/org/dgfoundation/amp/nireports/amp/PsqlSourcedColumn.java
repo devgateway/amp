@@ -1,20 +1,20 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.SqlSourcedColumn;
+import org.digijava.kernel.translator.LocalizableLabel;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.digijava.kernel.translator.LocalizableLabel;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.SqlSourcedColumn;
 
 
 /**

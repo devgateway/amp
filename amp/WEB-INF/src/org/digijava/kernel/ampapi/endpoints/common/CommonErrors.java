@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_COMMON_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_COMMON_ID;
 
 /**
  * @author Octavian Ciubotaru

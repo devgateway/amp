@@ -1,29 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.field.FieldType.LONG;
-
-import java.lang.reflect.Field;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.validation.groups.Default;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
@@ -53,6 +29,19 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.groups.Default;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.field.FieldType.LONG;
 
 /**
  * @author Octavian Ciubotaru

@@ -22,21 +22,15 @@
 
 package org.digijava.module.um.action;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.module.um.form.UserChangePasswordForm;
-import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.um.form.UserChangePasswordForm;
 
 public class ShowUserChangePassword
     extends Action {

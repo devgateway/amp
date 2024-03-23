@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 import org.apache.commons.collections.map.LRUMap;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Project List pagination cacher that reuses the very same approach as in {@link ReportCacher}

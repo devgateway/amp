@@ -4,9 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -14,13 +11,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.CheckGroup;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.HiddenField;
-import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -31,6 +22,9 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.Iterator;
+import java.util.List;
 
 
 

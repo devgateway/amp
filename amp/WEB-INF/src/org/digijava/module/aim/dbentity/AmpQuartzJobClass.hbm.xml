@@ -3,8 +3,8 @@
 <hibernate-mapping>
   <class name="org.digijava.module.aim.dbentity.AmpQuartzJobClass" table="AMP_QUARTZ_JOB_CLASS">
     <id column="jc_Id" name="id" type="java.lang.Long">
-      <generator class="native">
-        <param name="sequence">AMP_QUARTZ_JOB_CLASS_seq</param>
+      <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+        <param name="sequence_name">AMP_QUARTZ_JOB_CLASS_seq</param>
       </generator>
     </id>
     <property column="jc_name" name="name" type="java.lang.String"/>

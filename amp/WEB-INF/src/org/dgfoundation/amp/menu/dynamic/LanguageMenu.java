@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.menu.dynamic;
 
-import java.util.List;
-
 import org.dgfoundation.amp.menu.MenuItem;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.translation.util.TranslationManager;
+
+import java.util.List;
 
 /**
  * Dynamic Language menu sub-items builder 
@@ -22,7 +22,7 @@ public class LanguageMenu implements DynamicMenu {
         MenuItem template = langMenuItem.getChildren().iterator().next();
         langMenuItem.getChildren().clear();
         
-        List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
+        List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getRequestDBSession());
         for (String[] langOption : locales) {
             MenuItem mi = new MenuItem(template.name, langOption[1], 
                     langOption[1], String.format(template.url, langOption[0]), template.flags, template.requestUrl, template.groupKeys);

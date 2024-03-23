@@ -1,11 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -17,6 +11,9 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
+import java.io.Serializable;
+import java.util.*;
+
 
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
     //IATI-check: not to be ignored
@@ -26,12 +23,12 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 
     @InterchangeableBackReference
     private AmpActivityVersion activity;
-    
+
     @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true, uniqueConstraint = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
     private AmpOrganisation organisation;
-    
+
     private AmpRole role;
     @Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
             fmPath = FMVisibility.PARENT_FM + "/percentage",
@@ -39,13 +36,13 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     private Float   percentage;
     @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
     private Set<AmpOrgRoleBudget> budgets = new HashSet<>();
-    
+
     @Interchangeable(fieldTitle = "Additional Info", importable = true, label = "Department/Division",
             fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")
     private String additionalInfo;
 
     private Set<AmpGPINiSurvey> gpiNiSurveys;
-    
+
     public Float getPercentage() {
         return percentage;
     }
@@ -100,8 +97,8 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     public void setRole(AmpRole role) {
         this.role = role;
     }
-    
-        
+
+
     /**
      * @return the additionalInfo
      */
@@ -114,31 +111,28 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
-    
+
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpOrgRole aux = (AmpOrgRole) obj;
-        String original = "" + this.organisation.getAmpOrgId() + "-" + this.role.getAmpRoleId();
-        String copy = "" + aux.organisation.getAmpOrgId() + "-" + aux.role.getAmpRoleId();
-        if (original.equals(copy)) {
-            return true;
-        }
-        return false;
+        String original = this.organisation.getAmpOrgId() + "-" + this.role.getAmpRoleId();
+        String copy = aux.organisation.getAmpOrgId() + "-" + aux.role.getAmpRoleId();
+        return original.equals(copy);
     }
 
     @Override
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        
+
         String orgName = this.organisation.getName();
-        if (this.organisation != null 
+        if (this.organisation != null
                 && this.organisation.getDeleted() != null && this.organisation.getDeleted()) {
             out.setDeletedValues(true);
             orgName += " (" + TranslatorWorker.translateText("deleted") + ")";
         }
         out.getOutputs().add(new Output(null, new String[] {"Organization"}, new Object[] {orgName}));
-        
+
         out.getOutputs().add(new Output(null, new String[] { "Role" }, new Object[] { TranslatorWorker.translateText(this.role.getName()) }));
         if (this.percentage != null) {
             out.getOutputs().add(new Output(null, new String[] { "Percentage" }, new Object[] { this.percentage }));
@@ -146,38 +140,38 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         if (this.additionalInfo != null && this.additionalInfo.trim().length() > 0)
             out.getOutputs().add(new Output(null, new String[] {"Department/Division"}, new Object[] {this.additionalInfo}));
         if (this.budgets != null){
-            StringBuffer budgetCode = new StringBuffer();
+            StringBuilder budgetCode = new StringBuilder();
             for (AmpOrgRoleBudget budget :budgets) {
-            budgetCode.append(budget.getBudgetCode()+ ","); 
+            budgetCode.append(budget.getBudgetCode()).append(",");
             }
             if (budgetCode.length()>0) {
                 out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {budgetCode.substring(0,budgetCode.length()-1)}));
             }
         }
-        
+
         return out;
     }
 
     @Override
     public Object getValue() {
-        StringBuffer budgetCode = new StringBuffer();
+        StringBuilder budgetCode = new StringBuilder();
         for (AmpOrgRoleBudget budget :budgets) {
-        budgetCode.append(budget.getBudgetCode()+ ","); 
+        budgetCode.append(budget.getBudgetCode()).append(",");
         }
-        return "" + this.percentage + "" + this.additionalInfo + ""+budgetCode.toString();
+        return this.percentage + this.additionalInfo + budgetCode;
     }
-    
+
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpOrgRole clonedAmpOrgRole = (AmpOrgRole) clone();
         clonedAmpOrgRole.activity = newActivity;
         clonedAmpOrgRole.ampOrgRoleId = null;
-    
+
         if (getGpiNiSurveys() != null && !getGpiNiSurveys().isEmpty()) {
             AmpGPINiSurvey clonedSurvey = (AmpGPINiSurvey) getGpiNiSurveys().iterator().next().clone();
             clonedSurvey.setAmpGPINiSurveyId(null);
             clonedSurvey.setAmpOrgRole(clonedAmpOrgRole);
-        
+
             if (clonedSurvey.getResponses() != null) {
                 final Set<AmpGPINiSurveyResponse> clonedSurveyResponses = new HashSet<AmpGPINiSurveyResponse>();
                 clonedSurvey.getResponses().forEach(r -> {
@@ -199,7 +193,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         } else {
             clonedAmpOrgRole.setGpiNiSurveys(null);
         }
-        
+
         if (getBudgets() != null && !getBudgets().isEmpty()) {
             clonedAmpOrgRole.setBudgets(new HashSet<>());
             for (AmpOrgRoleBudget budget : getBudgets()) {
@@ -210,7 +204,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         } else {
             clonedAmpOrgRole.setBudgets(null);
         }
-        
+
         return clonedAmpOrgRole;
     }
     @Override
@@ -218,7 +212,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
     @Override
     public int compareTo(AmpOrgRole arg0) {
         if (this.getAmpOrgRoleId() !=null && arg0 != null && arg0.getAmpOrgRoleId() != null) {
@@ -231,7 +225,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
             return -1;
         }
     }
-    
+
     public final static Comparator<AmpOrgRole> BY_ACRONYM_AND_NAME_COMPARATOR = new SerializableComparator<AmpOrgRole>() {
         private static final long serialVersionUID = 1935052796869929272L;
 
@@ -244,7 +238,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
             return o1.getOrganisation().getAcronymAndName().compareTo(o2.getOrganisation().getAcronymAndName());
         }
     };
-    
+
     public final static Comparator<AmpOrgRole> BY_ORG_AND_ROLE = new SerializableComparator<AmpOrgRole>() {
         private static final long serialVersionUID = 2047345669087531206L;
 
@@ -268,11 +262,11 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     public Set<AmpOrgRoleBudget> getBudgets() {
         return budgets;
     }
-    
+
     public void setBudgets(Set<AmpOrgRoleBudget> budgets) {
         this.budgets = budgets;
     }
-    
+
     public AmpGPINiSurvey getGpiNiSurvey() {
         if (getGpiNiSurveys() != null && !getGpiNiSurveys().isEmpty()) {
             return getGpiNiSurveys().iterator().next();
@@ -295,7 +289,25 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         return gpiNiSurveys;
     }
     public void setGpiNiSurveys(Set<AmpGPINiSurvey> gpiNiSurveys) {
-        this.gpiNiSurveys = gpiNiSurveys;
+        if (this.gpiNiSurveys == null) {
+            this.gpiNiSurveys = gpiNiSurveys;
+        } else {
+            this.gpiNiSurveys.clear();
+            if (gpiNiSurveys==null)gpiNiSurveys=new HashSet<>();
+            this.gpiNiSurveys.addAll(gpiNiSurveys);
+        }
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpOrgRole that = (AmpOrgRole) o;
+        return Objects.equals(organisation, that.organisation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activity, organisation);
+    }
 }

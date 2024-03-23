@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpKmDocuments" table="AMP_KM_DOCUMENTS">
 		<cache usage="read-write" />
 		<id name="ampKmId" column="amp_km_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_KM_DOCUMENTS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_KM_DOCUMENTS_seq</param>
 			</generator>
 		</id>
 		<property name="name" column="name" type="java.lang.String" />

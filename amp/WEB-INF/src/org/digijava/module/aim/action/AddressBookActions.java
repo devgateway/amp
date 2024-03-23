@@ -1,43 +1,28 @@
 package org.digijava.module.aim.action;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.AddressBookForm;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.*;
 
 public class AddressBookActions extends DispatchAction {
     

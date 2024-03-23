@@ -1,14 +1,13 @@
 package org.digijava.kernel.job.cachedtables;
 
-import java.sql.SQLException;
-import java.util.*;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.job.CachedTableState;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.Session;
+
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Utilities regarding cached_ variants of reports' extractor tables / views

@@ -22,17 +22,13 @@
 
 package org.digijava.module.um.form;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
-import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.Constants;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.validator.ValidatorForm;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>Title: DiGiJava</p>

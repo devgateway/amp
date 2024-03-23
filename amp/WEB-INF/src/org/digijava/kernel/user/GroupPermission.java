@@ -22,8 +22,6 @@
 
 package org.digijava.kernel.user;
 
-import org.digijava.kernel.security.*;
-
 public class GroupPermission {
 
     public static final int SITE_PERMISSION = 0;

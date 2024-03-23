@@ -1,31 +1,12 @@
 package org.digijava.module.aim.action;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.NpdSettings;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.helper.ActivityItem;
@@ -36,6 +17,14 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * Returns XML of Activities list depending on request parameters. This action

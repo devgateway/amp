@@ -1,0 +1,10 @@
+{
+  "amp.offline:download": "Download AMP Offline",
+  "amp.offline:all-versions": "All installer versions",
+  "amp.offline:best-version-message": "We have automatically detected which version of the application meets your operating system requirements. Other versions are available below.",
+  "amp.offline:bits": "bits",
+  "amp.offline:page-title": "Aid Management Platform - Download Offline Client",
+  "amp.offline:download-title": "Download the Offline Client",
+  "amp.offline:text": "The AMP Offline application allows you to edit and add activity information to the AMP without having an active internet connection. In order to use the application, you must download and install the compatible version of AMP Offline application from the list of the latest AMP Offline installers. When you run the application for the first time, you must have an active internet connection in order to sync your user data, activity data, and other critical data to the application. After that, you may work offline and sync your data periodically.",
+  "amp.offline:unknown": "Unknown"
+}

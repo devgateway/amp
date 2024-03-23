@@ -1,19 +1,14 @@
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.cell.TrnTextCell;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.action.GetReports;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class TrnTextColWorker extends TextColWorker {
 

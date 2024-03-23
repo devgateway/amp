@@ -1,33 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.both;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.testutils.TransactionUtil;
@@ -39,16 +12,18 @@ import org.digijava.kernel.ampapi.endpoints.common.ObjectImporterAnyType;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.persistence.InMemoryValueConverter;
-import org.digijava.module.aim.annotations.interchange.Independent;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
-import org.digijava.module.aim.annotations.interchange.PossibleValueId;
-import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * Important cases to test.

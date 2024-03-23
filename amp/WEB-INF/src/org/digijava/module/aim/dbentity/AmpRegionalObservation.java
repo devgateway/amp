@@ -1,16 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.*;
 @TranslatableClass (displayName = "Regional Observation")
 public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
 

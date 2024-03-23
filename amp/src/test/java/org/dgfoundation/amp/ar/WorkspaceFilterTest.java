@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.ar;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertThat;
-
-import java.util.Collection;
-import java.util.List;
-
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.testutils.InTransactionRule;
@@ -23,6 +15,14 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+
+import java.util.Collection;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.assertThat;
 
 /**
  * Activity name format: ~wsf~ {$workspace_nr} {description}

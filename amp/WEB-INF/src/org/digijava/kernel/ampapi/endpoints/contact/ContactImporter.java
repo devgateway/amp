@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -13,6 +11,8 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
+
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.newreports;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
+
+import java.io.IOException;
 
 /**
  * @author Octavian Ciubotaru

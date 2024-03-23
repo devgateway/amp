@@ -4,14 +4,14 @@
  */
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  *

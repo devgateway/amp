@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+
+import java.util.List;
 
 /**
  * 

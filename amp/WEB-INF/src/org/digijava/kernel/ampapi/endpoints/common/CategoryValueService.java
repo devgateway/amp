@@ -3,15 +3,15 @@
  */
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Category Value Services

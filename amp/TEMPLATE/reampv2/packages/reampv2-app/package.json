@@ -67,7 +67,7 @@
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.13.8",
     "react-table": "^7.3.2",
-    "react-tooltip": "^4.2.6",
+    "react-tooltip": "^5.25.1",
     "react-transition-group": "^4.4.5",
     "react-visibility-sensor": "^5.1.1",
     "redux": "^4.0.5",
@@ -80,7 +80,7 @@
   },
   "scripts": {
     "start": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false node scripts/start.js",
-    "build": "cross-env DISABLE_ESLINT_PLUGIN=true PUBLIC_URL=/TEMPLATE/reampv2/build/ node scripts/build.js",
+    "build": "cross-env DISABLE_ESLINT_PLUGIN=true PUBLIC_URL=/TEMPLATE/reampv2/packages/reampv2-app/build/ node scripts/build.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",

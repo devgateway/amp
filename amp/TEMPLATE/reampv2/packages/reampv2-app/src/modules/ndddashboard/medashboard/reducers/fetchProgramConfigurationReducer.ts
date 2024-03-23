@@ -16,25 +16,30 @@ export const fetchProgramConfiguration = createAsyncThunk(
             return rejectWithValue(data);
         }
 
-        return data;
+        return data.sort((a, b) => a.name.localeCompare(b.name));
     }
 );
 
 interface ProgramConfigurationState extends InitialState {
     data: ProgramConfig [] | null;
+    programStartDate: string | null;
 }
 
 const initialState: ProgramConfigurationState = {
     data: null,
     loading: false,
-    error: null
+    error: null,
+    programStartDate: null
 };
 
 const programConfigurationSlice = createSlice({
     name: REDUCER_NAME,
     initialState,
     reducers: {
-        resetProgramConfiguration: () => initialState
+        resetProgramConfiguration: () => initialState,
+        saveProgramStartDate: (state, { payload }) => {
+            state.programStartDate = payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchProgramConfiguration.pending, (state) => {
@@ -43,13 +48,15 @@ const programConfigurationSlice = createSlice({
         builder.addCase(fetchProgramConfiguration.fulfilled, (state, { payload }) => {
             state.loading = false;
             state.data = payload;
+            state.error = null;
         });
         builder.addCase(fetchProgramConfiguration.rejected, (state, { payload }) => {
             state.loading = false;
+            state.data = null;
             state.error = errorHelper(payload);
         });
     }
 });
 
-export const { resetProgramConfiguration } = programConfigurationSlice.actions;
+export const { resetProgramConfiguration, saveProgramStartDate} = programConfigurationSlice.actions;
 export default programConfigurationSlice.reducer;

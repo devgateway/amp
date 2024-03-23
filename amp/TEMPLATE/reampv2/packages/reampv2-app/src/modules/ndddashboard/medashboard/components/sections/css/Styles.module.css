@@ -32,3 +32,13 @@
 .button_text {
     padding-left: 6px;
 }
+
+.line_chart_header {
+    display: flex;
+    align-items: center;
+}
+
+.line_chart_header_text {
+    display: flex;
+    align-items: center;
+}

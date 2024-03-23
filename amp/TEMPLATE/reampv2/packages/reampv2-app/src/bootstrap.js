@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 import '@devgateway/amp-filter/dist/amp-filter.css';
 const boilerplate = require('@devgateway/amp-boilerplate/dist/amp-boilerplate');
 
@@ -37,7 +36,7 @@ export const mount = ({ mountPoint, routingStrategy , initialPathName = '/', sta
         }
     }
 
-    serviceWorker.register();
+    // serviceWorker.register();
     //unmount the app if it is not in use
     return () => {
         if (!mountPoint) {

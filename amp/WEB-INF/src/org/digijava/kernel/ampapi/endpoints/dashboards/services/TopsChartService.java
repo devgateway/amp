@@ -132,6 +132,12 @@ public class TopsChartService {
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
                 name = DashboardConstants.TOP_SECTORS;
                 break;
+            case SS:
+                setColumn(ColumnConstants.SECONDARY_SECTOR);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_SECTOR));
+                title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
+                name = DashboardConstants.TOP_SECTORS;
+                break;
             case DG:
                 setColumn(ColumnConstants.DONOR_GROUP);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.DONOR_GROUP));

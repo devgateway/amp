@@ -1,10 +1,9 @@
-import { BarDatum, ResponsiveBar } from '@nivo/bar';
-import React, { useEffect } from 'react';
-import { ComponentProps, MarginProps, YearValues } from '../../../types';
-import { BASE_VALUE_COLOR, CURRENT_VALUE_COLOR, TARGET_VALUE_COLOR } from '../../../../utils/constants';
-import ChartUtils from '../../../utils/chart';
+import React, {useEffect} from 'react';
+import {BarDatum, BarLegendProps, LabelFormatter, ResponsiveBar} from '@nivo/bar';
+import { ComponentProps, MarginProps } from '../../../types';
+import ChartUtils from "../../../utils/chart";
 
-interface DataType {
+export interface DataType {
   id: string;
   value: number;
   label: string;
@@ -16,69 +15,28 @@ export interface BarChartProps extends ComponentProps {
   height?: number;
   width?: number;
   margin?: MarginProps;
-  data?: YearValues [];
+  data?: DataType [];
+  legendProps?: BarLegendProps[];
+  tooltipSuffix?: string;
+  labelFormat?: string | LabelFormatter;
+  barComponent?: React.FC<any>;
+  symlog?: boolean;
 }
 
 const BarChart: React.FC<BarChartProps> = (props) => {
-  const { title, height, width, margin, data, translations } = props;
-  const [displayDataSet, setDisplayDataSet] = React.useState<DataType[]>([]);
+  const {
+    title,
+    height,
+    width, margin,
+    data,
+    legendProps,
+    tooltipSuffix,
+    labelFormat,
+    barComponent,
+    symlog = true
+  } = props;
 
-  const generateDataSet = () => {
-    if (data) {
-      let aggregateValue = {
-        baseValue: 0,
-        targetValue: 0,
-        actualValue: 0
-      };
-
-      if (Array.isArray(data)) {
-        aggregateValue = ChartUtils.computeAggregateValues(data);
-      } else {
-        aggregateValue = ChartUtils.computeAggregateValues([data]);
-      }
-
-      const year = new Date().getFullYear();
-      if (aggregateValue.baseValue) {
-        const baseData = {
-          id: translations['amp.ndd.dashboard:me-baseline'],
-          value: aggregateValue.baseValue,
-          label: `${translations['amp.ndd.dashboard:me-baseline']} ${year}`,
-          color: BASE_VALUE_COLOR
-        }
-
-        setDisplayDataSet(prev => [...prev, baseData]);
-      }
-
-      if (aggregateValue.actualValue) {
-        const actualData = {
-          id: translations['amp.ndd.dashboard:me-current'],
-          value: aggregateValue.actualValue,
-          label: `${translations['amp.ndd.dashboard:me-current']} ${year}`,
-          color: CURRENT_VALUE_COLOR
-        };
-
-        setDisplayDataSet(prev => [...prev, actualData]);
-      }
-
-      if (aggregateValue.targetValue) {
-        const targetData = {
-          id: translations['amp.ndd.dashboard:me-target'],
-          value: aggregateValue.targetValue,
-          label: `${translations['amp.ndd.dashboard:me-target']} ${year}`,
-          color: TARGET_VALUE_COLOR
-        };
-
-        setDisplayDataSet(prev => [...prev, targetData]);
-      }
-
-    }
-  }
-
-  useEffect(() => {
-    generateDataSet();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
+  const displayDataSet = data && data.length > 0 ? data : null;
 
   return (
     <div style={{
@@ -97,6 +55,10 @@ const BarChart: React.FC<BarChartProps> = (props) => {
             indexBy="id"
             colors={(item: any) => item.data.color}
             tooltipLabel={(item: any) => item.data.label}
+            minValue={"auto"}
+            maxValue={"auto"}
+            labelFormat={labelFormat}
+            barComponent={barComponent}
             tooltip={
               (item) => {
                 return (
@@ -116,12 +78,12 @@ const BarChart: React.FC<BarChartProps> = (props) => {
                     }}></div>
                     <span style={{ fontWeight: 'normal', paddingLeft: 4 }}>{item.data.label}</span>
                     <span>:</span>
-                    <span style={{ fontWeight: 'bold', paddingLeft: 6 }}>{item.data.value} details</span>
+                    <span style={{ fontWeight: 'bold', paddingLeft: 6 }}>{ChartUtils.formatNumber(item.data.value as number)} {tooltipSuffix || 'details'}</span>
                   </div>
                 )
               }
             }
-            legends={[
+            legends={legendProps || [
               {
                 dataFrom: 'indexes',
                 anchor: 'top-left',
@@ -145,6 +107,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
               }
             ]}
             animate={true}
+            motionConfig={'wobbly'}
             enableGridX={false}
             enableGridY={false}
             axisTop={null}
@@ -153,8 +116,9 @@ const BarChart: React.FC<BarChartProps> = (props) => {
             axisLeft={null}
             margin={margin || { top: 50, right: 30, left: 20 }}
             borderRadius={3}
-            padding={0.3}
+            padding={0.2}
             enableLabel={false}
+            valueScale={{ type: symlog ? 'symlog' : 'linear' }}
             theme={{
               tooltip: {
                 container: {

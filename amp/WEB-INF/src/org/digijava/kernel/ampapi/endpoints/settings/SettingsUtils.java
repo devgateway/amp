@@ -482,6 +482,7 @@ public class SettingsUtils {
 
         settings.setIndicatorFilterBySector(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR));
         settings.setIndicatorFilterByProgram(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM));
+        settings.setNumberOfIndicatorsInDashboard(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.NUMBER_OF_INDICATORS_IN_DASHBOARD));
 
         return settings;
     }

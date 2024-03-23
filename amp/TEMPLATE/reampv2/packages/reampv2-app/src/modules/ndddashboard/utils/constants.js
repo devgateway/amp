@@ -72,14 +72,31 @@ export const BASE_VALUE ='BaseLine'
 export const CURRENT_VALUE ='Current'
 export const TARGET_VALUE ='Target'
 
-export const PROGRESS_TRACKING_DASHBOARDS = 'PROGRESS TRACKING DASHBOARDS'
+export const PROGRESS_TRACKING_DASHBOARDS = 'PROGRESS TRACKING DASHBOARDS';
+export const DASHBOARDS = 'DASHBOARDS';
 
 export const REST_PROGRAM_CONFIGURATION = '/rest/dashboard/programConfiguration';
 export const REST_FM_SETTINGS = '/rest/common/fm/flat';
 export const REST_SECTORS = '/rest/dashboard/sectors';
+export const REST_SECTOR_SCHEMES = '/rest/dashboard/sectorSchemes';
+export const REST_SECTOR_CLASSIFICATION = '/rest/dashboard/sectorClassification';
 export const REST_INDICATORS = '/rest/dashboard/me/indicators';
 export const REST_INDICATORS_BY_PROGRAM = '/rest/dashboard/me/indicatorsByProgram';
+export const REST_INDICATORS_BY_SECTOR = '/rest/dashboard/me/indicatorsBySector';
 export const REST_PROGRAM_PROGRESS_REPORT = '/rest/dashboard/me/programReport';
-export const REST_INDICATOR_REPORT = '/rest/dashboard/me/indicatorReport'
+export const REST_INDICATOR_REPORT = '/rest/dashboard/me/indicatorReport';
+export const REST_SECTORS_REPORT = '/rest/dashboard/tops';
+export const REST_INDICATORS_BY_CLASSIFICATION = '/rest/dashboard/indicatorsByClassification';
 
 export const DEFAULT_REPORTING_PERIOD = 5;
+
+export const SECTOR_COLOR = [
+  '#4294F7',
+  '#F0A93E',
+  '#79A43E',
+  '#8856B6',
+  '#DA524B'
+];
+
+export const NDDPath = '/Dashboards[true]/NDD Dashboard[true]';
+export const MEPath = '/Progress Tracking Dashboards[true]/M&E Dashboard[true]';

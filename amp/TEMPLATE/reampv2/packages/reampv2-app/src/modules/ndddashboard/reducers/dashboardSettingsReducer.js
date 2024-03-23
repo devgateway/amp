@@ -14,7 +14,8 @@ export default (state = initialState, action) => {
     case FETCH_DASHBOARD_SETTINGS_PENDING:
       return {
         ...state,
-        dashboardSettingsLoadingPending: true
+        dashboardSettingsLoadingPending: true,
+        dashboardSettingsLoaded: false
       };
     case FETCH_DASHBOARD_SETTINGS_SUCCESS: {
       return {

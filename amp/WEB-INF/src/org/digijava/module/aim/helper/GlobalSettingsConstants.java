@@ -246,4 +246,6 @@ public class GlobalSettingsConstants {
     public static final String EXEMPT_ORGANIZATION_DOCUMENTS = "Exempt organization to see documents";
 
     public static final String AMP_DASHBOARD_URL = "AMP Dashboard URL";
+
+    public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "Number of indicators in M&E Dashboard";
 }

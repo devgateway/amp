@@ -4,6 +4,7 @@ var BaseControlView = require('../../base-control/base-control-view');
 var FundingLayersView = require('./funding-layers-view');
 var IndicatorLayersView = require('./indicator-layers-view');
 var StatisticalLayersConfig = require('./statistical-layers-config');
+var LayersManager = require('./layers-manager-view');
 
 var Template = fs.readFileSync(__dirname + '/../templates/multisection-layers-template.html', 'utf8');
 
@@ -29,8 +30,7 @@ module.exports = BaseControlView.extend({
     BaseControlView.prototype.render.apply(this);
     this.$('.content').html(this.template({title: this.title}));
     //create layer manager
-    var self = this;    
-
+    var self = this;
     self.app.data.indicators.loadAll().then(function() {  	
     	
     	self.addSection(StatisticalLayersConfig.STANDARD);

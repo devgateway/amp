@@ -11,6 +11,7 @@
   "license": "TODO: what is the license for AMP?",
   "browserify": {
     "transform": [
+      "brfs",
       "browserify-shim"
     ]
   },
@@ -50,9 +51,9 @@
     "@babel/polyfill": "^7.2.5",
     "backbone": "1.1.2",
     "bootstrap": "3.3.0",
-    "brfs": "1.2.0",
-    "browserify": "4.2.3",
-    "browserify-shim": "3.6.0",
+    "brfs": "^1.2.0",
+    "browserify": "^5.12.0",
+    "browserify-shim": "3.8.12",
     "cheerio": "0.18.0",
     "css-element-queries": "1.0.0",
     "d3-browserify": "3.4.12",

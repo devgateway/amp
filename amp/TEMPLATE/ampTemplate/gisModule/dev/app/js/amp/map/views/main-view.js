@@ -33,8 +33,6 @@ module.exports = Backbone.View.extend({
     });
     this.map.attributionControl.setPosition('bottomleft');
     this.map.zoomControl.setPosition('topright');
-    var offset = this.map.getSize().y * 0.15;
-    this.map.panBy(new L.Point (0, -offset), {animate: false});
 
     this.app.state.register(this, 'map', {
       get: this._getMapView,
@@ -119,24 +117,7 @@ module.exports = Backbone.View.extend({
 
           self.countryBoundary = L.geoJson(boundary, {
             onEachFeature: updateOuterBounds,
-            style: function (feature) {
-              // Check if the "NAME" attribute is "extra"
-              if (feature.properties['BELT'] === true) {
-                return {
-                  color: '#29343F',
-                  fillColor: 'green', // Set green color for the feature with NAME 'extra'
-                  weight: 1.4,
-                  dashArray: '1'
-                };
-              } else {
-                return {
-                  color: '#29343F',
-                  fillColor: 'none',
-                  weight: 1.4,
-                  dashArray: '1'
-                };
-              }
-            }
+            style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
           }).addTo(self.map);
         }
 
@@ -160,6 +141,7 @@ module.exports = Backbone.View.extend({
             self.map.fitBounds(outerBounds, paddingToLeft);
           }
         }
+
       });
     });
   },

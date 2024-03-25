@@ -53,7 +53,7 @@ public class BoundariesService {
             String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);
             return MAPPER.readValue(jsonTxt, new TypeReference<List<Boundary>>() { });
         } catch (IOException e) {
-            logger.error("Failed to load boundaries for BOAD", e);
+            logger.error("Failed to load boundaries ", e);
             throw new RuntimeException(e);
         }
     }

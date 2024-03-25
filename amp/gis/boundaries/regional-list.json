@@ -54,58 +54,58 @@
     "country": "NE"
   },
   {
-    "id": "DJ-adm-0",
+    "id": "BJ-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "DJ"
+    "country": "BJ"
   },
   {
-    "id": "DJ-adm-1",
+    "id": "BJ-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "DJ"
+    "country": "BJ"
   },
   {
-    "id": "DJ-adm-2",
+    "id": "BJ-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "DJ"
+    "country": "BJ"
   },
   {
-    "id": "ER-adm-0",
+    "id": "CI-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "ER"
+    "country": "CI"
   },
   {
-    "id": "ER-adm-1",
+    "id": "CI-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "ER"
+    "country": "CI"
   },
   {
-    "id": "ER-adm-2",
+    "id": "CI-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "ER"
+    "country": "CI"
   },
   {
-    "id": "MR-adm-0",
+    "id": "CV-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "MR"
+    "country": "CV"
   },
   {
-    "id": "MR-adm-1",
+    "id": "CV-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "MR"
+    "country": "CV"
   },
   {
-    "id": "MR-adm-2",
+    "id": "CV-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "MR"
+    "country": "CV"
   }
   ,
   {
@@ -127,22 +127,22 @@
     "country": "NG"
   },
   {
-    "id": "SD-adm-0",
+    "id": "GH-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "SD"
+    "country": "GH"
   },
   {
-    "id": "SD-adm-1",
+    "id": "GH-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "SD"
+    "country": "GH"
   },
   {
-    "id": "SD-adm-2",
+    "id": "GH-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "SD"
+    "country": "GH"
   },
   {
     "id": "BF-adm-0",
@@ -157,45 +157,117 @@
     "country": "BF"
   },
   {
-    "id": "BF-adm-2",
+    "id": "GM-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "BF"
+    "country": "GM"
   },
   {
-    "id": "TD-adm-0",
+    "id": "GM-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "TD"
+    "country": "GM"
   },
   {
-    "id": "TD-adm-1",
+    "id": "GM-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "TD"
+    "country": "GM"
   },
   {
-    "id": "TD-adm-2",
+    "id": "GM-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "TD"
+    "country": "GM"
   },
   {
-    "id": "ET-adm-0",
+    "id": "GN-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "ET"
+    "country": "GN"
   },
   {
-    "id": "ET-adm-1",
+    "id": "GN-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "ET"
+    "country": "GN"
   },
   {
-    "id": "ET-adm-2",
+    "id": "GN-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "ET"
+    "country": "GN"
+  },
+  {
+    "id": "GW-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "GW"
+  },
+  {
+    "id": "GW-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "GW"
+  },
+  {
+    "id": "GW-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "GW"
+  },
+  {
+    "id": "LR-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "LR"
+  },
+  {
+    "id": "LR-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "LR"
+  },
+  {
+    "id": "LR-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "LR"
+  },
+  {
+    "id": "SL-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "SL"
+  },
+  {
+    "id": "SL-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "SL"
+  },
+  {
+    "id": "SL-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "SL"
+  },
+  {
+    "id": "TG-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "TG"
+  },
+  {
+    "id": "TG-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "TG"
+  },
+  {
+    "id": "TG-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "TG"
   }
 ]

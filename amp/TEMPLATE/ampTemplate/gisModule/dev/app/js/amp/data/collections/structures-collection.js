@@ -184,8 +184,16 @@ module.exports = Backbone.Collection
         .groupBy(function(site) {
 
           var activity = site.get('activity');
-          var filterVerticalText = (filterVertical === 'Primary Sector' ? 'Sectors' : 'Donors');
+          var filterVerticalText;
 
+          if (filterVertical === 'Primary Sector')
+          {
+            filterVerticalText='Sectors';
+          }
+          else if (filterVertical === 'Programs')
+            filterVerticalText='Programs'
+          else
+            filterVerticalText='Donors'
           // TODO: Choosing a vertical will need to be configurable from drop down..
           if (!_.isEmpty(activity.get('matchesFilters')[filterVertical])) {
             if (activity.get('matchesFilters')[filterVertical].length > 1) {

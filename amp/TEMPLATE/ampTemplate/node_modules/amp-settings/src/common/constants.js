@@ -2,6 +2,7 @@ module.exports = {
 	YEAR_RANGE_ID : 'year-range',
 	CALENDAR_ID : 'calendar-id',
 	CURRENCY_ID : 'currency-code',
+	PROGRAM_SETTINGS : 'program-settings',
 	FUNDING_TYPE_ID : 'funding-type',
 	CALENDAR_CURRENCIES_ID : 'calendar-currencies',
     AMOUNT_FORMAT_ID : 'amount-format',

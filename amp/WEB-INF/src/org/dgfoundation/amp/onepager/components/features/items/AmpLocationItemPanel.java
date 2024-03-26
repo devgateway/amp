@@ -191,14 +191,14 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
     @Override
     protected void onConfigure() {
-        AmpCategoryValueLocations loc = locationModel.getObject().getLocation();
-        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-        if (loc != null) {
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, loc);
-        }
-        super.onConfigure();
-        if (loc != null) {
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
-        }
+//        AmpCategoryValueLocations loc = locationModel.getObject().getLocation();
+//        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+//        if (loc != null) {
+//            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, loc);
+//        }
+//        super.onConfigure();
+//        if (loc != null) {
+//            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
+//        }
     }
 }

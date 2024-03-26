@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30853</jira>
+    <author>bmokandu</author>
+    <description>Update Cote Ivore to correct Name.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+				UPDATE amp_category_value_location
+SET location_name = 'Côte d''Ivoire'
+WHERE iso = 'ci';
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

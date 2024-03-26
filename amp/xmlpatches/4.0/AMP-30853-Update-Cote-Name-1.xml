@@ -8,7 +8,9 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-				UPDATE amp_category_value_location SET location_name='Côte d'Ivoire' WHERE iso='ci';
+				UPDATE amp_category_value_location
+SET location_name = 'Côte d''Ivoire'
+WHERE iso = 'ci';
 			]]></lang>
         </script>
     </apply>

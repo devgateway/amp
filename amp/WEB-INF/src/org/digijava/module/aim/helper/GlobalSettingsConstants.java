@@ -2,12 +2,43 @@ package org.digijava.module.aim.helper;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GlobalSettingsConstants {
 
     public static final String DEFAULT_COUNTRY = "Default Country";
 
+    public static final List<String> ECOWAS_COUNTRIES = Arrays.asList(
+            "BJ", // Benin
+            "BF", // Burkina Faso
+            "CI", // Côte d'Ivoire
+            "GM", // Gambia
+            "GH", // Ghana
+            "GN", // Guinea
+            "GW", // Guinea-Bissau
+            "LR", // Liberia
+            "ML", // Mali
+            "NE", // Niger
+            "NG", // Nigeria
+            "SN", // Senegal
+            "SL", // Sierra Leone
+            "TG"  // Togo
+    );
+
+    public static final List<String> GGW_COUNTRIES = Arrays.asList(
+            "BF", // Burkina Faso
+            "MR", // Mauritania
+            "SD", // Sudan
+            "TD", // Chad
+            "DJ", // Djibouti
+            "ER", // Eritrea
+            "ML", // Mali
+            "NE", // Niger
+            "NG", // Nigeria
+            "SN", // Senegal
+            "ET" // Ethiopia
+    );
     public static final String FEATURE_TEMPLATE = "Feature Template";
 
     public static final String YEAR_RANGE_START = "Year Range Start";

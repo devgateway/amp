@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -38,16 +39,22 @@ public class BoundariesService {
      * @return
      */
     public static List<Boundary> getBoundaries() {
-        String path = CONTEXT_PATH + BOUNDARY_PATH + "regional-list.json";
-        logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
-        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
+        String path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
+        if (Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode")).contains("-WS"))
         {
-                String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-                if (countryIso != null) {
-                    path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
-                }
+             path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
 
         }
+
+        logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
+//        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
+//        {
+            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+            if (countryIso != null) {
+                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+            }
+
+//        }
         logger.info("Boundaries path is: "+path);
         try (InputStream is = Files.newInputStream(Paths.get(path))) {
             String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);

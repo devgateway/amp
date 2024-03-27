@@ -69,7 +69,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 "implementationLevel",
                 CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
                 new AmpCategoryValueByKeyModel(
-                        new PropertyModel<Set<AmpCategoryValue>>(am,
+                        new PropertyModel<>(am,
                                 "categories"),
                         CategoryConstants.IMPLEMENTATION_LEVEL_KEY),
                 CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.MODULE);
@@ -81,7 +81,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 "implementationLocation",
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
                 new AmpCategoryValueByKeyModel(
-                        new PropertyModel<Set<AmpCategoryValue>>(am,
+                        new PropertyModel<>(am,
                                 "categories"),
                         CategoryConstants.IMPLEMENTATION_LOCATION_KEY),
                 CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,

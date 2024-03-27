@@ -17,7 +17,7 @@ VALUES
             SELECT acv.id
             FROM amp_category_value acv
             WHERE acv.category_value='Regional'
-              AND acv.amp_category_class_id=(SELECT id FROM amp_category_class cls WHERE cls.keyname='implementation_level')
+              AND acv.amp_category_class_id=(SELECT id FROM amp_category_class cls WHERE cls.keyname='implementation_level' OR cls.category_name='Country')
         ),
         'Ecowas Multicountry',
         '0000',
@@ -30,7 +30,7 @@ VALUES
             SELECT acv.id
             FROM amp_category_value acv
             WHERE acv.category_value='Regional'
-              AND acv.amp_category_class_id=(SELECT id FROM amp_category_class cls WHERE cls.keyname='implementation_level')
+              AND acv.amp_category_class_id=(SELECT id FROM amp_category_class cls WHERE cls.keyname='implementation_level' OR cls.category_name='Country')
         ),
         'GGW Multicountry',
         '0001',

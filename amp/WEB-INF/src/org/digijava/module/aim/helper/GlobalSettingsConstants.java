@@ -27,20 +27,17 @@ public class GlobalSettingsConstants {
     );
 
     public static final List<String> GGW_COUNTRIES = Arrays.asList(
-            "BJ", // Benin
             "BF", // Burkina Faso
-            "CI", // Côte d'Ivoire
-            "GM", // Gambia
-            "GH", // Ghana
-            "GN", // Guinea
-            "GW", // Guinea-Bissau
-            "LR", // Liberia
+            "MR", // Mauritania
+            "SD", // Sudan
+            "TD", // Chad
+            "DJ", // Djibouti
+            "ER", // Eritrea
             "ML", // Mali
             "NE", // Niger
             "NG", // Nigeria
             "SN", // Senegal
-            "SL", // Sierra Leone
-            "TG"  // Togo
+            "ET" // Ethiopia
     );
     public static final String FEATURE_TEMPLATE = "Feature Template";
 

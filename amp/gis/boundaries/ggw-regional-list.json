@@ -3,55 +3,55 @@
     "id": "ML_-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "ML"
+    "country": "ML_"
   },
   {
     "id": "ML_-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "ML"
+    "country": "ML_"
   },
   {
     "id": "ML_-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "ML"
+    "country": "ML_"
   },
   {
     "id": "SN_-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "SN"
+    "country": "SN_"
   },
   {
     "id": "SN_-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "SN"
+    "country": "SN_"
   },
   {
     "id": "SN_-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "SN"
+    "country": "SN_"
   },
   {
     "id": "NE_-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
-    "country": "NE"
+    "country": "NE_"
   },
   {
     "id": "NE_-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "NE"
+    "country": "NE_"
   },
   {
     "id": "NE_-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "NE"
+    "country": "NE_"
   },
   {
     "id": "DJ_-adm-0",
@@ -112,19 +112,19 @@
   "id": "NG_-adm-0",
   "admLevel": "adm-0",
   "label": "ADM 0",
-  "country": "NG"
+  "country": "NG_"
 },
   {
     "id": "NG_-adm-1",
     "admLevel": "adm-1",
     "label": "ADM 1",
-    "country": "NG"
+    "country": "NG_"
   },
   {
     "id": "NG_-adm-2",
     "admLevel": "adm-2",
     "label": "ADM 2",
-    "country": "NG"
+    "country": "NG_"
   },
   {
     "id": "SD_-adm-0",

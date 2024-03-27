@@ -196,7 +196,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
         if (loc != null) {
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, loc);
         }
-        super.onConfigure();
+//        super.onConfigure();
         if (loc != null) {
             PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
         }

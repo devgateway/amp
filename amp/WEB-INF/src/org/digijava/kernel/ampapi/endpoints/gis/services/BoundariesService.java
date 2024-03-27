@@ -40,15 +40,16 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
-        String val=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode"));
-        if (val.contains("-WS"))
+        String country=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode"));
+        if (country.contains("-WS"))
         {
              path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
 
         }
-        if (!val.contains("-WS") && !val.contains("-GG"))
+        logger.info("SELECTED COUNTRY: "+country);
+        if (!country.contains("-WS") && !country.contains("-GG"))
         {
-            String[] parts = val.split("-");
+            String[] parts = country.split("-");
             if (parts.length > 1) { // Ensure there's at least one hyphen-separated part
 
                 String countryIso = parts[parts.length - 1];
@@ -56,17 +57,16 @@ public class BoundariesService {
             }
             else
             {
-                throw new RuntimeException("Wrong country code format :"+val);
+                throw new RuntimeException("Wrong country code format :"+country);
             }
         }
 
-        logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
 //        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
 //        {
-            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-            if (countryIso != null) {
-                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
-            }
+//            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+//            if (countryIso != null) {
+//                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+//            }
 
 //        }
         logger.info("Boundaries path is: "+path);

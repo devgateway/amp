@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30853</jira>
+    <author>bmokandu</author>
+    <description>Add GIS Mode options</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+insert into amp_category_value_location (id,parent_category_value,location_name,code,iso,iso3) values
+(nextval('amp_category_value_location_seq'),
+(select acv.id
+ from amp_category_value acv where acv.category_value='Regional' and acv.amp_category_class_id=(select id from amp_category_class cls where cls.keyname='implementation_level')),'Ecowas Multicountry','0000','WS','WAS'),
+(nextval('amp_category_value_location_seq'),
+(select acv.id
+ from amp_category_value acv where acv.category_value='Regional' and acv.amp_category_class_id=(select id from amp_category_class cls where cls.keyname='implementation_level')),'GGW Multicountry','0001','GG','GGW');
+
+
+CREATE OR REPLACE VIEW v_g_gis_options AS SELECT id, location_name || '-' || iso AS value FROM amp_category_value_location WHERE iso IS NOT NULL AND iso3 IS NOT NULL;
+
+INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
+    ((select max(id) + 1 FROM amp_global_settings), 'GIS Mode', (select max(id) from v_g_gis_options), 'v_g_gis_options', 'GIS Mode. Select GGW or Ecowas as needed or Single country', 'gis');
+
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

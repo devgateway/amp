@@ -38,7 +38,13 @@ public class BoundariesService {
      * @return
      */
     public static List<Boundary> getBoundaries() {
-        String path = CONTEXT_PATH + BOUNDARY_PATH + "regional-list.json";
+        String path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
+        if (FeaturesUtil.getGlobalSettingValue("GIS Mode").equalsIgnoreCase("multicountry_ecowas"))
+        {
+             path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
+
+        }
+        
         logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
         if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
         {

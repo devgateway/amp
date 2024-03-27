@@ -41,20 +41,21 @@ public class BoundariesService {
     public static List<Boundary> getBoundaries() {
         String path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
         String country=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode"));
-        if (country.contains("-WS"))
+        if (country.length()==2){
+        if (country.equalsIgnoreCase("WS"))
         {
              path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
 
         }
         logger.info("SELECTED COUNTRY: "+country);
-        if (!country.contains("-WS") && !country.contains("-GG"))
-        {
-            String[] parts = country.split("-");
-            if (parts.length > 1) { // Ensure there's at least one hyphen-separated part
+        if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("GG")) {
+//            String[] parts = country.split("-");
+//            if (parts.length > 1) { // Ensure there's at least one hyphen-separated part
 
-                String countryIso = parts[parts.length - 1];
-                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
-            }
+//                String countryIso = parts[parts.length - 1];
+            path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
+//            }
+        }
             else
             {
                 throw new RuntimeException("Wrong country code format :"+country);

@@ -42,12 +42,11 @@ ON CONFLICT (iso) DO UPDATE
     SET location_name = EXCLUDED.location_name,
         code = EXCLUDED.code;
 
-
 DROP VIEW v_g_gis_options;
-CREATE OR REPLACE VIEW v_g_gis_options AS SELECT  iso, location_name || '-' || iso AS value FROM amp_category_value_location WHERE iso IS NOT NULL AND iso3 IS NOT NULL;
+CREATE OR REPLACE VIEW v_g_gis_options AS SELECT  id, iso as iso, location_name || '-' || iso AS value FROM amp_category_value_location WHERE iso IS NOT NULL AND iso3 IS NOT NULL;
 DELETE from amp_global_settings where settingsname='GIS Mode';
 INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
-    ((select max(id) + 1 FROM amp_global_settings), 'GIS Mode', (select value from v_g_gis_options where iso=(SELECT settingsvalue FROM amp_global_settings ags WHERE ags.settingsname='Default Country')), 'v_g_gis_options', 'GIS Mode. Select GGW or Ecowas as needed or Single country', 'gis');
+    ((select max(id) + 1 FROM amp_global_settings), 'GIS Mode', (select id from v_g_gis_options where LOWER(iso)=LOWER((SELECT settingsvalue FROM amp_global_settings ags WHERE ags.settingsname='Default Country'))), 'v_g_gis_options', 'GIS Mode. Select GGW or Ecowas as needed or Single country', 'gis');
 
 			]]></lang>
         </script>

@@ -39,28 +39,32 @@ public class BoundariesService {
      * @return
      */
     public static List<Boundary> getBoundaries() {
-        String path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
+        String path;
         String country=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode"));
-        if (country.length()==2){
-        if (country.equalsIgnoreCase("WS"))
-        {
-             path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
+        if (country.length()==2) {
 
-        }
-        logger.info("SELECTED COUNTRY: "+country);
-        if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("GG")) {
-//            String[] parts = country.split("-");
-//            if (parts.length > 1) { // Ensure there's at least one hyphen-separated part
-
-//                String countryIso = parts[parts.length - 1];
-            path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
-//            }
-        }
-            else
+            path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
+            if (country.equalsIgnoreCase("ZZ"))
             {
-                throw new RuntimeException("Wrong country code format :"+country);
+                path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
+
+            }
+            if (country.equalsIgnoreCase("WS")) {
+                path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
+
+            }
+            logger.info("SELECTED COUNTRY: " + country);
+            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("GG")) {
+
+                path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
+
             }
         }
+        else
+        {
+            throw new RuntimeException("Wrong country code format :"+country);
+        }
+
 
 //        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
 //        {

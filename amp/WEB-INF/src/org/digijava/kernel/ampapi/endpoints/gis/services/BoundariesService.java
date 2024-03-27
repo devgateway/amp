@@ -40,10 +40,24 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
-        if (Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode")).contains("-WS"))
+        String val=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode"));
+        if (val.contains("-WS"))
         {
              path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
 
+        }
+        if (!val.contains("-WS") && !val.contains("-GG"))
+        {
+            String[] parts = val.split("-");
+            if (parts.length > 1) { // Ensure there's at least one hyphen-separated part
+
+                String countryIso = parts[parts.length - 1];
+                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+            }
+            else
+            {
+                throw new RuntimeException("Wrong country code format :"+val);
+            }
         }
 
         logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());

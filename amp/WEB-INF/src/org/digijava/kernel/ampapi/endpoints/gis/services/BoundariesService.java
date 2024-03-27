@@ -54,7 +54,7 @@ public class BoundariesService {
 
             }
             logger.info("SELECTED COUNTRY: " + country);
-            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("GG")) {
+            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("GG") && !country.equalsIgnoreCase("ZZ")) {
 
                 path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
 

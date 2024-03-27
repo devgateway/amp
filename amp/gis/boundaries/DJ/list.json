@@ -1,16 +1,19 @@
 [
   {
-    "id": "adm-0",
+    "id": "DJ-adm-0",
+    "admLevel": "adm-0",
     "label": "ADM 0",
     "country": "DJ"
   },
   {
-    "id": "adm-1",
+    "id": "DJ-adm-1",
+    "admLevel": "adm-1",
     "label": "ADM 1",
     "country": "DJ"
   },
   {
-    "id": "adm-2",
+    "id": "DJ-adm-2",
+    "admLevel": "adm-2",
     "label": "ADM 2",
     "country": "DJ"
   }

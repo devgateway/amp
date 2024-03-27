@@ -1,16 +1,19 @@
 [
 	{
-	    "id": "adm-0",
-	    "label": "ADM 0",
-	    "country": "GM"
-  	},
-  	{
-	    "id": "adm-1",
-	    "label": "ADM 1",
-	    "country": "GM"
-  	},
+		"id": "GM-adm-0",
+		"admLevel": "adm-0",
+		"label": "ADM 0",
+		"country": "GM"
+	},
 	{
-		"id": "adm-2",
+		"id": "GM-adm-1",
+		"admLevel": "adm-1",
+		"label": "ADM 1",
+		"country": "GM"
+	},
+	{
+		"id": "GM-adm-2",
+		"admLevel": "adm-2",
 		"label": "ADM 2",
 		"country": "GM"
 	}

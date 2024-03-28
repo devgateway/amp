@@ -425,6 +425,15 @@
 			<role-name>DigiAdmin</role-name>
 		</auth-constraint>
 	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Restricted Resources</web-resource-name>
+			<url-pattern>*.xml</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
 
 	<login-config>
 		<auth-method>BASIC</auth-method>

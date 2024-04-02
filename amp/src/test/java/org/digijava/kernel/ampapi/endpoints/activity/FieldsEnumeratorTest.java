@@ -27,8 +27,10 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.validator.groups.Submit;
-import org.junit.Before;
+import org.hamcrest.MatcherAssert;
 import org.junit.Rule;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
@@ -44,7 +46,6 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.HIDDEN_FM_PATH;
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.VISIBLE_FM_PATH;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -61,7 +62,8 @@ public class FieldsEnumeratorTest {
     private FeatureManagerService fmService;
     private FieldInfoProvider provider;
 
-    @Rule public MockitoRule rule = MockitoJUnit.rule();
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock private TranslatorService throwingTranslatorService;
     @Mock private TranslatorService emptyTranslatorService;
@@ -73,7 +75,7 @@ public class FieldsEnumeratorTest {
 
     private ValueConverter valueConverter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         translatorService = new TestTranslatorService();
         fmService = new TestFMService();
@@ -93,7 +95,7 @@ public class FieldsEnumeratorTest {
     @Test
     public void testEmpty() {
         List<APIField> fields = fieldsFor(Object.class);
-        assertTrue(fields.isEmpty());
+        Assertions.assertTrue(fields.isEmpty());
     }
 
     private static class NotAnnotated {
@@ -104,7 +106,7 @@ public class FieldsEnumeratorTest {
     @Test
     public void testNotAnnotated() {
         List<APIField> fields = fieldsFor(NotAnnotated.class);
-        assertTrue(fields.isEmpty());
+        Assertions.assertTrue(fields.isEmpty());
     }
 
     private static class OneFieldClass {
@@ -259,7 +261,7 @@ public class FieldsEnumeratorTest {
                 new FieldsEnumerator(provider, invisibleFmService, translatorService, name -> true)
                         .getAllAvailableFields(OneFieldClass.class);
 
-        assertEquals(Collections.emptyList(), actual);
+        Assertions.assertEquals(Collections.emptyList(), actual);
     }
 
     private static class Composition {
@@ -639,8 +641,8 @@ public class FieldsEnumeratorTest {
         List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
 
-        assertEquals(1, fields.size());
-        assertEquals("One Field", fields.get(0).getFieldLabel().get(TrnUtil.DEFAULT, "en"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals("One Field", fields.get(0).getFieldLabel().get(TrnUtil.DEFAULT, "en"));
     }
 
     @Test
@@ -663,7 +665,7 @@ public class FieldsEnumeratorTest {
         try {
             List<APIField> actual = fieldsFor(Composition.class);
             String actualJson = new ObjectMapper().writeValueAsString(actual);
-            assertEquals(originalJson, actualJson);
+            Assertions.assertEquals(originalJson, actualJson);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -680,7 +682,7 @@ public class FieldsEnumeratorTest {
         try {
             List<APIField> actual = fieldsFor(NestedField.class);
             String actualJson = new ObjectMapper().writeValueAsString(actual);
-            assertEquals(originalJson, actualJson);
+            Assertions.assertEquals(originalJson, actualJson);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -718,7 +720,7 @@ public class FieldsEnumeratorTest {
 
         List<String> fieldPaths = fieldsEnumerator.findFieldPaths(fieldFilter, fields);
 
-        assertThat(fieldPaths, hasItems(
+        MatcherAssert.assertThat(fieldPaths, hasItems(
                 "team", // ref by type
                 "primary_sectors~sector", // nested ref by type
                 "approval_status", // ref by possible value
@@ -732,8 +734,8 @@ public class FieldsEnumeratorTest {
 
         List<String> fieldPaths = fieldsEnumerator.findFieldPaths(fieldFilter, fields);
 
-        assertThat(fieldPaths, hasItems("primary_sectors~sector"));
-        assertThat(fieldPaths, not(hasItems("team", "approval_status", "fundings~commitments~pledge")));
+        MatcherAssert.assertThat(fieldPaths, hasItems("primary_sectors~sector"));
+        MatcherAssert.assertThat(fieldPaths, not(hasItems("team", "approval_status", "fundings~commitments~pledge")));
     }
 
     private static class ObjWithImportableCollectionWithoutId {
@@ -774,7 +776,7 @@ public class FieldsEnumeratorTest {
     @Test
     public void testEnumerationDoesNotFailForCollectionsOfPrimitives() {
         List<APIField> fields = fieldsEnumerator.getAllAvailableFields(ObjWithPrimitiveCollections.class);
-        assertThat(fields.size(), is(2));
+        MatcherAssert.assertThat(fields.size(), is(2));
     }
 
     private static class ObjWithObjId {
@@ -835,21 +837,21 @@ public class FieldsEnumeratorTest {
     public void testActivityCollectionFields() {
         APIField apiField = fieldsEnumerator.getMetaModel(AmpActivityFields.class);
         List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpActivityVersion(), apiField);
-        assertEquals(nullableAPIFields, Collections.emptyList());
+        Assertions.assertEquals(nullableAPIFields, Collections.emptyList());
     }
 
     @Test
     public void testContactCollectionFields() {
         APIField apiField = fieldsEnumerator.getMetaModel(AmpContact.class);
         List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpContact(), apiField);
-        assertEquals(nullableAPIFields, Collections.emptyList());
+        Assertions.assertEquals(nullableAPIFields, Collections.emptyList());
     }
 
     @Test
     public void testResourceCollectionFields() {
         APIField apiField = fieldsEnumerator.getMetaModel(AmpResource.class);
         List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpResource(), apiField);
-        assertEquals(nullableAPIFields, Collections.emptyList());
+        Assertions.assertEquals(nullableAPIFields, Collections.emptyList());
     }
 
     private List<APIField> getAPIFieldWithNullCollections(Object object, APIField field) {
@@ -909,7 +911,7 @@ public class FieldsEnumeratorTest {
         APIField apiField = ValidatorUtil.getMetaData(AmpActivityFields.class,
                 ImmutableSet.of("/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator"));
 
-        assertThat(apiField.getChildren(), hasItem(allOf(
+        MatcherAssert.assertThat(apiField.getChildren(), hasItem(allOf(
                         hasProperty("fieldName", equalTo("primary_sectors")),
                         hasProperty("uniqueConstraint", equalTo("sector")),
                         hasProperty("treeCollectionConstraint", equalTo(true))
@@ -922,7 +924,7 @@ public class FieldsEnumeratorTest {
                 ImmutableSet.of("/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator",
                         "/Activity Form/Sectors/Primary Sectors/treeSectorsValidator"));
 
-        assertThat(apiField.getChildren(), hasItem(allOf(
+        MatcherAssert.assertThat(apiField.getChildren(), hasItem(allOf(
                 hasProperty("fieldName", equalTo("primary_sectors")),
                 hasProperty("uniqueConstraint", nullValue()),
                 hasProperty("treeCollectionConstraint", equalTo(false))
@@ -1027,9 +1029,7 @@ public class FieldsEnumeratorTest {
     }
 
     private void assertEqualsDigest(List<APIField> expected, List<APIField> actual) {
-        assertEquals(
-                expected.stream().map(this::digest).collect(Collectors.toList()),
-                actual.stream().map(this::digest).collect(Collectors.toList()));
+        Assertions.assertEquals(expected.stream().map(this::digest).collect(Collectors.toList()), actual.stream().map(this::digest).collect(Collectors.toList()));
     }
 
     private UnwrappedTranslationsByWorkspacePrefix fieldLabelFor(String baseText) {

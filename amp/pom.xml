@@ -70,7 +70,7 @@
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </repository>
         <repository>
-            <id>central</id>
+            <id>maven</id>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>

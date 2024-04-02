@@ -16,7 +16,7 @@ import javax.servlet.ServletContext;
 import java.util.*;
 
 /**
- * this class scans for newly-added measures in amp_measures which are not present there and adds them, in all the templates installed in the system. 
+ * this class scans for newly-added measures in amp_measures which are not present there and adds them, in all the templates installed in the system.
  * The just-added measure are then enabled in case the MeasuresVisibility-by-AF algorithm for the said template would enable them<br />
  * A measure might be missing in the FM for one of the following reasons: <br /><ol>
  * <li>it has been deleted by one of the prior commits to AMP-19577</li>
@@ -25,10 +25,10 @@ import java.util.*;
  *
  */
 public class RecreateFMEntries {
-    
+
     protected static final Logger logger = Logger.getLogger(RecreateFMEntries.class);
-    
-    
+
+
     @SuppressWarnings("serial")
     protected static final Set<String> oldMeasuresToRestore = new HashSet<String>() {{
         add(MeasureConstants.ACTUAL_COMMITMENTS);
@@ -64,27 +64,27 @@ public class RecreateFMEntries {
         add(MeasureConstants.PERCENTAGE_OF_DISBURSEMENT);
         add(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
     }};
-    
+
     public void doIt(ServletContext ampContext) {
         logger.info("adding newly-created-measures entries to the FM and enabling them according to the AF configuration...");
 
         List<String> measuresToRestore = new ArrayList<>();
-        measuresToRestore.addAll(MeasuresVisibility.allMeasures);        
-        
+        measuresToRestore.addAll(MeasuresVisibility.allMeasures);
+
         long measuresModuleId = PersistenceManager.getLong(
                 PersistenceManager.getRequestDBSession().createNativeQuery("select mod.id from amp_modules_visibility mod JOIN amp_modules_visibility rep "
                         + "ON lower(rep.name)='reporting' and rep.id = mod.parent WHERE lower(mod.name)='measures'")
                 .uniqueResult());
-        
+
         for(Object templateIdObj : PersistenceManager.getRequestDBSession().createNativeQuery("select id from amp_templates_visibility").list()) {
             long templateId = PersistenceManager.getLong(templateIdObj);
             MeasuresVisibility mv = new MeasuresVisibility();
-            
-            
+
+
             Set<String> enabledMeasuresByAF = new HashSet<String>();
             enabledMeasuresByAF.addAll(mv.detectVisibleDataAF(templateId));
-            
-            
+
+
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if ((gsValue == null || gsValue.equalsIgnoreCase("off"))) {
                 for (String measureName : measuresToRestore) {
@@ -96,39 +96,39 @@ public class RecreateFMEntries {
                     }
                 }
             }
-            
+
             createAndInsertMeasureFeatures(templateId, measuresModuleId, new HashSet<>(measuresToRestore), enabledMeasuresByAF);
         }
-        
+
         PersistenceManager.getSession().flush();
         logger.info("\t...done!");
     }
-    
+
     protected void createAndInsertMeasureFeatures(Long templateId, Long moduleId, Set<String> measuresToRestore, Set<String> enabledMeasuresByAF) {
         Session session = PersistenceManager.getSession();
         Set<String> measureNames = new TreeSet<>(measuresToRestore);
-        AmpTemplatesVisibility template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, templateId);
-        AmpModulesVisibility reportingModule = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, moduleId);
-        
+        AmpTemplatesVisibility template = session.load(AmpTemplatesVisibility.class, templateId);
+        AmpModulesVisibility reportingModule = session.load(AmpModulesVisibility.class, moduleId);
+
         for(AmpObjectVisibility preexistentFeature : reportingModule.getOrCreateItems()) {
             measureNames.remove(preexistentFeature.getName());
         }
-        
+
         for(String measureName : measureNames) {
             logger.error(String.format("Measure <%s> does not exist in the FM database, template <%s>, adding it: %s", measureName, template.getName(), enabledMeasuresByAF.contains(measureName) ? "enabled" : "disabled"));
             AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
             feature.setParent(reportingModule);
             feature.setName(measureName);
             feature.setHasLevel(false);
-                            
+
             reportingModule.getOrCreateItems().add(feature);
             session.save(feature);
-            
+
             if (enabledMeasuresByAF.contains(measureName)) {
                 template.getFeatures().add(feature);
             }
         }
-        
+
         session.update(reportingModule);
         session.update(template);
         session.flush();

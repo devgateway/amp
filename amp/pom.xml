@@ -69,10 +69,7 @@
             <name>amp</name>
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </repository>
-        <repository>
-            <id>maven</id>
-            <url>https://repo1.maven.apache.org/maven2</url>
-        </repository>
+
     </repositories>
     <pluginRepositories>
         <pluginRepository>

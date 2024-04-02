@@ -117,12 +117,19 @@ COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/bui
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
     mvn -B test war:exploded \
-      -DbuildSource=$BUILD_SOURCE \
-      -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
-      -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
-      -Dskip.npm -Dskip.installnodenpm \
+      -DbuildSource="$BUILD_SOURCE" \
+      -Djdbc.user=amp \
+      -Djdbc.password=amp122006 \
+      -Djdbc.db=amp \
+      -Djdbc.host=db \
+      -Djdbc.port=5432 \
+      -DdbName=postgresql \
+      -Djdbc.driverClassName=org.postgresql.Driver \
+      -Dskip.npm \
+      -Dskip.installnodenpm \
     && mv target/amp exploded \
     && rm -rf target
+
 
 FROM tomcat:8.5.79-jdk8
 

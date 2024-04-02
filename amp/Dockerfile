@@ -116,7 +116,7 @@ COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
 COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/build
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -B test war:exploded \
+    mvn -X -B test war:exploded \
       -DbuildSource="$BUILD_SOURCE" \
       -Djdbc.user=amp \
       -Djdbc.password=amp122006 \

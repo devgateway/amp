@@ -3,6 +3,16 @@
 <head>
   <title>Data Importer</title>
   <script>
+    function replaceLastOccurrence(inputString, search, replacement) {
+      var lastIndex = inputString.lastIndexOf(search);
+      if (lastIndex === -1) {
+        // If the search string is not found, return the original string
+        return inputString;
+      } else {
+        // Construct the new string with the replacement
+        return inputString.substring(0, lastIndex) + replacement + inputString.substring(lastIndex + search.length);
+      }
+    }
     function addField() {
       var columnName = document.getElementById("columnName").value;
       var selectedField = document.getElementById("selected-field").value;
@@ -16,11 +26,23 @@
       var selectedFieldCell = document.createElement("td");
       selectedFieldCell.textContent = selectedField;
 
+      var selectedPairsInput = document.getElementById("selected-pairs");
+      var currentPairs = selectedPairsInput.value;
+      if (currentPairs === "") {
+        // If the input field is empty, simply set it to the new pair
+        selectedPairsInput.value = columnName + ":" + selectedField;
+      } else {
+        // If the input field already contains pairs, append the new pair
+        selectedPairsInput.value += ";" + columnName + ":" + selectedField;
+      }
+
+
       // Create a remove button
       var removeButtonCell = document.createElement("td");
       var removeButton = document.createElement("button");
       removeButton.textContent = "Remove";
       removeButton.onclick = function() {
+        selectedPairsInput.value = replaceLastOccurrence(currentPairs, ";" + columnName + ":" + selectedField, '');
         row.remove(); // Remove the row when the remove button is clicked
       };
       removeButtonCell.appendChild(removeButton);
@@ -57,6 +79,8 @@
     </c:forEach>
   </select>
   <br><br>
+  <input type="hidden" id="selected-pairs" name="selectedPairs">
+
   <input type="button" value="Add Field" onclick="addField()">
   <br><br>
   <input type="submit" value="Upload">

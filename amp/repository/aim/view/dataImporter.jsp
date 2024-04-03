@@ -43,8 +43,9 @@
       removeButton.textContent = "Remove";
       removeButton.onclick = function() {
         var currentPairsHere = selectedPairsInput.value;
-        if (((currentPairsHere.match(new RegExp(";", "g")) || []).length)===1)
+        if (((currentPairsHere.match(new RegExp(":", "g")) || []).length)===1)
         {
+          alert(1)
           selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField, '');
         }
         else

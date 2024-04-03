@@ -19,12 +19,12 @@ export const getSectors = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         const response = await fetch("/rest/indicatorManager/sectors");
         const data: SectorObjectType[] = await response.json();
-        
+
         if (response.status !== 200) {
             return rejectWithValue(data);
         }
 
-        return data;
+        return data.sort((a, b) => a.name.localeCompare(b.name));
     }
 );
 
@@ -42,8 +42,8 @@ const fetchSectorsSlice = createSlice({
         });
         builder.addCase(getSectors.rejected, (state, action) => {
             state.loading = false;
-            state.error = errorHelper(action.payload); 
-    
+            state.error = errorHelper(action.payload);
+
         });
     }
 });

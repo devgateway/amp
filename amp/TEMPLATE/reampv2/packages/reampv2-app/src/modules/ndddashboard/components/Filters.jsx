@@ -5,8 +5,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
 import { TRN_PREFIX } from '../utils/constants';
+import '@devgateway/amp-filter/dist/amp-filter.css';
 
-import Filter from '@devgateway/amp-filter/dist/amp-filter';
+const Filter = require('@devgateway/amp-filter/dist/amp-filter')
 
 const filter = new Filter({
   draggable: true,
@@ -19,6 +20,8 @@ class Filters extends Component {
     this.state = {
       show: false, filtersWithModels: null, showFiltersList: false, savedDashboardLoaded: false
     };
+
+    console.log('Filters.jsx: constructor: filter=', filter);
   }
 
   componentDidMount() {

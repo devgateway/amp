@@ -299,7 +299,7 @@ public class ActivityUtil {
             if (a.getAmpActivityId() == null)
                 session.save(a);
             else {
-               cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
+                cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
                 session.saveOrUpdate(a);
             }
         } else {
@@ -329,6 +329,12 @@ public class ActivityUtil {
         {
             session.evict(object);
         }
+    }
+    private static void updateFunding(AmpActivityVersion ampActivityVersion)
+    {
+    Session session = PersistenceManager.getRequestDBSession();
+    List<AmpFunding> fundings = session.createQuery("FROM "+ AmpFunding.class.getName()+" af WHERE af.ampActivityId=:activityId",AmpFunding.class).setParameter("activityId",ampActivityVersion.getAmpActivityId(), LongType.INSTANCE).list();
+
     }
 
     private static void updateMultiStakeholderField(AmpActivityVersion a) {
@@ -745,7 +751,7 @@ public class ActivityUtil {
         for (AmpComponent ampComponent : components) {
             if (Hibernate.isInitialized(ampComponent.getFundings()) && (ampComponent.getFundings() != null)) {
 
-                    ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
+                ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
 
             }
         }
@@ -1285,7 +1291,7 @@ public class ActivityUtil {
             if (checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()) {
                 //List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
                 List<Long> activityDbContactsIds = ContactInfoUtil.getActivityContactIds(oldActivityId);
-                if (activityDbContactsIds != null && activityDbContactsIds.size() > 0) {
+                if (activityDbContactsIds != null && !activityDbContactsIds.isEmpty()) {
                     for (Long actContactId : activityDbContactsIds) {
                         int count = 0;
                         if (activityContacts != null) {
@@ -1317,7 +1323,7 @@ public class ActivityUtil {
         }
         try {
             //add or edit activity contact and amp contact
-            if (activityContacts != null && activityContacts.size() > 0) {
+            if (activityContacts != null && !activityContacts.isEmpty()) {
                 for (AmpActivityContact activityContact : activityContacts) {
                     Long contactId = activityContact.getContact().getId();
                     // if the contact already exists on the DB, and was not saved

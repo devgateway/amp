@@ -27,7 +27,7 @@ export const indicatorValidationSchema = Yup.object().shape({
   ascending: Yup.boolean().required('Ascending is required'),
   creationDate: Yup.date().required('Creation date is required'),
   sectors: Yup.mixed().optional() ,
-  programId: Yup.number().optional(),
+  programId: Yup.number().nullable().optional().notRequired(),
   base: Yup.object().shape({
     originalValue: Yup.number().optional().nullable(),
     originalValueDate: Yup.date().optional().nullable(),

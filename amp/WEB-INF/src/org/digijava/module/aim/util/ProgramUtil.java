@@ -1502,7 +1502,7 @@ public class ProgramUtil {
         Transaction tx = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             if (settings != null) {
                 for (Object o : settings) {
                     AmpActivityProgramSettings setting = (AmpActivityProgramSettings) o;
@@ -1530,6 +1530,7 @@ public class ProgramUtil {
                         }
 
                         session.update(oldSetting);
+                        session.flush();
                     }
 
                 }

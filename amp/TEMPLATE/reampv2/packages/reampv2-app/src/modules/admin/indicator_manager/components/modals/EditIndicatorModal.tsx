@@ -90,6 +90,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
   const [targetOriginalValueDateDisabled, setTargetOriginalValueDateDisabled] = useState(false);
 
+  const convertDateToISO = (date?: string) => {
+    if (!date) {
+      return '';
+    }
+    return DateUtil.toISO8601(date, globalSettings['default-date-format']);
+  };
 
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
@@ -144,13 +150,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         setProgramFieldVisible(true);
 
         if (programScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(programScheme.startDate || ''));
-          setBaseOriginalValueDateDisabled(true);
+          formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(programScheme.startDate));
         }
 
         if (programScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(programScheme.endDate || ''));
-          setTargetOriginalValueDateDisabled(true);
+          formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(programScheme.endDate));
         }
       }
 
@@ -299,18 +303,18 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     sectors: indicator?.sectors || [],
     programId: '',
     ascending: indicator?.ascending || false,
-    creationDate: indicator?.creationDate,
+    creationDate: indicator?.creationDate ? convertDateToISO(indicator?.creationDate) : '',
     base: {
       originalValue: indicator?.base?.originalValue,
-      originalValueDate: indicator?.base?.originalValueDate,
+      originalValueDate: indicator?.base?.originalValueDate ? convertDateToISO(indicator?.base?.originalValueDate) : '',
       revisedValue: indicator?.base?.revisedValue,
-      revisedValueDate: indicator?.base?.revisedValueDate,
+      revisedValueDate: indicator?.base?.revisedValueDate ? convertDateToISO(indicator?.base?.revisedValueDate) : '',
     },
     target: {
       originalValue: indicator?.target?.originalValue,
-      originalValueDate: indicator?.target?.originalValueDate,
+      originalValueDate: indicator?.target?.originalValueDate ? convertDateToISO(indicator?.target?.originalValueDate) : '',
       revisedValue: indicator?.target?.revisedValue,
-      revisedValueDate: indicator?.target?.revisedValueDate,
+      revisedValueDate: indicator?.target?.revisedValueDate ? convertDateToISO(indicator?.target?.revisedValueDate) : '',
     },
     indicatorsCategory: indicator?.indicatorsCategory?.toString() || ''
   };
@@ -336,7 +340,30 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         validationSchema={translatedIndicatorValidationSchema(translations)}
         innerRef={formikRef}
         onSubmit={(values) => {
-          const { name, description, code, sectors, ascending, programId, creationDate, base, target, indicatorsCategory } = values;
+          const {
+            name,
+            description,
+            code,
+            sectors,
+            ascending,
+            programId,
+            creationDate,
+            base,
+            target,
+            indicatorsCategory
+          } = values;
+
+          if (selectedProgramSchemeId && !programId) {
+            MySwal.fire({
+              title: 'Error',
+              text: translations['amp.indicatormanager:errors-program-is-required'],
+              icon: 'error',
+              confirmButtonText: 'Ok',
+            })
+
+            return;
+          }
+
           const updatedIndicatorData = {
             id: indicator.id,
             name,
@@ -449,8 +476,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         clearIcon={null}
                         calendarIcon={null}
                         className={styles.input_field}
-                       id="creationDate"
-                      inputRef={creationDateRef}/>
+                        id="creationDate"
+                        disableCalendar={true}
+                        inputRef={creationDateRef}/>
                     </Form.Group>
                   </Row>
 
@@ -770,7 +798,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                   {translations["amp.indicatormanager:close"]}
                 </Button>
-                <Button type="submit" variant="success">
+                <Button type="submit" variant="success" >
                   {translations["amp.indicatormanager:save"]}
                 </Button>
               </Modal.Footer>

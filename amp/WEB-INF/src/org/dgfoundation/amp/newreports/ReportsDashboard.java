@@ -9,6 +9,7 @@ public class ReportsDashboard {
 
     private String country;
     private String status;
+    private String reportingSystem;
     private String currency;
     private String year;
     private BigDecimal actualCommitment;
@@ -97,5 +98,13 @@ public class ReportsDashboard {
         if (other.actualDisbursement != null) {
             this.actualDisbursement = this.actualDisbursement.add(other.actualDisbursement);
         }
+    }
+
+    public String getReportingSystem() {
+        return reportingSystem;
+    }
+
+    public void setReportingSystem(String reportingSystem) {
+        this.reportingSystem = reportingSystem;
     }
 }

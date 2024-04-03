@@ -40,6 +40,7 @@
   <label for="selected-field">Select Entity Field:</label>
   <select id="selected-field">
     <!-- Populate dropdown with entity field names -->
+    <jsp:useBean id="fieldsInfo" type="java.util.List"/>
     <c:forEach items="${fieldsInfo}" var="fieldInfo">
       <option>${fieldInfo.fieldName}</option>
     </c:forEach>

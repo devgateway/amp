@@ -25,8 +25,9 @@ public class DataImporter extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         fieldsInfo = getEntityFieldsInfo(AmpActivityFields.class);
         logger.info("Fields: "+fieldsInfo);
-        DataImporterForm dataImporterForm = (DataImporterForm) form;
-        dataImporterForm.setFieldInfos(fieldsInfo);
+//        DataImporterForm dataImporterForm = (DataImporterForm) form;
+//        dataImporterForm.setFieldInfos(fieldsInfo);
+        request.setAttribute("fieldsInfo",fieldsInfo);
         return mapping.findForward("importData");
     }
     private List<FieldInfo> getEntityFieldsInfo(Class<?> entityClass) {

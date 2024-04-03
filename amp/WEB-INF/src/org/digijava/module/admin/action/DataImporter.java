@@ -26,12 +26,12 @@ public class DataImporter extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         fieldsInfo = getEntityFieldsInfo(AmpActivityFields.class);
-        logger.info("Fields: "+fieldsInfo);
+//        logger.info("Fields: "+fieldsInfo);
 //        DataImporterForm dataImporterForm = (DataImporterForm) form;
 //        dataImporterForm.setFieldInfos(fieldsInfo);
         request.setAttribute("fieldsInfo",fieldsInfo);
-        Map<String, String> fieldMapping = new HashMap<>();
-        request.setAttribute("fieldMapping", fieldMapping);
+//        Map<String, String> fieldMapping = new HashMap<>();
+//        request.setAttribute("fieldMapping", fieldMapping);
 
 //        request.getRequestDispatcher("/WEB-INF/country-selection.jsp").forward(request, response);
 

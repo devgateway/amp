@@ -42,7 +42,8 @@
       var removeButton = document.createElement("button");
       removeButton.textContent = "Remove";
       removeButton.onclick = function() {
-        selectedPairsInput.value = replaceLastOccurrence(currentPairs, ";" + columnName + ":" + selectedField, '');
+        var currentPairsHere = selectedPairsInput.value;
+        selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, ";" + columnName + ":" + selectedField, '');
         row.remove(); // Remove the row when the remove button is clicked
       };
       removeButtonCell.appendChild(removeButton);

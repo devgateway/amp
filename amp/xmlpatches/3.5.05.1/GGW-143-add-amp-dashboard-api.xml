@@ -10,7 +10,7 @@
             <lang delimiter=";" type="postgres"><![CDATA[
 
 				INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
-				VALUES (nextval('amp_global_settings_seq'), 'AMP Dashboard URL', 'https://ggw-dashboard.dgstg.org/api/amp-funding/importDonorFunding', null, 'Amp Dashboard api url', 'general', null);
+				VALUES (nextval('amp_global_settings_seq'), 'AMP Dashboard URL', null, null, 'Amp Dashboard api url', 'general', null);
 
 			]]></lang>
         </script>

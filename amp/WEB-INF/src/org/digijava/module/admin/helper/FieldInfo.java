@@ -6,6 +6,9 @@ public class FieldInfo {
     public String fieldType;
 
     public FieldInfo(String subclass, String fieldName, String fieldType) {
+        this.subclass=subclass;
+        this.fieldName=fieldName;
+        this.fieldName=fieldType;
     }
 
     public String getSubclass() {

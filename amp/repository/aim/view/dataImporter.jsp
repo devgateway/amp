@@ -27,8 +27,8 @@
 </head>
 <body>
 <h2>Data Importer</h2>
+<digi:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
 
-<form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
   <label for="file">Select Excel File:</label>
   <input type="file" id="file" name="file" required>
   <br><br>
@@ -38,14 +38,15 @@
     <html:select property="fieldName" styleClass="inp-text-fieldOption">
 
       <logic:notEmpty name="dataImporterForm" property="fieldInfos">
-        <html:optionsCollection name="dataImporterForm"
-                                property="fieldInfos" value="fieldName" label="fieldName" />
+        <html:optionsCollection name="dataImporterForm" property="fieldInfos" value="fieldName" label="fieldName" />
       </logic:notEmpty>
     </html:select>
     <br>
-    <label for="columnName">Column Name:</label>
-    <input type="text" id="columnName" name="columnName">
-    <button type="button" onclick="addColumnMapping()">Add Mapping</button>
+    <label>Column Name:</label>
+<%--    <input type="text" id="columnName" name="columnName">--%>
+  <html:text property="columnName" styleClass="inp-text" styleId="keyWordTextField"/>
+
+  <button type="button" onclick="addColumnMapping()">Add Mapping</button>
     <br>
   <br>
   <table id="mappingTable">
@@ -57,6 +58,6 @@
   </table>
   <br>
   <input type="submit" value="Upload">
-</form>
+</digi:form>
 </body>
 </html>

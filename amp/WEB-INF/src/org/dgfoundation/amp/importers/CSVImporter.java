@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.dgfoundation.amp.importers;
 
@@ -46,10 +46,10 @@ public abstract class CSVImporter extends AmpImporter {
         String line=lnr.readLine();
         if(line==null) return null;
         int k=0;
-        Map<String,String> ret=new HashMap<String,String>(); 
+        Map<String,String> ret=new HashMap<String,String>();
         String [] parts = tokenizeLine (line);
         for (String token:parts) {
-            if(token.trim().equals("")) ret.put(columnNames[k], null); else ret.put(columnNames[k], token);
+            if(token.trim().isEmpty()) ret.put(columnNames[k], null); else ret.put(columnNames[k], token);
             k++;
         }
         return ret;
@@ -61,10 +61,10 @@ public abstract class CSVImporter extends AmpImporter {
         LineNumberReader lnr=new LineNumberReader(source);
         reader=lnr;
     }
-    
+
     protected String [] tokenizeLine (String line) {
         return line.split(token);
-        
+
     }
 
 

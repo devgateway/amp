@@ -182,10 +182,10 @@
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
-                              <c:set var="trnSystemSettings">
+                              <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Data Import</digi:trn>
                               </c:set>
-                              <digi:link href="/DataImport.do" title="${trnSystemSettings}" >
+                              <digi:link href="/DataImport.do" title="${translation}" >
                                 <digi:trn>Data Import</digi:trn>
                               </digi:link>
                             </td>

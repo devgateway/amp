@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.dgfoundation.amp.importers;
 
@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 
 /**
  * @author mihai
- * 
+ *
  */
 public class ImporterWorker {
 
@@ -32,13 +32,13 @@ public class ImporterWorker {
     private String importerHome;
     private List<Properties> importersConfigs;
     private static final String importerPackage="org.dgfoundation.amp.importers";
-    
+
 
     public ImporterWorker(String importerHome) {
         this.importerHome = importerHome;
         importersConfigs=new ArrayList<Properties>();
     }
-    
+
     private void loadImporters() {
         String realPath = importerHome;
 
@@ -48,22 +48,22 @@ public class ImporterWorker {
                 return f.getName().endsWith(".properties");
             }
         };
-        
+
         if (!dir.isDirectory())
             throw new RuntimeException(
                     "Importer path is invalid! Should be a directory: "
                             + dir.getAbsolutePath());
         File[] files = dir.listFiles(filter);
-        for (int i = 0; i < files.length; i++) {
+        for (File file : files) {
             Properties p = new Properties();
             try {
-                p.load(new FileInputStream(files[i]));
+                p.load(new FileInputStream(file));
             } catch (FileNotFoundException e) {
-                logger.error("Cannot find configuration file " + files[i]
+                logger.error("Cannot find configuration file " + file
                         + " for the importer " + this.getClass().getName());
                 e.printStackTrace();
             } catch (IOException e) {
-                logger.error("Cannot read configuration file " + files[i]
+                logger.error("Cannot read configuration file " + file
                         + " for the importer " + this.getClass().getName());
                 e.printStackTrace();
             }
@@ -75,28 +75,26 @@ public class ImporterWorker {
         loadImporters();
         performImports();
     }
-    
-    
+
+
     private void performImports() {
-        Iterator<Properties> i=importersConfigs.iterator();
-        while (i.hasNext()) {
-            Properties properties = (Properties) i.next();
+        for (Properties properties : importersConfigs) {
             String enabled = properties.getProperty("enabled");
-            if(!("true".equals(enabled))) continue;
+            if (!("true".equals(enabled))) continue;
             try {
-                Class c=Class.forName(importerPackage+"."+properties.getProperty("importerClassName"));
-                Class []parameterTypes=new Class[] {String.class ,String[].class ,Properties.class};
+                Class c = Class.forName(importerPackage + "." + properties.getProperty("importerClassName"));
+                Class[] parameterTypes = new Class[]{String.class, String[].class, Properties.class};
                 Constructor constructor = c.getConstructor(parameterTypes);
-                
+
                 //parse the names of columns that will be imported:
-                StringTokenizer st=new StringTokenizer(properties.getProperty("columnNames"),",");
-                List<String> columns=new ArrayList<String>();
-                while(st.hasMoreTokens()) {
-                    String col=st.nextToken();
+                StringTokenizer st = new StringTokenizer(properties.getProperty("columnNames"), ",");
+                List<String> columns = new ArrayList<String>();
+                while (st.hasMoreTokens()) {
+                    String col = st.nextToken();
                     columns.add(col);
                 }
-                
-                AmpImporter ai = (AmpImporter) constructor.newInstance(properties.getProperty("importFileName"),columns.toArray(new String[0]),properties);
+
+                AmpImporter ai = (AmpImporter) constructor.newInstance(properties.getProperty("importFileName"), columns.toArray(new String[0]), properties);
                 ai.performImport();
             } catch (ClassNotFoundException e) {
                 logger.error(e.getMessage(), e);
@@ -113,9 +111,9 @@ public class ImporterWorker {
             } catch (InvocationTargetException e) {
                 logger.error(e.getMessage(), e);
             }
-        }       
+        }
     }
-    
+
     public ServletContext getSc() {
         return sc;
     }

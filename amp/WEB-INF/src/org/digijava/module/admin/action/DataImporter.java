@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataImporter extends Action {
     Logger logger = LoggerFactory.getLogger(DataImporter.class);
@@ -28,6 +30,9 @@ public class DataImporter extends Action {
 //        DataImporterForm dataImporterForm = (DataImporterForm) form;
 //        dataImporterForm.setFieldInfos(fieldsInfo);
         request.setAttribute("fieldsInfo",fieldsInfo);
+        Map<String, String> fieldMapping = new HashMap<>();
+        request.setAttribute("fieldMapping", fieldMapping);
+
 //        request.getRequestDispatcher("/WEB-INF/country-selection.jsp").forward(request, response);
 
         return mapping.findForward("importData");

@@ -5,8 +5,30 @@
 <head>
   <title>Data Importer</title>
   <script>
-    function addField() {
+      function addField() {
+      var columnName = document.getElementById("columnName").value;
+      var selectedField = document.getElementById("selected-field").value;
 
+      // Create or retrieve the hidden input field for column name
+      var columnNameInput = document.createElement("input");
+      columnNameInput.setAttribute("type", "hidden");
+      columnNameInput.setAttribute("name", "columnName");
+      columnNameInput.setAttribute("value", columnName);
+
+      // Create or retrieve the hidden input field for selected field
+      var selectedFieldInput = document.createElement("input");
+      selectedFieldInput.setAttribute("type", "hidden");
+      selectedFieldInput.setAttribute("name", "selectedField");
+      selectedFieldInput.setAttribute("value", selectedField);
+
+      // Append the hidden input fields to the form
+      document.getElementById("data-importer-form").appendChild(columnNameInput);
+      document.getElementById("data-importer-form").appendChild(selectedFieldInput);
+
+      // Display the added pair
+      var pairContainer = document.createElement("div");
+      pairContainer.textContent = "Column: " + columnName + ", Field: " + selectedField;
+      document.getElementById("pairs-container").appendChild(pairContainer);
     }
   </script>
 </head>

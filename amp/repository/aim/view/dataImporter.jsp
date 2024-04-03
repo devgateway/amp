@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib prefix="s" uri="http://struts.apache.org/tags-html"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,27 +25,27 @@
 </head>
 <body>
 <h2>Data Importer</h2>
-<digi:form action="${pageContext.request.contextPath}/dataImporter.do" method="post" enctype="multipart/form-data">
-
+<form action="uploadData" method="post" enctype="multipart/form-data">
   <label for="file">Select Excel File:</label>
   <input type="file" id="file" name="file" required>
   <br><br>
   <!-- Iterate over fieldsInfo and group fields by subclass -->
-  <label><digi:trn key="aim:fieldName">Field Name</digi:trn>&nbsp;</label>
-
-    <html:select property="fieldName" styleClass="inp-text-fieldOption">
-
-      <logic:notEmpty name="dataImporterForm" property="fieldInfos">
-        <html:optionsCollection name="dataImporterForm" property="fieldInfos" value="fieldName" label="fieldName" />
-      </logic:notEmpty>
-    </html:select>
+  <c:forEach items="${fieldsInfo}" var="fieldInfo" varStatus="loop">
+    <c:if test="${loop.first || !fieldInfo.subclass.equals(fieldsInfo[loop.index - 1].subclass)}">
+      <h3>${fieldInfo.subclass}</h3>
+    </c:if>
+    <label for="fieldName">Field Name:</label>
+    <s:select name="fieldName" property="fieldName">
+      <c:forEach items="${fieldsInfo}" var="field">
+        <option value="${field.fieldName}">${field.fieldName}</option>
+      </c:forEach>
+    </s:select>
     <br>
-    <label>Column Name:</label>
-<%--    <input type="text" id="columnName" name="columnName">--%>
-  <html:text property="columnName" styleClass="inp-text" styleId="keyWordTextField"/>
-
-  <button type="button" onclick="addColumnMapping()">Add Mapping</button>
+    <label for="columnName">Column Name:</label>
+    <input type="text" id="columnName" name="columnName">
+    <button type="button" onclick="addColumnMapping()">Add Mapping</button>
     <br>
+  </c:forEach>
   <br>
   <table id="mappingTable">
     <tr>
@@ -58,6 +56,6 @@
   </table>
   <br>
   <input type="submit" value="Upload">
-</digi:form>
+</form>
 </body>
 </html>

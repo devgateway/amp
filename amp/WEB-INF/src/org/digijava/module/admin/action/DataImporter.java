@@ -7,6 +7,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.admin.helper.FieldInfo;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.form.DataImporterForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataImporter extends Action {
+    Logger logger = LoggerFactory.getLogger(DataImporter.class);
     private static final long serialVersionUID = 1L;
     private List<FieldInfo> fieldsInfo; // List of field information
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         fieldsInfo = getEntityFieldsInfo(AmpActivityFields.class);
+        logger.info("Fields: "+fieldsInfo);
         DataImporterForm dataImporterForm = (DataImporterForm) form;
         dataImporterForm.setFieldInfos(fieldsInfo);
         return mapping.findForward("importData");

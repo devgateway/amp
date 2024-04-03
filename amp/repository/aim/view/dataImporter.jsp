@@ -43,7 +43,15 @@
       removeButton.textContent = "Remove";
       removeButton.onclick = function() {
         var currentPairsHere = selectedPairsInput.value;
-        selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, ";" + columnName + ":" + selectedField, '');
+        if (((currentPairsHere.match(new RegExp(";", "g")) || []).length)===1)
+        {
+          selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField, '');
+        }
+        else
+        {
+          selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, ";" + columnName + ":" + selectedField, '');
+
+        }
         row.remove(); // Remove the row when the remove button is clicked
       };
       removeButtonCell.appendChild(removeButton);

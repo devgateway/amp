@@ -185,7 +185,7 @@
                             <c:set var="translation">
                               <digi:trn invisibleLinks="true">Click here to Import Data</digi:trn>
                             </c:set>
-                            <digi:link href="/aim/dataImporter.do" title="${translation}" contextPath="/aim/dataImporter" >
+                            <digi:link href="/aim/dataImporter.do" title="${translation}" contextPath="" >
                               <digi:trn>Data Importer</digi:trn>
                             </digi:link>
                           </td>

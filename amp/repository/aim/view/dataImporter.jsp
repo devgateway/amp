@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib prefix="s" uri="http://struts.apache.org/tags-html"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,11 +32,11 @@
       <h3>${fieldInfo.subclass}</h3>
     </c:if>
     <label for="fieldName">Field Name:</label>
-    <s:select name="fieldName" property="fieldName">
+    <select id="fieldName" name="fieldName">
       <c:forEach items="${fieldsInfo}" var="field">
         <option value="${field.fieldName}">${field.fieldName}</option>
       </c:forEach>
-    </s:select>
+    </select>
     <br>
     <label for="columnName">Column Name:</label>
     <input type="text" id="columnName" name="columnName">

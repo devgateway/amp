@@ -178,14 +178,14 @@
                     <div class="admin_landing_page_box_cont">
                       <div class="admin_landing_page_box_title"><digi:trn>Backbone lists of AMP</digi:trn></div>
                       <table border="0" cellspacing="2" cellpadding="2">
-                        <module:display name="Data Import" parentModule="ADMINISTRATIVE SECTION">
+                        <module:display name="Data Importer" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Data Import</digi:trn>
                               </c:set>
-                              <digi:link href="/DataImport.do" title="${translation}" >
+                              <digi:link href="/DataImporter.do" title="${translation}" >
                                 <digi:trn>Data Import</digi:trn>
                               </digi:link>
                             </td>

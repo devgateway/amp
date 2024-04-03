@@ -140,6 +140,7 @@
     <form-bean name="aimParisIndicatorForm" type="org.digijava.module.aim.form.ParisIndicatorForm" />
     <form-bean name="aimNationalPlaningDashboardForm" type="org.digijava.module.aim.form.NationalPlaningDashboardForm" />
     <form-bean name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
+    <form-bean name="aimDataImportForm" type="org.digijava.module.aim.form.DataImporterForm" />
     <form-bean name="aimListAppliedPatchesForm" type="org.digijava.module.aim.form.ListAppliedPatchesForm" />
     <form-bean name="aimDynLocationManagerForm" type="org.digijava.module.aim.form.DynLocationManagerForm" />
     <form-bean name="aimNPDForm" type="org.digijava.module.aim.form.NpdForm" />
@@ -1233,8 +1234,8 @@
       <forward name="viewGS" path="/showLayout.do?layout=viewGlobalSettings" />
     </action>
 
-    <action name="aimDataImportForm" path="/aim/DataImport" scope="session" type="org.digijava.module.aim.action.DataImport" validate="false">
-      <forward name="viewDI" path="/showLayout.do?layout=viewDataImport" />
+    <action name="aimDataImportForm" path="/aim/DataImporter" scope="session" type="org.digijava.module.aim.action.DataImporter" validate="false">
+      <forward name="viewDI" path="/showLayout.do?layout=viewDataImporter" />
     </action>
 
     <action name="aimListAppliedPatchesForm" path="/aim/ListAppliedPatches" scope="session" type="org.digijava.module.aim.action.ListAppliedPatches" validate="false">

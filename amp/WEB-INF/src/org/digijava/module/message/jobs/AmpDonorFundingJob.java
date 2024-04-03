@@ -29,9 +29,11 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         List<ReportsDashboard> ampDashboardFundingCombinedUSD = getFundingByCurrency("USD");
         List<ReportsDashboard> ampDashboardFundingCombinedEUR = getFundingByCurrency("EUR");
-        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
-        ampDashboardFundingCombinedUSD.addAll(ampDashboardFundingCombinedEUR);
 
+        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
+        if (serverUrl != null) {
+            ampDashboardFundingCombinedUSD.addAll(ampDashboardFundingCombinedEUR);
+        }
         sendReportsToServer(ampDashboardFundingCombinedUSD, serverUrl);
     }
 
@@ -78,7 +80,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                             TextCell countryCell = (TextCell) location.getContents().get(country);
                             for (ReportArea statusData : location.getChildren()) {
                                 TextCell statusCell = (TextCell) statusData.getContents().get(status);
-                                for(ReportArea reportSystemData: statusData.getChildren()){
+                                for (ReportArea reportSystemData : statusData.getChildren()) {
                                     TextCell reportSystemCell = (TextCell) reportSystemData.getContents().get(reportingSystem);
                                     for (Map.Entry<ReportOutputColumn, ReportCell> content : reportSystemData.getContents().entrySet()) {
                                         ReportOutputColumn col = content.getKey();

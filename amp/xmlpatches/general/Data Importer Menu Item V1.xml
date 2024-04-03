@@ -10,6 +10,8 @@
             <lang delimiter=";" type="postgres">
                 INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Tools'),
                 'Data Importer', 'Data Importer', null, '/aim/dataImporter.do', null, 9, null);
+<!--                INSERT INTO amp_menu_entry_view(menu_id, view_type) VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'Developer Mode'), 1);-->
+                INSERT INTO amp_menu_entry_view(menu_id, view_type) VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'Data Importer'), 2);
             </lang>
         </script>
     </apply>

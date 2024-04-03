@@ -1,9 +1,9 @@
 package org.digijava.module.admin.helper;
 
 public class FieldInfo {
-    private String subclass;
-    private String fieldName;
-    private String fieldType;
+    public String subclass;
+    public String fieldName;
+    public String fieldType;
 
     public FieldInfo(String subclass, String fieldName, String fieldType) {
     }

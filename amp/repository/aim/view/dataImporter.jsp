@@ -109,8 +109,8 @@
     </tbody>
   </table>
   <br><br>
-  <label for="file">Select Excel File:</label>
-  <input type="file" id="file" name="file" required>
+  <label for="uploadedFile">Select Excel File:</label>
+  <input type="file" id="uploadedFile" name="uploadedFile" required>
   <br><br>
   <input type="submit" value="Upload">
 </form>

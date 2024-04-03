@@ -28,6 +28,8 @@ public class DataImporter extends Action {
 //        DataImporterForm dataImporterForm = (DataImporterForm) form;
 //        dataImporterForm.setFieldInfos(fieldsInfo);
         request.setAttribute("fieldsInfo",fieldsInfo);
+//        request.getRequestDispatcher("/WEB-INF/country-selection.jsp").forward(request, response);
+
         return mapping.findForward("importData");
     }
     private List<FieldInfo> getEntityFieldsInfo(Class<?> entityClass) {

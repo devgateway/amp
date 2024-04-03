@@ -43,7 +43,7 @@
     <!-- Populate dropdown with entity field names -->
     <jsp:useBean id="fieldsInfo" scope="request" type="java.util.List"/>
     <c:forEach items="${fieldsInfo}" var="fieldInfo">
-      <option>${fieldInfo.fieldName}</option>
+      <option>${fieldInfo.getFieldName()}</option>
     </c:forEach>
   </select>
   <br><br>

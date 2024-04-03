@@ -1,5 +1,5 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<html>
 <head>
   <title>Data Importer</title>
   <script>
@@ -73,10 +73,8 @@
 </head>
 <body>
 <h2>Data Importer</h2>
-<form id="data-importer-form" action="uploadData" method="post" enctype="multipart/form-data">
-  <label for="file">Select Excel File:</label>
-  <input type="file" id="file" name="file" required>
-  <br><br>
+<form id="data-importer-form" action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
+  <h2>Data file configuration</h2>
   <label for="columnName">Column Name:</label>
   <input type="text" id="columnName" name="columnName" required>
   <br><br>
@@ -97,21 +95,26 @@
 
   <input type="button" value="Add Field" onclick="addField()">
   <br><br>
+  <!-- Table to display selected pairs -->
+  <table>
+    <thead>
+    <tr>
+      <th>Column Name</th>
+      <th>Selected Field</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="selected-pairs-table-body">
+    <!-- Selected pairs will be dynamically added here -->
+    </tbody>
+  </table>
+  <br><br>
+  <label for="file">Select Excel File:</label>
+  <input type="file" id="file" name="file" required>
+  <br><br>
   <input type="submit" value="Upload">
 </form>
 
-<!-- Table to display selected pairs -->
-<table>
-  <thead>
-  <tr>
-    <th>Column Name</th>
-    <th>Selected Field</th>
-    <th>Action</th>
-  </tr>
-  </thead>
-  <tbody id="selected-pairs-table-body">
-  <!-- Selected pairs will be dynamically added here -->
-  </tbody>
-</table>
+
 </body>
 </html>

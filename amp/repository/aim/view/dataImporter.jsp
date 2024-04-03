@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,27 +27,26 @@
 </head>
 <body>
 <h2>Data Importer</h2>
+
 <form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
   <label for="file">Select Excel File:</label>
   <input type="file" id="file" name="file" required>
   <br><br>
   <!-- Iterate over fieldsInfo and group fields by subclass -->
-  <c:forEach items="${fieldsInfo}" var="fieldInfo" varStatus="loop">
-    <c:if test="${loop.first || !fieldInfo.subclass.equals(fieldsInfo[loop.index - 1].subclass)}">
-      <h3>${fieldInfo.subclass}</h3>
-    </c:if>
-    <label for="fieldName">Field Name:</label>
-    <select id="fieldName" name="fieldName">
-      <c:forEach items="${fieldsInfo}" var="field">
-        <option value="${field.fieldName}">${field.fieldName}</option>
-      </c:forEach>
-    </select>
+  <label><digi:trn key="aim:fieldName">Field Name</digi:trn>&nbsp;</label>
+
+    <html:select property="fieldName" styleClass="inp-text-fieldOption">
+
+      <logic:notEmpty name="dataImporterForm" property="fieldInfos">
+        <html:optionsCollection name="dataImporterForm"
+                                property="fieldInfos" value="fieldName" label="fieldName" />
+      </logic:notEmpty>
+    </html:select>
     <br>
     <label for="columnName">Column Name:</label>
     <input type="text" id="columnName" name="columnName">
     <button type="button" onclick="addColumnMapping()">Add Mapping</button>
     <br>
-  </c:forEach>
   <br>
   <table id="mappingTable">
     <tr>

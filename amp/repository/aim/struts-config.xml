@@ -34,6 +34,7 @@
     <form-bean name="aimFiscalCalendarForm" type="org.digijava.module.aim.form.FiscalCalendarForm" />
     <form-bean name="aimAddFiscalCalForm" type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
     <form-bean name="aimOrgManagerForm" type="org.digijava.module.aim.form.OrgManagerForm" />
+    <form-bean name="dataImporterForm" type="org.digijava.module.aim.form.DataImporterForm" />
     <form-bean name="aimAddOrgForm" type="org.digijava.module.aim.form.AddOrgForm" />
     <form-bean name="aimOrgTypeManagerForm" type="org.digijava.module.aim.form.OrgTypeManagerForm" />
 	<form-bean name="aimAddOrgTypeForm" type="org.digijava.module.aim.form.AddOrgTypeForm" />
@@ -1352,7 +1353,8 @@
 		<forward name="forward" path="/showLayout.do?layout=aim_showDocumentsInPopup" />
 	</action>
     <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
-    <action path="/aim/dataImporter" type="org.digijava.module.admin.action.DataImporter">
+
+    <action name="dataImporterForm" path="/aim/dataImporter" type="org.digijava.module.admin.action.DataImporter">
       <forward name="importData" path="/showLayout.do?layout=dataImporter" />
     </action>
 

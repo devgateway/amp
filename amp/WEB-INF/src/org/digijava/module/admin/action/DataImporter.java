@@ -6,6 +6,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.admin.helper.FieldInfo;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.form.DataImporterForm;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ public class DataImporter extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         fieldsInfo = getEntityFieldsInfo(AmpActivityFields.class);
+        DataImporterForm dataImporterForm = (DataImporterForm) form;
+        dataImporterForm.setFieldInfos(fieldsInfo);
         return mapping.findForward("importData");
     }
     private List<FieldInfo> getEntityFieldsInfo(Class<?> entityClass) {

@@ -6,17 +6,17 @@
   <title>Data Importer</title>
   <script>
     function addField() {
-      var columnsDropdown = document.getElementById("columns-dropdown");
-      var selectedColumn = columnsDropdown.options[columnsDropdown.selectedIndex].value;
+      var columnName = document.getElementById("columnName").value;
+      // var selectedColumn = columnsDropdown.options[columnsDropdown.selectedIndex].value;
       var selectedField = document.getElementById("selected-field").value;
       var form = document.getElementById("data-importer-form");
 
       var div = document.createElement("div");
       var label = document.createElement("label");
       var input = document.createElement("input");
-      label.textContent = selectedColumn;
+      label.textContent = columnName;
       input.type = "hidden";
-      input.name = selectedColumn;
+      input.name = columnName;
       input.value = selectedField;
       div.appendChild(label);
       div.appendChild(input);
@@ -30,20 +30,21 @@
   <label for="file">Select Excel File:</label>
   <input type="file" id="file" name="file" required>
   <br><br>
-  <label for="columns-dropdown">Select Excel Column:</label>
-  <select id="columns-dropdown">
-    <!-- Populate dropdown with Excel column names -->
-    <c:forEach items="${excelColumns}" var="column">
-      <option>${column}</option>
-    </c:forEach>
-  </select>
+  <label for="columnName">Enter Excel Column:</label>
+
+  <input id="columnName" type="text">
   <br><br>
   <label for="selected-field">Select Entity Field:</label>
   <select id="selected-field">
     <!-- Populate dropdown with entity field names -->
     <jsp:useBean id="fieldsInfo" scope="request" type="java.util.List"/>
-    <c:forEach items="${fieldsInfo}" var="fieldInfo">
-      <option>${fieldInfo.fieldName}</option>
+    <c:forEach items="${fieldsInfo}" var="fieldInfo" varStatus="loop">
+      <c:if test="${loop.first || !fieldInfo.subclass.equals(fieldsInfo[loop.index - 1].subclass)}">
+        <h3>${fieldInfo.subclass}</h3>
+      </c:if>
+      <label for="${fieldInfo.fieldName}">${fieldInfo.fieldName}</label>
+      <input type="text" id="${fieldInfo.fieldName}" name="${fieldInfo.fieldName}">
+      <br>
     </c:forEach>
   </select>
   <br><br>

@@ -24,17 +24,13 @@ import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.DashboardUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -42,14 +38,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -69,17 +58,17 @@ public class MeService {
 
 
     public List<MEIndicatorDTO> getIndicatorsByProgram (Long programId) {
-        List<AmpIndicator> indicators = new ArrayList<>();
-        AmpTheme program = ProgramUtil.getThemeById(programId);
+        Set<AmpIndicator> programIndicators = null;
 
-        Set<IndicatorTheme> programIndicators =  program.getIndicators();
+        try {
+            programIndicators = IndicatorUtil.getThemeIndicators(programId);
+        } catch (Exception e) {
+            throw new ApiRuntimeException(NOT_FOUND,
+                    ApiError.toError("Program with id " + programId + " does not exist"));
+        }
 
 
-        programIndicators.forEach(indicator -> {
-            indicators.add(indicator.getIndicator());
-        });
-
-        return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
+        return programIndicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
     }
 
     public List<MEIndicatorDTO> getIndicatorsBySector (Long sectorId) {
@@ -207,6 +196,51 @@ public class MeService {
         }
 
         return data;
+    }
+
+    public List<SectorClassificationDTO> getSectorClassification () {
+        List<SectorClassificationDTO> sectorClassificationDTOs = new ArrayList<>();
+        List<AmpClassificationConfiguration> sectorClassificationConfig = SectorUtil.getAllClassificationConfigs()
+                .stream()
+                .filter(config -> config.getClassification() != null)
+                .collect(Collectors.toList());
+
+        for (AmpClassificationConfiguration config : sectorClassificationConfig) {
+            AmpSectorScheme scheme = config.getClassification();
+            List<AmpSector> schemeSectors = (List<AmpSector>) SectorUtil.getSectorLevel1(Math.toIntExact(scheme.getAmpSecSchemeId()));
+            SectorDTO[] children = schemeSectors.stream().map(SectorDTO::new).toArray(SectorDTO[]::new);
+
+            SectorSchemeDTO schemeDTO = new SectorSchemeDTO(scheme, children);
+            sectorClassificationDTOs.add(new SectorClassificationDTO(config, schemeDTO));
+        }
+
+        return sectorClassificationDTOs;
+    }
+
+    public List<MEIndicatorDTO> getIndicatorsBySectorClassification (Long sectorClassificationId) {
+        List<AmpIndicator> indicators = new ArrayList<>();
+        AmpClassificationConfiguration sectorClassification = null;
+
+        try {
+            sectorClassification = SectorUtil.getClassificationConfigById(sectorClassificationId);
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicators");
+        }
+
+
+        if (sectorClassification == null) {
+            throw new ApiRuntimeException(NOT_FOUND,
+                    ApiError.toError("Sector classification with id " + sectorClassificationId + " does not exist"));
+        };
+
+        List<AmpSector> schemeSectors = (List<AmpSector>) SectorUtil.getSectorLevel1(
+                Math.toIntExact(sectorClassification.getClassification().getAmpSecSchemeId()));
+
+        for (AmpSector sector : schemeSectors) {
+            indicators.addAll(sector.getIndicators());
+        };
+
+        return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
     }
 
     private GeneratedReport runIndicatorReport(SettingsAndFiltersParameters settingsAndFilters) {

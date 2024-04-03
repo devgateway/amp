@@ -17,6 +17,7 @@ import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
 import {DefaultComponentProps, ProgramObjectType, SectorObjectType} from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSizePerPage} from '../../reducers/fetchIndicatorsReducer';
+import Select from "react-select";
 
 interface SkeletonTableProps extends DefaultComponentProps {
   columns: any;
@@ -225,11 +226,12 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                                         onChange={(e) => setSelectedProgram(e.target.value as unknown as number)}
                                         as="select"
                                         className={styles.filter_select}>
-                                    <option value="0">{translations['amp.indicatormanager:all-programs']}</option>
+                                    <option value="0" style={{ width: '400px'}}>{translations['amp.indicatormanager:all-programs']}</option>
                                     {
                                         programs && programs.length > 0 ?
                                             programs.map((program) => (
                                                 <option
+                                                    style={{width: '400px'}}
                                                     key={program.id}
                                                     value={program.id}>
                                                 {program.name}

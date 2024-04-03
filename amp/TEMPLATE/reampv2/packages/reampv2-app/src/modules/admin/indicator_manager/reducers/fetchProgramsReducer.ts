@@ -31,7 +31,7 @@ export const getPrograms = createAsyncThunk(
 
         return {
             programSchemes: data,
-            programs: children
+            programs: children.sort((a, b) => a.name.localeCompare(b.name))
         }
     }
 );
@@ -65,7 +65,7 @@ const fetchProgramsSlice = createSlice({
         builder.addCase(getPrograms.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
-    
+
         });
     }
 });

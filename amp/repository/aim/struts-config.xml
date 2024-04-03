@@ -1352,7 +1352,9 @@
 		<forward name="forward" path="/showLayout.do?layout=aim_showDocumentsInPopup" />
 	</action>
     <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
-    <action path="/aim/dataImporter" type="org.digijava.module.admin.action.DataImporter" />
+    <action path="/aim/dataImporter" type="org.digijava.module.admin.action.DataImporter">
+      <forward name="importData" path="/showLayout.do?layout=dataImporter" />
+    </action>
 
      <action name="quartzJobManagerForm" scope="session" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">
        <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />

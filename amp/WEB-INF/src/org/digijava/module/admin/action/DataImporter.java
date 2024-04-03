@@ -11,6 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 public class DataImporter extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return null;
+        return mapping.findForward("importData");
     }
 }

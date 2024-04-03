@@ -27,7 +27,7 @@
 </head>
 <body>
 <h2>Data Importer</h2>
-<digi:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
+<digi:form action="${pageContext.request.contextPath}/dataImporter.do" method="post" enctype="multipart/form-data">
 
   <label for="file">Select Excel File:</label>
   <input type="file" id="file" name="file" required>

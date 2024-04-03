@@ -1,34 +1,37 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
 <head>
   <title>Data Importer</title>
   <script>
-      function addField() {
+    function addField() {
       var columnName = document.getElementById("columnName").value;
       var selectedField = document.getElementById("selected-field").value;
 
-      // Create or retrieve the hidden input field for column name
-      var columnNameInput = document.createElement("input");
-      columnNameInput.setAttribute("type", "hidden");
-      columnNameInput.setAttribute("name", "columnName");
-      columnNameInput.setAttribute("value", columnName);
+      // Create a new table row
+      var row = document.createElement("tr");
 
-      // Create or retrieve the hidden input field for selected field
-      var selectedFieldInput = document.createElement("input");
-      selectedFieldInput.setAttribute("type", "hidden");
-      selectedFieldInput.setAttribute("name", "selectedField");
-      selectedFieldInput.setAttribute("value", selectedField);
+      // Create table cells for column name and selected field
+      var columnNameCell = document.createElement("td");
+      columnNameCell.textContent = columnName;
+      var selectedFieldCell = document.createElement("td");
+      selectedFieldCell.textContent = selectedField;
 
-      // Append the hidden input fields to the form
-      document.getElementById("data-importer-form").appendChild(columnNameInput);
-      document.getElementById("data-importer-form").appendChild(selectedFieldInput);
+      // Create a remove button
+      var removeButtonCell = document.createElement("td");
+      var removeButton = document.createElement("button");
+      removeButton.textContent = "Remove";
+      removeButton.onclick = function() {
+        row.remove(); // Remove the row when the remove button is clicked
+      };
+      removeButtonCell.appendChild(removeButton);
 
-      // Display the added pair
-      var pairContainer = document.createElement("div");
-      pairContainer.textContent = "Column: " + columnName + ", Field: " + selectedField;
-      document.getElementById("pairs-container").appendChild(pairContainer);
+      // Append cells to the row
+      row.appendChild(columnNameCell);
+      row.appendChild(selectedFieldCell);
+      row.appendChild(removeButtonCell);
+
+      // Append the row to the table body
+      document.getElementById("selected-pairs-table-body").appendChild(row);
     }
   </script>
 </head>
@@ -45,7 +48,6 @@
   <select id="selected-field">
     <!-- Populate dropdown with entity field names -->
     <jsp:useBean id="fieldsInfo" scope="request" type="java.util.List"/>
-
     <c:forEach items="${fieldsInfo}" var="fieldInfo" varStatus="loop">
       <c:if test="${loop.first || !fieldInfo.subclass.equals(fieldsInfo[loop.index - 1].subclass)}">
         <h3>${fieldInfo.subclass}</h3>
@@ -59,5 +61,19 @@
   <br><br>
   <input type="submit" value="Upload">
 </form>
+
+<!-- Table to display selected pairs -->
+<table>
+  <thead>
+  <tr>
+    <th>Column Name</th>
+    <th>Selected Field</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody id="selected-pairs-table-body">
+  <!-- Selected pairs will be dynamically added here -->
+  </tbody>
+</table>
 </body>
 </html>

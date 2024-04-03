@@ -40,6 +40,6 @@ public class DataImporter extends Action {
             String fieldType = field.getType().getSimpleName();
             fieldsInfos.add(new FieldInfo(subclass, fieldName, fieldType));
         }
-        return fieldsInfo;
+        return fieldsInfos;
     }
 }

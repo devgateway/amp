@@ -8,7 +8,7 @@ const extractChildren = (children: ProgramObjectType[]) => {
             childrenArray.push(...extractChildren(child.children));
         }
     });
-    return childrenArray;
+    return childrenArray.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export const extractChildrenFromProgramScheme = (programScheme: ProgramSchemeType | Array<ProgramSchemeType>)=> {
@@ -21,7 +21,7 @@ export const extractChildrenFromProgramScheme = (programScheme: ProgramSchemeTyp
     }
 
     const { children } = programScheme;
-    return extractChildren(children);
+    return extractChildren(children).sort((a, b) => a.id - b.id);
 }
 
 export const getProgamSchemeForChild = (programSchemes: Array<ProgramSchemeType>, childId: string | number) => {
@@ -42,7 +42,7 @@ export const checkObjectIsNull = <T>(obj: T | any) => {
         return true;
     }
 
-    if (typeof obj === 'object')     {
+    if (typeof obj === 'object') {
         const keys = Object.keys(obj);
         if (keys.length === 0) {
             return true;
@@ -71,3 +71,4 @@ export const formatProgramSchemeToSelect = (programSchemes: Array<ProgramSchemeT
 
     return childrenArray;
 }
+

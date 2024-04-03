@@ -1,4 +1,5 @@
 import translations from '../config/initialTranslations.json';
+import {SectorObjectType} from "../../admin/indicator_manager/types";
 
 export type DefaultTranslations = typeof translations;
 
@@ -22,8 +23,8 @@ export type ProgramConfig = {
     name:                 string;
     programName:          string;
     allowMultiple:        boolean;
-    startDate:            null;
-    endDate:              null;
+    startDate:            null | string;
+    endDate:              null | string;
     children:             ProgramConfigChild[];
 }
 
@@ -78,4 +79,51 @@ export interface LineChartData {
         x: string;
         y: number;
     } [];
+}
+
+export interface SectorClassifcation {
+    id:           number;
+    name:         string;
+    description:  string | null;
+    multisector:  boolean;
+    primary:      boolean;
+    sectorScheme: SectorScheme;
+}
+
+export interface SectorScheme {
+    ampSecSchemeId:  number;
+    secSchemeCode:   string;
+    secSchemeName:   string;
+    showInRMFilters: boolean;
+    used:            boolean;
+    children: SectorObjectType[];
+}
+
+export interface SectorReport {
+    values:         SectorReportValue[];
+    total:          number;
+    sumarizedTotal: string;
+    currency:       string;
+    maxLimit:       number;
+    totalPositive:  number;
+    name:           string;
+    title:          string;
+    source:         null;
+}
+
+export interface SectorReportValue {
+    id:              number;
+    name:            string;
+    amount:          number;
+    formattedAmount: string;
+}
+
+export enum ClassificationType {
+    PRIMARY = 'Primary',
+    SECONDARY = 'Secondary'
+}
+export interface FundingType {
+    id: number;
+    name: string;
+    value: string;
 }

@@ -32,11 +32,13 @@ package org.digijava.kernel.entity;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.Date;
 
 public abstract class Entity
-    implements Principal {
+        implements Principal, Serializable {
+    private static final long serialVersionUID = 5567118985120179660L;
 
     @Interchangeable(fieldTitle = "Id")
     @PossibleValueId

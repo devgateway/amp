@@ -23,7 +23,7 @@ import {
 } from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSizePerPage} from '../../reducers/fetchIndicatorsReducer';
-import Select from 'react-select';
+import Select from "react-select";
 import {formatProgramSchemeToSelect} from "../../utils/helpers";
 
 interface SkeletonTableProps extends DefaultComponentProps {

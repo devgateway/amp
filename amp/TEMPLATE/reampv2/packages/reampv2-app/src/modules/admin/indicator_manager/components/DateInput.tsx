@@ -22,6 +22,7 @@ export interface DateInputProps {
     minDate?: Date;
     maxDate?: Date;
     onClear?: () => void;
+    disableCalendar?: boolean;
 }
 
 const DateInput: React.FC<DateInputProps> = (props) => {
@@ -38,7 +39,8 @@ const DateInput: React.FC<DateInputProps> = (props) => {
         inputRef,
         minDate,
         maxDate,
-        onClear
+        onClear,
+        disableCalendar
     } = props;
     const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
     const [dateFormat, setDateFormat] = useState<string | undefined>();
@@ -80,7 +82,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
     const ClearInputButton = () => {
         return (
             <svg xmlns="http://www.w3.org/2000/svg" onClick={clearInputValue} width="19" height="19" viewBox="0 0 19 19" stroke="black" strokeWidth="2"
-            className="react-date-picker__clear-button__icon react-date-picker__button__icon">
+                 className="react-date-picker__clear-button__icon react-date-picker__button__icon">
                 <line x1="4" x2="15" y1="4" y2="15"></line>
                 <line x1="15" x2="4" y1="4" y2="15"></line>
             </svg>
@@ -113,6 +115,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
                     calendarAriaLabel="Toggle Calendar"
                     inputRef={inputRef}
                     locale="en-US"
+                    disableCalendar={disableCalendar}
                 />
             )}
         </div>

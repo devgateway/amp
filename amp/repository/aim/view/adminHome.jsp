@@ -112,15 +112,15 @@
                             <td class="admin_box_label">
                               <c:set var="trnDataFreezeManager">
                                 <digi:trn invisibleLinks="true">Click here to access Data Freeze Manager</digi:trn>
-                              </c:set>                             
+                              </c:set>
                               <a href="/TEMPLATE/reamp/modules/admin/data-freeze-manager/index.html"
                                  title="${trnDataFreezeManager}">
                                 <digi:trn>Data Freeze Manager</digi:trn>
                               </a>
                             </td>
                           </tr>
-                        </module:display>                        
-                        
+                        </module:display>
+
                         <module:display name="Project Performance Alerts Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -128,7 +128,7 @@
                                 <c:set var="trnProjectPerformanceAlertsManager">
                                     <digi:trn invisibleLinks="true">Click here to access Project Performance Alerts Manager</digi:trn>
                                 </c:set>
-                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html" 
+                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html"
                                 title="${trnProjectPerformanceAlertsManager}">
                                     <digi:trn>Project Performance Alerts Manager</digi:trn>
                                 </a>
@@ -178,6 +178,19 @@
                     <div class="admin_landing_page_box_cont">
                       <div class="admin_landing_page_box_title"><digi:trn>Backbone lists of AMP</digi:trn></div>
                       <table border="0" cellspacing="2" cellpadding="2">
+
+                        <tr>
+                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td class="admin_box_label">
+                            <c:set var="translation">
+                              <digi:trn invisibleLinks="true">Click here to Import Data</digi:trn>
+                            </c:set>
+                            <digi:link href="/aim/dataImporter.do" title="${translation}" contextPath="/aim/dataImporter" >
+                              <digi:trn>Data Importer</digi:trn>
+                            </digi:link>
+                          </td>
+                        </tr>
+
                         <module:display name="Category Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -343,7 +356,7 @@
                              <a href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/index.html" >
                                 <digi:trn>GIS Layers Manager</digi:trn>
                              </a>
-                           </td>                          
+                           </td>
                           </tr>
                         </module:display>
 
@@ -694,7 +707,7 @@
 								<td class="admin_box_label">
 									<c:set var="translation">
 										<digi:trn invisibleLinks="true">Click here to view Document manager admin</digi:trn>
-									</c:set> 
+									</c:set>
 									<a href="/TEMPLATE/reamp/modules/admin/resource-manager-admin/index.html"
 									title="${translation}"> <digi:trn>Resource Manager</digi:trn>
 									</a>

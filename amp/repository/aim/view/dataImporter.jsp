@@ -110,8 +110,8 @@
     </tbody>
   </table>
   <br><br>
-  <label for="uploadedFile">Select Excel File:</label>
-  <html:file property="uploadedFile" name="uploadedFile"  />
+  <label>Select Excel File:</label>
+  <html:file property="uploadedFile" name="dataImporterForm"  />
   <br><br>
   <html:submit property="Upload">Upload</html:submit>
 </html:form>

@@ -141,15 +141,20 @@
 </head>
 <body>
 <h2>Data Importer</h2>
-<html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
-  <h3>Data file configuration</h3>
+<h2>Upload File</h2>
+<h3>Data file configuration</h3>
 
-  <h2>Upload File</h2>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <label>Select Template File:</label>
-    <input type="file" accept=".xls,.xlsx,.csv" id="templateFile" name="templateFile" />
-    <input type="button" value="uploadTemplate" onclick="uploadFile()" />
-  </form>
+<form id="uploadForm" enctype="multipart/form-data">
+  <label>Select Template File:</label>
+  <input type="file" accept=".xls,.xlsx,.csv" id="templateFile" name="templateFile" />
+  <input type="button" value="uploadTemplate" onclick="uploadFile()" />
+</form>
+
+<div id="otherComponents" hidden>
+
+<html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
+
+
 <%--  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>--%>
 <%--  <bean:write name="dataImporterForm" property="fileHeaders"/>--%>
 
@@ -158,7 +163,6 @@
     <div id="headers"></div>
 
     <br><br>
-  <div id="otherComponents" hidden>
   <label for="selected-field">Select Entity Field:</label>
   <select id="selected-field">
     <!-- Populate dropdown with entity field names -->
@@ -192,10 +196,11 @@
   <html:file property="uploadedFile" name="dataImporterForm"   />
   <br><br>
   <html:submit property="Upload">Upload</html:submit>
-  </div>
 <%--  </logic:notEmpty>--%>
 
 </html:form>
+</div>
+
 
 
 </body>

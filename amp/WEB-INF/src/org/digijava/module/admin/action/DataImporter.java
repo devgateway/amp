@@ -99,7 +99,7 @@ public class DataImporter extends Action {
         }
 
         if (request.getParameter("Upload")!=null) {
-            logger.info(" this is the action "+request.getParameter("Upload"));
+            logger.info(" this is the action Upload "+request.getParameter("Upload"));
 
             InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);

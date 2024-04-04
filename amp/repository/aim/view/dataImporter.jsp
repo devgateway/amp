@@ -111,9 +111,9 @@
   </table>
   <br><br>
   <label for="uploadedFile">Select Excel File:</label>
-  <input type="file" id="uploadedFile" name="uploadedFile" required>
+  <html:file property="uploadedFile" name="uploadedFile"  >
   <br><br>
-  <html:submit property="Upload">back</html:submit>
+  <html:submit property="Upload">Upload</html:submit>
 </form>
 
 

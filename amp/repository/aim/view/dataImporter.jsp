@@ -126,8 +126,8 @@
 
   <c:if test="${not empty fileHeaders}">
 
+    <br><br>
   <label for="columnName">Column Name:</label>
-<%--  <input type="text" id="columnName" name="columnName" required>--%>
 <select id="columnName">
 
 <c:forEach items="${fileHeaders}" var="header" varStatus="loop">
@@ -148,11 +148,9 @@
     </c:forEach>
   </select>
   <br><br>
-<%--  <html:text  property="selectedPairs" name="dataImporterForm"/>--%>
 
   <input type="button" value="Add Field" onclick="addField()">
   <br><br>
-  </c:if>
 
   <!-- Table to display selected pairs -->
   <table>
@@ -172,6 +170,8 @@
   <html:file property="uploadedFile" name="dataImporterForm"  />
   <br><br>
   <html:submit property="Upload">Upload</html:submit>
+  </c:if>
+
 </html:form>
 
 

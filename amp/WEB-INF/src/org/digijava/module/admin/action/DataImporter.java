@@ -10,7 +10,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +54,9 @@ public class DataImporter extends Action {
             // Send JSON response
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            response.setHeader("updatedMap",json);
 
-            response.getWriter().write(json);
+//            response.getWriter().write(json);
         }
 
         if (request.getParameter("Upload")!=null) {
@@ -73,6 +76,7 @@ public class DataImporter extends Action {
         Sheet sheet = workbook.getSheetAt(0);
         for (Row row : sheet) {
             AmpActivityVersion ampActivityVersion = new AmpActivityVersion();
+            ampActivityVersion.setApprovalStatus(ApprovalStatus.valueOf("created"));
             if (row.getRowNum() == 0) {
                 continue;
             }
@@ -88,6 +92,10 @@ public class DataImporter extends Action {
                     case "{projectDescription}":
                         ampActivityVersion.setDescription(cell.getStringCellValue());
                         break;
+                    case "{projectLocation}":
+                        ampActivityVersion.addLocation(new AmpActivityLocation());
+//                    case "{primarySector}":
+//                        ampActivityVersion.setSectors();
 
                 }
 
@@ -113,6 +121,8 @@ public class DataImporter extends Action {
         List<String> fieldsInfos = new ArrayList<>();
         fieldsInfos.add("{projectName}");
         fieldsInfos.add("{projectDescription}");
+        fieldsInfos.add("{primarySector}");
+        fieldsInfos.add("{secondarySector}");
         fieldsInfos.add("{projectLocation}");
         fieldsInfos.add("{projectStartDate}");
         fieldsInfos.add("{projectEndDate}");

@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Paris Indicators section
  * @author aartimon@dginternational.org
- * @since Mar 29, 2011 
+ * @since Mar 29, 2011
  */
 public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
     private transient static final Comparator<AmpAhsurvey> SURVEY_COMPARATOR = new PIFormSectionSurveyComparator();
@@ -29,7 +29,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
     public AmpPIFormSectionFeature(String id, String fmName,
             final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
-        
+
         updateSurveySet(am);
         final AbstractReadOnlyModel<List<AmpAhsurvey>> listModel = OnePagerUtil
                 .getReadOnlyListModelFromSetModel(new PropertyModel<Set<AmpAhsurvey>>(am, "survey"), SURVEY_COMPARATOR);
@@ -46,7 +46,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
         //list.setReuseItems(true);
         list.setOutputMarkupId(true);
         add(list);
-        
+
         AmpAjaxLinkField addButton = new AmpAjaxLinkField("updateSurveys", "Update Available Surveys", "Update Available Surveys") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -69,38 +69,30 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
             }
         };*/
         IModel<Set<AmpAhsurvey>> surveys = new PropertyModel<Set<AmpAhsurvey>>(am, "survey");
-        
+
         if (surveys.getObject() == null)
             surveys.setObject(new TreeSet<AmpAhsurvey>());
-        
+
         if (am.getObject().getFunding() == null)
-            am.getObject().setFunding(new HashSet());
+            am.getObject().setFunding(new HashSet<>());
         Set<AmpFunding> fundingSet = am.getObject().getFunding();
-        
+
         Set<AmpOrganisation> piCertOrgs = new HashSet<AmpOrganisation>();
-        Iterator<AmpFunding> it = fundingSet.iterator();
-        while (it.hasNext()) {
-            AmpFunding fund = it.next();
+        for (AmpFunding fund : fundingSet) {
             AmpOrganisation auxOrg = fund.getAmpDonorOrgId();
-            
-            //check to see if funding org is Bilateral or Multilateral 
-            if(auxOrg!=null && auxOrg.getOrgGrpId()!=null &&auxOrg.getOrgGrpId().getOrgType()!=null)
-            if("BIL".equalsIgnoreCase(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode()) || 
-                    "MUL".equalsIgnoreCase(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode()) ) {
-                
-                //check to see if actual funding exist
-                if (fund.getFundingDetails() != null && !fund.getFundingDetails().isEmpty()){
-                    
-                    Iterator<AmpFundingDetail> it2 = fund.getFundingDetails().iterator();
-                    while (it2.hasNext()) {
-                        AmpFundingDetail fd = it2.next();
-                        if (fd.getTransactionType() == Constants.DISBURSEMENT){
-                            piCertOrgs.add(auxOrg);
-                            break;
-                        }
+
+            //check to see if funding org is Bilateral or Multilateral
+            if (auxOrg != null && auxOrg.getOrgGrpId() != null && auxOrg.getOrgGrpId().getOrgType() != null && ("BIL".equalsIgnoreCase(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode()) ||
+                        "MUL".equalsIgnoreCase(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode()) && (fund.getFundingDetails() != null && !fund.getFundingDetails().isEmpty()))) {
+
+                for (AmpFundingDetail fd : fund.getFundingDetails()) {
+                    if (fd.getTransactionType() == Constants.DISBURSEMENT) {
+                        piCertOrgs.add(auxOrg);
+                        break;
                     }
                 }
-            }
+
+                }
         }
 
         //removing surveys that are not in the funding list any more
@@ -110,19 +102,19 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
         while (it2.hasNext()) {
             AmpAhsurvey survey = it2.next();
             AmpOrganisation org = survey.getAmpDonorOrgId();
-            
+
             if (!piCertOrgs.contains(org))
                 deleteSurveysList.add(survey);
             else
                 existingSurveyOrgs.add(org);
         }
         surveys.getObject().removeAll(deleteSurveysList);
-        
+
         //adding non-existing surveys to the list
         Iterator<AmpOrganisation> it3 = piCertOrgs.iterator();
         while (it3.hasNext()) {
             AmpOrganisation org = it3.next();
-            
+
             if (!existingSurveyOrgs.contains(org)){
                 AmpAhsurvey as = new AmpAhsurvey();
                 as.setAmpActivityId(am.getObject());
@@ -131,5 +123,5 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
             }
         }
     }
-    
+
 }

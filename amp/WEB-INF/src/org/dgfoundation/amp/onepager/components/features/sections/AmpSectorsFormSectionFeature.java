@@ -4,10 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpSectorsFormTableFeature;
@@ -16,6 +12,8 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.util.SectorUtil;
 
+import java.util.List;
+
 /**
  * @author mpostelnicu@dgateway.org
  * since Oct 20, 2010
@@ -23,7 +21,7 @@ import org.digijava.module.aim.util.SectorUtil;
 public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5601918041949098629L;
 
@@ -36,7 +34,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
             throws Exception {
         super(id, fmName, am);
         this.fmType = AmpFMTypes.MODULE;
-        
+
         RepeatingView view = new RepeatingView("allSectorsTables");
         view.setOutputMarkupId(true);
         add(view);
@@ -45,9 +43,9 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
 
         for (AmpClassificationConfiguration sectorConf : allClassificationConfigs) {
             AmpSectorsFormTableFeature sectorsTable=new AmpSectorsFormTableFeature(view.newChildId(), sectorConf.getName()+" Sectors", am,sectorConf);
-            view.add(sectorsTable); 
+            view.add(sectorsTable);
         }
-        
+
     }
 
 }

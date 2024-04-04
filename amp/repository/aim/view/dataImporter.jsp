@@ -31,8 +31,10 @@
         if (xhr.readyState === 4 && xhr.status === 200) {
           // Update UI or perform any additional actions if needed
           console.log("Selected pairs updated successfully.");
-          console.log("Raw response: "+xhr.response)
-          var updatedMap = JSON.parse(xhr.response);
+          var updatedMapRaw = xhr.getResponseHeader('updatedMap');
+
+          console.log("Raw response: "+updatedMapRaw)
+          var updatedMap = JSON.parse(updatedMapRaw);
 
           // Use updatedMap as needed
           console.log("Updated map received:", updatedMap);
@@ -88,7 +90,7 @@
 <body>
 <h2>Data Importer</h2>
 <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
-  <h2>Data file configuration</h2>
+  <h3>Data file configuration</h3>
   <label for="columnName">Column Name:</label>
   <input type="text" id="columnName" name="columnName" required>
   <br><br>

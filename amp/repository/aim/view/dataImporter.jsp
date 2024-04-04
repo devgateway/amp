@@ -31,6 +31,7 @@
         if (xhr.readyState === 4 && xhr.status === 200) {
           // Update UI or perform any additional actions if needed
           console.log("Selected pairs updated successfully.");
+          console.log("Raw response: "+xhr.responseText)
           var updatedMap = JSON.parse(xhr.responseText);
 
           // Use updatedMap as needed

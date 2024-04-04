@@ -18,12 +18,19 @@
       var columnName = document.getElementById("columnName").value;
       var selectedField = document.getElementById("selected-field").value;
 
+      sendValuesToBackend(columnName,selectedField,"addField")
+
+
+    }
+
+    function sendValuesToBackend(columnName, selectedField, action)
+    {
       var xhr = new XMLHttpRequest();
       // Create a FormData object to send data in the request body
       var formData = new FormData();
       formData.append("columnName", columnName);
       formData.append("selectedField", selectedField);
-      formData.append("addField", "addField");
+      formData.append(action, action);
       xhr.open("POST", "${pageContext.request.contextPath}/aim/dataImporter.do", true);
       // xhr.setRequestHeader()
       // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -38,10 +45,22 @@
 
           // Use updatedMap as needed
           console.log("Updated map received:", updatedMap);
+
+          for (var key in updatedMap) {
+            if (updatedMap.hasOwnProperty(key)) {
+              // Access each property using the key
+              var value = updatedMap[key];
+              updateTable(key,value);
+              console.log('Key:', key, 'Value:', value);
+            }
+          }
+
         }
       };
       xhr.send(formData);
-
+    }
+    function updateTable(columnName,selectedField)
+    {
       // Create a new table row
       var row = document.createElement("tr");
       //
@@ -49,6 +68,7 @@
       var columnNameCell = document.createElement("td");
       columnNameCell.textContent = columnName;
       var selectedFieldCell = document.createElement("td");
+      selectedFieldCell.textContent=selectedField;
 
 
       // Create a remove button
@@ -56,7 +76,7 @@
       var removeButton = document.createElement("button");
       removeButton.textContent = "Remove";
       removeButton.onclick = function() {
-        row.remove(); // Remove the row when the remove button is clicked
+        sendValuesToBackend(columnName,selectedField,"removeField") // Remove the row when the remove button is clicked
       };
       removeButtonCell.appendChild(removeButton);
 

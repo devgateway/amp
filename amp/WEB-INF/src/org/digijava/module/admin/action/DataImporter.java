@@ -56,7 +56,26 @@ public class DataImporter extends Action {
             response.setCharacterEncoding("UTF-8");
             response.setHeader("updatedMap",json);
 
-//            response.getWriter().write(json);
+        }
+
+
+        if (request.getParameter("removeField")!=null) {
+            logger.info(" this is the action "+request.getParameter("removeField"));
+
+            String columnName = request.getParameter("columnName");
+            String selectedField = request.getParameter("selectedField");
+            dataImporterForm.getColumnPairs().put(columnName, selectedField);
+            removeMapItem(dataImporterForm.getColumnPairs(),columnName,selectedField);
+            logger.info("Datas:"+dataImporterForm.getColumnPairs());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString( dataImporterForm.getColumnPairs());
+
+            // Send JSON response
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("updatedMap",json);
+
         }
 
         if (request.getParameter("Upload")!=null) {
@@ -70,6 +89,13 @@ public class DataImporter extends Action {
 
         }
         return mapping.findForward("importData");
+    }
+
+    private void removeMapItem(Map<String,String> map,String columnName, String selectedField)
+    {
+        // Check if the entry's key and value match the criteria
+        // Remove the entry
+        map.entrySet().removeIf(entry -> columnName.equals(entry.getKey()) && selectedField.equals(entry.getValue()));
     }
     private void parseData(Map<String,String> config, Workbook workbook)
     {

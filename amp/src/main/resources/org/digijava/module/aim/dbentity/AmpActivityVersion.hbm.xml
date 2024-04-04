@@ -134,7 +134,7 @@
 		</set>
 
 
-		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="delete">
+		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="all">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
@@ -302,10 +302,10 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityGroup" />
 		</set>
 
-		
+
 		&activityFields;
 	</class>
-	
+
 	<class name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" polymorphism="explicit" lazy="true">
 		<cache usage="read-write" />
 		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
@@ -313,15 +313,15 @@
 				<param name="sequence_name">AMP_ACTIVITY_VERSION_seq</param>
 			</generator>
 		</id>
-		<!-- 
+		<!--
 		<subselect>
 			select * from amp_activity
 		</subselect>
 		<synchronize table="amp_activity"/>
 		<id column="amp_activity_id" />
-		 -->		
+		 -->
 
-		&activityFields;		
+		&activityFields;
 	</class>
-	
+
 </hibernate-mapping>

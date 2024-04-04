@@ -61,8 +61,8 @@
     }
     function updateTable(columnName,selectedField)
     {
-      var table= document.getElementById("selected-pairs-table-body");
-      var tbody = table.getElementsByTagName("tbody")[0];
+      var tbody= document.getElementById("selected-pairs-table-body");
+      // var tbody = table.getElementsByTagName("tbody")[0];
 
       // Remove all rows from the table body
       while (tbody.firstChild) {
@@ -93,7 +93,7 @@
       row.appendChild(removeButtonCell);
 
       // Append the row to the table body
-      table.appendChild(row);
+      tbody.appendChild(row);
     }
   </script>
   <style>

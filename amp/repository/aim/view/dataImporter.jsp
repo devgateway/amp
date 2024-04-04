@@ -1,6 +1,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib prefix="html" uri="/taglib/struts-html" %>
-<html>
+<html:html>
 <head>
   <title>Data Importer</title>
   <script>
@@ -74,7 +74,7 @@
 </head>
 <body>
 <h2>Data Importer</h2>
-<form id="data-importer-form" action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
+<html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
   <h2>Data file configuration</h2>
   <label for="columnName">Column Name:</label>
   <input type="text" id="columnName" name="columnName" required>
@@ -111,11 +111,11 @@
   </table>
   <br><br>
   <label for="uploadedFile">Select Excel File:</label>
-  <html:file property="uploadedFile" name="uploadedFile"  >
+  <html:file property="uploadedFile" name="uploadedFile"  />
   <br><br>
   <html:submit property="Upload">Upload</html:submit>
-</form>
+</html:form>
 
 
 </body>
-</html>
+</html:html>

@@ -140,7 +140,6 @@
 			<many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
 				column="amp_categoryvalue_id" />
 		</set>
-
 		<set name="activityDocuments" lazy="false" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />

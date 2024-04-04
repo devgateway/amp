@@ -46,24 +46,29 @@ public class DataImporter extends Action {
         fieldsInfo = getEntityFieldsInfo(AmpActivityFields.class);
 
         request.setAttribute("fieldsInfo",fieldsInfo);
+        if (request.getParameter("Upload")!=null) {
+            logger.info(" this is the action "+request.getParameter("Upload"));
 
-        FileInputStream fileInputStream= new FileInputStream(uploadedFile);
-        Workbook workbook = new XSSFWorkbook(fileInputStream);
-        Sheet sheet = workbook.getSheetAt(0); // Assuming first sheet
-        List<List<String>> excelData = new ArrayList<>();
+            FileInputStream fileInputStream = new FileInputStream(uploadedFile);
+            Workbook workbook = new XSSFWorkbook(fileInputStream);
+            Sheet sheet = workbook.getSheetAt(0); // Assuming first sheet
+            List<List<String>> excelData = new ArrayList<>();
 
-        for (Row row : sheet) {
-            Iterator<Cell> cellIterator = row.cellIterator();
-            List<String> rowData = new ArrayList<>();
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                rowData.add(cell.getStringCellValue()); // Assuming all cells contain string values
+            for (Row row : sheet) {
+                Iterator<Cell> cellIterator = row.cellIterator();
+                List<String> rowData = new ArrayList<>();
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    rowData.add(cell.getStringCellValue()); // Assuming all cells contain string values
+                }
+                excelData.add(rowData);
             }
-            excelData.add(rowData);
+            workbook.close();
+            logger.info("Excel Data" + excelData);
+            logger.info("Selected Pairs" + selectedPairs);
+
+
         }
-        workbook.close();
-        logger.info("Excel Data"+excelData);
-        logger.info("Selected Pairs"+selectedPairs);
         return mapping.findForward("importData");
     }
     private List<FieldInfo> getEntityFieldsInfo(Class<?> entityClass) {

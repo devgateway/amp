@@ -1,4 +1,5 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib prefix="html" uri="/taglib/struts-html" %>
 <html>
 <head>
   <title>Data Importer</title>
@@ -112,7 +113,7 @@
   <label for="uploadedFile">Select Excel File:</label>
   <input type="file" id="uploadedFile" name="uploadedFile" required>
   <br><br>
-  <input type="submit" value="Upload">
+  <html:submit property="Upload">back</html:submit>
 </form>
 
 

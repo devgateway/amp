@@ -147,7 +147,7 @@
 <%--  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>--%>
 <%--  <bean:write name="dataImporterForm" property="fileHeaders"/>--%>
 
-  <logic:notEmpty name="dataImporterForm" property="fileHeaders">
+<%--  <logic:notEmpty name="dataImporterForm" property="fileHeaders">--%>
 
     <br><br>
   <label for="columnName">Column Name:</label>
@@ -187,7 +187,7 @@
   <html:file property="uploadedFile" name="dataImporterForm"  />
   <br><br>
   <html:submit property="Upload">Upload</html:submit>
-  </logic:notEmpty>
+<%--  </logic:notEmpty>--%>
 
 </html:form>
 

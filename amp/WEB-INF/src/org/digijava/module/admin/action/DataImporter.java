@@ -26,7 +26,7 @@ import java.util.*;
 public class DataImporter extends Action {
     Logger logger = LoggerFactory.getLogger(DataImporter.class);
     private static final long serialVersionUID = 1L;
-    private List<FieldInfo> fieldsInfo; // List of field information
+    private List<String> fieldsInfo; // List of field information
     private String uploadedFileName;
     private String localDirectory = "/src/main/resources/uploads/";
 
@@ -66,17 +66,30 @@ public class DataImporter extends Action {
         }
         return mapping.findForward("importData");
     }
-    private List<FieldInfo> getEntityFieldsInfo(Class<?> entityClass) {
-        List<FieldInfo> fieldsInfos = new ArrayList<>();
-        Field[] fields = entityClass.getDeclaredFields();
-        for (Field field : fields) {
-            // Extract field information and group them by subclass
-            Class<?> declaringClass = field.getDeclaringClass();
-            String subclass = declaringClass.getSimpleName();
-            String fieldName = field.getName();
-            String fieldType = field.getType().getSimpleName();
-            fieldsInfos.add(new FieldInfo(subclass, fieldName, fieldType));
-        }
+    private List<String> getEntityFieldsInfo(Class<?> entityClass) {
+        List<String> fieldsInfos = new ArrayList<>();
+//        Field[] fields = entityClass.getDeclaredFields();
+//        for (Field field : fields) {
+//            // Extract field information and group them by subclass
+//            Class<?> declaringClass = field.getDeclaringClass();
+//            String subclass = declaringClass.getSimpleName();
+//            String fieldName = field.getName();
+//            String fieldType = field.getType().getSimpleName();
+//            fieldsInfos.add(new FieldInfo(subclass, fieldName, fieldType));
+//        }
+        fieldsInfos.add("{projectTitle}");
+        fieldsInfos.add("{projectName}");
+        fieldsInfos.add("{projectDescription}");
+        fieldsInfos.add("{projectLocation}");
+        fieldsInfos.add("{projectStartDate}");
+        fieldsInfos.add("{projectEndDate}");
+        fieldsInfos.add("{donorAgency}");
+        fieldsInfos.add("{executingAgency}");
+        fieldsInfos.add("{implementingAgency}");
+        fieldsInfos.add("{actualDisbursement}");
+        fieldsInfos.add("{actualCommitment}");
+        fieldsInfos.add("{plannedDisbursement}");
+        fieldsInfos.add("{plannedCommitment}");
         return fieldsInfos;
     }
 }

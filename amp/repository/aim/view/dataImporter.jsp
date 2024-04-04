@@ -16,7 +16,7 @@
     }
     function addField() {
       var columnName = document.getElementById("columnName").value;
-      var selectedField = document.getElementById("selected-field").value;
+      var selectedField = document.getElementById("selectedPairs").value;
 
       // Create a new table row
       var row = document.createElement("tr");
@@ -27,7 +27,7 @@
       var selectedFieldCell = document.createElement("td");
       selectedFieldCell.textContent = selectedField;
 
-      var selectedPairsInput = document.getElementById("selected-pairs");
+      var selectedPairsInput = document.getElementsByName("selected-pairs");
       var currentPairs = selectedPairsInput.value;
       if (currentPairs === "") {
         // If the input field is empty, simply set it to the new pair
@@ -71,6 +71,23 @@
       document.getElementById("selected-pairs-table-body").appendChild(row);
     }
   </script>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
 </head>
 <body>
 <h2>Data Importer</h2>
@@ -84,15 +101,15 @@
     <!-- Populate dropdown with entity field names -->
     <jsp:useBean id="fieldsInfo" scope="request" type="java.util.List"/>
     <c:forEach items="${fieldsInfo}" var="fieldInfo" varStatus="loop">
-      <c:if test="${loop.first || !fieldInfo.subclass.equals(fieldsInfo[loop.index - 1].subclass)}">
-        <h3>${fieldInfo.subclass}</h3>
-      </c:if>
-      <option>${fieldInfo.fieldName}</option>
+<%--      <c:if test="${loop.first || !fieldInfo.subclass.equals(fieldsInfo[loop.index - 1].subclass)}">--%>
+<%--        <h3>${fieldInfo.subclass}</h3>--%>
+<%--      </c:if>--%>
+      <option>${fieldInfo}</option>
       <br>
     </c:forEach>
   </select>
   <br><br>
-  <input type="hidden" id="selected-pairs" name="selectedPairs">
+  <html:text  property="selected-pairs" name="selectedPairs"/>
 
   <input type="button" value="Add Field" onclick="addField()">
   <br><br>

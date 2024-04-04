@@ -61,6 +61,13 @@
     }
     function updateTable(columnName,selectedField)
     {
+      var table= document.getElementById("selected-pairs-table-body");
+      var tbody = table.getElementsByTagName("tbody")[0];
+
+      // Remove all rows from the table body
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
       // Create a new table row
       var row = document.createElement("tr");
       //
@@ -86,7 +93,7 @@
       row.appendChild(removeButtonCell);
 
       // Append the row to the table body
-      document.getElementById("selected-pairs-table-body").appendChild(row);
+      table.appendChild(row);
     }
   </script>
   <style>

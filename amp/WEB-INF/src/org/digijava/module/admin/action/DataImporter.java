@@ -130,7 +130,7 @@ public class DataImporter extends Action {
         Sheet sheet = workbook.getSheetAt(sheetNumber);
         for (Row row : sheet) {
             AmpActivityVersion ampActivityVersion = new AmpActivityVersion();
-            ampActivityVersion.setApprovalStatus(ApprovalStatus.valueOf("created"));
+            ampActivityVersion.setApprovalStatus(ApprovalStatus.CREATED);
             if (row.getRowNum() == 0) {
                 continue;
             }
@@ -158,7 +158,7 @@ public class DataImporter extends Action {
 
             }
             logger.info("Activity here: "+ampActivityVersion);
-            session.save(ampActivityVersion);
+//            session.save(ampActivityVersion);
 
         }
 

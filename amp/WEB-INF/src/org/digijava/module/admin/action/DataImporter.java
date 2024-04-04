@@ -42,14 +42,18 @@ public class DataImporter extends Action {
             Workbook workbook = new XSSFWorkbook(fileInputStream);
             Sheet sheet = workbook.getSheetAt(0);
             Row headerRow = sheet.getRow(0);
-            Set<String> headers = new HashSet<>();
+            StringBuilder headers = new StringBuilder();
+            headers.append("<select id=\"columnName\">");
             Iterator<Cell> cellIterator = headerRow.cellIterator();
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
-                dataImporterForm.getFileHeaders().add(cell.getStringCellValue());
+                headers.append("<option>").append(cell.getStringCellValue()).append("</option>");
             }
+            headers.append("</select>");
+            response.setHeader("selectTag",headers.toString());
+
             logger.info("Headers: "+dataImporterForm.getFileHeaders());
-//            request.setAttribute("fileHeaders",headers);
+
             workbook.close();
             }
 

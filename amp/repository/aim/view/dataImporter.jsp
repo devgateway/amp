@@ -97,6 +97,23 @@
       // Append the row to the table body
       tbody.appendChild(row);
     }
+    function uploadFile() {
+      var formData = new FormData();
+      var fileInput = document.getElementById('templateFile');
+      formData.append('templateFile', fileInput.files[0]);
+      formData.append('uploadTemplate',"uploadTemplate");
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          document.getElementById('headers').innerHTML =  xhr.getResponseHeader('selectTag');
+        } else {
+          console.error('Error:', xhr.status);
+        }
+      };
+      xhr.send(formData);
+    }
   </script>
   <style>
     table {
@@ -120,11 +137,13 @@
 <h2>Data Importer</h2>
 <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
   <h3>Data file configuration</h3>
-  <label>Select Template File:</label>
-  <html:file property="templateFile" name="dataImporterForm"  />
-  <br><br>
 
-  <html:submit property="uploadTemplate">Upload Template</html:submit>
+  <h2>Upload File</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <label>Select Template File:</label>
+    <input type="file" id="templateFile" name="templateFile" />
+    <input type="button" value="Upload" onclick="uploadFile()" />
+  </form>
 <%--  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>--%>
 <%--  <bean:write name="dataImporterForm" property="fileHeaders"/>--%>
 
@@ -132,17 +151,9 @@
 
     <br><br>
   <label for="columnName">Column Name:</label>
-<select id="columnName">
-  <logic:iterate scope="request" name="dataImporterForm" property="fileHeaders" id="fileHeader">
+    <div id="headers"></div>
 
-<%--<c:forEach items="${dataImporterForm.fileHeaders}" var="header" varStatus="loop">--%>
-
-      <option>${fileHeader}</option>
-      <br>
-<%--    </c:forEach>--%>
-  </logic:iterate>
-</select>
-  <br><br>
+    <br><br>
   <label for="selected-field">Select Entity Field:</label>
   <select id="selected-field">
     <!-- Populate dropdown with entity field names -->

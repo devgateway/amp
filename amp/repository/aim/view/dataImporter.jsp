@@ -110,6 +110,9 @@
           if (xhr.getResponseHeader('selectTag').length>=1) {
             document.getElementById('headers').innerHTML =  xhr.getResponseHeader('selectTag');
             document.getElementById("otherComponents").removeAttribute("hidden");
+          }else
+          {
+            console.error("Unable to extract headers")
           }
         } else {
           console.error('Error:', xhr.status);

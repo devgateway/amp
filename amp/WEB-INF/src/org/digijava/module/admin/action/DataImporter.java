@@ -52,6 +52,7 @@ public class DataImporter extends Action {
             // Send JSON response
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+
             response.getWriter().write(json);
         }
 

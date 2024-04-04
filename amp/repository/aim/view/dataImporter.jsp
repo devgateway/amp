@@ -1,5 +1,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib prefix="html" uri="/taglib/struts-html" %>
+<%@ taglib prefix="bean" uri="/taglib/struts-bean" %>
 <html:html>
 <head>
   <title>Data Importer</title>
@@ -121,16 +122,18 @@
   <label>Select Template File:</label>
   <html:file property="templateFile" name="dataImporterForm"  />
   <br><br>
-  <html:submit property="uploadTemplate">Upload Template</html:submit>
-  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>
+  <bean:write name="dataImporterForm" property="fileHeaders"/>
 
-  <c:if test="${not empty fileHeaders}">
+  <html:submit property="uploadTemplate">Upload Template</html:submit>
+<%--  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>--%>
+
+  <c:if test="${not empty dataImporterForm.fileHeaders}">
 
     <br><br>
   <label for="columnName">Column Name:</label>
 <select id="columnName">
 
-<c:forEach items="${fileHeaders}" var="header" varStatus="loop">
+<c:forEach items="${dataImporterForm.fileHeaders}" var="header" varStatus="loop">
 
       <option>${header}</option>
       <br>

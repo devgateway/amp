@@ -4,14 +4,21 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.admin.helper.FieldInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataImporterForm extends ActionForm {
     List<FieldInfo> fieldInfos =new ArrayList<>();
     private FormFile uploadedFile;
+
+    public Set<String> getFileHeaders() {
+        return fileHeaders;
+    }
+
+    public void setFileHeaders(Set<String> fileHeaders) {
+        this.fileHeaders = fileHeaders;
+    }
+
+    public Set<String> fileHeaders= new HashSet<>();
 
     public FormFile getTemplateFile() {
         return templateFile;

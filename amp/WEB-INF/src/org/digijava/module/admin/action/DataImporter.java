@@ -46,7 +46,7 @@ public class DataImporter extends Action {
             Iterator<Cell> cellIterator = headerRow.cellIterator();
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
-                headers.add(cell.getStringCellValue());
+                dataImporterForm.getFileHeaders().add(cell.getStringCellValue());
             }
             request.setAttribute("fileHeaders",headers);
             workbook.close();

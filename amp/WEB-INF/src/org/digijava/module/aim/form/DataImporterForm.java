@@ -1,6 +1,7 @@
 package org.digijava.module.aim.form;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.digijava.module.admin.helper.FieldInfo;
 
 import java.util.ArrayList;
@@ -8,6 +9,15 @@ import java.util.List;
 
 public class DataImporterForm extends ActionForm {
     List<FieldInfo> fieldInfos =new ArrayList<>();
+    private FormFile uploadedFile;
+
+    public FormFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(FormFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
 
     public List<DataInfo> getDataInfos() {
         return dataInfos;

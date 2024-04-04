@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -26,19 +27,12 @@ public class DataImporter extends Action {
     Logger logger = LoggerFactory.getLogger(DataImporter.class);
     private static final long serialVersionUID = 1L;
     private List<FieldInfo> fieldsInfo; // List of field information
-    private File uploadedFile;
     private String uploadedFileName;
     private String localDirectory = "/src/main/resources/uploads/";
 
     private Map<String, String> selectedPairs;
 
-    public void setUploadedFile(File file) {
-        uploadedFile = file;
-    }
 
-    public void setUploadedFileFileName(String name) {
-        uploadedFileName = name;
-    }
 
 
     @Override
@@ -47,9 +41,10 @@ public class DataImporter extends Action {
 
         request.setAttribute("fieldsInfo",fieldsInfo);
         if (request.getParameter("Upload")!=null) {
+            DataImporterForm dataImporterForm = (DataImporterForm)form;
             logger.info(" this is the action "+request.getParameter("Upload"));
 
-            FileInputStream fileInputStream = new FileInputStream(uploadedFile);
+            InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);
             Sheet sheet = workbook.getSheetAt(0); // Assuming first sheet
             List<List<String>> excelData = new ArrayList<>();

@@ -23,6 +23,10 @@
 		<many-to-one name="teamLead" column="team_lead_id"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
+		<set name="ampApplicationSettings" inverse="true" lazy="true" cascade="all-delete-orphan">
+			<key column="team_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpTeam"/>
+		</set>
 
 		<many-to-one name="parentTeamId" column="parent_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
@@ -46,7 +50,7 @@
 
 		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" lazy="proxy" cascade="none" />
 		<property name="permissionStrategy" column="permission_strategy" type="java.lang.String" />
-		
+
 		<set name="filterDataSet" lazy="false" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_team_id" />

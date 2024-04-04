@@ -10,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,29 +60,56 @@ public class DataImporter extends Action {
 
             InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);
-            Sheet sheet = workbook.getSheetAt(0); // Assuming first sheet
-            List<List<String>> excelData = new ArrayList<>();
-
-            for (Row row : sheet) {
-                Iterator<Cell> cellIterator = row.cellIterator();
-                List<String> rowData = new ArrayList<>();
-                while (cellIterator.hasNext()) {
-                    Cell cell = cellIterator.next();
-                    rowData.add(cell.getStringCellValue()); // Assuming all cells contain string values
-                }
-                excelData.add(rowData);
-            }
+            parseData(dataImporterForm.getColumnPairs(),workbook);
             workbook.close();
-            logger.info("Excel Data" + excelData);
-            logger.info("Selected Pairs" + selectedPairs);
 
 
         }
         return mapping.findForward("importData");
     }
+    private void parseData(Map<String,String> config, Workbook workbook)
+    {
+        Sheet sheet = workbook.getSheetAt(0);
+        for (Row row : sheet) {
+            AmpActivityVersion ampActivityVersion = new AmpActivityVersion();
+            if (row.getRowNum() == 0) {
+                continue;
+            }
+
+            for (Map.Entry<String,String> entry : config.entrySet())
+            {
+                Cell cell = row.getCell(getColumnIndexByName(sheet, entry.getKey()));
+                switch (entry.getValue())
+                {
+                    case "{projectName}":
+                        ampActivityVersion.setName(cell.getStringCellValue());
+                        break;
+                    case "{projectDescription}":
+                        ampActivityVersion.setDescription(cell.getStringCellValue());
+                        break;
+
+                }
+
+            }
+            logger.info("Activity here: "+ampActivityVersion);
+        }
+
+
+
+    }
+
+    private static int getColumnIndexByName(Sheet sheet, String columnName) {
+        Row headerRow = sheet.getRow(0);
+        for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+            Cell cell = headerRow.getCell(i);
+            if (cell != null && columnName.equals(cell.getStringCellValue())) {
+                return i;
+            }
+        }
+        return -1; // Column not found
+    }
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
-        fieldsInfos.add("{projectTitle}");
         fieldsInfos.add("{projectName}");
         fieldsInfos.add("{projectDescription}");
         fieldsInfos.add("{projectLocation}");

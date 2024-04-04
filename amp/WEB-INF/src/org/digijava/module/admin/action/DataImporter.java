@@ -48,7 +48,8 @@ public class DataImporter extends Action {
                 Cell cell = cellIterator.next();
                 dataImporterForm.getFileHeaders().add(cell.getStringCellValue());
             }
-            request.setAttribute("fileHeaders",headers);
+            logger.info("Headers: "+dataImporterForm.getFileHeaders());
+//            request.setAttribute("fileHeaders",headers);
             workbook.close();
             }
 

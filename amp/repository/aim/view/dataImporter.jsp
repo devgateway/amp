@@ -1,6 +1,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib prefix="html" uri="/taglib/struts-html" %>
 <%@ taglib prefix="bean" uri="/taglib/struts-bean" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
 <html:html>
 <head>
   <title>Data Importer</title>
@@ -122,22 +123,24 @@
   <label>Select Template File:</label>
   <html:file property="templateFile" name="dataImporterForm"  />
   <br><br>
-  <bean:write name="dataImporterForm" property="fileHeaders"/>
 
   <html:submit property="uploadTemplate">Upload Template</html:submit>
 <%--  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>--%>
+<%--  <bean:write name="dataImporterForm" property="fileHeaders"/>--%>
 
-  <c:if test="${not empty dataImporterForm.fileHeaders}">
+  <logic:notEmpty name="dataImporterForm" property="fileHeaders">
 
     <br><br>
   <label for="columnName">Column Name:</label>
 <select id="columnName">
+  <logic:iterate scope="request" name="dataImporterForm" property="fileHeaders" id="fileHeader">
 
-<c:forEach items="${dataImporterForm.fileHeaders}" var="header" varStatus="loop">
+<%--<c:forEach items="${dataImporterForm.fileHeaders}" var="header" varStatus="loop">--%>
 
-      <option>${header}</option>
+      <option>${fileHeader}</option>
       <br>
-    </c:forEach>
+<%--    </c:forEach>--%>
+  </logic:iterate>
 </select>
   <br><br>
   <label for="selected-field">Select Entity Field:</label>
@@ -173,7 +176,7 @@
   <html:file property="uploadedFile" name="dataImporterForm"  />
   <br><br>
   <html:submit property="Upload">Upload</html:submit>
-  </c:if>
+  </logic:notEmpty>
 
 </html:form>
 

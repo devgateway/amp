@@ -40,8 +40,18 @@ public class DataImporter extends Action {
         fieldsInfo = getEntityFieldsInfo(AmpActivityFields.class);
 
         request.setAttribute("fieldsInfo",fieldsInfo);
+        DataImporterForm dataImporterForm = (DataImporterForm)form;
+
+        if (request.getParameter("addField")!=null) {
+            logger.info(" this is the action "+request.getParameter("addField"));
+
+            String columnName = request.getParameter("columnName");
+            String selectedField = request.getParameter("selectedField");
+            dataImporterForm.getDataInfos().add(new DataImporterForm.DataInfo(selectedField,columnName));
+            logger.info("Datas:"+dataImporterForm.getDataInfos());
+        }
+
         if (request.getParameter("Upload")!=null) {
-            DataImporterForm dataImporterForm = (DataImporterForm)form;
             logger.info(" this is the action "+request.getParameter("Upload"));
 
             InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();

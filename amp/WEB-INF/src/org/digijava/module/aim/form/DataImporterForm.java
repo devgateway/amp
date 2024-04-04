@@ -37,11 +37,20 @@ public class DataImporterForm extends ActionForm {
         this.fieldInfos = fieldInfos;
     }
 
-    private class DataInfo {
+    @Override
+    public String toString() {
+        return "DataImporterForm{" +
+                "fieldInfos=" + fieldInfos +
+                ", uploadedFile=" + uploadedFile +
+                ", dataInfos=" + dataInfos +
+                '}';
+    }
+
+    public static class DataInfo {
         private String fieldName;
         private String columnName;
 
-        DataInfo(String fieldName, String columnName) {
+        public DataInfo(String fieldName, String columnName) {
             this.fieldName = fieldName;
             this.columnName = columnName;
         }
@@ -60,6 +69,14 @@ public class DataImporterForm extends ActionForm {
 
         public void setColumnName(String columnName) {
             this.columnName = columnName;
+        }
+
+        @Override
+        public String toString() {
+            return "DataInfo{" +
+                    "fieldName='" + fieldName + '\'' +
+                    ", columnName='" + columnName + '\'' +
+                    '}';
         }
     }
 }

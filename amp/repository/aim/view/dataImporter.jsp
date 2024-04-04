@@ -16,26 +16,43 @@
     }
     function addField() {
       var columnName = document.getElementById("columnName").value;
-      var selectedField = document.getElementById("selectedPairs").value;
+      var selectedField = document.getElementById("selected-field").value;
+
+      var xhr = new XMLHttpRequest();
+      // Create a FormData object to send data in the request body
+      var formData = new FormData();
+      formData.append("columnName", columnName);
+      formData.append("selectedField", selectedField);
+      formData.append("addField", "addField");
+      xhr.open("POST", "${pageContext.request.contextPath}/aim/dataImporter.do", true);
+      // xhr.setRequestHeader()
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // Update UI or perform any additional actions if needed
+          console.log("Selected pairs updated successfully.");
+        }
+      };
+      xhr.send(formData);
 
       // Create a new table row
-      var row = document.createElement("tr");
-
-      // Create table cells for column name and selected field
+      // var row = document.createElement("tr");
+      //
+      // // Create table cells for column name and selected field
       var columnNameCell = document.createElement("td");
       columnNameCell.textContent = columnName;
       var selectedFieldCell = document.createElement("td");
-      selectedFieldCell.textContent = selectedField;
-
-      var selectedPairsInput = document.getElementsByName("selected-pairs");
-      var currentPairs = selectedPairsInput.value;
-      if (currentPairs === "") {
-        // If the input field is empty, simply set it to the new pair
-        selectedPairsInput.value = columnName + ":" + selectedField;
-      } else {
-        // If the input field already contains pairs, append the new pair
-        selectedPairsInput.value += ";" + columnName + ":" + selectedField;
-      }
+      // selectedFieldCell.textContent = selectedField;
+      //
+      // var selectedPairsInput = document.getElementsByName("selected-pairs");
+      // var currentPairs = selectedPairsInput.value;
+      // if (currentPairs === "") {
+      //   // If the input field is empty, simply set it to the new pair
+      //   selectedPairsInput.value = columnName + ":" + selectedField;
+      // } else {
+      //   // If the input field already contains pairs, append the new pair
+      //   selectedPairsInput.value += ";" + columnName + ":" + selectedField;
+      // }
 
 
       // Create a remove button
@@ -43,21 +60,21 @@
       var removeButton = document.createElement("button");
       removeButton.textContent = "Remove";
       removeButton.onclick = function() {
-        var currentPairsHere = selectedPairsInput.value;
-        if (currentPairsHere.lastIndexOf( columnName + ":" + selectedField+";")===0)
-        {
-          selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField+";", '');
-
-        }
-        if (((currentPairsHere.match(new RegExp(":", "g")) || []).length)===1)
-        {
-          selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField, '');
-        }
-        else
-        {
-          selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, ";" + columnName + ":" + selectedField, '');
-
-        }
+        // var currentPairsHere = selectedPairsInput.value;
+        // if (currentPairsHere.lastIndexOf( columnName + ":" + selectedField+";")===0)
+        // {
+        //   selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField+";", '');
+        //
+        // }
+        // if (((currentPairsHere.match(new RegExp(":", "g")) || []).length)===1)
+        // {
+        //   selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField, '');
+        // }
+        // else
+        // {
+        //   selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, ";" + columnName + ":" + selectedField, '');
+        //
+        // }
         row.remove(); // Remove the row when the remove button is clicked
       };
       removeButtonCell.appendChild(removeButton);
@@ -109,7 +126,7 @@
     </c:forEach>
   </select>
   <br><br>
-  <html:text  property="selected-pairs" name="selectedPairs"/>
+<%--  <html:text  property="selectedPairs" name="dataImporterForm"/>--%>
 
   <input type="button" value="Add Field" onclick="addField()">
   <br><br>

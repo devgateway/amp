@@ -148,7 +148,6 @@
 <%--  <bean:write name="dataImporterForm" property="fileHeaders"/>--%>
 
 <%--  <logic:notEmpty name="dataImporterForm" property="fileHeaders">--%>
-
     <br><br>
   <label for="columnName">Column Name:</label>
     <div id="headers"></div>

@@ -142,7 +142,7 @@
   <form id="uploadForm" enctype="multipart/form-data">
     <label>Select Template File:</label>
     <input type="file" id="templateFile" name="templateFile" />
-    <input type="button" value="Upload" onclick="uploadFile()" />
+    <input type="button" value="uploadTemplate" onclick="uploadFile()" />
   </form>
 <%--  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>--%>
 <%--  <bean:write name="dataImporterForm" property="fileHeaders"/>--%>

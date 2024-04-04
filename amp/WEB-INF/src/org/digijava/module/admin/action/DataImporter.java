@@ -10,10 +10,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DataImporterForm;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,23 +25,34 @@ import java.util.*;
 
 public class DataImporter extends Action {
     Logger logger = LoggerFactory.getLogger(DataImporter.class);
-    private static final long serialVersionUID = 1L;
-    private List<String> fieldsInfo; // List of field information
-    private String uploadedFileName;
-    private String localDirectory = "/src/main/resources/uploads/";
-
-    private Map<String, String> selectedPairs;
-
-
 
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        fieldsInfo = getEntityFieldsInfo();
-        request.setAttribute("fieldsInfo",fieldsInfo);
+        // List of fields
+        List<String> fieldsInfo = getEntityFieldsInfo();
+        request.setAttribute("fieldsInfo", fieldsInfo);
         DataImporterForm dataImporterForm = (DataImporterForm)form;
 
-        if (request.getParameter("addField")!=null) {
+
+        if (request.getParameter("uploadTemplate")!=null) {
+            logger.info(" this is the action "+request.getParameter("Upload"));
+
+            InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
+            Workbook workbook = new XSSFWorkbook(fileInputStream);
+            Sheet sheet = workbook.getSheetAt(0);
+            Row headerRow = sheet.getRow(0);
+            Set<String> headers = new HashSet<>();
+            for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+                Cell cell = headerRow.getCell(i);
+                headers.add(cell.getStringCellValue());
+                }
+            request.setAttribute("fileHeaders",headers);
+            }
+
+
+
+            if (request.getParameter("addField")!=null) {
             logger.info(" this is the action "+request.getParameter("addField"));
 
             String columnName = request.getParameter("columnName");
@@ -83,7 +95,11 @@ public class DataImporter extends Action {
 
             InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);
-            parseData(dataImporterForm.getColumnPairs(),workbook);
+            int numberOfSheets = workbook.getNumberOfSheets();
+            for (int i = 0; i < numberOfSheets; i++) {
+                parseData(dataImporterForm.getColumnPairs(),workbook,i);
+            }
+
             workbook.close();
 
 
@@ -97,9 +113,13 @@ public class DataImporter extends Action {
         // Remove the entry
         map.entrySet().removeIf(entry -> columnName.equals(entry.getKey()) && selectedField.equals(entry.getValue()));
     }
-    private void parseData(Map<String,String> config, Workbook workbook)
+
+
+    private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber)
     {
-        Sheet sheet = workbook.getSheetAt(0);
+        Session session = PersistenceManager.getRequestDBSession();
+
+        Sheet sheet = workbook.getSheetAt(sheetNumber);
         for (Row row : sheet) {
             AmpActivityVersion ampActivityVersion = new AmpActivityVersion();
             ampActivityVersion.setApprovalStatus(ApprovalStatus.valueOf("created"));
@@ -120,18 +140,41 @@ public class DataImporter extends Action {
                         break;
                     case "{projectLocation}":
                         ampActivityVersion.addLocation(new AmpActivityLocation());
-//                    case "{primarySector}":
-//                        ampActivityVersion.setSectors();
-
+                        break;
+                    case "{primarySector}":
+                        updateSectors(ampActivityVersion, cell.getStringCellValue(), session);
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + entry.getValue());
                 }
 
             }
             logger.info("Activity here: "+ampActivityVersion);
+            session.save(ampActivityVersion);
+
         }
 
+    }
 
+    private void updateFunding(AmpActivityVersion ampActivityVersion,String donorName,Session session)
+    {
 
     }
+
+    private void updateSectors(AmpActivityVersion ampActivityVersion, String name, Session session)
+    {
+        String hql = "SELECT "+ AmpSector.class.getName() +" s WHERE s.name LIKE %:name%";
+        Query query= session.createQuery(hql);
+        query.setString("name", name);
+        AmpSector sector =(AmpSector) query.uniqueResult();
+        if (sector!=null) {
+            AmpActivitySector ampActivitySector = new AmpActivitySector();
+            ampActivitySector.setSectorId(sector);
+            ampActivityVersion.getSectors().add(ampActivitySector);
+        }
+
+    }
+
 
     private static int getColumnIndexByName(Sheet sheet, String columnName) {
         Row headerRow = sheet.getRow(0);
@@ -141,7 +184,7 @@ public class DataImporter extends Action {
                 return i;
             }
         }
-        return -1; // Column not found
+        return -1;
     }
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();

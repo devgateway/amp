@@ -118,8 +118,24 @@
 <h2>Data Importer</h2>
 <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
   <h3>Data file configuration</h3>
+  <label>Select Template File:</label>
+  <html:file property="templateFile" name="dataImporterForm"  />
+  <br><br>
+  <html:submit property="uploadTemplate">Upload Template</html:submit>
+  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>
+
+  <c:if test="${not empty fileHeaders}">
+
   <label for="columnName">Column Name:</label>
-  <input type="text" id="columnName" name="columnName" required>
+<%--  <input type="text" id="columnName" name="columnName" required>--%>
+<select id="columnName">
+
+<c:forEach items="${fileHeaders}" var="header" varStatus="loop">
+
+      <option>${header}</option>
+      <br>
+    </c:forEach>
+</select>
   <br><br>
   <label for="selected-field">Select Entity Field:</label>
   <select id="selected-field">
@@ -136,6 +152,8 @@
 
   <input type="button" value="Add Field" onclick="addField()">
   <br><br>
+  </c:if>
+
   <!-- Table to display selected pairs -->
   <table>
     <thead>

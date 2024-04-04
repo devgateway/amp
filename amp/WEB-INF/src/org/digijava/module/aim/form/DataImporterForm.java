@@ -12,6 +12,16 @@ import java.util.Map;
 public class DataImporterForm extends ActionForm {
     List<FieldInfo> fieldInfos =new ArrayList<>();
     private FormFile uploadedFile;
+
+    public FormFile getTemplateFile() {
+        return templateFile;
+    }
+
+    public void setTemplateFile(FormFile templateFile) {
+        this.templateFile = templateFile;
+    }
+
+    private FormFile templateFile;
     private Map<String,String> columnPairs= new HashMap<>();
 
     public Map<String, String> getColumnPairs() {

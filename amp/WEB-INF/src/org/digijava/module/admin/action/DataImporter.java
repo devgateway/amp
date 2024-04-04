@@ -43,12 +43,15 @@ public class DataImporter extends Action {
             Sheet sheet = workbook.getSheetAt(0);
             Row headerRow = sheet.getRow(0);
             Set<String> headers = new HashSet<>();
-            for (int i = 0; i < headerRow.getLastCellNum(); i++) {
-                Cell cell = headerRow.getCell(i);
+            Iterator<Cell> cellIterator = headerRow.cellIterator();
+            while (cellIterator.hasNext()) {
+                Cell cell = cellIterator.next();
                 headers.add(cell.getStringCellValue());
-                }
-            request.setAttribute("fileHeaders",headers);
             }
+            request.setAttribute("fileHeaders",headers);
+            workbook.close();
+            }
+
 
 
 

@@ -37,6 +37,7 @@
 	<http pattern="/aim/showRegisterUser.do**" security="none" />
 
     <http pattern="/aim/showChangePassword.do**" security="none" />
+    <http pattern="/sdm/showImage.do**" security="none" />
 
     <http pattern="/aim/changePassword.do**" security="none" />
 

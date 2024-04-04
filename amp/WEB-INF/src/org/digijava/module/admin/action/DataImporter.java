@@ -1,5 +1,6 @@
 package org.digijava.module.admin.action;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -47,8 +48,16 @@ public class DataImporter extends Action {
 
             String columnName = request.getParameter("columnName");
             String selectedField = request.getParameter("selectedField");
-            dataImporterForm.getDataInfos().add(new DataImporterForm.DataInfo(selectedField,columnName));
-            logger.info("Datas:"+dataImporterForm.getDataInfos());
+            dataImporterForm.getColumnPairs().put(columnName, selectedField);
+            logger.info("Datas:"+dataImporterForm.getColumnPairs());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString( dataImporterForm.getColumnPairs());
+
+            // Send JSON response
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
         }
 
         if (request.getParameter("Upload")!=null) {

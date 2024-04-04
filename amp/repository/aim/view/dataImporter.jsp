@@ -26,17 +26,21 @@
       formData.append("addField", "addField");
       xhr.open("POST", "${pageContext.request.contextPath}/aim/dataImporter.do", true);
       // xhr.setRequestHeader()
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
           // Update UI or perform any additional actions if needed
           console.log("Selected pairs updated successfully.");
+          var updatedMap = JSON.parse(xhr.responseText);
+
+          // Use updatedMap as needed
+          console.log("Updated map received:", updatedMap);
         }
       };
       xhr.send(formData);
 
       // Create a new table row
-      // var row = document.createElement("tr");
+      var row = document.createElement("tr");
       //
       // // Create table cells for column name and selected field
       var columnNameCell = document.createElement("td");

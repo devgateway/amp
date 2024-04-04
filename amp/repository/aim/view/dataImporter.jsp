@@ -45,12 +45,18 @@
 
           // Use updatedMap as needed
           console.log("Updated map received:", updatedMap);
+          var tbody= document.getElementById("selected-pairs-table-body");
+          // var tbody = table.getElementsByTagName("tbody")[0];
 
+          // Remove all rows from the table body
+          while (tbody.firstChild) {
+            tbody.removeChild(tbody.firstChild);
+          }
           for (var key in updatedMap) {
             if (updatedMap.hasOwnProperty(key)) {
               // Access each property using the key
               var value = updatedMap[key];
-              updateTable(key,value);
+              updateTable(key,value, tbody);
               console.log('Key:', key, 'Value:', value);
             }
           }
@@ -59,15 +65,9 @@
       };
       xhr.send(formData);
     }
-    function updateTable(columnName,selectedField)
+    function updateTable(columnName,selectedField, tbody)
     {
-      var tbody= document.getElementById("selected-pairs-table-body");
-      // var tbody = table.getElementsByTagName("tbody")[0];
 
-      // Remove all rows from the table body
-      while (tbody.firstChild) {
-        tbody.removeChild(tbody.firstChild);
-      }
       // Create a new table row
       var row = document.createElement("tr");
       //

@@ -46,17 +46,6 @@
       var columnNameCell = document.createElement("td");
       columnNameCell.textContent = columnName;
       var selectedFieldCell = document.createElement("td");
-      // selectedFieldCell.textContent = selectedField;
-      //
-      // var selectedPairsInput = document.getElementsByName("selected-pairs");
-      // var currentPairs = selectedPairsInput.value;
-      // if (currentPairs === "") {
-      //   // If the input field is empty, simply set it to the new pair
-      //   selectedPairsInput.value = columnName + ":" + selectedField;
-      // } else {
-      //   // If the input field already contains pairs, append the new pair
-      //   selectedPairsInput.value += ";" + columnName + ":" + selectedField;
-      // }
 
 
       // Create a remove button
@@ -64,21 +53,6 @@
       var removeButton = document.createElement("button");
       removeButton.textContent = "Remove";
       removeButton.onclick = function() {
-        // var currentPairsHere = selectedPairsInput.value;
-        // if (currentPairsHere.lastIndexOf( columnName + ":" + selectedField+";")===0)
-        // {
-        //   selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField+";", '');
-        //
-        // }
-        // if (((currentPairsHere.match(new RegExp(":", "g")) || []).length)===1)
-        // {
-        //   selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, columnName + ":" + selectedField, '');
-        // }
-        // else
-        // {
-        //   selectedPairsInput.value = replaceLastOccurrence(currentPairsHere, ";" + columnName + ":" + selectedField, '');
-        //
-        // }
         row.remove(); // Remove the row when the remove button is clicked
       };
       removeButtonCell.appendChild(removeButton);
@@ -122,9 +96,7 @@
     <!-- Populate dropdown with entity field names -->
     <jsp:useBean id="fieldsInfo" scope="request" type="java.util.List"/>
     <c:forEach items="${fieldsInfo}" var="fieldInfo" varStatus="loop">
-<%--      <c:if test="${loop.first || !fieldInfo.subclass.equals(fieldsInfo[loop.index - 1].subclass)}">--%>
-<%--        <h3>${fieldInfo.subclass}</h3>--%>
-<%--      </c:if>--%>
+
       <option>${fieldInfo}</option>
       <br>
     </c:forEach>

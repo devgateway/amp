@@ -5,12 +5,14 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.module.admin.helper.FieldInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DataImporterForm extends ActionForm {
     List<FieldInfo> fieldInfos =new ArrayList<>();
     private FormFile uploadedFile;
+    private Map<String,String> columnPairs= new HashMap<>();
 
     public Map<String, String> getColumnPairs() {
         return columnPairs;
@@ -20,7 +22,6 @@ public class DataImporterForm extends ActionForm {
         this.columnPairs = columnPairs;
     }
 
-    private Map<String,String> columnPairs;
 
     public FormFile getUploadedFile() {
         return uploadedFile;

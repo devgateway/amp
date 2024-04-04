@@ -43,7 +43,7 @@ public class DataImporter extends Action {
             Sheet sheet = workbook.getSheetAt(0);
             Row headerRow = sheet.getRow(0);
             StringBuilder headers = new StringBuilder();
-            headers.append("<select id=\"columnName\">");
+            headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select id=\"columnName\">");
             Iterator<Cell> cellIterator = headerRow.cellIterator();
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();

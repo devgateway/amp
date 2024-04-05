@@ -43,7 +43,7 @@
 				column="amp_org_id" />
 		</set>
 
-		<set name="desktopTabSelections" lazy="true" inverse="true" cascade="none" order-by="index">
+		<set name="desktopTabSelections" lazy="true" inverse="true" cascade="all" order-by="index">
 			<cache usage="read-write" />
 			<key column="owner_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpDesktopTabSelection" />

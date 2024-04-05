@@ -3,16 +3,16 @@
  */
 package org.digijava.kernel.ampapi.endpoints.sync;
 
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
-
-import java.io.IOException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.digijava.kernel.AbstractIntegrationTest;
 import org.digijava.module.aim.util.TeamUtil;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 /**
  * @author Nadejda Mandrescu

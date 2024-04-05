@@ -3,13 +3,13 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.Set;
-
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.core.Permission;
+
+import java.util.Set;
 
 /**
  * @author dan

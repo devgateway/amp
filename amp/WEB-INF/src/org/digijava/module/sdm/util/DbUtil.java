@@ -22,12 +22,6 @@
 
 package org.digijava.module.sdm.util;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -37,10 +31,16 @@ import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.exception.SDMException;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -462,12 +462,10 @@ public class DbUtil {
             if(document.getId()==null){
                 session.save(document);
                 if(document.getItems()!=null){
-                    Iterator<SdmItem> iter=document.getItems().iterator();
-                    while(iter.hasNext()){
-                        SdmItem oldItem = iter.next();
+                    for (SdmItem oldItem : document.getItems()) {
                         oldItem.setDocument(document);
                         //save item
-                         session.save(oldItem);
+                        session.save(oldItem);
                     }
                 }
             }
@@ -624,18 +622,17 @@ public class DbUtil {
                                           " itm where itm.document.id=:docId" +
                                           " and itm.paragraphOrder=:paragraphId" +
                                           " and itm.realType=:itemType");
-            query.setLong("docId", sdmId);
-            query.setLong("paragraphId", paragraphId);
-            query.setString("itemType", SdmItem.TYPE_IMG);
+            query.setParameter("docId", sdmId, LongType.INSTANCE);
+            query.setParameter("paragraphId", paragraphId, LongType.INSTANCE);
+            query.setParameter("itemType", SdmItem.TYPE_IMG,StringType.INSTANCE);
             query.setCacheable(true);
 
             List result = query.list();
 
             if (result.size() != 0) {
                 Object[] resultRow = (Object[]) result.get(0);
-                ImageInfo imageInfo = new ImageInfo( (String) (resultRow[0]),
+                return new ImageInfo( (String) (resultRow[0]),
                                           (byte[]) (resultRow[1]));
-                return imageInfo;
             }
 
        }
@@ -657,8 +654,8 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery("select itm from " +SdmItem.class.getName() +
                                           " itm where itm.document.id=:docId and itm.paragraphOrder=:paragraphId");
-            query.setLong("docId", sdmId);
-            query.setLong("paragraphId", paragraphId);
+            query.setParameter("docId", sdmId, LongType.INSTANCE);
+            query.setParameter("paragraphId", paragraphId, LongType.INSTANCE);
 
             result = (SdmItem)query.uniqueResult();
        }

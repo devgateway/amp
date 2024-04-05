@@ -1,10 +1,10 @@
 package org.digijava.kernel.validation;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Octavian Ciubotaru

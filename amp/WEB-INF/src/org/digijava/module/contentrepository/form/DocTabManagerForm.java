@@ -3,10 +3,10 @@
  */
 package org.digijava.module.contentrepository.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
+
+import java.util.List;
 
 /**
  * @author Alex Gartner

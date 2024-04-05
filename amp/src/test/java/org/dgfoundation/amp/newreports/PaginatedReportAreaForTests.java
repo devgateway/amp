@@ -3,9 +3,9 @@
  */
 package org.dgfoundation.amp.newreports;
 
-import java.util.Map;
-
 import org.dgfoundation.amp.newreports.pagination.PaginatedReportArea;
+
+import java.util.Map;
 
 /**
  * 

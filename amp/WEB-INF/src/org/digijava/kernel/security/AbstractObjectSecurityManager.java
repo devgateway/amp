@@ -22,16 +22,6 @@
 
 package org.digijava.kernel.security;
 
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.Principal;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.security.permission.AdditivePermission;
 import org.digijava.kernel.security.permission.ObjectPermission;
@@ -39,6 +29,15 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
+
+import javax.security.auth.Subject;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Principal;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class AbstractObjectSecurityManager {
 

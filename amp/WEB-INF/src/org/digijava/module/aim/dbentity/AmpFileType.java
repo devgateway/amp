@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 /**
  * Stores allowed mimetype

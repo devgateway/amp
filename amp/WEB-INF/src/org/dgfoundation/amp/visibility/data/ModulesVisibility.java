@@ -3,17 +3,12 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Detects which main FM modules are enabled, that depends on root module being enabled 

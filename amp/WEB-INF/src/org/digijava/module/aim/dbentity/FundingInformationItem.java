@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.Date;
-
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+
+import java.util.Date;
 
 /**
  * an item which holds information regarding a funding detail (e.g. currently AmpFundingDetail or AmpFundingMTEFProjection)

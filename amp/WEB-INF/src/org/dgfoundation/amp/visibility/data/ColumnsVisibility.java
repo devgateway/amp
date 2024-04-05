@@ -14,15 +14,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -270,7 +263,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, ColumnConstants.SECTOR_GROUP);
         put(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, ColumnConstants.REGIONAL_GROUP);
-        
+
         String[][] contacts = new String[][] {
             {"Donor Contact", ColumnConstants.DONOR_CONTACT_ORGANIZATION}, 
             {"Sector Ministry Contact", ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION},

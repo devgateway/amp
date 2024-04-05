@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.currency.dto;
 
-import java.util.Objects;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Objects;
 
 /**
  * @author Octavian Ciubotaru

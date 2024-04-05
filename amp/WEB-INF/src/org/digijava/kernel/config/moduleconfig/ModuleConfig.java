@@ -22,12 +22,12 @@
 
 package org.digijava.kernel.config.moduleconfig;
 
+import org.digijava.kernel.config.HibernateClasses;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.digijava.kernel.config.HibernateClasses;
 
 public class ModuleConfig {
 

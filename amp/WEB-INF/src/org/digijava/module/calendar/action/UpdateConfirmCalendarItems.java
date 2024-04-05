@@ -22,10 +22,6 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -39,6 +35,10 @@ import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.common.util.ModuleEmailManager;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Action updates selected events statuses into database, sends appropriate notification email alerts to event's authors and redirects back to the action from which it was invoked

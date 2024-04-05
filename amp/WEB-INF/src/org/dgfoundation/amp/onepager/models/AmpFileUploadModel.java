@@ -1,10 +1,11 @@
 package org.dgfoundation.amp.onepager.models;
 
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.model.IModel;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
 
 public class AmpFileUploadModel implements IModel<List<FileUpload>> {
     private static final long serialVersionUID = 1L;

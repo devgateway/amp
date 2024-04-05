@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports;
 
-import static org.junit.Assert.*;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /** Test NumberCell compareTo method
  * 

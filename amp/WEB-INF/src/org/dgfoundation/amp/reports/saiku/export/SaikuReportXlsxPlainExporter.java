@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,11 +8,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.HeaderCell;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** renders the result of report to a plain Excel. See {@link SaikuReportXlsxExporter}
  * @author Viorel Chihai

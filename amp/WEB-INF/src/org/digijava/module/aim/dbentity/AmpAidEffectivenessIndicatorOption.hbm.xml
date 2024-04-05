@@ -4,8 +4,8 @@
     <class name="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption" table="AMP_AID_EFFECTIVENESS_INDICATOR_OPTION" lazy="false">
         <cache usage="read-write" />
         <id name="ampIndicatorOptionId" column="amp_indicator_option_id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">AMP_AID_EFFECTIVENESS_INDICATOR_OPTION_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_AID_EFFECTIVENESS_INDICATOR_OPTION_seq</param>
             </generator>
         </id>
 

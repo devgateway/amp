@@ -1,19 +1,18 @@
 package org.digijava.module.xmlpatcher.core;
 
-import java.sql.Connection;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.module.aim.helper.Constants;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * quick & dirty SQL patcher made for ugly things like DROPping tables or columns from entities which would otherwise have been locked by Hibernate

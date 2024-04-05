@@ -1,17 +1,5 @@
 package org.digijava.module.translation.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.struts.action.Action;
@@ -34,6 +22,11 @@ import org.digijava.module.translation.form.NewAdvancedTrnForm;
 import org.digijava.module.translation.lucene.LucTranslationModule;
 import org.digijava.module.translation.util.ListChangesBuffer;
 import org.digijava.module.translation.util.TranslationManager;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * New Advanced translation mode action. AMP-4911

@@ -3,9 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.tables;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,10 +14,9 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.kernel.user.User;
-import org.digijava.module.admin.exception.AdminException;
-import org.digijava.module.admin.util.DbUtil;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.helper.TeamMember;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

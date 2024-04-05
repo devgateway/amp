@@ -1,44 +1,22 @@
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
-import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.AllActivities;
 import org.digijava.module.aim.helper.AllMEIndicators;
-import org.digijava.module.aim.helper.AmpMEIndicatorList;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.MEIndicatorRisk;
-import org.digijava.module.aim.helper.MEIndicatorValue;
-import org.digijava.module.aim.helper.PriorCurrentValues;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.JDBCException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 @Deprecated
 public class MEIndicatorsUtil
@@ -58,10 +36,8 @@ public class MEIndicatorsUtil
                                 + AmpMEIndicatorValue.class.getName() + " actInd";
             qry = session.createQuery(queryString);
             actIdCol = qry.list();
-            Iterator itrIds = actIdCol.iterator();
-            while(itrIds.hasNext())
-            {
-                AmpActivity ampAct = (AmpActivity) itrIds.next();
+            for (Object o : actIdCol) {
+                AmpActivity ampAct = (AmpActivity) o;
                 AllActivities actList = new AllActivities();
                 actList.setActivityId(ampAct.getAmpActivityId());
                 actList.setActivityName(ampAct.getName());
@@ -170,14 +146,12 @@ public class MEIndicatorsUtil
                             AmpMEIndicatorValue.class.getName() + " " +
                             "indVal inner join indVal.indicator me where (indVal.activityId=:actId) and me.name=:name" ;
                         qry = session.createQuery(qryStr);
-                        qry.setLong("actId",actId);
-                        qry.setString("name",name);
-                        if(qry!=null){
-                                Iterator <Long> meIter= qry.list().iterator();
-                                if(meIter.hasNext()){
-                                     id=meIter.next();
-                                }
-                        }
+                        qry.setParameter("actId",actId, LongType.INSTANCE);
+                        qry.setParameter("name",name, StringType.INSTANCE);
+                    Iterator<Long> meIter = qry.list().iterator();
+                    if(meIter.hasNext()){
+                         id=meIter.next();
+                    }
 
                 }
         }
@@ -327,31 +301,26 @@ public class MEIndicatorsUtil
         AmpMEIndicators ampMEInd = new AmpMEIndicators();
         ampMEInd.setAmpMEIndId(indId);
         colMeIndValIds = MEIndicatorsUtil.getMeIndValIds(indId);
-        Iterator itr = colMeIndValIds.iterator();
-        while(itr.hasNext())
-        {
-            ampMEIndVal = (AmpMEIndicatorValue) itr.next();
+        for (Object colMeIndValId : colMeIndValIds) {
+            ampMEIndVal = (AmpMEIndicatorValue) colMeIndValId;
             ampMECurrValIds = MEIndicatorsUtil.getMeCurrValIds(ampMEIndVal.getAmpMeIndValId());
 
-            if(ampMECurrValIds != null)
-            {
+            if (ampMECurrValIds != null) {
                 AmpMECurrValHistory ampMECurrVal = null;
-                Iterator itrCurrVal = ampMECurrValIds.iterator();
-                while(itrCurrVal.hasNext())
-                {
-                    ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
+                for (Object ampMECurrValId : ampMECurrValIds) {
+                    ampMECurrVal = (AmpMECurrValHistory) ampMECurrValId;
                     try {
-                    DbUtil.delete(ampMECurrVal);
+                        DbUtil.delete(ampMECurrVal);
                     } catch (JDBCException e) {
                         logger.error(e.getMessage(), e);
+                    }
                 }
             }
-            }
             try {
-            DbUtil.delete(ampMEIndVal);
+                DbUtil.delete(ampMEIndVal);
             } catch (JDBCException e) {
                 logger.error(e.getMessage(), e);
-        }
+            }
         }
         try {
         DbUtil.delete(ampMEInd);

@@ -1,10 +1,10 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
-
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
 
 /**
  * Verify that dependent fields specify a value when a project is on budget.

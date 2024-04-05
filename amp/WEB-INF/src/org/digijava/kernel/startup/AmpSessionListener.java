@@ -1,11 +1,11 @@
 package org.digijava.kernel.startup;
 
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.hibernate.Session;
+
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 public class AmpSessionListener implements HttpSessionListener {
     

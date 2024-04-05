@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Collection;
-
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.Collection;
 
 /**
  * class holding metadata about a report-output-column. It also holds  

@@ -1,16 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
@@ -18,6 +7,10 @@ import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TabularSourcedNiDimension;
 import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.sql.ResultSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * a NiDimension which fetches its data from an SQL SELECT statement

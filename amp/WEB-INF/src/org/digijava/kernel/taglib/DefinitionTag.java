@@ -22,12 +22,12 @@
 
 package org.digijava.kernel.taglib;
 
-import javax.servlet.jsp.JspException;
-
-import org.apache.struts.tiles.taglib.PutListTag;
-import org.apache.struts.tiles.taglib.PutTag;
 import org.apache.struts.tiles.AttributeDefinition;
 import org.apache.struts.tiles.UntypedAttribute;
+import org.apache.struts.tiles.taglib.PutListTag;
+import org.apache.struts.tiles.taglib.PutTag;
+
+import javax.servlet.jsp.JspException;
 
 /**
  * @author wb231862

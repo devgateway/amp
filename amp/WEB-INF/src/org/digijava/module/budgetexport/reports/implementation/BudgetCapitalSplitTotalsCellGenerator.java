@@ -3,11 +3,9 @@
  */
 package org.digijava.module.budgetexport.reports.implementation;
 
-import javax.servlet.http.HttpSession;
-
-import org.dgfoundation.amp.ar.CapitalCellGenerator;
-import org.dgfoundation.amp.ar.CapitalExpenditureCellGenerator;
 import org.dgfoundation.amp.ar.CapitalSplitTotalsCellGenerator;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author alex

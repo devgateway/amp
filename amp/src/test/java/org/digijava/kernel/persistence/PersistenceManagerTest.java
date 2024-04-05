@@ -1,13 +1,5 @@
 package org.digijava.kernel.persistence;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -18,6 +10,10 @@ import org.hibernate.criterion.Property;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Octavian Ciubotaru

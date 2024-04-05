@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * The sole purpose of this class is to define a wrapper around a Map to be able document examples for Swagger.

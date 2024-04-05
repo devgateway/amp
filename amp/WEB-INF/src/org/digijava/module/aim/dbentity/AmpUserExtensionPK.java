@@ -1,8 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.kernel.user.User;
+
+import java.io.Serializable;
 
 /**
  * Primary Key for AmpUserExtension entity.

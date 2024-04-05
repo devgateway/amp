@@ -8,11 +8,13 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.form.SuspendLoginManagerForm;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.module.um.util.UmUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.

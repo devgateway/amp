@@ -22,16 +22,7 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.Locale;
+import org.apache.struts.action.*;
 import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
@@ -44,6 +35,10 @@ import org.digijava.module.calendar.util.CalendarPopulator;
 import org.digijava.module.calendar.util.CalendarUtil;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.util.BBCodeParser;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Action Previews the event before publcation

@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Octavian Ciubotaru

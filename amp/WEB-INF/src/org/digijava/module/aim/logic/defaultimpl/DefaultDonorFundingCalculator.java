@@ -1,8 +1,9 @@
 package org.digijava.module.aim.logic.defaultimpl;
 
-import java.math.BigDecimal;
 import org.digijava.module.aim.logic.DonorFundingCalculator;
 import org.digijava.module.aim.util.DecimalWraper;
+
+import java.math.BigDecimal;
 
 /**
  * 

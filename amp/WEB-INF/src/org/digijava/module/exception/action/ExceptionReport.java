@@ -22,10 +22,6 @@
 
 package org.digijava.module.exception.action;
 
-import java.util.Iterator;
-import javax.mail.Address;
-import javax.mail.internet.InternetAddress;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -39,6 +35,10 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.exception.form.DigiExceptionReportForm;
 import org.digijava.module.exception.util.ModuleErrorStack;
+
+import javax.mail.Address;
+import javax.mail.internet.InternetAddress;
+import java.util.Iterator;
 
 /**
  *

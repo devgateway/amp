@@ -1,8 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
 
 public class AmpScorecardSettingsCategoryValue implements Serializable {
     /**

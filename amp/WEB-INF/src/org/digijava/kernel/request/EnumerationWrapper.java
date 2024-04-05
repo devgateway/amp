@@ -23,9 +23,9 @@
 package org.digijava.kernel.request;
 
 import java.util.Enumeration;
-import java.util.Set;
-import java.util.Iterator;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * <p>Title: DiGiJava</p>

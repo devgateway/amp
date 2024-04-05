@@ -6,8 +6,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpContactProperty" table="AMP_CONTACT_PROPERTIES" discriminator-value="null">
 		<cache usage="read-write" />
 	  	<id name="id" column="property_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_CONTACT_PROPERTIES_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_CONTACT_PROPERTIES_seq</param>
 			</generator>
 		</id>
 		<discriminator column="name" />

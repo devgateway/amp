@@ -3,12 +3,11 @@
  */
 package org.dgfoundation.amp.reports;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
+import com.google.common.cache.CacheBuilder;
 import org.apache.log4j.Logger;
 
-import com.google.common.cache.CacheBuilder;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Report output cacher that uses a Guava-powered LRU softmap.

@@ -5,14 +5,10 @@
 
 package org.digijava.module.aim.helper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-
 import org.dgfoundation.amp.Util;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.*;
 
 public class FundingValidator {
     

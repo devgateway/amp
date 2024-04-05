@@ -6,20 +6,10 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.dgfoundation.amp.ar.AmpARFilter;
+import org.apache.poi.hssf.usermodel.*;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * 

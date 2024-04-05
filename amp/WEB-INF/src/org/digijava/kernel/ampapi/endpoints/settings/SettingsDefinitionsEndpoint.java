@@ -32,6 +32,18 @@ import org.digijava.kernel.ampapi.endpoints.util.PublicConstants;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.DbUtil;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.*;
+
 /**
  * This endpoint returns settings definitions for each module. Settings
  * definitions were designed to be consumed by Settings Widget.

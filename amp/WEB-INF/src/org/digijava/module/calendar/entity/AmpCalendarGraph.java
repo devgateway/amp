@@ -1,9 +1,9 @@
 package org.digijava.module.calendar.entity;
 
-import java.util.List;
-
 import org.digijava.module.calendar.dbentity.AmpCalendar;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class AmpCalendarGraph {
     private AmpCalendar ampCalendar;

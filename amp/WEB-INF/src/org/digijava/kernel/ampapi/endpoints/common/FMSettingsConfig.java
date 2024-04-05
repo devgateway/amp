@@ -1,14 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FMSettingsConfig {

@@ -1,17 +1,13 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import org.apache.commons.lang3.StringUtils;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.DateCell;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportVisitor;
 
 /**
  * An implementation of ReportVisitor for fetching items used in GPI report 1 output 2

@@ -1,14 +1,13 @@
 package org.digijava.kernel.validators.common;
 
-import java.util.Collection;
-import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Validates that the percentages from a collection sum up to 100. To read the percentage for each element

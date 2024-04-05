@@ -1,11 +1,11 @@
 package org.digijava.kernel.validation;
 
-import static java.util.Objects.requireNonNull;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Used for translatable fields tha are persisted in {@link AmpContentTranslation}.

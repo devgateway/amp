@@ -1,12 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.security.services;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -14,6 +7,13 @@ import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceMember;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Component;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Workspace Member Service

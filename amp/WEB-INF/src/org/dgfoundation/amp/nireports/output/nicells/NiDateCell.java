@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.output.nicells;
 
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 import static org.dgfoundation.amp.algo.AmpCollections.orderedListWrapper;
 

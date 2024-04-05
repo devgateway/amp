@@ -1,20 +1,5 @@
 package org.digijava.kernel.lucene;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -36,6 +21,11 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.jfree.util.Log;
+
+import javax.servlet.ServletContext;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Lucene worker contains general code for working with Lucene.

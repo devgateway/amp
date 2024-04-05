@@ -1,10 +1,10 @@
 package org.digijava.kernel.validation;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Container for constraint descriptors.

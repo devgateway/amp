@@ -1,9 +1,9 @@
 package org.digijava.kernel.translator;
 
+import org.apache.log4j.Logger;
+
 import java.text.MessageFormat;
 import java.util.Arrays;
-
-import org.apache.log4j.Logger;
 
 /**
  * A label that can be localized and supports parameterization. It uses underneath {@link MessageFormat} to format

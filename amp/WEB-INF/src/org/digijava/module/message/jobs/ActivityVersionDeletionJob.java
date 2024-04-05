@@ -1,13 +1,8 @@
 package org.digijava.module.message.jobs;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
@@ -17,6 +12,9 @@ import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.util.Collection;
+import java.util.Date;
 
 public class ActivityVersionDeletionJob extends ConnectionCleaningJob implements StatefulJob { 
     

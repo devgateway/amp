@@ -22,9 +22,6 @@
 
 package org.digijava.module.translation.action;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -36,6 +33,9 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.translation.form.AdvancedTranslationForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.util.DbUtil;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class SaveAllMessages extends Action {
 

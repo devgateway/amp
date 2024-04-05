@@ -22,9 +22,8 @@
 
 package org.digijava.kernel.security;
 
-import java.io.Serializable;
-
 import javax.security.auth.callback.Callback;
+import java.io.Serializable;
 
 public class SessionIdCallback
     implements Serializable, Callback {

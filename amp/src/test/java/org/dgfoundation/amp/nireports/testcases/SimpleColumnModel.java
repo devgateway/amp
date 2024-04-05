@@ -1,13 +1,15 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.*;
-
 import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * a model (sketch) of a CellColumn

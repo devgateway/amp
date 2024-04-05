@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpScorecardOrganisation" table="amp_scorecard_organisation">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_scorecard_organisation_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_scorecard_organisation_seq</param>
 			</generator>
 		</id>
 

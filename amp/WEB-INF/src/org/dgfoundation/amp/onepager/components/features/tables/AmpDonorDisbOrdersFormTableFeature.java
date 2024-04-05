@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -13,7 +11,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.WildcardListModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.FundingListEditor;
-import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
@@ -26,6 +23,8 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetailComparator;
+
+import java.util.ArrayList;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010

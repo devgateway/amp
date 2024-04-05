@@ -1,11 +1,10 @@
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 public class SelectSectorForm extends ActionForm {
 

@@ -5,8 +5,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpAhsurvey" table="AMP_AHSURVEY">
 		<cache usage="read-write" />
 		<id name="ampAHSurveyId" column="amp_ahsurvey_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_AHSURVEY_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_AHSURVEY_seq</param>
 			</generator>
 		</id>
 
@@ -17,7 +17,7 @@
 		-->
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" not-null="true" />
 
 		<many-to-one name="ampDonorOrgId" column="amp_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" not-null="true" />

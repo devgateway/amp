@@ -22,20 +22,16 @@
 
 package org.digijava.module.admin.helper.pickup;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.admin.util.DbUtil;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 
 public class SitePickupSource  {

@@ -4,14 +4,14 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
+import org.apache.wicket.model.IModel;
+import org.digijava.kernel.user.User;
+import org.digijava.module.um.exception.UMException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.wicket.model.IModel;
-import org.digijava.kernel.user.User;
-import org.digijava.module.um.exception.UMException;
 
 /**
  * 

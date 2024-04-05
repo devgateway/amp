@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.onepager.behaviors;
 
-import java.util.HashMap;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -9,10 +7,11 @@ import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.HashMap;
 
 public class DocumentReadyBehavior extends Behavior {
 

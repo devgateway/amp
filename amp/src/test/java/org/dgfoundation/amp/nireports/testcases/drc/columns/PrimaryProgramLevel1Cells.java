@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.testcases.drc.columns;
 
-import java.util.ArrayList;
+import org.dgfoundation.amp.nireports.PercentageTextCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.PercentageTextCell;
 
 public class PrimaryProgramLevel1Cells extends HardcodedCells<PercentageTextCell>{
 

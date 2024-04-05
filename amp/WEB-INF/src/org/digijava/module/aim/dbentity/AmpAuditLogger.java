@@ -6,12 +6,12 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpAuditLogger implements Comparable, Serializable {
     /**

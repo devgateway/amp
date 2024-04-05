@@ -1,5 +1,20 @@
 package org.digijava.kernel.ampapi.endpoints.serializers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.*;
+import org.apache.commons.lang.StringUtils;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
+import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
+import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.util.Identifiable;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -8,26 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.models.Model;
-import io.swagger.models.ModelImpl;
-import io.swagger.models.properties.ArrayProperty;
-import io.swagger.models.properties.BooleanProperty;
-import io.swagger.models.properties.LongProperty;
-import io.swagger.models.properties.MapProperty;
-import io.swagger.models.properties.StringProperty;
-import io.swagger.models.properties.UntypedProperty;
-import org.apache.commons.lang.StringUtils;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
-import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
-import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.util.Identifiable;
 
 
 /**

@@ -1,21 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_4;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.module.aim.util.LocationUtil;
@@ -27,8 +11,13 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.digijava.module.categorymanager.util.CategoryConstants.*;
 
 /**
  * This class generates the filter list (tree) object for locations

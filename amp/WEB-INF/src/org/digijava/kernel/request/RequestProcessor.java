@@ -25,19 +25,8 @@ package org.digijava.kernel.request;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionServlet;
-import org.apache.struts.action.DynaActionForm;
-import org.apache.struts.action.DynaActionFormClass;
-import org.apache.struts.action.InvalidCancelException;
-import org.apache.struts.config.ActionConfig;
-import org.apache.struts.config.ExceptionConfig;
-import org.apache.struts.config.FormBeanConfig;
-import org.apache.struts.config.ForwardConfig;
-import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.action.*;
+import org.apache.struts.config.*;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.TilesRequestProcessor;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -52,13 +41,7 @@ import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.SitePermission;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.AccessLogger;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.I18NHelper;
-import org.digijava.kernel.util.ModuleUtils;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteCache;
+import org.digijava.kernel.util.*;
 
 import javax.security.auth.Subject;
 import javax.servlet.ServletException;
@@ -66,12 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * This class works as Struts request processor
@@ -180,13 +158,10 @@ public class RequestProcessor
         String key = addModule ? "/" + moduleName + actionPath :
             actionPath;
         boolean matched = false;
-        Iterator iter = digiModuleSecurity.getActions().
-            iterator();
-        while (iter.hasNext()) {
+        for (Object o : digiModuleSecurity.getActions()) {
             org.digijava.kernel.config.moduleconfig.Action
-                digiAction = (org.digijava.kernel.config.
-                              moduleconfig.Action) iter.
-                next();
+                    digiAction = (org.digijava.kernel.config.
+                    moduleconfig.Action) o;
 
             if (actionPath.matches(digiAction.getPattern())) {
                 matched = true;
@@ -195,21 +170,19 @@ public class RequestProcessor
                     // If login is not required, no action permissions are
                     // required too
                     actionPermissions.put(key, null);
-                }
-                else if ( (digiAction.getValue() == null) ||
-                         (digiAction.getValue().trim().length() == 0)) {
+                } else if ((digiAction.getValue() == null) ||
+                        (digiAction.getValue().trim().length() == 0)) {
                     // If login is required and nothing more
                     actionPermissions.put(key, new ArrayList());
-                }
-                else {
+                } else {
                     // If some action permissions are required
                     StringTokenizer st = new StringTokenizer(digiAction.
-                        getValue(), ",");
+                            getValue(), ",");
                     ArrayList list = new ArrayList();
                     while (st.hasMoreElements()) {
-                        list.add(new Integer(ResourcePermission.
-                                             getActionCode(st.nextToken().
-                            trim())));
+                        list.add(ResourcePermission.
+                                getActionCode(st.nextToken().
+                                        trim()));
                     }
                     actionPermissions.put(key, list);
                 }
@@ -230,8 +203,8 @@ public class RequestProcessor
                 }
                 else {
                     ArrayList list = new ArrayList();
-                    list.add(new Integer(ResourcePermission.
-                                         getActionCode(defaultAction)));
+                    list.add(ResourcePermission.
+                            getActionCode(defaultAction));
                     actionPermissions.put(key, list);
                 }
             }
@@ -240,9 +213,7 @@ public class RequestProcessor
     }
 
     private boolean checkForIdInQuery(String url){
-        if (url.indexOf('~') > -1 || url.indexOf("id=") > -1 || url.indexOf("Id=") > -1)
-            return true;
-        return false;
+        return url.indexOf('~') > -1 || url.contains("id=") || url.contains("Id=");
     }
     
     public void process(HttpServletRequest request,
@@ -261,7 +232,7 @@ public class RequestProcessor
             if (idx > -1){
                 commonURL = commonURL.substring(0, idx);
             }
-            String oldCommonURL = new String(commonURL);
+            String oldCommonURL = commonURL;
 
 
             String actionPath = request.getRequestURL().substring(request.getRequestURL().indexOf("/", request.getRequestURL().indexOf("://") + 3));
@@ -272,13 +243,13 @@ public class RequestProcessor
             }
 
             if (referrer != null){
-                String commonREF = new String(referrer);
+                String commonREF = referrer;
                 commonREF = commonREF.substring(commonREF.indexOf("://") + 3);
                 idx = commonREF.indexOf('/');
                 if (idx > -1){
                     commonREF = commonREF.substring(0, idx);
                 }
-                
+
                 if (commonREF.compareTo(commonURL) != 0 ){
                     commonURL = new String(request.getRequestURL());
                     if (request.getQueryString() != null)
@@ -300,7 +271,7 @@ public class RequestProcessor
                 }
             }
         }
-        
+
         super.process(request, response);
 
     }
@@ -630,6 +601,7 @@ public class RequestProcessor
                         }
                     }
 
+
                 requiredInstance = DgUtil.getRequiredInstance(request, moduleName,
                     moduleInstance);
 
@@ -705,7 +677,6 @@ public class RequestProcessor
                 if (logger.isDebugEnabled()) {
                     logger.debug("Action " + mapping.getPath() + " has empty security constraints and user is not logged in");
                 }
-                result = false;
             }
             else {
                 // If user is logged in and there are no additional requirements
@@ -734,17 +705,15 @@ public class RequestProcessor
                     ModuleInstance realInstance = moduleInstance.
                         getRealInstance() == null ?
                         moduleInstance : moduleInstance.getRealInstance();
-
-                    Iterator iter = requiredPermissions.iterator();
                     boolean permitted = false;
-                    while (iter.hasNext()) {
-                        Integer item = (Integer) iter.next();
+                    for (Object requiredPermission : requiredPermissions) {
+                        Integer item = (Integer) requiredPermission;
                         permitted = DgSecurityManager.permitted(subject,
-                            currentSite, realInstance,
-                            item.intValue());
+                                currentSite, realInstance,
+                                item);
                         if (permitted) {
                             if (logger.isDebugEnabled()) {
-                                logger.debug("Required action #" + item.intValue() + " is set");
+                                logger.debug("Required action #" + item + " is set");
                             }
                             break;
                         }
@@ -759,11 +728,10 @@ public class RequestProcessor
                         if (logger.isDebugEnabled()) {
                             logger.debug("Action " + mapping.getPath() + " is not permitted");
                         }
-                        result = false;
                     }
                 }
             }
-            if (result == false) {
+            if (!result) {
                 logger.debug("Action " + mapping.getPath() + " is redirecting to login...");
                 doLogin(request, response);
             }
@@ -771,11 +739,11 @@ public class RequestProcessor
 
         if (context != null) {
             context.putAttribute(Constants.ACTION_ROLES_PROCESS_RESULT,
-                                 new Boolean(result));
+                    result);
         }
         else {
             request.setAttribute(Constants.ACTION_ROLES_PROCESS_RESULT,
-                                 new Boolean(result));
+                    result);
         }
         return result;
 

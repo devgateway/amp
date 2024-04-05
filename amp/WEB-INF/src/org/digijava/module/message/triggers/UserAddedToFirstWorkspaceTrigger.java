@@ -1,12 +1,11 @@
 package org.digijava.module.message.triggers;
 
-import java.util.List;
-
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.message.util.TriggerRegistry;
-import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.helper.Event;
+import org.digijava.module.message.helper.MessageConstants;
+
+import java.util.List;
 
 public class UserAddedToFirstWorkspaceTrigger extends Trigger {
 

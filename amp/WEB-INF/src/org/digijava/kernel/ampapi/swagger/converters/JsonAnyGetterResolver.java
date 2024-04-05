@@ -1,13 +1,14 @@
 package org.digijava.kernel.ampapi.swagger.converters;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.Iterator;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.databind.JavaType;
-
+import io.swagger.converter.ModelConverter;
+import io.swagger.converter.ModelConverterContext;
+import io.swagger.jackson.AbstractModelConverter;
+import io.swagger.models.Model;
+import io.swagger.models.properties.ObjectProperty;
+import io.swagger.models.properties.Property;
+import io.swagger.util.Json;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
@@ -16,13 +17,10 @@ import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 
-import io.swagger.converter.ModelConverter;
-import io.swagger.converter.ModelConverterContext;
-import io.swagger.jackson.AbstractModelConverter;
-import io.swagger.models.Model;
-import io.swagger.models.properties.ObjectProperty;
-import io.swagger.models.properties.Property;
-import io.swagger.util.Json;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Nadejda Mandrescu

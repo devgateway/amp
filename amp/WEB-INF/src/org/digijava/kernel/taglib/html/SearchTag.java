@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.taglib.html;
 
+import org.apache.struts.taglib.TagUtils;
+import org.digijava.kernel.taglib.util.TagUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-
-import org.apache.struts.taglib.TagUtils;
-import org.digijava.kernel.taglib.util.TagUtil;
 
 /**
  * Created by IntelliJ IDEA.

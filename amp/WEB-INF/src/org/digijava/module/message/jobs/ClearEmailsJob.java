@@ -1,8 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.util.List;
-
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.message.dbentity.AmpEmail;
 import org.digijava.module.message.util.AmpMessageUtil;
@@ -10,6 +7,8 @@ import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.util.List;
 
 /**
  * This Job is used to delete emails  from AmpEmails table, 

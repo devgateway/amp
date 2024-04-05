@@ -22,6 +22,9 @@
 
 package org.digijava.kernel.security;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.util.I18NHelper;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -30,9 +33,6 @@ import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.util.I18NHelper;
 
 public class ResourcePermissionCollection
     extends PermissionCollection

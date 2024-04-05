@@ -1,9 +1,5 @@
 package org.digijava.module.um.form;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -11,6 +7,9 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.CountryBean;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 public class ViewEditUserForm extends ActionForm {
 

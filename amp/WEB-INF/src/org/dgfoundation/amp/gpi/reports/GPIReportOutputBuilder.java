@@ -1,16 +1,5 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -18,8 +7,14 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.ampapi.endpoints.gpi.GpiFormParameters;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data, summary)

@@ -34,29 +34,27 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
-import org.hibernate.Transaction;
+import org.hibernate.*;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.query.Query;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
+import javax.persistence.FlushModeType;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -176,7 +174,12 @@ public class PersistenceManager {
 
     public static PersistentClass getClassMapping(Class<?> clazz)
     {
-        return cfg.getClassMapping(clazz.getName());
+
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build();
+        MetadataSources sources = new MetadataSources(registry);
+        Metadata metadata = sources.buildMetadata();
+        return metadata.getEntityBinding(clazz.getName());
+//        return cfg.getClassMapping(clazz.getName());
     }
 
     /**
@@ -184,9 +187,14 @@ public class PersistenceManager {
      * @return
      * @throws SQLException
      */
+//    public static Connection getJdbcConnection() throws SQLException {
+//        SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
+//        return sfi.getConnectionProvider().getConnection();
+//    }
+
     public static Connection getJdbcConnection() throws SQLException {
         SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
-        return sfi.getConnectionProvider().getConnection();
+        return sfi.getServiceRegistry().getService(ConnectionProvider.class).getConnection();
     }
 
 
@@ -509,7 +517,7 @@ public class PersistenceManager {
      *
      */
     public static void rollbackCurrentSessionTx() {
-        if (sf.getCurrentSession().getTransaction().isActive()
+        if (sf.getCurrentSession().getTransaction().getStatus().equals(TransactionStatus.ACTIVE)
                 && sf.getCurrentSession().isOpen()
                 && sf.getCurrentSession().isConnected()) {
             logger.info("Trying to rollback database transaction after exception");
@@ -569,7 +577,9 @@ public class PersistenceManager {
         if (!currentSessionIsManaged) {
             throw new IllegalStateException("Called outside of managed session context.");
         }
-        Session sess = PersistenceManager.sf.getCurrentSession();
+        Session sess = sf().getCurrentSession();
+        sess.setFlushMode(FlushModeType.AUTO);
+
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();
@@ -593,7 +603,7 @@ public class PersistenceManager {
         synchronized (sessionStackTraceMap){
             if(sessionStackTraceMap.get(sess)==null)
                 //logger.error(String.format("Thread #%d: storing new Session %d", Thread.currentThread().getId(), System.identityHashCode(sess)));
-                sessionStackTraceMap.put(sess,new Object[] {new Long(System.currentTimeMillis()),Thread.currentThread().getStackTrace()});
+                sessionStackTraceMap.put(sess,new Object[] {System.currentTimeMillis(),Thread.currentThread().getStackTrace()});
         }
     }
 
@@ -610,9 +620,10 @@ public class PersistenceManager {
         Session session = null;
 
         try {
-            sf.evict(objectClass, primaryKey);
+//            sf.evict(objectClass, primaryKey);
 
             session = getSession();
+            session.evict(primaryKey);
             Object obj = session.load(objectClass, primaryKey);
             Hibernate.initialize(obj);
         }
@@ -756,17 +767,18 @@ public class PersistenceManager {
         Transaction transaction = session.getTransaction();
         if (transaction != null) {
             if (transaction.isActive()) {
-                try {
-                    // note: flushing is needed only if session uses FlushMode.MANUAL
-                    session.flush();
-                } catch (HibernateException e) {
-                    // logging the error since finally may throw another exception and this one will be lost
-                    logger.error("Failed to flush the session.", e);
-                    throw e;
-                } finally {
-                    // do we really want to attempt commit if flushing fails?
+//                try {
+//                    // note: flushing is needed only if session uses FlushMode.MANUAL
+//                    session.flush();
+//                } catch (HibernateException e) {
+//                    // logging the error since finally may throw another exception and this one will be lost
+//                    logger.error("Failed to flush the session.", e);
+//                    throw e;
+//                } finally {
+//                    // do we really want to attempt commit if flushing fails?
+                //session will be flushed automatically on transaction commit since we set the FlusmodeType as AUTO
                     transaction.commit();
-                }
+//                }
             }
         }
     }

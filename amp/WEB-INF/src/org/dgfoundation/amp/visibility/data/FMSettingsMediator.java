@@ -3,13 +3,14 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
+import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Single point of reference for all FM settings groups 
@@ -22,6 +23,9 @@ public class FMSettingsMediator {
     public static final String FMGROUP_MEASURES = "MEASURES";
     public static final String FMGROUP_MODULES = "MODULES";
     public static final String FMGROUP_MENU = "MENU";
+
+    public static final String MODULE_GIS = "/GIS";
+    public static final String MODULE_MAP = "Map";
 
     /** stores all fm groups classes that are manageable via this proxy */
     private static Map<String, Class<? extends FMSettings>> registeredFMGroups = initFMGroups();
@@ -54,8 +58,16 @@ public class FMSettingsMediator {
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
         
         if (fmGroup != null) {
-            return fmGroup.getEnabledSettings(templateId);
+            Set<String> enabledSettings = fmGroup.getEnabledSettings(templateId);
+            if (Objects.equals(fmGroupName, FMGROUP_MENU)) {
+                if (!FeaturesUtil.isVisibleModule(MODULE_GIS)) {
+                    enabledSettings.remove(MODULE_MAP);
+                }
+            }
+
+            return enabledSettings;
         }
+
         
         return Collections.emptySet();
     }

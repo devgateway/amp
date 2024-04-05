@@ -1,10 +1,10 @@
 package org.digijava.module.gpi.helper.export;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.digijava.kernel.request.Site;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
+
+import java.util.Collection;
+import java.util.Map;
 
 public abstract class GPIAbstractExport {
 

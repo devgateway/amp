@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import org.digijava.module.aim.util.FeaturesUtil;
 
 @Deprecated
 public class AmpThemeIndicatorValue implements Comparable, Serializable 

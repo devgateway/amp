@@ -1,30 +1,22 @@
 package org.digijava.module.aim.util;
-        
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.AllPrgIndicators;
-import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.IndicatorThemeBean;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.*;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
         
         
         /**
@@ -122,9 +114,9 @@ public class IndicatorUtil {
                 qrString += "and ind.indicatorId !=:id ";
             }
             Query q=session.createQuery(qrString);
-            q.setString("name", indicator.getName());
+            q.setParameter("name", indicator.getName(), StringType.INSTANCE);
              if (indicatorId != null && indicatorId != 0) {
-               q.setLong("id",indicatorId);
+               q.setParameter("id",indicatorId, LongType.INSTANCE);
             }
             List result=q.list();
             if(result.size()==0){
@@ -224,7 +216,7 @@ public class IndicatorUtil {
         String oql="from "+IndicatorConnection.class.getName()+" c where c.indicator.indicatorId=:indId";
         try {
             Query query=session.createQuery(oql);
-            query.setLong("indId", indicatorId);
+            query.setParameter("indId", indicatorId, LongType.INSTANCE);
             result=query.list();
         } catch (HibernateException e) {
             throw new DgException("Cannot search connections for indicators",e);
@@ -522,12 +514,12 @@ public class IndicatorUtil {
         String oql="from "+IndicatorTheme.class.getName()+" ti where ti.theme.ampThemeId=:themeId";
         try {
             Query query=session.createQuery(oql);
-            query.setLong("themeId", themeId);
+            query.setParameter("themeId", themeId, LongType.INSTANCE);
             List resultList=query.list();
             if (resultList!=null && resultList.size()>0){
                 result=new HashSet<AmpIndicator>();
-                for (Iterator resIter = resultList.iterator(); resIter.hasNext();) {
-                    IndicatorTheme themeConnection = (IndicatorTheme) resIter.next();
+                for (Object o : resultList) {
+                    IndicatorTheme themeConnection = (IndicatorTheme) o;
                     result.add(themeConnection.getIndicator());
                 }
             }
@@ -637,15 +629,13 @@ public class IndicatorUtil {
 //beginTransaction();
             Set<AmpIndicatorValue> indValues=connection.getValues();                    
             if(indValues!=null && indValues.size()>0){
-                Iterator<AmpIndicatorValue> iter=indValues.iterator();
-                while(iter.hasNext()){
-                    AmpIndicatorValue indicatorValue=iter.next();
-                    AmpLocation location=indicatorValue.getLocation();
-                    if (location!=null){
-                        if(location.getAmpLocationId()==null){
+                for (AmpIndicatorValue indicatorValue : indValues) {
+                    AmpLocation location = indicatorValue.getLocation();
+                    if (location != null) {
+                        if (location.getAmpLocationId() == null) {
                             session.save(location);
-                        }else {
-                            AmpLocation oldLocation=(AmpLocation) session.load(AmpLocation.class, location.getAmpLocationId());
+                        } else {
+                            AmpLocation oldLocation = (AmpLocation) session.load(AmpLocation.class, location.getAmpLocationId());
                             oldLocation.setDescription(location.getDescription());
                             oldLocation.setGisCoordinates(location.getGisCoordinates());
                             oldLocation.setIso3Code(location.getIso3Code());
@@ -655,7 +645,7 @@ public class IndicatorUtil {
                             //indicatorValue.setLocation(oldLocation);                                  
                             session.update(oldLocation);
                         }
-                        
+
                     }
                 }
             }
@@ -691,8 +681,8 @@ public class IndicatorUtil {
         oql+=" where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
         try {
             Query query=session.createQuery(oql);
-            query.setLong("actId", activityId);
-            query.setLong("indicId", indicatorId);
+            query.setParameter("actId", activityId, LongType.INSTANCE);
+            query.setParameter("indicId", indicatorId, LongType.INSTANCE);
             result=(IndicatorActivity)query.uniqueResult();
         } catch (ObjectNotFoundException e) {
             logger.debug("Cannot find conenction for activity("+activityId+") and indicator("+indicatorId+")!");
@@ -719,8 +709,8 @@ public class IndicatorUtil {
         oql+=" where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
         try {
             Query query=session.createQuery(oql);
-            query.setLong("actId", activityId);
-            query.setLong("indicId", indicatorId);
+            query.setParameter("actId", activityId, LongType.INSTANCE);
+            query.setParameter("indicId", indicatorId, LongType.INSTANCE);
             result=(IndicatorActivity)query.uniqueResult();
         } catch (ObjectNotFoundException e) {
             logger.debug("Cannot find conenction for activity("+activityId+") and indicator("+indicatorId+")!");
@@ -744,8 +734,8 @@ public class IndicatorUtil {
         oql+=" where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
         try {
             Query query=session.createQuery(oql);
-            query.setLong("actId", activityId);
-            query.setLong("indicId", indicatorId);
+            query.setParameter("actId", activityId, LongType.INSTANCE);
+            query.setParameter("indicId", indicatorId, LongType.INSTANCE);
             result=(IndicatorActivity)query.uniqueResult();
         } catch (HibernateException e) {
             throw new DgException("Error searching conenction for activity("+activityId+") and indicator("+indicatorId+")!",e);
@@ -840,7 +830,7 @@ public class IndicatorUtil {
 
             }
             if (ActivityVersionUtil.isVersioningEnabled()) {
-                AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, actInd.getActivityId());
+                AmpActivityVersion act = session.load(AmpActivityVersion.class, actInd.getActivityId());
                 Hibernate.initialize(act);
                 Hibernate.initialize(act.getActivityContacts());
                 AmpActivityGroup tmpGroup = act.getAmpActivityGroup();
@@ -909,12 +899,12 @@ public class IndicatorUtil {
         oql+="order by " + indicatorName;
         try {
             Query query=sesison.createQuery(oql);
-            query.setLong("actId", activityId);
+            query.setParameter("actId", activityId, LongType.INSTANCE);
             List resultList=query.list();
             if (result!=null && result.size()>0){
                 result=new HashSet<AmpIndicator>();
-                for (Iterator iterator = resultList.iterator(); iterator.hasNext();) {
-                    AmpIndicator indicator = (AmpIndicator) iterator.next();
+                for (Object o : resultList) {
+                    AmpIndicator indicator = (AmpIndicator) o;
                     result.add(indicator);
                 }
             }
@@ -940,12 +930,12 @@ public class IndicatorUtil {
         oql+="where indi.activity.ampActivityId =:actId ";
         try {
             Query query=sesison.createQuery(oql);
-            query.setLong("actId", activityId);
+            query.setParameter("actId", activityId, LongType.INSTANCE);
             List resultList=query.list();
             if (resultList!=null && resultList.size()>0){
                 result=new HashSet<IndicatorActivity>();
-                for (Iterator iterator = resultList.iterator(); iterator.hasNext();) {
-                    IndicatorActivity indicator = (IndicatorActivity) iterator.next();
+                for (Object o : resultList) {
+                    IndicatorActivity indicator = (IndicatorActivity) o;
                     result.add(indicator);
                 }
             }
@@ -1237,8 +1227,8 @@ public class IndicatorUtil {
                 + AmpMEIndicatorValue.class.getName()
                 + " val where val.indicator=:indId and val.activityId=:actId";
         q = session.createQuery(queryString);
-        q.setLong("indId", indId);
-        q.setLong("actId", actId);
+        q.setParameter("indId", indId, LongType.INSTANCE);
+        q.setParameter("actId", actId, LongType.INSTANCE);
         val=q.uniqueResult();
         }
         }
@@ -1597,14 +1587,13 @@ public class IndicatorUtil {
                 + AmpSector.class.getName() + " sec "
                 + "where " + sectorName + "=:name and (sec.deleted is null or sec.deleted = false) ";
                 Query qry = session.createQuery(queryString);
-                qry.setString("name", sectorname);
+                qry.setParameter("name", sectorname,StringType.INSTANCE);
     
               iter = qry.list().iterator();
 
             while (iter.hasNext()) {
                 ampsector = (AmpSector) iter.next();
-                for(Iterator itr = ampsector.getIndicators().iterator();itr.hasNext();){
-                    AmpIndicator sect=(AmpIndicator)itr.next();
+                for (AmpIndicator sect : ampsector.getIndicators()) {
                     Indicator.add(sect);
                 }
                 
@@ -1759,24 +1748,21 @@ public class IndicatorUtil {
             try
             {
                 session = PersistenceManager.getRequestDBSession();
-                Iterator indValItr = prgIndValues.iterator();
-                while(indValItr.hasNext())
-                {
+                for (AmpPrgIndicatorValue prgIndValue : prgIndValues) {
                     AmpThemeIndicatorValue ampThIndVal = null;
-                    AmpPrgIndicatorValue ampPrgIndVal = (AmpPrgIndicatorValue) indValItr.next();
-                    if(ampPrgIndVal.getIndicatorValueId() == null){
+                    if (prgIndValue.getIndicatorValueId() == null) {
                         ampThIndVal = new AmpThemeIndicatorValue();
-                    }else{
-                                                ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class,ampPrgIndVal.getIndicatorValueId());
+                    } else {
+                        ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class, prgIndValue.getIndicatorValueId());
                     }
-                    ampThIndVal.setValueAmount(ampPrgIndVal.getValAmount());
-                    ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
-                    ampThIndVal.setValueType(ampPrgIndVal.getValueType());
+                    ampThIndVal.setValueAmount(prgIndValue.getValAmount());
+                    ampThIndVal.setCreationDate(DateConversion.getDate(prgIndValue.getCreationDate()));
+                    ampThIndVal.setValueType(prgIndValue.getValueType());
                     ampThIndVal.setIndicatorId(ampInd);
 //beginTransaction();
                     session.saveOrUpdate(ampThIndVal);
                     //tx.commit();
-                    }
+                }
                 }
             
             catch(Exception ex)
@@ -1870,9 +1856,7 @@ public class IndicatorUtil {
          try {
              Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
                 if(valuesActivity!=null && valuesActivity.size()>0){
-                    Iterator<IndicatorActivity> it=valuesActivity.iterator();
-                    while(it.hasNext()){
-                        IndicatorActivity indActivity = it.next();
+                    for (IndicatorActivity indActivity : valuesActivity) {
                         if (indActivity.getRisk() != null) {
                             risks.add(indActivity.getRisk());
                         }

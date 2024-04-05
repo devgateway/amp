@@ -22,8 +22,6 @@
 
 package org.digijava.module.editor.action;
 
-import java.net.URLDecoder;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -35,6 +33,8 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.form.EditorForm;
 import org.digijava.module.editor.util.DbUtil;
+
+import java.net.URLDecoder;
 
 public class ShowPage extends Action {
 

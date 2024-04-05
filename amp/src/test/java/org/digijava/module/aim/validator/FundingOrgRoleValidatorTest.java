@@ -1,25 +1,20 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-
 import com.google.common.collect.ImmutableSet;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.fundings.FundingOrgRole;
 import org.digijava.module.aim.validator.fundings.FundingOrgRoleValidator;
 import org.hamcrest.Matcher;
 import org.junit.Test;
+
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Viorel Chihai

@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.math.BigDecimal;
-
 import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
+
+import java.math.BigDecimal;
 
 /**
  * 

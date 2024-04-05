@@ -22,10 +22,6 @@
 
 package org.digijava.module.exception.util;
 
-import java.util.Date;
-import java.util.HashMap;
-import javax.servlet.http.HttpServletRequest;
-
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.ExceptionInfo;
@@ -34,6 +30,10 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * <p>Title: </p>

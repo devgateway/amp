@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.newreports.pagination;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Stores partial report area, with statistical information regarding the full report area,

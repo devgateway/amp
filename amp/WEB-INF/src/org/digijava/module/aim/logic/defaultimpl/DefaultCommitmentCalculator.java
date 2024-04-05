@@ -1,11 +1,11 @@
 package org.digijava.module.aim.logic.defaultimpl;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.digijava.module.aim.logic.AmountCalculator;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * 

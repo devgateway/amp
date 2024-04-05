@@ -1,8 +1,8 @@
 package org.digijava.module.aim.util.time;
 
-import java.util.Hashtable;
-
 import org.apache.log4j.Logger;
+
+import java.util.Hashtable;
 
 public class StopWatch {
     private static Logger logger = Logger.getLogger(StopWatch.class);

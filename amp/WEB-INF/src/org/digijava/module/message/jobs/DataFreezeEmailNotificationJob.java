@@ -1,7 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.util.Date;
-import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
@@ -10,6 +8,9 @@ import org.digijava.module.message.triggers.DataFreezeEmailNotificationTrigger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.util.Date;
+import java.util.List;
 
 public class DataFreezeEmailNotificationJob extends ConnectionCleaningJob implements StatefulJob {
     private static Logger logger = Logger.getLogger(DataFreezeEmailNotificationJob.class);

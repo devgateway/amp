@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.util.resource;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
-import java.net.URL;
-import java.net.MalformedURLException;
 
 public class ResourceStreamHandlerFactory
     implements URLStreamHandlerFactory {

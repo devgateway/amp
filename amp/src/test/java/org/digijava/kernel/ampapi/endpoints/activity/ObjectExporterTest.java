@@ -1,21 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableList;
-
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -32,6 +17,15 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
@@ -216,11 +210,11 @@ public class ObjectExporterTest {
     @Test
     public void testApprovalStatusRefHack() {
         Dummy dummy = new Dummy();
-        dummy.approvalStatus = ApprovalStatus.STARTED;
+        dummy.approvalStatus = ApprovalStatus.started;
 
         Map<String, Object> jsonObj = exporter.export(dummy);
 
-        assertThat(jsonObj, hasEntry("approval_status", ApprovalStatus.STARTED.getId()));
+        assertThat(jsonObj, hasEntry("approval_status", ApprovalStatus.started.getId()));
     }
 
     @Test

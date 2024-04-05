@@ -22,16 +22,7 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.security.principal.GroupPrincipal;
@@ -39,6 +30,10 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.GroupsForm;
 import org.digijava.module.admin.util.DbUtil;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class DeleteGroup  extends Action {
 

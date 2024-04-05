@@ -9,18 +9,14 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuUtils;
-import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportSettings;
-import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.AmpGeneralSettings;
 import org.digijava.kernel.ampapi.endpoints.common.CurrencySettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -30,31 +26,13 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.helper.*;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Utility class for amp settings handling
@@ -245,9 +223,18 @@ public class SettingsUtils {
     }
 
     private static String getReportCalendarId(final ReportSettings settings) {
-        if (settings.getCurrencyCode() != null) {
-            return settings.getCalendar().getIdentifier().toString();
-        }
+
+          if (settings!=null) {
+              if (settings.getCurrencyCode() != null && settings.getCalendar()!=null) {
+                  CalendarConverter calendarConverter = settings.getCalendar();
+                  if (calendarConverter!=null) {
+                      Long id = calendarConverter.getIdentifier();
+                      if (id!=null) {
+                        return id.toString();
+                      }
+                  }
+              }
+          }
 
         return null;
     }
@@ -264,6 +251,7 @@ public class SettingsUtils {
 
         return null;
     }
+
     static SettingField getCalendarCurrenciesField() {
         return getSettingFieldForOptions(SettingsConstants.CALENDAR_CURRENCIES_ID, getCalendarCurrencySettings());
     }
@@ -491,6 +479,10 @@ public class SettingsUtils {
             settings.setShowActivityWorkspaces(true);
         }
         addDateRangeSettingsForDashboardsAndGis(settings);
+
+        settings.setIndicatorFilterBySector(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR));
+        settings.setIndicatorFilterByProgram(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM));
+        settings.setNumberOfIndicatorsInDashboard(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.NUMBER_OF_INDICATORS_IN_DASHBOARD));
 
         return settings;
     }
@@ -818,7 +810,8 @@ public class SettingsUtils {
             try {
                 reportSettings.setYearsRangeFilterRule(start, end);
             } catch (Exception e) {
-                logger.error(e.getMessage());
+
+                logger.error(e.getMessage(),e);
             }
         }
     }

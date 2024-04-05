@@ -22,16 +22,6 @@
 
 package org.digijava.kernel.job;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.SingleServerJob;
 import org.digijava.kernel.config.SingleServerJobs;
@@ -39,6 +29,11 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.*;
 
 public abstract class SingleHostJob
       implements Job {

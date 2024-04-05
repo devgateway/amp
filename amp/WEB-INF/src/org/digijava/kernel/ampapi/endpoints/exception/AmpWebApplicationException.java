@@ -3,16 +3,11 @@
  */
 package org.digijava.kernel.ampapi.endpoints.exception;
 
-import java.util.Collection;
+import org.digijava.kernel.ampapi.endpoints.errors.*;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
-import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import java.util.Collection;
 
 /**
  * AMP wrapper WebApplicationException

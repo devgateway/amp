@@ -4,19 +4,7 @@ import com.google.common.base.CharMatcher;
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.IdentifiedReportCell;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
@@ -35,12 +23,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
@@ -146,6 +129,12 @@ public class TopsChartService {
             case PS:
                 setColumn(ColumnConstants.PRIMARY_SECTOR);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.PRIMARY_SECTOR));
+                title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
+                name = DashboardConstants.TOP_SECTORS;
+                break;
+            case SS:
+                setColumn(ColumnConstants.SECONDARY_SECTOR);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_SECTOR));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
                 name = DashboardConstants.TOP_SECTORS;
                 break;

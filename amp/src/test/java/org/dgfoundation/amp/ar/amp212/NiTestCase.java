@@ -1,43 +1,24 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.MonetaryAmount;
-import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.TextCell;
-import org.dgfoundation.amp.nireports.TranslatedDate;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
 import org.dgfoundation.amp.nireports.amp.DirectedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
-import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.runtime.DebugOutputReportDataVisitor;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.ReportData;
-import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+import org.dgfoundation.amp.nireports.runtime.*;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.testutils.AmpTestCase;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * a testcase of the inner structures of NiReports

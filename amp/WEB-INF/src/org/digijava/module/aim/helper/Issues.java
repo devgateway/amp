@@ -5,10 +5,10 @@
 
 package org.digijava.module.aim.helper;
 
-import java.util.ArrayList;
-
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpMeasure;
+
+import java.util.ArrayList;
 
 public class Issues {
     private Long id;

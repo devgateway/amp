@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import org.dgfoundation.amp.nireports.ComparableValue;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 /**
  * an interface which governs the way a column is split vertically:

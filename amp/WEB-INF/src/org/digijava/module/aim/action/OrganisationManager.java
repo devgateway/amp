@@ -1,21 +1,19 @@
     package org.digijava.module.aim.action;
 
-import java.text.Collator;
-import java.util.*;
+    import org.apache.commons.lang.StringUtils;
+    import org.apache.log4j.Logger;
+    import org.apache.struts.action.Action;
+    import org.apache.struts.action.ActionForm;
+    import org.apache.struts.action.ActionForward;
+    import org.apache.struts.action.ActionMapping;
+    import org.digijava.module.aim.dbentity.AmpOrganisation;
+    import org.digijava.module.aim.form.OrgManagerForm;
+    import org.digijava.module.aim.helper.TeamMember;
+    import org.digijava.module.aim.util.DbUtil;
+    import org.digijava.module.calendar.util.AmpUtil;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.form.OrgManagerForm;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.calendar.util.AmpUtil;
+    import javax.servlet.http.HttpSession;
+    import java.util.*;
 
     public class OrganisationManager extends Action {
 

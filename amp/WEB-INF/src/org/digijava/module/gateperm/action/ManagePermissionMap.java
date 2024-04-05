@@ -3,16 +3,6 @@
  */
 package org.digijava.module.gateperm.action;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -24,7 +14,10 @@ import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.form.PermissionMapForm;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * ManagePermissionMap.java

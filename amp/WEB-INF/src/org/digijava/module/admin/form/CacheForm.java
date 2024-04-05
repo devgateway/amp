@@ -22,11 +22,11 @@
 
 package org.digijava.module.admin.form;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class CacheForm
     extends ActionForm {

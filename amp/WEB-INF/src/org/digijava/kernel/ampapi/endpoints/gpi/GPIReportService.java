@@ -1,26 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReport1Output1Builder;
-import org.dgfoundation.amp.gpi.reports.GPIReport1Output2Builder;
-import org.dgfoundation.amp.gpi.reports.GPIReport5aOutputBuilder;
-import org.dgfoundation.amp.gpi.reports.GPIReport5bOutputBuilder;
-import org.dgfoundation.amp.gpi.reports.GPIReport6OutputBuilder;
-import org.dgfoundation.amp.gpi.reports.GPIReport9bOutputBuilder;
-import org.dgfoundation.amp.gpi.reports.GPIReportBuilder;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputBuilder;
-import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.gpi.reports.*;
 import org.dgfoundation.amp.gpi.reports.export.GPIReportExportType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * The service for building GPI reports

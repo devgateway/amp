@@ -4,14 +4,15 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011

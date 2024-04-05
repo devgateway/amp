@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.entity;
 
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.user.User;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.user.User;
 
 public class UserPreferencesPK
     implements Serializable {

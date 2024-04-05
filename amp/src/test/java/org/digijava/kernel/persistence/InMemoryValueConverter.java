@@ -1,8 +1,5 @@
 package org.digijava.kernel.persistence;
 
-import java.util.Map;
-import java.util.function.Function;
-
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporterTest;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
@@ -11,7 +8,8 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-import static org.junit.Assert.assertThat;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Non-persistent implementation of {@code ValueConverter} which is backed by an in-memory map.

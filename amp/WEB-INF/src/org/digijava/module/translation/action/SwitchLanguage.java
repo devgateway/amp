@@ -22,9 +22,6 @@
 
 package org.digijava.module.translation.action;
 
-import java.net.URLDecoder;
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -40,6 +37,9 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+
+import java.net.URLDecoder;
+import java.util.Enumeration;
 
 /**
  * <p>Title: DiGiJava</p>

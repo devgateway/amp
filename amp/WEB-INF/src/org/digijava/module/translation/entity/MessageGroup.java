@@ -1,17 +1,5 @@
 package org.digijava.module.translation.entity;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.datatype.DatatypeFactory;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
@@ -23,6 +11,10 @@ import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Trn;
+
+import javax.xml.datatype.DatatypeFactory;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Group of messages with same translation key.

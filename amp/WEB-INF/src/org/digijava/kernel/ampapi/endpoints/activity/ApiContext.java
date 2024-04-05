@@ -1,14 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Date;
-
-import javax.servlet.ServletContext;
-
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
+
+import javax.servlet.ServletContext;
+import java.util.Date;
 
 public class ApiContext {
     

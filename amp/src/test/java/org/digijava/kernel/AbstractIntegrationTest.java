@@ -1,7 +1,7 @@
 package org.digijava.kernel;
 
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.StandaloneAMPInitializer;
+import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.junit.BeforeClass;
 import org.junit.Rule;

@@ -1,12 +1,8 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
+import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -15,6 +11,10 @@ import org.dgfoundation.amp.nireports.amp.diff.KeyBuilder;
 import org.dgfoundation.amp.nireports.amp.diff.SSCKeyBuilder;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 
 /**

@@ -1,14 +1,7 @@
 package org.digijava.module.esrigis.helpers;
 
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.helper.ActivitySector;
-
-import net.sf.json.JSON;
 
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)

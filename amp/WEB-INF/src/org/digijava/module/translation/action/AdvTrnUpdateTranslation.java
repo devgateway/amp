@@ -1,9 +1,6 @@
 package org.digijava.module.translation.action;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -14,6 +11,9 @@ import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.translation.form.NewAdvancedTrnForm;
 import org.digijava.module.translation.util.ListChangesBuffer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class AdvTrnUpdateTranslation extends Action {
 

@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.onepager.converters;
 
+import org.apache.wicket.datetime.PatternDateConverter;
+import org.apache.wicket.util.convert.ConversionException;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
-import org.apache.wicket.datetime.PatternDateConverter;
-import org.apache.wicket.util.convert.ConversionException;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public class StrictPatternDateConverter extends PatternDateConverter {
 

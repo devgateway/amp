@@ -22,10 +22,10 @@
 
 package org.digijava.module.admin.form;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class MailStatusForm
     extends ActionForm {

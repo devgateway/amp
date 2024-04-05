@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
-import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.kernel.request.TLSUtils;
 
 /**

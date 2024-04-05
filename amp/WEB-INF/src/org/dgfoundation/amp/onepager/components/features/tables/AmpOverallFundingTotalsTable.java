@@ -1,17 +1,15 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.Set;
-
-import org.digijava.module.aim.helper.Constants;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelInformationFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOverallFundingModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+
+import java.util.Set;
 
 public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
 

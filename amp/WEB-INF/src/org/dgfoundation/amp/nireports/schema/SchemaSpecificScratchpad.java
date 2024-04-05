@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.Set;
-
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
+
+import java.util.Set;
 
 /**
  * An interface instances of which are created by the schema at early {@link NiReportsEngine} initialisation time 

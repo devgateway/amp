@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.error;
 
-import java.util.LinkedList;
-
 import org.digijava.module.aim.helper.Constants;
+
+import java.util.LinkedList;
 
 public class AMPUncheckedException extends RuntimeException implements AMPTaggedExceptions {
     private static final int DEFAULT_ERROR_LEVEL = Constants.AMP_ERROR_LEVEL_ERROR;

@@ -22,13 +22,14 @@
 
 package org.digijava.kernel.services;
 
-import org.digijava.kernel.service.Service;
-import javax.jcr.Session;
-import org.digijava.kernel.service.ServiceException;
-import javax.jcr.Node;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.service.Service;
+import org.digijava.kernel.service.ServiceException;
+
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 public interface JCRRepositoryService extends Service {
     /**

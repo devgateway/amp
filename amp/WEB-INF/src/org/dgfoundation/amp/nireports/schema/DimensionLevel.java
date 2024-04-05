@@ -1,13 +1,9 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.nireports.NiUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * a class describing a Level of a dimension. A Level has all its nodes represented as two maps <br />

@@ -1,8 +1,8 @@
 package org.digijava.kernel.lucene;
 
-import java.util.List;
-
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+
+import java.util.List;
 
 /**
  * 

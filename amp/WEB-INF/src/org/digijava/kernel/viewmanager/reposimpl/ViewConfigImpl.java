@@ -40,25 +40,16 @@ package org.digijava.kernel.viewmanager.reposimpl;
 *
 *************************************************************************/
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.siteconfig.*;
+import org.digijava.kernel.viewmanager.ViewConfigException;
+
+import javax.servlet.ServletContext;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.servlet.ServletContext;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.siteconfig.Instance;
-import org.digijava.kernel.siteconfig.Layout;
-import org.digijava.kernel.siteconfig.Module;
-import org.digijava.kernel.siteconfig.ModuleLayout;
-import org.digijava.kernel.siteconfig.Page;
-import org.digijava.kernel.siteconfig.Put;
-import org.digijava.kernel.siteconfig.PutItem;
-import org.digijava.kernel.siteconfig.SiteLayout;
-import org.digijava.kernel.siteconfig.Teaser;
-import org.digijava.kernel.viewmanager.ViewConfigException;
 
 public class ViewConfigImpl extends ViewConfigUtil  {
     protected static Logger logger =

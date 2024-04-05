@@ -1,17 +1,17 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import java.awt.Color;
-import java.util.Map;
-
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.export.GPIReportMessages;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPTable;
+import java.util.Map;
 
 /**
  * @author Viorel Chihai
@@ -29,8 +29,8 @@ public class GPIReportIndicator1Output2PdfExporter extends GPIReportPdfExporter 
 
     @Override
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(Font.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.LIGHT_GRAY;
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.LIGHT_GRAY;
 
         insertCell(table, GPIReportConstants.COLUMN_YEAR, Element.ALIGN_CENTER, 1, bfBold11, bkgColor);
         insertCell(table, COLUMN_QUESTION, Element.ALIGN_CENTER, 1, bfBold11, bkgColor);
@@ -42,8 +42,8 @@ public class GPIReportIndicator1Output2PdfExporter extends GPIReportPdfExporter 
 
     @Override
     public void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf11 = new Font(Font.HELVETICA, 10);
-        Color bkgColor = Color.WHITE;
+        Font bf11 = new Font(Font.FontFamily.HELVETICA, 10);
+        BaseColor bkgColor = BaseColor.WHITE;
 
         GPIReportOutputColumn yearColumn = report.getPage().getHeaders().get(0);
         for (int i = 0; i < report.getPage().getContents().size(); i++) {
@@ -62,11 +62,9 @@ public class GPIReportIndicator1Output2PdfExporter extends GPIReportPdfExporter 
 
     @Override
     public int getCellAlignment(String columnName) {
-        switch (columnName) {
-        case COLUMN_QUESTION:
+        if (columnName.equals(COLUMN_QUESTION)) {
             return Element.ALIGN_LEFT;
-        default:
-            return Element.ALIGN_CENTER;
         }
+        return Element.ALIGN_CENTER;
     }
 }

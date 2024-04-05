@@ -1,9 +1,9 @@
 package org.digijava.module.aim.helper;
 
-import java.util.Date;
-
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
+
+import java.util.Date;
 
 public class IndicatorValuesBean {
     private Long indicatorValueId;

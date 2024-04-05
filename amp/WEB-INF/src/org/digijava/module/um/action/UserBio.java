@@ -23,20 +23,19 @@
 package org.digijava.module.um.action;
 
 
-import java.sql.Blob;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Image;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.um.form.UserBioForm;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.util.RequestUtils;
+
+import java.sql.Blob;
 
 
 /**

@@ -1,9 +1,8 @@
 package org.digijava.module.message.triggers;
 
 import org.digijava.kernel.user.User;
-import org.digijava.module.message.util.TriggerRegistry;
-import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.helper.Event;
+import org.digijava.module.message.helper.MessageConstants;
 
 public class UserRegistrationTrigger extends Trigger {
 

@@ -6,10 +6,10 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.security.serializers.AmpApplicationSettingsSerializer;
+
+import java.io.Serializable;
 
 @SuppressWarnings("serial")
 @JsonSerialize(using = AmpApplicationSettingsSerializer.class)

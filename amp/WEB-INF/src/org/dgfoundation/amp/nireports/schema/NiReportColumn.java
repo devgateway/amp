@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.Optional;
-
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.Cell;
+import org.digijava.kernel.translator.LocalizableLabel;
+
+import java.util.Optional;
 
 /**
  * a NiReports definition of a column 

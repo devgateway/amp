@@ -1,22 +1,5 @@
 package org.digijava.module.search.util;
 
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -28,14 +11,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.admin.helper.AmpPledgeFake;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -47,15 +23,24 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 import org.digijava.module.search.helper.Resource;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.type.StringType;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.servlet.http.HttpServletRequest;
+import java.text.Normalizer;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SearchUtil {
 
-    private static Logger logger = Logger.getLogger(SearchUtil.class);
+    private static final Logger logger = Logger.getLogger(SearchUtil.class);
 
     public static final int QUERY_ALL = -1;
     public static final int ACTIVITIES = 0;
@@ -116,8 +101,8 @@ public class SearchUtil {
                         + AmpTeamReports.class.getName()
                         + " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                 qry = session.createQuery(queryString);
-                qry.setLong("ampTeamMemId", tm.getMemberId());
-                qry.setLong("teamId", tm.getTeamId());
+                qry.setParameter("ampTeamMemId", tm.getMemberId(), LongType.INSTANCE);
+                qry.setParameter("teamId", tm.getTeamId(), LongType.INSTANCE);
                 addKeywordParameters(qry, keywords);
                 col = qry.list();
 
@@ -133,14 +118,14 @@ public class SearchUtil {
     }
     
     public static String buildLike(List<String> keywords, String field, int searchMode) {
-        String query = "";
+        StringBuilder query = new StringBuilder();
         String operator = searchMode == KEYWORDS_ALL ? "AND" : "OR";
         for (int index = 1; index < keywords.size() + 1; index++) {
-            query += (query != "" ? " " + operator + " " : "") + " lower(" + field + ") LIKE :keyword" + index + " ";
+            query.append(!query.toString().equals("") ? " " + operator + " " : "").append(" lower(").append(field).append(") LIKE :keyword").append(index).append(" ");
         }
-        query = "( " + query + ")";
+        query = new StringBuilder("( " + query + ")");
 
-        return query;
+        return query.toString();
     }
     
     public static void addKeywordParameters(Query qry, List<String> keywords) {
@@ -190,8 +175,8 @@ public class SearchUtil {
                         + " or r.id in (select r2.id from " + AmpTeamReports.class.getName()
                         + " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                 qry = session.createQuery(queryString);
-                qry.setLong("ampTeamMemId", tm.getMemberId());
-                qry.setLong("teamId", tm.getTeamId());
+                qry.setParameter("ampTeamMemId", tm.getMemberId(), LongType.INSTANCE);
+                qry.setParameter("teamId", tm.getTeamId(), LongType.INSTANCE);
                 addKeywordParameters(qry, keywords);
                 col = qry.list();
 
@@ -232,8 +217,8 @@ public class SearchUtil {
             newQueryString += "WHERE" +  buildLike(keywords, "f.title", searchMode);
         }
         
-        SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id", StandardBasicTypes.LONG);
-        newQuery = newQuery.addScalar("title", StandardBasicTypes.STRING);
+        Query newQuery = session.createNativeQuery(newQueryString).addScalar("pledge_id", StandardBasicTypes.LONG).addScalar("title", StandardBasicTypes.STRING);
+//        newQuery = newQuery.addScalar("title", StandardBasicTypes.STRING);
         addKeywordParameters(newQuery, keywords);
 
         List<Object[]> items = newQuery.list();
@@ -287,7 +272,7 @@ public class SearchUtil {
                 + AmpActivityVersion.sqlStringForName("f.amp_activity_id")
                 + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("
                 + Util.toCSStringForIN(ids) + ")";
-        SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
+        SQLQuery newQuery = session.createNativeQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
         newQuery = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
         newQuery = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);
         newQuery = newQuery.addScalar("approval_status", org.hibernate.type.StandardBasicTypes.STRING);
@@ -334,7 +319,7 @@ public class SearchUtil {
                 javax.jcr.query.QueryManager qm = folderNode.getSession().getWorkspace().getQueryManager();
                 javax.jcr.query.Query q = qm.createQuery(
                         "SELECT * FROM nt:base WHERE jcr:path LIKE '/team/" + tm.getTeamId() + "/%' ",
-                        javax.jcr.query.Query.SQL);
+                        javax.jcr.query.Query.JCR_SQL2);
 
                 javax.jcr.query.QueryResult result = q.execute();
                 NodeIterator it = result.getNodes();
@@ -352,7 +337,7 @@ public class SearchUtil {
                 }
                 q = qm.createQuery(
                         "SELECT * FROM nt:base WHERE jcr:path LIKE '/private/" + tm.getTeamId() + "/" + tm.getEmail()
-                                + "/%' " + "", javax.jcr.query.Query.SQL);
+                                + "/%' ", javax.jcr.query.Query.JCR_SQL2);
 
                 result = q.execute();
                 it = result.getNodes();
@@ -456,12 +441,12 @@ public class SearchUtil {
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");
         if (!hasComputedOrgs) {
-            query.append(" and " + buildLike(keywords, orgNameHql, searchMode) + " ");
+            query.append(" and ").append(buildLike(keywords, orgNameHql, searchMode)).append(" ");
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(
                         " and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",
-                        ApprovalStatus.STARTED_APPROVED.getDbName(),
-                        ApprovalStatus.APPROVED.getDbName()));
+                        ApprovalStatus.startedapproved.getDbName(),
+                        ApprovalStatus.approved.getDbName()));
             }
         }
 
@@ -469,9 +454,9 @@ public class SearchUtil {
         Query qry = session.createQuery(query.toString());
 
         if (hasComputedOrgs) {
-            qry.setString("roleCode", "DN");
+            qry.setParameter("roleCode", "DN", StringType.INSTANCE);
         } else {
-            qry.setString("roleCode", roleCode);
+            qry.setParameter("roleCode", roleCode,StringType.INSTANCE);
             addKeywordParameters(qry, keywords);
         }
 
@@ -480,20 +465,19 @@ public class SearchUtil {
             if (!hasComputedOrgs) {
                 activities.addAll(result);
             } else {
-                StringBuilder queryString = new StringBuilder();
-                queryString.append(" select act from ");
-                queryString.append(AmpActivity.class.getName());
-                queryString.append(" act ");
-                queryString.append(" inner join act.orgrole role ");
-                queryString.append(" inner join role.organisation org ");
-                queryString.append(" inner join role.role roleCode ");
-                queryString.append(" where roleCode.roleCode=:roleCode ");
-                queryString.append(" and act.ampActivityId in (");
-                queryString.append(Util.toCSStringForIN(result));
-                queryString.append(")");
-                queryString.append(" and " + buildLike(keywords, orgNameHql, searchMode) + " ");
-                qry = session.createQuery(queryString.toString());
-                qry.setString("roleCode", roleCode);
+                String queryString = " select act from " +
+                        AmpActivity.class.getName() +
+                        " act " +
+                        " inner join act.orgrole role " +
+                        " inner join role.organisation org " +
+                        " inner join role.role roleCode " +
+                        " where roleCode.roleCode=:roleCode " +
+                        " and act.ampActivityId in (" +
+                        Util.toCSStringForIN(result) +
+                        ")" +
+                        " and " + buildLike(keywords, orgNameHql, searchMode) + " ";
+                qry = session.createQuery(queryString);
+                qry.setParameter("roleCode", roleCode,StringType.INSTANCE);
                 addKeywordParameters(qry, keywords);
                 if (result != null && !result.isEmpty()) {
                     result = qry.list();
@@ -524,14 +508,11 @@ public class SearchUtil {
     
     public static List<String> buildKeywordsList(String keywordString) {
         keywordString = keywordString.replace("*", "").toLowerCase();
-        
-        Set<String> keywords =  Arrays.asList(keywordString.split(" ")).stream()
-            .map(word -> word.trim())
-            .filter(word -> StringUtils.isNotBlank(word))
-            .map(word -> StringEscapeUtils.escapeSql(word))
-            .collect(Collectors.toSet());
-        
-        return new ArrayList<String>(keywords);
+
+        return Arrays.stream(keywordString.split(" "))
+                .map(String::trim)
+                .filter(StringUtils::isNotBlank)
+                .map(StringEscapeUtils::escapeSql).distinct().collect(Collectors.toList());
     }
 
 }

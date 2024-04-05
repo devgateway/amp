@@ -22,8 +22,8 @@
 
 package org.digijava.module.um.util;
 
-import org.digijava.kernel.translator.util.TranslationCallback;
 import org.digijava.kernel.entity.HowDidYouHear;
+import org.digijava.kernel.translator.util.TranslationCallback;
 
 
 /**

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.utils;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 /**
  * a class which is a like linkedlist bounded by a maximum length<br />

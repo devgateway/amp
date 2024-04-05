@@ -1,16 +1,16 @@
 package org.digijava.module.aim.form;
 
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.donorReport.DonorReportHelper;
 import org.digijava.module.aim.helper.donorReport.OrganizationReportRecord;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 public class OrgProfileReportForm  extends ActionForm {
     private static final long serialVersionUID = 1L;

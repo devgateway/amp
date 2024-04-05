@@ -1,24 +1,15 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.ADD;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.CONSTANT;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.DIVIDE;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.DIVIDEIFLOWER;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.MULTIPLY;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGE;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGEIFLOWER;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACT;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACTIFGREATER;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.VARIABLE;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
+import org.dgfoundation.amp.testutils.AmpTestCase;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dgfoundation.amp.nireports.formulas.NiFormula;
-import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
-import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
 
 
 /**

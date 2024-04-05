@@ -1,23 +1,5 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -28,8 +10,17 @@ import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.dialect.PostgreSQL95Dialect;
+import org.hibernate.engine.jdbc.spi.JdbcServices;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.TypedValue;
+
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class SQLUtils {
     
@@ -309,7 +300,11 @@ public class SQLUtils {
 
             @Override
             public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
-                Dialect dialect = criteriaQuery.getFactory().getDialect();
+                SessionFactoryImplementor sessionFactoryImplementor = criteriaQuery.getFactory();
+                JdbcServices jdbcServices = sessionFactoryImplementor.getJdbcServices();
+
+                Dialect dialect = jdbcServices.getDialect();
+
                 String[] columns = criteriaQuery.findColumns(propertyName, criteria);
                 String entityName = criteriaQuery.getEntityName(criteria);
               
@@ -319,7 +314,7 @@ public class SQLUtils {
                 if (ids.length!=1)
                     throw new HibernateException("We do not support multiple identifiers just yet!");
 
-                if ( dialect instanceof PostgreSQLDialect ) {
+                if ( dialect instanceof PostgreSQL95Dialect ) {
                     String ret = " " + ids[0] + " = any(contentmatch('" + entityName + "','" + propertyName + "','"
                             + locale + "', ?)) OR ";
                     ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";

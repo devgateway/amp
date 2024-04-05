@@ -1,11 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * The Amp Aid Effectiveness Indicator domain class

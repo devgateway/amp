@@ -1,17 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators.mapping;
 
-import java.lang.annotation.Annotation;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.annotation.PostConstruct;
-import javax.validation.ConstraintViolation;
-import javax.validation.Path;
-
 import com.google.common.collect.ImmutableMap;
-
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -19,9 +8,17 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.contact.PrimaryContact;
-import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
 import org.digijava.module.aim.validator.fundings.FundingOrgRole;
+import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
 import org.digijava.module.aim.validator.user.MatchExistingCreator;
+
+import javax.annotation.PostConstruct;
+import javax.validation.ConstraintViolation;
+import javax.validation.Path;
+import java.lang.annotation.Annotation;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Map activity errors onto json structure.

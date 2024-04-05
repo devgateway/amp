@@ -2,8 +2,6 @@ package org.dgfoundation.amp.currencyconvertor;
 
 import java.time.LocalDate;
 
-import org.digijava.module.aim.dbentity.AmpCurrency;
-
 /**
  * a class which can convert amounts from one currency to another currency
  * @author Dolghier Constantin

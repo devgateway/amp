@@ -7,9 +7,6 @@
 package org.dgfoundation.amp.ar;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * <b> Immutable</b>class describing objects with purpose of wrapping metainformation. a

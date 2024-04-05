@@ -7,16 +7,15 @@
 
 package org.digijava.module.autopatcher.schema.impl.runtime;
 
+import com.sun.xml.bind.Messages;
+import com.sun.xml.bind.serializer.AbortSerializationException;
+import com.sun.xml.bind.util.ValidationEventLocatorExImpl;
+import org.xml.sax.SAXException;
+
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.helpers.PrintConversionEventImpl;
 import javax.xml.bind.helpers.ValidationEventImpl;
 import javax.xml.bind.helpers.ValidationEventLocatorImpl;
-
-import org.xml.sax.SAXException;
-
-import com.sun.xml.bind.Messages;
-import com.sun.xml.bind.serializer.AbortSerializationException;
-import com.sun.xml.bind.util.ValidationEventLocatorExImpl;
 
 /**
  * 

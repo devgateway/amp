@@ -1,11 +1,11 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTheme;
+
+import java.util.Collection;
 
 public class NewIndicatorForm
     extends ActionForm {

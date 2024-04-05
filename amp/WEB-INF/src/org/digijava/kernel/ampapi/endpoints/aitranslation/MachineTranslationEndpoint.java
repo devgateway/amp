@@ -1,27 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.aitranslation;
 
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_ENABLED;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_MAX_CHARACTERS;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Example;
-import io.swagger.annotations.ExampleProperty;
+import io.swagger.annotations.*;
 import org.apache.http.HttpStatus;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_ENABLED;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_MAX_CHARACTERS;
 
 /**
  * @author Octavian Ciubotaru

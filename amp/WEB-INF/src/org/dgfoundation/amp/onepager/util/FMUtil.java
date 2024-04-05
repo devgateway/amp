@@ -1,14 +1,5 @@
 package org.dgfoundation.amp.onepager.util;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
@@ -27,6 +18,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+
+import javax.servlet.ServletContext;
+import java.util.*;
 
 public final class FMUtil {
     private static Logger logger = Logger.getLogger(FMUtil.class);

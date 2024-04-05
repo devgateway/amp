@@ -1,15 +1,15 @@
 package org.digijava.kernel.translator.util;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Thread to save translation access time stamps.

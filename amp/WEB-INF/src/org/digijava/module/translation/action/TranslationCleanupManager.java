@@ -1,24 +1,20 @@
 package org.digijava.module.translation.action;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.translation.form.TranslationCleanupForm;
 import org.digijava.module.translation.lucene.TrnLuceneModule;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TranslationCleanupManager extends Action {
     @Override

@@ -1,10 +1,10 @@
 package org.digijava.module.aim.validator.user;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.validator.ActivityValidationContext;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * @author Nadejda Mandrescu

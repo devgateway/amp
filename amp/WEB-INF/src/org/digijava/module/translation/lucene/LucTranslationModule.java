@@ -1,9 +1,5 @@
 package org.digijava.module.translation.lucene;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -15,6 +11,10 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.AmpLuceneDoc;
 import org.digijava.kernel.lucene.LucModule;
 import org.digijava.module.aim.util.DbUtil;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Translation module for lucene.

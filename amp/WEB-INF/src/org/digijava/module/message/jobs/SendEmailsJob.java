@@ -1,11 +1,6 @@
 package org.digijava.module.message.jobs;
 
-import java.util.List;
-
-import javax.mail.internet.InternetAddress;
-
 import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.message.dbentity.AmpEmail;
@@ -16,6 +11,9 @@ import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import javax.mail.internet.InternetAddress;
+import java.util.List;
 
 public class SendEmailsJob extends ConnectionCleaningJob implements StatefulJob { 
     

@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import org.dgfoundation.amp.nireports.schema.Behaviour;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 /**
  * an umbrella for multiple-main-ids-trackers

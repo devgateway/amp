@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import org.apache.commons.collections.ComparatorUtils;
+
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
-
-import org.apache.commons.collections.ComparatorUtils;
 
 public class AmpGPINiQuestion implements Serializable {
     

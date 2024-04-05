@@ -1,12 +1,12 @@
 package org.digijava.module.message.dbentity;
 
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.sdm.dbentity.Sdm;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.sdm.dbentity.Sdm;
 
 /**
  * General AMP Message.

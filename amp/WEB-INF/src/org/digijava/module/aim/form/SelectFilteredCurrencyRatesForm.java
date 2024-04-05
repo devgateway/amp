@@ -3,11 +3,11 @@
  */
 package org.digijava.module.aim.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate;
 import org.digijava.module.aim.helper.KeyValue;
+
+import java.util.List;
 
 /**
  * @author Alex Gartner

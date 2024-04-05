@@ -1,11 +1,12 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
  * a trivial measure defined as a filter 

@@ -1,12 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.digijava.module.aim.annotations.translation.TranslatableClass;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Regional Observation Measure")
 public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
     //IATI-check: to be ignored

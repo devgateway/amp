@@ -22,22 +22,15 @@
 
 package org.digijava.module.admin.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.validator.ValidatorForm;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteConfigUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 public class SiteForm
     extends ValidatorForm {

@@ -1,53 +1,27 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
-import static org.dgfoundation.amp.nireports.testcases.TestModelConstants.*;
-import static org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells.degenerate;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.nireports.AbstractReportsSchema;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.DateCell;
-import org.dgfoundation.amp.nireports.NiFilters;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.*;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
-import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
-import org.dgfoundation.amp.nireports.schema.TimeRange;
+import org.dgfoundation.amp.nireports.schema.*;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.testcases.ReportsTestScratchpad;
 import org.dgfoundation.amp.nireports.testcases.TestFundingFetcher;
 import org.dgfoundation.amp.nireports.testcases.TrivialTestMeasure;
-import org.dgfoundation.amp.nireports.testcases.generic.dimensions.CategoriesTestDimension;
-import org.dgfoundation.amp.nireports.testcases.generic.dimensions.LocationsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.generic.dimensions.OrganizationsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.generic.dimensions.ProgramsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.generic.dimensions.SectorsTestDimension;
+import org.dgfoundation.amp.nireports.testcases.generic.dimensions.*;
 import org.digijava.module.aim.helper.Constants;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.dgfoundation.amp.nireports.testcases.TestModelConstants.*;
+import static org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells.degenerate;
 
 /**
  * the NiReports testcases schema

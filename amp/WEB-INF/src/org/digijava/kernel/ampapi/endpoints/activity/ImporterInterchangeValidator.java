@@ -1,32 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.intToLong;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.validation.ConstraintDescriptor;
-import org.digijava.kernel.validation.ConstraintValidator;
-import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.TranslatedValueContext;
-import org.digijava.kernel.validation.Path;
-import org.digijava.kernel.validation.TranslationContext;
-import org.digijava.kernel.validation.Validator;
-import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
-import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
-import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
-import org.digijava.kernel.validators.activity.PledgeOrgValidator;
-import org.digijava.kernel.validators.activity.RegionLocationValidator;
+import org.digijava.kernel.validation.*;
+import org.digijava.kernel.validators.activity.*;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.intToLong;
 
 /**
  * Acts as a bridge between importer and interchangeable validation.

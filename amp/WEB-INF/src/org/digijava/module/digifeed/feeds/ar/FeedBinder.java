@@ -6,23 +6,18 @@
  */
 package org.digijava.module.digifeed.feeds.ar;
 
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.util.Iterator;
-
-import javax.xml.bind.JAXBException;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.digifeed.core.GenericFeedBinder;
-import org.digijava.module.digifeed.feeds.ar.schema.ColumnType;
-import org.digijava.module.digifeed.feeds.ar.schema.MeasureType;
-import org.digijava.module.digifeed.feeds.ar.schema.ObjectFactory;
-import org.digijava.module.digifeed.feeds.ar.schema.ReportType;
-import org.digijava.module.digifeed.feeds.ar.schema.Reports;
+import org.digijava.module.digifeed.feeds.ar.schema.*;
+
+import javax.xml.bind.JAXBException;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.util.Iterator;
 
 /**
  * 

@@ -1,11 +1,10 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * a column-in-a-view translator which does a translateText() call on the input for its outputs 

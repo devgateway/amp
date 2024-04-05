@@ -1,17 +1,14 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import java.awt.Color;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * @author Viorel Chihai
@@ -31,8 +28,8 @@ public class GPIReportIndicator5bPdfExporter extends GPIReportPdfExporter {
         table.setWidthPercentage(45f);
         table.setHorizontalAlignment(0);
         
-        Font bfBold14 = new Font(Font.HELVETICA, 13, Font.BOLD, new Color(0, 0, 0));
-        Color bkgColor = Color.ORANGE;
+        Font bfBold14 = new Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 13, Font.BOLD, new BaseColor(0, 0, 0));
+        BaseColor bkgColor = BaseColor.ORANGE;
         
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
             GPIReportOutputColumn column = report.getPage().getHeaders().get(i);

@@ -1,12 +1,5 @@
 package org.digijava.module.help.action;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +12,12 @@ import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.util.GlossaryUtil;
 import org.digijava.module.help.util.HelpUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Date;
 
 /**
  * Gets help topic body and returns as HTML.

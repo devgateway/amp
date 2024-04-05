@@ -22,25 +22,16 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.Iterator;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.SiteConfigUtils;
-import org.digijava.module.admin.form.AdministrateUserForm;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.security.HttpLoginManager;
+import org.digijava.kernel.user.User;
+import org.digijava.module.admin.form.AdministrateUserForm;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 //Action for Become User
 //Logs the admin as if s/he was selected user and redirects to the home page

@@ -1,77 +1,32 @@
 package org.dgfoundation.amp.nireports.testcases.tanzania;
 
-import static org.dgfoundation.amp.nireports.testcases.TestModelConstants.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.nireports.AbstractReportsSchema;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.DateCell;
-import org.dgfoundation.amp.nireports.NiFilters;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.*;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
-import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.testcases.ReportsTestScratchpad;
 import org.dgfoundation.amp.nireports.testcases.TestFundingFetcher;
 import org.dgfoundation.amp.nireports.testcases.TrivialTestMeasure;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedColumn;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ActivityCreatedOnCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ActivityUpdatedOnCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.CountryCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DistrictCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DonorAgencyCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DonorGroupCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DonorTypeCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.FinancingInstrumentCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.FundingStatusCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementationLevelCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementingAgencyCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementingAgencyGroupsCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementingAgencyTypeCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ModeOfPaymentCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimaryProgramLevel1Cells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimaryProgramLevel2Cells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimarySectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimarySectorSubSectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ProjectTitleCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.RegionCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.SecondarySectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.SecondarySectorSubSectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.StatusCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.TypeOfAssistanceCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ZoneCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.CategoriesTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.LocationsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.OrganizationsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.ProgramsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.SectorsTestDimension;
+import org.dgfoundation.amp.nireports.testcases.tanzania.columns.*;
+import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.*;
 import org.digijava.module.aim.helper.Constants;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.dgfoundation.amp.nireports.testcases.TestModelConstants.*;
 
 /**
  * the NiReports testcases schema

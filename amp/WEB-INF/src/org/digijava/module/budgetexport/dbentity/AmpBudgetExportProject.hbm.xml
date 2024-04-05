@@ -4,8 +4,8 @@
 
 	<class name="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" table="amp_budget_export_project">
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_budget_export_project_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_budget_export_project_seq</param>
 			</generator>
 		</id>
 		<property name="name" column="name" type="java.lang.String"/>

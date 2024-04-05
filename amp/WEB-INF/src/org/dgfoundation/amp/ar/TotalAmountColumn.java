@@ -3,14 +3,14 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TotalAmountColumn<K extends AmountCell> extends AmountCellColumn<K> {
 

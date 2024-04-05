@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Date;
-
 import org.dgfoundation.amp.nireports.TranslatedDate;
+
+import java.util.Date;
 
 public interface CalendarConverter {
     

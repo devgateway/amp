@@ -22,16 +22,7 @@
 
 package org.digijava.module.calendar.action;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
@@ -43,10 +34,10 @@ import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.CalendarUtil;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
-import java.util.Date;
+
 import java.text.ParseException;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionMessage;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Action displayes events in Year View

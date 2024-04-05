@@ -3,8 +3,8 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.esrigis.dbentity.AmpMapConfig" table="AMP_MAP_CONFIG">
 		<id name="Id" column="id" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">amp_map_config_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_map_config_seq</param>
 			</generator>
 		</id>
 

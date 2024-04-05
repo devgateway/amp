@@ -18,10 +18,6 @@
 
 package org.digijava.module.common.util;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -33,6 +29,10 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteUtils;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * <p>Title: </p>

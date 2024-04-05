@@ -22,15 +22,15 @@
 
 package org.digijava.kernel.util;
 
+import org.digijava.kernel.service.ServiceContext;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
-
-import org.digijava.kernel.service.ServiceContext;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.*;
 
 public class StandaloneServiceContext
     implements ServiceContext {

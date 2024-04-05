@@ -6,11 +6,11 @@
  */
 package org.digijava.module.digifeed.core;
 
+import org.apache.log4j.Logger;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 /**
  * Interface providing the feed method that returns the Business side objects from the database, based on a FeedRequest object as

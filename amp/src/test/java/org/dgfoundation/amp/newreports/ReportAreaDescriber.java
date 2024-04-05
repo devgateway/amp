@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.List;
-import java.util.Collection;
-
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReportArea;
+
+import java.util.Collection;
+import java.util.List;
 
 public class ReportAreaDescriber {
     

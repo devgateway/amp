@@ -7,12 +7,12 @@
 
 package org.digijava.module.autopatcher.schema.impl.runtime;
 
-import java.util.ArrayList;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+
+import java.util.ArrayList;
 
 /**
  * Receives SAX2 events and send the equivalent events to

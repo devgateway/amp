@@ -4,17 +4,15 @@
 */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Collection;
-import java.util.Set;
-
+import bsh.This;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 
-import bsh.This;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Etend this class to implement validation for collections of items (like validation of sum of percentages, or size of a collection)

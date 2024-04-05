@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpTeam" table="AMP_TEAM" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampTeamId" column="amp_team_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_TEAM_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_TEAM_seq</param>
 			</generator>
 		</id>
 

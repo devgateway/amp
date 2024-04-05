@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
 import org.joda.time.DateTime;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 public class AmpApiToken implements Serializable {
 

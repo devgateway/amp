@@ -6,18 +6,12 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.exception.IncompatibleCellException;
+
+import java.util.*;
 
 /**
  * 

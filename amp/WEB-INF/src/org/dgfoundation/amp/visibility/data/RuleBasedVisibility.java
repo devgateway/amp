@@ -3,19 +3,13 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpVisibilityRuleType;
 import org.digijava.module.aim.dbentity.AmpVisibilityRule;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.VisibilityUtil;
+
+import java.util.*;
 
 /**
  * A rule based visibility base class

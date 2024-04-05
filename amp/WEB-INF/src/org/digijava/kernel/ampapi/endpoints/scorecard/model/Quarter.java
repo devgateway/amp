@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard.model;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Representation of a quarter (3 month period)

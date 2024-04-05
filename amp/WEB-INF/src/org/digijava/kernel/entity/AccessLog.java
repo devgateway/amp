@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.entity;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.util.Date;
 import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class AccessLog
     implements Cloneable {

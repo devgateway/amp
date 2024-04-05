@@ -1,11 +1,5 @@
 package org.digijava.module.categorymanager.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -16,8 +10,12 @@ import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
 import org.digijava.module.categorymanager.util.CategoryLabelsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.categorymanager.util.LabelCategory;
 import org.digijava.module.categorymanager.util.PossibleValue;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class CategoryLabelsAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, 

@@ -1,14 +1,8 @@
 package org.dgfoundation.amp.onepager.util;
 
-import java.sql.SQLException;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 public class SessionUtil {
     

@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.viewmanager;
 
+import org.w3c.dom.Document;
+
 import java.util.Map;
 import java.util.Set;
-
-import org.w3c.dom.Document;
 
 /**
  * Describes site's view configuration

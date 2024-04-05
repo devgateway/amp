@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 
 /**
  * NiReports' hardcoded boolean dimension, used for performance alert type columns

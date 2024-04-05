@@ -1,12 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.List;
+import org.digijava.module.aim.dbentity.*;
 
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpThemeMapping;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

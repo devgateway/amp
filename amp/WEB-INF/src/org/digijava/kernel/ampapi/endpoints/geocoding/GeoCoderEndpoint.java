@@ -1,11 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.geocoding;
 
-import com.sun.jersey.api.client.ClientHandlerException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
@@ -20,13 +15,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Set;
@@ -62,7 +51,7 @@ public class GeoCoderEndpoint {
             ApiErrorResponse apiErrorResponse = ApiError.toError(
                     GeoCoderEndpointErrors.GEO_CODING_GENERAL_ERROR.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
-        } catch (ClientHandlerException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
             ApiErrorResponse apiErrorResponse = ApiError.toError(
                     GeoCoderEndpointErrors.GEO_CODING_CLIENT_NOT_AVAILABLE.withDetails(e.getMessage()));

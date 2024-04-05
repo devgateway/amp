@@ -1,13 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
@@ -18,9 +12,18 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.hibernate.jdbc.Work;
-import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.hibernate.persister.entity.EntityPersister;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru
@@ -28,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public class AmpFieldInfoProvider implements FieldInfoProvider {
     
     private final Object lock = new Object();
+    private static  final Logger logger = LoggerFactory.getLogger(AmpFieldInfoProvider.class);
     
     private Map<Class<?>, Map<String, FieldInfo>> classFieldInfo = new HashMap<>();
     
@@ -59,7 +63,7 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
     private void initializeDeclaringClassOfFieldIfNeeded(Field field) {
         synchronized (lock) {
             Class clazz = getActualFieldClass(field);
-            if (classFieldInfo.get(clazz) == null) {
+            if (classFieldInfo.get(clazz) == null && InternationalizedModelDescription.isEntity(clazz)) {
                 initializeFields(clazz);
             }
         }
@@ -77,16 +81,17 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
         final Map<String, String> dbTypes = new HashMap<>();
         final Map<String, Integer> maxLengths = new HashMap<>();
         
-        ClassMetadata meta = PersistenceManager.getClassMetadata(clazz);
+//        ClassMetadata meta = PersistenceManager.getClassMetadata(clazz);
         
-        if (meta == null) {
-            return;
-        }
-        
-        AbstractEntityPersister entityPersister = (AbstractEntityPersister) meta;
-        final String tableName = entityPersister.getTableName().toLowerCase();
-        PersistenceManager.getSession().doWork(new Work() {
-            public void execute(Connection conn) throws SQLException {
+//        if (meta == null) {
+//            return;
+//        }
+        try {
+            AbstractEntityPersister entityPersister = InternationalizedModelDescription.getPersister(clazz);
+
+//        AbstractEntityPersister entityPersister = (AbstractEntityPersister) meta;
+            final String tableName = entityPersister.getTableName();
+            PersistenceManager.getSession().doWork(conn -> {
                 String allSectorsQuery = "SELECT column_name, data_type, character_maximum_length "
                         + "FROM INFORMATION_SCHEMA.COLUMNS WHERE character_maximum_length IS NOT NULL "
                         + "AND table_name = '" + tableName + "'";
@@ -98,36 +103,40 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
                     }
                     rs.close();
                 }
-            }
-        });
-        
-        String[] identityNames = entityPersister.getIdentifierColumnNames();
-        if (identityNames.length > 0) {
-            String fieldName = entityPersister.getIdentifierPropertyName();
-            Field field = FieldUtils.getField(clazz, fieldName, true);
-            if (field != null) {
-                String colName = identityNames[0];
-                FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), field);
-                fieldInfoMap.put(fieldName, fieldInfo);
-            }
-        }
-    
-        String[] propertyNames = entityPersister.getPropertyNames();
-        for (int i = 0; i < propertyNames.length; i++) {
-            String[] columnNames = entityPersister.getPropertyColumnNames(i);
-            if (columnNames.length > 0) {
-                String fieldName = propertyNames[i];
+            });
+
+            String[] identityNames = entityPersister.getIdentifierColumnNames();
+            if (identityNames.length > 0) {
+                String fieldName = entityPersister.getIdentifierPropertyName();
                 Field field = FieldUtils.getField(clazz, fieldName, true);
-                // it could be possible that the fieldName could be part of a subclass and is not part of clazz
                 if (field != null) {
-                    String colName = columnNames[0];
+                    String colName = identityNames[0];
                     FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), field);
                     fieldInfoMap.put(fieldName, fieldInfo);
                 }
             }
+
+            String[] propertyNames = entityPersister.getPropertyNames();
+            for (int i = 0; i < propertyNames.length; i++) {
+                String[] columnNames = entityPersister.getPropertyColumnNames(i);
+                if (columnNames.length > 0) {
+                    String fieldName = propertyNames[i];
+                    Field field = FieldUtils.getField(clazz, fieldName, true);
+                    // it could be possible that the fieldName could be part of a subclass and is not part of clazz
+                    if (field != null) {
+                        String colName = columnNames[0];
+                        FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), field);
+                        fieldInfoMap.put(fieldName, fieldInfo);
+                    }
+                }
+            }
+
+            classFieldInfo.put(clazz, fieldInfoMap);
+        }catch (Exception e)
+        {
+            logger.error("Error initializing fields: "+e.getMessage(), e);
         }
-        
-        classFieldInfo.put(clazz, fieldInfoMap);
+
     }
     
     private FieldInfo getFieldInfo(Class<?> clazz, String dbType, Integer maxLength, Field field) {

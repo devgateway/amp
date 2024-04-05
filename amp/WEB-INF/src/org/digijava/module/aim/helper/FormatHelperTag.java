@@ -1,13 +1,12 @@
 package org.digijava.module.aim.helper;
 
-import java.io.IOException;
-import java.text.NumberFormat;
+import org.apache.taglibs.standard.resources.Resources;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-
-import org.apache.taglibs.standard.resources.Resources;
+import java.io.IOException;
+import java.text.NumberFormat;
 
 /**
  *

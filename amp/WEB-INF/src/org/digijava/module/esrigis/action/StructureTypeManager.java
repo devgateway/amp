@@ -1,21 +1,7 @@
 package org.digijava.module.esrigis.action;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -23,6 +9,14 @@ import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.esrigis.form.StructureTypeForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class StructureTypeManager extends DispatchAction {
     private static Logger logger = Logger.getLogger(StructureTypeManager.class);

@@ -1,14 +1,10 @@
 package org.dgfoundation.amp.newreports.pagination;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportArea;
+
+import java.util.*;
+
 import static java.util.stream.Collectors.toList;
 
 /**

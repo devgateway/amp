@@ -4,9 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -18,9 +15,9 @@ import org.dgfoundation.amp.onepager.models.ActivityFYModel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011

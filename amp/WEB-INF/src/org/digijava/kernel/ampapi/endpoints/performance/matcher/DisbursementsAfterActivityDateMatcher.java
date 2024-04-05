@@ -1,22 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.ActivityUtil;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.ActivityUtil;
 
 /**
  * The matcher checks if there are disbursements happened after a selected activity date 

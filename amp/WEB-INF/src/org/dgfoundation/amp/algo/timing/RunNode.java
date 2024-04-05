@@ -1,16 +1,12 @@
 package org.dgfoundation.amp.algo.timing;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.IntFunction;
-import java.util.function.LongFunction;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.algo.AlgoUtils;
+
+import java.util.*;
+import java.util.function.IntFunction;
+import java.util.function.LongFunction;
 
 /**
  * an object returned by InclusiveTimer to represent a read-only identifying view in the runtime tree

@@ -1,8 +1,5 @@
 package org.digijava.module.message.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -11,6 +8,9 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.util.AmpMessageUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class ViewMessages extends TilesAction {
     

@@ -1,13 +1,5 @@
 package org.digijava.module.contentrepository.util;
 
-import java.util.List;
-
-import javax.jcr.Node;
-import javax.jcr.Workspace;
-import javax.jcr.version.Version;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
@@ -16,6 +8,13 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+
+import javax.jcr.Node;
+import javax.jcr.Workspace;
+import javax.jcr.version.Version;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public class DocumentManagerRights {
     

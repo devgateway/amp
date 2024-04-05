@@ -1,12 +1,6 @@
 package org.digijava.module.categorymanager.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -15,6 +9,9 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
+import java.io.Serializable;
+import java.util.*;
+
 /**
  * Represents one of the possible values for a certain category
  * @author Alex Gartner
@@ -22,11 +19,17 @@ import org.digijava.module.aim.util.Output;
  */
 public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable{
     @PossibleValueId
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("ampCategoryClass")
     private AmpCategoryClass ampCategoryClass;
     @PossibleValueValue
+    @JsonProperty("value")
     private String value;
+    @JsonProperty("index")
     private Integer index;
+    @JsonProperty("deleted")
     private Boolean deleted = false;
     
     private Set<AmpActivityVersion> activities;
@@ -154,11 +157,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     public boolean equalsForVersioning(Object obj) {
         AmpCategoryValue aux = (AmpCategoryValue) obj;
         if (aux != null) {
-            if (aux.getAmpCategoryClass().getName().equals(this.getAmpCategoryClass().getName())) {
-                return true;
-            } else {
-                return false;
-            }
+            return aux.getAmpCategoryClass().getName().equals(this.getAmpCategoryClass().getName());
         }
         return false;
     }
@@ -209,7 +208,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
             return false;
         }
         AmpCategoryValue a = (AmpCategoryValue) o;
-        return this.getId().equals(a.getId());
+        return Objects.equals(this.getId(),a.getId());
     }
 
     @Override

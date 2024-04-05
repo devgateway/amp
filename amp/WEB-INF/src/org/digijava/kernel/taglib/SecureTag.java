@@ -22,18 +22,6 @@
 
 package org.digijava.kernel.taglib;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-import java.util.StringTokenizer;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyTagSupport;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
@@ -47,6 +35,17 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 public class SecureTag
     extends BodyTagSupport {
@@ -139,10 +138,9 @@ public class SecureTag
                     if (siteGroup.getName().equals(this.getGroup())){
                         User user = RequestUtils.getUser(request);
                         if (user == null) return SKIP_BODY;
-                        Iterator userGroupIter = user.getGroups().iterator();
-                        while(userGroupIter.hasNext()){
-                            Group userGroup = (Group)userGroupIter.next();
-                            if (userGroup.getName().equals(this.getGroup())){
+                        for (Object o : user.getGroups()) {
+                            Group userGroup = (Group) o;
+                            if (userGroup.getName().equals(this.getGroup())) {
                                 return EVAL_BODY_INCLUDE;
                             }
                         }

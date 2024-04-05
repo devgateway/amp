@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * Field Enumeration Context.

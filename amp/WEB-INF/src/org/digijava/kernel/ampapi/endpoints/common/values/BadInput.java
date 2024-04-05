@@ -1,11 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.common.values;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 
 /**
  * Stores the original input with associated error codes

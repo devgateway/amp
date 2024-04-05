@@ -22,25 +22,13 @@
 
 package org.digijava.kernel.viewmanager;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.siteconfig.Instance;
-import org.digijava.kernel.siteconfig.Layout;
-import org.digijava.kernel.siteconfig.Module;
-import org.digijava.kernel.siteconfig.ModuleLayout;
-import org.digijava.kernel.siteconfig.Page;
-import org.digijava.kernel.siteconfig.Put;
-import org.digijava.kernel.siteconfig.PutItem;
-import org.digijava.kernel.siteconfig.SiteConfig;
-import org.digijava.kernel.siteconfig.SiteLayout;
-import org.digijava.kernel.siteconfig.Teaser;
+import org.digijava.kernel.siteconfig.*;
 import org.xml.sax.SAXException;
-import org.digijava.kernel.siteconfig.PageGroup;
-import org.digijava.kernel.siteconfig.ModulePageGroup;
-import org.digijava.kernel.siteconfig.GroupedPage;
+
+import java.io.File;
+import java.io.IOException;
 
 public final class SiteConfigParser {
     private static Logger log =

@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.newreports;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * class holding a "Option" unit

@@ -1,43 +1,25 @@
 package org.digijava.module.esrigis.helpers;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpColorThreshold;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
+
+import java.math.BigInteger;
+import java.util.*;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -139,7 +121,7 @@ public class DbUtil {
             session = PersistenceManager.getSession();
             String queryString = "SELECT s.* FROM amp_sector s "
                     + "WHERE s.parent_sector_id =:id " ;
-             qry = session.createSQLQuery(queryString).addEntity(AmpSector.class);
+             qry = session.createNativeQuery(queryString).addEntity(AmpSector.class);
              qry.setParameter("id", id, LongType.INSTANCE);
              col = qry.list();
         } catch (Exception ex) {
@@ -522,7 +504,7 @@ public class DbUtil {
 
     public static ArrayList<BigInteger> getInActivities(String query) throws Exception{
         Session session = PersistenceManager.getRequestDBSession();
-        ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery("select amp_activity_id from amp_activity where " + query).list();
+        ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createNativeQuery("select amp_activity_id from amp_activity where " + query).list();
         return result;
     }
     

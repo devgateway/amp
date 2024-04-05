@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.testutils;
 
-import javax.persistence.RollbackException;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import javax.persistence.RollbackException;
 
 /**
  * The sole purpose of this rule is to create an environment where you can access hibernate session.

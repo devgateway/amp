@@ -1,26 +1,18 @@
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.module.aim.dbentity.AmpOrgRecipient;
-import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
-import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.Pledge;
-import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public class AddOrgForm extends ActionForm {
 

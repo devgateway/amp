@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.Arrays;
-
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+
+import java.util.Arrays;
 
 public abstract class ReportModel implements Comparable<ReportModel>{
     

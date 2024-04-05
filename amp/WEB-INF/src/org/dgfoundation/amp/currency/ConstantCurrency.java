@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.currency;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Constant Currency

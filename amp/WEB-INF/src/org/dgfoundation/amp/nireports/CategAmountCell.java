@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.nireports;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * the most widely instantiated cell in NiReports - the one holding "funding" (e.g. regular hierarchies-abiding numerical cells).

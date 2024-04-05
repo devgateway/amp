@@ -1,20 +1,18 @@
 package org.digijava.module.budget.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.budget.form.SetBudgetProgramForm;
 import org.digijava.module.budget.helper.BudgetDbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SetBudgetProgram extends Action {
 

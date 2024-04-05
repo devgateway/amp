@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.HashMap;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.NewTextColWorker;
+
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * @author Alex

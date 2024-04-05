@@ -1,14 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.activity.values;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FiscalYearPossibleValuesProvider implements PossibleValuesProvider {
 

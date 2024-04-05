@@ -3,7 +3,9 @@ package org.dgfoundation.amp.testutils;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ActivityNameFilteringMapFilter extends MapFilter
 {

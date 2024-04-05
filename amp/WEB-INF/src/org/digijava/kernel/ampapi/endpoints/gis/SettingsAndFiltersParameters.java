@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

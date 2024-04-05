@@ -7,12 +7,11 @@
 
 package org.digijava.module.autopatcher.schema.impl.runtime;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.ValidationEvent;
-
+import com.sun.xml.bind.unmarshaller.InterningXMLReader;
 import org.xml.sax.SAXException;
 
-import com.sun.xml.bind.unmarshaller.InterningXMLReader;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.ValidationEvent;
 
 /**
  * Filter {@link SAXUnmarshallerHandler} that interns all the Strings

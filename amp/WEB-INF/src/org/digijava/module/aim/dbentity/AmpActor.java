@@ -1,9 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
-
-import java.io.Serializable;
-
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -13,6 +9,8 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.validator.groups.Submit;
+
+import java.io.Serializable;
 
 @TranslatableClass (displayName = "Actor")
 public class AmpActor  implements Serializable, Cloneable, Identifiable {

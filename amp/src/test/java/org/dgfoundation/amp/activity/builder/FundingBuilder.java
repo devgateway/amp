@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.activity.builder;
 
-import java.util.Date;
-import java.util.HashSet;
-
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.Date;
+import java.util.HashSet;
 
 /**
  * 

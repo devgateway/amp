@@ -7,8 +7,6 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.util.SectorUtil;
 
 public class ActivitySector implements Comparable<ActivitySector>, Serializable {
     private Long id;

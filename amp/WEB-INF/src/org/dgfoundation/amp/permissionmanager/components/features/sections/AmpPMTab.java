@@ -3,15 +3,13 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.components.fields.AmpCommentPanel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author dan

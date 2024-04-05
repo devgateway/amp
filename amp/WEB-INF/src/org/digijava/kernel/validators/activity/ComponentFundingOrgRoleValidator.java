@@ -1,14 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static java.util.Collections.emptyList;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -21,6 +12,10 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+
+import java.util.*;
+
+import static java.util.Collections.emptyList;
 
 /**
  * @author Octavian Ciubotaru

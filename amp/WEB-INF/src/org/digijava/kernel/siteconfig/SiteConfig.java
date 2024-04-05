@@ -22,8 +22,6 @@
 
 package org.digijava.kernel.siteconfig;
 
-import java.util.Vector;
-
 /**
  * Data class, used by Digester to parse site-config.xml.
  * See org.digijava.kernel.util.ConfigurationManager for more details

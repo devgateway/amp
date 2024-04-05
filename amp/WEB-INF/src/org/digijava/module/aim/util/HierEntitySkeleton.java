@@ -1,24 +1,13 @@
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
-import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.*;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.hibernate.jdbc.Work;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
 
 /*
  * skeleton class for amp_category_value_location

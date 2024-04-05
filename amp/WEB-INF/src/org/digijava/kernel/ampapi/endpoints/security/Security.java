@@ -1,25 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import java.util.List;
-
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.digijava.kernel.ampapi.endpoints.security.dto.AuthenticationRequest;
-import org.digijava.kernel.ampapi.endpoints.security.dto.LayoutInformation;
-import org.digijava.kernel.ampapi.endpoints.security.dto.MenuItemStructure;
-import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceInfo;
-import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
-import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceMember;
+import org.digijava.kernel.ampapi.endpoints.security.dto.*;
 import org.digijava.kernel.ampapi.endpoints.security.services.UserService;
 import org.digijava.kernel.ampapi.endpoints.security.services.WorkspaceMemberService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -29,6 +13,10 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * This class should have all security / permissions related methods

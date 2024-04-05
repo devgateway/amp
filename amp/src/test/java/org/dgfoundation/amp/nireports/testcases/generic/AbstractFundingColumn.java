@@ -1,17 +1,5 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.codegenerators.FundingCellEntry;
@@ -31,6 +19,18 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.testcases.IHardcodedNames;
 import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
 import org.dgfoundation.amp.nireports.testcases.TestcasesPrecisionSetting;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /**
  * a Funding Column which gets its data from a source which encodes the cells independent of the schema. 

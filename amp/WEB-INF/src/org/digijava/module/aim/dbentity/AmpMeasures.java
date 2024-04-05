@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.module.aim.annotations.reports.Identificator;
+
+import java.io.Serializable;
+import java.util.Set;
 
 //but used in reports engine
 public class AmpMeasures  implements Serializable, Comparable

@@ -22,26 +22,25 @@
 
 package org.digijava.kernel.util;
 
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.commons.asyncdispatcher.AsyncBuffer;
 import org.digijava.commons.asyncdispatcher.AsyncHandler;
 import org.digijava.kernel.Constants;
+import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.moduleconfig.Action;
+import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.entity.AccessLog;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.request.searchfriendly.ActionInformation;
-import org.digijava.kernel.config.moduleconfig.ModuleConfig;
+import org.digijava.kernel.user.User;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 
 public class AccessLogger
     implements AsyncHandler {
@@ -171,10 +170,10 @@ public class AccessLogger
             entry.setIdentityPattern(action.getIdentityPattern());
             //entry.setParameters(new HashMap(request.getParameterMap()));
 
-            HashMap params = new HashMap();
-            Enumeration enumParamNames = request.getParameterNames();
+            HashMap params = new HashMap<>();
+            Enumeration<String> enumParamNames = request.getParameterNames();
             while (enumParamNames.hasMoreElements()) {
-                String paramName = (String)enumParamNames.nextElement();
+                String paramName = enumParamNames.nextElement();
                 String paramValue = request.getParameter(paramName);
 
                 params.put(paramName, paramValue);
@@ -212,10 +211,10 @@ public class AccessLogger
         DigiConfig config = DigiConfigManager.getConfig();
         if (config.isEnableLogging()) {
             int buffSize = config.getAccessLogBuffSize() == null ? BUFFER_SIZE :
-                config.getAccessLogBuffSize().intValue();
+                    config.getAccessLogBuffSize();
 
             int poolSize = config.getAccessLogPoolSize() == null ? POOL_SIZE :
-                config.getAccessLogPoolSize().intValue();
+                    config.getAccessLogPoolSize();
 
             logger.info("Creating access logger. Buffer size: " + buffSize + ", pool size: " + poolSize);
             asyncBuffer = new AsyncBuffer(

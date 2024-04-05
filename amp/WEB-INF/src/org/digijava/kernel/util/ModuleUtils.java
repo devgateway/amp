@@ -22,16 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.config.moduleconfig.Action;
@@ -42,6 +32,14 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
+
+import javax.security.auth.Subject;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class contains module-related utillity functions. Module must be

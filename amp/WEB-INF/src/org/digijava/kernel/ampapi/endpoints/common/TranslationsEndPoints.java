@@ -1,31 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Example;
-import io.swagger.annotations.ExampleProperty;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
+import io.swagger.annotations.*;
 import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -37,6 +12,19 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.TranslationManager;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
 
 @Path("translations")
 @Api("translations")
@@ -152,11 +140,12 @@ public class TranslationsEndPoints {
     @Path("/languages/{langCode}")
     @ApiOperation("Change the language used in session.")
     @ApiMethod(ui = false, id = "LanguageSwitch")
-    public void switchLanguage(@PathParam("langCode") @ApiParam(name = "langCode", example = "fr") String langCode,
+    public String switchLanguage(@PathParam("langCode") @ApiParam(name = "langCode", example = "fr") String langCode,
                                @Context HttpServletResponse response) {
         Locale locale = new Locale();
         locale.setCode(langCode);
         DgUtil.switchLanguage(locale, TLSUtils.getRequest(), response);
+        return null;
     }
 
     @GET

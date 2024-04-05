@@ -1,5 +1,10 @@
 package org.digijava.module.aim.util;
 
+import org.dgfoundation.amp.ar.viewfetcher.*;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.hibernate.jdbc.Work;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,15 +12,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
-import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
-import org.hibernate.jdbc.Work;
 
 /**
  * lightweight alternative to AmpOrgGroup, usable in the (vast) majority of places in AMP where a full OrgGroup is not needed, but just a name and id

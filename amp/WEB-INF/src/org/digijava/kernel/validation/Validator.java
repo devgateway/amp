@@ -1,12 +1,12 @@
 package org.digijava.kernel.validation;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableSet;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Validator that follows type information from APIField.

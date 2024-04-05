@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.reports.xml;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class XmlReportUtil {
 

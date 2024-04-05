@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.dto.GisActivity;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

@@ -3,14 +3,9 @@
  */
 package org.dgfoundation.amp.reports;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.MeasureConstants;
+
+import java.util.*;
 
 /**
  * Stores different sets of measures with some custom rules

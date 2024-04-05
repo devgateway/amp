@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports;
 
-import java.math.BigDecimal;
-
 import org.apache.commons.collections.ComparatorUtils;
 import org.dgfoundation.amp.newreports.ReportSettings;
+
+import java.math.BigDecimal;
 
 /**
  * a Cell which contains a number. The number can be of any type (percentage, natural amount, etc)

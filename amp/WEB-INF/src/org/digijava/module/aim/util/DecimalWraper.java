@@ -1,8 +1,8 @@
 package org.digijava.module.aim.util;
 
-import java.math.BigDecimal;
-
 import org.digijava.module.aim.helper.FormatHelper;
+
+import java.math.BigDecimal;
 
 public class DecimalWraper {
 

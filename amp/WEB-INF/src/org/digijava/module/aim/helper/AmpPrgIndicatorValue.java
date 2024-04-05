@@ -1,8 +1,8 @@
 package org.digijava.module.aim.helper;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.dbentity.AmpLocation;
+
+import java.io.Serializable;
 
 public class AmpPrgIndicatorValue implements Serializable
 {

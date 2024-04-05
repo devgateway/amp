@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableList;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

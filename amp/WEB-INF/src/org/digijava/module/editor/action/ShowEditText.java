@@ -21,11 +21,6 @@
  */
 package org.digijava.module.editor.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -44,7 +39,12 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.form.EditorForm;
 import org.digijava.module.editor.util.Constants;
 import org.digijava.module.editor.util.DbUtil;
+
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>Title: DiGiJava</p>

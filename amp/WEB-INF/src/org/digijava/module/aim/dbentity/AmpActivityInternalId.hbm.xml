@@ -6,8 +6,8 @@
 		table="AMP_ACTIVITY_INTERNAL_ID">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_INTERNAL_ID_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_INTERNAL_ID_seq</param>
 			</generator>
 		</id>
 
@@ -15,7 +15,7 @@
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 
 		<many-to-one name="organisation" column="amp_org_id"
-			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" not-null="true" lazy="false"/>
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="merge" not-null="true" lazy="false"/>
 
 		<property name="internalId" column="internal_id" type="java.lang.String" />
 

@@ -7,17 +7,16 @@
 
 package org.digijava.module.digifeed.feeds.ar.schema.impl.runtime;
 
+import com.sun.xml.bind.Messages;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
-
-import com.sun.xml.bind.Messages;
 
 /**
  * Keeps the information about the grammar as a whole.

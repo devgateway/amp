@@ -6,14 +6,10 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Hashtable;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.ar.view.xls.XLSExportType;
+
+import java.lang.reflect.Constructor;
+import java.util.Hashtable;
 
 /**
  * Class describing a viewable behaviour. Viewable objects always have a viewer

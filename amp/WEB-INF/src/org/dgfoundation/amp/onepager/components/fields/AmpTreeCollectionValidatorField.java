@@ -3,14 +3,14 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpTreeCollectionValidator;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author mihai

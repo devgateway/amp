@@ -4,9 +4,9 @@
 */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -29,12 +29,11 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
      */
     public AmpSubsectionFeaturePanel(String id, String fmName){
         this(id, fmName,null);
-        
+
     }
 
     /**
      * @param id
-     * @param fmName
      * @param model
      * @throws Exception
      */
@@ -80,7 +79,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
             add(summary);
         }
     }
-    
+
     public TransparentWebMarkupContainer getSlider() {
         return slider;
     }

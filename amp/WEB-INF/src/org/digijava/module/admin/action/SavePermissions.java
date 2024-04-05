@@ -22,16 +22,8 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.ModuleInstancePermission;
@@ -44,6 +36,10 @@ import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.admin.form.GroupPermissionsForm;
 import org.digijava.module.admin.helper.AdminUIManager;
 import org.digijava.module.admin.util.DbUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class SavePermissions
     extends Action {

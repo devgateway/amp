@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class MiscReportsTests extends ReportsTestCase {
 

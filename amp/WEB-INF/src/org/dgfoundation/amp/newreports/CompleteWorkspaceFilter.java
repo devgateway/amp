@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.diffcaching.DatabaseChangedDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+
+import java.util.Set;
 
 /**
  * a cached, etl_log-invalidated, WorkspaceFilter which takes into account both the team and the team filters (if any)

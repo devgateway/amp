@@ -1,13 +1,13 @@
 package org.digijava.kernel.xmlpatches;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 
 public class XMLPatchTranslationService {
     

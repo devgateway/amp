@@ -4,10 +4,10 @@
  */
 package org.digijava.module.aim.helper;
 
-import java.util.ArrayList;
-
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpMeasure;
+
+import java.util.ArrayList;
 
 public class Measures {
     private Long id;

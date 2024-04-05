@@ -1,14 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.activity.values;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.activity.IndicatorRiskRatingExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.AbstractPossibleValuesBaseProvider;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

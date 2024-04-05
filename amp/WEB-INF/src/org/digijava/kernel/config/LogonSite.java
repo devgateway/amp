@@ -22,8 +22,6 @@
 
 package org.digijava.kernel.config;
 
-import org.digijava.kernel.util.SiteUtils;
-
 /**
  * <p>Title: DiGiJava</p>
  * <p>Description: </p>

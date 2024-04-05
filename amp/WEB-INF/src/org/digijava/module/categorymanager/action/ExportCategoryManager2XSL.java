@@ -1,17 +1,7 @@
 package org.digijava.module.categorymanager.action;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -24,6 +14,10 @@ import org.digijava.module.aim.util.AdminXSLExportUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
+
+import javax.servlet.http.HttpSession;
+import java.util.Collection;
+import java.util.List;
 
 public class ExportCategoryManager2XSL extends Action {
     private static Logger logger = Logger

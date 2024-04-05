@@ -1,13 +1,5 @@
 package org.digijava.kernel.geocoding.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.onepager.util.PercentagesUtil;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.entity.geocoding.GeoCodedActivity;
@@ -33,6 +25,10 @@ import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.digijava.kernel.entity.geocoding.GeoCodedActivity.Status.SAVED;
 

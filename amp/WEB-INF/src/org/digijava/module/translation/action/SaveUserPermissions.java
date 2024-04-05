@@ -22,9 +22,6 @@
 
 package org.digijava.module.translation.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -36,6 +33,9 @@ import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.translation.form.TranslationPermissionsForm;
 import org.digijava.module.translation.security.TranslateObject;
 import org.digijava.module.translation.security.TranslatePermission;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SaveUserPermissions
       extends Action {

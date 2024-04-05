@@ -3,21 +3,9 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -28,6 +16,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Detects which measures are visible in Activity Form and can be further used, 
@@ -120,7 +111,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 
     @SuppressWarnings("unchecked")
     private static Set<String> _getAllMeasures() {
-        return Collections.unmodifiableSet(new HashSet<String>(PersistenceManager.getSession().createSQLQuery("select distinct(measurename) from amp_measures").list()));
+        return Collections.unmodifiableSet(new HashSet<String>(PersistenceManager.getSession().createNativeQuery("select distinct(measurename) from amp_measures").list()));
     }
     
     /**

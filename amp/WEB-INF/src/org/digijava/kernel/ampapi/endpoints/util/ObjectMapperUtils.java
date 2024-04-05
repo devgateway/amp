@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
-import java.io.IOException;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dgfoundation.amp.algo.AlgoUtils;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

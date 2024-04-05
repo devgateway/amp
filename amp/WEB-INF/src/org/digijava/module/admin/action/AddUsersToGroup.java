@@ -22,23 +22,19 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.admin.util.DbUtil;
-import org.digijava.module.admin.form.GroupMembersForm;
-import org.digijava.module.admin.exception.AdminException;
-import java.util.StringTokenizer;
-import org.apache.log4j.Logger;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.admin.exception.AdminException;
+import org.digijava.module.admin.form.GroupMembersForm;
+import org.digijava.module.admin.util.DbUtil;
+
+import java.util.StringTokenizer;
 
 public class AddUsersToGroup
     extends Action {

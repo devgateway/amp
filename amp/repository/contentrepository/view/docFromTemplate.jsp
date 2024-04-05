@@ -36,6 +36,7 @@
 		</td>
 	  	<td>
 	  		<html:select property="docType" styleClass="dropdwn_sm">
+				<html:option value=""><digi:trn>Select Document Format</digi:trn></html:option>
 				<html:option value="pdf"><digi:trn>Pdf</digi:trn></html:option>
 				<html:option value="doc"><digi:trn>Word Document</digi:trn></html:option>
 			</html:select>

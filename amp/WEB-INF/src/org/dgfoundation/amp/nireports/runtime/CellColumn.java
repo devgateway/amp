@@ -1,22 +1,16 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import static java.util.Collections.emptyList;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.function.Consumer;
-
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.digijava.kernel.translator.LocalizableLabel;
+
+import java.util.*;
+import java.util.function.Consumer;
+
+import static java.util.Collections.emptyList;
 
 /**
  * a leaf column

@@ -7,12 +7,6 @@
 
 package org.digijava.module.message.jaxb.impl.runtime;
 
-import javax.xml.bind.ValidationEvent;
-
-import org.relaxng.datatype.Datatype;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import com.sun.msv.grammar.IDContextProvider2;
 import com.sun.msv.util.LightStack;
 import com.sun.msv.util.StartTagInfo;
@@ -26,6 +20,11 @@ import com.sun.xml.bind.marshaller.IdentifiableObject;
 import com.sun.xml.bind.serializer.AbortSerializationException;
 import com.sun.xml.bind.serializer.Util;
 import com.sun.xml.bind.validator.Messages;
+import org.relaxng.datatype.Datatype;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
+import javax.xml.bind.ValidationEvent;
 
 /**
  * XMLSerializer that calls the native interface of MSV and performs validation.

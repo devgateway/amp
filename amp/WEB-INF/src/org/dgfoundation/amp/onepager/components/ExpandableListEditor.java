@@ -22,6 +22,7 @@ public abstract class ExpandableListEditor<T> extends ListEditor<T> {
 
     public ExpandableListEditor(String id, IModel<Set<T>> model) {
         super(id, model, null);
+        this.currentLoadIndex = 1;
     }
 
     public ExpandableListEditor(String id, IModel<Set<T>> model, Comparator<T> comparator) {

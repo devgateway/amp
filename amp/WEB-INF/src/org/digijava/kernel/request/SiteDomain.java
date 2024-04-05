@@ -22,14 +22,14 @@
 
 package org.digijava.kernel.request;
 
-import static java.util.Comparator.comparing;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.util.SiteUtils;
 
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.apache.log4j.Logger;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.util.SiteUtils;
+import static java.util.Comparator.comparing;
 
 public class SiteDomain implements Serializable{
 

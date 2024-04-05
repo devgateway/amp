@@ -22,30 +22,25 @@
 
 package org.digijava.kernel.exception;
 
-import java.io.CharArrayWriter;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.dgfoundation.amp.error.AMPException;
+import org.apache.log4j.Logger;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.error.AMPTaggedExceptions;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
-import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
-
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.tiles.ComponentContext;
-import org.apache.struts.action.ActionForward;
-import org.digijava.kernel.util.DgUtil;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.Globals;
-import org.apache.struts.action.ActionMessages;
 
 public class ExceptionHelper {
 

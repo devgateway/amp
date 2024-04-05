@@ -4,12 +4,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.list.PageableListView;
@@ -21,6 +15,12 @@ import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMVi
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.um.exception.UMException;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 

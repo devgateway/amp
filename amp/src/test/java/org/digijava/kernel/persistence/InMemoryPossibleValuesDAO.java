@@ -1,11 +1,11 @@
 package org.digijava.kernel.persistence;
 
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
+import org.digijava.module.aim.dbentity.*;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
-import org.digijava.module.aim.dbentity.*;
 
 /**
  * Non-persistent implementation of {@code PossibleValuesDAO} which is backed by an in-memory map.

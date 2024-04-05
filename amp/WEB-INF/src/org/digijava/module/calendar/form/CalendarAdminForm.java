@@ -22,14 +22,14 @@
 
 package org.digijava.module.calendar.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.module.calendar.dbentity.CalendarSettings;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class CalendarAdminForm
     extends ActionForm {

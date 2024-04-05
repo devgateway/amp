@@ -2,9 +2,9 @@
 
 package org.digijava.module.aim.helper;
 
-import java.util.Comparator;
-
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+
+import java.util.Comparator;
 
 /**
  *

@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 

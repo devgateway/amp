@@ -22,22 +22,17 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.GroupsForm;
 import org.digijava.module.admin.util.DbUtil;
-import org.digijava.kernel.util.RequestUtils;
+
+import java.util.*;
 
 public class ShowGroups
     extends Action {

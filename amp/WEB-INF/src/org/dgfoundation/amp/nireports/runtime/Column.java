@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import org.dgfoundation.amp.nireports.ReportHeadingCell;
+import org.digijava.kernel.translator.LocalizableLabel;
+
 import java.util.List;
 import java.util.function.Consumer;
-
-import org.digijava.kernel.translator.LocalizableLabel;
-import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
  * a Report-output-column. All columns are immutable in the upside direction 

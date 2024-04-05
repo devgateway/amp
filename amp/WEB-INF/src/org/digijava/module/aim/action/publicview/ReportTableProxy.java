@@ -1,19 +1,15 @@
 package org.digijava.module.aim.action.publicview;
 
-import net.sf.ehcache.config.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.services.publicview.PublicViewReportCreator;
 import org.digijava.module.aim.services.publicview.conf.ConfigurationUtil;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 
 /**

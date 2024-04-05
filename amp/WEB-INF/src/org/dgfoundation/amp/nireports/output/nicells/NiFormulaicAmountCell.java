@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports.output.nicells;
 
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.NiPrecisionSetting;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
  * a {@link NiAmountCell} subclass with some extra possibilities 

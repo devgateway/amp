@@ -1,10 +1,10 @@
 package org.digijava.module.help.helper;
 
-import java.util.List;
-
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.util.HelpUtil;
+
+import java.util.List;
 
 /**
  * Helper class for Help topic.

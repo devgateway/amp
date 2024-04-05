@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 

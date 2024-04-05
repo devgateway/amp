@@ -1,11 +1,10 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import java.util.ArrayList;
 import org.dgfoundation.amp.ar.FilterParam;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * a {@link ViewFetcher} which rawly fetches data from a view/table

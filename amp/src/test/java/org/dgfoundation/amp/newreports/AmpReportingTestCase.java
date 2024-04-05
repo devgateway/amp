@@ -1,13 +1,12 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.List;
-
-import org.dgfoundation.amp.newreports.ReportingTestCase;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
+import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

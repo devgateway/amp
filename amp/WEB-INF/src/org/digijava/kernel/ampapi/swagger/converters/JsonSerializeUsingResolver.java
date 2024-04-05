@@ -1,9 +1,5 @@
 package org.digijava.kernel.ampapi.swagger.converters;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,6 +9,10 @@ import io.swagger.jackson.AbstractModelConverter;
 import io.swagger.models.Model;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Iterator;
 
 /**
  * <p>Swagger can't describe objects created by Jackson serializers/deserializers.

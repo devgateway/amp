@@ -1,14 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -16,11 +8,12 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.query.Query;
 
-import com.google.common.collect.ImmutableList;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class generates the filter list (tree) object for pledge donors
@@ -147,7 +140,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
         String query = "SELECT grpId FROM v_all_organizations_with_roles "
                 + "WHERE roles like '%" + getDonorRoleId() + "%'";
         
-        List<Long> rows = (List<Long>) session.createSQLQuery(query).list().stream()
+        List<Long> rows = (List<Long>) session.createNativeQuery(query).list().stream()
                 .map(o -> Long.parseLong(o.toString()))
                 .collect(Collectors.toList());
         

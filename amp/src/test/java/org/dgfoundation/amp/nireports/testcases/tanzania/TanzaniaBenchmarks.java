@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.nireports.testcases.tanzania;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.amp212.FilteringSanityChecks;
@@ -10,8 +7,11 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.testcases.SchemaBenchmarks;
 import org.dgfoundation.amp.nireports.testcases.BenchmarksRunner.BenchmarkResult;
+import org.dgfoundation.amp.nireports.testcases.SchemaBenchmarks;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * the entry point for NiReports' "Tanzania" offline performance benchmarks (e.g. a curated, hardcoded, dump of altered Tanzania DB)

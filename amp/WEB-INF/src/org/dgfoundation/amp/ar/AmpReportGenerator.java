@@ -6,33 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
-import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.dgfoundation.amp.ar.cell.CategCell;
-import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.ListCell;
-import org.dgfoundation.amp.ar.cell.MetaTextCell;
-import org.dgfoundation.amp.ar.cell.TextCell;
+import org.dgfoundation.amp.ar.cell.*;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -47,16 +23,18 @@ import org.dgfoundation.amp.ar.workers.TextColWorker;
 import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReportMeasures;
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.http.HttpSession;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * 

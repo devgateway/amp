@@ -1,13 +1,12 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 public class ActualDisbSplitCapRecTotalsCellGenerator extends
         SyntheticCellGenerator {

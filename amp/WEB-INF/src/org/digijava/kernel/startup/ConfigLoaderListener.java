@@ -22,28 +22,6 @@
 
 package org.digijava.kernel.startup;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryPoolMXBean;
-import java.lang.management.MemoryUsage;
-import java.security.Policy;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpServlet;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
@@ -61,6 +39,27 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServlet;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.MemoryUsage;
+import java.security.Policy;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Parses digi.xml configuration file,
@@ -205,17 +204,16 @@ public class ConfigLoaderListener
             verify=false;
             logger.warn("Memory Allocation Check Disabled! THIS SHOULD ONLY BE USED IN DEVELOPMENT ENVIRONMENTS !!");
         }
-             
-        Iterator iter = ManagementFactory.getMemoryPoolMXBeans().iterator();  
-        while(iter.hasNext()){  
-           MemoryPoolMXBean item = (MemoryPoolMXBean) iter.next();  
-               MemoryUsage mu = item.getUsage();  
-               long used      = mu.getUsed()/MB;  
-               long committed = mu.getCommitted()/MB;  
-               long max       = mu.getMax()/MB;  
-               logger.info("MEMORY Type "+item.getName()+": Used="+used+"m; Committed="+committed+"m; Max="+max+"m");
-               String setting=compat.getProperty("jvm."+item.getName().replaceAll(" ","").toLowerCase());
-               if(verify && setting!=null && Long.parseLong(setting)>max) throw new IncompatibleEnvironmentException("The JVM does not have enough memory allocated. Memory Type "+item.getName()+"; Max available="+max+"m; Max required="+Long.parseLong(setting)+"m"+DISABLE_MEM_PARAM); 
+
+        for (MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans()) {
+            MemoryUsage mu = item.getUsage();
+            long used = mu.getUsed() / MB;
+            long committed = mu.getCommitted() / MB;
+            long max = mu.getMax() / MB;
+            logger.info("MEMORY Type " + item.getName() + ": Used=" + used + "m; Committed=" + committed + "m; Max=" + max + "m");
+            String setting = compat.getProperty("jvm." + item.getName().replaceAll(" ", "").toLowerCase());
+            if (verify && setting != null && Long.parseLong(setting) > max)
+                throw new IncompatibleEnvironmentException("The JVM does not have enough memory allocated. Memory Type " + item.getName() + "; Max available=" + max + "m; Max required=" + Long.parseLong(setting) + "m" + DISABLE_MEM_PARAM);
         }
         long maxMemAvaiable=Runtime.getRuntime().maxMemory()/MB;
         logger.info("MEMORY Total Max: "+maxMemAvaiable+"m");

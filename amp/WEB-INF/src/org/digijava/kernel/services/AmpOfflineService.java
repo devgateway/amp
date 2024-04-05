@@ -1,5 +1,18 @@
 package org.digijava.kernel.services;
 
+import org.apache.commons.io.FileUtils;
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.digijava.kernel.Constants;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOfflineRelease;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,19 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import org.apache.commons.io.FileUtils;
-import org.dgfoundation.amp.algo.AlgoUtils;
-import org.digijava.kernel.Constants;
-import org.digijava.module.aim.dbentity.AmpOfflineRelease;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Octavian Ciubotaru

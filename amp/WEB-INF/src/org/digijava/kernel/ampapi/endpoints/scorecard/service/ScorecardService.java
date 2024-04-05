@@ -16,11 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpScorecardOrganisation;
-import org.digijava.module.aim.dbentity.AmpScorecardSettings;
-import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
@@ -29,7 +25,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
@@ -51,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import org.hibernate.query.Query;
 import static java.util.Calendar.YEAR;
 
 /**

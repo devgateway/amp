@@ -3,13 +3,12 @@
  */
 package org.digijava.module.contentrepository.jcrentity;
 
-import java.net.URLEncoder;
+import org.digijava.module.contentrepository.exception.LabelPropertiesEmptyCrException;
+import org.digijava.module.contentrepository.helper.CrConstants;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-
-import org.digijava.module.contentrepository.exception.LabelPropertiesEmptyCrException;
-import org.digijava.module.contentrepository.helper.CrConstants;
+import java.net.URLEncoder;
 
 /**
  * @author Alex Gartner

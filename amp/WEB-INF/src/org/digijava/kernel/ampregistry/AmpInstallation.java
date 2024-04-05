@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampregistry;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Describes an AMP Installation. Used by AMP Registry for AMP discovery.

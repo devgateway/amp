@@ -4,8 +4,8 @@
 	<class name="org.digijava.kernel.entity.ModuleInstance" table="DG_MODULE_INSTANCE" lazy="false">
 		<cache usage="read-write" />
 		<id name="moduleInstanceId" column="MODULE_INSTANCE_ID" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">dg_module_instance_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_module_instance_seq</param>
 			</generator>
 		</id>
 		<property column="MODULE_NAME" name="moduleName" type="java.lang.String" />

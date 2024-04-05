@@ -1,9 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
@@ -13,6 +9,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 

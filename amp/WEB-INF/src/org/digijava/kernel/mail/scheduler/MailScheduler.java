@@ -22,17 +22,19 @@
 
 package org.digijava.kernel.mail.scheduler;
 
-import org.quartz.Job;
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionException;
-import org.quartz.JobExecutionContext;
-import org.digijava.kernel.mail.util.DbUtil;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.mail.exception.*;
-import java.util.List;
-import java.util.*;
 import org.digijava.kernel.entity.MailSpool;
+import org.digijava.kernel.mail.exception.MailSpoolException;
+import org.digijava.kernel.mail.util.DbUtil;
 import org.digijava.kernel.mail.util.MailUtil;
+import org.digijava.kernel.util.DigiConfigManager;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>Title: </p>

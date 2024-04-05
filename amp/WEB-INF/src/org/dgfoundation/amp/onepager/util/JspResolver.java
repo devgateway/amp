@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.onepager.util;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Map;
-import java.util.StringTokenizer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.wicket.Application;
@@ -23,16 +15,22 @@ import org.apache.wicket.markup.resolver.IComponentResolver;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.Constants;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 public class JspResolver implements IComponentResolver {
     private static final long serialVersionUID = 1L;

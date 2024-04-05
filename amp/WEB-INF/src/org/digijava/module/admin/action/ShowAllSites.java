@@ -22,30 +22,29 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.admin.form.AllSitesForm;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.admin.util.SiteCallback;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.util.RequestUtils;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 
 /**

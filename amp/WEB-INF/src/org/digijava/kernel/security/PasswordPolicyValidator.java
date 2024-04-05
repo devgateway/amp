@@ -2,13 +2,7 @@ package org.digijava.kernel.security;
 
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.passay.CharacterRule;
-import org.passay.EnglishCharacterData;
-import org.passay.LengthRule;
-import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.RuleResult;
-import org.passay.UsernameRule;
+import org.passay.*;
 
 import java.util.Arrays;
 

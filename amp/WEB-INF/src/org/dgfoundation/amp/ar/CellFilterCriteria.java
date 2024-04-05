@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.ar;
 
-import org.dgfoundation.amp.ar.cell.*;
+import org.dgfoundation.amp.ar.cell.Cell;
 
 /**
  * interface for specifying a way of filtering cells

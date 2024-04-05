@@ -1,14 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.util.Date;

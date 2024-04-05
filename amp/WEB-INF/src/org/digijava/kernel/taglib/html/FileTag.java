@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.io.IOException;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.DgUtil;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import java.io.IOException;
 
 /**
  * Support inheritable resources like: images, css, javascript. giving

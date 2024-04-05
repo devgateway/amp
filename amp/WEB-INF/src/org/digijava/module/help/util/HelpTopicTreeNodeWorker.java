@@ -1,11 +1,11 @@
 package org.digijava.module.help.util;
 
-import java.util.List;
-
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpTopicTreeNode;
+
+import java.util.List;
 
 /**
  * Implements node worker interface. 

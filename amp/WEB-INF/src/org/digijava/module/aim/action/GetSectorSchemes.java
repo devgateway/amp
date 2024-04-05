@@ -1,24 +1,15 @@
 
 package org.digijava.module.aim.action ;
 
-import java.util.Collection;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.*;
+import org.digijava.module.aim.form.AddSectorForm;
+import org.digijava.module.aim.util.SectorUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.form.AddSectorForm;
-import org.digijava.module.aim.util.SectorUtil;
+import java.util.Collection;
 
 public class GetSectorSchemes extends Action {
 

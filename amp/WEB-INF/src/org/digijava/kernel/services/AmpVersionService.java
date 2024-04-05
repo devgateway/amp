@@ -1,13 +1,5 @@
 package org.digijava.kernel.services;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -20,6 +12,13 @@ import org.springframework.web.context.WebApplicationContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
+
+import javax.servlet.ServletContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

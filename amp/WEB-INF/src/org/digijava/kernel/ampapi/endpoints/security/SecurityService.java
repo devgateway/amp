@@ -3,16 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
@@ -21,12 +11,7 @@ import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
-import org.digijava.kernel.ampapi.endpoints.security.dto.AuthenticationRequest;
-import org.digijava.kernel.ampapi.endpoints.security.dto.LayoutInformation;
-import org.digijava.kernel.ampapi.endpoints.security.dto.MenuItemStructure;
-import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
-import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceInfo;
-import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
+import org.digijava.kernel.ampapi.endpoints.security.dto.*;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpVersionInfo;
@@ -50,6 +35,14 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 /**
  * Security Endpoint related services like menu, footer, user

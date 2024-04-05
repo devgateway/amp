@@ -1,12 +1,11 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.TeamMember;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Octavian Ciubotaru

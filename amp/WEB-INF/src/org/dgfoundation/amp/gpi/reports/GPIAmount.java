@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.LocalDate;
-
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.TranslatedDate;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * <strong>This class is deeply immutable</strong>

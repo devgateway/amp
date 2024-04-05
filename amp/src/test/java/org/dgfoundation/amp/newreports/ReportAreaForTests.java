@@ -1,16 +1,10 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.Stack;
-import java.util.function.Function;
-
 import junit.framework.TestCase;
-
 import org.dgfoundation.amp.algo.AmpCollections;
+
+import java.util.*;
+import java.util.function.Function;
 
 public class ReportAreaForTests extends ReportAreaImpl {
             

@@ -1,17 +1,17 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import static org.dgfoundation.amp.algo.AmpCollections.relist;
-
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.amp.AmpNiReportsFormatter;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
+
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.dgfoundation.amp.algo.AmpCollections.relist;
 
 /**
  * Builds a string digest out of ReportOutputColumns. Used to test if headers were generated correctly.

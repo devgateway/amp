@@ -3,13 +3,11 @@
  */
 package org.digijava.module.gateperm.form;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author mihai

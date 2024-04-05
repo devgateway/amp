@@ -6,40 +6,23 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.*;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
+import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.ComparableMonth;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.AmountCellColumn;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.AmpReportGenerator;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.CellColumn;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.FundingTypeSortedString;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.ar.ReportGenerator;
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
-import org.digijava.module.aim.helper.fiscalcalendar.ComparableMonth;
-import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 

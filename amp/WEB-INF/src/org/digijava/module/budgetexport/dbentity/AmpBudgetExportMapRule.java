@@ -1,8 +1,6 @@
 package org.digijava.module.budgetexport.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
-import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 
 import java.util.List;
 

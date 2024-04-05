@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
@@ -17,6 +13,10 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.hibernate.jdbc.Work;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Pledges Form tests

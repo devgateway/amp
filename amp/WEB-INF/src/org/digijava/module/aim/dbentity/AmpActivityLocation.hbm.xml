@@ -6,8 +6,8 @@
 		table="AMP_ACTIVITY_LOCATION">
 		<cache usage="read-write" />
 		<id name="id" column="amp_activity_location_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_LOCATION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_LOCATION_seq</param>
 			</generator>
 		</id>
 

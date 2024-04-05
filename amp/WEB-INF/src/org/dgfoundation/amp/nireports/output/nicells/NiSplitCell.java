@@ -1,18 +1,14 @@
 package org.dgfoundation.amp.nireports.output.nicells;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.dgfoundation.amp.nireports.ReportHierarchiesCollapser;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * a cell which holds info regarding the splitter cell of a hierarchy element (e.g. the name of a {@link NiReportData} and the ids having that id)

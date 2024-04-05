@@ -4,12 +4,12 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011

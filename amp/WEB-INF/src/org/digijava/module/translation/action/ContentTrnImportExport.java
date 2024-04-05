@@ -14,8 +14,6 @@ import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.util.DbUtil;
@@ -27,10 +25,7 @@ import org.digijava.module.translation.util.ContentTrnObjectType;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.*;
 
 

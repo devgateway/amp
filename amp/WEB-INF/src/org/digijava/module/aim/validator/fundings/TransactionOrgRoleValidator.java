@@ -1,16 +1,15 @@
 package org.digijava.module.aim.validator.fundings;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.validator.ActivityValidationContext;
 import org.springframework.util.CollectionUtils;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Viorel Chihai

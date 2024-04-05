@@ -1,9 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.validators.activity.AgreementCodeValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
@@ -13,6 +9,10 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 
 @TranslatableClass(displayName = "Agreement")
 public class AmpAgreement implements Serializable, Versionable, Identifiable {

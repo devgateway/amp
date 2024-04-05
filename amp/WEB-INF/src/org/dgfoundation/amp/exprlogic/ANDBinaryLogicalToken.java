@@ -2,7 +2,6 @@ package org.dgfoundation.amp.exprlogic;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.digijava.module.categorymanager.action.CategoryManager;
 
 public class ANDBinaryLogicalToken extends BinaryLogicalToken {
     

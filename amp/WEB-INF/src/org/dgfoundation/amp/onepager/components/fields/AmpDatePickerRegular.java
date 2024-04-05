@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Date;
-
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.model.IModel;
@@ -9,6 +7,8 @@ import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.converters.StrictPatternDateConverter;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.Date;
 
 /**
  * 

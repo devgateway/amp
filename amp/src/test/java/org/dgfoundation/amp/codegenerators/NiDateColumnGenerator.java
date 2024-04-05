@@ -1,14 +1,12 @@
 package org.dgfoundation.amp.codegenerators;
 
+import org.dgfoundation.amp.nireports.DateCell;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.nireports.DateCell;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 public class NiDateColumnGenerator extends ColumnGenerator {
 

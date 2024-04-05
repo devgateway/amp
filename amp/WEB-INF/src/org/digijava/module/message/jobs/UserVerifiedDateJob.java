@@ -1,17 +1,15 @@
 package org.digijava.module.message.jobs;
 
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 
 
 /**

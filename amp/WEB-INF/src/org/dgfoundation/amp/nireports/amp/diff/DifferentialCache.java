@@ -1,13 +1,9 @@
 package org.dgfoundation.amp.nireports.amp.diff;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.dgfoundation.amp.nireports.Cell;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * a differential cache of {@link Cell} instances which can update in batches of ids. <br />

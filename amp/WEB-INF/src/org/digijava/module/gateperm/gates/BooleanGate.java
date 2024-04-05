@@ -3,11 +3,11 @@
  */
 package org.digijava.module.gateperm.gates;
 
-import java.util.Map;
-import java.util.Queue;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Gate;
+
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * This gate receives only one parameter, a string representation of a boolean

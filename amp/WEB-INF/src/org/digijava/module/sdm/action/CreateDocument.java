@@ -22,8 +22,6 @@
 
 package org.digijava.module.sdm.action;
 
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -32,6 +30,8 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
+
+import java.util.List;
 
 public class CreateDocument
     extends Action {

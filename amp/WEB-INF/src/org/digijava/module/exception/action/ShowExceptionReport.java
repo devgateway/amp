@@ -22,22 +22,22 @@
 
 package org.digijava.module.exception.action;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.digijava.kernel.exception.ExceptionHelper;
 import org.digijava.kernel.exception.ExceptionInfo;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.exception.form.DigiExceptionReportForm;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.tiles.ComponentContext;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.user.User;
+import java.util.Enumeration;
 
 /**
  *

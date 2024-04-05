@@ -22,12 +22,12 @@
 
 package org.digijava.kernel.security;
 
-import java.io.Serializable;
-
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.security.permission.ObjectPermission;
 import org.digijava.kernel.util.ModuleUtils;
+
+import java.io.Serializable;
 
 public class ModuleInstancePermission
     extends ObjectPermission implements Serializable {

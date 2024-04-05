@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
+
+import java.io.IOException;
 
 /**
  * @author Octavian Ciubotaru

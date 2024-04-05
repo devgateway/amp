@@ -23,9 +23,6 @@
 package org.digijava.module.um.action;
 
 
-import java.util.Iterator;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -41,6 +38,8 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.um.form.UserUpdateForm;
 import org.digijava.module.um.util.DbUtil;
+
+import java.util.Iterator;
 
 
 /**

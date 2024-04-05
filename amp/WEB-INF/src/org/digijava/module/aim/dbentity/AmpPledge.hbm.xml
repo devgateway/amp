@@ -5,8 +5,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpPledge" table="AMP_PLEDGES">
 		<cache usage="read-write" />
 		<id name="ampPledgeId" column="amp_pledge_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_PLEDGES_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_PLEDGES_seq</param>
 			</generator>
 		</id>
 		

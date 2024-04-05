@@ -2,7 +2,6 @@ package org.digijava.module.aim.logic.boliviaimpl;
 
 
 import org.digijava.module.aim.logic.DonorFundingCalculator;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 
 /**

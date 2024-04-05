@@ -1,10 +1,5 @@
 package org.digijava.module.contentrepository.helper.filter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.TeamUtil;
@@ -13,6 +8,10 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.jcrentity.LabelDAO;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DocumentFilterJson {
     private List<Label> filterLabels;

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.FeatureTemplates" table="AMP_FEATURE_TEMPLATES">
 		<cache usage="read-write" />
 		<id name="templateId" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_feature_templates_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_feature_templates_seq</param>
 			</generator>
 		</id>
 		<property name="featureTemplateName" column="featureTemplateName" type="java.lang.String" />

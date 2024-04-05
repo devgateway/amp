@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.syndication.publicator;
 
-import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.Vector;
-
 import org.digijava.kernel.syndication.digester.Rss;
 import org.digijava.kernel.syndication.digester.RssChannel;
 import org.digijava.kernel.syndication.digester.RssItem;
+
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * <p>Title: </p>

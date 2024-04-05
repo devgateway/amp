@@ -6,8 +6,8 @@
 		<cache usage="read-write" />
 
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_THEME_MAPPING_SEQ</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_THEME_MAPPING_SEQ</param>
 			</generator>
 		</id>
 

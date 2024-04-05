@@ -1,14 +1,14 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static org.dgfoundation.amp.nireports.NiUtils.failIf;
+import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 
 /**
  * This class holds all columns that can be used as hierarchies are at sub activity level. In other words one activity

@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.onepager.converters;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
 import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.digijava.module.aim.helper.FormatHelper;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Created by esoliani on 24/03/16.

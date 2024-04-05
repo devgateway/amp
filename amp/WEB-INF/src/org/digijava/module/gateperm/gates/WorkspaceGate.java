@@ -4,13 +4,13 @@
  */
 package org.digijava.module.gateperm.gates;
 
-import java.util.Map;
-import java.util.Queue;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * This gate returns true if the {@link GatePermConst.ScopeKeys#CURRENT_MEMBER}

@@ -7,27 +7,21 @@
 
 package org.digijava.module.message.jaxb.impl.runtime;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
+import com.sun.xml.bind.JAXBAssertionError;
+import com.sun.xml.bind.unmarshaller.Messages;
+import com.sun.xml.bind.unmarshaller.Tracer;
+import com.sun.xml.bind.util.AttributesImpl;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
-import com.sun.xml.bind.JAXBAssertionError;
-import com.sun.xml.bind.unmarshaller.Messages;
-import com.sun.xml.bind.unmarshaller.Tracer;
-import com.sun.xml.bind.util.AttributesImpl;
+import java.util.*;
 
 /**
  * Implementation of {@link UnmarshallerHandler}.

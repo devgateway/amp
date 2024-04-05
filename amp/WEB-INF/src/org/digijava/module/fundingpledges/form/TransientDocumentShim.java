@@ -1,6 +1,5 @@
 package org.digijava.module.fundingpledges.form;
 
-import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;

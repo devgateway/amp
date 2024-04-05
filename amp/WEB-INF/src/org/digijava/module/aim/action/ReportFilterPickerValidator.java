@@ -1,8 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -10,6 +7,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.FormatHelper;
+
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 public class ReportFilterPickerValidator extends Action {
     private static Logger logger = Logger

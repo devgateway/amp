@@ -5,8 +5,8 @@
 		<cache usage="read-write" />
 
 		<id name="ampComponentId" column="amp_component_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_COMPONENTS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COMPONENTS_seq</param>
 			</generator>
 		</id>
 
@@ -16,7 +16,7 @@
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />
 
 		<many-to-one name="activity" column="amp_activity_id" index="i_activity"
-					 class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
+					 class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete"/>
 
 		<many-to-one name="type" column="type"
 			class="org.digijava.module.aim.dbentity.AmpComponentType" cascade="none" />

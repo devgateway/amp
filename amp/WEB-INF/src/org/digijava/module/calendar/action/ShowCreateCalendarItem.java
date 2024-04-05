@@ -22,21 +22,21 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.calendar.form.CalendarItemForm;
-import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.module.calendar.dbentity.Calendar;
+import org.digijava.module.calendar.form.CalendarItemForm;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.GregorianCalendar;
 
 /**
  * Action renders form, whith which new event is created

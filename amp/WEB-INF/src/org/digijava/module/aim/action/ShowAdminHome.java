@@ -1,7 +1,5 @@
 package org.digijava.module.aim.action;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -9,6 +7,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+
+import javax.servlet.http.HttpSession;
 
 public class ShowAdminHome extends Action {
 

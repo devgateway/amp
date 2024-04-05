@@ -1,14 +1,14 @@
 package org.digijava.kernel.entity.geocoding;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.serializers.GeoCodedCategoryValueLocationSerializer;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

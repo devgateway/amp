@@ -1,11 +1,5 @@
 package org.digijava.module.aim.util;
 
-import static org.digijava.module.aim.util.DynLocationManagerUtil.ErrorCode.CORRECT_CONTENT;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.*;
-
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.AbstractIntegrationTest;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -18,6 +12,13 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.digijava.module.aim.util.DynLocationManagerUtil.ErrorCode.CORRECT_CONTENT;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class DynLocationManagerUtilTest extends AbstractIntegrationTest {
     

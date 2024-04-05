@@ -22,9 +22,6 @@
 
 package org.digijava.kernel.robots;
 
-import java.io.StringReader;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.robots.config.RobotsConfig;
@@ -33,6 +30,9 @@ import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceException;
 import org.digijava.kernel.util.DigesterFactory;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.StringReader;
 
 public class RobotsTxtService
     extends AbstractServiceImpl {

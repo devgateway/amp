@@ -1,17 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
-
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.digijava.kernel.ampapi.endpoints.activity.LocationExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
+import java.util.List;
+import java.util.Map;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
 
 /**
  * @author Nadejda Mandrescu

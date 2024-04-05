@@ -1,20 +1,17 @@
 package org.digijava.module.aim.util;
 
-import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.util.Collection;
-
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Cell;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpChapter;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.Collection;
 
 public class ChapterUtil {
     private static Logger logger = Logger.getLogger(ChapterUtil.class);

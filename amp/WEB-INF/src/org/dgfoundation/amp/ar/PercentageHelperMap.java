@@ -3,12 +3,12 @@
  */
 package org.dgfoundation.amp.ar;
 
+import org.dgfoundation.amp.ar.PercentageHelperMap.PercentageHelperList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import org.dgfoundation.amp.ar.PercentageHelperMap.PercentageHelperList;
 
 /**
  * @author Alex Gartner

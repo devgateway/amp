@@ -1,21 +1,17 @@
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.calendar.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.calendar.form.EditActivityForm;
+
+import java.util.*;
 
 public class OrganisationSelected extends Action {
 

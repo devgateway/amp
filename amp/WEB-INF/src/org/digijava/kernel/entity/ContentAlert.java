@@ -22,10 +22,6 @@
 
 package org.digijava.kernel.entity;
 
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.request.Site;
-import java.sql.Clob;
-import java.util.Set;
 import java.io.Serializable;
 
 public class ContentAlert

@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.newreports;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.dgfoundation.amp.ar.ArConstants;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.dgfoundation.amp.ar.ArConstants;
 
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 

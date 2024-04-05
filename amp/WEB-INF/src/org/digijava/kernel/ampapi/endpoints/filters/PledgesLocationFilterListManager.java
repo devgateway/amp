@@ -1,10 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_4;
+import com.google.common.collect.ImmutableMap;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,11 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-
-import com.google.common.collect.ImmutableMap;
+import static org.digijava.module.categorymanager.util.CategoryConstants.*;
 
 /**
  * This class generates the filter list (tree) object for pledges locations

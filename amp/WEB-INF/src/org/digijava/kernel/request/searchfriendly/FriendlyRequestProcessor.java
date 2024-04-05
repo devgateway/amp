@@ -22,13 +22,8 @@
 
 package org.digijava.kernel.request.searchfriendly;
 
-import java.io.IOException;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.log4j.Logger;
+import org.digijava.kernel.Constants;
 import org.digijava.kernel.config.moduleconfig.Action;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.config.moduleconfig.Param;
@@ -37,8 +32,13 @@ import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.Constants;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * This class processes search friendly URLs

@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.request.service;
 
-import org.digijava.kernel.service.AbstractServiceImpl;
-import org.digijava.kernel.service.ServiceContext;
-import org.digijava.kernel.service.ServiceException;
 import gnu.jel.CompilationException;
 import gnu.jel.CompiledExpression;
 import gnu.jel.Evaluator;
 import gnu.jel.Library;
+import org.digijava.kernel.service.AbstractServiceImpl;
+import org.digijava.kernel.service.ServiceContext;
+import org.digijava.kernel.service.ServiceException;
 
 public class IgnoredAgentsService
     extends AbstractServiceImpl {

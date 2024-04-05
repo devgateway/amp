@@ -4,12 +4,12 @@
  */
 package org.digijava.module.gateperm.util;
 
+import org.apache.log4j.Logger;
+import org.digijava.module.gateperm.core.GatePermConst;
+
 import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
  * ActionUtil.java TODO description here

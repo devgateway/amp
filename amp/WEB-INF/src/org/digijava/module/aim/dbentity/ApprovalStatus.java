@@ -13,19 +13,19 @@ public enum ApprovalStatus implements Identifiable {
     /**
      * In use. Not supported by reports. Should be removed in favor of started.
      */
-    CREATED("created", 0),
-    APPROVED("approved", 1),
-    EDITED("edited", 2),
-    STARTED_APPROVED("startedapproved", 3),
-    STARTED("started", 4),
+    created("created", 0),
+    approved("approved", 1),
+    edited("edited", 2),
+    startedapproved("startedapproved", 3),
+    started("started", 4),
     /**
      * Not in use. Synonym to rejected?
      */
-    NOT_APPROVED("not_approved", 5),
-    REJECTED("rejected", 6);
+    not_approved("not_approved", 5),
+    rejected("rejected", 6);
 
-    private String dbName;
-    private Integer id;
+    private final String dbName;
+    private final Integer id;
 
     ApprovalStatus(String dbName, Integer id) {
         this.dbName = dbName;

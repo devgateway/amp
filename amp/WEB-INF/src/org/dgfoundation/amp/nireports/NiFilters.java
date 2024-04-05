@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * This interface is the NiReports faucet of filtering, e.g.  a NiReports-specific reinterpretation of {@link ReportFilters}. <br />

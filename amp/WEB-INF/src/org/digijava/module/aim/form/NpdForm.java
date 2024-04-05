@@ -1,10 +1,10 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+
+import java.util.Collection;
+import java.util.List;
 
 public class NpdForm extends ActionForm {
 

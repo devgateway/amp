@@ -1,10 +1,11 @@
 package org.digijava.module.aim.uicomponents.form;
 
-import java.util.List;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
+
+import java.util.List;
 
 public class AddContactComponentForm extends ActionForm {
 

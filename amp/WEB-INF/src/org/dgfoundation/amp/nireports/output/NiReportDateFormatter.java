@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -12,6 +8,10 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.joda.time.DateTime;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  * a formatter which converts dates in different calendars

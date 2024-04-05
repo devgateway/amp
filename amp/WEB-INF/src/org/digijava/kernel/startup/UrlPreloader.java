@@ -22,8 +22,8 @@
 
 package org.digijava.kernel.startup;
 
+import org.apache.log4j.Logger;
 import org.digijava.commons.asyncdispatcher.AsyncHandler;
-import org.apache.log4j.*;
 
 public class UrlPreloader implements AsyncHandler {
 

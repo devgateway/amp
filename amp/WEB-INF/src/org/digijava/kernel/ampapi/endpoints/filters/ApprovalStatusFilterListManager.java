@@ -1,16 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.TeamMemberUtil;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class generates the filter list (tree) object for activity approval status

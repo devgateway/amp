@@ -1,11 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -18,6 +12,12 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Persister class for Structures
@@ -186,8 +186,8 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
         aux.setActivity(newActivity);
         aux.setAmpStructureId(null);
         
-        if (aux.getImages() != null && aux.getImages().size() > 0) {
-            Set<AmpStructureImg> auxSetImages = new HashSet<AmpStructureImg>();
+        if (aux.getImages() != null && !aux.getImages().isEmpty()) {
+            Set<AmpStructureImg> auxSetImages = new HashSet<>();
             for (AmpStructureImg img : aux.getImages()) {
                 AmpStructureImg auxImg = (AmpStructureImg) img.clone();
                 auxImg.setId(null);
@@ -196,11 +196,11 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             }
             aux.setImages(auxSetImages);
         } else {
-            aux.setImages(null);
+            aux.setImages(new HashSet<>());
         }
 
-        if (aux.getCoordinates() != null && aux.getCoordinates().size() > 0) {
-            List<AmpStructureCoordinate> coords = new ArrayList<AmpStructureCoordinate>();
+        if (aux.getCoordinates() != null && !aux.getCoordinates().isEmpty()) {
+            List<AmpStructureCoordinate> coords = new ArrayList<>();
             for (AmpStructureCoordinate coord : aux.getCoordinates()) {
                 AmpStructureCoordinate auxCoord = (AmpStructureCoordinate) coord.clone();
                 auxCoord.setAmpStructureCoordinateId(null);
@@ -209,7 +209,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             }
             aux.setCoordinates(coords);
         } else {
-            aux.setCoordinates(null);
+            aux.setCoordinates(new ArrayList<>());
         }
 
         return aux;

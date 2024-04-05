@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
@@ -21,8 +16,13 @@ import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.glassfish.jersey.server.ContainerRequest;
 
-import com.sun.jersey.spi.container.ContainerRequest;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
+
 
 /**
  * Authorizes current API request based on the given set of required actions 
@@ -52,7 +52,8 @@ public class ActionAuthorizer {
         }
 
         Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
-        
+        logger.info("Authenticated: "+AuthRule.AUTHENTICATED +"User: "+TeamUtil.getCurrentUser());
+
         if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
             ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
         }

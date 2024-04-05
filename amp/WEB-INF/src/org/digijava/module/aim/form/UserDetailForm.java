@@ -1,10 +1,10 @@
 package org.digijava.module.aim.form;
 
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.um.form.UserProfileForm;
+
 import java.util.Collection;
 import java.util.List;
-import org.digijava.module.aim.helper.TeamMember;
-
-import org.digijava.module.um.form.UserProfileForm;
 
 public class UserDetailForm extends UserProfileForm
 {

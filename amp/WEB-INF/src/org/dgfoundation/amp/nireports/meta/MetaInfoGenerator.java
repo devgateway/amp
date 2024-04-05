@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.meta;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.nireports.ImmutablePair;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * a caching generator of MetaInfo, used for saving memory and GC runtime <br />

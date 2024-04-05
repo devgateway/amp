@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpAuditLogger" table="AMP_AUDIT_LOGGER">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_AUDIT_LOGGER_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_AUDIT_LOGGER_seq</param>
 			</generator>
 		</id>
 

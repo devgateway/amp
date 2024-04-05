@@ -1,11 +1,11 @@
 package org.digijava.kernel.security;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @author Octavian Ciubotaru

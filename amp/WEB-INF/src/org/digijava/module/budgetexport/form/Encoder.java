@@ -3,11 +3,11 @@
  */
 package org.digijava.module.budgetexport.form;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.digijava.module.budgetexport.util.MappingEncoder;
 import org.digijava.module.budgetexport.util.MappingRetrieverImplementation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Alex Gartner

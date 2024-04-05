@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
-import java.util.Set;
-import java.util.SortedSet;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
+
+import java.util.Date;
+import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * Basic user information

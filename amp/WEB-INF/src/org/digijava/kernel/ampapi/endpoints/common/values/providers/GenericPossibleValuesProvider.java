@@ -1,14 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import static java.util.stream.Collectors.toList;
-import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.newServerErrorException;
-
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
@@ -21,7 +13,14 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvi
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 
-import com.google.common.collect.ImmutableMap;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toList;
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.newServerErrorException;
 
 
 public class GenericPossibleValuesProvider implements PossibleValuesProvider {

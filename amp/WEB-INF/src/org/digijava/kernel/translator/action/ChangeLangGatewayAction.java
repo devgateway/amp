@@ -22,12 +22,6 @@
 
 package org.digijava.kernel.translator.action;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -35,6 +29,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /* Controller Class that's called by Struts or Tiles ActionServlet... See the definitions in
  * struts-config.xml under /Web-INF/
@@ -80,31 +79,27 @@ public final class ChangeLangGatewayAction extends Action {
 
         //first check for site-domain/site-path mapping to the destination locale...
         java.util.Collection col = RequestUtils.getSite(request).getSiteDomains();
-        java.util.Iterator it = col.iterator();
 
-        while(it.hasNext()){
-            org.digijava.kernel.request.SiteDomain domain =(org.digijava.kernel.request.SiteDomain)it.next();
-            if(domain.getLanguage() != null && domain.getLanguage().getCode().equals(selectedLocale)){
+        for (Object o : col) {
+            org.digijava.kernel.request.SiteDomain domain = (org.digijava.kernel.request.SiteDomain) o;
+            if (domain.getLanguage() != null && domain.getLanguage().getCode().equals(selectedLocale)) {
                 localeUrl = DgUtil.getSiteUrl(domain, request);
                 break;
             }
 
-            if(logger.isDebugEnabled())
+            if (logger.isDebugEnabled())
                 logger.debug(" domain object got " + domain);
         }
 
 
 
         if(localeUrl.equals("")){
-            it = col.iterator();
-            while(it.hasNext()){
-                org.digijava.kernel.request.SiteDomain domain1 = (org.digijava.kernel.request.SiteDomain)it.next();
-                if(domain1.getLanguage() == null){
+            for (Object o : col) {
+                org.digijava.kernel.request.SiteDomain domain1 = (org.digijava.kernel.request.SiteDomain) o;
+                if (domain1.getLanguage() == null) {
 
-                    if(localeUrl.equals("")){
-                        localeUrl = DgUtil.getSiteUrl(domain1, request);
-                        break;
-                    }
+                    localeUrl = DgUtil.getSiteUrl(domain1, request);
+                    break;
                 }
             }
         }

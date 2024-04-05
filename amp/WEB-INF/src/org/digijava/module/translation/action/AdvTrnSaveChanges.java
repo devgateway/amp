@@ -1,11 +1,5 @@
 package org.digijava.module.translation.action;
 
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +13,11 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.translation.util.ListChangesBuffer;
 import org.digijava.module.translation.util.ListChangesBuffer.ChangedItem;
 import org.digijava.module.translation.util.ListChangesBuffer.Operation;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Executes buffered actions.

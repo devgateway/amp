@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpIndicatorColor" table="AMP_INDICATOR_COLOR">
 		<cache usage="read-write" />
 		<id name="indicatorColorId" column="amp_indicator_color_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_INDICATOR_COLOR_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_INDICATOR_COLOR_seq</param>
 			</generator>
 		</id>
 		<property column="color" name="color" type="java.lang.String" />

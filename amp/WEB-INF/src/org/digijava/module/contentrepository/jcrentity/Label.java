@@ -3,21 +3,16 @@
  */
 package org.digijava.module.contentrepository.jcrentity;
 
+import org.digijava.module.contentrepository.exception.LabelPropertiesEmptyCrException;
+import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.*;
 import java.io.Serializable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
-import org.digijava.module.contentrepository.exception.LabelPropertiesEmptyCrException;
-import org.digijava.module.contentrepository.helper.CrConstants;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
  * @author Alex Gartner

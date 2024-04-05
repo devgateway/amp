@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.testcases.tanzania.dimensions;
 
-import static org.dgfoundation.amp.nireports.testcases.HNDNode.element;
+import org.dgfoundation.amp.nireports.testcases.HNDNode;
+import org.dgfoundation.amp.nireports.testcases.HardcodedNiDimension;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.nireports.testcases.HNDNode;
-import org.dgfoundation.amp.nireports.testcases.HardcodedNiDimension;
+import static org.dgfoundation.amp.nireports.testcases.HNDNode.element;
 
 public class ProgramsTestDimension extends HardcodedNiDimension {
 

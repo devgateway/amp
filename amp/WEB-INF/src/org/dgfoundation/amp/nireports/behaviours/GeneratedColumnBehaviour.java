@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
@@ -16,6 +13,9 @@ import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * an abstract behaviour of a fully-custom aggregated column/measure. <br />

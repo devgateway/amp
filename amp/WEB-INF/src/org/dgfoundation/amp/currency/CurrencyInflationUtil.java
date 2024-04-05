@@ -3,21 +3,13 @@
  */
 package org.dgfoundation.amp.currency;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpCurrencyRate;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpInflationRate;
-import org.digijava.module.aim.dbentity.AmpInflationSource;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
+
+import java.util.*;
 
 /**
  * Common currency inflation rates utility methods
@@ -49,7 +41,7 @@ public class CurrencyInflationUtil {
     }
     
     public static void deleteAllInflationRates() {
-        PersistenceManager.getSession().createSQLQuery("DELETE FROM amp_inflation_rates WHERE 1=1").executeUpdate();
+        PersistenceManager.getSession().createNativeQuery("DELETE FROM amp_inflation_rates WHERE 1=1").executeUpdate();
     }
     
     public static List<AmpCurrency> getConstantAmpCurrencies() {

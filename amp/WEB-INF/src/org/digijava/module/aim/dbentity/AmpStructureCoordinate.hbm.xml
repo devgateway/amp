@@ -5,8 +5,8 @@
 		table="AMP_STRUCTURE_COORDINATE">
 		<cache usage="read-write" />
 		<id name="ampStructureCoordinateId" column="amp_structure_coordinate_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_STRUCTURE_COORDINATE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_STRUCTURE_COORDINATE_seq</param>
 			</generator>
 		</id>
 		<property column="latitude" name="latitude" type="text" />

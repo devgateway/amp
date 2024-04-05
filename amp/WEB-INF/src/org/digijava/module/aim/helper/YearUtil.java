@@ -1,11 +1,11 @@
 package org.digijava.module.aim.helper;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-
-import org.apache.log4j.Logger;
 
 public class YearUtil {
     private static Logger logger = Logger.getLogger(YearUtil.class) ;

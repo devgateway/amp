@@ -22,11 +22,11 @@
 
 package org.digijava.kernel.config;
 
+import org.digijava.kernel.viewmanager.ViewConfigFactory;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-
-import org.digijava.kernel.viewmanager.ViewConfigFactory;
 
 /**
  * Data class, used by Digester to parse digi.xml.

@@ -22,11 +22,6 @@
 
 package org.digijava.kernel.security.util;
 
-import java.security.Permission;
-import java.util.Iterator;
-
-import org.hibernate.Session;
-
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -38,6 +33,10 @@ import org.digijava.kernel.user.GroupPermission;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.DummyServletContext;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.hibernate.Session;
+
+import java.security.Permission;
+import java.util.Iterator;
 
 public class PermissionConverter {
 

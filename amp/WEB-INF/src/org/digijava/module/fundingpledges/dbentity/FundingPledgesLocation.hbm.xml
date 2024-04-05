@@ -5,8 +5,8 @@
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long"
 			unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">AMP_FUNDING_PLEDGES_LOCATION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_PLEDGES_LOCATION_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="location" column="location_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" lazy="false" cascade="none" not-null="true" />

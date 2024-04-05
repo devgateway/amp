@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+
 import java.util.Map;
 import java.util.Set;
-
-import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 
 /**
  * an {@link IdsAcceptor} which does equality testing on the id (most useful for degenerate dimensions)

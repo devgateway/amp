@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.common.fm;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class FMSettingsResult<T> {

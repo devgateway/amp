@@ -6,6 +6,28 @@
  */
 package org.digijava.module.aim.action;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.*;
+import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
+import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
+import org.dgfoundation.amp.ar.view.pdf.ReportPdfExportState;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ResponseUtil;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.AdvancedReportForm;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -14,53 +36,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.GenericViews;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
-import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
-import org.dgfoundation.amp.ar.view.pdf.ReportPdfExportState;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.ResponseUtil;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
-
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Document;
-import com.lowagie.text.ExceptionConverter;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPageEvent;
-import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 
@@ -104,13 +79,13 @@ public class PDFExportAction extends Action implements PdfPageEvent
         // This a temporary fix to avoid stack overflow error in large reports AMP-5324
         // temporary my a$$
         Rectangle page = new Rectangle(new Float("1500"), new Float("1500"));
-        Document document = new Document(page.rotate(),5, 5, 15, 50);               
+        Document document = new Document(page.rotate(),5, 5, 15, 50);
             
         //
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, report.getName() + ".pdf"));
         //
-        PdfWriter writer = PdfWriter.getInstance(document,response.getOutputStream());      
+        PdfWriter writer = PdfWriter.getInstance(document,response.getOutputStream());
         //
         writer.setPageEvent(this);
         // noteFromSession=AmpReports.getNote(request.getSession());    
@@ -262,11 +237,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
                 String urlPrefix = this.request.getRequestURL().substring(0, end); 
                 try {
                     logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
-                } catch (BadElementException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (BadElementException | IOException e) {
                     e.printStackTrace();
                 }
                 PdfPCell pdfc;  
@@ -292,7 +263,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
             }                                                       
             if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header        
                 PdfPCell pdfc;
-                    Font font = new Font(Font.COURIER, 8, Font.COURIER);        
+                    Font font = new Font(Font.FontFamily.COURIER, 8);
                 pdfc = new PdfPCell(new Paragraph(stmt, font));
                 pdfc.setPaddingBottom(10);
                 pdfc.setPaddingTop(10);
@@ -311,7 +282,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
         translatedReportDescription=TranslatorWorker.translateText("Description:");
     
         PdfPCell pdfc;
-            Font titleFont = new Font(Font.COURIER, 8, Font.COURIER);       
+            Font titleFont = new Font(Font.FontFamily.COURIER, 8);
             //Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);               
         pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
         pdfc.setPaddingBottom(10);
@@ -331,7 +302,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
         //translatedNotes
         //ArConstants.SELECTED_CURRENCY
         //Currency
-            Font currencyFont = new Font(Font.COURIER, 10, Font.ITALIC);
+            Font currencyFont = new Font(Font.FontFamily.COURIER, 10, Font.ITALIC);
         pdfc = new PdfPCell(new Paragraph(translatedAmount+": "+translatedCurrency,currencyFont));
         pdfc.setPaddingBottom(2);
         pdfc.setPaddingTop(2);

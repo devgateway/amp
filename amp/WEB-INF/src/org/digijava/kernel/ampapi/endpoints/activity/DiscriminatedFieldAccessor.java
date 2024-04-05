@@ -1,15 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.digijava.kernel.request.TLSUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 
@@ -46,7 +41,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     @Override
     public <T> T get(Object targetObject) {
         Collection<?> collection = getWrappedCollection(targetObject);
-        String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
+        String prefix = String.valueOf(TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX));
         if (multipleValues) {
             return (T) getList(collection, prefix);
         } else {
@@ -85,7 +80,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     @Override
     public void set(Object targetObject, Object value) {
         Collection targetCollection = getWrappedCollection(targetObject);
-        String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
+        String prefix = String.valueOf(TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX));
 
         if (multipleValues) {
             setList(targetCollection, (Collection) value, prefix);

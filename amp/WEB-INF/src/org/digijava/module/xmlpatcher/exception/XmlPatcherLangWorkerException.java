@@ -5,10 +5,9 @@
  */
 package org.digijava.module.xmlpatcher.exception;
 
-import java.sql.BatchUpdateException;
-
 import org.apache.log4j.Logger;
-import org.digijava.module.xmlpatcher.core.XmlPatcherService;
+
+import java.sql.BatchUpdateException;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

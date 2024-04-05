@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.nireports.output.nicells;
 
-import java.util.Map;
-
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
+import java.util.Map;
 
 /**
  * a cell which holds a text

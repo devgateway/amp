@@ -3,10 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.util;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
@@ -14,6 +10,10 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Utility methods to build dates / years filters

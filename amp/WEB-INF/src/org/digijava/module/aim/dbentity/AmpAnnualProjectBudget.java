@@ -1,13 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable {
 

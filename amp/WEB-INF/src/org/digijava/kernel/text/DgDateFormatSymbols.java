@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.text;
 
-import java.util.Locale;
-
 import org.digijava.kernel.text.parser.LocaleData;
 import org.digijava.kernel.text.parser.LocaleParser;
+
+import java.util.Locale;
 
 public class DgDateFormatSymbols
     extends java.text.DateFormatSymbols {

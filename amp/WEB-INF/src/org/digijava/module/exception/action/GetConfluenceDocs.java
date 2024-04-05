@@ -1,27 +1,18 @@
 package org.digijava.module.exception.action;
 
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.codehaus.swizzle.confluence.Confluence;
-import org.digijava.kernel.exception.ExceptionHelper;
 import org.digijava.kernel.exception.ExceptionInfo;
 import org.digijava.module.exception.form.DigiExceptionReportForm;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.tiles.ComponentContext;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.user.User;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  *

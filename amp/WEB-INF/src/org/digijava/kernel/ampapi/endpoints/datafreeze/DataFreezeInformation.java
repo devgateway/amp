@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 public class DataFreezeInformation {
     

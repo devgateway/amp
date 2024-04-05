@@ -2,9 +2,7 @@
 package org.digijava.module.fundingpledges.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.SectorUtil;
 
 public class FundingPledgesSector implements Identifiable{
     

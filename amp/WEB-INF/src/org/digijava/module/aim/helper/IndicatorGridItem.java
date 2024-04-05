@@ -1,19 +1,11 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
-
-import org.digijava.module.aim.dbentity.AmpAuditLogger;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.DbUtil.AmpIndicatorValuesComparatorByTypeAndYear;
-
-import java.util.Collections;
 
 /**
  * Indicator value helper bean. Stores indicator name and both values, target,

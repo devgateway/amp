@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
+import org.dgfoundation.amp.nireports.TranslatedDate;
+
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
-
-import org.dgfoundation.amp.nireports.TranslatedDate;
 
 /**
  * Used by FundingColumnGenerator to create a TranslatedDate from a year+month

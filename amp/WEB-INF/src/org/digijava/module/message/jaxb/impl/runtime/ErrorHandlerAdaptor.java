@@ -7,15 +7,14 @@
 
 package org.digijava.module.message.jaxb.impl.runtime;
 
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventLocator;
-import javax.xml.bind.helpers.ValidationEventImpl;
-
+import com.sun.xml.bind.validator.Locator;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.sun.xml.bind.validator.Locator;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventLocator;
+import javax.xml.bind.helpers.ValidationEventImpl;
 
 /**
  * Receives errors through {@link ErrorHandler} and reports to the

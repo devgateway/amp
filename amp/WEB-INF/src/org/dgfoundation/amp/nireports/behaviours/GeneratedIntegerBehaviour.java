@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-
 import org.dgfoundation.amp.nireports.IntCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiRowId;
@@ -13,6 +9,10 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * {@link GeneratedColumnBehaviour} which generates integers 

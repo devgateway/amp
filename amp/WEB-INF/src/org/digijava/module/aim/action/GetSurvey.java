@@ -5,11 +5,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +14,10 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.form.EditSurveyForm;
 import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 public class GetSurvey extends TilesAction {
 

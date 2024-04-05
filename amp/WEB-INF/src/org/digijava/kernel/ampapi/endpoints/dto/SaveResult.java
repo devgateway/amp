@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.List;
-import java.util.Map;
-
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

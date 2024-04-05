@@ -1,57 +1,5 @@
 package org.digijava.kernel.services.sync;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonMap;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_ACTIVITY;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_CONTACT;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_RESOURCE;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CONTACT;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.EXCHANGE_RATES;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_FILTER_DATA;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_MEMBER;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_ORGANIZATIONS;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_SETTINGS;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.function.Predicate;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 import org.apache.jackrabbit.util.ISO8601;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
@@ -67,12 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
-import org.digijava.kernel.services.sync.model.ActivityChange;
-import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
-import org.digijava.kernel.services.sync.model.ListDiff;
-import org.digijava.kernel.services.sync.model.ResourceChange;
-import org.digijava.kernel.services.sync.model.SystemDiff;
-import org.digijava.kernel.services.sync.model.Translation;
+import org.digijava.kernel.services.sync.model.*;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -92,6 +35,24 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.jcr.*;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.function.Predicate;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.*;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
 
 /**
  * @author Octavian Ciubotaru

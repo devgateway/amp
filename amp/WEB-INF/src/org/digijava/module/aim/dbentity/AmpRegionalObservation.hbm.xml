@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpRegionalObservation" table="AMP_REGIONAL_OBSERVATION">
 		<cache usage="read-write" />
 		<id name="ampRegionalObservationId" column="amp_regional_observation_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_REGIONAL_OBSERVATION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_REGIONAL_OBSERVATION_seq</param>
 			</generator>
 		</id>
 		<property column="name" name="name" type="text" />

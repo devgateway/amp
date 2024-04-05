@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.aitranslation;
 
-import java.util.Map;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

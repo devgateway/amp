@@ -2,18 +2,9 @@ package org.dgfoundation.amp.onepager.components.upload;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.util.file.Files;
-import org.apache.wicket.util.file.Folder;
-import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.upload.FileItem;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 
 
 /**

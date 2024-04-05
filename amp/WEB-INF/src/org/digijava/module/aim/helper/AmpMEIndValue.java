@@ -1,10 +1,10 @@
 package org.digijava.module.aim.helper ;
 
-import java.sql.Date;
-
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
+
+import java.sql.Date;
 
 @Deprecated
 public class AmpMEIndValue

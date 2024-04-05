@@ -1,12 +1,10 @@
 package org.digijava.module.aim.services.auditcleaner;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 

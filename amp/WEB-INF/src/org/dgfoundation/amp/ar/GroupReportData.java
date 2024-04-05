@@ -6,27 +6,19 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.dgfoundation.amp.ar.cell.*;
+import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
+import org.dgfoundation.amp.ar.cell.ComputedMeasureCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.Values;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * complex report (e.g. non-flat, e.g. non-ColumnReportData)

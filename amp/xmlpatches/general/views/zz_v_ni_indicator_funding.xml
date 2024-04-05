@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
+	<jira>BOAD-30</jira>
+	<keyword>NiReports</keyword>
+	<author>Octavian Ciubotaru</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_ni_indicator_funding CASCADE;
+
+				create view v_ni_indicator_funding AS
+				select ic.activity_id as amp_activity_id, iv.value, iv.value_type, iv.value_date as value_date, ic.indicator_id as me_indicator_id
+				from amp_indicator i
+				join amp_indicator_connection ic ON i.indicator_id = ic.indicator_id and ic.sub_clazz='a'
+				join amp_indicator_values iv ON ic.id = iv.ind_connect_id
+				join amp_activity_version a ON ic.activity_id = a.amp_activity_id
+        	</lang>
+		</script>
+	</apply>
+</tns:patch>

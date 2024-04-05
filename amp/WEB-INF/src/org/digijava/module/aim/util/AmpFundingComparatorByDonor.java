@@ -1,9 +1,8 @@
 package org.digijava.module.aim.util;
 
-import java.util.Comparator;
-
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
+
+import java.util.Comparator;
 
 public class AmpFundingComparatorByDonor implements Comparator<AmpFunding> {
 

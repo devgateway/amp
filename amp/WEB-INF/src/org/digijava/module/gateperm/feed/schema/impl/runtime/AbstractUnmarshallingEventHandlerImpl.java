@@ -7,7 +7,10 @@
 
 package org.digijava.module.gateperm.feed.schema.impl.runtime;
 
-import java.util.StringTokenizer;
+import com.sun.xml.bind.JAXBAssertionError;
+import com.sun.xml.bind.unmarshaller.Messages;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 import javax.xml.bind.Element;
 import javax.xml.bind.ParseConversionEvent;
@@ -15,12 +18,7 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.helpers.ParseConversionEventImpl;
 import javax.xml.bind.helpers.ValidationEventImpl;
 import javax.xml.bind.helpers.ValidationEventLocatorImpl;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import com.sun.xml.bind.JAXBAssertionError;
-import com.sun.xml.bind.unmarshaller.Messages;
+import java.util.StringTokenizer;
 
 /**
  * Convenient default implementation of

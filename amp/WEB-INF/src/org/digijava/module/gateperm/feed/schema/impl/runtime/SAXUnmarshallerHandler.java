@@ -7,10 +7,10 @@
 
 package org.digijava.module.gateperm.feed.schema.impl.runtime;
 
+import org.xml.sax.SAXException;
+
 import javax.xml.bind.UnmarshallerHandler;
 import javax.xml.bind.ValidationEvent;
-
-import org.xml.sax.SAXException;
 
 /**
  * Unified event handler that processes

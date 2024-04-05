@@ -1,11 +1,11 @@
 package org.digijava.module.aim.helper ;
 
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AllPrgIndicators implements Serializable
 {

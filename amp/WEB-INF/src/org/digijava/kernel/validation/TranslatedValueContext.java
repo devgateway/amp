@@ -1,11 +1,11 @@
 package org.digijava.kernel.validation;
 
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.module.aim.util.Identifiable;
+
+import java.util.Map;
 
 /**
  * A context object that allows to retrieve the value for a specific language.

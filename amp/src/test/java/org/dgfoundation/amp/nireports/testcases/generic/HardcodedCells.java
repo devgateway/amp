@@ -1,14 +1,5 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DateCell;
@@ -19,6 +10,11 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * Cell source for hardcoded columns (TestColumn)

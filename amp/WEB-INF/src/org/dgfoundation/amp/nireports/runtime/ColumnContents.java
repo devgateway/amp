@@ -1,25 +1,19 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
-import static org.dgfoundation.amp.algo.AmpCollections.remap;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import static org.dgfoundation.amp.algo.AmpCollections.relist;
+import static org.dgfoundation.amp.algo.AmpCollections.remap;
 
 /**
  * the contents of a column inside of a {@link CellColumn} <br />

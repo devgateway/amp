@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpTeamMember" table="AMP_TEAM_MEMBER" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampTeamMemId" column="amp_team_mem_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_team_member_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_team_member_seq</param>
 			</generator>
 		</id>
 
@@ -17,7 +17,7 @@
 		<many-to-one name="ampMemberRole" column="amp_member_role_id"
 			class="org.digijava.module.aim.dbentity.AmpTeamMemberRoles" cascade="none" />
 
-		<set name="activities" table="AMP_MEMBER_ACTIVITIES" lazy="true">
+		<set name="activities" table="AMP_MEMBER_ACTIVITIES" lazy="true" cascade="delete">
 			<cache usage="read-write" />
 			<key column="amp_member_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion"

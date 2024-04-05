@@ -1,14 +1,10 @@
 package org.digijava.module.aim.services.auditcleaner;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.SimpleTrigger;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+
+import java.util.Date;
 
 /**
  * 

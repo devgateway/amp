@@ -1,10 +1,10 @@
 package org.digijava.module.parisindicator.helper.export;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.digijava.kernel.request.Site;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
+
+import java.util.Collection;
+import java.util.Map;
 
 public abstract class PIAbstractExport {
 

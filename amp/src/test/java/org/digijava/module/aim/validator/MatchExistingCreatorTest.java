@@ -1,16 +1,5 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -19,6 +8,16 @@ import org.digijava.module.aim.validator.user.MatchExistingCreatorConstraint;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Nadejda Mandrescu

@@ -1,12 +1,13 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.lang.reflect.Field;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import java.lang.reflect.Field;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <b>IMMUTABLE</b>class holding the data necessary reading the i18n value of a property of a Translatable model<br />

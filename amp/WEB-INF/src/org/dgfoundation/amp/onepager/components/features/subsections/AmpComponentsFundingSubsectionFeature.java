@@ -4,8 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentsFundingFormTableFeature;
@@ -17,6 +15,8 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.Set;
 
 /**
  * @author aartimon@dginternational.org

@@ -1,7 +1,5 @@
 package org.digijava.module.contentrepository.dbentity.template;
 
-import org.digijava.module.contentrepository.dbentity.template.PossibleValue;
-
 public class DropDownField extends TemplateField {
 
     public String getType(){

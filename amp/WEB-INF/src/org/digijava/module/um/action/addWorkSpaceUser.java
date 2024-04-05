@@ -1,14 +1,7 @@
 package org.digijava.module.um.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.UserUtils;
@@ -18,6 +11,9 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.UmUtil;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class addWorkSpaceUser extends Action {
     private static Logger logger = Logger.getLogger(addWorkSpaceUser.class);

@@ -1,9 +1,9 @@
 package org.digijava.module.budget.dbentity;
 
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+
 import java.io.Serializable;
 import java.util.Set;
-
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 
 public class AmpBudgetSector implements Serializable,Comparable{

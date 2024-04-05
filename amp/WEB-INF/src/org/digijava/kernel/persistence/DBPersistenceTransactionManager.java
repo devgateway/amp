@@ -1,6 +1,7 @@
 package org.digijava.kernel.persistence;
 
-import org.hibernate.FlushMode;
+
+import javax.persistence.FlushModeType;
 
 public class DBPersistenceTransactionManager implements PersistenceTransactionManager {
     
@@ -11,7 +12,7 @@ public class DBPersistenceTransactionManager implements PersistenceTransactionMa
     
     @Override
     public void inTransactionWithPendingChanges(Runnable runnable) {
-        PersistenceManager.getSession().setFlushMode(FlushMode.COMMIT);
+        PersistenceManager.getSession().setFlushMode(FlushModeType.COMMIT);
         inTransaction(runnable);
     }
     

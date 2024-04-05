@@ -1,13 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
-import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.module.aim.jackson.TranslatingConverter;
+
+import java.math.BigDecimal;
 
 /**
  * Simple Heat Colors and Threshold storage

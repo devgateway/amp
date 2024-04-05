@@ -1,15 +1,10 @@
 package org.digijava.module.translation.exotic;
 
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.dgfoundation.amp.algo.AlgoUtils;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class containing month names with locales unsupported by Java 8. 

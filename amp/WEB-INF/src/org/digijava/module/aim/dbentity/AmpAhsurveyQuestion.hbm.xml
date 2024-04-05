@@ -6,8 +6,8 @@
 		table="AMP_AHSURVEY_QUESTION">
 		<cache usage="read-write" />
 		<id name="ampQuestionId" column="amp_question_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_AHSURVEY_QUESTION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_AHSURVEY_QUESTION_seq</param>
 			</generator>
 		</id>
 

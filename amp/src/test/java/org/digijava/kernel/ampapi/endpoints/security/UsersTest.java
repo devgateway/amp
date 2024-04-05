@@ -1,17 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import static org.junit.Assert.assertTrue;
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
-
-import java.io.IOException;
-import java.util.Collections;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.AbstractIntegrationTest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.User;
 import org.digijava.kernel.ampapi.endpoints.security.services.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.util.Collections;
+
+import static org.junit.Assert.assertTrue;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 /**
  * @author Nadejda Mandrescu

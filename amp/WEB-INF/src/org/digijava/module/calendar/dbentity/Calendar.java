@@ -22,11 +22,11 @@
 
 package org.digijava.module.calendar.dbentity;
 
+import org.digijava.module.common.dbentity.ItemStatus;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.digijava.module.common.dbentity.ItemStatus;
 
 public class Calendar {
 

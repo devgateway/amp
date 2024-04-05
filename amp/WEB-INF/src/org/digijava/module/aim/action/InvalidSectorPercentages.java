@@ -1,9 +1,4 @@
 package org.digijava.module.aim.action;
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -14,6 +9,11 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.InvalidDataListsForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.InvalidDataUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Shows list of activities with invalid percentage data.

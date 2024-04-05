@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpOrgGroup" table="AMP_ORG_GROUP" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampOrgGrpId" column="amp_org_grp_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ORG_GROUP_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ORG_GROUP_seq</param>
 			</generator>
 		</id>
 		<property name="orgGrpName" column="org_grp_name" type="java.lang.String" />

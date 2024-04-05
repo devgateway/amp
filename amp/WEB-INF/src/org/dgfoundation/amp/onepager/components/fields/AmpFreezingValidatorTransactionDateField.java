@@ -1,20 +1,13 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.convert.converter.DateConverter;
-import org.dgfoundation.amp.onepager.components.FundingListEditor;
-import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
-import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.validators.AmpFreezingValidatorTransactionDate;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import com.tonbeller.wcf.form.FormComponent;
+import java.text.SimpleDateFormat;
 
 /**
  * Transaction date validator

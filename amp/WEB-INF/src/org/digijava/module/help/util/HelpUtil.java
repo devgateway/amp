@@ -1,24 +1,5 @@
 package org.digijava.module.help.util;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.entity.Message;
@@ -27,7 +8,6 @@ import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LucModule;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -53,11 +33,20 @@ import org.digijava.module.help.lucene.LucHelpModule;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.exception.SDMException;
-import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class HelpUtil {
     private static Logger logger = Logger.getLogger(HelpUtil.class);
@@ -152,11 +141,11 @@ public class HelpUtil {
                         + "and t.siteId=:siteId  and t.topicType=NULL and t.moduleInstance=:moduleInstance "
                         + "and msg.locale=:locale and msg.message like '%"+ keyWords+ "%'";
                 query = session.createQuery(queryString);
-                query.setString("locale", locale);
+                query.setParameter("locale", locale, StringType.INSTANCE);
             }
             
-            query.setString("siteId", site.getSiteId());
-            query.setString("moduleInstance", moduleInstance);          
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            query.setParameter("moduleInstance", moduleInstance,StringType.INSTANCE);
             helpTopics = query.list();
 
         } catch (Exception e) {
@@ -225,9 +214,9 @@ public class HelpUtil {
                 String queryString="from "+ HelpTopic.class.getName()+" topic where (topic.topicKey=:key) " +
                         " and (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) ";
                 query=session.createQuery(queryString);
-                query.setString("siteId", site.getSiteId());
-                query.setString("moduleInstance", moduleInstance);
-                query.setString("key", key);
+                query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+                query.setParameter("moduleInstance", moduleInstance,StringType.INSTANCE);
+                query.setParameter("key", key,StringType.INSTANCE);
                 helpTopic=(HelpTopic) query.uniqueResult();
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -249,9 +238,9 @@ public class HelpUtil {
                 String queryString="from "+ HelpTopic.class.getName()+" topic where (topic.bodyEditKey=:bodyEditKey) " +
                         " and (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) ";
                 query=session.createQuery(queryString);
-                query.setString("siteId", site.getSiteId());
-                query.setString("moduleInstance", moduleInstance);
-                query.setString("bodyEditKey", bodyEditKey);
+                query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+                query.setParameter("moduleInstance", moduleInstance,StringType.INSTANCE);
+                query.setParameter("bodyEditKey", bodyEditKey,StringType.INSTANCE);
                 helpTopic=(HelpTopic) query.uniqueResult();
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -272,7 +261,7 @@ public class HelpUtil {
                 session = PersistenceManager.getRequestDBSession();
                 String queryString = "from " + HelpTopic.class.getName()+" topic where (topic.bodyEditKey=:key) ";
                 query = session.createQuery(queryString);
-                query.setString("key", key);
+                query.setParameter("key", key,StringType.INSTANCE);
                 helpTopic=(HelpTopic) query.uniqueResult();
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -295,9 +284,9 @@ public class HelpUtil {
                     + " topic where (topic.topicKey=:key) and "
                     + "(topic.siteId=:siteId) and (topic.moduleInstance=:instance)";
             query = session.createQuery(queryString);
-            query.setString("key", key);
-            query.setString("siteId", site.getSiteId());
-            query.setString("instance", moduleInstance);
+            query.setParameter("key", key,StringType.INSTANCE);
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            query.setParameter("instance", moduleInstance,StringType.INSTANCE);
             if (query.uniqueResult() == null) {
                 return true;
             }
@@ -478,8 +467,8 @@ public class HelpUtil {
             queryString = "from "+ HelpTopic.class.getName()
             + " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent is null) and (topic.topicType=NULL)";
             query = session.createQuery(queryString);           
-            query.setString("siteId", site.getSiteId());
-            query.setString("moduleInstance", moduleInstance);
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            query.setParameter("moduleInstance", moduleInstance,StringType.INSTANCE);
             helpTopics = query.list();
 
         } catch (Exception e) {
@@ -508,7 +497,7 @@ public class HelpUtil {
             //queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null and topic.topicType=NULL";
             queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null ";
             query = session.createQuery(queryString);
-            query.setString("siteId", site.getSiteId());
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
             helpTopics = query.list();
         } catch (Exception e) {
             logger.error("Unable to load help topics");
@@ -526,8 +515,8 @@ public class HelpUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.moduleInstance=:moduleInstance and topic.parent is null and topic.topicType=NULL";
             query = session.createQuery(queryString);
-            query.setString("siteId", site.getSiteId());
-            query.setString("moduleInstance", moduleInstance);
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            query.setParameter("moduleInstance", moduleInstance,StringType.INSTANCE);
             helpTopics = query.list();
         } catch (Exception e) {
             logger.error("Unable to load help topics");
@@ -554,9 +543,9 @@ public class HelpUtil {
             queryString = "from "+ HelpTopic.class.getName()
             + " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent.helpTopicId=:id) and (topic.topicType=NULL)";
             query = session.createQuery(queryString);           
-            query.setString("siteId", site.getSiteId());
-            query.setString("moduleInstance", moduleInstance);
-            query.setLong("id", parentId);
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            query.setParameter("moduleInstance", moduleInstance,StringType.INSTANCE);
+            query.setParameter("id", parentId, LongType.INSTANCE);
             helpTopics = query.list();          
 
         } catch (Exception e) {
@@ -576,8 +565,8 @@ public class HelpUtil {
             queryString = "from "+ HelpTopic.class.getName()
             + " topic where (topic.siteId=:siteId) and (topic.parent.helpTopicId=:id) ";
             query = session.createQuery(queryString);
-            query.setString("siteId", site.getSiteId());
-            query.setLong("id", parentId);
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            query.setParameter("id", parentId, LongType.INSTANCE);
             helpTopics = query.list();
 
         } catch (Exception e) {
@@ -598,7 +587,7 @@ public class HelpUtil {
         session = PersistenceManager.getRequestDBSession();
          Query q = session.createQuery(" from e in class " +
                  Editor.class.getName() +" where e.editorKey like 'help%' and e.language=:lang order by e.lastModDate");
-            q.setString("lang", lang);
+            q.setParameter("lang", lang,StringType.INSTANCE);
         helpTopics = q.list();
         
         
@@ -663,7 +652,7 @@ public class HelpUtil {
         
         String queryString = "select topic from "+ Editor.class.getName() + " topic where (topic.editorKey=:bodyKey)";
              query = session.createQuery(queryString);
-             query.setString("bodyKey", bodyKey);
+             query.setParameter("bodyKey", bodyKey,StringType.INSTANCE);
              result = query.list();
              
         } catch (Exception e) {
@@ -684,8 +673,8 @@ public class HelpUtil {
         
         String queryString = "select topic from "+ Editor.class.getName() + " topic where (topic.editorKey=:bodyKey) and (topic.language=:lang)";
              query = session.createQuery(queryString);
-             query.setString("bodyKey", bodyKey);
-             query.setString("lang", lang);
+             query.setParameter("bodyKey", bodyKey,StringType.INSTANCE);
+             query.setParameter("lang", lang,StringType.INSTANCE);
              result = query.list();
              
         } catch (Exception e) {
@@ -1109,8 +1098,8 @@ public class HelpUtil {
 //beginTransaction();
             String queryString = "select editTopic from "+ Editor.class.getName() + " editTopic where (editTopic.editorKey=:key) and  (editTopic.language=:lang)";
             query = session.createQuery(queryString);
-            query.setString("lang", help.getCode());
-            query.setString("key", key);
+            query.setParameter("lang", help.getCode(),StringType.INSTANCE);
+            query.setParameter("key", key,StringType.INSTANCE);
             List<Editor> res =query.list();
             
             String helpBody=help.getBody();
@@ -1396,18 +1385,16 @@ public class HelpUtil {
         Query query = session.createQuery(oql);
         
         if (site != null){
-            query.setString("siteID", site.getSiteId());
+            query.setParameter("siteID", site.getSiteId(),StringType.INSTANCE);
         }
         if (moduleInstance != null){
-            query.setString("modInst", moduleInstance);
+            query.setParameter("modInst", moduleInstance,StringType.INSTANCE);
         }
         if (langs != null){
             query.setParameterList("langISOs", LangSupport.toCodeList(langs));
         }
-        
-        List<HelpTopicHelper> result = (List<HelpTopicHelper>) query.list();
 
-        return result;
+        return (List<HelpTopicHelper>) query.list();
     }
     
  

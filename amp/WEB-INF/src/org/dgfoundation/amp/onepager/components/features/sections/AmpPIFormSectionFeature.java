@@ -3,6 +3,7 @@
  *
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -16,6 +17,7 @@ import org.dgfoundation.amp.onepager.helper.PIFormSectionSurveyComparator;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
+
 import java.util.*;
 
 /**

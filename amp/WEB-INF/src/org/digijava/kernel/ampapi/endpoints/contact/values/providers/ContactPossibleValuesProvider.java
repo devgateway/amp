@@ -1,8 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.contact.values.providers;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
@@ -11,7 +9,8 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Nadejda Mandrescu

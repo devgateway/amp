@@ -1,8 +1,5 @@
 package org.digijava.module.aim.logic;
 
-import java.util.Collection;
-
-import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.util.DecimalWraper;
 
 /**

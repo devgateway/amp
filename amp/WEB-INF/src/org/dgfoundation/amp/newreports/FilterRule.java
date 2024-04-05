@@ -3,20 +3,12 @@
  */
 package org.dgfoundation.amp.newreports;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type

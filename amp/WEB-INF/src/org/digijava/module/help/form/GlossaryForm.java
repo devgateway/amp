@@ -1,9 +1,9 @@
 package org.digijava.module.help.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.help.helper.HelpTopicTreeNode;
+
+import java.util.List;
 
 /**
  * 

@@ -6,14 +6,10 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.*;
-
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.PercentageHelperMap;
-import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.ar.*;
 import org.dgfoundation.amp.ar.workers.AmountColWorker;
+
+import java.util.*;
 
 /**
  * 

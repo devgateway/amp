@@ -1,14 +1,12 @@
 package org.digijava.module.aim.auth;
 
-import javax.jcr.Session;
+import org.digijava.kernel.util.RequestUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.contentrepository.helper.CrConstants;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 public class AmpLogoutHandler
     implements LogoutHandler {

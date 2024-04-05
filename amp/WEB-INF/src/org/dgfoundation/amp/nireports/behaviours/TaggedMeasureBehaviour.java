@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Supplier;
-
 import org.apache.wicket.behavior.Behavior;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
@@ -14,6 +10,10 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * the {@link Behavior} of a Tagged entity (like Classified Actual Expenditures -- expenditures vertically divided by an ACV)

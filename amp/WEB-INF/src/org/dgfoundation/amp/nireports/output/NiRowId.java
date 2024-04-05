@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.List;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

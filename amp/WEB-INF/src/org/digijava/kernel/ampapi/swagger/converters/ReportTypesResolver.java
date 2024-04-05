@@ -1,23 +1,7 @@
 package org.digijava.kernel.ampapi.swagger.converters;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.common.collect.ImmutableMap;
-
-import org.dgfoundation.amp.newreports.ReportFilters;
-import org.digijava.kernel.ampapi.swagger.types.ErrorOrWarningPH;
-import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
-import org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH;
-import org.digijava.kernel.ampapi.swagger.types.PublicHeadersPH;
-import org.digijava.kernel.ampapi.swagger.types.PublicTopDataPH;
-import org.digijava.kernel.ampapi.swagger.types.PublicTopTotalsPH;
-import org.digijava.kernel.ampapi.swagger.types.SettingsPH;
-
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
 import io.swagger.jackson.AbstractModelConverter;
@@ -26,6 +10,14 @@ import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.util.Json;
+import org.dgfoundation.amp.newreports.ReportFilters;
+import org.digijava.kernel.ampapi.swagger.types.*;
+
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * @author Octavian Ciubotaru

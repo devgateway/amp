@@ -1,11 +1,11 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.AmpTheme;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
-import org.digijava.module.aim.dbentity.AmpTheme;
 /**
  * 
  * @author Alex Gartner

@@ -3,23 +3,10 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.ColumnReportData;
-import org.dgfoundation.amp.ar.Exporter;
-import org.dgfoundation.amp.ar.ReportData;
-import org.dgfoundation.amp.ar.Viewable;
+import org.dgfoundation.amp.ar.*;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 
 /**

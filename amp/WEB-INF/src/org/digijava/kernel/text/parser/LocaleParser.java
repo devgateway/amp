@@ -22,14 +22,14 @@
 
 package org.digijava.kernel.text.parser;
 
+import org.apache.commons.digester.Digester;
+import org.apache.log4j.Logger;
+
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Locale;
-
-import org.apache.commons.digester.Digester;
-import org.apache.log4j.Logger;
 
 public class LocaleParser {
 

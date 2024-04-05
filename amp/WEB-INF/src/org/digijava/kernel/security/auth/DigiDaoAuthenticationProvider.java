@@ -22,30 +22,30 @@
 
 package org.digijava.kernel.security.auth;
 
-import java.util.List;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.ShaCrypt;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.List;
+
 public class DigiDaoAuthenticationProvider
-    extends DaoAuthenticationProvider implements InitializingBean, SaltSource {
+        extends DaoAuthenticationProvider implements InitializingBean {
 
     protected void additionalAuthenticationChecks(UserDetails userDetails,
                                                   UsernamePasswordAuthenticationToken
-                                                  authentication) throws
-        AuthenticationException {
+                                                          authentication) throws
+            AuthenticationException {
 
         String encryptPassword = null;
         String compare = null;
@@ -53,35 +53,35 @@ public class DigiDaoAuthenticationProvider
         String userPassword = userDetails.getPassword();
         String pass = authentication.getCredentials().toString();
 
-        Object saltObj;
-        String salt = "";
-
-        SaltSource saltSource = this.getSaltSource();
-        if (saltSource != null) {
-            saltObj = saltSource.getSalt(userDetails);
-            if (saltObj != null) {
-                salt = saltObj.toString();
-            }
-        }
+//        Object saltObj;
+//        String salt = "";
+//
+//        SaltSource saltSource = this.getSaltSource();
+//        if (saltSource != null) {
+//            saltObj = saltSource.getSalt(userDetails);
+//            if (saltObj != null) {
+//                salt = saltObj.toString();
+//            }
+//        }
 
         boolean passwordMatched = false;
-                    compare = pass.trim();
+        compare = pass.trim();
 
-                    // first try new user ( using SHA1 )
-                    encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
-    
-            
-                // check user in database
-                if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
-                    passwordMatched = true;
-                }
-        
-            if (!passwordMatched) {
-                throw new BadCredentialsException(
-                        "Invalid username/password, login denied");
-            }
+        // first try new user ( using SHA1 )
+        encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
+
+
+        // check user in database
+        if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
+            passwordMatched = true;
         }
-    
+
+        if (!passwordMatched) {
+            throw new BadCredentialsException(
+                    "Invalid username/password, login denied");
+        }
+    }
+
 
     public boolean supports(Class authentication) {
         return (UsernamePasswordAuthenticationToken.class
@@ -94,14 +94,14 @@ public class DigiDaoAuthenticationProvider
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from " + User.class.getName() +
-                                          " u where lower(u.email) =? ");
-            q.setString(0, email.toLowerCase());
+                    " u where lower(u.email) =:email ");
+            q.setParameter("email", email.toLowerCase(), StringType.INSTANCE);
             q.setCacheable(true);
 
             List results = q.list();
             if (results.size() == 0) {
                 throw new UsernameNotFoundException(
-                    "There is no user with email: " + email);
+                        "There is no user with email: " + email);
             }
             else {
                 return ( (User) results.get(0)).getSalt();
@@ -111,7 +111,7 @@ public class DigiDaoAuthenticationProvider
         catch (Exception ex) {
 
             throw new DataRetrievalFailureException("Unable to load user: " +
-                email, ex);
+                    email, ex);
         }
     }
 }

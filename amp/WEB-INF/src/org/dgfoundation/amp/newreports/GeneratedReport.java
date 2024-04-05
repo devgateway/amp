@@ -1,15 +1,11 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.SortedMap;
-import java.util.SortedSet;
-
-import org.apache.commons.lang.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.digijava.module.aim.helper.TeamMember;
+
+import java.util.*;
 
 public class GeneratedReport {
     

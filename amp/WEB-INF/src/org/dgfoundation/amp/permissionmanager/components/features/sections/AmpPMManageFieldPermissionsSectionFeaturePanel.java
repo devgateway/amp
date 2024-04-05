@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -17,7 +13,10 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFi
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.gateperm.core.PermissionMap;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

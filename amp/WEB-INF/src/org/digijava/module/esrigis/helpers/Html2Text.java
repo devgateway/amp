@@ -1,14 +1,10 @@
 package org.digijava.module.esrigis.helpers;
 
+import org.ccil.cowan.tagsoup.Parser;
+import org.xml.sax.*;
+
 import java.io.IOException;
 import java.io.StringReader;
-import org.ccil.cowan.tagsoup.Parser;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 /**
  * Take HTML and give back the text part while dropping the HTML tags.

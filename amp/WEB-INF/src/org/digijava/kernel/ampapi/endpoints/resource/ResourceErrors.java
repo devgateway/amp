@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_RESOURCE_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_RESOURCE_ID;
 
 /**
  * @author Viorel Chihai

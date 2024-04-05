@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.util;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.RuleSet;
 import org.apache.xerces.jaxp.SAXParserFactoryImpl;
 import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Wrapper class around the Digester that hide Digester's initialization details

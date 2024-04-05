@@ -1,10 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
-
-import java.util.Collection;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -16,6 +11,11 @@ import org.digijava.kernel.validation.ConstraintValidatorContext;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.Collection;
+import java.util.Map;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
 
 /**
  * Part 1. Implementation location checks.

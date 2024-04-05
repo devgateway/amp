@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
 import org.digijava.kernel.ampapi.endpoints.activity.SectorExtraInfo;
+
+import java.util.List;
 
 /**
  * @author Nadejda Mandrescu

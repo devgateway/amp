@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.List;
 
 /**
  * Setting Field that allows us to drill down & define custom settings structure 

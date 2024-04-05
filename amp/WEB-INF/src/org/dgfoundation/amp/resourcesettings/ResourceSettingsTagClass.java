@@ -1,12 +1,10 @@
 package org.dgfoundation.amp.resourcesettings;
 
-import java.io.IOException;
+import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
+import java.io.IOException;
 
 public class ResourceSettingsTagClass extends BodyTagSupport {
 

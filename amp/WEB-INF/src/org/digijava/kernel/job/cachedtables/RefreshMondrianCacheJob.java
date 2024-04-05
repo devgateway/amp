@@ -3,15 +3,15 @@
  */
 package org.digijava.kernel.job.cachedtables;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author mihai

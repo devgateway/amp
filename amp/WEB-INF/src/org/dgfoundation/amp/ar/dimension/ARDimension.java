@@ -4,15 +4,6 @@
  */
 package org.dgfoundation.amp.ar.dimension;
 
-import java.lang.reflect.Constructor;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
@@ -20,6 +11,11 @@ import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.hibernate.HibernateException;
+
+import java.lang.reflect.Constructor;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.Map.Entry;
 
 public abstract class ARDimension {
 

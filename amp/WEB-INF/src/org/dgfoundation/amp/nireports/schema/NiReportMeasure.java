@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.dgfoundation.amp.nireports.Cell;
+
 import java.util.Collections;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.Cell;
 
 /**
  * a class which holds complete info for NiReports so that those know how to process them (please see {@link NiReportColumn}). <br />

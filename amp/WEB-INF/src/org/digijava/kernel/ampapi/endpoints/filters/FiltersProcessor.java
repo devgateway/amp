@@ -3,12 +3,12 @@
  */
 package org.digijava.kernel.ampapi.endpoints.filters;
 
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Optional;
-
-import org.dgfoundation.amp.newreports.AmpReportFilters;
 
 /**
  * Processes and stores filters

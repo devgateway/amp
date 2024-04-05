@@ -5,9 +5,8 @@ import org.dgfoundation.amp.ar.StringGenerator;
 import org.dgfoundation.amp.ar.viewfetcher.*;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import java.util.*;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class NameFilteringTeamFilter implements StringGenerator {
 

@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.model.IModel;
@@ -16,6 +12,10 @@ import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.util.CurrencyUtil;
+
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.Set;
 
 public class AmpComponentAnnualBudgetSubsectionFeature extends AmpSubsectionFeaturePanel<AmpActivityVersion> {
 

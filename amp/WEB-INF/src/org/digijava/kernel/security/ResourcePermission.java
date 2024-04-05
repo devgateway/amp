@@ -26,14 +26,7 @@ import java.io.Serializable;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public abstract class ResourcePermission
     extends BasicPermission implements Serializable  {
@@ -101,7 +94,7 @@ public abstract class ResourcePermission
             if (v == null) {
                 throw new RuntimeException("Unkonow security action: " + action);
             } else {
-                mask = mask | modifySecurityAction(( (Integer) v).intValue());
+                mask = mask | modifySecurityAction(v);
             }
         }
         return mask;
@@ -203,7 +196,7 @@ public abstract class ResourcePermission
         Iterator iter = getCodesToActions().entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry item = (Map.Entry)iter.next();
-            int code = ((Integer)item.getKey()).intValue();
+            int code = (Integer) item.getKey();
             String name = (String)item.getValue();
 
             if ((code | tmpMask) == tmpMask) {

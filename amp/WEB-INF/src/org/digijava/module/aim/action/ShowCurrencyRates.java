@@ -4,37 +4,23 @@
  */
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.form.CurrencyRateForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyRateLoader;
-import org.digijava.module.aim.helper.CurrencyRates;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 public class ShowCurrencyRates extends Action {
     

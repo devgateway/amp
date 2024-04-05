@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -18,6 +12,12 @@ import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * a class which, given a schema and a list of benchmarks to run, runs each of them and returns the results in a hashmap having the spec.reportName as a key.

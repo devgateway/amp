@@ -4,9 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;

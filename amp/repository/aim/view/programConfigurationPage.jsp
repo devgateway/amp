@@ -5,7 +5,26 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
+
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <script language="JavaScript">
+	$(document).ready(function () {
+		var hierarchyIDs=$("select[name$='.defaultHierarchyId']");
+
+		if (hierarchyIDs != null) {
+			for (var i = 0; i < hierarchyIDs.length; i++) {
+				handleHierarchyChange(i);
+			}
+		}
+	});
 
  function cancelSaving() {
 
@@ -29,6 +48,33 @@
         valid=true;
         return valid;
     }
+
+	function saveProgramConfiguration(){
+		if(validateSave()){
+			document.forms[0].submit();
+		}
+
+	}
+
+	function handleHierarchyChange(hierarchyIndex){
+	    if (hierarchyIndex == null) {
+	        hierarchyIndex = -1;
+	    }
+
+		const hierarchyIdClass = 'settingsListDTO[' + hierarchyIndex + '].defaultHierarchyId';
+		const hierarchyId = document.getElementsByName(hierarchyIdClass)[0].selectedOptions[0].value;
+
+
+		if (hierarchyId.toString() === "-1") {
+			$('.mpc-startDate' + hierarchyIndex).hide();
+			$('#startDate' + hierarchyIndex).val('');
+			$('.mpc-endDate' + hierarchyIndex).hide();
+			$('#endDate' + hierarchyIndex).val('');
+		} else {
+			$('.mpc-startDate' + hierarchyIndex).show();
+			$('.mpc-endDate' + hierarchyIndex).show();
+		}
+	}
 
    var enterBinder	= new EnterHitBinder('saveMPCBtn');
 
@@ -79,7 +125,7 @@
 <td class="inside"><b><digi:trn key="aim:defaultHierarchy">Default Hierarchy</digi:trn></b></td>
 <td class="inside"><b><digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn></b></td>
 </tr>
-<logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="setting">
+<logic:iterate name="aimActivityProgramSettingsForm" property="settingsListDTO" id="setting">
 <tr>
 <td class="inside">
 <digi:trn key="aim:${setting.name}"> <c:out value="${setting.name}"/></digi:trn>
@@ -114,10 +160,10 @@
 <digi:form action="/programConfigurationPage.do" method="post">
 
 <table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" style="margin-top:15px;" class="inside">
-<logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="settingsList">
+<logic:iterate name="aimActivityProgramSettingsForm" property="settingsListDTO" id="settingsListDTO" indexId="index">
 <tr>
 <td colspan="2" bgColor=#f2f2f2 class="inside" height="20" align="center" style="font-weight:bold;">
-<digi:trn key="aim:${settingsList.name}"> <c:out value="${settingsList.name}"/></digi:trn>
+<digi:trn key="aim:${settingsListDTO.name}"> <c:out value="${settingsListDTO.name}"/></digi:trn>
 </td>
 </tr>
 <tr>
@@ -128,23 +174,45 @@ Default Hierarchy
 </td>
 <td class="inside">
 
-<html:select name="settingsList" property="defaultHierarchyId" indexed="true">
-  <html:option value="-1"><digi:trn key="aim:selprogram">Select Program</digi:trn></html:option>
-	<html:optionsCollection  property="programList" value="ampThemeId" label="name" />
+<html:select onchange="return handleHierarchyChange(${index})" name="settingsListDTO" property="defaultHierarchyId" styleId="settingsListDTO${index}" indexed="true" value="${settingsListDTO.defaultHierarchy.ampThemeId}">
+  <html:option value="-1"><digi:trn key="aim:selprogram" >Select Program</digi:trn></html:option>
+	<html:optionsCollection property="programList" value="ampThemeId" label="name" />
 </html:select>
 </td>
 </tr>
 <tr>
 <td colspan="2" class="inside" align=center>
-<digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsList" property="allowMultiple" indexed="true" />
+<digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsListDTO" property="allowMultiple" indexed="true" />
 </td>
+<tr class="mpc-startDate${index}">
+		<td width="50%" class="inside" align="right">
+			<digi:trn key="aim:startDate">Start Date</digi:trn>
+
+		</td>
+		<td class="inside">
+			<html:text property="startDate" styleId="startDate${index}" name="settingsListDTO" readonly="true" indexed="true" />
+			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+			</a>
+		</td>
 </tr>
+	<tr class="mpc-endDate${index}">
+	<td width="50%" class="inside" align="right">
+		<digi:trn key="aim:endDate">End Date</digi:trn>
+	</td>
+	<td class="inside">
+		<html:text property="endDate" styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />
+		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>
+			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+		</a>
+	</td>
+	</tr>
 </logic:iterate>
 
 <tr>
 <td colspan="2" class="inside" align=center>
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return validateSave()"  styleId="saveMPCBtn"/>
+<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return saveProgramConfiguration()"  styleId="saveMPCBtn"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" styleClass="buttonx" value="${resetTrn}" />
@@ -155,7 +223,6 @@ Default Hierarchy
 </td>
 </tr>
 </table>
-
 
 </digi:form >
 

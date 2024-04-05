@@ -5,16 +5,6 @@
  */
 package org.dgfoundation.amp.visibility;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.tagext.BodyTagSupport;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -25,6 +15,15 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -67,6 +66,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
     
        ServletContext ampContext=pageContext.getServletContext();
        HttpSession session=pageContext.getSession();
+            System.out.println(session);
  try{
        AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
            if(ampTreeVisibility!=null)
@@ -101,12 +101,15 @@ public class FieldVisibilityTag extends BodyTagSupport {
                 }
                 ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
                 if(ampTreeVisibility!=null)
-                   if(!isFeatureTheParent(ampTreeVisibility)){
-                       FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
-                       AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-                       ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-                       FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
-                   } 
+                   if(!isFeatureTheParent(ampTreeVisibility)) {
+                       AmpFeaturesVisibility ampFeaturesVisibility = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
+//                       if (ampFeaturesVisibility != null) {
+                           FeaturesUtil.updateFieldWithFeatureVisibility(ampFeaturesVisibility.getId(), this.getName());
+                           AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility) FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+                           ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+                           FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+                       }
+//                   }
 //     }
        
     } catch (Exception e) {

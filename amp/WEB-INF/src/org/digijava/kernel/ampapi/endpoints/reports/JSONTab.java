@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class JSONTab {
     

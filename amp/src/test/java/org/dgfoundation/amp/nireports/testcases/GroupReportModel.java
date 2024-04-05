@@ -1,15 +1,14 @@
 package org.dgfoundation.amp.nireports.testcases;
 
+import org.dgfoundation.amp.ar.ColumnReportData;
+import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.ReportData;
+import org.dgfoundation.amp.testutils.TestCaseException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import org.dgfoundation.amp.ar.ColumnReportData;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.ReportData;
-import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.testutils.*;
 
 public class GroupReportModel extends ReportModel
 {

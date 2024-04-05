@@ -22,9 +22,9 @@
 
 package org.digijava.kernel.action;
 
-import java.io.File;
-
 import org.digijava.kernel.exception.DgException;
+
+import java.io.File;
 
 public class ActionServlet extends org.apache.struts.action.ActionServlet {
 

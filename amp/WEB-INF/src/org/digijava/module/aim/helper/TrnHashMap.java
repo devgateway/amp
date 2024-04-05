@@ -5,9 +5,9 @@
  */
 package org.digijava.module.aim.helper;
 
-import java.util.ArrayList;
-
 import org.digijava.module.translation.entity.MessageGroup;
+
+import java.util.ArrayList;
 
 /**
  * @author dan

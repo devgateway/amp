@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.digijava.kernel.translator.LocalizableLabel;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+
 import java.util.Optional;
 import java.util.Set;
-
-import org.digijava.kernel.translator.LocalizableLabel;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  * class for fetching any of the MTEF columns/measures.

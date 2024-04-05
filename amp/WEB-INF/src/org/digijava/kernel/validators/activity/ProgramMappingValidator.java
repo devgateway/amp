@@ -23,11 +23,7 @@ import java.util.stream.Collectors;
 import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
-import static org.digijava.module.aim.util.ProgramUtil.NATIONAL_PLAN_OBJECTIVE;
-import static org.digijava.module.aim.util.ProgramUtil.PRIMARY_PROGRAM;
-import static org.digijava.module.aim.util.ProgramUtil.SECONDARY_PROGRAM;
-import static org.digijava.module.aim.util.ProgramUtil.TERTIARY_PROGRAM;
-import static org.digijava.module.aim.util.ProgramUtil.getProgramsIncludingAncestors;
+import static org.digijava.module.aim.util.ProgramUtil.*;
 
 /**
  * Ensure that the mapped programs matches if does exist direct program mapping

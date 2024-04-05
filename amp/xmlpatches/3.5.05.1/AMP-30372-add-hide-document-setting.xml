@@ -10,23 +10,23 @@
             <lang delimiter=";" type="postgres">
                 insert into amp_modules_visibility (id, name, haslevel, parent)
                 select nextval('amp_modules_visibility_seq'),
-                'Activity Preview',
+                '/Activity Preview',
                 true,
                 (select id
                 from amp_modules_visibility
                 where name = 'REPORTING')
                 where not exists(select 1
                 from amp_modules_visibility
-                where name = 'Activity Preview'
+                where name = '/Activity Preview'
                 and parent = (select id
                 from amp_modules_visibility
                 where name = 'REPORTING'));
 
 
                 insert into amp_modules_visibility (id, name, haslevel, parent)
-                values (nextval('amp_modules_visibility_seq'), '/REPORTING/Activity Preview/Hide Documents if no donor', true, (select id
+                values (nextval('amp_modules_visibility_seq'), 'Hide Documents if No Donor', true, (select id
                 from amp_modules_visibility
-                where name = 'Activity Preview'
+                where name = '/Activity Preview'
                 and parent = (select id
                 from amp_modules_visibility
                 where name = 'REPORTING')));

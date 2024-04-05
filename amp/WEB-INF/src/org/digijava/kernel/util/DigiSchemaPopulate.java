@@ -22,23 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FilenameFilter;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Enumeration;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.internal.SessionImpl;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.LogonSite;
 import org.digijava.kernel.entity.Locale;
@@ -52,6 +35,19 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.autopatcher.core.AutopatcherService;
+import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionImplementor;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class DigiSchemaPopulate {
 

@@ -1,13 +1,11 @@
 package org.digijava.module.translation.form;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.util.ListChangesBuffer.ChangedItem;
+
+import java.util.List;
 
 /**
  * New Advanced Mode form bean.

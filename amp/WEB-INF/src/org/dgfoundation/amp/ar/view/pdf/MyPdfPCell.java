@@ -1,9 +1,10 @@
 package org.dgfoundation.amp.ar.view.pdf;
 
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
 
-public class MyPdfPCell extends PdfPCell 
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+
+public class MyPdfPCell extends PdfPCell
 {
 
     public MyPdfPCell(Paragraph para)

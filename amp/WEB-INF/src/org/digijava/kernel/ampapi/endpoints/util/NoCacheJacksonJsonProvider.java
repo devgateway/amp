@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
-import javax.ws.rs.ext.Provider;
-
 import com.fasterxml.jackson.jaxrs.cfg.JaxRSFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+
+import javax.ws.rs.ext.Provider;
 
 /**
  * {@link JacksonJsonProvider} without cache for endpoint readers and writers.

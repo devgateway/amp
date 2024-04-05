@@ -15,9 +15,8 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBContext;
@@ -30,7 +29,6 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -320,17 +318,14 @@ public final class XmlPatcherUtil {
      */
     public static void addLogToPatch(AmpXmlPatch p, AmpXmlPatchLog log) {
         Session sess = null;
-        Transaction tx = null;
 
         try {
-            sess = PersistenceManager.getSession();
-//beginTransaction();
-            AmpXmlPatch lazyPatch = (AmpXmlPatch) sess.load(AmpXmlPatch.class,
+            sess = PersistenceManager.getRequestDBSession();
+            AmpXmlPatch lazyPatch = sess.load(AmpXmlPatch.class,
                     p.getPatchId());
             log.setPatch(lazyPatch);
             lazyPatch.getLogs().add(log);
             sess.saveOrUpdate(lazyPatch);
-            //tx.commit();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
@@ -410,15 +405,12 @@ public final class XmlPatcherUtil {
      * Returns the count of the list of discovered XmlPatches
      * 
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static Integer countAllDiscoveredPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
-            Integer ret= ((Integer)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
-        return ret;
+        return ((Long)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
     }
     
     

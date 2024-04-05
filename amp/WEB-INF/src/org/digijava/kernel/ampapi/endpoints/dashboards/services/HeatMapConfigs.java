@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
+import io.swagger.annotations.ApiModelProperty;
+import org.digijava.module.aim.helper.HeatMapConfig;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-
-import io.swagger.annotations.ApiModelProperty;
-import org.digijava.module.aim.helper.HeatMapConfig;
 
 /**
  * @author Octavian Ciubotaru

@@ -23,12 +23,12 @@
 package org.digijava.kernel.mail.scheduler;
 
 import org.apache.log4j.Logger;
-import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.Scheduler;
 import org.digijava.kernel.exception.DgException;
-import org.quartz.JobDetail;
-import org.quartz.CronTrigger;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.quartz.CronTrigger;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.impl.StdSchedulerFactory;
 
 
 /**

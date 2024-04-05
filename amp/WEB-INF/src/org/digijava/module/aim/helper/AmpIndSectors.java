@@ -1,9 +1,9 @@
 package org.digijava.module.aim.helper;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+
+import java.io.Serializable;
 
 public class AmpIndSectors implements Serializable
 {

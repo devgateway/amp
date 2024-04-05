@@ -4,9 +4,9 @@
  */
 package org.digijava.module.aim.helper;
 
-import java.util.Collection;
-
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.Collection;
 
 public class ActivityIndicator {
 

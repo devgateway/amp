@@ -1,7 +1,5 @@
 package org.digijava.module.parisindicator.action;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -12,6 +10,8 @@ import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.model.PIExportUseCase;
 import org.digijava.module.parisindicator.model.PIUseCase;
+
+import javax.servlet.ServletContext;
 
 public class PIAction extends Action {
 

@@ -1,13 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.sync;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

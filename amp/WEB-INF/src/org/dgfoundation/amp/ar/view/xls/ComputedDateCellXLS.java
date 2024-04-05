@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.io.IOException;
-import java.io.StringReader;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -11,11 +8,12 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
-import org.dgfoundation.amp.ar.workers.ComputedDateColWorker;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Html2TextCallback;
+
+import java.io.IOException;
+import java.io.StringReader;
 
 public class ComputedDateCellXLS extends TextCellXLS {
 

@@ -1,19 +1,7 @@
 package org.digijava.module.contentrepository.action;
 
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -23,6 +11,15 @@ import org.digijava.module.contentrepository.form.DocTabManagerForm;
 import org.digijava.module.contentrepository.helper.filter.DocumentFilterJson;
 import org.digijava.module.contentrepository.util.DocumentFilterDAO;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeSet;
 
 public class DocTabManagerAction extends MultiAction {
 

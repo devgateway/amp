@@ -1,16 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
@@ -18,7 +7,6 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
@@ -30,6 +18,12 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
+
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Project List generation class
@@ -149,7 +143,7 @@ public class ProjectList {
 
             // for every workspace generate the workspace query to get the activities.
             final String query = WorkspaceFilter.getViewableActivitiesIdByTeams(teamMemberList);
-            viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query)
+            viewableActivityIds = PersistenceManager.getSession().createNativeQuery(query)
                     .addScalar("amp_activity_id", LongType.INSTANCE).list();
         }
         return viewableActivityIds;

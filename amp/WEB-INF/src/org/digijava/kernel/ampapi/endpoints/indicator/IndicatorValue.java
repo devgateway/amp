@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.math.BigDecimal;
 
 /**
  * @author Octavian Ciubotaru

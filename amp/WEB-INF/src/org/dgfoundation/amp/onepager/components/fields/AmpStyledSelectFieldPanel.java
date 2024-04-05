@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.List;
-
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOptions;
 import org.apache.wicket.model.IModel;
+
+import java.util.List;
 
 public class AmpStyledSelectFieldPanel<T> extends AmpFieldPanel<T> {
 

@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.security.principal;
 
+import org.digijava.kernel.user.User;
+
 import java.io.Serializable;
 import java.security.Principal;
-
-import org.digijava.kernel.user.User;
 
 public class UserPrincipal
     implements Principal, Serializable  {

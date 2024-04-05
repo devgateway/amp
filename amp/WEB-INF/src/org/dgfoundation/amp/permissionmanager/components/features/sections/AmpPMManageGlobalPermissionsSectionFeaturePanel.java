@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -15,6 +11,10 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.core.Permission;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

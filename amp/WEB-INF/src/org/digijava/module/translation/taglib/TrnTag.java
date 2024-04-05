@@ -22,12 +22,15 @@
 
 package org.digijava.module.translation.taglib;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.Constants;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.*;
+import org.digijava.module.translation.security.TranslateSecurityManager;
 
 import javax.security.auth.Subject;
 import javax.servlet.ServletContext;
@@ -35,21 +38,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.translation.security.TranslateSecurityManager;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Custom tag that retrieves internationalized message

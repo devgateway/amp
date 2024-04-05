@@ -1,9 +1,8 @@
 package org.digijava.kernel.web.gzip;
 
+import javax.servlet.ServletInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.servlet.ServletInputStream;
 
 /**
  * A simple wrapper that converts InputStream to ServletInputStream.

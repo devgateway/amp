@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
-import static org.junit.Assert.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.digijava.module.aim.helper.HeatMapConfig;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Octavian Ciubotaru

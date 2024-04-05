@@ -24,7 +24,7 @@ public class RepairDbUtil {
         try{
             session             = PersistenceManager.getSession();
             qryStr              = "UPDATE amp_activity_version SET activity_creator=NULL WHERE activity_creator NOT IN (SELECT amp_team_mem_id FROM amp_team_member)" ;
-            int result          = session.createSQLQuery(qryStr).executeUpdate();
+            int result          = session.createNativeQuery(qryStr).executeUpdate();
                 
             if (result > 0) {
                 logger.error ("There was an error with inexistent activity creator in AmpActivity --- updated " + result + "rows" );
@@ -45,7 +45,7 @@ public class RepairDbUtil {
 //      try{
 //          session             = PersistenceManager.getSession();
 //          qryStr              = "DELETE FROM amp_team_page_filters WHERE page NOT IN (SELECT amp_page_id FROM amp_pages)" ;
-//          int result          = session.createSQLQuery(qryStr).executeUpdate();
+//          int result          = session.createNativeQuery(qryStr).executeUpdate();
 //              
 //          if (result > 0) {
 //              logger.error ("There was an error with inexistent amp_page in amp_team_page_filter --- deleted " + result + "rows" );
@@ -65,7 +65,7 @@ public class RepairDbUtil {
             String qryStr = "UPDATE dg_user SET banned = false WHERE banned = TRUE "
                     + "AND dg_user.id IN (SELECT amp_team_member.user_ FROM amp_team_member WHERE deleted is not true)";
 
-            int result = session.createSQLQuery(qryStr).executeUpdate();
+            int result = session.createNativeQuery(qryStr).executeUpdate();
 
             if (result > 0) {
                 logger.error("There was an error with banned users still appearing in teams --- updated "

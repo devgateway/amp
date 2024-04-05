@@ -1,13 +1,13 @@
 package org.digijava.kernel.services.sync.model;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

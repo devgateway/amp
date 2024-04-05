@@ -102,7 +102,7 @@
 
 
 		<many-to-one name="team" column="amp_team_id"
-			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="delete" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 
 		<many-to-one name="activityCreator" column="activity_creator"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember"/>

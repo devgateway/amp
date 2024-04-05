@@ -39,7 +39,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     private Boolean computation;
     private Boolean hideDraftActivities;
     private Boolean useFilter;
-    private Set<AmpApplicationSettings> ampApplicationSettings;
     @TranslatableField
     private String description;
 
@@ -325,13 +324,5 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
         } else {
             this.isolated = isolated;
         }
-    }
-
-    public Set<AmpApplicationSettings> getAmpApplicationSettings() {
-        return ampApplicationSettings;
-    }
-
-    public void setAmpApplicationSettings(Set<AmpApplicationSettings> ampApplicationSettings) {
-        this.ampApplicationSettings = ampApplicationSettings;
     }
 }

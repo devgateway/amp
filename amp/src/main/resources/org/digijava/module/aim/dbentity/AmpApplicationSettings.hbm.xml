@@ -22,7 +22,6 @@
 			class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
 		<many-to-one name="team" column="team_id" class="org.digijava.module.aim.dbentity.AmpTeam"
 			cascade="none" />
-
 		<many-to-one name="currency" column="currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="fiscalCalendar" column="fis_cal_id"

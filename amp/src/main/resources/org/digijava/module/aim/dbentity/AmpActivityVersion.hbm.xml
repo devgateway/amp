@@ -134,7 +134,7 @@
 		</set>
 
 
-		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="merge">
+		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="persist,delete">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"

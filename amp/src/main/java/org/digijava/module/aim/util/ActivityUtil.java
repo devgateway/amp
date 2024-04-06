@@ -1629,14 +1629,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
         if (activityversions != null && !activityversions.isEmpty()) {
             for (AmpActivityVersion ampActivityVersion : activityversions) {
-//                deleteFullActivityContent(ampActivityVersion, session);
-
+                deleteFullActivityContent(ampActivityVersion, session);
+                session.flush();
                 session.delete(ampActivityVersion);
 //                deleteActivity(session,ampActivityVersion);
             }
         } else {
             AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
             deleteFullActivityContent(ampAct, session);
+            session.flush();
             session.delete(ampAct);
 //            deleteActivity(session,ampAct);
         }

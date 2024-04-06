@@ -1141,10 +1141,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
   public static void deleteActivityIndicators(Collection activityInd, AmpActivityVersion activity, Session session) throws Exception {
 
-            if (activityInd != null && activityInd.size() > 0) {
+            if (activityInd != null && !activityInd.isEmpty()) {
                 for (Object indAct : activityInd) {
 
-                    AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, ((IndicatorActivity) indAct).getIndicator().getIndicatorId());
+                    AmpIndicator ind = session.get(AmpIndicator.class, ((IndicatorActivity) indAct).getIndicator().getIndicatorId());
                     IndicatorActivity indConn = IndicatorUtil.findActivityIndicatorConnection(activity, ind);
                     IndicatorUtil.removeConnection(indConn);
                 }

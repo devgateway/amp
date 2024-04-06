@@ -2285,8 +2285,7 @@ public class DbUtil {
             qry.setParameter("ampActId", ampActId, LongType.INSTANCE);
             col = qry.list();
         } catch (Exception e1) {
-            logger.error("could not retrieve AmpReportSector " + e1.getMessage());
-            e1.printStackTrace(System.out);
+            logger.error("could not retrieve IndicatorActivity " + e1.getMessage(),e1);
         }
         return col;
     }

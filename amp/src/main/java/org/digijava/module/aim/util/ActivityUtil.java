@@ -1631,19 +1631,29 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             for (AmpActivityVersion ampActivityVersion : activityversions) {
                 deleteFullActivityContent(ampActivityVersion, session);
 
-                session.delete(ampActivityVersion);
+//                session.delete(ampActivityVersion);
+                deleteActivity(session,ampActivityVersion);
             }
         } else {
             AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
             deleteFullActivityContent(ampAct, session);
-            session.delete(ampAct);
+//            session.delete(ampAct);
+            deleteActivity(session,ampAct);
         }
         session.delete(ampActivityGroup);
     }
 
+    private static void deleteActivity(Session session, AmpActivityVersion ampAct)
+    {
+        logger.info("Deleting Real ... Activity # " + ampAct.getAmpActivityId());
+        Connection con = ((SessionImplementor)session).connection();
+        //   delete surveys
+        String deleteActivitySurveyResponse = "DELETE FROM amp_activity_version WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivitySurveyResponse );
+    }
+
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);
-        session.flush();
 
         Long ampActId = ampAct.getAmpActivityId();
         //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.

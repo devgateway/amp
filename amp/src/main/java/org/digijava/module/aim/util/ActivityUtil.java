@@ -1069,6 +1069,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         SQLUtils.executeQuery(con, deleteActivityTeam );
+
+        String deleteActivityFunding = "DELETE FROM amp_funding WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivityFunding );
     }
 
     public static void removeMergeSources(Long ampActivityId,Session session){

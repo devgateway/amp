@@ -1069,9 +1069,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         SQLUtils.executeQuery(con, deleteActivityTeam );
-
-        String deleteActivityFunding = "DELETE FROM amp_funding WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityFunding );
     }
 
     public static void removeMergeSources(Long ampActivityId,Session session){
@@ -1632,16 +1629,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
         if (activityversions != null && !activityversions.isEmpty()) {
             for (AmpActivityVersion ampActivityVersion : activityversions) {
-                deleteFullActivityContent(ampActivityVersion, session);
+//                deleteFullActivityContent(ampActivityVersion, session);
 
-//                session.delete(ampActivityVersion);
-                deleteActivity(session,ampActivityVersion);
+                session.delete(ampActivityVersion);
+//                deleteActivity(session,ampActivityVersion);
             }
         } else {
             AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
             deleteFullActivityContent(ampAct, session);
-//            session.delete(ampAct);
-            deleteActivity(session,ampAct);
+            session.delete(ampAct);
+//            deleteActivity(session,ampAct);
         }
         session.delete(ampActivityGroup);
     }

@@ -11,8 +11,8 @@
 
 		<property name="value" column="category_value" type="java.lang.String" index="value" />
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
-		
-		
+
+
  		<properties name="class_index_uniqueness">
 			<many-to-one name="ampCategoryClass" column="amp_category_class_id" lazy="false"
 				class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
@@ -28,7 +28,7 @@
 		<set name="usedByValues" table="AMP_CATEGORY_VALUES_USED" inverse="true" lazy="true">
 			<cache usage="read-write"/>
 			<key column="used_value_id"/>
-			<many-to-many column="value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+			<many-to-many column="value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"  />
 		</set>
 		<many-to-one name="defaultUsedValue" column="default_used_value"
 					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />

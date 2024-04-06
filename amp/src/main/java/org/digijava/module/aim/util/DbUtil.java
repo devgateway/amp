@@ -2279,6 +2279,7 @@ public class DbUtil {
         Query qry;
         try {
             session = PersistenceManager.getRequestDBSession();
+            session.flush();
             String queryString = "select indAct from " + IndicatorActivity.class.getName() + " indAct "
                     + " where (indAct.activity=:ampActId)";
             qry = session.createQuery(queryString);

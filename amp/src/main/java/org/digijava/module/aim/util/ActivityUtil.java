@@ -1639,6 +1639,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             session.delete(ampAct);
         }
         session.delete(ampActivityGroup);
+        session.flush();
     }
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

@@ -226,7 +226,7 @@ public class DataImporter extends Action {
 
     private void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
     {
-        String hql = "SELECT o FROM " + AmpSector.class.getName() + " o WHERE s.name LIKE :name";
+        String hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o WHERE o.name LIKE :name";
 
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");

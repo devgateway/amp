@@ -1,5 +1,6 @@
 package org.digijava.module.admin.action;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -10,7 +11,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.admin.util.model.ActivityGroup;
+import org.digijava.module.admin.util.model.DonorOrganization;
+import org.digijava.module.admin.util.model.ImportDataModel;
+import org.digijava.module.admin.util.model.Sector;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.hibernate.Query;
@@ -21,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataImporter extends Action {
@@ -126,41 +135,63 @@ public class DataImporter extends Action {
     private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber)
     {
         Session session = PersistenceManager.getRequestDBSession();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
         Sheet sheet = workbook.getSheetAt(sheetNumber);
         for (Row row : sheet) {
-            AmpActivityVersion ampActivityVersion = new AmpActivityVersion();
-            ampActivityVersion.setApprovalStatus(ApprovalStatus.CREATED);
+            ImportDataModel importDataModel = new ImportDataModel();
+            importDataModel.setIs_draft(true);
+            importDataModel.setCreation_date(LocalDateTime.now().format(formatter));
+
+//            ampActivityVersion.setApprovalStatus(ApprovalStatus.CREATED);
             if (row.getRowNum() == 0) {
                 continue;
             }
+            if (row.getRowNum()<=5) {
 
-            for (Map.Entry<String,String> entry : config.entrySet())
-            {
-                Cell cell = row.getCell(getColumnIndexByName(sheet, entry.getKey()));
-                switch (entry.getValue())
-                {
-                    case "{projectName}":
-                        ampActivityVersion.setName(cell.getStringCellValue());
-                        break;
-                    case "{projectDescription}":
-                        ampActivityVersion.setDescription(cell.getStringCellValue());
-                        break;
-                    case "{projectLocation}":
-                        ampActivityVersion.addLocation(new AmpActivityLocation());
-                        break;
-                    case "{primarySector}":
-                        updateSectors(ampActivityVersion, cell.getStringCellValue(), session);
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + entry.getValue());
+                for (Map.Entry<String, String> entry : config.entrySet()) {
+                    Cell cell = row.getCell(getColumnIndexByName(sheet, entry.getKey()));
+                    switch (entry.getValue()) {
+                        case "{projectName}":
+                            importDataModel.setProject_title(cell.getStringCellValue());
+                            break;
+                        case "{projectDescription}":
+                            importDataModel.setDescription(cell.getStringCellValue());
+                            break;
+                        case "{projectLocation}":
+//                        ampActivityVersion.addLocation(new AmpActivityLocation());
+                            break;
+                        case "{primarySector}":
+                            updateSectors(importDataModel, cell.getStringCellValue(), session, true);
+                            break;
+                        case "{secondarySector}":
+                            updateSectors(importDataModel, cell.getStringCellValue(), session, false);
+                            break;
+                        case "{donorAgency}":
+                            updateOrgs(importDataModel, cell.getStringCellValue(), session, "donor");
+                            break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + entry.getValue());
+                    }
+
                 }
-
             }
-            logger.info("Activity here: "+ampActivityVersion);
-//            session.save(ampActivityVersion);
+            logger.info("Activity here: "+importDataModel);
+            importTheData(importDataModel);
 
         }
+
+    }
+    private void importTheData(ImportDataModel importDataModel){
+        logger.info("Trying to import tha data...");
+        ActivityImportRules rules = new ActivityImportRules(false, false,
+                true);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map<String, Object> map = objectMapper
+                .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
+    logger.info("Data map "+map);
+     ActivityInterchangeUtils.importActivity(map, false, rules,  "activity");
 
     }
 
@@ -169,16 +200,40 @@ public class DataImporter extends Action {
 
     }
 
-    private void updateSectors(AmpActivityVersion ampActivityVersion, String name, Session session)
+    private void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
     {
         String hql = "SELECT "+ AmpSector.class.getName() +" s WHERE s.name LIKE %:name%";
         Query query= session.createQuery(hql);
         query.setString("name", name);
         AmpSector sector =(AmpSector) query.uniqueResult();
         if (sector!=null) {
-            AmpActivitySector ampActivitySector = new AmpActivitySector();
-            ampActivitySector.setSectorId(sector);
-            ampActivityVersion.getSectors().add(ampActivitySector);
+           Sector sector1 = new Sector();
+            sector1.setSector(sector.getAmpSectorId());
+            if (primary) {
+                importDataModel.getPrimary_sectors().add(sector1);
+            }
+            else
+            {
+                importDataModel.getSecondary_sectors().add(sector1);
+
+            }
+        }
+
+    }
+
+    private void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
+    {
+        String hql = "SELECT "+ AmpOrganisation.class.getName() +" o WHERE o.name LIKE %:name%";
+        Query query= session.createQuery(hql);
+        query.setString("name", name);
+        AmpOrganisation organisation =(AmpOrganisation) query.uniqueResult();
+        if (organisation!=null) {
+            if (Objects.equals(type, "donor")) {
+                DonorOrganization donorOrganization = new DonorOrganization();
+            donorOrganization.setOrganization(organisation.getAmpOrgId());
+                importDataModel.getDonor_organization().add(donorOrganization);
+            }
+
         }
 
     }

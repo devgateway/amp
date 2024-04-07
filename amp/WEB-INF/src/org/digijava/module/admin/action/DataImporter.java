@@ -205,9 +205,9 @@ public class DataImporter extends Action {
 
     private void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
     {
-        String hql = "SELECT "+ AmpSector.class.getName() +" s WHERE s.name LIKE %:name%";
+        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s WHERE s.name LIKE :name";
         Query query= session.createQuery(hql);
-        query.setString("name", name);
+        query.setParameter("name", "%" + name + "%");
         AmpSector sector =(AmpSector) query.uniqueResult();
         if (sector!=null) {
            Sector sector1 = new Sector();
@@ -226,9 +226,10 @@ public class DataImporter extends Action {
 
     private void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
     {
-        String hql = "SELECT "+ AmpOrganisation.class.getName() +" o WHERE o.name LIKE %:name%";
+        String hql = "SELECT o FROM " + AmpSector.class.getName() + " o WHERE s.name LIKE :name";
+
         Query query= session.createQuery(hql);
-        query.setString("name", name);
+        query.setParameter("name", "%" + name + "%");
         AmpOrganisation organisation =(AmpOrganisation) query.uniqueResult();
         if (organisation!=null) {
             if (Objects.equals(type, "donor")) {

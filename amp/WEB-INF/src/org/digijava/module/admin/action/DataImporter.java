@@ -208,10 +208,10 @@ public class DataImporter extends Action {
         String hql = "SELECT s FROM " + AmpSector.class.getName() + " s WHERE s.name LIKE :name";
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");
-        AmpSector sector =(AmpSector) query.uniqueResult();
-        if (sector!=null) {
+        List<AmpSector> sectors =query.list();
+        if (sectors!=null && !sectors.isEmpty()) {
            Sector sector1 = new Sector();
-            sector1.setSector(sector.getAmpSectorId());
+            sector1.setSector(sectors.get(0).getAmpSectorId());
             if (primary) {
                 importDataModel.getPrimary_sectors().add(sector1);
             }
@@ -230,11 +230,11 @@ public class DataImporter extends Action {
 
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");
-        AmpOrganisation organisation =(AmpOrganisation) query.uniqueResult();
-        if (organisation!=null) {
+        List<AmpOrganisation> organisations =query.list();
+        if (organisations!=null && !organisations.isEmpty()) {
             if (Objects.equals(type, "donor")) {
                 DonorOrganization donorOrganization = new DonorOrganization();
-            donorOrganization.setOrganization(organisation.getAmpOrgId());
+            donorOrganization.setOrganization(organisations.get(0).getAmpOrgId());
                 importDataModel.getDonor_organization().add(donorOrganization);
             }
 

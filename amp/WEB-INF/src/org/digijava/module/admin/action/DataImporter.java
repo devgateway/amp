@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -141,7 +143,8 @@ public class DataImporter extends Action {
         for (Row row : sheet) {
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setIs_draft(true);
-            importDataModel.setCreation_date(LocalDateTime.now().format(formatter));
+            OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+            importDataModel.setCreation_date(now.format(formatter));
 
 //            ampActivityVersion.setApprovalStatus(ApprovalStatus.CREATED);
             if (row.getRowNum() == 0) {

@@ -1,5 +1,6 @@
 package org.digijava.module.admin.action;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.Cell;
@@ -13,6 +14,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.util.model.ActivityGroup;
 import org.digijava.module.admin.util.model.DonorOrganization;
@@ -134,8 +137,7 @@ public class DataImporter extends Action {
     }
 
 
-    private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber)
-    {
+    private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber) throws JsonProcessingException {
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
@@ -185,7 +187,7 @@ public class DataImporter extends Action {
         }
 
     }
-    private void importTheData(ImportDataModel importDataModel){
+    private void importTheData(ImportDataModel importDataModel) throws JsonProcessingException {
         logger.info("Trying to import tha data...");
         ActivityImportRules rules = new ActivityImportRules(false, false,
                 true);
@@ -194,8 +196,8 @@ public class DataImporter extends Action {
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
     logger.info("Data map "+map);
-     ActivityInterchangeUtils.importActivity(map, false, rules,  "activity");
-
+        JsonApiResponse<ActivitySummary> response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity");
+        logger.info("Import Response: "+objectMapper.writeValueAsString(response));
     }
 
     private void updateFunding(AmpActivityVersion ampActivityVersion,String donorName,Session session)

@@ -23,6 +23,7 @@ import org.digijava.module.admin.util.model.ImportDataModel;
 import org.digijava.module.admin.util.model.Sector;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DataImporterForm;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -119,7 +120,7 @@ public class DataImporter extends Action {
             Workbook workbook = new XSSFWorkbook(fileInputStream);
             int numberOfSheets = workbook.getNumberOfSheets();
             for (int i = 0; i < numberOfSheets; i++) {
-                parseData(dataImporterForm.getColumnPairs(),workbook,i);
+                parseData(dataImporterForm.getColumnPairs(),workbook,i, request);
             }
 
             workbook.close();
@@ -137,13 +138,14 @@ public class DataImporter extends Action {
     }
 
 
-    private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber) throws JsonProcessingException {
+    private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber, HttpServletRequest request) throws JsonProcessingException {
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
         Sheet sheet = workbook.getSheetAt(sheetNumber);
         for (Row row : sheet) {
             ImportDataModel importDataModel = new ImportDataModel();
+            importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
             importDataModel.setIs_draft(true);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
@@ -152,7 +154,7 @@ public class DataImporter extends Action {
             if (row.getRowNum() == 0) {
                 continue;
             }
-//            if (row.getRowNum()<=5) {
+            if (row.getRowNum()<=5) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     Cell cell = row.getCell(getColumnIndexByName(sheet, entry.getKey()));
@@ -180,9 +182,10 @@ public class DataImporter extends Action {
                     }
 
                 }
-//            }
-            logger.info("Activity here: "+importDataModel);
             importTheData(importDataModel);
+
+            }
+//            logger.info("Activity here: "+importDataModel);
 
         }
 

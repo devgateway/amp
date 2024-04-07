@@ -1,6 +1,7 @@
 package org.digijava.module.admin.util.model;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ImportDataModel {
     private Long internal_id;
@@ -13,23 +14,23 @@ public class ImportDataModel {
     private Object last_imported_at;
     private Object last_imported_by;
     private Object original_completion_date;
-    private List<Sector> primary_sectors;
-    private List<Sector> secondary_sectors;
-    private List<Location> locations;
-    private List<DonorOrganization> donor_organization;
-    private List<Object> responsible_organization;
-    private List<Object> executing_agency;
-    private List<Object> activity_internal_ids;
-    private List<Funding> fundings;
-    private List<Object> issues;
+    private Set<Sector> primary_sectors=new HashSet<>();
+    private Set<Sector> secondary_sectors=new HashSet<>();
+    private Set<Location> locations=new HashSet<>();
+    private Set<DonorOrganization> donor_organization=new HashSet<>();
+    private Set<Object> responsible_organization=new HashSet<>();
+    private Set<Object> executing_agency=new HashSet<>();
+    private Set<Object> activity_internal_ids;
+    private Set<Funding> fundings;
+    private Set<Object> issues;
     private Long team;
     private PpcAmount ppc_amount;
-    private List<Object> donor_contact_information;
-    private List<Object> project_coordinator_contact_information;
-    private List<Object> sector_ministry_contact_information;
-    private List<Object> mofed_contact_information;
-    private List<Object> implementing_executing_agency_contact_information;
-    private List<Object> structures;
+    private Set<Object> donor_contact_information;
+    private Set<Object> project_coordinator_contact_information;
+    private Set<Object> sector_ministry_contact_information;
+    private Set<Object> mofed_contact_information;
+    private Set<Object> implementing_executing_agency_contact_information;
+    private Set<Object> structures;
     private Object proposed_start_date;
     private Object actual_start_date;
     private Object actual_approval_date;
@@ -42,17 +43,17 @@ public class ImportDataModel {
     private Object approval_date;
     private Long approval_status;
     private Object archived;
-    private List<Object> indicators;
-    private List<Object> activity_documents;
+    private Set<Object> indicators;
+    private Set<Object> activity_documents;
     private Long activity_status;
     private Long activity_budget;
     private Object implementation_level;
     private Object implementation_location;
     private Object cris_number;
-    private List<Program> national_plan_objective;
-    private List<Object> primary_programs;
-    private List<Program> secondary_programs;
-    private List<Program> tertiary_programs;
+    private Set<Program> national_plan_objective=new HashSet<>();
+    private Set<Program> primary_programs=new HashSet<>();
+    private Set<Program> secondary_programs=new HashSet<>();
+    private Set<Program> tertiary_programs=new HashSet<>();
     private ActivityGroup activity_group;
     private Long modified_by;
     private Long activity_type;
@@ -137,75 +138,75 @@ public class ImportDataModel {
         this.original_completion_date = original_completion_date;
     }
 
-    public List<Sector> getPrimary_sectors() {
+    public Set<Sector> getPrimary_sectors() {
         return primary_sectors;
     }
 
-    public void setPrimary_sectors(List<Sector> primary_sectors) {
+    public void setPrimary_sectors(Set<Sector> primary_sectors) {
         this.primary_sectors = primary_sectors;
     }
 
-    public List<Sector> getSecondary_sectors() {
+    public Set<Sector> getSecondary_sectors() {
         return secondary_sectors;
     }
 
-    public void setSecondary_sectors(List<Sector> secondary_sectors) {
+    public void setSecondary_sectors(Set<Sector> secondary_sectors) {
         this.secondary_sectors = secondary_sectors;
     }
 
-    public List<Location> getLocations() {
+    public Set<Location> getLocations() {
         return locations;
     }
 
-    public void setLocations(List<Location> locations) {
+    public void setLocations(Set<Location> locations) {
         this.locations = locations;
     }
 
-    public List<DonorOrganization> getDonor_organization() {
+    public Set<DonorOrganization> getDonor_organization() {
         return donor_organization;
     }
 
-    public void setDonor_organization(List<DonorOrganization> donor_organization) {
+    public void setDonor_organization(Set<DonorOrganization> donor_organization) {
         this.donor_organization = donor_organization;
     }
 
-    public List<Object> getResponsible_organization() {
+    public Set<Object> getResponsible_organization() {
         return responsible_organization;
     }
 
-    public void setResponsible_organization(List<Object> responsible_organization) {
+    public void setResponsible_organization(Set<Object> responsible_organization) {
         this.responsible_organization = responsible_organization;
     }
 
-    public List<Object> getExecuting_agency() {
+    public Set<Object> getExecuting_agency() {
         return executing_agency;
     }
 
-    public void setExecuting_agency(List<Object> executing_agency) {
+    public void setExecuting_agency(Set<Object> executing_agency) {
         this.executing_agency = executing_agency;
     }
 
-    public List<Object> getActivity_internal_ids() {
+    public Set<Object> getActivity_internal_ids() {
         return activity_internal_ids;
     }
 
-    public void setActivity_internal_ids(List<Object> activity_internal_ids) {
+    public void setActivity_internal_ids(Set<Object> activity_internal_ids) {
         this.activity_internal_ids = activity_internal_ids;
     }
 
-    public List<Funding> getFundings() {
+    public Set<Funding> getFundings() {
         return fundings;
     }
 
-    public void setFundings(List<Funding> fundings) {
+    public void setFundings(Set<Funding> fundings) {
         this.fundings = fundings;
     }
 
-    public List<Object> getIssues() {
+    public Set<Object> getIssues() {
         return issues;
     }
 
-    public void setIssues(List<Object> issues) {
+    public void setIssues(Set<Object> issues) {
         this.issues = issues;
     }
 
@@ -225,51 +226,51 @@ public class ImportDataModel {
         this.ppc_amount = ppc_amount;
     }
 
-    public List<Object> getDonor_contact_information() {
+    public Set<Object> getDonor_contact_information() {
         return donor_contact_information;
     }
 
-    public void setDonor_contact_information(List<Object> donor_contact_information) {
+    public void setDonor_contact_information(Set<Object> donor_contact_information) {
         this.donor_contact_information = donor_contact_information;
     }
 
-    public List<Object> getProject_coordinator_contact_information() {
+    public Set<Object> getProject_coordinator_contact_information() {
         return project_coordinator_contact_information;
     }
 
-    public void setProject_coordinator_contact_information(List<Object> project_coordinator_contact_information) {
+    public void setProject_coordinator_contact_information(Set<Object> project_coordinator_contact_information) {
         this.project_coordinator_contact_information = project_coordinator_contact_information;
     }
 
-    public List<Object> getSector_ministry_contact_information() {
+    public Set<Object> getSector_ministry_contact_information() {
         return sector_ministry_contact_information;
     }
 
-    public void setSector_ministry_contact_information(List<Object> sector_ministry_contact_information) {
+    public void setSector_ministry_contact_information(Set<Object> sector_ministry_contact_information) {
         this.sector_ministry_contact_information = sector_ministry_contact_information;
     }
 
-    public List<Object> getMofed_contact_information() {
+    public Set<Object> getMofed_contact_information() {
         return mofed_contact_information;
     }
 
-    public void setMofed_contact_information(List<Object> mofed_contact_information) {
+    public void setMofed_contact_information(Set<Object> mofed_contact_information) {
         this.mofed_contact_information = mofed_contact_information;
     }
 
-    public List<Object> getImplementing_executing_agency_contact_information() {
+    public Set<Object> getImplementing_executing_agency_contact_information() {
         return implementing_executing_agency_contact_information;
     }
 
-    public void setImplementing_executing_agency_contact_information(List<Object> implementing_executing_agency_contact_information) {
+    public void setImplementing_executing_agency_contact_information(Set<Object> implementing_executing_agency_contact_information) {
         this.implementing_executing_agency_contact_information = implementing_executing_agency_contact_information;
     }
 
-    public List<Object> getStructures() {
+    public Set<Object> getStructures() {
         return structures;
     }
 
-    public void setStructures(List<Object> structures) {
+    public void setStructures(Set<Object> structures) {
         this.structures = structures;
     }
 
@@ -369,19 +370,19 @@ public class ImportDataModel {
         this.archived = archived;
     }
 
-    public List<Object> getIndicators() {
+    public Set<Object> getIndicators() {
         return indicators;
     }
 
-    public void setIndicators(List<Object> indicators) {
+    public void setIndicators(Set<Object> indicators) {
         this.indicators = indicators;
     }
 
-    public List<Object> getActivity_documents() {
+    public Set<Object> getActivity_documents() {
         return activity_documents;
     }
 
-    public void setActivity_documents(List<Object> activity_documents) {
+    public void setActivity_documents(Set<Object> activity_documents) {
         this.activity_documents = activity_documents;
     }
 
@@ -425,35 +426,35 @@ public class ImportDataModel {
         this.cris_number = cris_number;
     }
 
-    public List<Program> getNational_plan_objective() {
+    public Set<Program> getNational_plan_objective() {
         return national_plan_objective;
     }
 
-    public void setNational_plan_objective(List<Program> national_plan_objective) {
+    public void setNational_plan_objective(Set<Program> national_plan_objective) {
         this.national_plan_objective = national_plan_objective;
     }
 
-    public List<Object> getPrimary_programs() {
+    public Set<Program> getPrimary_programs() {
         return primary_programs;
     }
 
-    public void setPrimary_programs(List<Object> primary_programs) {
+    public void setPrimary_programs(Set<Program> primary_programs) {
         this.primary_programs = primary_programs;
     }
 
-    public List<Program> getSecondary_programs() {
+    public Set<Program> getSecondary_programs() {
         return secondary_programs;
     }
 
-    public void setSecondary_programs(List<Program> secondary_programs) {
+    public void setSecondary_programs(Set<Program> secondary_programs) {
         this.secondary_programs = secondary_programs;
     }
 
-    public List<Program> getTertiary_programs() {
+    public Set<Program> getTertiary_programs() {
         return tertiary_programs;
     }
 
-    public void setTertiary_programs(List<Program> tertiary_programs) {
+    public void setTertiary_programs(Set<Program> tertiary_programs) {
         this.tertiary_programs = tertiary_programs;
     }
 

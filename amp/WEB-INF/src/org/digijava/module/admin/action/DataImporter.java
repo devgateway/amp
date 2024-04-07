@@ -150,7 +150,7 @@ public class DataImporter extends Action {
             if (row.getRowNum() == 0) {
                 continue;
             }
-            if (row.getRowNum()<=5) {
+//            if (row.getRowNum()<=5) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     Cell cell = row.getCell(getColumnIndexByName(sheet, entry.getKey()));
@@ -178,7 +178,7 @@ public class DataImporter extends Action {
                     }
 
                 }
-            }
+//            }
             logger.info("Activity here: "+importDataModel);
             importTheData(importDataModel);
 

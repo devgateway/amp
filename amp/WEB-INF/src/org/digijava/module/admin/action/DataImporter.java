@@ -203,11 +203,16 @@ public class DataImporter extends Action {
         String statusStr = TranslatorWorker.translateText("Ongoing project");
 
 //        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s WHERE s.category_value LIKE :value";
+//        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
+//                "JOIN " + AmpCategoryClass.class.getName() + " c " +
+//                "WHERE s.amp_category_class_id = c.id " +  // Join condition
+//                "AND s.category_value LIKE :value " +     // Additional conditions
+//                "AND c.keyname = :categoryKey";          // Additional conditions
+
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
-                "JOIN " + AmpCategoryClass.class.getName() + " c " +
-                "WHERE s.amp_category_class_id = c.id " +  // Join condition
-                "AND s.category_value LIKE :value " +     // Additional conditions
-                "AND c.keyname = :categoryKey";          // Additional conditions
+                "JOIN s.ampCategoryClass c " +
+                "WHERE s.value LIKE :value " +
+                "AND c.keyname = :categoryKey";
 
         Query query= session.createQuery(hql);
         query.setParameter("value", "%" + statusStr + "%");

@@ -211,15 +211,14 @@ public class DataImporter extends Action {
 
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
-                "WHERE s.value LIKE :value " +
-                "AND c.keyName = :categoryKey";
+                "WHERE c.keyName = :categoryKey";
 
         Query query= session.createQuery(hql);
         logger.info("Query: "+query.getQueryString());
-        query.setParameter("value", "%" + statusStr + "%");
+//        query.setParameter("value", "%" + statusStr + "%");
         query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY );
-        AmpCategoryValue value= (AmpCategoryValue) query.uniqueResult();
-        importDataModel.setActivity_status(value.getId());
+        List<AmpCategoryValue> values= query.list();
+        importDataModel.setActivity_status(values.get(0).getId());
 
     }
     private void importTheData(ImportDataModel importDataModel) throws JsonProcessingException {

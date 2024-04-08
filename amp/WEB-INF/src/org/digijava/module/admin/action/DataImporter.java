@@ -270,7 +270,7 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT s FROM " + AmpActivitySector.class.getName() + " acs " +
+        String hql = "SELECT acs FROM " + AmpActivitySector.class.getName() + " acs " +
                 "JOIN acs.sectorId s " +
                 "WHERE LOWER(s.name) LIKE LOWER(:name)";        Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");

@@ -139,7 +139,7 @@ public class DataImporter extends Action {
 
 
     private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber, HttpServletRequest request) throws JsonProcessingException {
-        Session session = PersistenceManager.getRequestDBSession();
+//        Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
         Sheet sheet = workbook.getSheetAt(sheetNumber);
@@ -169,13 +169,13 @@ public class DataImporter extends Action {
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                             break;
                         case "{primarySector}":
-                            updateSectors(importDataModel, cell.getStringCellValue(), session, true);
+                            updateSectors(importDataModel, cell.getStringCellValue(), true);
                             break;
                         case "{secondarySector}":
-                            updateSectors(importDataModel, cell.getStringCellValue(), session, false);
+                            updateSectors(importDataModel, cell.getStringCellValue(), false);
                             break;
                         case "{donorAgency}":
-                            updateOrgs(importDataModel, cell.getStringCellValue(), session, "donor");
+                            updateOrgs(importDataModel, cell.getStringCellValue(), "donor");
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + entry.getValue());
@@ -208,8 +208,9 @@ public class DataImporter extends Action {
 
     }
 
-    private void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
+    private void updateSectors(ImportDataModel importDataModel, String name, boolean primary)
     {
+        Session session = PersistenceManager.getRequestDBSession();
         String hql = "SELECT s FROM " + AmpSector.class.getName() + " s WHERE s.name LIKE :name";
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");
@@ -229,8 +230,10 @@ public class DataImporter extends Action {
 
     }
 
-    private void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
+    private void updateOrgs(ImportDataModel importDataModel, String name, String type)
     {
+        Session session = PersistenceManager.getRequestDBSession();
+
         String hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o WHERE o.name LIKE :name";
 
         Query query= session.createQuery(hql);
@@ -240,6 +243,7 @@ public class DataImporter extends Action {
             if (Objects.equals(type, "donor")) {
                 DonorOrganization donorOrganization = new DonorOrganization();
             donorOrganization.setOrganization(organisations.get(0).getAmpOrgId());
+            donorOrganization.setPercentage(100.0);
                 importDataModel.getDonor_organization().add(donorOrganization);
             }
 

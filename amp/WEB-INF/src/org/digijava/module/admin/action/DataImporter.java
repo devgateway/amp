@@ -272,8 +272,8 @@ public class DataImporter extends Action {
         }
         String hql = "SELECT acs FROM " + AmpActivitySector.class.getName() + " acs " +
                 "JOIN acs.sectorId s " +
-                "WHERE LOWER(s.name) LIKE LOWER(:name)";        Query query= session.createQuery(hql);
-        query.setParameter("name", "%" + name + "%");
+                "WHERE LOWER(s.name) = LOWER(:name)";        Query query= session.createQuery(hql);
+        query.setParameter("name",  name.trim() );
         List<AmpActivitySector> sectors =query.list();
         logger.info("Sectors: "+sectors);
         if (sectors!=null && !sectors.isEmpty()) {

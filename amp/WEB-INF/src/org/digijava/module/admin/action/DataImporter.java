@@ -217,7 +217,7 @@ public class DataImporter extends Action {
         Query query= session.createQuery(hql);
         logger.info("Query: "+query.getQueryString());
         query.setParameter("value", "%" + statusStr + "%");
-        query.setParameter("categoryKey", "%" + CategoryConstants.ACTIVITY_STATUS_KEY + "%");
+        query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY );
         AmpCategoryValue value= (AmpCategoryValue) query.uniqueResult();
         importDataModel.setActivity_status(value.getId());
 

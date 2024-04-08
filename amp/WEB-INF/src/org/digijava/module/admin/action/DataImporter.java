@@ -13,6 +13,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -31,12 +34,15 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -276,26 +282,49 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s "+
-                "WHERE LOWER(s.name) = LOWER(:name)";
-        Query query= session.createQuery(hql);
-        query.setParameter("name",  name.trim() );
-        List<AmpSector> sectors =query.list();
-        logger.info("Sectors: "+sectors);
-        if (sectors!=null && !sectors.isEmpty()) {
-           Sector sector1 = new Sector();
-//           sector1.setId(sectors.get(0).getAmpSectorId());
-           sector1.setSector_percentage(100.00);
-            sector1.setSector(sectors.get(0).getAmpSectorId());
-            if (primary) {
-                importDataModel.getPrimary_sectors().add(sector1);
-            }
-            else
-            {
-                importDataModel.getSecondary_sectors().add(sector1);
 
+        session.doWork(connection -> {
+            String query = String.format("SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE name = %s", name);
+            try(RsInfo rs = SQLUtils.rawRunQuery(connection, query, null)) {
+
+                while (rs.rs.next()) {
+                    Long secId = rs.rs.getLong(1);
+//                        String secScheme = rs.rs.getString(2);
+                    Sector sector1 = new Sector();
+                    sector1.setSector_percentage(100.00);
+                    sector1.setSector(secId);
+                    if (primary) {
+                        importDataModel.getPrimary_sectors().add(sector1);
+                    }
+                    else
+                    {
+                        importDataModel.getSecondary_sectors().add(sector1);
+
+                    }
+//
+                }
             }
-        }
+        });
+//        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s "+
+//                "WHERE LOWER(s.name) = LOWER(:name)";
+//        Query query= session.createQuery(hql);
+//        query.setParameter("name",  name.trim() );
+//        List<AmpSector> sectors =query.list();
+//        logger.info("Sectors: "+sectors);
+//        if (sectors!=null && !sectors.isEmpty()) {
+//           Sector sector1 = new Sector();
+////           sector1.setId(sectors.get(0).getAmpSectorId());
+//           sector1.setSector_percentage(100.00);
+//            sector1.setSector(sectors.get(0).getAmpSectorId());
+//            if (primary) {
+//                importDataModel.getPrimary_sectors().add(sector1);
+//            }
+//            else
+//            {
+//                importDataModel.getSecondary_sectors().add(sector1);
+//
+//            }
+//        }
 
     }
 

@@ -212,7 +212,7 @@ public class DataImporter extends Action {
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
                 "WHERE s.value LIKE :value " +
-                "AND c.keyname = :categoryKey";
+                "AND c.keyName = :categoryKey";
 
         Query query= session.createQuery(hql);
         query.setParameter("value", "%" + statusStr + "%");

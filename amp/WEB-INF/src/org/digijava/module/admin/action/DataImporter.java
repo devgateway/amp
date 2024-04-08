@@ -205,12 +205,13 @@ public class DataImporter extends Action {
 //        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s WHERE s.category_value LIKE :value";
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN " + AmpCategoryClass.class.getName() + " c " +
-                "WHERE s.ampCategoryClass.id = c.id " +  // Join condition
-                "AND s.categoryValue LIKE :value " +     // Additional conditions
+                "WHERE s.amp_category_class_id = c.id " +  // Join condition
+                "AND s.category_value LIKE :value " +     // Additional conditions
                 "AND c.keyname = :categoryKey";          // Additional conditions
 
         Query query= session.createQuery(hql);
         query.setParameter("value", "%" + statusStr + "%");
+        query.setParameter("categoryKey", "%" + CategoryConstants.ACTIVITY_STATUS_KEY + "%");
         AmpCategoryValue value= (AmpCategoryValue) query.uniqueResult();
         importDataModel.setActivity_status(value.getId());
 

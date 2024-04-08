@@ -59,14 +59,23 @@ public class DataImporter extends Action {
 
             InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);
-            Sheet sheet = workbook.getSheetAt(0);
-            Row headerRow = sheet.getRow(0);
+            int numberOfSheets = workbook.getNumberOfSheets();
+            Set<String> headersSet = new HashSet<>();
+            for (int i=0;i<numberOfSheets;i++)
+            {
+                Sheet sheet = workbook.getSheetAt(0);
+                Row headerRow = sheet.getRow(0);
+                Iterator<Cell> cellIterator = headerRow.cellIterator();
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    headersSet.add(cell.getStringCellValue());
+                }
+
+            }
             StringBuilder headers = new StringBuilder();
             headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select id=\"columnName\">");
-            Iterator<Cell> cellIterator = headerRow.cellIterator();
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                headers.append("<option>").append(cell.getStringCellValue()).append("</option>");
+            for (String option: headersSet) {
+                headers.append("<option>").append(option).append("</option>");
             }
             headers.append("</select>");
             response.setHeader("selectTag",headers.toString());
@@ -154,7 +163,6 @@ public class DataImporter extends Action {
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
 
-//            ampActivityVersion.setApprovalStatus(ApprovalStatus.CREATED);
             if (row.getRowNum() == 0) {
                 continue;
             }
@@ -189,7 +197,6 @@ public class DataImporter extends Action {
             importTheData(importDataModel,session);
 
             }
-//            logger.info("Activity here: "+importDataModel);
 
         }
 
@@ -256,10 +263,11 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s WHERE s.name LIKE :name";
+        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s WHERE LOWER(s.name) LIKE LOWER(:name)";
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");
         List<AmpSector> sectors =query.list();
+        logger.info("Sectors: "+sectors);
         if (sectors!=null && !sectors.isEmpty()) {
            Sector sector1 = new Sector();
             sector1.setSector(sectors.get(0).getAmpSectorId());
@@ -280,7 +288,7 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
         session=PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o WHERE o.name LIKE :name";
+        String hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
 
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");

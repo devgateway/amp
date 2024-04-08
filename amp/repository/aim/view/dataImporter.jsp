@@ -6,6 +6,7 @@
 <head>
   <title>Data Importer</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
   <script>
     function replaceLastOccurrence(inputString, search, replacement) {

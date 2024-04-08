@@ -215,6 +215,7 @@ public class DataImporter extends Action {
                 "AND c.keyName = :categoryKey";
 
         Query query= session.createQuery(hql);
+        logger.info("Query: "+query.getQueryString());
         query.setParameter("value", "%" + statusStr + "%");
         query.setParameter("categoryKey", "%" + CategoryConstants.ACTIVITY_STATUS_KEY + "%");
         AmpCategoryValue value= (AmpCategoryValue) query.uniqueResult();

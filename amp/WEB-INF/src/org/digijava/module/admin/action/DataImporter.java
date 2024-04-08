@@ -204,14 +204,13 @@ public class DataImporter extends Action {
         }
 
     }
-    private boolean activityExists(ImportDataModel importDataModel,Session session)
+    private AmpActivityVersion existingActivity(ImportDataModel importDataModel,Session session)
     {
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name LIKE :name";
+                "WHERE a.name = :name";
         Query query= session.createQuery(hql);
         query.setString("name", "%"+importDataModel.getProject_title()+"%");
-        return  !query.list().isEmpty();
-
+        return (AmpActivityVersion) query.uniqueResult();
     }
     private void setStatus(ImportDataModel importDataModel,Session session)
     {
@@ -244,13 +243,18 @@ public class DataImporter extends Action {
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
         JsonApiResponse<ActivitySummary> response;
-    if (!activityExists(importDataModel,session)){
-         response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity");
+        AmpActivityVersion existing = existingActivity(importDataModel,session);
+    if (existing==null){
+         response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity/new");
     }
 
     else
     {
-        response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity");
+        importDataModel.setInternal_id(existing.getAmpActivityId());
+        importDataModel.setAmp_id(existing.getAmpId());
+        map = objectMapper
+                .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
+        response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity/update");
 
     }
         logger.info("Import Response: "+objectMapper.writeValueAsString(response));
@@ -273,6 +277,7 @@ public class DataImporter extends Action {
         logger.info("Sectors: "+sectors);
         if (sectors!=null && !sectors.isEmpty()) {
            Sector sector1 = new Sector();
+           sector1.setSector_percentage(100.00);
             sector1.setSector(sectors.get(0).getAmpSectorId());
             if (primary) {
                 importDataModel.getPrimary_sectors().add(sector1);

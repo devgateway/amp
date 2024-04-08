@@ -164,34 +164,43 @@ public class DataImporter extends Action {
                     Cell cell = row.getCell(getColumnIndexByName(sheet, entry.getKey()));
                     switch (entry.getValue()) {
                         case "{projectName}":
-                            importDataModel.setProject_title(cell.getStringCellValue());
+                            importDataModel.setProject_title(cell.getStringCellValue().trim());
                             break;
                         case "{projectDescription}":
-                            importDataModel.setDescription(cell.getStringCellValue());
+                            importDataModel.setDescription(cell.getStringCellValue().trim());
                             break;
                         case "{projectLocation}":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                             break;
                         case "{primarySector}":
-                            updateSectors(importDataModel, cell.getStringCellValue(), session, true);
+                            updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
                             break;
                         case "{secondarySector}":
-                            updateSectors(importDataModel, cell.getStringCellValue(), session, false);
+                            updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
                             break;
                         case "{donorAgency}":
-                            updateOrgs(importDataModel, cell.getStringCellValue(), session, "donor");
+                            updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + entry.getValue());
                     }
 
                 }
-            importTheData(importDataModel);
+            importTheData(importDataModel,session);
 
             }
 //            logger.info("Activity here: "+importDataModel);
 
         }
+
+    }
+    private boolean activityExists(ImportDataModel importDataModel,Session session)
+    {
+        String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
+                "WHERE c.name LIKE :name";
+        Query query= session.createQuery(hql);
+        query.setString("name", "%"+importDataModel.getProject_title()+"%");
+        return  !query.list().isEmpty();
 
     }
     private void setStatus(ImportDataModel importDataModel,Session session)
@@ -202,36 +211,38 @@ public class DataImporter extends Action {
         String statusStr = TranslatorWorker.translateText("Ongoing project");
         logger.info("Status: "+statusStr);
 
-//        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s WHERE s.category_value LIKE :value";
-//        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
-//                "JOIN " + AmpCategoryClass.class.getName() + " c " +
-//                "WHERE s.amp_category_class_id = c.id " +  // Join condition
-//                "AND s.category_value LIKE :value " +     // Additional conditions
-//                "AND c.keyname = :categoryKey";          // Additional conditions
-
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
                 "WHERE c.keyName = :categoryKey";
 
         Query query= session.createQuery(hql);
-        logger.info("Query: "+query.getQueryString());
-//        query.setParameter("value", "%" + statusStr + "%");
         query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY );
         List<AmpCategoryValue> values= query.list();
         logger.info("Statuses: "+values);
         importDataModel.setActivity_status(values.get(0).getId());
 
     }
-    private void importTheData(ImportDataModel importDataModel) throws JsonProcessingException {
+    private void importTheData(ImportDataModel importDataModel, Session session) throws JsonProcessingException {
         logger.info("Trying to import tha data...");
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
         ActivityImportRules rules = new ActivityImportRules(false, false,
                 true);
         ObjectMapper objectMapper = new ObjectMapper();
 
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
-    logger.info("Data map "+map);
-        JsonApiResponse<ActivitySummary> response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity");
+        JsonApiResponse<ActivitySummary> response;
+    if (!activityExists(importDataModel,session)){
+         response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity");
+    }
+
+    else
+    {
+        response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity");
+
+    }
         logger.info("Import Response: "+objectMapper.writeValueAsString(response));
     }
 

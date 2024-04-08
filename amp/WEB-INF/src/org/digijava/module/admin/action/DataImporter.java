@@ -207,7 +207,7 @@ public class DataImporter extends Action {
     private boolean activityExists(ImportDataModel importDataModel,Session session)
     {
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE c.name LIKE :name";
+                "WHERE a.name LIKE :name";
         Query query= session.createQuery(hql);
         query.setString("name", "%"+importDataModel.getProject_title()+"%");
         return  !query.list().isEmpty();

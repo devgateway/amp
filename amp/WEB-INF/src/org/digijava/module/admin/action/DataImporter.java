@@ -220,7 +220,7 @@ public class DataImporter extends Action {
 
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
-//    logger.info("Data map "+map);
+    logger.info("Data map "+map);
         JsonApiResponse<ActivitySummary> response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity");
         logger.info("Import Response: "+objectMapper.writeValueAsString(response));
     }

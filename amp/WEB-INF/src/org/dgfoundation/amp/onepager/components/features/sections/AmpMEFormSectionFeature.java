@@ -19,7 +19,9 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,6 +70,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         add(listView);
         add(UpdateEventBehavior.of(LocationChangedEvent.class));
 
+        boolean isMUltiCOuntry = isMultiCountryLocation();
+        System.out.println(isMUltiCOuntry);
         tabsList = new ListView<AmpActivityLocation>("locationItemsForTabs", locations) {
             private static final long serialVersionUID = -206108834217110807L;
 
@@ -145,5 +149,10 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             }
         }
 
+    }
+
+    public boolean isMultiCountryLocation(){
+        String defaultCountryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+        return defaultCountryIso.equals("zz");
     }
 }

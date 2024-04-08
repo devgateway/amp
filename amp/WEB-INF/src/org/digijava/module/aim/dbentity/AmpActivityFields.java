@@ -1325,18 +1325,8 @@ LoggerIdentifiable, Cloneable {
         }
 
     public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
-        if (this.activityContacts == null) {
-            if (activityContacts != null && !activityContacts.isEmpty()) {
-                this.activityContacts = activityContacts;
-            }
-        } else {
-            if (activityContacts == null || activityContacts.isEmpty()) {
-                this.activityContacts = new HashSet<>();
-            } else {
-                this.activityContacts.clear();
-                this.activityContacts.addAll(activityContacts);
-            }
-        }
+
+        this.activityContacts = activityContacts;
     }
 
         /**
@@ -2177,19 +2167,9 @@ LoggerIdentifiable, Cloneable {
             throw new IllegalArgumentException("Target set cannot be null.");
         }
     }
+
     public void setContracts(Set<IPAContract> contracts) {
-        if (this.contracts == null) {
-            if (contracts != null && !contracts.isEmpty()) {
-                this.contracts = contracts;
-            }
-        } else {
-            if (contracts == null || contracts.isEmpty()) {
-                this.contracts = new HashSet<>();
-            } else {
-                this.contracts.clear();
-                this.contracts.addAll(contracts);
-            }
-        }
+        this.contracts = contracts;
     }
 
         public Set<IPAContract> getContracts() {
@@ -2331,18 +2311,8 @@ LoggerIdentifiable, Cloneable {
 
 
     public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
-        if (this.regionalObservations == null) {
-            if (regionalObservations != null && !regionalObservations.isEmpty()) {
-                this.regionalObservations = regionalObservations;
-            }
-        } else {
-            if (regionalObservations == null || regionalObservations.isEmpty()) {
-                this.regionalObservations = new HashSet<>();
-            } else {
-                this.regionalObservations.clear();
-                this.regionalObservations.addAll(regionalObservations);
-            }
-        }
+        this.regionalObservations = regionalObservations;
+
     }
 
 

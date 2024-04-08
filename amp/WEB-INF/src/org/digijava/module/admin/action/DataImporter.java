@@ -270,15 +270,17 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s WHERE LOWER(s.name) LIKE LOWER(:name)";
-        Query query= session.createQuery(hql);
+        String hql = "SELECT s FROM " + AmpActivitySector.class.getName() + " acs " +
+                "JOIN acs.sectorId s " +
+                "WHERE LOWER(s.name) LIKE LOWER(:name)";        Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");
-        List<AmpSector> sectors =query.list();
+        List<AmpActivitySector> sectors =query.list();
         logger.info("Sectors: "+sectors);
         if (sectors!=null && !sectors.isEmpty()) {
            Sector sector1 = new Sector();
+           sector1.setId(sectors.get(0).getSectorId().getAmpSectorId());
            sector1.setSector_percentage(100.00);
-            sector1.setSector(sectors.get(0).getAmpSectorId());
+            sector1.setSector(sectors.get(0).getAmpActivitySectorId());
             if (primary) {
                 importDataModel.getPrimary_sectors().add(sector1);
             }

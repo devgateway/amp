@@ -1349,6 +1349,7 @@ public class ActivityUtil {
         }catch (Exception e)
         {
             logger.error("Error saving activity contact:",e);
+            throw e;
         }
     }
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,

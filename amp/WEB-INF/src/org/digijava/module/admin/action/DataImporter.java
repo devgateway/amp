@@ -218,6 +218,7 @@ public class DataImporter extends Action {
 //        query.setParameter("value", "%" + statusStr + "%");
         query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY );
         List<AmpCategoryValue> values= query.list();
+        logger.info("Statuses: "+values);
         importDataModel.setActivity_status(values.get(0).getId());
 
     }

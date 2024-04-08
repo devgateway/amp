@@ -284,9 +284,9 @@ public class DataImporter extends Action {
         logger.info("Sectors: "+sectors);
         if (sectors!=null && !sectors.isEmpty()) {
            Sector sector1 = new Sector();
-           sector1.setId(sectors.get(0).getSectorId().getAmpSectorId());
+           sector1.setId(sectors.get(0).getAmpActivitySectorId());
            sector1.setSector_percentage(100.00);
-            sector1.setSector(sectors.get(0).getAmpActivitySectorId());
+            sector1.setSector(sectors.get(0).getSectorId().getAmpSectorId());
             if (primary) {
                 importDataModel.getPrimary_sectors().add(sector1);
             }

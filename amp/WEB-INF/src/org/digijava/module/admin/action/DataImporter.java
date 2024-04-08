@@ -71,7 +71,6 @@ public class DataImporter extends Action {
             headers.append("</select>");
             response.setHeader("selectTag",headers.toString());
 
-            logger.info("Headers: "+dataImporterForm.getFileHeaders());
 
             workbook.close();
             }
@@ -201,6 +200,7 @@ public class DataImporter extends Action {
             session=PersistenceManager.getRequestDBSession();
         }
         String statusStr = TranslatorWorker.translateText("Ongoing project");
+        logger.info("Status: "+statusStr);
 
 //        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s WHERE s.category_value LIKE :value";
 //        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +

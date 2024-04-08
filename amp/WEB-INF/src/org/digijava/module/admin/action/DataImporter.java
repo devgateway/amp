@@ -63,7 +63,7 @@ public class DataImporter extends Action {
             Set<String> headersSet = new HashSet<>();
             for (int i=0;i<numberOfSheets;i++)
             {
-                Sheet sheet = workbook.getSheetAt(0);
+                Sheet sheet = workbook.getSheetAt(i);
                 Row headerRow = sheet.getRow(0);
                 Iterator<Cell> cellIterator = headerRow.cellIterator();
                 while (cellIterator.hasNext()) {
@@ -73,7 +73,7 @@ public class DataImporter extends Action {
 
             }
             StringBuilder headers = new StringBuilder();
-            headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select id=\"columnName\">");
+            headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
             for (String option: headersSet) {
                 headers.append("<option>").append(option).append("</option>");
             }

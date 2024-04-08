@@ -42,6 +42,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -284,27 +286,38 @@ public class DataImporter extends Action {
         }
 
         session.doWork(connection -> {
-            String query = String.format("SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE name = %s", name);
-            try(RsInfo rs = SQLUtils.rawRunQuery(connection, query, null)) {
+//            String query = String.format("SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE LOWER(name) = LOWER(%s)", name);
+//            String query = "SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE LOWER(name) = LOWER(?)";
+            String query = "SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE LOWER(name) = LOWER(?)";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                // Set the name as a parameter to the prepared statement
+                statement.setString(1, name);
 
-                while (rs.rs.next()) {
-                    Long secId = rs.rs.getLong(1);
-//                        String secScheme = rs.rs.getString(2);
-                    Sector sector1 = new Sector();
-                    sector1.setSector_percentage(100.00);
-                    sector1.setSector(secId);
-                    if (primary) {
-                        importDataModel.getPrimary_sectors().add(sector1);
-                    }
-                    else
-                    {
-                        importDataModel.getSecondary_sectors().add(sector1);
+                // Execute the query and process the results
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Long ampSectorId = resultSet.getLong("amp_sector_id");
+                        String sectorConfigName = resultSet.getString("sector_config_name");
+                        Sector sector1 = new Sector();
+                        sector1.setSector_percentage(100.00);
+                        sector1.setSector(ampSectorId);
+                        if (primary) {
+                            importDataModel.getPrimary_sectors().add(sector1);
+                        }
+                        else
+                        {
+                            importDataModel.getSecondary_sectors().add(sector1);
 
+                        }
                     }
-//
                 }
-            }
+
+        } catch (SQLException e) {
+        logger.error("Error getting sectors",e);
+    }
         });
+
+
 //        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s "+
 //                "WHERE LOWER(s.name) = LOWER(:name)";
 //        Query query= session.createQuery(hql);

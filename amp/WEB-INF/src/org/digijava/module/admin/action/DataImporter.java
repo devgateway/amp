@@ -17,6 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.admin.util.model.ActivityGroup;
 import org.digijava.module.admin.util.model.DonorOrganization;
 import org.digijava.module.admin.util.model.ImportDataModel;
@@ -24,6 +25,9 @@ import org.digijava.module.admin.util.model.Sector;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -149,6 +153,7 @@ public class DataImporter extends Action {
             importDataModel.setIs_draft(true);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
+            setStatus(importDataModel, session);
 
 //            ampActivityVersion.setApprovalStatus(ApprovalStatus.CREATED);
             if (row.getRowNum() == 0) {
@@ -188,6 +193,23 @@ public class DataImporter extends Action {
 //            logger.info("Activity here: "+importDataModel);
 
         }
+
+    }
+    private void setStatus(ImportDataModel importDataModel,Session session)
+    {
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String statusStr = TranslatorWorker.translateText("Ongoing project");
+
+//        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s WHERE s.category_value LIKE :value";
+        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
+                "JOIN " + AmpCategoryClass.class.getName()+" c ON s.amp_category_class_id = c.id " +
+                "WHERE s.category_value LIKE :value AND c.keyname="+ CategoryConstants.ACTIVITY_STATUS_KEY;
+        Query query= session.createQuery(hql);
+        query.setParameter("value", "%" + statusStr + "%");
+        AmpCategoryValue value= (AmpCategoryValue) query.uniqueResult();
+        importDataModel.setActivity_status(value.getId());
 
     }
     private void importTheData(ImportDataModel importDataModel) throws JsonProcessingException {

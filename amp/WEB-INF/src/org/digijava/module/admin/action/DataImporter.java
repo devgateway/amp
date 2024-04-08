@@ -259,11 +259,13 @@ public class DataImporter extends Action {
         JsonApiResponse<ActivitySummary> response;
         AmpActivityVersion existing = existingActivity(importDataModel,session);
     if (existing==null){
+        logger.info("New activity");
          response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity/new");
     }
 
     else
     {
+        logger.info("Existing activity");
         importDataModel.setInternal_id(existing.getAmpActivityId());
         importDataModel.setAmp_id(existing.getAmpId());
         map = objectMapper

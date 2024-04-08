@@ -149,7 +149,8 @@
 <form id="uploadForm" enctype="multipart/form-data">
   <label>Select Template File:</label>
   <input type="file" accept=".xls,.xlsx,.csv" id="templateFile" name="templateFile" />
-  <input type="button" value="uploadTemplate" onclick="uploadFile()" />
+ <br><br>
+  <input type="button" value="Upload Template" onclick="uploadFile()" />
 </form>
 
 <div id="otherComponents" hidden>

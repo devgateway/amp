@@ -169,33 +169,36 @@ public class DataImporter extends Action {
             if (row.getRowNum()<=5) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
-                    Cell cell = row.getCell(getColumnIndexByName(sheet, entry.getKey()));
-                    switch (entry.getValue()) {
-                        case "{projectName}":
-                            importDataModel.setProject_title(cell.getStringCellValue().trim());
-                            break;
-                        case "{projectDescription}":
-                            importDataModel.setDescription(cell.getStringCellValue().trim());
-                            break;
-                        case "{projectLocation}":
+                    int columnIndex = getColumnIndexByName(sheet, entry.getKey());
+                    if (columnIndex >= 0) {
+                        Cell cell = row.getCell(columnIndex);
+                        switch (entry.getValue()) {
+                            case "{projectName}":
+                                importDataModel.setProject_title(cell.getStringCellValue().trim());
+                                break;
+                            case "{projectDescription}":
+                                importDataModel.setDescription(cell.getStringCellValue().trim());
+                                break;
+                            case "{projectLocation}":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
-                            break;
-                        case "{primarySector}":
-                            updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
-                            break;
-                        case "{secondarySector}":
-                            updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
-                            break;
-                        case "{donorAgency}":
-                            updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
-                            break;
-                        default:
-                            throw new IllegalStateException("Unexpected value: " + entry.getValue());
+                                break;
+                            case "{primarySector}":
+                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
+                                break;
+                            case "{secondarySector}":
+                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
+                                break;
+                            case "{donorAgency}":
+                                updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
+                                break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + entry.getValue());
+                        }
+                        importTheData(importDataModel, session);
+
                     }
 
                 }
-            importTheData(importDataModel,session);
-
             }
 
         }

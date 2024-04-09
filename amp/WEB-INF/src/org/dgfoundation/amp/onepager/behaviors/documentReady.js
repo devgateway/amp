@@ -81,7 +81,6 @@ function adjustQuickLinks(){
 		$('#rightMenu').css('top', contentMarginTop + "px");
 		leftPositionOfRightMenu = getLeftPositionOfRightMenu(false);
 	}
-
 	$('#rightMenu').css('left', leftPositionOfRightMenu + "px");
 
 	if (onepagerMode) {

@@ -88,7 +88,6 @@ function adjustQuickLinks(){
 		computateVisibleSections();
 	}
 }
-
 //Manage the position of the right menu in AF on initialization
 function initQuickLinksInRtlMode(){
 

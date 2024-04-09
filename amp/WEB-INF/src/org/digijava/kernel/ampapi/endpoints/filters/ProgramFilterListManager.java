@@ -76,7 +76,6 @@ public class ProgramFilterListManager implements FilterListManager {
     }
 
     protected List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
-
         List<String> filterIds = new ArrayList<>();
         for (String col : AmpActivityProgramSettings.NAME_TO_COLUMN_AND_LEVEL.get(setting.getName())
                 .values()) {

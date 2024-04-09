@@ -97,7 +97,6 @@ function initQuickLinksInRtlMode(){
 	var rightMenuHeight = $('#rightMenu').height();
 	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
 	var rightMenuWidth = $('#rightMenu').width();
-
 	// the initial position of the right menu should be below the next menu
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;

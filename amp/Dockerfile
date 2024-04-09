@@ -104,7 +104,8 @@ COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-
 COPY TEMPLATE/reampv2 .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm ci \
+    npm cache clean --force \
+    && npm ci \
     && npm run build \
     && rm -rf node_modules
 

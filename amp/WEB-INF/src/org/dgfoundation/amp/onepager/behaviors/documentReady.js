@@ -56,7 +56,6 @@ function adjustQuickLinks(){
 	var contentMarginTop = $('#stepHead').offset().top;
 	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55;
 	var rightMenuHeight = $('#rightMenu').height();
-
 	// the initial position of the right menu should be below the next menu
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;

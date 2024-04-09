@@ -113,7 +113,6 @@ function initQuickLinksInRtlMode(){
 	$('#rightMenu').css('top', contentMarginTop + "px");
 	$('#rightMenu').css('left', rightMenuLeftPosition + "px");
 }
-
 function highlightQItem(currentItem){
 	$('#qListItems').find('li').removeClass('quickListHighlight');
 	$(currentItem).parent().parent().addClass('quickListHighlight');

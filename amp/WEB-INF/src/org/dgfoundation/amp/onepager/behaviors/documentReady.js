@@ -61,7 +61,6 @@ function adjustQuickLinks(){
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;
 	}
-
 	var leftPositionOfRightMenu = 0;
 
 	if ((($(window).scrollTop() + rightMenuHeight) > contentHeight)) {

@@ -102,7 +102,6 @@ function initQuickLinksInRtlMode(){
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;
 	}
-
 	var rightMenuLeftPosition = (window.outerWidth - $('#stepHead').outerWidth()) / 2 + INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU - $('#rightMenu').width();
 
 	if ($(window).width() < (contentWidth + rightMenuWidth + DISTANCE_BETWEEN_CONTENT_AND_MENU)) {

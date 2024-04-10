@@ -579,6 +579,7 @@ public class PersistenceManager {
         }
         Session sess = sf().getCurrentSession();
         sess.setFlushMode(FlushModeType.AUTO);
+        sess.clear();
 
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
@@ -730,7 +731,7 @@ public class PersistenceManager {
             return false;
         throw new RuntimeException("cannot convert object " + obj + " to boolean");
     }
-    
+
     public static StatelessSession openNewStatelessSession() {
         return sf.openStatelessSession();
     }

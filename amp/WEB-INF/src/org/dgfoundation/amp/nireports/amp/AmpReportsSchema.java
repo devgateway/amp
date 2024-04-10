@@ -1078,7 +1078,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             Map<Long, String> dbColumns = SQLUtils.collectKeyValue(conn, "SELECT columnid, columnname FROM amp_columns");
             Set<String> columnNamestoBeMigrated = dbColumns.values().stream()
                     .filter(z -> this.measures.containsKey(z) && !this.columns.containsKey(z)).collect(Collectors.toSet());
-            if (columnNamestoBeMigrated.size() > 0) {
+            if (!columnNamestoBeMigrated.isEmpty()) {
                 List<String> columnNames = Arrays.asList("amp_report_id", "measureid", "order_id");
                 String columnNamesJoined = SQLUtils.generateCSV(columnNamestoBeMigrated.stream().map(z -> String.format("'%s'", z)).collect(Collectors.toList()));
                 String query = String.format("SELECT arc.amp_report_id, am.measureid, counts.order_id FROM amp_report_column arc " +
@@ -1170,7 +1170,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
                 MeasuresVisibility.resetMeasuresList();
             }
-            return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
+            return toBeAdded.stream().map(Object::toString).collect(Collectors.toSet());
         });
     }
 

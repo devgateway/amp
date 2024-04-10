@@ -70,8 +70,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         add(listView);
         add(UpdateEventBehavior.of(LocationChangedEvent.class));
 
-        boolean isMUltiCOuntry = isMultiCountryLocation();
-        System.out.println(isMUltiCOuntry);
+        boolean isMultiCountry = isMultiCountryLocation();
         tabsList = new ListView<AmpActivityLocation>("locationItemsForTabs", locations) {
             private static final long serialVersionUID = -206108834217110807L;
 
@@ -100,7 +99,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             }
 
         };
-        tabsList.setVisibilityAllowed(isTabsView);
+        tabsList.setVisibilityAllowed(isTabsView && isMultiCountry);
         tabsList.setOutputMarkupId(true);
         add(tabsList);
 
@@ -111,7 +110,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {
                 AmpMEItemFeaturePanel indicatorLoc = null;
                 try {
-                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations
+                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations, isMultiCountry
                     );
                 } catch (Exception e) {
                     throw new RuntimeException(e);

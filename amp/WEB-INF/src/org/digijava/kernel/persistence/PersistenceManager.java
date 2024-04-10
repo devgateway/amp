@@ -584,7 +584,7 @@ public class PersistenceManager {
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();
         }
-        sess.clear();
+//        sess.clear();
 
         addSessionToStackTraceMap(sess);
         return sess;

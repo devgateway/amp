@@ -579,12 +579,13 @@ public class PersistenceManager {
         }
         Session sess = sf().getCurrentSession();
         sess.setFlushMode(FlushModeType.AUTO);
-        sess.clear();
 
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();
         }
+        sess.clear();
+
         addSessionToStackTraceMap(sess);
         return sess;
     }

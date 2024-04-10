@@ -94,15 +94,7 @@ RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci \
     && npm run build \
-    && rm -rf node_modules
-
-# Use the official Redis image from Docker Hub
-FROM redis:latest as redis-server
-
-# Set any additional configuration if needed
-# For example, if you want to expose Redis port or set a password
-EXPOSE 6379
-CMD ["redis-server", "--requirepass", "abc"]
+    && rm -rf node_modules \
 
 FROM node as compile-reampv2
 WORKDIR /tmp/amp/TEMPLATE/reampv2

@@ -94,7 +94,7 @@ RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci \
     && npm run build \
-    && rm -rf node_modules \
+    && rm -rf node_modules
 
 FROM node as compile-reampv2
 WORKDIR /tmp/amp/TEMPLATE/reampv2
@@ -107,8 +107,6 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build \
     && rm -rf node_modules
-
-
 
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp

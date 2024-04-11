@@ -9,7 +9,7 @@
         <script>
             <lang delimiter=";" type="postgres">
                 INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
-                VALUES (nextval('amp_global_settings_seq'), 'Number of indicators in M&amp;E Dashboard', '5', 't_Integer', 'Number of Indicators that can be displayed in the M&amp;E Dashboard', 'general', null)
+                VALUES ((select nextval('amp_global_settings_seq')), 'Number of indicators in M&amp;E Dashboard', '5', 't_Integer', 'Number of Indicators that can be displayed in the M&amp;E Dashboard', 'general', null)
             </lang>
         </script>
     </apply>

@@ -239,12 +239,10 @@ public class ActivityUtil {
                 logger.error("Can't clone current Activity: ", e);
             }
         }
-        logger.info("Object before prepare :" + a);
 
         if (context.isPrepareToSave()) {
             prepareToSave(a, oldA, ampCurrentMember, draft, context);
         }
-        logger.info("Object after prepare :" + a);
 
         if (a.getAmpActivityGroup() == null) {
             //we need to create a group for this activity

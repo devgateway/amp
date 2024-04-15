@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30863</jira>
+    <keyword>fix report offline urls</keyword>
+    <author>jdeanquin</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                UPDATE AMP_MENU_ENTRY_VIEW
+                SET URL='/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/ampoffline'
+                where url='/TEMPLATE/reampv2/packages/container/build/index.html#/ampoffline';            </lang>
+        </script>
+    </apply>
+</tns:patch>

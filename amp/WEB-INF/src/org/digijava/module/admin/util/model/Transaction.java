@@ -1,6 +1,6 @@
 package org.digijava.module.admin.util.model;
 
-public class Disbursement {
+public class Transaction {
     private Long transaction_id;
     private Long adjustment_type;
     private String transaction_date;

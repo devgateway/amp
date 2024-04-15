@@ -9,8 +9,8 @@ public class Funding {
     private Object actual_completion_date;
     private Object original_completion_date;
     private Object reporting_date;
-    private List<Object> commitments;
-    private List<Disbursement> disbursements;
+    private List<Transaction> commitments;
+    private List<Transaction> transactions;
     private Long type_of_assistance;
     private Long financing_instrument;
     private Object funding_status;
@@ -65,20 +65,20 @@ public class Funding {
         this.reporting_date = reporting_date;
     }
 
-    public List<Object> getCommitments() {
+    public List<Transaction> getCommitments() {
         return commitments;
     }
 
-    public void setCommitments(List<Object> commitments) {
+    public void setCommitments(List<Transaction> commitments) {
         this.commitments = commitments;
     }
 
-    public List<Disbursement> getDisbursements() {
-        return disbursements;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setDisbursements(List<Disbursement> disbursements) {
-        this.disbursements = disbursements;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public Long getType_of_assistance() {

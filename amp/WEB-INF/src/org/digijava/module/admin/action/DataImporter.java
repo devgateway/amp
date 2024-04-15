@@ -50,6 +50,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 
@@ -202,6 +204,8 @@ public class DataImporter extends Action {
                             case "{donorAgency}":
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                                 break;
+                            case "{fundingItem}":
+
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
                         }
@@ -215,6 +219,19 @@ public class DataImporter extends Action {
         }
 
     }
+
+    public static String findYearSubstring(String input) {
+        // Regular expression pattern to match a year in the format YYYY
+        String pattern = "\\b(\\d{4})\\b"; // \b matches a word boundary, \d{4} matches four digits
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(input);
+        if (m.find()) {
+            return m.group(1); // Return the matched year substring
+        } else {
+            return null; // Year substring not found
+        }
+    }
+
     private AmpActivityVersion existingActivity(ImportDataModel importDataModel,Session session)
     {
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +

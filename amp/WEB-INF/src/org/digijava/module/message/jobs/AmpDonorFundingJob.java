@@ -29,6 +29,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         List<ReportsDashboard> ampDashboardFundingCombinedUSD = getFundingByCurrency("USD");
         List<ReportsDashboard> ampDashboardFundingCombinedEUR = getFundingByCurrency("EUR");
+        List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
         if (serverUrl != null) {

@@ -76,6 +76,19 @@ public class AmpConfiguration {
         return PublicServices.buildOkResponseWithOriginHeaders(SettingsUtils.getGeneralSettings());
     }
 
+    @GET
+    @Path("/settings/gis")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "GisSettings")
+    @ApiOperation("GIS settings")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "GIS settings",
+            response = AmpGeneralSettings.class))
+    public Response getGISSettings() {
+        return PublicServices.buildOkResponseWithOriginHeaders(SettingsUtils.getGisSettings());
+    }
+
+
+
     @OPTIONS
     @Path("/settings")
     @ApiOperation(

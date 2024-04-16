@@ -267,7 +267,7 @@ public class DataImporter extends Action {
         Transaction commitment  = new Transaction();
         commitment.setCurrency(currencyId);
         commitment.setAdjustment_type(adjType);
-        commitment.setTransaction_amount(Long.parseLong(String.valueOf(amount)));
+        commitment.setTransaction_amount(Double.parseDouble(String.valueOf(amount)));
         commitment.setTransaction_date(fundingDate);
         funding.getCommitments().add(commitment);
         funding.getDisbursements().add(commitment);

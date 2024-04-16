@@ -202,7 +202,7 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                                 break;
                             case "{fundingItem}":
-                                if (importDataModel.getDonor_organization()==null)
+                                if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
                                 {
                                     updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
 

@@ -179,7 +179,6 @@ public class DataImporter extends Action {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
-                    Long orgId = null;
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
@@ -207,6 +206,7 @@ public class DataImporter extends Action {
                                     updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
 
                                 }
+
                                 updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
                                 break;
                             default:

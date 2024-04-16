@@ -179,6 +179,7 @@ public class DataImporter extends Action {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
+                    Long orgId = null;
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
@@ -201,7 +202,12 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                                 break;
                             case "{fundingItem}":
-                                updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey());
+                                if (importDataModel.getDonor_organization()==null)
+                                {
+                                    updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
+
+                                }
+                                updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getId());
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
@@ -232,14 +238,14 @@ public class DataImporter extends Action {
     {
         LocalDate date = LocalDate.of(Integer.parseInt(yearString), 1, 1);
 
-        LocalTime time = LocalTime.MIDNIGHT;
-        LocalDateTime dateTime = LocalDateTime.of(date, time);
+//        LocalTime time = LocalTime.MIDNIGHT;
+//        LocalDateTime dateTime = LocalDateTime.of(date, time);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        return dateTime.format(formatter);
+        return date.format(formatter);
     }
-    private void updateFunding(ImportDataModel importDataModel,Session session, Number amount, String columnHeader)
+    private void updateFunding(ImportDataModel importDataModel,Session session, Number amount, String columnHeader, Long orgId)
     {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
@@ -264,6 +270,8 @@ public class DataImporter extends Action {
         String yearString = findYearSubstring(columnHeader);
         String fundingDate = yearString!=null?getFundingDate(yearString):getFundingDate("2000");
         Funding funding = new Funding();
+        funding.setDonor_organization_id(orgId);
+        funding.setSource_role(1L);
         Transaction commitment  = new Transaction();
         commitment.setCurrency(currencyId);
         commitment.setAdjustment_type(adjType);
@@ -291,8 +299,7 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-        String statusStr = TranslatorWorker.translateText("Ongoing project");
-        logger.info("Status: "+statusStr);
+
 
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
@@ -396,6 +403,7 @@ public class DataImporter extends Action {
         if (organisations!=null && !organisations.isEmpty()) {
             if (Objects.equals(type, "donor")) {
                 DonorOrganization donorOrganization = new DonorOrganization();
+
             donorOrganization.setOrganization(organisations.get(0).getAmpOrgId());
             donorOrganization.setPercentage(100.0);
                 importDataModel.getDonor_organization().add(donorOrganization);

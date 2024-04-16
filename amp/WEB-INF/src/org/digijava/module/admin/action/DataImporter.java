@@ -164,6 +164,7 @@ public class DataImporter extends Action {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
         Sheet sheet = workbook.getSheetAt(sheetNumber);
+        Set<ImportDataModel> importDataModels = new LinkedHashSet<>();
         for (Row row : sheet) {
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
@@ -176,7 +177,7 @@ public class DataImporter extends Action {
             if (row.getRowNum() == 0) {
                 continue;
             }
-            if (row.getRowNum()<=5) {
+            if (row.getRowNum()<=20) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
@@ -215,13 +216,18 @@ public class DataImporter extends Action {
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
                         }
-                        importTheData(importDataModel, session);
+                        importDataModels.add(importDataModel);
 
                     }
 
                 }
             }
 
+        }
+        for (ImportDataModel importDataModel: importDataModels)
+        {
+            logger.info("Trying to import tha data...");
+            importTheData(importDataModel, session);
         }
 
     }
@@ -345,7 +351,6 @@ public class DataImporter extends Action {
 
     }
     private void importTheData(ImportDataModel importDataModel, Session session) throws JsonProcessingException {
-        logger.info("Trying to import tha data...");
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }

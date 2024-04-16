@@ -204,7 +204,7 @@ public class DataImporter extends Action {
                             case "{fundingItem}":
                                 if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
                                 {
-                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrgs(session).get(0).getAmpOrgId());
+                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrg(session));
 
                                 }else {
                                     updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
@@ -392,16 +392,15 @@ public class DataImporter extends Action {
 
 
     }
-    private List<AmpOrganisation> getOrgs(Session session)
+    private Long getOrg(Session session)
     {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-            String hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o";
+            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o LIMIT 1";
 
-            Query query= session.createQuery(hql);
-            List<AmpOrganisation> organisations =query.list();
-            return organisations;
+        //            List<Long> organisations =query.list();
+            return (Long) session.createQuery(hql).setMaxResults(1).uniqueResult();
 
     }
 
@@ -410,22 +409,28 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
         session=PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
+        String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
 
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");
-        List<AmpOrganisation> organisations =query.list();
-        if (organisations.isEmpty())
+        List<Long> organisations =query.list();
+        Long orgId;
+        if (!organisations.isEmpty())
+        {
+             orgId=organisations.get(0);
+        }
+        else
         {
              hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o";
 
-             query= session.createQuery(hql);
-            organisations =query.list();
+             query= session.createQuery(hql).setMaxResults(1);
+            orgId =(Long) query.uniqueResult();
         }
+
             if (Objects.equals(type, "donor")) {
                 DonorOrganization donorOrganization = new DonorOrganization();
 
-            donorOrganization.setOrganization(organisations.get(0).getAmpOrgId());
+            donorOrganization.setOrganization(orgId);
             donorOrganization.setPercentage(100.0);
                 importDataModel.getDonor_organization().add(donorOrganization);
             }

@@ -428,7 +428,6 @@ public class DataImporter extends Action {
         }
             String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
 
-        //            List<Long> organisations =query.list();
             return (Long) session.createQuery(hql).setMaxResults(1).uniqueResult();
 
     }
@@ -450,7 +449,7 @@ public class DataImporter extends Action {
         }
         else
         {
-             hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o";
+             hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
 
              query= session.createQuery(hql).setMaxResults(1);
             orgId =(Long) query.uniqueResult();

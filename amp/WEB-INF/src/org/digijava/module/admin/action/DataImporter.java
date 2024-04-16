@@ -206,9 +206,11 @@ public class DataImporter extends Action {
                                 {
                                     updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrgs(session).get(0).getAmpOrgId());
 
+                                }else {
+                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
+
                                 }
 
-                                updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());

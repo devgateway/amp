@@ -269,6 +269,26 @@ public class DataImporter extends Action {
         logger.info("Adj Types: "+values);
         Long adjType = values.get(0).getId();
 
+//        hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
+//                "JOIN s.ampCategoryClass c " +
+//                "WHERE c.keyName = :categoryKey";
+
+        query= session.createQuery(hql);
+        query.setParameter("categoryKey", CategoryConstants.TYPE_OF_ASSISTENCE_KEY );
+
+        values= query.list();
+        logger.info("Types of assistance: "+values);
+
+        Long assType = values.get(0).getId();
+
+        query= session.createQuery(hql);
+        query.setParameter("categoryKey", CategoryConstants.FINANCING_INSTRUMENT_KEY );
+
+        values= query.list();
+        logger.info("Financing Instrument: "+values);
+
+        Long finInstrument = values.get(0).getId();
+
          hql = "SELECT o.ampRoleId FROM " + AmpRole.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
 
          query= session.createQuery(hql);
@@ -281,6 +301,8 @@ public class DataImporter extends Action {
         String fundingDate = yearString!=null?getFundingDate(yearString):getFundingDate("2000");
         Funding funding = new Funding();
         funding.setDonor_organization_id(orgId);
+        funding.setType_of_assistance(assType);
+        funding.setFinancing_instrument(finInstrument);
         funding.setSource_role(orgRoles.get(0));
         Transaction commitment  = new Transaction();
         commitment.setCurrency(currencyId);

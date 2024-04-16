@@ -162,7 +162,7 @@ public class DataImporter extends Action {
     private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber, HttpServletRequest request) throws JsonProcessingException {
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-
+        logger.info("Sheet number: "+sheetNumber);
         Sheet sheet = workbook.getSheetAt(sheetNumber);
         Set<ImportDataModel> importDataModels = new LinkedHashSet<>();
         for (Row row : sheet) {
@@ -327,7 +327,7 @@ public class DataImporter extends Action {
             session=PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name";
+                "WHERE a.name LIKE :name";
         Query query= session.createQuery(hql);
         query.setString("name", "%"+importDataModel.getProject_title()+"%");
         return (AmpActivityVersion) query.uniqueResult();

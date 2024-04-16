@@ -455,12 +455,12 @@ public class DataImporter extends Action {
              query= session.createQuery(hql).setMaxResults(1);
             orgId =(Long) query.uniqueResult();
         }
+        logger.info("Organisation: "+orgId);
 
             if (Objects.equals(type, "donor")) {
                 DonorOrganization donorOrganization = new DonorOrganization();
-
-            donorOrganization.setOrganization(orgId);
-            donorOrganization.setPercentage(100.0);
+                donorOrganization.setOrganization(orgId);
+                donorOrganization.setPercentage(100.0);
                 importDataModel.getDonor_organization().add(donorOrganization);
             }
 

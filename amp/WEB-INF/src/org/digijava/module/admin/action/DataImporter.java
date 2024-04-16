@@ -216,7 +216,8 @@ public class DataImporter extends Action {
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
                         }
-                        importDataModels.add(importDataModel);
+//                        importDataModels.add(importDataModel);
+                        importTheData(importDataModel, session);
 
                     }
 
@@ -224,11 +225,11 @@ public class DataImporter extends Action {
             }
 
         }
-        for (ImportDataModel importDataModel: importDataModels)
-        {
-            logger.info("Trying to import tha data...");
-            importTheData(importDataModel, session);
-        }
+//        for (ImportDataModel importDataModel: importDataModels)
+//        {
+//            logger.info("Trying to import tha data...");
+//            importTheData(importDataModel, session);
+//        }
 
     }
 

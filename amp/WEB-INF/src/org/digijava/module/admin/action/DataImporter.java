@@ -275,6 +275,7 @@ public class DataImporter extends Action {
         query.setParameter("name", "%donor%");
         List<Long> orgRoles = query.list();
 
+
 //        double amount = Double.parseDouble();
         String yearString = findYearSubstring(columnHeader);
         String fundingDate = yearString!=null?getFundingDate(yearString):getFundingDate("2000");

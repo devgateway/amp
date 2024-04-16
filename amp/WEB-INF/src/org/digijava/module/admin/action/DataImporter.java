@@ -201,7 +201,7 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                                 break;
                             case "{fundingItem}":
-                                updateFunding(importDataModel,session,cell.getStringCellValue().trim(),entry.getKey());
+                                updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey());
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
@@ -218,37 +218,28 @@ public class DataImporter extends Action {
     }
 
     public static String findYearSubstring(String input) {
-        // Regular expression pattern to match a year in the format YYYY
-        String pattern = "\\b(\\d{4})\\b"; // \b matches a word boundary, \d{4} matches four digits
+        String pattern = "\\b(\\d{4})\\b"; //
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(input);
         if (m.find()) {
-            return m.group(1); // Return the matched year substring
+            return m.group(1);
         } else {
-            return null; // Year substring not found
+            return null;
         }
     }
 
     private String getFundingDate(String yearString)
     {
-        // Create a LocalDate object for January 1, 2001
         LocalDate date = LocalDate.of(Integer.parseInt(yearString), 1, 1);
 
-        // Create a LocalTime object with midnight time
         LocalTime time = LocalTime.MIDNIGHT;
-
-        // Combine LocalDate and LocalTime to create a LocalDateTime object
         LocalDateTime dateTime = LocalDateTime.of(date, time);
 
-        // Create a DateTimeFormatter with the provided pattern
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
-        // Format the LocalDateTime object using the formatter
-
-        // Print the formatted date and time
         return dateTime.format(formatter);
     }
-    private void updateFunding(ImportDataModel importDataModel,Session session, String amountString, String columnHeader)
+    private void updateFunding(ImportDataModel importDataModel,Session session, Number amount, String columnHeader)
     {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
@@ -269,14 +260,14 @@ public class DataImporter extends Action {
         logger.info("Adj Types: "+values);
         Long adjType = values.get(0).getId();
 
-        double amount = Double.parseDouble(amountString);
+//        double amount = Double.parseDouble();
         String yearString = findYearSubstring(columnHeader);
         String fundingDate = yearString!=null?getFundingDate(yearString):getFundingDate("2000");
         Funding funding = new Funding();
         Transaction commitment  = new Transaction();
         commitment.setCurrency(currencyId);
         commitment.setAdjustment_type(adjType);
-        commitment.setTransaction_amount(amount);
+        commitment.setTransaction_amount(Long.parseLong(String.valueOf(amount)));
         commitment.setTransaction_date(fundingDate);
         funding.getCommitments().add(commitment);
         funding.getDisbursements().add(commitment);

@@ -328,9 +328,9 @@ public class DataImporter extends Action {
             session=PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name LIKE :name";
+                "WHERE a.name = :name";
         Query query= session.createQuery(hql);
-        query.setString("name", "%"+importDataModel.getProject_title()+"%");
+        query.setString("name", importDataModel.getProject_title());
         return (AmpActivityVersion) query.uniqueResult();
     }
     private void setStatus(ImportDataModel importDataModel,Session session)

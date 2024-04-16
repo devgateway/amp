@@ -171,6 +171,7 @@ public class DataImporter extends Action {
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
+            config= sortByValues(config);
 
             if (row.getRowNum() == 0) {
                 continue;
@@ -203,7 +204,7 @@ public class DataImporter extends Action {
                             case "{fundingItem}":
                                 if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
                                 {
-                                    updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
+                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrgs(session).get(0).getAmpOrgId());
 
                                 }
 
@@ -389,6 +390,18 @@ public class DataImporter extends Action {
 
 
     }
+    private List<AmpOrganisation> getOrgs(Session session)
+    {
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+            String hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o";
+
+            Query query= session.createQuery(hql);
+            List<AmpOrganisation> organisations =query.list();
+            return organisations;
+
+    }
 
     private void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
     {
@@ -447,5 +460,34 @@ public class DataImporter extends Action {
         fieldsInfos.add("{plannedDisbursement}");
         fieldsInfos.add("{fundingItem}");
         return fieldsInfos;
+    }
+
+    // Method to sort a map by its values
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValues(Map<K, V> map) {
+        // Create a TreeMap to store the sorted entries
+        Map<K, V> sortedMap = new TreeMap<>(new ValueComparator<>(map));
+
+        // Put all entries from the original map into the TreeMap
+        sortedMap.putAll(map);
+
+        return sortedMap;
+    }
+
+    // Custom comparator to compare map entries by values
+    static class ValueComparator<K, V extends Comparable<? super V>> implements Comparator<K> {
+        Map<K, V> map;
+
+        // Constructor that takes the original map
+        public ValueComparator(Map<K, V> map) {
+            this.map = map;
+        }
+
+        // Compare method to compare two keys based on their values in the map
+        @Override
+        public int compare(K key1, K key2) {
+            V value1 = map.get(key1);
+            V value2 = map.get(key2);
+            return value1.compareTo(value2); // Compare values
+        }
     }
 }

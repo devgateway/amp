@@ -397,7 +397,7 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o LIMIT 1";
+            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
 
         //            List<Long> organisations =query.list();
             return (Long) session.createQuery(hql).setMaxResults(1).uniqueResult();

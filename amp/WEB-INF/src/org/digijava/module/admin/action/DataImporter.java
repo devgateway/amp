@@ -269,12 +269,18 @@ public class DataImporter extends Action {
         logger.info("Adj Types: "+values);
         Long adjType = values.get(0).getId();
 
+         hql = "SELECT o.ampRoleId FROM " + AmpRole.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
+
+         query= session.createQuery(hql);
+        query.setParameter("name", "%donor%");
+        List<Long> orgRoles = query.list();
+
 //        double amount = Double.parseDouble();
         String yearString = findYearSubstring(columnHeader);
         String fundingDate = yearString!=null?getFundingDate(yearString):getFundingDate("2000");
         Funding funding = new Funding();
         funding.setDonor_organization_id(orgId);
-        funding.setSource_role(1L);
+        funding.setSource_role(orgRoles.get(0));
         Transaction commitment  = new Transaction();
         commitment.setCurrency(currencyId);
         commitment.setAdjustment_type(adjType);

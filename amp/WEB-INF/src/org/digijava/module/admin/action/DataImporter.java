@@ -207,7 +207,7 @@ public class DataImporter extends Action {
                                     updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
 
                                 }
-                                updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getId());
+                                updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
@@ -400,7 +400,13 @@ public class DataImporter extends Action {
         Query query= session.createQuery(hql);
         query.setParameter("name", "%" + name + "%");
         List<AmpOrganisation> organisations =query.list();
-        if (organisations!=null && !organisations.isEmpty()) {
+        if (organisations.isEmpty())
+        {
+             hql = "SELECT o FROM " + AmpOrganisation.class.getName() + " o";
+
+             query= session.createQuery(hql);
+            organisations =query.list();
+        }
             if (Objects.equals(type, "donor")) {
                 DonorOrganization donorOrganization = new DonorOrganization();
 
@@ -409,7 +415,7 @@ public class DataImporter extends Action {
                 importDataModel.getDonor_organization().add(donorOrganization);
             }
 
-        }
+
 
     }
 

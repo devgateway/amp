@@ -245,7 +245,7 @@ public class DataImporter extends Action {
             session=PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
-                "WHERE a.currencyCode = :currencyCode";
+                "WHERE ac.currencyCode = :currencyCode";
         Query query= session.createQuery(hql);
         query.setString("currencyCode", "XOF");
         Long currencyId = (Long)query.uniqueResult();

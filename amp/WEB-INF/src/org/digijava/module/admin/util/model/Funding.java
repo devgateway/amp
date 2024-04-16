@@ -1,5 +1,6 @@
 package org.digijava.module.admin.util.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Funding {
@@ -9,8 +10,8 @@ public class Funding {
     private Object actual_completion_date;
     private Object original_completion_date;
     private Object reporting_date;
-    private List<Transaction> commitments;
-    private List<Transaction> transactions;
+    private List<Transaction> commitments= new ArrayList<>();
+    private List<Transaction> disbursements= new ArrayList<>();
     private Long type_of_assistance;
     private Long financing_instrument;
     private Object funding_status;
@@ -73,12 +74,12 @@ public class Funding {
         this.commitments = commitments;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<Transaction> getDisbursements() {
+        return disbursements;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setDisbursements(List<Transaction> transactions) {
+        this.disbursements = transactions;
     }
 
     public Long getType_of_assistance() {

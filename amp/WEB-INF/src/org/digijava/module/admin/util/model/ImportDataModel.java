@@ -21,7 +21,7 @@ public class ImportDataModel {
     private Set<Object> responsible_organization=new HashSet<>();
     private Set<Object> executing_agency=new HashSet<>();
     private Set<Object> activity_internal_ids;
-    private Set<Funding> fundings;
+    private Set<Funding> fundings= new HashSet<>();
     private Set<Object> issues;
     private Long team;
     private PpcAmount ppc_amount;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.ecs.wml.Do;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -22,10 +23,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.admin.util.model.ActivityGroup;
-import org.digijava.module.admin.util.model.DonorOrganization;
-import org.digijava.module.admin.util.model.ImportDataModel;
-import org.digijava.module.admin.util.model.Sector;
+import org.digijava.module.admin.util.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -45,9 +43,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -205,7 +201,8 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                                 break;
                             case "{fundingItem}":
-
+                                updateFunding(importDataModel,session,cell.getStringCellValue().trim(),entry.getKey());
+                                break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
                         }
@@ -232,8 +229,66 @@ public class DataImporter extends Action {
         }
     }
 
+    private String getFundingDate(String yearString)
+    {
+        // Create a LocalDate object for January 1, 2001
+        LocalDate date = LocalDate.of(Integer.parseInt(yearString), 1, 1);
+
+        // Create a LocalTime object with midnight time
+        LocalTime time = LocalTime.MIDNIGHT;
+
+        // Combine LocalDate and LocalTime to create a LocalDateTime object
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+
+        // Create a DateTimeFormatter with the provided pattern
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+
+        // Format the LocalDateTime object using the formatter
+
+        // Print the formatted date and time
+        return dateTime.format(formatter);
+    }
+    private void updateFunding(ImportDataModel importDataModel,Session session, String amountString, String columnHeader)
+    {
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
+                "WHERE a.currencyCode = :currencyCode";
+        Query query= session.createQuery(hql);
+        query.setString("currencyCode", "XOF");
+        Long currencyId = (Long)query.uniqueResult();
+         hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
+                "JOIN s.ampCategoryClass c " +
+                "WHERE c.keyName = :categoryKey";
+
+         query= session.createQuery(hql);
+        query.setParameter("categoryKey", CategoryConstants.ADJUSTMENT_TYPE_KEY );
+
+        List<AmpCategoryValue> values= query.list();
+        logger.info("Adj Types: "+values);
+        Long adjType = values.get(0).getId();
+
+        double amount = Double.parseDouble(amountString);
+        String yearString = findYearSubstring(columnHeader);
+        String fundingDate = yearString!=null?getFundingDate(yearString):getFundingDate("2000");
+        Funding funding = new Funding();
+        Transaction commitment  = new Transaction();
+        commitment.setCurrency(currencyId);
+        commitment.setAdjustment_type(adjType);
+        commitment.setTransaction_amount(amount);
+        commitment.setTransaction_date(fundingDate);
+        funding.getCommitments().add(commitment);
+        funding.getDisbursements().add(commitment);
+
+        importDataModel.getFundings().add(funding);
+    }
+
     private AmpActivityVersion existingActivity(ImportDataModel importDataModel,Session session)
     {
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
                 "WHERE a.name = :name";
         Query query= session.createQuery(hql);
@@ -293,10 +348,7 @@ public class DataImporter extends Action {
         logger.info("Import Response: "+objectMapper.writeValueAsString(response));
     }
 
-    private void updateFunding(AmpActivityVersion ampActivityVersion,String donorName,Session session)
-    {
 
-    }
 
     private void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
     {
@@ -337,26 +389,6 @@ public class DataImporter extends Action {
         });
 
 
-//        String hql = "SELECT s FROM " + AmpSector.class.getName() + " s "+
-//                "WHERE LOWER(s.name) = LOWER(:name)";
-//        Query query= session.createQuery(hql);
-//        query.setParameter("name",  name.trim() );
-//        List<AmpSector> sectors =query.list();
-//        logger.info("Sectors: "+sectors);
-//        if (sectors!=null && !sectors.isEmpty()) {
-//           Sector sector1 = new Sector();
-////           sector1.setId(sectors.get(0).getAmpSectorId());
-//           sector1.setSector_percentage(100.00);
-//            sector1.setSector(sectors.get(0).getAmpSectorId());
-//            if (primary) {
-//                importDataModel.getPrimary_sectors().add(sector1);
-//            }
-//            else
-//            {
-//                importDataModel.getSecondary_sectors().add(sector1);
-//
-//            }
-//        }
 
     }
 
@@ -408,7 +440,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("{actualDisbursement}");
         fieldsInfos.add("{actualCommitment}");
         fieldsInfos.add("{plannedDisbursement}");
-        fieldsInfos.add("{plannedCommitment}");
+        fieldsInfos.add("{fundingItem}");
         return fieldsInfos;
     }
 }

@@ -331,7 +331,7 @@ public class DataImporter extends Action {
                 "WHERE a.name = :name";
         Query query= session.createQuery(hql);
         query.setString("name", importDataModel.getProject_title());
-        return (AmpActivityVersion) query.uniqueResult();
+        return  !query.list().isEmpty()?(AmpActivityVersion) query.list().get(0):null;
     }
     private void setStatus(ImportDataModel importDataModel,Session session)
     {

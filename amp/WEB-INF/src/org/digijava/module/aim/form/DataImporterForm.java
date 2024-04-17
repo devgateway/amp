@@ -8,7 +8,7 @@ import java.util.*;
 
 public class DataImporterForm extends ActionForm {
     List<FieldInfo> fieldInfos =new ArrayList<>();
-    private FormFile uploadedFile;
+    private FormFile dataFile;
 
     public Set<String> getFileHeaders() {
         return fileHeaders;
@@ -40,12 +40,12 @@ public class DataImporterForm extends ActionForm {
     }
 
 
-    public FormFile getUploadedFile() {
-        return uploadedFile;
+    public FormFile getDataFile() {
+        return dataFile;
     }
 
-    public void setUploadedFile(FormFile uploadedFile) {
-        this.uploadedFile = uploadedFile;
+    public void setDataFile(FormFile dataFile) {
+        this.dataFile = dataFile;
     }
 
     public List<DataInfo> getDataInfos() {
@@ -70,7 +70,7 @@ public class DataImporterForm extends ActionForm {
     public String toString() {
         return "DataImporterForm{" +
                 "fieldInfos=" + fieldInfos +
-                ", uploadedFile=" + uploadedFile +
+                ", dataFile=" + dataFile +
                 ", dataInfos=" + dataInfos +
                 '}';
     }

@@ -100,7 +100,7 @@
       // Append the row to the table body
       tbody.appendChild(row);
     }
-    function uploadFile() {
+    function uploadTemplateFile() {
       var formData = new FormData();
       var fileInput = document.getElementById('templateFile');
       formData.append('templateFile', fileInput.files[0]);
@@ -117,6 +117,32 @@
           {
             console.error("Unable to extract headers")
           }
+        } else {
+          console.error('Error:', xhr.status);
+        }
+      };
+      xhr.send(formData);
+    }
+
+
+    function uploadDataFile() {
+      var formData = new FormData();
+      var fileInput = document.getElementById('dataFile');
+      formData.append('dataFile', fileInput.files[0]);
+      formData.append('uploadDataFile',"uploadDataFile");
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log("File Parsed successfully")
+          // if (xhr.getResponseHeader('selectTag').length>=1) {
+          //   document.getElementById('headers').innerHTML =  xhr.getResponseHeader('selectTag');
+          //   document.getElementById("otherComponents").removeAttribute("hidden");
+          // }else
+          // {
+          //   console.error("Unable to extract headers")
+          // }
         } else {
           console.error('Error:', xhr.status);
         }
@@ -151,7 +177,7 @@
   <label>Select Template File:</label>
   <input type="file" accept=".xls,.xlsx,.csv" id="templateFile" name="templateFile" />
  <br><br>
-  <input type="button" value="Upload Template" onclick="uploadFile()" />
+  <input type="button" value="Upload Template" onclick="uploadTemplateFile()" />
 </form>
 
 <div id="otherComponents" hidden>
@@ -197,10 +223,14 @@
   </table>
   <br><br>
   <label>Select Excel File:</label>
-  <html:file property="uploadedFile" name="dataImporterForm"   />
+<%--  <html:file property="uploadedFile" name="dataImporterForm"   />--%>
+  <input type="file" accept=".xls,.xlsx,.csv" id="dataFile" name="dataFile" />
+
   <br><br>
-  <html:submit property="Upload">Upload</html:submit>
-<%--  </logic:notEmpty>--%>
+<%--  <html:submit property="Upload">Upload</html:submit>--%>
+  <input type="button" value="Upload" onclick="uploadDataFile()">
+
+  <%--  </logic:notEmpty>--%>
 
 </html:form>
 </div>

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -59,7 +58,7 @@ public class DataImporter extends Action {
 
 
         if (request.getParameter("uploadTemplate")!=null) {
-            logger.info(" this is the action "+request.getParameter("Upload"));
+            logger.info(" this is the action "+request.getParameter("uploadTemplate"));
 
             InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);
@@ -129,10 +128,10 @@ public class DataImporter extends Action {
 
         }
 
-        if (request.getParameter("Upload")!=null) {
-            logger.info(" this is the action Upload "+request.getParameter("Upload"));
+        if (request.getParameter("uploadDataFile")!=null) {
+            logger.info(" this is the action Upload "+request.getParameter("uploadDataFile"));
 
-            InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
+            InputStream fileInputStream = dataImporterForm.getDataFile().getInputStream();
             processFileInBatches(fileInputStream,request,dataImporterForm.getColumnPairs());
 //            Workbook workbook = new XSSFWorkbook(fileInputStream);
 //            int numberOfSheets = workbook.getNumberOfSheets();
@@ -142,7 +141,7 @@ public class DataImporter extends Action {
 //                Sheet sheet = workbook.getSheetAt(i);
 //                parseData(dataImporterForm.getColumnPairs(),sheet, request);
 //            }
-            logger.info("Closing the workbook...");
+//            logger.info("Closing the workbook...");
 
 //            workbook.close();
 

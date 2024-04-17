@@ -140,6 +140,7 @@ public class DataImporter extends Action {
             InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);
             int numberOfSheets = workbook.getNumberOfSheets();
+            logger.info("Number of sheets: "+numberOfSheets);
             for (int i = 0; i < numberOfSheets; i++) {
                 parseData(dataImporterForm.getColumnPairs(),workbook,i, request);
             }

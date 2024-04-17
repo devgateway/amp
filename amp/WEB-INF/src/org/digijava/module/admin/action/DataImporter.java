@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,6 +47,7 @@ import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 
 public class DataImporter extends Action {
     Logger logger = LoggerFactory.getLogger(DataImporter.class);
+    private static final int BATCH_SIZE = 1000;
 
 
     @Override
@@ -131,17 +133,18 @@ public class DataImporter extends Action {
             logger.info(" this is the action Upload "+request.getParameter("Upload"));
 
             InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
-            Workbook workbook = new HSSFWorkbook(fileInputStream);
-            int numberOfSheets = workbook.getNumberOfSheets();
-            logger.info("Number of sheets: "+numberOfSheets);
-            for (int i = 0; i < numberOfSheets; i++) {
-                logger.info("Sheet number: "+i);
-                Sheet sheet = workbook.getSheetAt(i);
-                parseData(dataImporterForm.getColumnPairs(),sheet, request);
-            }
+            processFileInBatches(fileInputStream,request,dataImporterForm.getColumnPairs());
+//            Workbook workbook = new XSSFWorkbook(fileInputStream);
+//            int numberOfSheets = workbook.getNumberOfSheets();
+//            logger.info("Number of sheets: "+numberOfSheets);
+//            for (int i = 0; i < numberOfSheets; i++) {
+//                logger.info("Sheet number: "+i);
+//                Sheet sheet = workbook.getSheetAt(i);
+//                parseData(dataImporterForm.getColumnPairs(),sheet, request);
+//            }
             logger.info("Closing the workbook...");
 
-            workbook.close();
+//            workbook.close();
 
 
 
@@ -158,19 +161,129 @@ public class DataImporter extends Action {
     }
 
 
-    private void parseData(Map<String,String> config, Sheet sheet, HttpServletRequest request) throws JsonProcessingException {
-        logger.info("Sheet name: "+sheet.getSheetName());
+//    private void parseData(Map<String,String> config, Sheet sheet, HttpServletRequest request) throws JsonProcessingException {
+//        logger.info("Sheet name: "+sheet.getSheetName());
+//        Session session = PersistenceManager.getRequestDBSession();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+//        Set<ImportDataModel> importDataModels = new LinkedHashSet<>();
+//        for (Row row : sheet) {
+//            ImportDataModel importDataModel = new ImportDataModel();
+//            importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
+//            importDataModel.setIs_draft(true);
+//            OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+//            importDataModel.setCreation_date(now.format(formatter));
+//            setStatus(importDataModel, session);
+//            config= sortByValues(config);
+//
+//            if (row.getRowNum() == 0) {
+//                continue;
+//            }
+//            if (row.getRowNum()<=20) {
+//
+//                for (Map.Entry<String, String> entry : config.entrySet()) {
+//                    int columnIndex = getColumnIndexByName(sheet, entry.getKey());
+//                    if (columnIndex >= 0) {
+//                        Cell cell = row.getCell(columnIndex);
+//                        switch (entry.getValue()) {
+//                            case "{projectName}":
+//                                importDataModel.setProject_title(cell.getStringCellValue().trim());
+//                                break;
+//                            case "{projectDescription}":
+//                                importDataModel.setDescription(cell.getStringCellValue().trim());
+//                                break;
+//                            case "{projectLocation}":
+////                        ampActivityVersion.addLocation(new AmpActivityLocation());
+//                                break;
+//                            case "{primarySector}":
+//                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
+//                                break;
+//                            case "{secondarySector}":
+//                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
+//                                break;
+//                            case "{donorAgency}":
+//                                updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
+//                                break;
+//                            case "{fundingItem}":
+//                                if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
+//                                {
+//                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrg(session));
+//
+//                                }else {
+//                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
+//
+//                                }
+//
+//                                break;
+//                            default:
+//                                throw new IllegalStateException("Unexpected value: " + entry.getValue());
+//                        }
+////                        importDataModels.add(importDataModel);
+//                        importTheData(importDataModel, session);
+//
+//                    }
+//
+//                }
+//            }
+//
+//        }
+//
+//    }
+
+
+    public void processFileInBatches(InputStream fileInputStream, HttpServletRequest request,Map<String, String> config) {
+        // Open the workbook
+        try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+            int numberOfSheets = workbook.getNumberOfSheets();
+            logger.info("Number of sheets: " + numberOfSheets);
+
+            // Process each sheet in the workbook
+            for (int i = 0; i < numberOfSheets; i++) {
+                logger.info("Sheet number: " + i);
+                Sheet sheet = workbook.getSheetAt(i);
+                processSheetInBatches(sheet, request,config);
+            }
+
+            logger.info("Closing the workbook...");
+        } catch (IOException e) {
+            logger.error("Error processing Excel file: " + e.getMessage(), e);
+        }
+    }
+
+    private void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config) throws JsonProcessingException {
+        // Get the number of rows in the sheet
+        int rowCount = sheet.getPhysicalNumberOfRows();
+        logger.info("Total number of rows: " + rowCount);
+
+        // Process each row in batches
+        for (int i = 0; i < rowCount; i += BATCH_SIZE) {
+            int endIndex = Math.min(i + BATCH_SIZE, rowCount);
+            List<Row> batch = new ArrayList<>();
+
+            // Retrieve a batch of rows
+            for (int j = i; j < endIndex; j++) {
+                Row row = sheet.getRow(j);
+                if (row != null) {
+                    batch.add(row);
+                }
+            }
+
+            // Process the batch
+            processBatch(batch, sheet, request,config);
+        }
+    }
+
+    private void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config) throws JsonProcessingException {
+        // Process the batch of rows
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        Set<ImportDataModel> importDataModels = new LinkedHashSet<>();
-        for (Row row : sheet) {
+        for (Row row : batch) {
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
             importDataModel.setIs_draft(true);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
-            config= sortByValues(config);
+//            config= sortByValues(config);
 
             if (row.getRowNum() == 0) {
                 continue;
@@ -221,14 +334,7 @@ public class DataImporter extends Action {
 
                 }
             }
-
         }
-//        for (ImportDataModel importDataModel: importDataModels)
-//        {
-//            logger.info("Trying to import tha data...");
-//            importTheData(importDataModel, session);
-//        }
-
     }
 
     public static String findYearSubstring(String input) {

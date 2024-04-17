@@ -504,7 +504,7 @@ public class DataImporter extends Action {
         session.doWork(connection -> {
 //            String query = String.format("SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE LOWER(name) = LOWER(%s)", name);
 //            String query = "SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE LOWER(name) = LOWER(?)";
-            String query = "SELECT amp_sector_id, name FROM amp_sector WHERE LOWER(name) = LOWER(?)";
+            String query = primary?"SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(name) = LOWER(?) AND acc.name='Primary'":"SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(name) = LOWER(?) AND acc.name='Secondary'";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 // Set the name as a parameter to the prepared statement
                 statement.setString(1, name);
@@ -513,7 +513,7 @@ public class DataImporter extends Action {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         Long ampSectorId = resultSet.getLong("amp_sector_id");
-                        String sectorConfigName = resultSet.getString("name");
+//                        String sectorConfigName = resultSet.getString("name");
                         Sector sector1 = new Sector();
                         sector1.setSector_percentage(100.00);
                         sector1.setSector(ampSectorId);

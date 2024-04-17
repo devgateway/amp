@@ -138,8 +138,9 @@ public class DataImporter extends Action {
                 Sheet sheet = workbook.getSheetAt(i);
                 parseData(dataImporterForm.getColumnPairs(),sheet, request);
             }
+            logger.info("Closing the workbook...");
 
-            workbook.close();
+//            workbook.close();
 
 
         }

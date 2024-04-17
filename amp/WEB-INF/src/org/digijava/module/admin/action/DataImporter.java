@@ -289,7 +289,7 @@ public class DataImporter extends Action {
             if (row.getRowNum() == 0) {
                 continue;
             }
-            if (row.getRowNum()<=20) {
+//            if (row.getRowNum()<=20) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
@@ -331,7 +331,7 @@ public class DataImporter extends Action {
 //                        importDataModels.add(importDataModel);
                         importTheData(importDataModel, session);
 
-                    }
+//                    }
 
                 }
             }

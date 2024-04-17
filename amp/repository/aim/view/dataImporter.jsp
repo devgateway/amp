@@ -136,13 +136,6 @@
       xhr.onload = function () {
         if (xhr.status === 200) {
           console.log("File Parsed successfully")
-          // if (xhr.getResponseHeader('selectTag').length>=1) {
-          //   document.getElementById('headers').innerHTML =  xhr.getResponseHeader('selectTag');
-          //   document.getElementById("otherComponents").removeAttribute("hidden");
-          // }else
-          // {
-          //   console.error("Unable to extract headers")
-          // }
         } else {
           console.error('Error:', xhr.status);
         }

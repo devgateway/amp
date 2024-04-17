@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.ecs.wml.Do;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,32 +13,25 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.admin.util.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -142,7 +134,9 @@ public class DataImporter extends Action {
             int numberOfSheets = workbook.getNumberOfSheets();
             logger.info("Number of sheets: "+numberOfSheets);
             for (int i = 0; i < numberOfSheets; i++) {
-                parseData(dataImporterForm.getColumnPairs(),workbook,i, request);
+                logger.info("Sheet number: "+i);
+                Sheet sheet = workbook.getSheetAt(i);
+                parseData(dataImporterForm.getColumnPairs(),sheet, request);
             }
 
             workbook.close();
@@ -160,11 +154,10 @@ public class DataImporter extends Action {
     }
 
 
-    private void parseData(Map<String,String> config, Workbook workbook, int sheetNumber, HttpServletRequest request) throws JsonProcessingException {
+    private void parseData(Map<String,String> config, Sheet sheet, HttpServletRequest request) throws JsonProcessingException {
+        logger.info("Sheet name: "+sheet.getSheetName());
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        logger.info("Sheet number: "+sheetNumber);
-        Sheet sheet = workbook.getSheetAt(sheetNumber);
         Set<ImportDataModel> importDataModels = new LinkedHashSet<>();
         for (Row row : sheet) {
             ImportDataModel importDataModel = new ImportDataModel();

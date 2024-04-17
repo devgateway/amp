@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -38,7 +39,6 @@ import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -130,42 +130,19 @@ public class DataImporter extends Action {
         if (request.getParameter("Upload")!=null) {
             logger.info(" this is the action Upload "+request.getParameter("Upload"));
 
-//            InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
-//            Workbook workbook = new XSSFWorkbook(fileInputStream);
-//            int numberOfSheets = workbook.getNumberOfSheets();
-//            logger.info("Number of sheets: "+numberOfSheets);
-//            for (int i = 0; i < numberOfSheets; i++) {
-//                logger.info("Sheet number: "+i);
-//                Sheet sheet = workbook.getSheetAt(i);
-//                parseData(dataImporterForm.getColumnPairs(),sheet, request);
-//            }
-//            logger.info("Closing the workbook...");
-//
-//            workbook.close();
+            InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
+            Workbook workbook = new HSSFWorkbook(fileInputStream);
+            int numberOfSheets = workbook.getNumberOfSheets();
+            logger.info("Number of sheets: "+numberOfSheets);
+            for (int i = 0; i < numberOfSheets; i++) {
+                logger.info("Sheet number: "+i);
+                Sheet sheet = workbook.getSheetAt(i);
+                parseData(dataImporterForm.getColumnPairs(),sheet, request);
+            }
+            logger.info("Closing the workbook...");
 
-            CompletableFuture.runAsync(() -> {
-                try {
-                    // Open the workbook
-                    InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
+            workbook.close();
 
-                    Workbook workbook = new XSSFWorkbook(fileInputStream);
-                    int numberOfSheets = workbook.getNumberOfSheets();
-                    logger.info("Number of sheets: " + numberOfSheets);
-
-                    // Process each sheet in the workbook
-                    for (int i = 0; i < numberOfSheets; i++) {
-                        logger.info("Sheet number: " + i);
-                        Sheet sheet = workbook.getSheetAt(i);
-                        parseData(dataImporterForm.getColumnPairs(), sheet, request);
-                    }
-
-                    // Close the workbook
-                    workbook.close();
-                    logger.info("Closing the workbook...");
-                } catch (Exception e) {
-                    logger.error("Error processing Excel file: " + e.getMessage(), e);
-                }
-            });
 
 
 
@@ -198,7 +175,7 @@ public class DataImporter extends Action {
             if (row.getRowNum() == 0) {
                 continue;
             }
-            if (row.getRowNum()<=20) {
+//            if (row.getRowNum()<=20) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
@@ -242,7 +219,7 @@ public class DataImporter extends Action {
 
                     }
 
-                }
+//                }
             }
 
         }

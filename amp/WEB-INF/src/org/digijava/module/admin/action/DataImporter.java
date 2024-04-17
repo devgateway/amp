@@ -38,6 +38,7 @@ import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,7 +95,7 @@ public class DataImporter extends Action {
             String columnName = request.getParameter("columnName");
             String selectedField = request.getParameter("selectedField");
             dataImporterForm.getColumnPairs().put(columnName, selectedField);
-            logger.info("Datas:"+dataImporterForm.getColumnPairs());
+            logger.info("Column Pairs:"+dataImporterForm.getColumnPairs());
 
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString( dataImporterForm.getColumnPairs());
@@ -114,7 +115,7 @@ public class DataImporter extends Action {
             String selectedField = request.getParameter("selectedField");
             dataImporterForm.getColumnPairs().put(columnName, selectedField);
             removeMapItem(dataImporterForm.getColumnPairs(),columnName,selectedField);
-            logger.info("Datas:"+dataImporterForm.getColumnPairs());
+            logger.info("Column Pairs:"+dataImporterForm.getColumnPairs());
 
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString( dataImporterForm.getColumnPairs());
@@ -129,18 +130,43 @@ public class DataImporter extends Action {
         if (request.getParameter("Upload")!=null) {
             logger.info(" this is the action Upload "+request.getParameter("Upload"));
 
-            InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
-            Workbook workbook = new XSSFWorkbook(fileInputStream);
-            int numberOfSheets = workbook.getNumberOfSheets();
-            logger.info("Number of sheets: "+numberOfSheets);
-            for (int i = 0; i < numberOfSheets; i++) {
-                logger.info("Sheet number: "+i);
-                Sheet sheet = workbook.getSheetAt(i);
-                parseData(dataImporterForm.getColumnPairs(),sheet, request);
-            }
-            logger.info("Closing the workbook...");
-
+//            InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
+//            Workbook workbook = new XSSFWorkbook(fileInputStream);
+//            int numberOfSheets = workbook.getNumberOfSheets();
+//            logger.info("Number of sheets: "+numberOfSheets);
+//            for (int i = 0; i < numberOfSheets; i++) {
+//                logger.info("Sheet number: "+i);
+//                Sheet sheet = workbook.getSheetAt(i);
+//                parseData(dataImporterForm.getColumnPairs(),sheet, request);
+//            }
+//            logger.info("Closing the workbook...");
+//
 //            workbook.close();
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    // Open the workbook
+                    InputStream fileInputStream = dataImporterForm.getUploadedFile().getInputStream();
+
+                    Workbook workbook = new XSSFWorkbook(fileInputStream);
+                    int numberOfSheets = workbook.getNumberOfSheets();
+                    logger.info("Number of sheets: " + numberOfSheets);
+
+                    // Process each sheet in the workbook
+                    for (int i = 0; i < numberOfSheets; i++) {
+                        logger.info("Sheet number: " + i);
+                        Sheet sheet = workbook.getSheetAt(i);
+                        parseData(dataImporterForm.getColumnPairs(), sheet, request);
+                    }
+
+                    // Close the workbook
+                    workbook.close();
+                    logger.info("Closing the workbook...");
+                } catch (Exception e) {
+                    logger.error("Error processing Excel file: " + e.getMessage(), e);
+                }
+            });
+
 
 
         }

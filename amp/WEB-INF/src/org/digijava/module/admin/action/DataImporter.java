@@ -480,6 +480,7 @@ public class DataImporter extends Action {
         logger.info("Existing activity");
         importDataModel.setInternal_id(existing.getAmpActivityId());
         importDataModel.setAmp_id(existing.getAmpId());
+        importDataModel.getActivity_group().setVersion(existing.getAmpActivityGroup().getVersion());
         map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
         response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity/update");

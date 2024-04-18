@@ -43,8 +43,10 @@ module.exports = Backbone.View.extend({
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;
               });
-              this.cluster.gisSettings = gisSettings.gisSettings;
-              this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+              // this.cluster.gisSettings = gisSettings.gisSettings;
+                this.cluster.sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
+                this.cluster.programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
+                 this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
               // get appropriate cluster model:
               if (this.cluster) {
                   popup.setContent(this.template(this.cluster));
@@ -187,7 +189,7 @@ module.exports = Backbone.View.extend({
     if (this.cluster.properties.admLevel) {
        payload.filters[this.cluster.properties.admLevel.toLowerCase()] = [this.cluster.properties.admId];
     }
-    
+
     return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
 
@@ -210,7 +212,7 @@ module.exports = Backbone.View.extend({
   // table should show planned comitments and dispursements,
   // otherwise show actual values.
   _updatePlannedActualUI: function() {
-	  var self = this;       
+	  var self = this;
 	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
       self.tempDOM.find('.setting-scc').hide();
       self.tempDOM.find('.setting-executings').hide();
@@ -226,7 +228,7 @@ module.exports = Backbone.View.extend({
 	  } else {
 		  self.tempDOM.find('.setting-actual').show();
 		  self.tempDOM.find('.setting-planned').hide();
-	  }    
+	  }
   },
 
 
@@ -244,8 +246,8 @@ module.exports = Backbone.View.extend({
 		  this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
 				  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
 	  }
-      
-	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {        
+
+	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {
 		  self.tempDOM.find('#projects-pane .loading').remove();
 		  /* Format the numerical columns */
 		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));
@@ -266,7 +268,7 @@ module.exports = Backbone.View.extend({
               columnName2 = fundingType + ' Disbursements';
           }
 
-		  var activityFormatted = _.map(activityCollection, function(activity) {             
+		  var activityFormatted = _.map(activityCollection, function(activity) {
 			  var formattedColumnName1 = ampFormatter.format(activity.get(columnName1));
 			  var formattedColumnName2 = ampFormatter.format(activity.get(columnName2));
 

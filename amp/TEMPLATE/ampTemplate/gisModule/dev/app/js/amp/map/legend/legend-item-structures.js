@@ -5,8 +5,8 @@ const Backbone = require('backbone');
 const Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
 const SettingsUtils = require('../../../libs/local/settings-utils.js');
 var Constants = require('../../../libs/local/constants.js');
-const GisSettings = require("../../services/gis_settings");
-var gisSettings = new GisSettings();
+// const GisSettings = require("../../services/gis_settings");
+// var gisSettings = new GisSettings();
 
 module.exports = Backbone.View.extend({
 
@@ -43,7 +43,8 @@ module.exports = Backbone.View.extend({
 					   status: 'loaded',
 					   colourBuckets: self.model.structuresCollection.palette.colours,
 					   selectedVertical: self.model.get('filterVertical'),
-					   gisSettings: gisSettings.gisSettings,
+					   sectorsEnabled: app.data.generalSettings.get('gis-sectors-enabled'),
+					   programsEnabled: app.data.generalSettings.get('gis-programs-enabled'),
 					   customStructureColors: customStructureColors
 				   };
 

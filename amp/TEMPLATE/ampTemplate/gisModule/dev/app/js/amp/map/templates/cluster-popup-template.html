@@ -3,10 +3,10 @@
 
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#projects-pane" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-projectlist">Project List</a></li>
-    <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
+    <% if (obj.sectorsEnabled == true){ %>
     <li><a href="#charts-pane-sector" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-sectors">Sectors</a></li>
     <% } %>
-    <% if (obj.gisSettings.gis_programs_enabled == true){ %>
+    <% if (obj.programsEnabled == true){ %>
     <li><a href="#charts-pane-program" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-programs">Programs</a></li>
     <% } %>
     <li>
@@ -49,7 +49,7 @@
       <div class="btn btn-sm btn-info load-more"><span data-i18n="amp.gis:popup-loadmore">load more</span>...</div>
     </div>
 
-    <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
+    <% if (obj.sectorsEnabled == true){ %>
     <div class="tab-pane" id="charts-pane-sector">
       <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span>
         <small> (<span data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></span>)</small>
@@ -61,7 +61,7 @@
     </div>
     <% } %>
 
-    <% if (obj.gisSettings.gis_programs_enabled == true){ %>
+    <% if (obj.programsEnabled == true){ %>
     <div class="tab-pane" id="charts-pane-program">
       <h5><span data-i18n="amp.gis:activities-programs">Programs</span>
         <small> (<span data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></span>)</small>

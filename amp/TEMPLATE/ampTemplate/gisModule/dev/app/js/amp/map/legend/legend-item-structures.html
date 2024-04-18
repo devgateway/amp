@@ -1,13 +1,13 @@
 <span class="templateBugWorkaround">
   <h3><span data-i18n="amp.gis:legend-item-structures"><%= title %></span>
     <select class="form-control" >
-      <% if (obj.gisSettings.gis_sectors_enabled == true){ %>
+      <% if (obj.sectorsEnabled == true){ %>
       <option data-i18n="amp.gis:legend-by-sector" value="Primary Sector" <%= (obj.selectedVertical == "Primary Sector"? 'selected': '') %>>
          By Sector
       </option>
       <% } %>
 
-       <% if (obj.gisSettings.gis_programs_enabled == true){ %>
+       <% if (obj.programsEnabled == true){ %>
       <option data-i18n="amp.gis:legend-by-program" value="Programs" <%= (obj.selectedVertical == "Programs"? 'selected': '') %>>
          By Program
       </option>

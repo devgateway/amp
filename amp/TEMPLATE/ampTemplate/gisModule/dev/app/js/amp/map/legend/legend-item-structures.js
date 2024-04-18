@@ -22,8 +22,10 @@ module.exports = Backbone.View.extend({
   render:  function() {
 	  var self = this;
 	  //getStructuresWithActivities was null...
-	  			var verticalID = self.$('option:selected').val();
-	  			self.model.set('filterVertical', verticalID);
+	  self.$('select').change(function() {
+		  var verticalID = self.$('option:selected').val();
+		  self.model.set('filterVertical', verticalID);
+	  });
 			   self.model.structuresCollection.getStructuresWithActivities().then(function() {
 				   var geoJSON = self.model.structuresCollection.toGeoJSON();
 				   var customStructureColors = []
@@ -111,10 +113,7 @@ module.exports = Backbone.View.extend({
 
 				   // add listener to select. Didn't work when i used 'events'
 				   // probably because happens after view populated...or translate strips events..
-				   self.$('select').change(function() {
-					   var verticalID = self.$('option:selected').val();
-					   self.model.set('filterVertical', verticalID);
-				   });
+
 			   });
 
 	  // })

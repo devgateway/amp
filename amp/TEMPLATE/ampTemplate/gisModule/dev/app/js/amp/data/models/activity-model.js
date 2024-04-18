@@ -95,7 +95,6 @@ module.exports = Backbone.Model.extend({
 
   _getNames: function(name) {
 	var matchesFilters = this.attributes.matchesFilters;
-      console.log("Attributes: ",matchesFilters[name])
     if (matchesFilters && matchesFilters[name]) {
       if (matchesFilters[name].length > 1) {
           // let joinedValues = "";
@@ -115,7 +114,7 @@ module.exports = Backbone.Model.extend({
       }
 
     }
-    return 'nil';
+    return '';
   }
 
 });

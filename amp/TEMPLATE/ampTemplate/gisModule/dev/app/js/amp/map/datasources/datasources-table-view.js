@@ -44,8 +44,8 @@ module.exports = Backbone.View.extend({
 
       var collection = self.collection.getPageDetails();
       // collection.gisSettings = gisSettings.gisSettings;
-      collection.sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled'),
-          collection.programsEnabled= app.data.generalSettings.get('gis-programs-enabled'),
+      collection.sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
+          collection.programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
       self.app.translator.translateDOM(
         self.template(collection)).then(
         function(newEl) {

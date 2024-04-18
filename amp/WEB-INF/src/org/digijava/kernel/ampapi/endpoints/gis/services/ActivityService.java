@@ -219,7 +219,7 @@ public class ActivityService {
 
     private static Set<Map<String, Object>> getPrograms(Set<Map<String, Object>> programs,String columnName,Set<Long> ids){
         for (Long id: ids){
-            if (columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0)||
+            if (
                     columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1)||
                     columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2)||
                     columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3)||

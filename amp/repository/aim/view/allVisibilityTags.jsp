@@ -1088,6 +1088,7 @@ deleted 6 fields, do not reinsert
 <feature:display name="Project sites" module="/GIS"></feature:display>
 <feature:display name="Download Map selector" module="/GIS"></feature:display>
 <feature:display name="Gap Analysis Map" module="/GIS"></feature:display>
+
 <feature:display name="Programs Enabled" module="/GIS"></feature:display>
 <feature:display name="Sectors Enabled" module="/GIS"></feature:display>
 <feature:display name="Login Required" module="/GIS"></feature:display>

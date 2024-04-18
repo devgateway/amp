@@ -418,6 +418,10 @@ public class SettingsUtils {
                 FeaturesUtil.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST));
 
         settings.setProjectSites(FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
+        settings.setProgramsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_PROGRAMS_ENABLED));
+        settings.setSectorsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_SECTORS_ENABLED));
+        settings.setMultiCountryEnabled(FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED));
+        settings.setLoginRequired(FeaturesUtil.isVisibleFeature(GisConstants.LOGIN_REQUIRED));
 
         settings.setMaxLocationsIcons(
                 FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_LOCATIONS_ICONS));

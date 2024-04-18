@@ -35,21 +35,21 @@ module.exports = Backbone.Model.extend({
     var filter = this.appData ? this.appData.filter : this.collection.appData.filter;
 
     filter.getAllFilters().then(function(allFilters) {
-    	var matchesFilters = self.attributes.matchesFilters;       
+    	var matchesFilters = self.attributes.matchesFilters;
     	if (allFilters.filters && matchesFilters) {
     		_.each(matchesFilters, function(v, k) {
     			if (k === Constants.PRIMARY_SECTOR) {
-    				_.each(matchesFilters[k], function(sector, index) {    					
-    				   if (!(sector instanceof Backbone.Model)) {    					
-    					   matchesFilters[k][index] = new Backbone.Model(sector);  
+    				_.each(matchesFilters[k], function(sector, index) {
+    				   if (!(sector instanceof Backbone.Model)) {
+    					   matchesFilters[k][index] = new Backbone.Model(sector);
     				   }
-    					                   
-    				});        	   
+
+    				});
     			} else {
     				//make sure it's a valid filter
-    				var filterId  = k.toLowerCase().replace(' ', '-');          
+    				var filterId  = k.toLowerCase().replace(' ', '-');
     				if (allFilters.filters[filterId]) {
-    					//iterate over ids.        	        			  
+    					//iterate over ids.
     					_.each(matchesFilters[k], function(id, index) {
     						var matched = _(allFilters.filters[filterId]).findWhere({id: id});
     						if (matched) {
@@ -57,7 +57,7 @@ module.exports = Backbone.Model.extend({
     						}
     					});
     				}
-    			}          
+    			}
     		});
 
     		self.set('matchesFilters', matchesFilters);
@@ -70,7 +70,7 @@ module.exports = Backbone.Model.extend({
 
   parse: function(data) {
     // make our id an int
-    data['Activity Id'] = parseInt(data['Activity Id'], 10);    
+    data['Activity Id'] = parseInt(data['Activity Id'], 10);
     return data;
   },
 
@@ -86,6 +86,7 @@ module.exports = Backbone.Model.extend({
 
   _getNames: function(name) {
 	var matchesFilters = this.attributes.matchesFilters;
+      console.log("Attribute: ",matchesFilters[name])
     if (matchesFilters && matchesFilters[name]) {
       if (matchesFilters[name].length > 1) {
           // let joinedValues = "";
@@ -100,7 +101,8 @@ module.exports = Backbone.Model.extend({
           // }
           //We could use the joined values but it might be confusing for individual values that have commas in them
         return "Multiple";
-      } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {    	 
+      // } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {
+      } else if (matchesFilters[name][0]) {
         return matchesFilters[name][0].get('name');
       }
     }

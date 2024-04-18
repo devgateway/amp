@@ -2,11 +2,11 @@
   <td data-th="title"><a target="_blank" href="<% if (activity) { %> <%= activity.ampUrl%><% } %>"><%= activity["Project Title"] %></a>
   </td>
   <td class="executings" data-th="executings"><%= obj.orgColumnName %> </td>
-  <% if (obj.generalSettings.attributes['gis-sectors-enabled']){ %>
+  <% if (obj.sectorsEnabled){ %>
   <td class="sectors" data-th="sectors"><%= activity.sectorNames %> </td>
   <% } %>
 
-  <% if (obj.generalSettings.attributes['gis-programs-enabled']){ %>
+  <% if (obj.programsEnabled){ %>
   <td class="programs" data-th="programs"><%= activity.programNames %> </td>
   <% } %>
 

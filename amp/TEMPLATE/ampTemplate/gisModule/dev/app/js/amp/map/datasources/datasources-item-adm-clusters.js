@@ -61,7 +61,8 @@ module.exports = Backbone.View.extend({
                       // put them on the page.
 
                           self.$el.append(self.template({
-                              generalSettings: self.app.data.generalSettings,
+                              sectorsEnabled: self.app.data.generalSettings.get('gis-sectors-enabled'),
+                              programsEnabled: self.app.data.generalSettings.get('gis-programs-enabled'),
                               activity: activity,
                               orgColumnName: orgColumnName ? orgColumnName : '',
                               formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),

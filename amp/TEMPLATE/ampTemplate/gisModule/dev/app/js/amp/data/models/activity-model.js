@@ -45,7 +45,16 @@ module.exports = Backbone.Model.extend({
     				   }
 
     				});
-    			} else {
+    			}
+                else if (k === Constants.PROGRAMS) {
+                    _.each(matchesFilters[k], function(program, index) {
+                        if (!(program instanceof Backbone.Model)) {
+                            matchesFilters[k][index] = new Backbone.Model(program);
+                        }
+                    });
+                }
+
+                else {
     				//make sure it's a valid filter
     				var filterId  = k.toLowerCase().replace(' ', '-');
     				if (allFilters.filters[filterId]) {

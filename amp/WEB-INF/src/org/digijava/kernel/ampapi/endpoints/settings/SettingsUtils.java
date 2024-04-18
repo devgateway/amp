@@ -490,9 +490,9 @@ public class SettingsUtils {
     public static AmpGisSettings getGisSettings()
     {
         AmpGisSettings ampGisSettings = new AmpGisSettings();
-        ampGisSettings.setSectorsEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.GIS_SECTORS_ENABLED));
-        ampGisSettings.setProgramsEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.GIS_PROGRAMS_ENABLED));
-        ampGisSettings.setMultiCountryEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisSettingsConstants.MULTICOUNTRY_ENABLED));
+        ampGisSettings.setSectorsEnabled(FeaturesUtil.isVisibleFeature(GisSettingsConstants.GIS_SECTORS_ENABLED));
+        ampGisSettings.setProgramsEnabled(FeaturesUtil.isVisibleFeature(GisSettingsConstants.GIS_PROGRAMS_ENABLED));
+        ampGisSettings.setMultiCountryEnabled(FeaturesUtil.isVisibleFeature(GisSettingsConstants.MULTICOUNTRY_ENABLED));
         return ampGisSettings;
     }
 

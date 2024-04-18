@@ -68,7 +68,7 @@ module.exports = Backbone.View.extend({
 
 				   // render icons if available
 				   if ((MAX_NUM_FOR_ICONS === -1 || self.model.structuresCollection.length < MAX_NUM_FOR_ICONS) &&
-					   self.model.get('filterVertical') === 'Primary Sector') {
+					   (self.model.get('filterVertical') === 'Primary Sector' || self.model.get('filterVertical') === 'Programs')) {
 					   renderObject.imageBuckets = self.model.iconMappings;
 					   renderObject.DEFAULT_ICON_CODE =  self.model.DEFAULT_ICON_CODE;
 					   renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');

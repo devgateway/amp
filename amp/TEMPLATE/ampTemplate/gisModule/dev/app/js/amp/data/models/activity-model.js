@@ -113,10 +113,7 @@ module.exports = Backbone.Model.extend({
       } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {
         return matchesFilters[name][0].get('name');
       }
-      else {
-          return matchesFilters[name][0].get('name');
 
-      }
     }
     return 'nil';
   }

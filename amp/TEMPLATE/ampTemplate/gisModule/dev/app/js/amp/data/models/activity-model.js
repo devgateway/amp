@@ -86,7 +86,7 @@ module.exports = Backbone.Model.extend({
 
   _getNames: function(name) {
 	var matchesFilters = this.attributes.matchesFilters;
-      console.log("Attribute: ",matchesFilters[name])
+      console.log("Attributes: ",matchesFilters[name])
     if (matchesFilters && matchesFilters[name]) {
       if (matchesFilters[name].length > 1) {
           // let joinedValues = "";
@@ -101,12 +101,11 @@ module.exports = Backbone.Model.extend({
           // }
           //We could use the joined values but it might be confusing for individual values that have commas in them
         return "Multiple";
-      // } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {
-      } else if (matchesFilters[name][0]) {
+      } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {
         return matchesFilters[name][0].get('name');
       }
     }
-    return '';
+    return 'nil';
   }
 
 });

@@ -317,11 +317,20 @@ public class DataImporter extends Action {
                             case "{fundingItem}":
                                 if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
                                 {
-                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrg(session));
+                                    if (!config.values().contains("{donorAgency}"))
+                                    {
+                                        updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrg(session));
+
+                                    }
+                                    else {
+                                        int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
+                                        Cell cell1 = row.getCell(columnIndex1);
+                                        updateOrgs(importDataModel, cell1.getStringCellValue().trim(), session, "donor");
+                                        updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
+                                    }
 
                                 }else {
                                     updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
-
                                 }
 
                                 break;
@@ -336,6 +345,15 @@ public class DataImporter extends Action {
                 }
             }
         }
+    }
+
+    public <K, V> K getKey(Map<K, V> map, V value) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public static String findYearSubstring(String input) {
@@ -424,6 +442,12 @@ public class DataImporter extends Action {
         funding.getCommitments().add(commitment);
         funding.getDisbursements().add(commitment);
 
+        DonorOrganization donorOrganization = new DonorOrganization();
+        donorOrganization.setOrganization(orgId);
+        donorOrganization.setPercentage(100.0);
+
+
+        importDataModel.getDonor_organization().add(donorOrganization);
         importDataModel.getFundings().add(funding);
     }
 

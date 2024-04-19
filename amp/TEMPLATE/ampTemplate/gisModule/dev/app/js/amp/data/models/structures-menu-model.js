@@ -6,6 +6,8 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var $ = require('jquery');
+const GisSettings = require("../../services/gis_settings");
+var gisSettings=new GisSettings();
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
@@ -21,7 +23,18 @@ module.exports = Backbone.Model
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
-
+    console.log("Attributes ",gisSettings)
+    var sectorsEnabled= gisSettings.gisSettings.gis_sectors_enabled;
+    var programsEnabled= gisSettings.gisSettings.gis_programs_enabled;
+    console.log(programsEnabled,sectorsEnabled)
+    if (programsEnabled && !sectorsEnabled) {
+      this.set({'filterVertical':'Programs'});
+    } else if (!programsEnabled && !sectorsEnabled) {
+      this.set({'filterVertical ':'Donor Agency'});
+    }else if (programsEnabled && sectorsEnabled) {
+      this.set({'filterVertical':'Primary Sector'});
+    }
+    console.log("Filter vertical default ",this.get('filterVertical'));
     this.attachListeners();
   },
 

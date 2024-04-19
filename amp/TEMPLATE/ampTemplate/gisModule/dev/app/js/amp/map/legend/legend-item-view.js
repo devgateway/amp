@@ -42,17 +42,6 @@ module.exports = function(options) {
   } else if (options.model instanceof IndicatorWMS) {
     return new IndicatorWMSView(options);
   } else if (options.model instanceof structuresMenu) {
-    var sectorsEnabled= options.app.data.generalSettings.get('gis-sectors-enabled');
-    var programsEnabled= options.app.data.generalSettings.get('gis-programs-enabled');
-    console.log(programsEnabled,sectorsEnabled)
-    if (programsEnabled && !sectorsEnabled) {
-      options.model.set('filterVertical','Programs');
-    } else if (!programsEnabled && !sectorsEnabled) {
-      options.model.set('filterVertical ', 'Donor Agency');
-    }else if (programsEnabled && sectorsEnabled) {
-      options.model.set('filterVertical','Primary Sector');
-    }
-    console.log("Filter vertical default ",options.model.get('filterVertical'));
     return new ProjectSitesView(options);
   } else if (options.model instanceof IndicatorJoin || options.model instanceof HilightFunding ||
       options.model.attributes.type === 'FeatureCollection') {

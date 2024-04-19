@@ -21,18 +21,7 @@ module.exports = Backbone.View.extend({
 	  // console.log("Vertical Id ",verticalID)
 	  // this.model.set('filterVertical', verticalID);
 
-	  // console.log("Attributes ",app.data.generalSettings)
-	  // var sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
-	  // var programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
-	  // console.log(programsEnabled,sectorsEnabled)
-	  // if (programsEnabled && !sectorsEnabled) {
-		//   this.model.set('filterVertical','Programs');
-	  // } else if (!programsEnabled && !sectorsEnabled) {
-		//   this.model.set('filterVertical ', 'Donor Agency');
-	  // }else if (programsEnabled && sectorsEnabled) {
-		//   this.model.set('filterVertical','Primary Sector');
-	  // }
-	  // console.log("Filter vertical default ",this.model.get('filterVertical'));
+
   },
 
 

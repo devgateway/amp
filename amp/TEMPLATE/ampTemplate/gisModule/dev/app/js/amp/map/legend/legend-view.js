@@ -16,18 +16,18 @@ module.exports = Backbone.View.extend({
   events: {
     'click a[href="#toggle-legend-collapse"]': 'toggleLegend'
   },
- 
+
   initialize: function(options) {
     var self = this;
     this.app = options.app;
-    
+
     //attach legend listeners after filter and app state loaded.
     $.when(this.app.data.filter.loaded, this.app.data._stateWait).then(function() {
       self.listenTo(self.app.data, 'show hide refresh sync valuesChanged', self.render);
     });
   },
 
-  render: function() {	
+  render: function() {
     var self = this;
     // Chained Translate: returns el
     this.app.translator.translateDOM(this.template())
@@ -36,7 +36,19 @@ module.exports = Backbone.View.extend({
       });
 
     var content = this.app.data.getAllVisibleLayers().map(function(layer) {
-      return (new LegendItem({ model: layer, app: this.app })).render().el;
+        var self= this;
+        var sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');
+        var programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
+        var filterVertical;
+        if (programsEnabled && !sectorsEnabled) {
+           filterVertical='Programs';
+        } else if (!programsEnabled && !sectorsEnabled) {
+            filterVertical='Donor Agency';
+        }else if (programsEnabled && sectorsEnabled) {
+            filterVertical='Primary Sector';
+        }
+        console.log("Filter vertical default ",filterVertical);
+      return (new LegendItem({ model: layer, app: this.app,filterVertical:filterVertical })).render().el;
     }).value();
 
 
@@ -44,32 +56,32 @@ module.exports = Backbone.View.extend({
       this.$el.addClass('expanded');  // always expand when new layers are added
         this.originalHeight = this.$el.height();
       this.$('.legend-content').html(content);
-    }    
-        
+    }
+
     this.makeLegendDraggable();
     this.makeLegendResizable();
-    
+
     return this;
-  },  
+  },
   makeLegendDraggable: function() {
 	  $('.legend').draggable({
     	  containment : "parent",
     	  stop: function( event, ui ) {
     		  if (event.originalEvent.target.id === 'legend-title'){
-    			this.$el.toggleClass('expanded'); //hack to prevent legend from collapsing when dragging stops.  
-    		  }    		 
+    			this.$el.toggleClass('expanded'); //hack to prevent legend from collapsing when dragging stops.
+    		  }
     	  }.bind(this)
      });
   },
   makeLegendResizable: function() {
 	  this.$('.legend-content').resizable({
 	    	alsoResize: ".legend",
-	        handles: 's, e, se'       
-	    });      
+	        handles: 's, e, se'
+	    });
   },
   toggleLegend: function() {
     this.$el.toggleClass('expanded');
-    
+
     if (this.$el.hasClass('expanded')) {
         this.$el.removeClass('legend-collapsed');
         var realHeight = Math.trunc($('.legend-content')[0].getBoundingClientRect().height +

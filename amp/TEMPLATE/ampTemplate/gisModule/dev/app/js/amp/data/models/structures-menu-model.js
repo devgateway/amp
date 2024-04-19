@@ -6,17 +6,18 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var $ = require('jquery');
-const GisSettings = require("../../services/gis_settings");
-var gisSettings=new GisSettings();
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
-      defaults: {
-        title: 'Project Sites',
-        value: '',
-        helpText: '',
-        filterVertical: 'Primary Sector'
-      },
+          defaults: function(options) { // Use a function to access options
+            console.log("Vert ",options.filterVertical)
+            return {
+              title: 'Project Sites',
+              value: '',
+              helpText: '',
+              filterVertical: options.filterVertical || 'Primary Sector' // Set default if not provided
+            };
+          },
 
   initialize: function(things, options) {
     this.appData = options.appData;
@@ -24,28 +25,7 @@ module.exports = Backbone.Model
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
 
-    var selectedValue = $('#legendSelector').val();
 
-    // var settings = gisSettings.gisSettings;
-    console.log("Selected ",selectedValue)
-    $('#legendSelector').change(function() {
-      var selectedValue = $('#legendSelector').val();
-      // self.model.set('filterVertical', verticalID);
-      console.log("Selected  again",selectedValue)
-
-    });
-
-    // var sectorsEnabled= settings['gis_sectors_enabled'];
-    // var programsEnabled= settings['gis_programs_enabled'];
-    // console.log(programsEnabled,sectorsEnabled)
-    // if (programsEnabled && !sectorsEnabled) {
-    //   this.set({'filterVertical':'Programs'});
-    // } else if (!programsEnabled && !sectorsEnabled) {
-    //   this.set({'filterVertical ':'Donor Agency'});
-    // }else if (programsEnabled && sectorsEnabled) {
-    //   this.set({'filterVertical':'Primary Sector'});
-    // }
-    // console.log("Filter vertical default ",this.get('filterVertical'));
     this.attachListeners();
   },
 

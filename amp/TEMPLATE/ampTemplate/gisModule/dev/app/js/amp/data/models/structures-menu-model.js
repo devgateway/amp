@@ -14,7 +14,7 @@ module.exports = Backbone.Model
     title: 'Project Sites',
     value: '',
     helpText: '',
-    filterVertical: 'Primary Sector'
+    filterVertical: this.$('#legend-selector').val()
   },
 
   initialize: function(things, options) {
@@ -56,10 +56,10 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:filterVertical', function() {
       self.structuresCollection.updatePaletteSet();
     });
-    
-    
+
+
     this.listenTo(this.appData.performanceToggleModel, 'change:isPerformanceToggleSelected', this.applyFilters);
-    
+
   },
 
   applyFilters: function() {
@@ -137,7 +137,7 @@ module.exports = Backbone.Model
     740: '740',
     998: '998'
   },
-  
+
   DEFAULT_ICON_CODE: '998', //if no icon can be found using the sector code in the activity, default to unspecified
 
   getSelectedIconStyleCode: function(sectorCode) {

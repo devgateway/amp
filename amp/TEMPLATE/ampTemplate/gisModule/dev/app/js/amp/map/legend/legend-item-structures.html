@@ -1,6 +1,6 @@
 <span class="templateBugWorkaround">
   <h3><span data-i18n="amp.gis:legend-item-structures"><%= title %></span>
-    <select class="form-control" >
+    <select class="form-control" id="legend-selector" >
       <% if (obj.sectorsEnabled == true){ %>
       <option data-i18n="amp.gis:legend-by-sector" value="Primary Sector" <%= (obj.selectedVertical == "Primary Sector"? 'selected': '') %>>
          By Sector

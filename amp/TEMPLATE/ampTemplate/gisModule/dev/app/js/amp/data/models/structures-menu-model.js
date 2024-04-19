@@ -28,13 +28,13 @@ module.exports = Backbone.Model
     var programsEnabled= options.generalSettings.get('gis-programs-enabled');
     console.log(programsEnabled,sectorsEnabled)
     if (programsEnabled && !sectorsEnabled) {
-      this.model.set('filterVertical','Programs');
+      this.set('filterVertical','Programs');
     } else if (!programsEnabled && !sectorsEnabled) {
-      this.model.set('filterVertical ', 'Donor Agency');
+      this.set('filterVertical ', 'Donor Agency');
     }else if (programsEnabled && sectorsEnabled) {
-      this.model.set('filterVertical','Primary Sector');
+      this.set('filterVertical','Primary Sector');
     }
-    console.log("Filter vertical default ",this.model.get('filterVertical'));
+    console.log("Filter vertical default ",this.get('filterVertical'));
 
     this.attachListeners();
   },

@@ -16,9 +16,10 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
 
-	  var verticalID = self.$('option:selected').val();
-	  this.model.set('filterVertical', verticalID);
 
+	  var verticalID = self.$('#legend-selector').val();
+	  console.log("Vertical Id ",verticalID)
+	  self.model.set('filterVertical', verticalID);
 
 	  // console.log("Attributes ",app.data.generalSettings)
 	  // var sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');

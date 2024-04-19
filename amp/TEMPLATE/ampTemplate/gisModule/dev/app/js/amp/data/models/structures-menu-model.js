@@ -23,9 +23,11 @@ module.exports = Backbone.Model
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
-    console.log("Attributes ",gisSettings)
-    var sectorsEnabled= gisSettings.gisSettings.gis_sectors_enabled;
-    var programsEnabled= gisSettings.gisSettings.gis_programs_enabled;
+    var settings = gisSettings.gisSettings;
+    console.log("GIS Settings ",settings)
+
+    var sectorsEnabled= settings['gis_sectors_enabled'];
+    var programsEnabled= settings['gis_programs_enabled'];
     console.log(programsEnabled,sectorsEnabled)
     if (programsEnabled && !sectorsEnabled) {
       this.set({'filterVertical':'Programs'});

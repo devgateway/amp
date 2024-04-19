@@ -24,17 +24,7 @@ module.exports = Backbone.Model
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
-    var sectorsEnabled= options.generalSettings.get('gis-sectors-enabled');
-    var programsEnabled= options.generalSettings.get('gis-programs-enabled');
-    console.log(programsEnabled,sectorsEnabled)
-    if (programsEnabled && !sectorsEnabled) {
-      this.set('filterVertical','Programs');
-    } else if (!programsEnabled && !sectorsEnabled) {
-      this.set('filterVertical ', 'Donor Agency');
-    }else if (programsEnabled && sectorsEnabled) {
-      this.set('filterVertical','Primary Sector');
-    }
-    console.log("Filter vertical default ",this.get('filterVertical'));
+
 
     this.attachListeners();
   },
@@ -57,7 +47,17 @@ module.exports = Backbone.Model
     var self = this;
     console.log("General sett1: "+self.generalSettings)
     console.log("Sectors sett 1: "+self.generalSettings.get('gis-sectors-enabled'))
-
+    var sectorsEnabled= self.generalSettings.get('gis-sectors-enabled');
+    var programsEnabled= self.generalSettings.get('gis-programs-enabled');
+    console.log(programsEnabled,sectorsEnabled)
+    if (programsEnabled && !sectorsEnabled) {
+      self.set('filterVertical','Programs');
+    } else if (!programsEnabled && !sectorsEnabled) {
+      self.set('filterVertical ', 'Donor Agency');
+    }else if (programsEnabled && sectorsEnabled) {
+      self.set('filterVertical','Primary Sector');
+    }
+    console.log("Filter vertical default ",self.get('filterVertical'));
     this.listenTo(this, 'change:selected', function(other, show) {
       if (self.structuresCollection._lastFetch) {  // what does this do?
         this.trigger(show ? 'show' : 'hide', this);

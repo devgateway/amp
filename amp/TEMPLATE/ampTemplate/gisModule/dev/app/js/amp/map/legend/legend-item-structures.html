@@ -2,18 +2,18 @@
   <h3><span data-i18n="amp.gis:legend-item-structures"><%= title %></span>
     <select class="form-control" id="legend-selector" >
       <% if (obj.sectorsEnabled == true){ %>
-      <option data-i18n="amp.gis:legend-by-sector" value="Primary Sector" <%= (obj.selectedVertical == "Primary Sector"? 'selected': '') %>>
+      <option data-i18n="amp.gis:legend-by-sector" value="Primary Sector" >
          By Sector
       </option>
       <% } %>
 
        <% if (obj.programsEnabled == true){ %>
-      <option data-i18n="amp.gis:legend-by-program" value="Programs" <%= (obj.selectedVertical == "Programs"? 'selected': '') %>>
+      <option data-i18n="amp.gis:legend-by-program" value="Programs" >
          By Program
       </option>
       <% } %>
 
-      <option data-i18n="amp.gis:legend-by-donor" value="Donor Agency" <%= (obj.selectedVertical == "Donor Agency"? 'selected': '') %>>
+      <option data-i18n="amp.gis:legend-by-donor" value="Donor Agency">
         By Donor
       </option>
     </select>

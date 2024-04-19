@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
 
 	  var verticalID = self.$('option:selected').val();
-	  self.model.set('filterVertical', verticalID);
+	  this.model.set('filterVertical', verticalID);
 
 
 	  // console.log("Attributes ",app.data.generalSettings)

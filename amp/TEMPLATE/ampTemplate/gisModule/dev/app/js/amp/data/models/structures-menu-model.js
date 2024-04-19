@@ -5,7 +5,7 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
-
+var $ = require('jquery');
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
@@ -14,7 +14,7 @@ module.exports = Backbone.Model
     title: 'Project Sites',
     value: '',
     helpText: '',
-    filterVertical: this.$('#legend-selector').val()
+    filterVertical: $('#legend-selector').val()
   },
 
   initialize: function(things, options) {

@@ -23,20 +23,29 @@ module.exports = Backbone.Model
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
-    var settings = gisSettings.gisSettings;
-    console.log("GIS Settings ",settings)
 
-    var sectorsEnabled= settings['gis_sectors_enabled'];
-    var programsEnabled= settings['gis_programs_enabled'];
-    console.log(programsEnabled,sectorsEnabled)
-    if (programsEnabled && !sectorsEnabled) {
-      this.set({'filterVertical':'Programs'});
-    } else if (!programsEnabled && !sectorsEnabled) {
-      this.set({'filterVertical ':'Donor Agency'});
-    }else if (programsEnabled && sectorsEnabled) {
-      this.set({'filterVertical':'Primary Sector'});
-    }
-    console.log("Filter vertical default ",this.get('filterVertical'));
+    var selectedValue = $('#legendSelector').val();
+
+    // var settings = gisSettings.gisSettings;
+    console.log("Selected ",selectedValue)
+    $('#legendSelector').change(function() {
+      var selectedValue = $('#legendSelector').val();
+      // self.model.set('filterVertical', verticalID);
+      console.log("Selected  again",selectedValue)
+
+    });
+
+    // var sectorsEnabled= settings['gis_sectors_enabled'];
+    // var programsEnabled= settings['gis_programs_enabled'];
+    // console.log(programsEnabled,sectorsEnabled)
+    // if (programsEnabled && !sectorsEnabled) {
+    //   this.set({'filterVertical':'Programs'});
+    // } else if (!programsEnabled && !sectorsEnabled) {
+    //   this.set({'filterVertical ':'Donor Agency'});
+    // }else if (programsEnabled && sectorsEnabled) {
+    //   this.set({'filterVertical':'Primary Sector'});
+    // }
+    // console.log("Filter vertical default ",this.get('filterVertical'));
     this.attachListeners();
   },
 

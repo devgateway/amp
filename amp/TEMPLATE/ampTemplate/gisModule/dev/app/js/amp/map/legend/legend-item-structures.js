@@ -15,6 +15,18 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
+	  console.log("Attributes ",this.appData.generalSettings)
+	  var sectorsEnabled= this.app.generalSettings.get('gis-sectors-enabled');
+	  var programsEnabled= this.app.generalSettings.get('gis-programs-enabled');
+	  console.log(programsEnabled,sectorsEnabled)
+	  if (programsEnabled && !sectorsEnabled) {
+		  this.model.set('filterVertical','Programs');
+	  } else if (!programsEnabled && !sectorsEnabled) {
+		  this.model.set('filterVertical ', 'Donor Agency');
+	  }else if (programsEnabled && sectorsEnabled) {
+		  this.model.set('filterVertical','Primary Sector');
+	  }
+	  console.log("Filter vertical default ",this.model.get('filterVertical'));
   },
 
 

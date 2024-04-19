@@ -27,18 +27,7 @@ module.exports = Backbone.Model
 
   addedState: function() {
     var self = this;
-    console.log("Attributes ",self.appData.generalSettings)
-    var sectorsEnabled= self.appData.generalSettings.get('gis-sectors-enabled');
-    var programsEnabled= self.appData.generalSettings.get('gis-programs-enabled');
-    console.log(programsEnabled,sectorsEnabled)
-    if (programsEnabled && !sectorsEnabled) {
-      self.set('filterVertical','Programs');
-    } else if (!programsEnabled && !sectorsEnabled) {
-      self.set('filterVertical ', 'Donor Agency');
-    }else if (programsEnabled && sectorsEnabled) {
-      self.set('filterVertical','Primary Sector');
-    }
-    console.log("Filter vertical default ",self.get('filterVertical'));
+
     this.appData.state.register(this, 'structuresMenu', {
       get: function() { return {filterVertical: self.get('filterVertical')}; },
       set: function(stateBlob) {

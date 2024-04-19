@@ -24,15 +24,15 @@ module.exports = Backbone.Model
 
     var sectorsEnabled= this.appData.generalSettings.get('gis-sectors-enabled');
     var programsEnabled= this.appData.generalSettings.get('gis-programs-enabled')
-    console.log("AppData",this.appData)
+    console.log(programsEnabled,sectorsEnabled)
     if (programsEnabled && !sectorsEnabled) {
-      this.defaults.filterVertical = 'Programs';
+      self.set('filterVertical','Programs');
     } else if (!programsEnabled && !sectorsEnabled) {
-      this.defaults.filterVertical = 'Donor Agency';
+      self.set('filterVertical', 'Donor Agency');
     }else if (programsEnabled && sectorsEnabled) {
-      this.defaults.filterVertical = 'Primary Sector';
+      self.set('filterVertical','Primary Sector');
     }
-    console.log("Filter vertical default ",this.defaults.filterVertical);
+    console.log("Filter vertical default ",self.get('filterVertical'));
     this.attachListeners();
   },
 

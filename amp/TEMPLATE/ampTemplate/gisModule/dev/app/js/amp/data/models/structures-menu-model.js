@@ -9,22 +9,31 @@ var $ = require('jquery');
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
-          defaults: function(options) { // Use a function to access options
-            console.log("Vert ",options.filterVertical)
-            return {
-              title: 'Project Sites',
-              value: '',
-              helpText: '',
-              filterVertical: options.filterVertical || 'Primary Sector' // Set default if not provided
-            };
-          },
+      defaults: {
+        title: 'Project Sites',
+        value: '',
+        helpText: '',
+        filterVertical: 'Primary Sector'
+      },
 
   initialize: function(things, options) {
+    console.log("General sett: "+options.generalSettings)
+    console.log("Sectors sett: "+options.generalSettings.get('gis-sectors-enabled'))
     this.appData = options.appData;
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
-
+    var sectorsEnabled= options.generalSettings.get('gis-sectors-enabled');
+    var programsEnabled= options.generalSettings.get('gis-programs-enabled');
+    console.log(programsEnabled,sectorsEnabled)
+    if (programsEnabled && !sectorsEnabled) {
+      this.model.set('filterVertical','Programs');
+    } else if (!programsEnabled && !sectorsEnabled) {
+      this.model.set('filterVertical ', 'Donor Agency');
+    }else if (programsEnabled && sectorsEnabled) {
+      this.model.set('filterVertical','Primary Sector');
+    }
+    console.log("Filter vertical default ",this.model.get('filterVertical'));
 
     this.attachListeners();
   },

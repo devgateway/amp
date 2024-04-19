@@ -36,19 +36,7 @@ module.exports = Backbone.View.extend({
       });
 
     var content = this.app.data.getAllVisibleLayers().map(function(layer) {
-        var self= this;
-        var sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');
-        var programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
-        var filterVertical;
-        if (programsEnabled && !sectorsEnabled) {
-           filterVertical='Programs';
-        } else if (!programsEnabled && !sectorsEnabled) {
-            filterVertical='Donor Agency';
-        }else if (programsEnabled && sectorsEnabled) {
-            filterVertical='Primary Sector';
-        }
-        console.log("Filter vertical default ",filterVertical);
-      return (new LegendItem({ model: layer, app: this.app,filterVertical:filterVertical })).render().el;
+      return (new LegendItem({ model: layer, app: this.app })).render().el;
     }).value();
 
 

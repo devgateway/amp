@@ -19,7 +19,11 @@ module.exports = Backbone.Model
           filterVerticalDefault = 'Programs';
         } else if (!programsEnabled && !sectorsEnabled) {
           filterVerticalDefault = 'Donor Agency';
-        }}
+        }else if (programsEnabled && sectorsEnabled) {
+          filterVerticalDefault = 'Primary Sector';
+        }
+
+        }
         console.log("Filter vertical default ",filterVerticalDefault)
 
         return {

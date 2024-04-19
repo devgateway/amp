@@ -45,15 +45,16 @@ module.exports = Backbone.Model
 
   attachListeners: function() {
     var self = this;
-
+    console.log("General sett1: "+self.generalSettings)
+    console.log("Sectors sett 1: "+self.generalSettings.get('gis-sectors-enabled'))
     var sectorsEnabled= self.generalSettings.get('gis-sectors-enabled');
     var programsEnabled= self.generalSettings.get('gis-programs-enabled');
     console.log(programsEnabled,sectorsEnabled)
-    if (programsEnabled===true && sectorsEnabled===false) {
+    if (programsEnabled && !sectorsEnabled) {
       self.set('filterVertical','Programs');
-    } else if (programsEnabled===false && sectorsEnabled===false) {
-      self.set('filterVertical ', 'Donor Agency');
-    }else if (programsEnabled===true && sectorsEnabled===true) {
+    } else if (!programsEnabled && !sectorsEnabled) {
+      self.set('filterVertical', 'Donor Agency');
+    }else if (programsEnabled && sectorsEnabled) {
       self.set('filterVertical','Primary Sector');
     }
     console.log("Filter vertical default ",self.get('filterVertical'));

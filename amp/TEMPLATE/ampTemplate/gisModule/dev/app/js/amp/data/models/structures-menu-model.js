@@ -9,29 +9,11 @@ var $ = require('jquery');
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
-      defaults: function() {
-        // Set default values dynamically based on options.app
-        var filterVerticalDefault = 'Primary Sector';
-        if(this.options && this.options.app){
-        var sectorsEnabled= this.options.app.data.generalSettings.get('gis-sectors-enabled');
-            var programsEnabled= this.options.app.data.generalSettings.get('gis-programs-enabled')
-        if (programsEnabled && !sectorsEnabled) {
-          filterVerticalDefault = 'Programs';
-        } else if (!programsEnabled && !sectorsEnabled) {
-          filterVerticalDefault = 'Donor Agency';
-        }else if (programsEnabled && sectorsEnabled) {
-          filterVerticalDefault = 'Primary Sector';
-        }
-
-        }
-        console.log("Filter vertical default ",filterVerticalDefault)
-
-        return {
-          title: 'Project Sites',
-          value: '',
-          helpText: '',
-          filterVertical: filterVerticalDefault
-        };
+      defaults: {
+        title: 'Project Sites',
+        value: '',
+        helpText: '',
+        filterVertical: 'Primary Sector'
       },
 
   initialize: function(things, options) {
@@ -39,6 +21,18 @@ module.exports = Backbone.Model
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
+
+    var sectorsEnabled= this.appData.generalSettings.get('gis-sectors-enabled');
+    var programsEnabled= this.appData.generalSettings.get('gis-programs-enabled')
+    console.log("AppData",this.appData)
+    if (programsEnabled && !sectorsEnabled) {
+      this.defaults.filterVertical = 'Programs';
+    } else if (!programsEnabled && !sectorsEnabled) {
+      this.defaults.filterVertical = 'Donor Agency';
+    }else if (programsEnabled && sectorsEnabled) {
+      this.defaults.filterVertical = 'Primary Sector';
+    }
+    console.log("Filter vertical default ",this.defaults.filterVertical);
     this.attachListeners();
   },
 

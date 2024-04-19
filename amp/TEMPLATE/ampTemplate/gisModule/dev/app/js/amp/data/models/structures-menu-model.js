@@ -14,7 +14,7 @@ module.exports = Backbone.Model
     title: 'Project Sites',
     value: '',
     helpText: '',
-    filterVertical: $('#legend-selector').val()
+    filterVertical: $("#legend-selector").find(":selected").val()
   },
 
   initialize: function(things, options) {

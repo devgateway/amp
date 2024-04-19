@@ -88,8 +88,8 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    ], {
 	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
-	      appData: this,
-			generalSettings: this.generalSettings
+			generalSettings: this.generalSettings,
+			appData: this,
 	    });
 
 

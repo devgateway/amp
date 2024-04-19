@@ -17,8 +17,9 @@ module.exports = Backbone.Model
       },
 
   initialize: function(things, options) {
-    console.log("General sett: "+options.generalSettings)
-    console.log("Sectors sett: "+options.generalSettings.get('gis-sectors-enabled'))
+        this.generalSettings =options.generalSettings
+    console.log("General sett: "+this.generalSettings)
+    console.log("Sectors sett: "+this.generalSettings.get('gis-sectors-enabled'))
     this.appData = options.appData;
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
@@ -54,6 +55,8 @@ module.exports = Backbone.Model
 
   attachListeners: function() {
     var self = this;
+    console.log("General sett1: "+self.generalSettings)
+    console.log("Sectors sett 1: "+self.generalSettings.get('gis-sectors-enabled'))
 
     this.listenTo(this, 'change:selected', function(other, show) {
       if (self.structuresCollection._lastFetch) {  // what does this do?

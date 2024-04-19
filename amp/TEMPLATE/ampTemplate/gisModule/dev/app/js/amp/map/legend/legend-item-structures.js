@@ -57,26 +57,12 @@ module.exports = Backbone.View.extend({
 					   }
 				   });
 
-				   var sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
-				   var programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
-				   var selectedVertical;
-				   console.log(programsEnabled,sectorsEnabled)
-				   if (programsEnabled && !sectorsEnabled) {
-				     // this.model.set('filterVertical','Programs');
-					   selectedVertical='Programs';
-				   } else if (!programsEnabled && !sectorsEnabled) {
-				     // this.model.set('filterVertical ', 'Donor Agency');
-					   selectedVertical='Donor Agency';
-				   }else if (programsEnabled && sectorsEnabled) {
-				     // this.model.set('filterVertical','Primary Sector');
-					   selectedVertical='Primary Sector';
-				   }
-				   console.log("Filter vertical default ",selectedVertical);
+
 
 				   var renderObject = {
 					   status: 'loaded',
 					   colourBuckets: self.model.structuresCollection.palette.colours,
-					   selectedVertical: selectedVertical,
+					   selectedVertical: self.model.get('filterVertical'),
 					   sectorsEnabled: app.data.generalSettings.get('gis-sectors-enabled'),
 					   programsEnabled: app.data.generalSettings.get('gis-programs-enabled'),
 					   customStructureColors: customStructureColors

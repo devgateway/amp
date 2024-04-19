@@ -45,8 +45,6 @@ module.exports = Backbone.Model
 
   attachListeners: function() {
     var self = this;
-    console.log("General sett1: "+self.generalSettings)
-    console.log("Sectors sett 1: "+self.generalSettings.get('gis-sectors-enabled'))
     var sectorsEnabled= self.generalSettings.get('gis-sectors-enabled');
     var programsEnabled= self.generalSettings.get('gis-programs-enabled');
     console.log(programsEnabled,sectorsEnabled)

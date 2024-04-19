@@ -9,13 +9,26 @@ var $ = require('jquery');
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
+      defaults: function() {
+        // Set default values dynamically based on options.app
+        var filterVerticalDefault = 'Primary Sector';
+        if(this.options && this.options.app){
+        var sectorsEnabled= this.options.app.data.generalSettings.get('gis-sectors-enabled');
+            var programsEnabled= this.options.app.data.generalSettings.get('gis-programs-enabled')
+        if (programsEnabled && !sectorsEnabled) {
+          filterVerticalDefault = 'Programs';
+        } else if (!programsEnabled && !sectorsEnabled) {
+          filterVerticalDefault = 'Donor Agency';
+        }}
+        console.log("Filter vertical default ",filterVerticalDefault)
 
-  defaults: {
-    title: 'Project Sites',
-    value: '',
-    helpText: '',
-    filterVertical: $("#legend-selector").find(":selected").val()
-  },
+        return {
+          title: 'Project Sites',
+          value: '',
+          helpText: '',
+          filterVertical: filterVerticalDefault
+        };
+      },
 
   initialize: function(things, options) {
     this.appData = options.appData;

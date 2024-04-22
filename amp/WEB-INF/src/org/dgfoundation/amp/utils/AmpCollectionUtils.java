@@ -68,7 +68,7 @@ public class AmpCollectionUtils {
      */
     @SuppressWarnings("unchecked")
     public static <K,E> K[] getIdsArray(Collection<E> col,KeyResolver<K, E> resolver){
-        List<K> result=new ArrayList<K>(col.size());
+        List<K> result= new ArrayList<>(col.size());
         for (E element : col) {
             K key=resolver.resolveKey(element);
             result.add(key);
@@ -111,7 +111,7 @@ public class AmpCollectionUtils {
      */
     public static <E,K> Collection<E> joinInNew(Collection<E> sesCol,Collection<E> dbCol, KeyResolver<K, E> keyResolver) {
         Map<K,E> oldEmap = createMap(dbCol, keyResolver);
-        Collection<E> result = new LinkedList<E>();
+        Collection<E> result = new LinkedList<>();
         for (E newE : sesCol) {
             E oldE = oldEmap.get(keyResolver.resolveKey(newE));
             if (oldE == null){
@@ -141,7 +141,7 @@ public class AmpCollectionUtils {
         Map<K, E> mapEref = createMap(refCol, keyResolver);
         Iterator<E> iterEmain = mainCol.iterator();
         while (iterEmain.hasNext()) {
-            E mainE = (E) iterEmain.next();
+            E mainE = iterEmain.next();
             K mainK = keyResolver.resolveKey(mainE);
             E refE = mapEref.get(mainK);
             if (refE == null){
@@ -177,7 +177,7 @@ public class AmpCollectionUtils {
         Map<K, E> mapEref = createMap(refCol, keyWorker);
         Iterator<E> iterEmain = mainCol.iterator();
         while (iterEmain.hasNext()) {
-            E mainE = (E) iterEmain.next();
+            E mainE = iterEmain.next();
             K mainEkey = keyWorker.resolveKey(mainE);
             E refE = mapEref.get(mainEkey);
             if (refE == null){
@@ -204,12 +204,12 @@ public class AmpCollectionUtils {
         Map<K, E> mapEref = createMap(refCol, keyWorker);
         Iterator<E> iterEmain = mainCol.iterator();
         while (iterEmain.hasNext()) {
-            E mainE = (E) iterEmain.next();
+            E mainE = iterEmain.next();
             E refE = mapEref.get(keyWorker.resolveKey(mainE));
             if (refE == null){
                 iterEmain.remove();
                 if (deleted == null){
-                    deleted = new ArrayList<E>();
+                    deleted = new ArrayList<>();
                 }
                 deleted.add(mainE);
             }else{
@@ -365,10 +365,10 @@ public class AmpCollectionUtils {
      * @param comparator node comparator. It should be of type N - node type.
      */
     public static <K,E,N> void sortTree(List<N> tree,NodeWorker<K, E, N> worker,Comparator<N> comparator){
-        Collections.sort(tree,comparator);
+        tree.sort(comparator);
         for (N node : tree) {
             List<N> children = worker.getNodeChildren(node);
-            if (children != null && children.size()>0){
+            if (children != null && !children.isEmpty()){
                 sortTree(children, worker, comparator);
             }
         }

@@ -26,7 +26,7 @@
 		</set>
 
 		<many-to-one name="indicatorsCategory" column="indicators_category"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="false"  />
 
 		<many-to-one name="risk" column="risk"
 			class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />
@@ -47,6 +47,11 @@
 		<set name="valuesTheme" lazy="true" inverse="true" cascade="delete-orphan">
 				<key column="indicator_id"/>
 				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorConnection"/>
+		</set>
+
+		<set name="indicatorLocations" lazy="true" inverse="true" cascade="delete-orphan">
+			<key column="indicator_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorLocation"/>
 		</set>
 
 	</class>

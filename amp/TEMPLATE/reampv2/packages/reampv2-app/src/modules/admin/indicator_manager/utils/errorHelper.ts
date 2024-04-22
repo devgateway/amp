@@ -1,3 +1,5 @@
+const NOT_AUTHENTICATED_ERROR = '(Not authenticated)';
+
 export const errorHelper = <T>(error: T | any[]) => {
     if (error === null) {
         return 'No error';
@@ -17,6 +19,10 @@ export const errorHelper = <T>(error: T | any[]) => {
             return "An error occurred.";
         }
 
+        if (extractedError === NOT_AUTHENTICATED_ERROR) {
+            window.location.href = '/';
+            return "Auth Error";
+        }
         return extractedError;
     }
 

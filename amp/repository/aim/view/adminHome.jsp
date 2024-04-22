@@ -287,9 +287,9 @@
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Indicator Manager</digi:trn>
                               </c:set>
-                              <digi:link href="/viewIndicators.do?sortBy=nameAsc" title="${translation}" >
+                              <a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/admin/indicator_manager" title="${translation}" >
                                 <digi:trn>Indicator Manager</digi:trn>
-                              </digi:link>
+                              </a>
                             </td>
                           </tr>
                         </module:display>
@@ -368,7 +368,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewNDDMappingManager" invisibleLinks="true">Click here to view the Indirect Programs Mapping for NDD Dashboard</digi:trn>
                               </c:set>
-                              <a href="/TEMPLATE/reampv2/build/index.html#/ndd"
+                              <a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/admin/ndd"
                                  title="${translation}">
                                 <digi:trn key="aim:nddMappingManager">Program Mapping Manager</digi:trn>
                               </a>

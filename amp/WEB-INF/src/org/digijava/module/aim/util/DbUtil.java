@@ -1261,13 +1261,15 @@ public class DbUtil {
     }
 
     public static void add(Object object) {
-        PersistenceManager.getSession().save(object);
-        PersistenceManager.getSession().flush();
+        Session session = PersistenceManager.getSession();
+        session.save(object);
+        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
     }
 
     public static void update(Object object) {
-        PersistenceManager.getSession().update(object);
-        PersistenceManager.getSession().flush();
+        Session session = PersistenceManager.getSession();
+        session.update(object);
+        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
     }
 
     public static void updateField(String className, Long id, String fieldName, Object newValue) {

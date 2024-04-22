@@ -36,9 +36,11 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
     /**
      * Indicator values.
      */
-    @Interchangeable(fieldTitle = "Indicator Values", importable = true, fmPath = "/Activity Form/M&E/ME Item/Actual Values")
-    @VersionableCollection(fieldTitle = "Indicator Values")
+//    @Interchangeable(fieldTitle = "Indicator Values", importable = true, fmPath = "/Activity Form/M&E/ME Item/Actual Values")
+//    @VersionableCollection(fieldTitle = "Indicator Values")
     protected Set<AmpIndicatorValue> values = new HashSet<>();
+
+    private AmpActivityLocation activityLocation;
 
     public Long getId() {
         return id;
@@ -86,5 +88,13 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public AmpActivityLocation getActivityLocation() {
+        return activityLocation;
+    }
+
+    public void setActivityLocation(AmpActivityLocation activityLocation) {
+        this.activityLocation = activityLocation;
     }
 }

@@ -25,7 +25,7 @@ import static org.digijava.module.aim.dbentity.AmpIndicatorValue.TARGET;
 /**
  * DTO for AmpIndicator
  */
-@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors", "programId"})
+@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors", "programId", "indicatorsCategory" })
 public class MEIndicatorDTO {
 
     @JsonProperty("id")
@@ -66,6 +66,9 @@ public class MEIndicatorDTO {
     @ValidProgramId
     private Long programId;
 
+    @JsonProperty("indicatorsCategory")
+    private Long indicatorsCategory;
+
     public MEIndicatorDTO() {
 
     }
@@ -81,6 +84,7 @@ public class MEIndicatorDTO {
         this.targetValue = indicator.getTargetValue();
         this.sectorIds = indicator.getSectors().stream().map(AmpSector::getAmpSectorId).collect(Collectors.toList());
         this.programId = indicator.getProgram() != null ? indicator.getProgram().getAmpThemeId() : null;
+        this.indicatorsCategory = indicator.getIndicatorsCategory() != null ? indicator.getIndicatorsCategory().getId() : null;
     }
 
     public Long getId() {
@@ -168,5 +172,13 @@ public class MEIndicatorDTO {
 
     public void setProgramId(final Long programId) {
         this.programId = programId;
+    }
+
+    public Long getIndicatorsCategory() {
+        return indicatorsCategory;
+    }
+
+    public void setIndicatorsCategory(Long indicatorsCategory) {
+        this.indicatorsCategory = indicatorsCategory;
     }
 }

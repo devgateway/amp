@@ -21,7 +21,6 @@
 }
 
 .array_item {
-    color: white;
     font-size: 12px;
     font-weight: 600;
     max-width: 80%;
@@ -30,4 +29,10 @@
 .view_item {
     width: 50%;
     text-align: left;
+}
+
+.header_text {
+    padding: 4px 30px;
+    margin-right: -15px;
+    margin-left: -15px;
 }

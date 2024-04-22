@@ -4,6 +4,7 @@ import translationsReducer from '../../../../utils/reducers/translationsReducer'
 import shareLinkReducer from './shareLinkReducer';
 import sharedDataReducer from './sharedDataReducer';
 import fetchSettingsReducer from './fetchSettingsReducer';
+import fetchAmpCategoryReducer from './fetchAmpCategoryReducer';
 
 //indicators reducers
 import fetchIndicatorsReducer from './fetchIndicatorsReducer';
@@ -24,5 +25,6 @@ export default combineReducers({
   createIndicatorReducer,
   updateIndicatorReducer,
   deleteIndicatorReducer,
-  fetchSettingsReducer
+  fetchSettingsReducer,
+  fetchAmpCategoryReducer
 });

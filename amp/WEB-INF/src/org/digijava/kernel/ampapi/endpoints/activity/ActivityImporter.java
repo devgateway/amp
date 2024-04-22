@@ -195,10 +195,9 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         try {
             ActivityGatekeeper.doWithLock(activityId, modifiedBy.getAmpTeamMemId(), persistenceTransactionManager,
                     () -> importOrUpdateActivity(activityId));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             // error is not always logged at source; better duplicate it than have none
             logger.error("Import failed", e);
-            e.printStackTrace();
             if (e instanceof ActivityLockNotGrantedException) {
                 logger.error("Cannot acquire lock during IATI update for activity " + activityId);
                 Long userId = ((ActivityLockNotGrantedException) e).getUserId();
@@ -238,7 +237,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             }
 
             sanityChecks();
-            
+
             if (oldActivity != null) {
                 oldActivityDraft = oldActivity.getDraft();
 
@@ -270,7 +269,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             org.digijava.module.aim.util.ActivityUtil.setCurrentWorkspacePrefixIntoRequest(newActivity);
 
             validateAndImport(newActivity, newJson);
-            
+
             if (errors.isEmpty()) {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
@@ -288,6 +287,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         }
 
         if (!errors.isEmpty()) {
+            logger.error("Errors occurred during activity import: "+errors);
             throw new ImportFailedException("Trigger rollback");
         }
     }

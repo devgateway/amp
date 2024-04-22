@@ -459,9 +459,8 @@ public class SiteCache implements Runnable {
         }
 
         SiteDomain siteDomain = null;
-        Iterator iter = siteDomainPathes.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry item = (Map.Entry) iter.next();
+        for (Object o : siteDomainPathes.entrySet()) {
+            Map.Entry item = (Map.Entry) o;
             if (path.startsWith(item.getKey() + "/")) {
                 siteDomain = (SiteDomain) item.getValue();
                 break;

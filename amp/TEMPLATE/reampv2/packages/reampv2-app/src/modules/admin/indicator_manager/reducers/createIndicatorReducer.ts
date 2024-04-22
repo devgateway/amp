@@ -45,9 +45,11 @@ const createIndicatorSlice = createSlice({
         builder.addCase(createIndicator.fulfilled, (state, action) => {
             state.loading = false;
             state.createdIndicator = action.payload;
+            state.error = null;
         });
         builder.addCase(createIndicator.rejected, (state, action) => {
             state.loading = false;
+            state.createdIndicator = null;
             state.error = errorHelper(action.payload);
         });
     }

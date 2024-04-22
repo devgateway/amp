@@ -40,7 +40,7 @@ import java.util.*;
 @InterchangeableValue(UserValueProvider.class)
 public class User
     extends Entity implements Serializable, Comparable, Identifiable {
-
+    private static final long serialVersionUID = 4467118985120179660L;
     private Subject subject;
     private String firstNames;
     private String lastName;
@@ -84,7 +84,8 @@ public class User
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String email, String firstNames, String lastName) {
         /**
@@ -541,52 +542,5 @@ public class User
         }
         
         return email;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "subject=" + subject +
-                ", firstNames='" + firstNames + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", emailVerified=" + emailVerified +
-                ", emailBouncing=" + emailBouncing +
-                ", noAlertsUntil=" + noAlertsUntil +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", passQuestion='" + passQuestion + '\'' +
-                ", passAnswer='" + passAnswer + '\'' +
-                ", url='" + url + '\'' +
-                ", banned=" + banned +
-                ", pledger=" + pledger +
-                ", pledgeSuperUser=" + pledgeSuperUser +
-                ", registeredThrough=" + registeredThrough +
-                ", interests=" + interests +
-                ", bio=" + bio +
-                ", portrait=" + portrait +
-                ", organizationName='" + organizationName + '\'' +
-                ", organizationType=" + organizationType +
-                ", referral='" + referral + '\'' +
-                ", country=" + country +
-                ", region=" + region +
-                ", sitePreferences=" + sitePreferences +
-                ", groups=" + groups +
-                ", siteContentLocales=" + siteContentLocales +
-                ", address='" + address + '\'' +
-                ", photo=" + photo +
-                ", userPreference=" + userPreference +
-                ", userLangPreferences=" + userLangPreferences +
-                ", registerLanguage=" + registerLanguage +
-                ", globalAdmin=" + globalAdmin +
-                ", organizationTypeOther='" + organizationTypeOther + '\'' +
-                ", contacts=" + contacts +
-                ", userExtension=" + userExtension +
-                ", exemptFromDataFreezing=" + exemptFromDataFreezing +
-                ", notificationEmailEnabled=" + notificationEmailEnabled +
-                ", notificationEmail='" + notificationEmail + '\'' +
-                ", assignedOrgs=" + assignedOrgs +
-                ", passwordChangedAt=" + passwordChangedAt +
-                '}';
     }
 }

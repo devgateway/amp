@@ -19,6 +19,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -28,10 +29,7 @@ import org.dgfoundation.amp.onepager.helper.structure.MapData;
 import org.dgfoundation.amp.onepager.helper.structure.StructureData;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
-import org.digijava.module.aim.dbentity.AmpStructureType;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.StructuresUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -127,7 +125,7 @@ public class AmpStructuresFormSectionFeature extends
                 latitude.setTextContainerDefaultMaxSize();
                 latitude.setOutputMarkupId(true);
 
-                latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+                latitude.getTextContainer().add(new AttributeAppender("size", new Model<>("7px"), ";"));
                 latitude.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -137,9 +135,9 @@ public class AmpStructuresFormSectionFeature extends
                 });
                 item.add(latitude);
 
-                final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
+                final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<>(structureModel, "shape"),"Structure Shape", true, true);
                 shape.setOutputMarkupId(true);                
-                shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+                shape.getTextContainer().add(new AttributeAppender("size", new Model<>("7px"), ";"));
                 shape.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {                        
@@ -319,12 +317,14 @@ public class AmpStructuresFormSectionFeature extends
                 coordinates.add(new CoordinateData(coord.getLatitude(), coord.getLongitude()));
             }
         }
+        String gsLat="7.1881";
+        String gsLong="21.0938";
 
         String colorValue = structure.getStructureColor() != null
                 ? structure.getStructureColor().getValue().substring(0, COLOR_OFFSET_CATEGORY_VALUE) : null;
 
-        structureData.setLatitude(Optional.ofNullable(structure.getLatitude()).orElse(""));
-        structureData.setLongitude(Optional.ofNullable(structure.getLongitude()).orElse(""));
+        structureData.setLatitude(Optional.ofNullable(structure.getLatitude()).orElse(gsLat));
+        structureData.setLongitude(Optional.ofNullable(structure.getLongitude()).orElse(gsLong));
         structureData.setShape(Optional.ofNullable(structure.getShape()).orElse(""));
         structureData.setTitle(structure.getTitle());
         structureData.setCoordinates(coordinates);

@@ -22,7 +22,7 @@ export const routes: RouteObject[] = [
         path: `/${REAMPV2_APP_NAME}/*`,
         element: (
             <CrossNavigationManager>
-                <Suspense fallback={<div className="Loading route...."/>}>
+                <Suspense fallback={<div className="loading"/>}>
                     <Reampv2Lazy/>
                 </Suspense>
             </CrossNavigationManager>

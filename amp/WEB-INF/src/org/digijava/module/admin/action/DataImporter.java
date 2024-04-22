@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -130,22 +130,29 @@ public class DataImporter extends Action {
 
         if (request.getParameter("uploadDataFile")!=null) {
             logger.info(" this is the action Upload "+request.getParameter("uploadDataFile"));
+            String fileName = dataImporterForm.getDataFile().getFileName();
+            String tempDirPath = System.getProperty("java.io.tmpdir");
+            File tempDir = new File(tempDirPath);
+            if (!tempDir.exists()) {
+                tempDir.mkdirs();
+            }
+            String tempFilePath = tempDirPath + File.separator + fileName;
+            try (InputStream inputStream =  dataImporterForm.getDataFile().getInputStream();
+                 FileOutputStream outputStream = new FileOutputStream(tempFilePath)) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+            File  tempFile = new File(tempFilePath);
+            logger.info("File path is "+tempFilePath+" and size is "+tempFile.length()/ (1024 * 1024) + " mb");
 
-            InputStream fileInputStream = dataImporterForm.getDataFile().getInputStream();
+            InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
             processFileInBatches(fileInputStream,request,dataImporterForm.getColumnPairs());
-//            Workbook workbook = new XSSFWorkbook(fileInputStream);
-//            int numberOfSheets = workbook.getNumberOfSheets();
-//            logger.info("Number of sheets: "+numberOfSheets);
-//            for (int i = 0; i < numberOfSheets; i++) {
-//                logger.info("Sheet number: "+i);
-//                Sheet sheet = workbook.getSheetAt(i);
-//                parseData(dataImporterForm.getColumnPairs(),sheet, request);
-//            }
-//            logger.info("Closing the workbook...");
-
-//            workbook.close();
 
 
+            logger.info("Done and deleting the file");
 
 
         }
@@ -261,6 +268,7 @@ public class DataImporter extends Action {
             // Retrieve a batch of rows
             for (int j = i; j < endIndex; j++) {
                 Row row = sheet.getRow(j);
+                logger.info("Row Number: "+j);
                 if (row != null) {
                     batch.add(row);
                 }

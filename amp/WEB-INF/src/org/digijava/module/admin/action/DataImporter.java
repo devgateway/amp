@@ -139,7 +139,7 @@ public class DataImporter extends Action {
             String tempFilePath = tempDirPath + File.separator + fileName;
             try (InputStream inputStream =  dataImporterForm.getDataFile().getInputStream();
                  FileOutputStream outputStream = new FileOutputStream(tempFilePath)) {
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[8192];
                 int bytesRead;
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, bytesRead);

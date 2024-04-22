@@ -151,7 +151,6 @@ public class DataImporter extends Action {
             InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
             processFileInBatches(fileInputStream,request,dataImporterForm.getColumnPairs());
 
-
             logger.info("Done and deleting the file");
             Files.delete(tempFile.toPath());
 

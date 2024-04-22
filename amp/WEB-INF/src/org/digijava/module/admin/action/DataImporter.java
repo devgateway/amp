@@ -433,7 +433,7 @@ public class DataImporter extends Action {
 
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
-        logger.info("Data map: "+map);
+//        logger.info("Data map: "+map);
         JsonApiResponse<ActivitySummary> response;
         AmpActivityVersion existing = existingActivity(importDataModel,session);
     if (existing==null){

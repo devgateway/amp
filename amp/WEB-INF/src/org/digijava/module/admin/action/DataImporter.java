@@ -168,75 +168,6 @@ public class DataImporter extends Action {
     }
 
 
-//    private void parseData(Map<String,String> config, Sheet sheet, HttpServletRequest request) throws JsonProcessingException {
-//        logger.info("Sheet name: "+sheet.getSheetName());
-//        Session session = PersistenceManager.getRequestDBSession();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-//        Set<ImportDataModel> importDataModels = new LinkedHashSet<>();
-//        for (Row row : sheet) {
-//            ImportDataModel importDataModel = new ImportDataModel();
-//            importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
-//            importDataModel.setIs_draft(true);
-//            OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-//            importDataModel.setCreation_date(now.format(formatter));
-//            setStatus(importDataModel, session);
-//            config= sortByValues(config);
-//
-//            if (row.getRowNum() == 0) {
-//                continue;
-//            }
-//            if (row.getRowNum()<=20) {
-//
-//                for (Map.Entry<String, String> entry : config.entrySet()) {
-//                    int columnIndex = getColumnIndexByName(sheet, entry.getKey());
-//                    if (columnIndex >= 0) {
-//                        Cell cell = row.getCell(columnIndex);
-//                        switch (entry.getValue()) {
-//                            case "{projectName}":
-//                                importDataModel.setProject_title(cell.getStringCellValue().trim());
-//                                break;
-//                            case "{projectDescription}":
-//                                importDataModel.setDescription(cell.getStringCellValue().trim());
-//                                break;
-//                            case "{projectLocation}":
-////                        ampActivityVersion.addLocation(new AmpActivityLocation());
-//                                break;
-//                            case "{primarySector}":
-//                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
-//                                break;
-//                            case "{secondarySector}":
-//                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
-//                                break;
-//                            case "{donorAgency}":
-//                                updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
-//                                break;
-//                            case "{fundingItem}":
-//                                if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
-//                                {
-//                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrg(session));
-//
-//                                }else {
-//                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
-//
-//                                }
-//
-//                                break;
-//                            default:
-//                                throw new IllegalStateException("Unexpected value: " + entry.getValue());
-//                        }
-////                        importDataModels.add(importDataModel);
-//                        importTheData(importDataModel, session);
-//
-//                    }
-//
-//                }
-//            }
-//
-//        }
-//
-//    }
-
-
     public void processFileInBatches(InputStream fileInputStream, HttpServletRequest request,Map<String, String> config) {
         // Open the workbook
         try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
@@ -269,7 +200,6 @@ public class DataImporter extends Action {
             // Retrieve a batch of rows
             for (int j = i; j < endIndex; j++) {
                 Row row = sheet.getRow(j);
-                logger.info("Row Number: "+j);
                 if (row != null) {
                     batch.add(row);
                 }
@@ -298,6 +228,8 @@ public class DataImporter extends Action {
             if (row.getRowNum() == 0) {
                 continue;
             }
+            logger.info("Row Number: "+row.getRowNum());
+
 //            if (row.getRowNum()<=20) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {

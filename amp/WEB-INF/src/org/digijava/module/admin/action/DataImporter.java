@@ -153,6 +153,7 @@ public class DataImporter extends Action {
 
 
             logger.info("Done and deleting the file");
+            Files.delete(tempFile.toPath());
 
 
         }

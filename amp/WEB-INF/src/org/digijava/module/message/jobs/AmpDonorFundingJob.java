@@ -34,6 +34,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
         if (serverUrl != null) {
             ampDashboardFundingCombinedUSD.addAll(ampDashboardFundingCombinedEUR);
+            ampDashboardFundingCombinedUSD.addAll(ampDashboardFundingCombinedXDR);
         }
         sendReportsToServer(ampDashboardFundingCombinedUSD, serverUrl);
     }

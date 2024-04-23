@@ -12,7 +12,7 @@
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="merge"
-			not-null="true" />
+			not-null="false" />
 
 		<set name="responses" table="AMP_GPISURVEY_RESPONSE" inverse="true"
 			cascade="merge">

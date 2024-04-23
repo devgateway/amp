@@ -10,7 +10,9 @@
 	<!-- ******************************************* -->
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
-
+	<session-config>
+		<session-timeout>5</session-timeout>
+	</session-config>
 	<filter>
 		<filter-name>javamelody</filter-name>
 		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>

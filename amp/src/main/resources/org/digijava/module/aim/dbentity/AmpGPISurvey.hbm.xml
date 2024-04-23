@@ -11,8 +11,8 @@
 		</id>
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="merge"
-			not-null="false" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="all-delete-orphan"
+			not-null="true" />
 
 		<set name="responses" table="AMP_GPISURVEY_RESPONSE" inverse="true"
 			cascade="merge">

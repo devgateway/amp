@@ -285,10 +285,10 @@ public class DataImporter extends Action {
 
 
                 }
-                if (importDataModel.getProject_title()==null)
-                {
-                    continue;
-                }
+//                if (importDataModel.getProject_title()==null)
+//                {
+//                    continue;
+//                }
                 importTheData(importDataModel, session);
             }
         }

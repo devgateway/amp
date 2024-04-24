@@ -13,6 +13,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -147,12 +148,16 @@ public class DataImporter extends Action {
             }
             File  tempFile = new File(tempFilePath);
             logger.info("File path is "+tempFilePath+" and size is "+tempFile.length()/ (1024 * 1024) + " mb");
-
+            Instant start = Instant.now();
+            logger.info("Start time :" +start);
             InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
             processFileInBatches(fileInputStream,request,dataImporterForm.getColumnPairs());
 
             logger.info("Done and deleting the file");
             Files.delete(tempFile.toPath());
+            Instant finish = Instant.now();
+            long timeElapsed = Duration.between(start, finish).toMillis();
+            logger.info("Time Elapsed: "+timeElapsed);
 
 
         }
@@ -200,6 +205,9 @@ public class DataImporter extends Action {
             for (int j = i; j < endIndex; j++) {
                 Row row = sheet.getRow(j);
                 if (row != null) {
+                    if (row.getRowNum() == 0) {
+                        continue;
+                    }
                     batch.add(row);
                 }
             }
@@ -211,6 +219,7 @@ public class DataImporter extends Action {
 
     private void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config) throws JsonProcessingException {
         // Process the batch of rows
+        SessionUtil.extendSessionIfNeeded(request);
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         for (Row row : batch) {
@@ -222,14 +231,8 @@ public class DataImporter extends Action {
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
-//            config= sortByValues(config);
 
-            if (row.getRowNum() == 0) {
-                continue;
-            }
             logger.info("Row Number: "+row.getRowNum());
-
-//            if (row.getRowNum()<=20) {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
@@ -277,10 +280,8 @@ public class DataImporter extends Action {
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
                         }
-//                        importDataModels.add(importDataModel);
                         importTheData(importDataModel, session);
 
-//                    }
 
                 }
             }
@@ -310,9 +311,6 @@ public class DataImporter extends Action {
     private String getFundingDate(String yearString)
     {
         LocalDate date = LocalDate.of(Integer.parseInt(yearString), 1, 1);
-
-//        LocalTime time = LocalTime.MIDNIGHT;
-//        LocalDateTime dateTime = LocalDateTime.of(date, time);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

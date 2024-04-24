@@ -440,7 +440,7 @@ public class DataImporter extends Action {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
-        ActivityImportRules rules = new ActivityImportRules(false, false,
+        ActivityImportRules rules = new ActivityImportRules(true, false,
                 true);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
@@ -450,12 +450,12 @@ public class DataImporter extends Action {
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
         JsonApiResponse<ActivitySummary> response;
         AmpActivityVersion existing = existingActivity(importDataModel,session);
+        logger.info("Existing ?"+existing);
         logger.info("Data model object: "+importDataModel);
     if (existing==null){
         logger.info("New activity");
          response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity/new");
     }
-
     else
     {
         logger.info("Existing activity");

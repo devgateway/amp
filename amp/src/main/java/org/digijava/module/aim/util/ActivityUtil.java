@@ -1170,7 +1170,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             boolean hasTeamLeadOrValidator = false;
             if (currentTeam != null) {
                 List<AmpTeamMember> valids = TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId());
-                if (valids != null && valids.size() > 0) {
+                if (valids != null && !valids.isEmpty()) {
                     hasTeamLeadOrValidator = true;
                 }
             }
@@ -1662,9 +1662,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
+        ActivityUtil.deleteActivityContent(ampAct,session);
+
         ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampAct.getAmpActivityId()), ampAct, session);
 
-        ActivityUtil.deleteActivityContent(ampAct,session);
 //        session.flush();
 
 //        Long ampActId = ;

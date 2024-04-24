@@ -1054,7 +1054,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
 //        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = ?";
-        SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() );
+        SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() ,"amp_ahsurvey");
 
 
 //        SQLUtils.executeQuery(con, deleteActivitySurvey );
@@ -1064,19 +1064,19 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         SQLUtils.executeQuery(con, deleteActivityGPISurveyReponse );
 
         String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = ?";
-        SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() );
+        SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() ,"amp_gpi_survey");
 
         //   delete all previous comments
 //        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
 //        SQLUtils.executeQuery(con, deleteActivityComments );
         String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = ?";
-        SQLUtils.executePreparedQuery(con, deleteActivityComments,ampAct.getAmpActivityId() );
+        SQLUtils.executePreparedQuery(con, deleteActivityComments,ampAct.getAmpActivityId() ,"amp_comments");
 
         //Delete the connection with Team.
 //        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = ?";
 
-        SQLUtils.executePreparedQuery(con, deleteActivityTeam,ampAct.getAmpActivityId() );
+        SQLUtils.executePreparedQuery(con, deleteActivityTeam,ampAct.getAmpActivityId(),"amp_team_activities" );
     }
 
     public static void removeMergeSources(Long ampActivityId,Session session){
@@ -1663,9 +1663,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
-        ActivityUtil.deleteActivityContent(ampAct,session);
 
         ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampAct.getAmpActivityId()), ampAct, session);
+        ActivityUtil.deleteActivityContent(ampAct,session);
 
 //        session.flush();
 

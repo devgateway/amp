@@ -125,14 +125,14 @@ public class SQLUtils {
         }
     }
 
-    public static void executePreparedQuery(Connection conn, String query, Long actId)
+    public static void executePreparedQuery(Connection conn, String query, Long actId, String table)
     {
         try
         {
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setLong(1, actId);
             int deleted= statement.executeUpdate();
-            logger.info("Deleted records :"+deleted);
+            logger.info("Deleted records :"+deleted + " from "+ table);
             statement.close();
         }
         catch(SQLException e)

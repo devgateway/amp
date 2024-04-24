@@ -297,16 +297,17 @@ public class DataImporter extends Action {
         return null;
     }
 
-    public static String findYearSubstring(String input) {
-        String pattern = "\\b(\\d{4})\\b"; //
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(input);
-        if (m.find()) {
-            return m.group(1);
+
+    public static String findYearSubstring(String text) {
+        Pattern pattern = Pattern.compile("(?:19|20)\\d{2}");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            return matcher.group();
         } else {
             return null;
         }
     }
+
 
     private String getFundingDate(String yearString)
     {

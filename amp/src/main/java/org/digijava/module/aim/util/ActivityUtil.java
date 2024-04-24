@@ -1640,7 +1640,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             for (AmpActivityVersion ampActivityVersion : activityversions) {
                 deleteFullActivityContent(ampActivityVersion, session);
                 session.flush();
-                session.delete(ampActivityVersion);
+                deleteActivity(session,ampActivityVersion);
 //                deleteActivity(session,ampActivityVersion);
             }
         } else {
@@ -1648,6 +1648,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             deleteFullActivityContent(ampAct, session);
             session.flush();
             session.delete(ampAct);
+            deleteActivity(session,ampAct);
+
 //            deleteActivity(session,ampAct);
         }
         session.delete(ampActivityGroup);
@@ -1658,8 +1660,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         logger.info("Deleting Real ... Activity # " + ampAct.getAmpActivityId());
         Connection con = ((SessionImplementor)session).connection();
         //   delete surveys
-        String deleteActivitySurveyResponse = "DELETE FROM amp_activity_version WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivitySurveyResponse );
+//        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = ?";
+//        SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() );
+        String deletActivity = "DELETE FROM amp_activity_version WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deletActivity,ampAct.getAmpActivityId(),"amp_activity_version" );
     }
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

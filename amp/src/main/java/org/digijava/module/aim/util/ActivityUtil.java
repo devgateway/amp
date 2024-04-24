@@ -1059,8 +1059,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String deleteActivityGPISurveyReponse = "DELETE FROM amp_gpi_survey_response WHERE amp_gpisurvey_id in ( SELECT amp_gpisurvey_id FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) " ;
         SQLUtils.executeQuery(con, deleteActivityGPISurveyReponse );
 
-        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityGPISurvey );
+        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() );
 
         //   delete all previous comments
         String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();

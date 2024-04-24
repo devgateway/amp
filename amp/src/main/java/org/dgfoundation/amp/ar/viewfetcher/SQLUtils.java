@@ -14,6 +14,8 @@ import org.hibernate.dialect.PostgreSQL95Dialect;
 import org.hibernate.engine.jdbc.spi.JdbcServices;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.TypedValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -23,20 +25,21 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SQLUtils {
-    
+
     public final static String SQL_UTILS_NULL = "###NULL###";
-    
+    private static Logger logger = LoggerFactory.getLogger(SQLUtils.class);
+
     /**
      * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
      * @param tableName - the table / view whose columns to fetch
      * @param crashOnDuplicates - whether to throw exception in case the table/view has duplicate names
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public static LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates){
         return new LinkedHashSet<String>(getTableColumnsWithTypes(tableName, crashOnDuplicates).keySet());
     }
-    
+
     /**
      * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
      * @param tableName - the table / view whose columns to fetch
@@ -52,7 +55,7 @@ public class SQLUtils {
             throw new RuntimeException(ex);
         }
     }
-    
+
     /**
      * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
      * @param tableName - the table / view whose columns to fetch
@@ -63,7 +66,7 @@ public class SQLUtils {
         String query = String.format("SELECT c.column_name, c.data_type FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
         return getStringToStringMap(jdbcConnection, tableName, query, crashOnDuplicates);
     }
-    
+
     /**
      * generically builds a linkedhashmap of (colname, coltype), based on a query
      * @param jdbcConnection
@@ -77,7 +80,7 @@ public class SQLUtils {
             while (rsi.rs.next()) {
                 String columnName = rsi.rs.getString(1);
                 String columnType = rsi.rs.getString(2);
-                    
+
                 if (crashOnDuplicates && res.containsKey(columnName))
                     throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
                 res.put(columnName, columnType);
@@ -102,12 +105,12 @@ public class SQLUtils {
     {
         return getTableColumns(tableName, false);
     }
-    
+
     public static boolean tableExists(String tableName)
     {
         return !getTableColumns(tableName).isEmpty();
-    }   
-    
+    }
+
     public static void executeQuery(Connection conn, String query)
     {
         try
@@ -121,7 +124,23 @@ public class SQLUtils {
             throw new RuntimeException(e);
         }
     }
-    
+
+    public static void executePreparedQuery(Connection conn, String query, Long actId)
+    {
+        try
+        {
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setLong(1, actId);
+            int deleted= statement.executeUpdate();
+            logger.info("Deleted records :"+deleted);
+            statement.close();
+        }
+        catch(SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * runs a query and calls the consumer for each row of the result
      * @param connection
@@ -136,7 +155,7 @@ public class SQLUtils {
             throw AlgoUtils.translateException(ex);
         }
     }
-    
+
     /**
      * calls a given function for each row of the result and accumulates the results in a List
      * @param connection
@@ -156,7 +175,7 @@ public class SQLUtils {
         }
         return Collections.unmodifiableList(res);
     }
-    
+
     /**
      * runs a query, optimizing for throughput
      * @param connection
@@ -168,23 +187,23 @@ public class SQLUtils {
     public static RsInfo rawRunQuery(Connection connection, String query, List<FilterParam> params) throws SQLException
     {
         //logger.info("Running raw SQL query: " + query);
-        
+
         PreparedStatement ps = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         if (params != null)
         {
             //logger.debug("the parameters are:");
-            for (int i = 0; i < params.size(); i++) 
+            for (int i = 0; i < params.size(); i++)
             {
                 ps.setObject(i + 1, params.get(i).getValue(), params.get(i).getSqlType());
                 //logger.debug(String.format("\tvalue: %s, SQL type: %d", params.get(i).getValue(), params.get(i).getSqlType()));
             }
         }
-        
+
         ResultSet rs = ps.executeQuery();
 
         return new RsInfo(rs, ps);
     }
-    
+
     /**
      * fetches an ArrayList of longs
      * @param connection
@@ -203,7 +222,7 @@ public class SQLUtils {
         }
         return res;
     }
-    
+
     /**
      * fetches an ArrayList of Strings
      * @param connection
@@ -219,10 +238,10 @@ public class SQLUtils {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-        
+
         return res;
     }
-    
+
     /**
      * runs a query and returns a list of the nth elements in each of the rows
      * @param connection
@@ -243,7 +262,7 @@ public class SQLUtils {
 //          PersistenceManager.closeQuietly(rs);
 //      }
     }
-    
+
     /**
      * runs a query and fetches its only result as a Long
      * @param connection
@@ -256,13 +275,13 @@ public class SQLUtils {
             throw new RuntimeException("query should have returned exactly one result, but returned instead: " + res.size());
         return PersistenceManager.getLong(res.get(0));
     }
-        
+
     public static <T> List<T> fetchAsList(ResultSet rs, int n, String errMsgAdd)
     {
         try
         {
             ArrayList<T> result = new ArrayList<T>();
-            
+
             while (rs.next())
             {
                 T elem = (T) rs.getObject(n);
@@ -274,8 +293,8 @@ public class SQLUtils {
         {
             throw new RuntimeException("Error fetching list of values" + errMsgAdd, e);
         }
-    }   
-    
+    }
+
     /**
      * generates a raw comma-separated-values
      * @param values
@@ -293,7 +312,7 @@ public class SQLUtils {
         }
         return result.toString();
     }
-    
+
     public static Criterion getUnaccentILikeExpression(final String propertyName, final String value, final String locale, final MatchMode matchMode) {
         return new Criterion(){
             private static final long serialVersionUID = -8979378752879206485L;
@@ -307,7 +326,7 @@ public class SQLUtils {
 
                 String[] columns = criteriaQuery.findColumns(propertyName, criteria);
                 String entityName = criteriaQuery.getEntityName(criteria);
-              
+
                 String []ids=criteriaQuery.getIdentifierColumns(criteria);
                 if (columns.length!=1)
                     throw new HibernateException("ilike may only be used with single-column properties");
@@ -323,21 +342,21 @@ public class SQLUtils {
                     throw new HibernateException("We do not handle non-postgresql databases yet, sorry!");
                 }
             }
-        
+
 
             @Override
-            public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException 
+            public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException
             {
                 return new TypedValue[] { criteriaQuery.getTypedValue( criteria, propertyName, matchMode.toMatchString(value).toLowerCase() ) ,
                     criteriaQuery.getTypedValue( criteria, propertyName, matchMode.toMatchString(value).toLowerCase() )};
             }
             };
         }
-        
-            
+
+
         //ao.* from amp_organisation ao -> "ao.amp_org_id, ao.column2, getOrgName(....), ...."
         /**
-         * 
+         *
          * @param tableName
          * @param tableAlias
          * @param renames Map<ColumnName, String to Replace with>
@@ -354,7 +373,7 @@ public class SQLUtils {
                 else
                     outputs.add(tableAlias + "." + column);
             }
-        
+
             return Util.collectionAsString(outputs);
         }
 
@@ -370,19 +389,19 @@ public class SQLUtils {
         public static void insert(Connection conn, String tableName, String idColumnName, String seqName, Collection<String> colNames, List<List<Object>> values) {
             if ((idColumnName == null) ^ (seqName == null))
                 throw new RuntimeException("idColumnName should be both null or both non-null");
-            
+
             int rowsPerInsert = 300;
-            int nrSegments = values.size() / rowsPerInsert + 1;         
+            int nrSegments = values.size() / rowsPerInsert + 1;
             for(int i = 0; i < nrSegments; i++) {
                 int segmentStart = i * rowsPerInsert; // inclusive
                 int segmentEnd = Math.min(values.size(), (i + 1) * rowsPerInsert); // exclusive
                 if (segmentStart >= segmentEnd)
-                    break; 
+                    break;
                 String query = buildMultiRowInsert(tableName, idColumnName, seqName, colNames, values.subList(segmentStart, segmentEnd));
                 SQLUtils.executeQuery(conn, query.toString());
             }
         }
-        
+
         /**
          * builds a statement of the form INSERT INTO $tableName$ (col1, col2, col3) VALUES (val11, val12, val13), (val21, val22, val23);
          * @param tableName
@@ -394,10 +413,10 @@ public class SQLUtils {
         public static String buildMultiRowInsert(String tableName, String idColumnName, String seqName, Collection<String> colNames, List<List<Object>> values) {
             if ((idColumnName == null) ^ (seqName == null))
                 throw new RuntimeException("idColumnName and seqName should be either both null or both nonnull");
-            
+
             if (values.isEmpty())
                 return null; // nothing to do
-            
+
             List<String> keys = new ArrayList<>(colNames);
             StringBuilder query = new StringBuilder("INSERT INTO " + tableName + " (");
             boolean needComma = false;
@@ -407,13 +426,13 @@ public class SQLUtils {
                 query.append(key);
                 needComma = true;
             }
-            
+
             if (idColumnName != null) {
                 if (!keys.isEmpty())
                     query.append(",");
                 query.append(idColumnName);
             }
-            
+
             query.append(") VALUES");
             boolean firstRow = true;
             for(List<Object> coords:values) {
@@ -424,10 +443,10 @@ public class SQLUtils {
                 firstRow = false;
             }
             query.append(";");
-            
+
             return query.toString();
         }
-        
+
         /**
          * builds a line of type (colValue, colValue, colValue)
          * @param coords
@@ -445,7 +464,7 @@ public class SQLUtils {
                 query.append(stringifyObject(value));
                 needComma = true;
             }
-            
+
             if (idColumnName != null) {
                 if (!coords.isEmpty())
                     query.append(",");
@@ -454,16 +473,16 @@ public class SQLUtils {
             query.append(")");
             return query.toString();
         }
-        
-        private static ThreadLocal<SimpleDateFormat> dbDateExportFormat = new ThreadLocal<>(); 
+
+        private static ThreadLocal<SimpleDateFormat> dbDateExportFormat = new ThreadLocal<>();
         //private static SimpleDateFormat dbDateExportFormat = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         private static String stringifyDate(Date obj) {
-            if (dbDateExportFormat.get() == null) 
+            if (dbDateExportFormat.get() == null)
                 dbDateExportFormat.set(new SimpleDateFormat("yyyy-MM-dd"));
             return "'" + dbDateExportFormat.get().format(obj) + "'";
         }
-        
+
         /**
          * returns a ready-to-be-included-into-SQL-query representation of a var
          * @param obj
@@ -479,10 +498,10 @@ public class SQLUtils {
 //              if (obj.toString().indexOf('\'') < 0)
 //                  return String.format("'%s'", obj.toString());
                 return String.format("'%s'", sqlEscapeStr(obj.toString()));
-                
+
                 //$t$blablabla$t$ - dollar-quoting
                 //return "'" + obj.toString() + "'";
-                
+
                 /*String dollarQuote = "$dAaD41$";
                 return dollarQuote + obj.toString() + dollarQuote;*/
             }
@@ -496,7 +515,7 @@ public class SQLUtils {
                 return "'" + obj.toString() + "'";
             }
         }
-        
+
         public static String sqlEscapeStr(String input) {
             StringBuilder res = new StringBuilder();
             for (char ch:input.toCharArray()) {
@@ -509,13 +528,13 @@ public class SQLUtils {
             }
             return res.toString();
         }
-        
+
     /**
      * flush schema changes so that they can used for introspection via {@link #getTableColumnsWithTypes(String, boolean)} and the likes
      * @param conn
      */
     public static void flush(Connection conn){
-        try {           
+        try {
             if (!conn.getAutoCommit())
                 conn.commit();
         }
@@ -523,7 +542,7 @@ public class SQLUtils {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * rethrows any exception as a RunTimeException - good for lambdas
      * @param rs
@@ -541,7 +560,7 @@ public class SQLUtils {
             throw AlgoUtils.translateException(e);
         }
     }
-    
+
     /**
      * this is written lambda-free so as to maximize performance
      * @param conn
@@ -563,7 +582,7 @@ public class SQLUtils {
         }
         return map;
     }
-    
+
     /**
      * @param conn
      * @param query
@@ -581,7 +600,7 @@ public class SQLUtils {
         } catch (SQLException e) {
             throw AlgoUtils.translateException(e);
         }
-        
+
         return map;
     }
 }

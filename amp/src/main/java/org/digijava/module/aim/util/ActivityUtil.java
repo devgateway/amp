@@ -1156,6 +1156,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     IndicatorActivity indConn = IndicatorUtil.findActivityIndicatorConnection(activity, ind);
                     IndicatorUtil.removeConnection(indConn);
                 }
+                session.flush();
             }
   }
 

@@ -281,6 +281,10 @@ public class DataImporter extends Action {
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
                         }
+                        if (importDataModel.getProject_title()==null)
+                        {
+                            continue;
+                        }
                         importTheData(importDataModel, session);
 
 
@@ -448,6 +452,7 @@ public class DataImporter extends Action {
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
         JsonApiResponse<ActivitySummary> response;
         AmpActivityVersion existing = existingActivity(importDataModel,session);
+        logger.info("Data model object: "+importDataModel);
     if (existing==null){
         logger.info("New activity");
          response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity/new");

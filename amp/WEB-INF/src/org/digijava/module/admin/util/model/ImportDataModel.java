@@ -482,6 +482,65 @@ public class ImportDataModel {
         this.activity_type = activity_type;
     }
 
+    @Override
+    public String toString() {
+        return "ImportDataModel{" +
+                "internal_id=" + internal_id +
+                ", amp_id='" + amp_id + '\'' +
+                ", project_title='" + project_title + '\'' +
+                ", description='" + description + '\'' +
+                ", objective='" + objective + '\'' +
+                ", document_space=" + document_space +
+                ", is_draft=" + is_draft +
+                ", last_imported_at=" + last_imported_at +
+                ", last_imported_by=" + last_imported_by +
+                ", original_completion_date=" + original_completion_date +
+                ", primary_sectors=" + primary_sectors +
+                ", secondary_sectors=" + secondary_sectors +
+                ", locations=" + locations +
+                ", donor_organization=" + donor_organization +
+                ", responsible_organization=" + responsible_organization +
+                ", executing_agency=" + executing_agency +
+                ", activity_internal_ids=" + activity_internal_ids +
+                ", fundings=" + fundings +
+                ", issues=" + issues +
+                ", team=" + team +
+                ", ppc_amount=" + ppc_amount +
+                ", donor_contact_information=" + donor_contact_information +
+                ", project_coordinator_contact_information=" + project_coordinator_contact_information +
+                ", sector_ministry_contact_information=" + sector_ministry_contact_information +
+                ", mofed_contact_information=" + mofed_contact_information +
+                ", implementing_executing_agency_contact_information=" + implementing_executing_agency_contact_information +
+                ", structures=" + structures +
+                ", proposed_start_date=" + proposed_start_date +
+                ", actual_start_date=" + actual_start_date +
+                ", actual_approval_date=" + actual_approval_date +
+                ", actual_completion_date=" + actual_completion_date +
+                ", created_by=" + created_by +
+                ", creation_date='" + creation_date + '\'' +
+                ", update_date='" + update_date + '\'' +
+                ", iati_last_update_date=" + iati_last_update_date +
+                ", approved_by=" + approved_by +
+                ", approval_date=" + approval_date +
+                ", approval_status=" + approval_status +
+                ", archived=" + archived +
+                ", indicators=" + indicators +
+                ", activity_documents=" + activity_documents +
+                ", activity_status=" + activity_status +
+                ", activity_budget=" + activity_budget +
+                ", implementation_level=" + implementation_level +
+                ", implementation_location=" + implementation_location +
+                ", cris_number=" + cris_number +
+                ", national_plan_objective=" + national_plan_objective +
+                ", primary_programs=" + primary_programs +
+                ", secondary_programs=" + secondary_programs +
+                ", tertiary_programs=" + tertiary_programs +
+                ", activity_group=" + activity_group +
+                ", modified_by=" + modified_by +
+                ", activity_type=" + activity_type +
+                '}';
+    }
+
     // Getters and setters
 }
 

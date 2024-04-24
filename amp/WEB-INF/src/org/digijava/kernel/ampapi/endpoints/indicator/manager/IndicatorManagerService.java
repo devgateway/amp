@@ -426,17 +426,12 @@ public class IndicatorManagerService {
             Date baseRevisedValueDate = indicatorRequest.getBaseValue().getRevisedValueDate();
 
             if (originalBaseValue != null && revisedBaseValue != null) {
-                if (originalBaseValue > revisedBaseValue) {
-                    throw new ApiRuntimeException(BAD_REQUEST,
-                            ApiError.toError("Revised base value must be greater than original value"));
-                }
-
                 baseValues.setOriginalValue(originalBaseValue);
                 baseValues.setRevisedValue(revisedBaseValue);
             }
 
             if (baseOriginalValueDate != null && baseRevisedValueDate != null) {
-                if (baseOriginalValueDate.after(baseRevisedValueDate)) {
+                if (baseOriginalValueDate.after(baseRevisedValueDate) || !baseOriginalValueDate.equals(baseRevisedValueDate)) {
                     throw new ApiRuntimeException(BAD_REQUEST,
                             ApiError.toError("Revised base value date must be greater than original value date"));
                 }
@@ -460,17 +455,12 @@ public class IndicatorManagerService {
             Date targetRevisedValueDate = indicatorRequest.getTargetValue().getRevisedValueDate();
 
             if (originalTargetValue != null && revisedTargetValue != null) {
-                if (originalTargetValue > revisedTargetValue) {
-                    throw new ApiRuntimeException(BAD_REQUEST,
-                            ApiError.toError("Revised target value must be greater than original value"));
-                }
-
                 targetValues.setOriginalValue(originalTargetValue);
                 targetValues.setRevisedValue(revisedTargetValue);
             }
 
             if (targetOriginalValueDate != null && targetRevisedValueDate != null) {
-                if (targetOriginalValueDate.after(targetRevisedValueDate)) {
+                if (targetOriginalValueDate.after(targetRevisedValueDate) || !targetOriginalValueDate.equals(targetRevisedValueDate)) {
                     throw new ApiRuntimeException(BAD_REQUEST,
                             ApiError.toError("Revised target value date must be greater than original value date"));
                 }

@@ -1052,8 +1052,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String deleteActivitySurveyResponse = "DELETE FROM amp_ahsurvey_response WHERE amp_ahsurvey_id in ( SELECT amp_ahsurvey_id FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) ";
         SQLUtils.executeQuery(con, deleteActivitySurveyResponse );
 
-        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivitySurvey );
+//        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() );
+
+
+//        SQLUtils.executeQuery(con, deleteActivitySurvey );
 
         //   delete surveys
         String deleteActivityGPISurveyReponse = "DELETE FROM amp_gpi_survey_response WHERE amp_gpisurvey_id in ( SELECT amp_gpisurvey_id FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) " ;
@@ -1063,12 +1067,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() );
 
         //   delete all previous comments
-        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityComments );
+//        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+//        SQLUtils.executeQuery(con, deleteActivityComments );
+        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteActivityComments,ampAct.getAmpActivityId() );
 
         //Delete the connection with Team.
-        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityTeam );
+//        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = ?";
+
+        SQLUtils.executePreparedQuery(con, deleteActivityTeam,ampAct.getAmpActivityId() );
     }
 
     public static void removeMergeSources(Long ampActivityId,Session session){

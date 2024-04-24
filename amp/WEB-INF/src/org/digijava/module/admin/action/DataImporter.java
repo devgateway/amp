@@ -48,6 +48,7 @@ import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 public class DataImporter extends Action {
     Logger logger = LoggerFactory.getLogger(DataImporter.class);
     private static final int BATCH_SIZE = 1000;
+    private static Map<String, Long> constantsMap=new HashMap<>();
 
 
     @Override
@@ -262,7 +263,7 @@ public class DataImporter extends Action {
                                 {
                                     if (!config.values().contains("{donorAgency}"))
                                     {
-                                        updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getOrg(session));
+                                        updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getRandomOrg(session));
 
                                     }
                                     else {
@@ -317,67 +318,29 @@ public class DataImporter extends Action {
 
         return date.format(formatter);
     }
-    private void updateFunding(ImportDataModel importDataModel,Session session, Number amount, String columnHeader, Long orgId)
-    {
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
-        }
-        String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
-                "WHERE ac.currencyCode = :currencyCode";
-        Query query= session.createQuery(hql);
-        query.setString("currencyCode", "XOF");
-        Long currencyId = (Long)query.uniqueResult();
-         hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
-                "JOIN s.ampCategoryClass c " +
-                "WHERE c.keyName = :categoryKey";
+    private void updateFunding(ImportDataModel importDataModel, Session session, Number amount, String columnHeader, Long orgId) {
+        String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
+        Long currencyId = getCurrencyId(session);
+        Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql );
+        Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql);
+        Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql);
+        Long orgRole = getOrganizationRole(session);
 
-         query= session.createQuery(hql);
-        query.setParameter("categoryKey", CategoryConstants.ADJUSTMENT_TYPE_KEY );
-
-        List<AmpCategoryValue> values= query.list();
-        logger.info("Adj Types: "+values);
-        Long adjType = values.get(0).getId();
-
-//        hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
-//                "JOIN s.ampCategoryClass c " +
-//                "WHERE c.keyName = :categoryKey";
-
-        query= session.createQuery(hql);
-        query.setParameter("categoryKey", CategoryConstants.TYPE_OF_ASSISTENCE_KEY );
-
-        values= query.list();
-        logger.info("Types of assistance: "+values);
-
-        Long assType = values.get(0).getId();
-
-        query= session.createQuery(hql);
-        query.setParameter("categoryKey", CategoryConstants.FINANCING_INSTRUMENT_KEY );
-
-        values= query.list();
-        logger.info("Financing Instrument: "+values);
-
-        Long finInstrument = values.get(0).getId();
-
-         hql = "SELECT o.ampRoleId FROM " + AmpRole.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
-
-         query= session.createQuery(hql);
-        query.setParameter("name", "%donor%");
-        List<Long> orgRoles = query.list();
-
-
-//        double amount = Double.parseDouble();
         String yearString = findYearSubstring(columnHeader);
-        String fundingDate = yearString!=null?getFundingDate(yearString):getFundingDate("2000");
+        String fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+
         Funding funding = new Funding();
         funding.setDonor_organization_id(orgId);
         funding.setType_of_assistance(assType);
         funding.setFinancing_instrument(finInstrument);
-        funding.setSource_role(orgRoles.get(0));
-        Transaction commitment  = new Transaction();
+        funding.setSource_role(orgRole);
+
+        Transaction commitment = new Transaction();
         commitment.setCurrency(currencyId);
         commitment.setAdjustment_type(adjType);
-        commitment.setTransaction_amount(Double.parseDouble(String.valueOf(amount)));
+        commitment.setTransaction_amount(amount.doubleValue());
         commitment.setTransaction_date(fundingDate);
+
         funding.getCommitments().add(commitment);
         funding.getDisbursements().add(commitment);
 
@@ -385,9 +348,69 @@ public class DataImporter extends Action {
         donorOrganization.setOrganization(orgId);
         donorOrganization.setPercentage(100.0);
 
-
         importDataModel.getDonor_organization().add(donorOrganization);
         importDataModel.getFundings().add(funding);
+    }
+
+
+    private Long getOrganizationRole(Session session) {
+
+        if (constantsMap.containsKey("orgRole")) {
+            Long val= constantsMap.get("orgRole");
+            logger.info("In cache... orgRole: "+val);
+            return val;
+
+        }
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        String hql = "SELECT o.ampRoleId FROM " + AmpRole.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
+
+        Query query = session.createQuery(hql);
+        query.setParameter("name", "%donor%");
+        List<Long> orgRoles = query.list();
+        Long orgRole = orgRoles.get(0);
+        constantsMap.put("orgRole", orgRole);
+        return orgRole;
+    }
+
+    private Long getCurrencyId(Session session) {
+
+        if (constantsMap.containsKey("currencyId")) {
+            Long val = constantsMap.get("currencyId");
+            logger.info("In cache... currency: "+val);
+            return val;
+
+        }
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
+                "WHERE ac.currencyCode = :currencyCode";
+
+        Query query = session.createQuery(hql);
+        query.setString("currencyCode", "XOF");
+        Long currencyId = (Long) query.uniqueResult();
+        constantsMap.put("currencyId", currencyId);
+        return currencyId;
+    }
+
+    private Long getCategoryValue(Session session, String constantKey, String categoryKey, String hql) {
+        if (constantsMap.containsKey(constantKey)) {
+            Long val = constantsMap.get(constantKey);
+            logger.info("In cache... "+constantKey+":"+val);
+            return val;
+
+        }
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        Query query = session.createQuery(hql);
+        query.setParameter("categoryKey", categoryKey);
+        List<?> values = query.list();
+        Long categoryId = ((AmpCategoryValue) values.get(0)).getId();
+        constantsMap.put(constantKey, categoryId);
+        return categoryId;
     }
 
     private AmpActivityVersion existingActivity(ImportDataModel importDataModel,Session session)
@@ -404,20 +427,11 @@ public class DataImporter extends Action {
     }
     private void setStatus(ImportDataModel importDataModel,Session session)
     {
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
-        }
-
-
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
                 "WHERE c.keyName = :categoryKey";
-
-        Query query= session.createQuery(hql);
-        query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY );
-        List<AmpCategoryValue> values= query.list();
-        logger.info("Statuses: "+values);
-        importDataModel.setActivity_status(values.get(0).getId());
+        Long statusId = getCategoryValue(session,"statusId",CategoryConstants.ACTIVITY_STATUS_KEY,hql);
+        importDataModel.setActivity_status(statusId);
 
     }
     private void importTheData(ImportDataModel importDataModel, Session session) throws JsonProcessingException {
@@ -432,7 +446,6 @@ public class DataImporter extends Action {
 
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
-//        logger.info("Data map: "+map);
         JsonApiResponse<ActivitySummary> response;
         AmpActivityVersion existing = existingActivity(importDataModel,session);
     if (existing==null){
@@ -460,86 +473,111 @@ public class DataImporter extends Action {
 
     private void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
     {
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
+
+        if (constantsMap.containsKey("sector_"+name)) {
+            Long sectorId = constantsMap.get("sector_"+name);
+            logger.info("In cache... sector "+"sector_"+name+":"+sectorId);
+            createSector(importDataModel,primary,sectorId);
         }
+        else {
+            if (!session.isOpen()) {
+                session = PersistenceManager.getRequestDBSession();
+            }
 
-        session.doWork(connection -> {
-//            String query = String.format("SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE LOWER(name) = LOWER(%s)", name);
-//            String query = "SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE LOWER(name) = LOWER(?)";
-            String query = primary?"SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'":"SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                // Set the name as a parameter to the prepared statement
-                statement.setString(1, name);
+            session.doWork(connection -> {
+                String query = primary ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'" : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    // Set the name as a parameter to the prepared statement
+                    statement.setString(1, name);
 
-                // Execute the query and process the results
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-                        Long ampSectorId = resultSet.getLong("amp_sector_id");
-//                        String sectorConfigName = resultSet.getString("name");
-                        Sector sector1 = new Sector();
-                        sector1.setSector_percentage(100.00);
-                        sector1.setSector(ampSectorId);
-                        if (primary) {
-                            importDataModel.getPrimary_sectors().add(sector1);
-                        }
-                        else
-                        {
-                            importDataModel.getSecondary_sectors().add(sector1);
-
+                    // Execute the query and process the results
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            Long ampSectorId = resultSet.getLong("amp_sector_id");
+                            createSector(importDataModel, primary, ampSectorId);
+                            constantsMap.put("sector_"+name, ampSectorId);
                         }
                     }
+
+                } catch (SQLException e) {
+                    logger.error("Error getting sectors", e);
                 }
-
-        } catch (SQLException e) {
-        logger.error("Error getting sectors",e);
-    }
-        });
-
-
-
-    }
-    private Long getOrg(Session session)
-    {
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
+            });
         }
+
+
+
+    }
+
+    private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {
+        Sector sector1 = new Sector();
+        sector1.setSector_percentage(100.00);
+        sector1.setSector(ampSectorId);
+        if (primary) {
+            importDataModel.getPrimary_sectors().add(sector1);
+        }
+        else
+        {
+            importDataModel.getSecondary_sectors().add(sector1);
+
+        }
+    }
+
+    private Long getRandomOrg(Session session)
+    {
+        Long randomOrg;
+        if (constantsMap.containsKey("randomOrg")) {
+            randomOrg = constantsMap.get("randomOrg");
+            logger.info("In cache... randomOrg "+randomOrg);
+        }else {
+            if (!session.isOpen()) {
+                session = PersistenceManager.getRequestDBSession();
+            }
             String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
 
-            return (Long) session.createQuery(hql).setMaxResults(1).uniqueResult();
+            randomOrg = (Long) session.createQuery(hql).setMaxResults(1).uniqueResult();
+            constantsMap.put("randomOrg",randomOrg);
+        }
+        return randomOrg;
+
 
     }
 
     private void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
     {
-        if (!session.isOpen()) {
-        session=PersistenceManager.getRequestDBSession();
-        }
-        String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
-
-        Query query= session.createQuery(hql);
-        query.setParameter("name", "%" + name + "%");
-        List<Long> organisations =query.list();
         Long orgId;
-        if (!organisations.isEmpty())
-        {
-             orgId=organisations.get(0);
-        }
-        else
-        {
-             hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
 
-             query= session.createQuery(hql).setMaxResults(1);
-            orgId =(Long) query.uniqueResult();
+        if (constantsMap.containsKey("org_"+name)) {
+            orgId = constantsMap.get("org_"+name);
+            logger.info("In cache... organisation "+"org_"+name+":"+orgId);
         }
-        logger.info("Organisation: "+orgId);
+        else {
+            if (!session.isOpen()) {
+                session = PersistenceManager.getRequestDBSession();
+            }
+            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
 
-            if (Objects.equals(type, "donor")) {
+            Query query = session.createQuery(hql);
+            query.setParameter("name", "%" + name + "%");
+            List<Long> organisations = query.list();
+            if (!organisations.isEmpty()) {
+                orgId = organisations.get(0);
+            } else {
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
+
+                query = session.createQuery(hql).setMaxResults(1);
+                orgId = (Long) query.uniqueResult();
+            }
+            constantsMap.put("org_" + name, orgId);
+        }
+        logger.info("Organisation: " + orgId);
+
+        if (Objects.equals(type, "donor")) {
                 DonorOrganization donorOrganization = new DonorOrganization();
                 donorOrganization.setOrganization(orgId);
                 donorOrganization.setPercentage(100.0);
                 importDataModel.getDonor_organization().add(donorOrganization);
-            }
+        }
 
 
 

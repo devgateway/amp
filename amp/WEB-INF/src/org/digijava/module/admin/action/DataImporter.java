@@ -281,14 +281,15 @@ public class DataImporter extends Action {
                             default:
                                 throw new IllegalStateException("Unexpected value: " + entry.getValue());
                         }
-                        if (importDataModel.getProject_title()==null)
-                        {
-                            continue;
-                        }
-                        importTheData(importDataModel, session);
+
 
 
                 }
+                if (importDataModel.getProject_title()==null)
+                {
+                    continue;
+                }
+                importTheData(importDataModel, session);
             }
         }
     }

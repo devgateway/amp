@@ -226,7 +226,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalFunding" />
 		</set>
 
-		<set name="survey" cascade="merge" table="AMP_AHSURVEY" inverse="true">
+		<set name="survey" cascade="all-delete-orphan" table="AMP_AHSURVEY" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey" />

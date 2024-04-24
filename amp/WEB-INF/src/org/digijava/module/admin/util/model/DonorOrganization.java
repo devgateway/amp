@@ -44,5 +44,14 @@ public class DonorOrganization {
         return Objects.hash(getOrganization());
     }
 
+    @Override
+    public String toString() {
+        return "DonorOrganization{" +
+                "id=" + id +
+                ", organization=" + organization +
+                ", percentage=" + percentage +
+                '}';
+    }
+
     // Getters and setters
 }

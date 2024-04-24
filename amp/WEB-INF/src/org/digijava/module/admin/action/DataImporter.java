@@ -42,6 +42,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 
@@ -154,8 +155,10 @@ public class DataImporter extends Action {
             InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
             processFileInBatches(fileInputStream,request,dataImporterForm.getColumnPairs());
 
-            logger.info("Done and deleting the file");
+            logger.info("Done ... deleting the file and clearing cache map");
             Files.delete(tempFile.toPath());
+            logger.info("Cache map size: "+constantsMap.size());
+            constantsMap.clear();
             Instant finish = Instant.now();
             long timeElapsed = Duration.between(start, finish).toMillis();
             logger.info("Time Elapsed: "+timeElapsed);
@@ -233,7 +236,7 @@ public class DataImporter extends Action {
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
 
-            logger.info("Row Number: "+row.getRowNum());
+            logger.info("Row Number: "+row.getRowNum()+", Sheet Name: "+sheet.getSheetName());
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
@@ -261,7 +264,7 @@ public class DataImporter extends Action {
                             case "{fundingItem}":
                                 if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
                                 {
-                                    if (!config.values().contains("{donorAgency}"))
+                                    if (!config.containsValue("{donorAgency}"))
                                     {
                                         updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getRandomOrg(session));
 
@@ -613,7 +616,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("{actualCommitment}");
         fieldsInfos.add("{plannedDisbursement}");
         fieldsInfos.add("{fundingItem}");
-        return fieldsInfos;
+        return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 
     // Method to sort a map by its values

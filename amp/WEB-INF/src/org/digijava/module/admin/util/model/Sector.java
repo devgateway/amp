@@ -29,4 +29,13 @@ public class Sector {
     public void setSector_percentage(Double sector_percentage) {
         this.sector_percentage = sector_percentage;
     }
+
+    @Override
+    public String toString() {
+        return "Sector{" +
+                "id=" + id +
+                ", sector=" + sector +
+                ", sector_percentage=" + sector_percentage +
+                '}';
+    }
 }

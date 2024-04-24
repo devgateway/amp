@@ -122,5 +122,24 @@ public class Funding {
         this.source_role = source_role;
     }
 
+    @Override
+    public String toString() {
+        return "Funding{" +
+                "funding_id=" + funding_id +
+                ", donor_organization_id=" + donor_organization_id +
+                ", actual_start_date=" + actual_start_date +
+                ", actual_completion_date=" + actual_completion_date +
+                ", original_completion_date=" + original_completion_date +
+                ", reporting_date=" + reporting_date +
+                ", commitments=" + commitments +
+                ", disbursements=" + disbursements +
+                ", type_of_assistance=" + type_of_assistance +
+                ", financing_instrument=" + financing_instrument +
+                ", funding_status=" + funding_status +
+                ", group_versioned_funding=" + group_versioned_funding +
+                ", source_role=" + source_role +
+                '}';
+    }
+
     // Getters and setters
 }

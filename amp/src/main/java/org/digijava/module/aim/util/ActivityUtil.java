@@ -1636,7 +1636,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     public static void deleteAmpActivityWithVersions(Long ampActId) throws Exception {
-            logger.info("Activity id: ");
         Session session = PersistenceManager.getSession();
         AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
         Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();

@@ -30,7 +30,6 @@ public class CellColumn<K extends Cell> extends Column<K> {
      */
     protected String extractorView;
 
-
     /**
      * Returns the number of items in the column as the visible rows (they are already unique) so this means
      * the number activities that have data for this column
@@ -58,13 +57,10 @@ public class CellColumn<K extends Cell> extends Column<K> {
     public CellColumn(String name) {
         super(name);
     }
-    public String getClassName() {
-        return this.getClass().getName();
-    }
 
     public CellColumn(String name, int initialCapacity) {
         super(name, initialCapacity);
-        itemsMap = new HashMap<Long, List<Cell>>(initialCapacity);
+        itemsMap = new HashMap<>(initialCapacity);
     }
 
     public CellColumn(Column source) {

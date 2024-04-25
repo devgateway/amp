@@ -178,7 +178,7 @@
 		</set>
 
 
-		<set name="funding" cascade="delete,all" inverse="true" order-by="index">
+		<set name="funding" cascade="all" inverse="true" order-by="index">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding" />

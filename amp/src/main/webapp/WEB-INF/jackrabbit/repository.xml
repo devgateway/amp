@@ -92,4 +92,4 @@
         <param name="path" value="${rep.home}/jsp/index" />
     </SearchIndex>
 
-</jsp>
+</Repository>

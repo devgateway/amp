@@ -1,4 +1,4 @@
-/*  
+/*
  *   Copyright 2012 OSBI Ltd
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+import { SavedQuery } from '../models/Repository'
+
 
 /**
  * Router for opening query when session is initialized
@@ -31,8 +33,8 @@ var QueryRouter = Backbone.Router.extend({
     },
     run_report: function(report_token) {
     	Saiku.logger.log("QueryRouter.run_report");
-    	$.getJSON(Settings.AMP_PATH + "/run/" + report_token, process_spec);	
-    },    
+    	$.getJSON(Settings.AMP_PATH + "/run/" + report_token, process_spec);
+    },
     open_report: function(report_id) {
         Saiku.logger.log("QueryRouter.open_report");
         if (Saiku.originalReportMetadata) {
@@ -42,7 +44,7 @@ var QueryRouter = Backbone.Router.extend({
         }
     },
     open_query: function(query_name) {
-    	Saiku.logger.log("QueryRouter.open_query");        
+    	Saiku.logger.log("QueryRouter.open_query");
     },
     open_query_repository: function( ) {
     	Saiku.logger.log("QueryRouter.open_query_repository");
@@ -65,7 +67,7 @@ var process_spec = function(data) {
 
 	templateQuery.reportSpec = data.reportSpec;
 	Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
-	 
+
 	var report_type = data.reportMetadata.reportType;
 	var report_fieldname = (report_type === "IN_MEMORY") ? "report_token" : "report_id";
 	var report_identifier = data.reportMetadata.reportIdentifier;
@@ -102,7 +104,7 @@ var templateQuery = {
    },
    "plugins":{
 
-   },   
+   },
    "metadata":{
 
    }

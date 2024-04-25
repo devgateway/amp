@@ -29,6 +29,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
      * view used for having extracted the column. Might be null!
      */
     protected String extractorView;
+    public Class aClass;
 
     /**
      * Returns the number of items in the column as the visible rows (they are already unique) so this means
@@ -52,6 +53,9 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     public CellColumn(ColumnWorker worker) {
         super(worker);
+    }
+    public Class getaClass(){
+        return this.getClass();
     }
 
     public CellColumn(String name) {

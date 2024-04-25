@@ -158,7 +158,7 @@ SaveReportEngine.prototype.saveReport		= function () {
 		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  Error: please enter a value in at least one language " );		
 	}
 	else {
-		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
+		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/static/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
 		var postString		= "dynamicSaveReport=true" +
 							reportTitles + 
 							"&reportTitle=dummy" + 

@@ -340,7 +340,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 		this.titlePanel.hide();
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 
-			"... <img src='/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
+			"... <img src='/static/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
 
 	var reportTitles = getReportTitles();
 	var sendData = true;

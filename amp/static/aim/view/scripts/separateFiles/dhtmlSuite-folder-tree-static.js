@@ -33,7 +33,7 @@ Owner of DHTMLgoodies.com
 
 
 
-	var imageFolder = '/jsp/aim/view/images/images_dhtmlsuite/';	// Path to images
+	var imageFolder = '/static/aim/view/images/images_dhtmlsuite/';	// Path to images
 	var folderImage = 'dhtmlgoodies_folder.gif';
 	var plusImage = 'dhtmlgoodies_plus.gif';
 	var minusImage = 'dhtmlgoodies_minus.gif';

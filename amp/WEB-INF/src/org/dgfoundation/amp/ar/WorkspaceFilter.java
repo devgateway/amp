@@ -170,7 +170,7 @@ public final class WorkspaceFilter {
                 + "AND a.amp_team_id IS NOT NULL "
                 + "UNION "
                 + "SELECT DISTINCT(af.amp_activity_id) "
-                + "FROM amp_funding af, amp_activity_version b "
+                + "FROM amp_funding af, amp_activity b "
                 + "WHERE af.amp_donor_org_id IN (" + orgsClause + ") "
                 + "AND af.amp_activity_id = b.amp_activity_id "
                 + "AND b.amp_team_id IS NOT NULL";

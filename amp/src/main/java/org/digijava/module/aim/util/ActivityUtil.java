@@ -1056,6 +1056,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = ?";
         SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() ,"amp_ahsurvey");
 
+        String deleteFunding = "DELETE FROM amp_funding WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteFunding,ampAct.getAmpActivityId() ,"amp_funding");
+
 
 //        SQLUtils.executeQuery(con, deleteActivitySurvey );
 

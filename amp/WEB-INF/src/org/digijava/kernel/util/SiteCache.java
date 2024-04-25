@@ -41,7 +41,7 @@ public class SiteCache implements Runnable {
     private static Logger logger = I18NHelper.getKernelLogger(SiteCache.class);
     private static final String appScopeKey = SiteCache.class.getName();
 
-    public class CachedSite {
+    public static class CachedSite {
 
         public CachedSite(Site site) {
             this.site = site;

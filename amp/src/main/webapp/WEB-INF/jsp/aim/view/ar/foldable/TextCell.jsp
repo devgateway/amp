@@ -19,7 +19,7 @@
 		<bean:write name="textCell" property="shortTextVersion" filter="false"/>&nbsp;
 
 
-<%--<logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">--%>
+<logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="textCell" property="hasLongVersion" value="true">
 	<div class="desktop_project_name_sel" style="position:relative;display:none;" id='<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>'>
 		<bean:write name="textCell" filter="false"/>

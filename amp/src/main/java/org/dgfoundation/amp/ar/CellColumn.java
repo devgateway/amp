@@ -2,7 +2,7 @@
  * CellColumn.java
  * (c) 2005 Development Gateway Foundation
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
- * 
+ *
  */
 package org.dgfoundation.amp.ar;
 
@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * 
+ *
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jun 19, 2006 a column that holds cells
  */
@@ -29,7 +29,8 @@ public class CellColumn<K extends Cell> extends Column<K> {
      * view used for having extracted the column. Might be null!
      */
     protected String extractorView;
-    
+
+
     /**
      * Returns the number of items in the column as the visible rows (they are already unique) so this means
      * the number activities that have data for this column
@@ -41,7 +42,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /**
      * Iterator for the internal list of items
-     * 
+     *
      * @return the Iterator
      */
     public Iterator<K> iterator() {
@@ -56,6 +57,9 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     public CellColumn(String name) {
         super(name);
+    }
+    public String getClassName() {
+        return this.getClass().getName();
     }
 
     public CellColumn(String name, int initialCapacity) {
@@ -83,23 +87,23 @@ public class CellColumn<K extends Cell> extends Column<K> {
         dest.contentCategory = source.getContentCategory();
         dest.dimensionClass = source.getDimensionClass();
         dest.relatedContentPersisterClass = source.getRelatedContentPersisterClass();
-        
+
         if (source instanceof CellColumn)
             dest.setExtractorView(((CellColumn) source).getExtractorView());
-        
+
         dest.worker=source.getWorker();
-        
+
         dest.setDescription(source.getDescription());
         dest.setExpression(source.getExpression());
         dest.setTotalExpression(source.getTotalExpression());
     }
-    
-    
+
+
     public Cell getByOwner(Long ownerId) {
         List<Cell> cells = itemsMap.get(ownerId);
         if (cells == null || cells.isEmpty())
             return null;
-        
+
         return cells.get(0); // return the first one since the caller doesn't care
     }
 
@@ -107,24 +111,24 @@ public class CellColumn<K extends Cell> extends Column<K> {
     {
         return this.itemsMap.keySet();
     }
-    
+
     static long calls = 0;
     static long iterations = 0;
-    
+
     public Cell getByOwnerAndValue(Long ownerId, Object value) {
         calls ++;
-        
+
         List<Cell> list = itemsMap.get(ownerId);
         if (list == null)
             return null;
-        
+
         for(Cell element:list)
         {
             iterations ++;
             if (value.equals(element.getValue()))
                 return element;
         }
-        
+
 //      Iterator i = items.iterator();
 //      while (i.hasNext()) {
 //          iterations ++;
@@ -157,22 +161,22 @@ public class CellColumn<K extends Cell> extends Column<K> {
         itemsMap.get(c.getOwnerId()).add(c);
         items.add((K) c);
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#filterCopy(org.dgfoundation.amp.ar.cell.Cell)
      */
     @Override
     public Column filterCopy(final Cell metaCell, final Set<Long> ids) {
-        
+
         CellFilterCriteria filter = new CellFilterCriteria(){
             public Cell filter(Cell source){
                 return source.filter(metaCell, ids);
-            }};     
+            }};
         return filterCopy(filter);
     }
-    
+
     public Column filterCopy(CellFilterCriteria crit)
     {
         CellColumn dest = (CellColumn) this.newInstance();
@@ -186,7 +190,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#process()
      */
     @Override
@@ -202,7 +206,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
                 if (!(objelement instanceof Column)) {
 
                     Cell element = (Cell) objelement;
-                    
+
                     // if we don't have items in the cell list, just add the
                     // cell
                     /*if (lc.size() == 0)
@@ -229,10 +233,10 @@ public class CellColumn<K extends Cell> extends Column<K> {
                         lc = new ListCell();
                         lc.addCell(element);
                     }*/
-                    
+
                     if (element.toString().equals("Expenditure Class Unallocated") && this.getName().equals("Expenditure Class"))
                         continue; // this is so hacky I have no words. Luckily we're dumping LegacyReports really soon (c)
-                    
+
                     ListCell listCell   = ownerToCells.get(element.getOwnerId());
                     if ( listCell == null ) {
                         listCell    = new ListCell();
@@ -275,7 +279,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#getSubColumn(int)
      */
     @Override
@@ -285,19 +289,19 @@ public class CellColumn<K extends Cell> extends Column<K> {
             ret.add(this);
         return ret;
     }
-    
+
     @Override
     public void setPositionInHeadingLayout(int totalRowSpan, int startingDepth, int startingColumn)
     {
         this.positionInHeading = new ReportHeadingLayoutCell(this, startingDepth, totalRowSpan, totalRowSpan, startingColumn, this.getWidth(), this.getName());
     }
-    
+
     @Override
     protected int getRowSpanInHeading_internal()
     {
         return 1;
     }
-    
+
     @Override
     public int calculateTotalRowSpan()
     {
@@ -314,7 +318,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#getOwnerIds()
      */
     @Override
@@ -332,7 +336,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#newInstance()
      */
     @Override
@@ -342,17 +346,17 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#getColumnDepth()
      */
     @Override
     public int getColumnDepth() {
         if (this.getName() != null && !this.getName().equals("")){
-            return 1;   
+            return 1;
         }else{
             return 0;
         }
-        
+
     }
 
     /**
@@ -364,7 +368,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
         int idx = items.indexOf(oldCell);
         items.remove(idx);
         items.add(idx, newCell);
-        
+
         int idx2 = itemsMap.get(oldCell.getOwnerId()).indexOf(oldCell);
         itemsMap.get(oldCell.getOwnerId()).remove(idx2);
         itemsMap.get(oldCell.getOwnerId()).add(newCell);
@@ -374,7 +378,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /*;
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#cellCount()
      */
     @Override
@@ -384,7 +388,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.ar.Column#getVisibleCellCount()
      */
     @Override
@@ -412,7 +416,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 //  public void setItemsMap(HashMap itemsMap) {
 //      this.itemsMap = itemsMap;
 //  }
-    
+
     @Override
     public boolean removeEmptyChildren(boolean checkFunding) {
         if ( this.getOwnerIds().size() > 0 ) {
@@ -421,7 +425,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
         else
             return true;
     }
-    
+
     @Override
     public Column hasSorterColumn(String namePath) {
         if ( namePath == null ) {
@@ -434,7 +438,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
         else
             return null;
     }
-    
+
     @Override
     public void filterByIds(Set<Long> idsToRetain)
     {
@@ -446,7 +450,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
                 cells.remove();
         }
     }
-    
+
     @Override
     public List<Cell> getAllCells(List<Cell> src, boolean freeze)
     {
@@ -458,14 +462,14 @@ public class CellColumn<K extends Cell> extends Column<K> {
         }
         return src;
     }
-    
+
     @Override
     public void deleteByOwnerId(Set<Long> ownerId)
     {
         // pay attention when merging with AMP2.4, as the way cells are kept there has been slightly changed
         for(Long id:ownerId)
             itemsMap.remove(id);
-        
+
         Iterator<Cell> iter = (Iterator<Cell>) items.iterator();
         while (iter.hasNext())
         {
@@ -474,12 +478,12 @@ public class CellColumn<K extends Cell> extends Column<K> {
                 iter.remove();
         }
     }
-    
+
     public void setExtractorView(String ev)
     {
         this.extractorView = ev;
     }
-    
+
     /**
      * the view used for having extracted this column
      * @return
@@ -488,7 +492,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
     {
         return this.extractorView;
     }
-    
+
     @Override
     public GroupColumn verticalSplitByCateg(String category, Set ids, boolean generateTotalCols, AmpReports reportMetadata)
     {
@@ -497,13 +501,13 @@ public class CellColumn<K extends Cell> extends Column<K> {
                 return null; // only REAL DISBURSEMENTS columns can be split by real disbursements
         return GroupColumn.verticalSplitByCateg_internal((CellColumn<? extends CategAmountCell>)this, category, ids, generateTotalCols, reportMetadata);
     }
-    
+
     @Override
     public boolean isSortableBy()
     {
         return true;
     }
-    
+
     public List<Cell> getCells(){
         return (List<Cell>) items;
     }

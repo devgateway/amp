@@ -52,7 +52,7 @@ var RepositoryZipExport = Backbone.Model.extend( {
     }
 } );
 
-export var SavedQuery = Backbone.Model.extend({
+ var SavedQuery = Backbone.Model.extend({
 
     parse: function(response) {
     	Saiku.logger.log("SavedQuery.parse");

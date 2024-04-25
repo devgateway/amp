@@ -31,8 +31,6 @@ Owner of DHTMLgoodies.com
 	February, 3rd 2006 - Dynamic load nodes by use of Ajax(Alf Magne Kalleland)
 */
 
-
-
 	var imageFolder = '/static/aim/view/images/images_dhtmlsuite/';	// Path to images
 	var folderImage = 'dhtmlgoodies_folder.gif';
 	var plusImage = 'dhtmlgoodies_plus.gif';

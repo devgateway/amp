@@ -1274,12 +1274,12 @@ function toggleView(elementId, iconId, isMinus) {
 	var icon	= document.getElementById(iconId);
 	var element	= document.getElementById(elementId);
 	if (isMinus) {
-			icon.src				= '/jsp/contentrepository/view/images/dhtmlgoodies_plus.gif';
+			icon.src				= '/WEB-INF/jsp/contentrepository/view/images/dhtmlgoodies_plus.gif';
 			element.style.display	= 'none';
 			isMinus		= false;
 	}
 	else{
-			icon.src	= '/jsp/contentrepository/view/images/dhtmlgoodies_minus.gif';
+			icon.src	= '/WEB-INF/jsp/contentrepository/view/images/dhtmlgoodies_minus.gif';
 			element.style.display	= '';
 			isMinus		= true;
 	}

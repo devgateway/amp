@@ -486,7 +486,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
   public static AmpActivityVersion loadAmpActivity(Long id){
-     return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id);
+     return PersistenceManager.getSession().load(AmpActivityVersion.class, id);
   }
 
   public static List<AmpActivitySector> getAmpActivitySectors(Long actId) {
@@ -1636,16 +1636,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     public static void deleteAmpActivityWithVersions(Long ampActId) throws Exception {
+            logger.info("Activity id: ");
         Session session = PersistenceManager.getSession();
         AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
         Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
         if (activityversions != null && !activityversions.isEmpty()) {
-            for (AmpActivityVersion ampActivityVersion : activityversions) {
-                deleteFullActivityContent(ampActivityVersion, session);
-                session.flush();
-                deleteActivity(session,ampActivityVersion);
+            session.delete(ampActivityGroup);
+//            for (AmpActivityVersion ampActivityVersion : activityversions) {
+//                deleteFullActivityContent(ampActivityVersion, session);
+//                session.flush();
 //                deleteActivity(session,ampActivityVersion);
-            }
+////                deleteActivity(session,ampActivityVersion);
+//            }
         } else {
             AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
             deleteFullActivityContent(ampAct, session);

@@ -71,7 +71,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
         IModel<Set<AmpAhsurvey>> surveys = new PropertyModel<Set<AmpAhsurvey>>(am, "survey");
 
         if (surveys.getObject() == null)
-            surveys.setObject(new TreeSet<AmpAhsurvey>());
+            surveys.setObject(new TreeSet<>());
 
         if (am.getObject().getFunding() == null)
             am.getObject().setFunding(new HashSet<>());

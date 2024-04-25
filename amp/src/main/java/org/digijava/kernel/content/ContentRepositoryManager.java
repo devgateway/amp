@@ -100,7 +100,7 @@ public final class ContentRepositoryManager {
         try {
             readSession = getOrCloseIfNotLive(readSession);
             if (readSession == null) {
-                readSession = getRepositoryInstance().login();
+                readSession = getRepositoryInstance().login(new SimpleCredentials("admin", "admin".toCharArray()));
             }
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -154,7 +154,7 @@ public final class ContentRepositoryManager {
             userName = teamMember.getEmail();
         }
 
-        SimpleCredentials creden = new SimpleCredentials(userName, userName.toCharArray());
+        SimpleCredentials creden = new SimpleCredentials("admin", "admin".toCharArray());
 
         return creden;
     }

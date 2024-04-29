@@ -61,8 +61,6 @@ const LineChart: React.FC<LineChartProps> = (props) => {
 
     const tickValues = intervals || ChartUtils.generateTickValues(minMax.min, minMax.max, generateSteps(minMax.max));
 
-
-
     return (
         <div style={{ height: height || 360, width: width || 630 }}>
             <ResponsiveLine
@@ -90,6 +88,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
                 enableGridY
                 axisBottom={{
                     tickSize: 0,
+                    tickRotation: displayDataSet[0].data.length > 15 ? -65 : 0,
                 }}
 
             />

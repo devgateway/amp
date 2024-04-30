@@ -367,7 +367,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       onChange={(value) => {
                         if (value) props.setFieldValue('ascending', value.value)
                       }}
-                      defaultValue={ascendingOptions[1]}
+                      defaultValue={{
+                        value: false,
+                        label: translations["amp.indicatormanager:true"]
+                      }}
                     />
                     <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                       {props.errors.ascending}
@@ -396,6 +399,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         <Select
                           isMulti
                           name="sectors"
+                          placeholder={translations["amp.indicatormanager:select"]}
                           options={sectors}
                           onChange={(values) => {
                             // set the formik value with the selected values and remove the label
@@ -427,6 +431,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         <Select
                           name="categories"
                           options={categories}
+                          placeholder={translations["amp.indicatormanager:select"]}
                           onChange={(value) => {
                             // set the formik value with the selected values and remove the label
                             if (value) {
@@ -458,6 +463,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         <Select
                           name="programScheme"
                           options={programSchemes}
+                          placeholder={translations["amp.indicatormanager:select"]}
                           onChange={(selectedValue) => {
                             // set the formik value with the selected values and remove the label
                             if (selectedValue) {
@@ -492,6 +498,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         programs.length > 0 ? (
                           <Select
                             name="programs"
+                            placeholder={translations["amp.indicatormanager:select"]}
                             options={programs}
                             onChange={(selectedValue) => {
                               // set the formik value with the selected values and remove the label

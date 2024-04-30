@@ -452,7 +452,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         onChange={(value) => {
                           props.setFieldValue("ascending", value?.value);
                         }}
-                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? "True" : "False" }}
+                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? translations["amp.indicatormanager:true"] : translations["amp.indicatormanager:false"] }}
                       />
                     </Form.Group>
 
@@ -482,6 +482,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             isMulti
                             name="sectors"
                             options={sectors}
+                            placeholder={translations["amp.indicatormanager:select"]}
                             onChange={(values) => {
                               // set the formik value with the selected values and remove the label
                               const selectedValues = values.map((value: any) => parseInt(value.value))
@@ -497,6 +498,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         ) : (
                             <Select
                                 isDisabled={true}
+                                placeholder={translations["amp.indicatormanager:select"]}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         )
                       }
@@ -511,6 +514,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                                 name="indicatorsCategory"
                                 options={categories}
+                                placeholder={translations["amp.indicatormanager:select"]}
                                 onChange={(selectedValue) => {
                                   // set the formik value with the selected values and remove the label
                                   if (selectedValue) {
@@ -529,6 +533,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                                 name="categories"
                                 isDisabled={true}
+                                placeholder={translations["amp.indicatormanager:select"]}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         )
                       }
@@ -543,6 +549,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           <Select
                             name="programScheme"
                             options={programSchemes}
+                            placeholder={translations["amp.indicatormanager:select"]}
                             onChange={(selectedValue) => {
                               // set the formik value with the selected values and remove the label
                               if (selectedValue) {
@@ -566,7 +573,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       {!programsReducer.loading && (
                         <Select
                         isDisabled={true}
-                      defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                        defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                     />
                     )}
                   </>
@@ -584,6 +591,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                               name="programs"
                               options={programs}
+                              placeholder={translations["amp.indicatormanager:select"]}
                               onChange={(selectedValue) => {
                                 // set the formik value with the selected values and remove the label
                                 if (selectedValue) props.setFieldValue('programId', parseInt(selectedValue?.value) );

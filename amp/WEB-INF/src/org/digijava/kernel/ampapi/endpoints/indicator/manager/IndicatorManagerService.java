@@ -431,7 +431,7 @@ public class IndicatorManagerService {
             }
 
             if (baseOriginalValueDate != null && baseRevisedValueDate != null) {
-                if (baseOriginalValueDate.after(baseRevisedValueDate) || !baseOriginalValueDate.equals(baseRevisedValueDate)) {
+                if (baseOriginalValueDate.after(baseRevisedValueDate)) {
                     throw new ApiRuntimeException(BAD_REQUEST,
                             ApiError.toError("Revised base value date must be greater than original value date"));
                 }
@@ -460,7 +460,7 @@ public class IndicatorManagerService {
             }
 
             if (targetOriginalValueDate != null && targetRevisedValueDate != null) {
-                if (targetOriginalValueDate.after(targetRevisedValueDate) || !targetOriginalValueDate.equals(targetRevisedValueDate)) {
+                if (targetOriginalValueDate.after(targetRevisedValueDate)) {
                     throw new ApiRuntimeException(BAD_REQUEST,
                             ApiError.toError("Revised target value date must be greater than original value date"));
                 }

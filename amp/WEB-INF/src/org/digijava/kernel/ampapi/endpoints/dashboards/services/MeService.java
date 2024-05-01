@@ -138,35 +138,66 @@ public class MeService {
         }
 
         // Getting params array of objectives
-        List<Integer> objectiveIds = (List<Integer>) params.getFilters().get("national-planning-objectives-level-2");
+        List<Integer> objectiveIds = (List<Integer>) params.getFilters().get("national-planning-objectives-level-1");
 
         for (Integer objectiveId : objectiveIds) {
             Long id = Long.valueOf(objectiveId);
             AmpTheme objective = ProgramUtil.getThemeById(id);
-            ProgramIndicatorValues programValues = new ProgramIndicatorValues(objective.getAmpThemeId(), objective.getName());
+            List<AmpTheme> programSubThemes =  new ArrayList<>();
+            try {
+                programSubThemes = ProgramUtil.getSubThemes(id);
+            } catch (DgException e) {
+                throw new RuntimeException(e);
+            }
 
-            // Clone or create a new instance of params for each objectiveId
+            // Clone or create a new instance of params for each programId
             SettingsAndFiltersParameters modifiedParams = cloneWithSingleObjective(params, id);
 
-            Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
+            ProgramIndicatorValues programValues = new ProgramIndicatorValues(objective.getAmpThemeId(), objective.getName());
+            // Get all sub programs from parent theme and create objective/sub programs from it
+            for(AmpTheme subProgram: programSubThemes) {
+                ProgramIndicatorValues subProgramValue = new ProgramIndicatorValues(subProgram.getAmpThemeId(), subProgram.getName());
+                Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
 
-            List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
+                List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
+                for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
+                    // Access the indicator ID (key)
+                    Long indicatorId = entry.getKey();
+                    AmpIndicator existingIndicator = getIndicatorById(indicatorId);
+                    // Check to see it the value is added to the same subProgram
+                    if(existingIndicator.getProgram().getAmpThemeId().equals(subProgram.getAmpThemeId())){
+                        IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+                        // Include indicators name
+                        singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
+                        indicatorValues.add(singelIndicatorYearValues);
+                    }
+                }
 
-            for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
-                // Access the indicator ID (key)
-                Long indicatorId = entry.getKey();
-                AmpIndicator existingIndicator = getIndicatorById(indicatorId);
-                IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
-                // Include indicators name
-                singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
-                indicatorValues.add(singelIndicatorYearValues);
+                // As an update we need to return indicators with also no values and give them values of 0
+                addIndicatorsWithNoValues(params, subProgram.getAmpThemeId(), indicatorValues, yearsCount);
 
+                subProgramValue.setIndicators(indicatorValues);
+                programIndicatorValues.add(subProgramValue);
             }
-            // As an update we need to return indicators with also no values and give them values of 0
-            addIndicatorsWithNoValues(params, id, indicatorValues, yearsCount);
+//            Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
 
-            programValues.setIndicators(indicatorValues);
-            programIndicatorValues.add(programValues);
+//            List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
+//
+//            for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
+//                // Access the indicator ID (key)
+//                Long indicatorId = entry.getKey();
+//                AmpIndicator existingIndicator = getIndicatorById(indicatorId);
+//                IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+//                // Include indicators name
+//                singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
+//                indicatorValues.add(singelIndicatorYearValues);
+//
+//            }
+//            // As an update we need to return indicators with also no values and give them values of 0
+//            addIndicatorsWithNoValues(params, id, indicatorValues, yearsCount);
+//
+//            programValues.setIndicators(indicatorValues);
+//            programIndicatorValues.add(programValues);
         }
 
         return programIndicatorValues;
@@ -428,7 +459,7 @@ public class MeService {
 
         // Update the "national-planning-objectives-level-2" filter with a single objectiveId
         Map<String, Object> filters = new HashMap<>(originalParams.getFilters());
-        filters.put("national-planning-objectives-level-2", Arrays.asList(objectiveId.intValue())); // Convert back to Integer if necessary
+        filters.put("national-planning-objectives-level-1", Arrays.asList(objectiveId.intValue())); // Convert back to Integer if necessary
         modifiedParams.setFilters(filters);
 
         return modifiedParams;

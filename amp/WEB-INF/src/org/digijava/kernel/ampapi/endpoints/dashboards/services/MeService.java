@@ -179,25 +179,6 @@ public class MeService {
                 subProgramValue.setIndicators(indicatorValues);
                 programIndicatorValues.add(subProgramValue);
             }
-//            Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
-
-//            List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
-//
-//            for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
-//                // Access the indicator ID (key)
-//                Long indicatorId = entry.getKey();
-//                AmpIndicator existingIndicator = getIndicatorById(indicatorId);
-//                IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
-//                // Include indicators name
-//                singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
-//                indicatorValues.add(singelIndicatorYearValues);
-//
-//            }
-//            // As an update we need to return indicators with also no values and give them values of 0
-//            addIndicatorsWithNoValues(params, id, indicatorValues, yearsCount);
-//
-//            programValues.setIndicators(indicatorValues);
-//            programIndicatorValues.add(programValues);
         }
 
         return programIndicatorValues;

@@ -144,6 +144,10 @@ public class MeService {
             Long id = Long.valueOf(objectiveId);
             AmpTheme objective = ProgramUtil.getThemeById(id);
             List<AmpTheme> programSubThemes =  new ArrayList<>();
+            // Check if the objectives are pillars only
+            if(!objective.getIndlevel().equals(1)){
+                continue;
+            }
             try {
                 programSubThemes = ProgramUtil.getSubThemes(id);
             } catch (DgException e) {

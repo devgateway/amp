@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.*;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardIndicatorCoreData;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
@@ -447,6 +448,16 @@ public class EndPoints {
     @ApiOperation(value = "Retrieve and provide a list of M&E indicators by sector.")
     public final List<MEIndicatorDTO> getIndicatorsBySector(@PathParam("id") Long sectorId) {
         return new MeService().getIndicatorsBySector(sectorId);
+    }
+
+    @POST
+    @Path("/me/dashboardCoreIndicatorData")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getCoreIndicatorData")
+    @ApiOperation(value = "Returns indicator report values for all indicators.")
+    public Response getCoreIndicatorData(SettingsAndFiltersParameters params) {
+        List<DashboardIndicatorCoreData> resp = new MeService().getIndicatorCoreData();
+        return PublicServices.buildOkResponseWithOriginHeaders(resp);
     }
 }
 

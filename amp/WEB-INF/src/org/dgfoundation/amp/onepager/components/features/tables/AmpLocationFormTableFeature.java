@@ -47,7 +47,7 @@ public class AmpLocationFormTableFeature extends
         AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivityLocation> {
 
     private static final long serialVersionUID = 1L;
-    public final static Set<AmpActivityLocation> LOCATIONS_SELECTED=new HashSet<>();
+    public static final Set<AmpActivityLocation> LOCATIONS_SELECTED=new HashSet<>();
 
     private IModel<Set<AmpActivityLocation>> setModel;
 
@@ -64,20 +64,18 @@ public class AmpLocationFormTableFeature extends
      * @param fmName
      * @param regionalFundingFeature
      * @param implementationLevel
-     * @throws Exception
      */
     public AmpLocationFormTableFeature(String id, String fmName,
                                        final IModel<AmpActivityVersion> am,
                                        final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
                                        final AmpCategorySelectFieldPanel implementationLocation, final AmpCategorySelectFieldPanel implementationLevel,
-                                       final IModel<Boolean> disablePercentagesForInternational)
-            throws Exception {
+                                       final IModel<Boolean> disablePercentagesForInternational) {
         super(id, am, fmName, false, true);
         setTitleHeaderColSpan(4);
-        setModel = new PropertyModel<Set<AmpActivityLocation>>(
+        setModel = new PropertyModel<>(
                 am, "locations");
         if (setModel.getObject() == null)
-            setModel.setObject(new HashSet<AmpActivityLocation>());
+            setModel.setObject(new HashSet<>());
 
         final AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = new AbstractReadOnlyModel<List<AmpActivityLocation>>() {
             private static final long serialVersionUID = 1L;
@@ -94,13 +92,7 @@ public class AmpLocationFormTableFeature extends
                     }
                 }
 
-                Comparator<AmpActivityLocation> comparator = new Comparator<AmpActivityLocation>() {
-                    @Override
-                    public int compare(AmpActivityLocation o1, AmpActivityLocation o2) {
-                        return o1.getLocation().getAutoCompleteLabel().compareTo(
-                                o2.getLocation().getAutoCompleteLabel());
-                    }
-                };
+                Comparator<AmpActivityLocation> comparator = Comparator.comparing(o -> o.getLocation().getAutoCompleteLabel());
 
                 ret.sort(comparator);
                 return ret;

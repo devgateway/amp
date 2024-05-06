@@ -109,10 +109,10 @@
 	<http pattern="/rest/**" security="none" />
     <http pattern="/api-docs/**" security="none" />
 
-	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
-    <http pattern="/gis/boundaries/**" security="none" />
+<!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />-->
+<!--    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />-->
+<!--    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />-->
+<!--    <http pattern="/gis/boundaries/**" security="none" />-->
 
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />

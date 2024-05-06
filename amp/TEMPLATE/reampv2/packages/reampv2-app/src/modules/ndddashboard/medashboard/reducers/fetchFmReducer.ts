@@ -1,6 +1,6 @@
 import { errorHelper } from "../../../admin/indicator_manager/utils/errorHelper";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {PROGRESS_TRACKING_DASHBOARDS, REST_FM_SETTINGS} from "../../utils/constants";
+import {PROGRESS_TRACKING_DASHBOARDS, DASHBOARDS, REST_FM_SETTINGS} from "../../utils/constants";
 import {extractFmColumnsData} from "../utils/data";
 
 const REDUCER_NAME = 'fm';
@@ -17,16 +17,21 @@ const initialState: FmInitialStateType = {
     error: null,
 }
 
+const detailModules = [
+    PROGRESS_TRACKING_DASHBOARDS,
+    DASHBOARDS
+];
+
 export const fetchFm = createAsyncThunk(
     `${REDUCER_NAME}/fetch`,
     async ( _, { rejectWithValue }) => {
+
+
         const body = {
             "enabled-modules": false,
             "reporting-fields": false,
             "full-enabled-paths": false,
-            "detail-modules": [
-                "PROGRESS TRACKING DASHBOARDS"
-            ]
+            "detail-modules": detailModules
         }
 
         const response = await fetch(REST_FM_SETTINGS,{
@@ -37,6 +42,9 @@ export const fetchFm = createAsyncThunk(
             body: JSON.stringify({ ...body }),
         });
         const data: any = await response.json();
+
+        //merge the data objects
+
 
         if (response.status !== 200) {
             return rejectWithValue(data);
@@ -62,7 +70,7 @@ const fmSlice = createSlice({
         builder.addCase(fetchFm.fulfilled, (state, action) => {
             state.error = null;
             state.loading = false;
-            state.data = extractFmColumnsData(action.payload, PROGRESS_TRACKING_DASHBOARDS);
+            state.data = extractFmColumnsData(action.payload, detailModules)
         });
         builder.addCase(fetchFm.rejected, (state, action) => {
             state.loading = false;

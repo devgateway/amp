@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../utils/constants';
 // eslint-disable-next-line no-unused-vars
+import  '@devgateway/amp-settings/dist/amp-settings.css';
 
 import { NDDTranslationContext } from './StartUp';
 

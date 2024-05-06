@@ -19,6 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,7 +196,7 @@ public class ResourceEndpoint {
             @ApiParam(value = "resource configuration", type = "SwaggerResource") @FormDataParam("resource")
                     SwaggerResource resource,
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") ContentDisposition fileDetail) {
+            @FormDataParam("file") FormDataContentDisposition fileDetail) {
 
         if (resource == null) {
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(

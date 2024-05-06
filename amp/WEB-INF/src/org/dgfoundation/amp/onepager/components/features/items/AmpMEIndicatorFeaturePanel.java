@@ -5,23 +5,30 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpMEBaseTargetValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -69,19 +76,19 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
         add(riskSelect);
 
-        final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);
-        final AmpIndicatorValue targetVal = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+        final AmpIndicatorGlobalValue globalBaseVal = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.BASE);
+        final AmpIndicatorGlobalValue globalTargetVal = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.TARGET);
 
         final Model<Boolean> valuesSet = new Model<Boolean>(false);
 
-        for (AmpIndicatorValue val : values.getObject()){
+        for (AmpIndicatorGlobalValue val : indicator.getObject().getIndicatorValues()){
 
-            switch (val.getValueType()) {
+            switch (val.getType()) {
                 case AmpIndicatorValue.BASE:
-                    val.copyValuesTo(baseVal);
+                    val.copyValuesTo(globalBaseVal);
                     break;
                 case AmpIndicatorValue.TARGET:
-                    val.copyValuesTo(targetVal);
+                    val.copyValuesTo(globalTargetVal);
                     valuesSet.setObject(true);
                     break;
                 default:
@@ -89,16 +96,46 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             }
         }
 
-        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<>(baseVal, "value"));
+        final Label indicatorBaseValueLabel = new Label("base", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
+            }
+        });
         add(indicatorBaseValueLabel);
 
-        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<>(baseVal, "valueDate"));
+        final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (globalBaseVal.getOriginalValueDate() != null) {
+                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
+                    return format.format(globalBaseVal.getOriginalValueDate());
+                } else {
+                    return "N/A";
+                }
+            }
+        });
         add(indicatorBaseDateLabel);
 
-        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<>(targetVal, "value"));
+        final Label indicatorTargetValueLabel = new Label("target", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return globalTargetVal.getOriginalValue() != null ? String.valueOf(globalTargetVal.getOriginalValue()) : "N/A";
+            }
+        });
         add(indicatorTargetValueLabel);
 
-        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<>(targetVal, "valueDate"));
+        final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (globalTargetVal.getOriginalValueDate() != null) {
+                    SimpleDateFormat format = new SimpleDateFormat(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
+                    return format.format(globalTargetVal.getOriginalValueDate());
+                } else {
+                    return "N/A";
+                }
+            }
+        });
         add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
@@ -120,6 +157,14 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
         add(addActualValue);
 
+        AmpMEIndicatorBaseFeaturePanel baseValues = null;
+
+        try {
+            baseValues = new AmpMEIndicatorBaseFeaturePanel("addBaseTargetValue", "Add Base Target Values", conn, indicator, values, location);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        add(baseValues);
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
             @Override
             protected void onConfigure() {

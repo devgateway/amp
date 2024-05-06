@@ -1413,7 +1413,8 @@ public class ProgramUtil {
           if (excludeIndirect) {
               queryString += " where ap.name <> :indirectName";
           }
-          Query qry = PersistenceManager.getSession().createQuery(queryString);
+          Session session = PersistenceManager.getRequestDBSession();
+          Query qry = session.createQuery(queryString);
           if (excludeIndirect) {
               qry.setParameter("indirectName", INDIRECT_PRIMARY_PROGRAM, StringType.INSTANCE);
           }
@@ -1501,7 +1502,7 @@ public class ProgramUtil {
         Transaction tx = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             if (settings != null) {
                 for (Object o : settings) {
                     AmpActivityProgramSettings setting = (AmpActivityProgramSettings) o;
@@ -1529,6 +1530,7 @@ public class ProgramUtil {
                         }
 
                         session.update(oldSetting);
+                        session.flush();
                     }
 
                 }

@@ -119,7 +119,24 @@ module.exports = Backbone.View.extend({
 
           self.countryBoundary = L.geoJson(boundary, {
             onEachFeature: updateOuterBounds,
-            style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
+            style: function (feature) {
+              // Check if the "NAME" attribute is "extra"
+              if (feature.properties['BELT'] === true) {
+                return {
+                  color: '#29343F',
+                  fillColor: 'green', // Set green color for the feature with NAME 'extra'
+                  weight: 1.4,
+                  dashArray: '1'
+                };
+              } else {
+                return {
+                  color: '#29343F',
+                  fillColor: 'none',
+                  weight: 1.4,
+                  dashArray: '1'
+                };
+              }
+            }
           }).addTo(self.map);
         }
 

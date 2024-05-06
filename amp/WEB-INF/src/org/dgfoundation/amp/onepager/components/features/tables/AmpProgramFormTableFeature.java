@@ -246,6 +246,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
              */
             private static final long serialVersionUID = 9205254457879832345L;
 
+
             @Override
             protected String getChoiceValue(AmpTheme choice) {
                 //transientBoolean used internally to flag the default theme
@@ -301,6 +302,21 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
                     send(getPage(), Broadcast.BREADTH, new DirectProgramMappingUpdateEvent(target));
                 }
                 send(getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
+            }
+
+            @Override
+            protected Collection<AmpTheme> getChoices(String input) {
+//                return super.getChoices(input);
+                Collection<AmpTheme> choices = super.getChoices(input);
+                Iterator<AmpTheme> iterator = choices.iterator();
+                while (iterator.hasNext()) {
+                    AmpTheme choice = iterator.next();
+                    if (choice.getIndlevel().equals(0)) {  // Replace with your actual criteria check
+                        iterator.remove();  // Remove the choice
+                        // Or, you could set a disabled flag on the choice object
+                    }
+                }
+                return choices;
             }
 
             @Override

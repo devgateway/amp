@@ -13,6 +13,7 @@ public enum TopChartType {
     @JsonProperty("ea") EA,
     @JsonProperty("re") RE,
     @JsonProperty("ps") PS,
+    @JsonProperty("ss") SS,
     @JsonProperty("dg") DG,
     @JsonProperty("ndd") NDD,
     @JsonProperty("pr") PR;

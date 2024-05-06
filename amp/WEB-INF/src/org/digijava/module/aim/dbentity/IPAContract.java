@@ -687,9 +687,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         if (this.disbursements != null) {
             List auxDisbList = new ArrayList(this.disbursements);
             Collections.sort(auxDisbList, disbComparator);
-            Iterator<IPAContractDisbursement> iterDisb = auxDisbList.iterator();
-            while (iterDisb.hasNext()) {
-                IPAContractDisbursement auxDisb = iterDisb.next();
+            for (IPAContractDisbursement auxDisb : (Iterable<IPAContractDisbursement>) auxDisbList) {
                 ret = ret + auxDisb.getAdjustmentType() + "-" + auxDisb.getAmount() + "-" + auxDisb.getCurrency() + "-"
                         + auxDisb.getDate();
             }
@@ -816,10 +814,23 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         // TODO Auto-generated method stub
         return super.clone();
     }
+
     
     @Override
     public String toString() {
         return (contractName == null ? "" : contractName);
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IPAContract)) return false;
+        IPAContract that = (IPAContract) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getContractName(), that.getContractName()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getContractingOrganizationText(), that.getContractingOrganizationText()) && Objects.equals(getActivityCategory(), that.getActivityCategory()) && Objects.equals(getStartOfTendering(), that.getStartOfTendering()) && Objects.equals(getSignatureOfContract(), that.getSignatureOfContract()) && Objects.equals(getContractValidity(), that.getContractValidity()) && Objects.equals(getContractCompletion(), that.getContractCompletion()) && Objects.equals(getTotalPrivateContribAmountDate(), that.getTotalPrivateContribAmountDate()) && Objects.equals(getTotalNationalContribRegionalAmountDate(), that.getTotalNationalContribRegionalAmountDate()) && Objects.equals(getTotalNationalContribIFIAmountDate(), that.getTotalNationalContribIFIAmountDate()) && Objects.equals(getTotalNationalContribCentralAmountDate(), that.getTotalNationalContribCentralAmountDate()) && Objects.equals(getTotalECContribINVAmountDate(), that.getTotalECContribINVAmountDate()) && Objects.equals(getTotalECContribIBAmountDate(), that.getTotalECContribIBAmountDate()) && Objects.equals(getTotalECContribIBAmount(), that.getTotalECContribIBAmount()) && Objects.equals(getTotalAmount(), that.getTotalAmount()) && Objects.equals(getContractTotalValue(), that.getContractTotalValue()) && Objects.equals(getTotalAmountCurrency(), that.getTotalAmountCurrency()) && Objects.equals(getDibusrsementsGlobalCurrency(), that.getDibusrsementsGlobalCurrency()) && Objects.equals(getTotalECContribINVAmount(), that.getTotalECContribINVAmount()) && Objects.equals(getTotalNationalContribCentralAmount(), that.getTotalNationalContribCentralAmount()) && Objects.equals(getTotalNationalContribRegionalAmount(), that.getTotalNationalContribRegionalAmount()) && Objects.equals(getTotalNationalContribIFIAmount(), that.getTotalNationalContribIFIAmount()) && Objects.equals(getTotalPrivateContribAmount(), that.getTotalPrivateContribAmount()) && Objects.equals(getDisbursements(), that.getDisbursements()) && Objects.equals(getActivity(), that.getActivity()) && Objects.equals(getOrganization(), that.getOrganization()) && Objects.equals(getOrganizations(), that.getOrganizations()) && Objects.equals(getStatus(), that.getStatus()) && Objects.equals(getTotalDisbursements(), that.getTotalDisbursements()) && Objects.equals(getExecutionRate(), that.getExecutionRate()) && Objects.equals(getFundingTotalDisbursements(), that.getFundingTotalDisbursements()) && Objects.equals(getFundingExecutionRate(), that.getFundingExecutionRate()) && Objects.equals(getType(), that.getType()) && Objects.equals(getContractType(), that.getContractType()) && Objects.equals(getDonorContractFundinAmount(), that.getDonorContractFundinAmount()) && Objects.equals(getDonorContractFundingCurrency(), that.getDonorContractFundingCurrency()) && Objects.equals(getTotAmountDonorContractFunding(), that.getTotAmountDonorContractFunding()) && Objects.equals(getTotalAmountCurrencyDonor(), that.getTotalAmountCurrencyDonor()) && Objects.equals(getTotAmountCountryContractFunding(), that.getTotAmountCountryContractFunding()) && Objects.equals(getTotalAmountCurrencyCountry(), that.getTotalAmountCurrencyCountry()) && Objects.equals(disbComparator, that.disbComparator) && Objects.equals(amendComparator, that.amendComparator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getContractName(), getDescription(), getContractingOrganizationText(), getActivityCategory(), getStartOfTendering(), getSignatureOfContract(), getContractValidity(), getContractCompletion(), getTotalPrivateContribAmountDate(), getTotalNationalContribRegionalAmountDate(), getTotalNationalContribIFIAmountDate(), getTotalNationalContribCentralAmountDate(), getTotalECContribINVAmountDate(), getTotalECContribIBAmountDate(), getTotalECContribIBAmount(), getTotalAmount(), getContractTotalValue(), getTotalAmountCurrency(), getDibusrsementsGlobalCurrency(), getTotalECContribINVAmount(), getTotalNationalContribCentralAmount(), getTotalNationalContribRegionalAmount(), getTotalNationalContribIFIAmount(), getTotalPrivateContribAmount(), getDisbursements(), getActivity(), getOrganization(), getOrganizations(), getStatus(), getTotalDisbursements(), getExecutionRate(), getFundingTotalDisbursements(), getFundingExecutionRate(), getType(), getContractType(), getDonorContractFundinAmount(), getDonorContractFundingCurrency(), getTotAmountDonorContractFunding(), getTotalAmountCurrencyDonor(), getTotAmountCountryContractFunding(), getTotalAmountCurrencyCountry(), disbComparator, amendComparator);
+    }
 }

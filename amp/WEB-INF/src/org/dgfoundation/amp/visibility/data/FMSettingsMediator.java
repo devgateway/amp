@@ -6,6 +6,8 @@ package org.dgfoundation.amp.visibility.data;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +65,7 @@ public class FMSettingsMediator {
             if (Objects.equals(fmGroupName, FMGROUP_MENU)) {
                 boolean loginRequired = FeaturesUtil.isVisibleFeature(GisConstants.LOGIN_REQUIRED);
 
-                if (!FeaturesUtil.isVisibleModule(MODULE_GIS) || loginRequired) {
+                if (!FeaturesUtil.isVisibleModule(MODULE_GIS) || (loginRequired && TeamUtil.getCurrentAmpTeamMember()==null)) {
                     enabledSettings.remove(MODULE_MAP);
                 }
             }

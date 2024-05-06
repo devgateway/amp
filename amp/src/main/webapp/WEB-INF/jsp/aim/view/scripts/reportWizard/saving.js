@@ -82,7 +82,7 @@ function getReportTitlesInCurrentLang(lang)
 function getReportCategory() {
 	var categoryEl 	= document.getElementById("repCat");
 	if (categoryEl != null ) {
-		var category	= categoryEl.value; 
+		var category	= categoryEl.value;
 		return category;
 	}
 	return 0;
@@ -128,27 +128,27 @@ function getDesktopTab() {
 function getSelectedFields( ulId, name ) {
 	var ret			= "";
 	var ulEl		= document.getElementById( ulId );
-	
+
 	var fields		= ulEl.getElementsByTagName( "input" );
 	for ( var i=0; i<fields.length; i++ ) {
 		ret			+= name+"="+fields[i].value;
 		if ( i < fields.length-1 )
 			ret		+= "&";
 	}
-	if ( fields.length == 0 ) { 
+	if ( fields.length == 0 ) {
 			ret	= name + "=0";
 	}
-	return ret;	
+	return ret;
 }
 function getSelectedFieldsNames( ulId ) {
 	var ret			= new Array();
 	var ulEl		= document.getElementById( ulId );
-	
+
 	var fields		= ulEl.getElementsByTagName( "input" );
 	for ( var i=0; i<fields.length; i++ ) {
 		ret.push(fields[i].parentNode.innerHTML.replace(/<[^>]*>/g, "").replace(/^\s+|\s+$/g, '') );
 	}
-	return ret;	
+	return ret;
 }
 
 function getColInfo (id) {
@@ -245,7 +245,7 @@ SaveReportEngine.prototype.success = function (o) {
 		}
 		return;
 	}
-	
+
 	// got till here -> no error
 	// example response string: {openReportId=1344,saiku=false}
 	var parametersArray = response.split(',');
@@ -266,7 +266,7 @@ SaveReportEngine.prototype.success = function (o) {
 		}
 
 		this.openReport(openReportId, openSaiku); // open report in a new browser tab/window
-	}else{ 
+	}else{
 		//we test if we have to run the report in saiku
 		if(shouldRunReport){
 		    var runSaikuParamArray = parametersArray[0].split("=");
@@ -309,15 +309,15 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 
 	if ( this.titlePanel == null ) {
 		document.getElementById("titlePanel").style.display	= "block";
-		this.titlePanel	= new YAHOO.widget.Panel("titlePanel", 
+		this.titlePanel	= new YAHOO.widget.Panel("titlePanel",
 				{ 	visible:true,
-					width: "400px", 
-					constraintoviewport:true, 
-					fixedcenter: true, 
+					width: "400px",
+					constraintoviewport:true,
+					fixedcenter: true,
 					modal: true,
-					close:true, 
+					close:true,
 					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
-					visible:false, 
+					visible:false,
 					draggable:true } );
 		this.titlePanel.render( document.body );
 	}
@@ -335,18 +335,18 @@ SaveReportEngine.prototype.saveAndOpenReport = function() {
 };
 
 SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
-	
+
 	if (this.titlePanel != null)
 		this.titlePanel.hide();
 	this.divEl.style.visibility		= "";
-	this.divEl.innerHTML			= this.savingMessage + 
+	this.divEl.innerHTML			= this.savingMessage +
 			"... <img src='/static/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
 
 	var reportTitles = getReportTitles();
 	var sendData = true;
 	var noReportNameSupplied = "";
 	if (reportTitles == null ) {
-		reportTitles = ""; 
+		reportTitles = "";
 		noReportNameSupplied = "&noReportNameSupplied=true";
 	} else {
 		var reportTitleInCurrentLang = getReportTitlesInCurrentLang(defaultLanguage);
@@ -356,8 +356,8 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 		}
 	}
 	if (sendData) {
-		var postString		= "reportTitle=dummy&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
-							"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
+		var postString		= "reportTitle=dummy&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() +
+							"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") +
 							"&reportCategory="+ getReportCategory()+
 							"&forceNameOverwrite=" + this.forceOverwrite+
 							"&runReport=" + this.runReport +
@@ -372,17 +372,17 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 							"&useFilters="+getUseFilters()+
 							"&openReport=" + openReport +
 							reportTitles +
-							noReportNameSupplied + 
+							noReportNameSupplied +
 							//"&reportContextId="+getReportContextId()+
 							"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
-							"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");		
-		
+							"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
+
 		//YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
-		//uses synchronous request as a workaround for popup issues - AMP-22717 
+		//uses synchronous request as a workaround for popup issues - AMP-22717
 		var self = this;
 		$.ajax({
-			url:"/aim/reportWizard.do",
-			async:false,		   
+			url:"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T",
+			async:false,
 			data: postString,
 			success:  function(data) {
 				self.success({responseText:data});

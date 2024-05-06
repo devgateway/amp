@@ -53,7 +53,6 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
     final AmpCategorySelectFieldPanel implementationLevel;
     final AmpCategorySelectFieldPanel implementationLocation;
 
-
     public AmpRegionalFundingFormSectionFeature getRegionalFundingFeature() {
         return regionalFundingFeature;
     }

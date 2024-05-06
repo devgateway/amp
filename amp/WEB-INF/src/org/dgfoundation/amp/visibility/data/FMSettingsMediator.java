@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.dgfoundation.amp.visibility.data;
 
@@ -10,12 +10,12 @@ import org.digijava.module.aim.util.TeamUtil;
 import java.util.*;
 
 /**
- * Single point of reference for all FM settings groups 
+ * Single point of reference for all FM settings groups
  * @author Nadejda Mandrescu
  */
 public class FMSettingsMediator {
     protected static final Logger logger = Logger.getLogger(FMSettingsMediator.class);
-    
+
     public static final String FMGROUP_COLUMNS = "COLUMNS";
     public static final String FMGROUP_MEASURES = "MEASURES";
     public static final String FMGROUP_MODULES = "MODULES";
@@ -26,22 +26,22 @@ public class FMSettingsMediator {
 
     /** stores all fm groups classes that are manageable via this proxy */
     private static Map<String, Class<? extends FMSettings>> registeredFMGroups = initFMGroups();
-    
+
     /** stores all instances of fm settings per template */
     private static Map<Long, Map<String, FMSettings>> templateToFMGroupMap =
             Collections.synchronizedMap(new HashMap<Long, Map<String, FMSettings>>());
-            
+
     private static Map<String, Class<? extends FMSettings>> initFMGroups() {
         Map<String, Class<? extends FMSettings>> groups = new HashMap<String, Class<? extends FMSettings>>();
-        
+
         groups.put(FMGROUP_COLUMNS, ColumnsVisibility.class);
         groups.put(FMGROUP_MEASURES, MeasuresVisibility.class);
         groups.put(FMGROUP_MODULES, ModulesVisibility.class);
         groups.put(FMGROUP_MENU, MenuVisibility.class);
-        
+
         return Collections.synchronizedMap(groups);
     }
-    
+
     /**
      * Retrieves a set of enabled settings for the given FM group name
      * @param fmGroupName
@@ -51,9 +51,9 @@ public class FMSettingsMediator {
         if (templateId == null) {
             templateId = FeaturesUtil.getCurrentTemplateId();
         }
-        
+
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
-        
+
         if (fmGroup != null) {
             Set<String> enabledSettings = new LinkedHashSet<>(fmGroup.getEnabledSettings(templateId));
             if (Objects.equals(fmGroupName, FMGROUP_MENU)) {
@@ -70,7 +70,6 @@ public class FMSettingsMediator {
             return enabledSettings;
         }
 
-        
         return Collections.emptySet();
     }
 
@@ -83,12 +82,12 @@ public class FMSettingsMediator {
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
         return fmGroup.getSettings();
     }
-    
+
     public static boolean supportsFMTree(String fmGroupName, Long templateId) {
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
         return fmGroup == null ? false : fmGroup.supportsFMTree();
     }
-    
+
     public static FMTree getEnabledSettingsAsTree(String fmGroupName, Long templateId) {
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
         if (fmGroup != null) {
@@ -96,7 +95,7 @@ public class FMSettingsMediator {
         }
         return new FMTree(null, false);
     }
-    
+
     /**
      * Identify the template group & create it if doesn't exist yet
      * @param id
@@ -111,7 +110,7 @@ public class FMSettingsMediator {
         }
         return templateGroup;
     }
-    
+
     /**
      * Identifies fmGroup settings object for the given group name within a specific template group
      * @param templateGroup
@@ -132,7 +131,7 @@ public class FMSettingsMediator {
                 }
             } else {
                 // fallback to the generic settings
-                ModulesVisibility modulesSettings = (ModulesVisibility) 
+                ModulesVisibility modulesSettings = (ModulesVisibility)
                         getFMSettings(FMSettingsMediator.FMGROUP_MODULES, templateId);
                 String fmModule = modulesSettings.getOrigName(fmGroupName);
                 fmGroup = new GenericVisibility(fmModule, templateId);

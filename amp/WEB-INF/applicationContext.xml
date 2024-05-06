@@ -5,9 +5,9 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
                     http://www.springframework.org/schema/beans/spring-beans.xsd
-                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security
                     http://www.springframework.org/schema/security/spring-security.xsd
 					http://www.springframework.org/schema/context
 					http://www.springframework.org/schema/context/spring-context.xsd">
@@ -16,6 +16,29 @@
 
 	<beans:bean id="customHttpFirewall" class="org.springframework.security.web.firewall.DefaultHttpFirewall"/>
 	<http-firewall ref="customHttpFirewall"/>
+
+	<beans:bean id="gisAuthenticationCheckService" class="org.digijava.kernel.util.GisSecurityUtilService"/>
+
+
+	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
+
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/gis/boundaries/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
 
 
 	<!-- by default allow displaying of the flag -->
@@ -86,7 +109,6 @@
 	<http pattern="/rest/**" security="none" />
     <http pattern="/api-docs/**" security="none" />
 
-	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
@@ -256,7 +278,7 @@
 		<beans:property name="populateGroupAuthorities" value="false"/>
 	</beans:bean>
 
-	<!-- digest filter - this will check the HTTP headers and perform authentication 
+	<!-- digest filter - this will check the HTTP headers and perform authentication
 		if an Authorization section is found -->
 	<beans:bean id="digestFilter"
 		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
@@ -274,4 +296,4 @@
 
 	<context:component-scan base-package="org.digijava.kernel.services"/>
 
-</beans:beans>   
+</beans:beans>

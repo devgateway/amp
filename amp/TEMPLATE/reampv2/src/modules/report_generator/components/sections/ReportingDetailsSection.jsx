@@ -231,7 +231,6 @@ class ReportingDetailSection extends Component {
 
   render() {
     const { visible,options } = this.props;
-    console.log("Options:", options);
     const showGroupingSection = this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS).length !== 1
       || this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS).length !== 0;
     return (

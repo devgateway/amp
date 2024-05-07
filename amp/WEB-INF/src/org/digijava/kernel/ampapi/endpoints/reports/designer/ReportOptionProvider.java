@@ -114,9 +114,7 @@ public class ReportOptionProvider {
         if (!reportType.isPledge()) {
             options.addAll(getManagementOrReportProfileOptions());
         }
-        logger.info("Is manager: "+isCurrentMemberManager());
         if (isCurrentMemberManager()) {
-            logger.info("Management options: "+ getManagementOptions());
             options.addAll(getManagementOptions());
         }
         options.addAll(getAllProfileOptions());

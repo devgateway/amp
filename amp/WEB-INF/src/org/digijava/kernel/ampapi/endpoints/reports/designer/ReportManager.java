@@ -113,6 +113,7 @@ public class ReportManager {
     public ReportManager createOrUpdateReport(ReportRequest reportRequest, final Long reportId,
                                               final Boolean isDynamic) {
         authorize(isDynamic);
+        logger.info("Report Request: " + reportRequest);
 
         this.reportRequest = reportRequest;
         this.report = reportId == null ? new AmpReports() : getReportById(reportId);

@@ -249,9 +249,9 @@ class ReportingDetailSection extends Component {
           {this.getOptions(OPTIONS_CHECKBOX_OPTIONS).length !== 0 ? (
             this.renderOptionsSection()
           ) : null}
-          {( options && options.find(i => i.name === PUBLIC_VIEW).visible) ? (
+          {this.getOptions(PUBLIC_VIEW_OPTIONS).length !== 0 ? (
               this.renderPublicViewOptions()
-          ) : null }
+          ) : null}
 
         </Grid>
       </div>

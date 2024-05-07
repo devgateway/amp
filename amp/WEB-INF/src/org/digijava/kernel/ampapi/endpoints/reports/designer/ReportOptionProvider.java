@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportManager.PUBLIC_REPORT_GENERATOR_MODULE_NAME;
+import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportManager.PUBLIC_VIEW_CHECKBOX;
 
 /**
  *  Enumerate all options of report designer depending on report profile (tab/report), report type
@@ -93,8 +94,12 @@ public class ReportOptionProvider {
         List<ReportOption> reportOptions = reportProfile.isReport() ? getReportOptions(reportType) : getTabOptions();
 
         Boolean publicReportEnabled = FeaturesUtil.isVisibleModule(PUBLIC_REPORT_GENERATOR_MODULE_NAME);
+        Boolean publicViewReportEnabled = FeaturesUtil.isVisibleFeature(PUBLIC_VIEW_CHECKBOX);
         ReportOption option = new ReportOption("fm-is-public-report-enabled", "", null);
-        option.setVisible(publicReportEnabled);
+        option.setVisible(false);
+//        if (publicReportEnabled || publicViewReportEnabled) {
+            option.setVisible(publicReportEnabled);
+//        }
         reportOptions.add(option);
         return reportOptions;
     }
@@ -104,7 +109,7 @@ public class ReportOptionProvider {
 
         options.addAll(REPORT_PROFILE_OPTIONS.stream()
                 .filter(r -> isOptionVisibleForReportType(r, reportType))
-                .map(r -> getOptionFromConfiguration(r))
+                .map(this::getOptionFromConfiguration)
                 .collect(Collectors.toList()));
 
         options.addAll(getPledgesProfileOptions());
@@ -151,7 +156,7 @@ public class ReportOptionProvider {
 
     private List<ReportOption> getManagementOptions() {
         return MANAGEMENT_OPTIONS.stream()
-                .map(r -> getOptionFromConfiguration(r))
+                .map(this::getOptionFromConfiguration)
                 .collect(Collectors.toList());
     }
 

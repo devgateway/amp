@@ -260,7 +260,7 @@ public final class ContentRepositoryManager {
                 uuids.add(nodes.nextNode().getIdentifier());
             }
         } catch (RepositoryException e) {
-            throw new RuntimeException(e);
+            logger.info("Error during query: ",e);
         }
 
         return uuids;

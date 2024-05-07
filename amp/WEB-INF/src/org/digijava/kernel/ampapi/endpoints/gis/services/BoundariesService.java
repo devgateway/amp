@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -40,7 +41,7 @@ public class BoundariesService {
     public static List<Boundary> getBoundaries() {
         String path = CONTEXT_PATH + BOUNDARY_PATH + "regional-list.json";
         logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
-        if (!FeaturesUtil.isVisibleFeature(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
+        if (!FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
         {
                 String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
                 if (countryIso != null) {

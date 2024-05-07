@@ -7,18 +7,30 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.*;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardCoreIndicatorValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardIndicatorCoreData;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
@@ -36,10 +48,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
 import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
+import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 
 /**
  * @author Diego Dimunzio
@@ -455,9 +471,80 @@ public class EndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getCoreIndicatorData")
     @ApiOperation(value = "Returns indicator report values for all indicators.")
-    public Response getCoreIndicatorData(SettingsAndFiltersParameters params) {
-        List<DashboardIndicatorCoreData> resp = new MeService().getIndicatorCoreData();
-        return PublicServices.buildOkResponseWithOriginHeaders(resp);
+    public Response getCoreIndicatorData(ReportFormParameters formParams) {
+        ReportSpecificationImpl
+                spec = new ReportSpecificationImpl("indicator-data", ArConstants.INDICATOR_TYPE);
+        spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
+        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
+        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        spec.addColumn(new ReportColumn(ColumnConstants.INDICATOR_NAME));
+
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_NAME));
+
+        spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE));
+        spec.setSummaryReport(true);
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+
+        new MeService().applySettingsAndFilters(new SettingsAndFiltersParameters(), spec);
+        GeneratedReport report = EndpointUtils.runReport(spec);
+        List<DashboardIndicatorCoreData> resp = processReportData(report);
+        SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
+        return PublicServices.buildOkResponseWithOriginHeaders(htmlRenderer.renderTable().toString());
+    }
+
+    private List<DashboardIndicatorCoreData> processReportData(GeneratedReport report) {
+
+        ReportOutputColumn countryData = report.leafHeaders.get(0);
+        ReportOutputColumn pilar = report.leafHeaders.get(1);
+        ReportOutputColumn donorData = report.leafHeaders.get(2);
+        ReportOutputColumn indicatorsData = report.leafHeaders.get(3);
+
+        List<DashboardIndicatorCoreData> ampDashboardCoreIndicator = new ArrayList<>();
+        for (ReportArea child : report.reportContents.getChildren()) {
+            TextCell countryDataCell = (TextCell) child.getContents().get(countryData);
+            if (child.getChildren() != null) {
+                for (ReportArea pilarData : child.getChildren()) {
+                    TextCell pilarCell = (TextCell) pilarData.getContents().get(pilar);
+                        for (ReportArea donor : pilarData.getChildren()) {
+                            TextCell donorCell = (TextCell) donor.getContents().get(donorData);
+                            DashboardIndicatorCoreData fundingReport = new DashboardIndicatorCoreData();
+                            fundingReport.setDonor(donorCell.value.toString());
+                            fundingReport.setPillar(pilarCell.value.toString());
+                            fundingReport.setCountry(countryDataCell.value.toString());
+                            List<DashboardCoreIndicatorValue> valuesList = new ArrayList<DashboardCoreIndicatorValue>();
+                            for(ReportArea indicator : donor.getChildren()){
+                                DashboardCoreIndicatorValue value = new DashboardCoreIndicatorValue();
+                                TextCell indicatorCell = (TextCell) indicator.getContents().get(indicatorsData);
+                                value.setIndicator(indicatorCell.value.toString());
+                                value.setIndicator_id(indicatorCell.entityId);
+
+//                                for (Map.Entry<ReportOutputColumn, ReportCell> entry : indicator.getContents().entrySet()) {
+//                                    ReportOutputColumn col = entry.getKey();
+//
+//                                    if (col.parentColumn != null
+//                                            && col.originalColumnName.equals(MeasureConstants.INDICATOR_ACTUAL_VALUE)
+//                                            && col.parentColumn.parentColumn != null
+//                                            && col.parentColumn.parentColumn.originalColumnName.equals(
+//                                            NiReportsEngine.FUNDING_COLUMN_NAME)
+//                                            && col.parentColumn.parentColumn.parentColumn == null) {
+//                                        AmountCell cell = (AmountCell) entry.getValue();
+//                                        BigDecimal actualValue = cell.extractValue();
+//                                        value.setActualValue(actualValue);
+//                                    }
+//                                }
+                                valuesList.add(value);
+                            }
+                            fundingReport.setValues(valuesList);
+                            ampDashboardCoreIndicator.add(fundingReport);
+                        }
+                }
+            }
+        }
+
+        return ampDashboardCoreIndicator;
     }
 }
 

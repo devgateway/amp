@@ -1,8 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard;
 
+import java.math.BigDecimal;
+
 public class DashboardCoreIndicatorValue {
+    private String indicator;
+    private Long indicator_id;
     private Double targetValue;
-    private Double actualValue;
+    private BigDecimal actualValue;
     private DashboardCoreIndicatorType coreIndicatorType;
 
     public Double getTargetValue() {
@@ -13,11 +17,11 @@ public class DashboardCoreIndicatorValue {
         this.targetValue = targetValue;
     }
 
-    public Double getActualValue() {
+    public BigDecimal getActualValue() {
         return actualValue;
     }
 
-    public void setActualValue(Double actualValue) {
+    public void setActualValue(BigDecimal actualValue) {
         this.actualValue = actualValue;
     }
 
@@ -29,4 +33,19 @@ public class DashboardCoreIndicatorValue {
         this.coreIndicatorType = coreIndicatorType;
     }
 
+    public String getIndicator() {
+        return indicator;
+    }
+
+    public void setIndicator(String indicator) {
+        this.indicator = indicator;
+    }
+
+    public Long getIndicator_id() {
+        return indicator_id;
+    }
+
+    public void setIndicator_id(Long indicator_id) {
+        this.indicator_id = indicator_id;
+    }
 }

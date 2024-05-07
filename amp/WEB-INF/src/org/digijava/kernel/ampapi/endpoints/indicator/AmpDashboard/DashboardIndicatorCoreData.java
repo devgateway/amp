@@ -4,8 +4,8 @@ import java.util.List;
 
 public class DashboardIndicatorCoreData {
     private String country;
-    private String donor;
     private String pillar;
+    private String donor;
     private List<DashboardCoreIndicatorValue> values;
 
     public String getCountry() {

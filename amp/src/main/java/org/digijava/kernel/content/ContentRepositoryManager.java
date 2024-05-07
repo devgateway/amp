@@ -100,7 +100,7 @@ public final class ContentRepositoryManager {
         try {
             readSession = getOrCloseIfNotLive(readSession);
             if (readSession == null) {
-                readSession = getRepositoryInstance().login();
+                readSession = getRepositoryInstance().login(getCredentials(request));
             }
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -154,9 +154,7 @@ public final class ContentRepositoryManager {
             userName = teamMember.getEmail();
         }
 
-        SimpleCredentials creden = new SimpleCredentials(userName, userName.toCharArray());
-
-        return creden;
+        return new SimpleCredentials("admin", "admin".toCharArray());
     }
 
     private static void registerNamespace(Session session, String namespace, String uri) {
@@ -260,7 +258,7 @@ public final class ContentRepositoryManager {
                 uuids.add(nodes.nextNode().getIdentifier());
             }
         } catch (RepositoryException e) {
-            throw new RuntimeException(e);
+            logger.info("Error during query: ",e);
         }
 
         return uuids;

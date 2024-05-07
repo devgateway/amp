@@ -8,6 +8,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,15 +17,15 @@ import java.util.Set;
  */
 @TranslatableClass (displayName = "Activity Version")
 public class AmpActivityVersion extends AmpActivityFields implements Versionable{
-    
+
     /**
-     * 
+     *
      * NOTE:
      *    All new fields should be added in {@link AmpActivityFields}
-     *    
+     *
      */
     protected String rejectMessage;
-    private Set<AmpActivityGroup> groups;
+    private Set<AmpActivityGroup> groups=new HashSet<>();
 
     public Set<AmpActivityGroup> getGroups() {
         return groups;
@@ -80,7 +81,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     public Object prepareMerge(AmpActivityVersion newActivity) throws Exception {
         throw new AssertionError("Not implemented");
     }
-    
+
     public static String sqlStringForName(String idSource)
     {
         return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource);

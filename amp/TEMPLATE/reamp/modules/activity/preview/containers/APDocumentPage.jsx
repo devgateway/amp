@@ -2,7 +2,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { APDocument } from 'amp-ui';
 import * as ResourceAction from '../actions/ResourceAction';
-import RepositoryManager from '../utils/jspManager';
+import RepositoryManager from "amp/modules/activity/preview/utils/RepositoryManager";
+// import RepositoryManager from '../utils/jspManager';
 
 const mapStateToProps = (state) => {
     return {

@@ -12,6 +12,6 @@
 	<many-to-one column="AMP_SCORECARD_SETTINGS_ID" name="ampScorecardSettings"
 		class="org.digijava.module.aim.dbentity.AmpScorecardSettings" />
 	<many-to-one column="AMP_CATEGORY_VALUE_ID" name="ampCategoryValueStatus"
-		class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+		class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 	</class>
 </hibernate-mapping>

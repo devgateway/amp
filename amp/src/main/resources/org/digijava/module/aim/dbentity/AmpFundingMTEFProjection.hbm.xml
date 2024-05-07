@@ -22,12 +22,12 @@
 		<many-to-one name="ampFunding" column="amp_funding_id"
 			class="org.digijava.module.aim.dbentity.AmpFunding" />
 		<many-to-one name="projection" column="amp_projected_categoryvalue_id"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="recipientOrg" column="recipient_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
-			
+
 		<many-to-one name="recipientRole" column="recipient_role_id"
-			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />				
+			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />
 	</class>
 </hibernate-mapping>

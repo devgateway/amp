@@ -11,8 +11,9 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -27,7 +28,7 @@ public class ActivityExporterTest {
 
     private List<APIField> fields;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         TestTranslatorService translatorService = new TestTranslatorService();
 
@@ -51,7 +52,7 @@ public class ActivityExporterTest {
 
         Map<String, Object> jsonActivity = createExporter().export(activity);
 
-        assertThat(jsonActivity, hasEntry("project_title", "test"));// fixme there are 100+ fields with null values!
+        MatcherAssert.assertThat(jsonActivity, hasEntry("project_title", "test"));// fixme there are 100+ fields with null values!
     }
 
     @Test
@@ -87,14 +88,13 @@ public class ActivityExporterTest {
 
         Map<String, Object> jsonActivity = createExporter().export(activity);
 
-        assertThat(jsonActivity,
-                (Matcher) allOf(
-                        hasEntry(equalTo("primary_programs"),
-                                contains(actProgram(axe1.getAmpThemeId(), 100F))),
-                        hasEntry(equalTo("secondary_programs"),
-                                containsInAnyOrder(
-                                        actProgram(instReform.getAmpThemeId(), 78F),
-                                        actProgram(edReform.getAmpThemeId(), 22F)))));
+        MatcherAssert.assertThat(jsonActivity, (Matcher) allOf(
+                hasEntry(equalTo("primary_programs"),
+                        contains(actProgram(axe1.getAmpThemeId(), 100F))),
+                hasEntry(equalTo("secondary_programs"),
+                        containsInAnyOrder(
+                                actProgram(instReform.getAmpThemeId(), 78F),
+                                actProgram(edReform.getAmpThemeId(), 22F)))));
     }
 
     /**
@@ -116,10 +116,9 @@ public class ActivityExporterTest {
 
         Map<String, Object> jsonActivity = exporter.export(activity);
 
-        assertThat(jsonActivity,
-                allOf(
-                        hasEntry("description", "desc"),
-                        not(hasEntry("project_title", "test"))));
+        MatcherAssert.assertThat(jsonActivity, allOf(
+                hasEntry("description", "desc"),
+                not(hasEntry("project_title", "test"))));
     }
 
     private ActivityExporter createExporter() {

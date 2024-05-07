@@ -46,7 +46,7 @@
 
 		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" lazy="proxy" cascade="none" />
 		<property name="permissionStrategy" column="permission_strategy" type="java.lang.String" />
-		
+
 		<set name="filterDataSet" lazy="false" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_team_id" />

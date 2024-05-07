@@ -33,7 +33,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     @TranslatableField
     @PossibleValueValue
     private String name;
-    
+
     private Boolean addActivity;
     private Boolean isolated;//called thus because 'private' is a reserved keyword in Java
     private Boolean computation;
@@ -45,20 +45,20 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     private AmpTeamMember teamLead; // Denotes the Team Leader
 
     private AmpTeam parentTeamId;
-    
+
     private Collection childrenWorkspaces;
-    
+
     private String accessType;      // Management or Team
 
     private AmpTeam relatedTeamId;  // a donor team referring a mofed team
     private Set<AmpActivityVersion> activityList;       // activities assigned to donor team
-    
+
     private Set organizations;      // activities assigned to donor team
-    
+
     private AmpCategoryValue workspaceGroup;
-    
+
     private String permissionStrategy;
-    
+
     private Set<AmpTeamFilterData> filterDataSet;
 
     private AmpTemplatesVisibility fmTemplate;
@@ -71,12 +71,12 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
             String elementClassName, String value) {
         return new AmpTeamFilterData(filterRelObj, propertyName, propertyClassName, elementClassName, value);
     }
-    
+
     @Override
     public Set<AmpTeamFilterData> getFilterDataSet() {
         return filterDataSet;
     }
-    
+
     @Override
     public void setFilterDataSet(Set<AmpTeamFilterData> filterDataSet) {
         this.filterDataSet = filterDataSet;
@@ -176,7 +176,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     public void setAccessType(String accessType) {
         this.accessType = accessType;
     }
-    
+
     /**
      * @return Returns the activityList.
      */
@@ -209,7 +209,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     public int compareTo(Object o) {
         return ampTeamId.compareTo(((AmpTeam)o).getAmpTeamId());
     }
-    
+
 //    public String toString() {
 //        return name;
 //    }
@@ -301,7 +301,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     {
         return InternationalizedModelDescription.getForProperty(AmpTeam.class, "name").getSQLFunctionCall(idSource + ".ampTeamId");
     }
-    
+
     public boolean isSSCWorkspace () {
         return this.getWorkspacePrefix() != null && "SSC_".equals(this.getWorkspacePrefix().getValue());
     }

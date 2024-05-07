@@ -96,12 +96,8 @@ public class ReportOptionProvider {
         List<ReportOption> reportOptions = reportProfile.isReport() ? getReportOptions(reportType) : getTabOptions();
 
         Boolean publicReportEnabled = FeaturesUtil.isVisibleModule(PUBLIC_REPORT_GENERATOR_MODULE_NAME);
-        Boolean publicViewReportEnabled = FeaturesUtil.isVisibleFeature(PUBLIC_VIEW_CHECKBOX);
         ReportOption option = new ReportOption("fm-is-public-report-enabled", "", null);
-        option.setVisible(false);
-//        if (publicReportEnabled || publicViewReportEnabled) {
-            option.setVisible(publicReportEnabled);
-//        }
+        option.setVisible(publicReportEnabled);
         reportOptions.add(option);
         return reportOptions;
     }

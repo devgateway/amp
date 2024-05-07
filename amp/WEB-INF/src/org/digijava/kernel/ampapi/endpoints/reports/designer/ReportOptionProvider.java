@@ -5,6 +5,8 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportManage
  * @author Viorel Chihai
  */
 public class ReportOptionProvider {
-
+    private static final Logger logger = LoggerFactory.getLogger(ReportOptionProvider.class);
     public static final List<ReportOptionConfiguration> REPORT_PROFILE_OPTIONS = ImmutableList.of(
         new ReportOptionConfiguration("funding-donor", "Donor Report (Donor Funding)", null,
                 "Donor Report", "Report Types"),
@@ -116,8 +118,9 @@ public class ReportOptionProvider {
         if (!reportType.isPledge()) {
             options.addAll(getManagementOrReportProfileOptions());
         }
-
+        logger.info("Is manager: "+isCurrentMemberManager());
         if (isCurrentMemberManager()) {
+            logger.info("Management options: "+ getManagementOptions());
             options.addAll(getManagementOptions());
         }
         options.addAll(getAllProfileOptions());

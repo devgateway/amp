@@ -154,7 +154,7 @@ public final class ContentRepositoryManager {
             userName = teamMember.getEmail();
         }
 
-        return new SimpleCredentials(userName, userName.toCharArray());
+        return new SimpleCredentials("admin", "admin".toCharArray());
     }
 
     private static void registerNamespace(Session session, String namespace, String uri) {

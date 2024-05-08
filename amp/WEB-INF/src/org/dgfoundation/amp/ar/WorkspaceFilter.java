@@ -88,7 +88,7 @@ public final class WorkspaceFilter {
             });
         }
         String approvalStatus = Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS);
-        String activityTable = inPublicView() ? "cached_amp_activity" : "amp_activity_version";
+        String activityTable = inPublicView() ? "cached_amp_activity" : "amp_activity";
         String teamIds = Util.toCSStringForIN(relatedTeams);
         String managementWsQuery = String.format("SELECT amp_activity_id "
                         + "FROM %s "
@@ -117,7 +117,7 @@ public final class WorkspaceFilter {
 
         // remove draft activities at end since filters don't not know of this condition
         if (team.getHideDraftActivities() != null && team.getHideDraftActivities()) {
-            String draftActsSql = "SELECT amp_activity_id FROM amp_activity_version WHERE draft = TRUE";
+            String draftActsSql = "SELECT amp_activity_id FROM amp_activity WHERE draft = TRUE";
             Set<Long> draftActivities = ActivityUtil.fetchLongs(draftActsSql);
             ids.removeAll(draftActivities);
         }
@@ -125,7 +125,7 @@ public final class WorkspaceFilter {
         // remove activities from isolated workspaces
         if (!team.getIsolated()) {
             String privateActsQuery = "SELECT a.amp_activity_id "
-                    + "FROM amp_activity_version a, amp_team t "
+                    + "FROM amp_activity a, amp_team t "
                     + "WHERE a.amp_team_id = t.amp_team_id "
                     + "AND t.isolated = TRUE";
             Set<Long> privateActs = ActivityUtil.fetchLongs(privateActsQuery);
@@ -149,7 +149,7 @@ public final class WorkspaceFilter {
      * Note: This does not account filters of computed workspaces.
      */
     private String getNormalWorkspaceQuery(Long ampTeamId) {
-        return "SELECT amp_activity_id FROM amp_activity_version WHERE amp_team_id = " + ampTeamId;
+        return "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id = " + ampTeamId;
     }
 
     /**
@@ -164,7 +164,7 @@ public final class WorkspaceFilter {
         String orgsClause = Util.toCSStringForIN(orgs);
 
         String query = " SELECT DISTINCT(aor.activity) "
-                + "FROM amp_org_role aor, amp_activity_version a "
+                + "FROM amp_org_role aor, amp_activity a "
                 + "WHERE aor.organisation IN (" + orgsClause + ") "
                 + "AND aor.activity = a.amp_activity_id "
                 + "AND a.amp_team_id IS NOT NULL "
@@ -250,7 +250,7 @@ public final class WorkspaceFilter {
         String wsQuery = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
         List res = PersistenceManager.getSession().createSQLQuery(wsQuery).list();
         if (res != null && !res.isEmpty()) {
-            String activitiesQuery = "select amp_team_id from amp_activity_version where amp_activity_id IN (" +
+            String activitiesQuery = "select amp_team_id from amp_activity_Version where amp_activity_id IN (" +
                     Joiner.on(',').join(res) + ")";
             List<Number> teamIds = PersistenceManager.getSession().createSQLQuery(activitiesQuery).list();
             return TeamUtil.getRelatedTeamsForTeamsById(teamIds);

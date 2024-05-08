@@ -128,11 +128,17 @@
     function uploadDataFile() {
       var formData = new FormData();
       var fileInput = document.getElementById('dataFile');
+      // Check if a file is selected
+      if (!fileInput.files.length) {
+        alert("Please select a file to upload.");
+        return;
+      }
       formData.append('dataFile', fileInput.files[0]);
       formData.append('uploadDataFile',"uploadDataFile");
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
+      alert("File is uploading and will be parsed shortly.");
       xhr.onload = function () {
         if (xhr.status === 200) {
           console.log("File Parsed successfully")
@@ -141,6 +147,7 @@
         }
       };
       xhr.send(formData);
+      window.location.href = "/";
     }
   </script>
   <style>

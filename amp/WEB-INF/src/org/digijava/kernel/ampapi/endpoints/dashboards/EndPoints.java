@@ -492,7 +492,7 @@ public class EndPoints {
         GeneratedReport report = EndpointUtils.runReport(spec);
         List<DashboardIndicatorCoreData> resp = processReportData(report);
         SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
-        return PublicServices.buildOkResponseWithOriginHeaders(htmlRenderer.renderTable().toString());
+        return PublicServices.buildOkResponseWithOriginHeaders(resp);
     }
 
     private List<DashboardIndicatorCoreData> processReportData(GeneratedReport report) {
@@ -521,20 +521,20 @@ public class EndPoints {
                                 value.setIndicator(indicatorCell.value.toString());
                                 value.setIndicator_id(indicatorCell.entityId);
 
-//                                for (Map.Entry<ReportOutputColumn, ReportCell> entry : indicator.getContents().entrySet()) {
-//                                    ReportOutputColumn col = entry.getKey();
-//
-//                                    if (col.parentColumn != null
-//                                            && col.originalColumnName.equals(MeasureConstants.INDICATOR_ACTUAL_VALUE)
-//                                            && col.parentColumn.parentColumn != null
-//                                            && col.parentColumn.parentColumn.originalColumnName.equals(
-//                                            NiReportsEngine.FUNDING_COLUMN_NAME)
-//                                            && col.parentColumn.parentColumn.parentColumn == null) {
-//                                        AmountCell cell = (AmountCell) entry.getValue();
-//                                        BigDecimal actualValue = cell.extractValue();
-//                                        value.setActualValue(actualValue);
-//                                    }
-//                                }
+                                for (Map.Entry<ReportOutputColumn, ReportCell> entry : indicator.getContents().entrySet()) {
+                                    ReportOutputColumn col = entry.getKey();
+
+                                    if (col.parentColumn != null
+                                            && col.originalColumnName.equals(MeasureConstants.INDICATOR_ACTUAL_VALUE)
+                                            && col.parentColumn.parentColumn != null
+                                            && col.parentColumn.parentColumn.originalColumnName.equals(
+                                            NiReportsEngine.FUNDING_COLUMN_NAME)
+                                            && col.parentColumn.parentColumn.parentColumn == null) {
+                                        AmountCell cell = (AmountCell) entry.getValue();
+                                        BigDecimal actualValue = cell.extractValue();
+                                        value.setActualValue(actualValue);
+                                    }
+                                }
                                 valuesList.add(value);
                             }
                             fundingReport.setValues(valuesList);

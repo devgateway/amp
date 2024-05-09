@@ -91,6 +91,8 @@ public class DataImporter extends Action {
             response.setHeader("selectTag",headers.toString());
 
             response.setHeader("updatedMap","");
+            dataImporterForm.getColumnPairs().clear();
+
             workbook.close();
             }
 
@@ -173,6 +175,7 @@ public class DataImporter extends Action {
             logger.info("Time Elapsed: "+timeElapsed);
 
             response.setHeader("updatedMap","");
+            dataImporterForm.getColumnPairs().clear();
 
         }
         return mapping.findForward("importData");

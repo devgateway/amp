@@ -368,7 +368,8 @@ public class DataImporter extends Action {
 
                                 break;
                             default:
-                                throw new IllegalStateException("Unexpected value: " + entry.getValue());
+                                logger.error("Unexpected value: " + entry.getValue());
+                                break;
                         }
 
 

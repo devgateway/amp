@@ -16,6 +16,7 @@ import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.*;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardCoreIndicatorType;
 import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardCoreIndicatorValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardIndicatorCoreData;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
@@ -32,7 +33,9 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 
@@ -546,6 +549,14 @@ public class EndPoints {
                                         value.setTargetValue(targetValue);
                                     }
                                 }
+
+                                // Add category value type for the indicator
+                                DashboardCoreIndicatorType indicatorType = new DashboardCoreIndicatorType();
+                                AmpIndicator existingInd = getIndicatorById(indicatorCell.entityId);
+                                if (existingInd != null){
+                                    indicatorType.setName(existingInd.getIndicatorsCategory().getValue());
+                                }
+                                value.setCoreIndicatorType(indicatorType);
                                 valuesList.add(value);
                             }
                             fundingReport.setValues(valuesList);
@@ -556,6 +567,14 @@ public class EndPoints {
         }
 
         return ampDashboardCoreIndicator;
+    }
+
+    private AmpIndicator getIndicatorById(Long indicatorId){
+        try {
+            return IndicatorUtil.getIndicator(indicatorId);
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicator");
+        }
     }
 }
 

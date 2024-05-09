@@ -530,6 +530,7 @@ public class DataImporter extends Action {
 
             }
         }
+        logger.info("Found category: "+categoryId +" for "+constantKey+"_"+possibleValue);
         constantsMap.put(constantKey+"_"+possibleValue, categoryId);
         return categoryId;
     }

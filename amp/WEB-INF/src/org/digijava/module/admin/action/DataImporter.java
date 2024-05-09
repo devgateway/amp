@@ -170,7 +170,14 @@ public class DataImporter extends Action {
                 // Proceed with processing the file
                 ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
                 // Process the file in batches
-                processFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                int res = processFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                if (res != 0) {
+                    // Handle error
+                    logger.info("Error processing file  " + tempFile);
+                    response.setHeader("errorMessage","Unable to parse the file. Please check the file format/content and try again.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
 
                 // Clean up
                 Files.delete(tempFile.toPath());
@@ -220,7 +227,7 @@ public class DataImporter extends Action {
         }
     }
 
-    public void processFileInBatches(ImportedFilesRecord importedFilesRecord,File file, HttpServletRequest request,Map<String, String> config) {
+    public int processFileInBatches(ImportedFilesRecord importedFilesRecord,File file, HttpServletRequest request,Map<String, String> config) {
         // Open the workbook
         ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(file)) {
@@ -236,13 +243,14 @@ public class DataImporter extends Action {
 
             logger.info("Closing the workbook...");
             ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.SUCCESS);
-
+            return 1;
         } catch (IOException e) {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.FAILED);
-
             logger.error("Error processing Excel file: " + e.getMessage(), e);
+            return 0;
         } catch (InvalidFormatException e) {
-            throw new RuntimeException(e);
+            logger.error("Error processing Excel file: " + e.getMessage(),e);
+            return 0;
         }
     }
 

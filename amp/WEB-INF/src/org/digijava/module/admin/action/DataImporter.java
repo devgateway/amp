@@ -90,7 +90,7 @@ public class DataImporter extends Action {
             headers.append("</select>");
             response.setHeader("selectTag",headers.toString());
 
-
+            response.setHeader("updatedMap","");
             workbook.close();
             }
 
@@ -172,6 +172,7 @@ public class DataImporter extends Action {
             long timeElapsed = Duration.between(start, finish).toMillis();
             logger.info("Time Elapsed: "+timeElapsed);
 
+            response.setHeader("updatedMap","");
 
         }
         return mapping.findForward("importData");

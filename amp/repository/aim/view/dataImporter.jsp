@@ -154,7 +154,7 @@
         }
       };
       xhr.send(formData);
-      window.location.href = "/aim/showDesktop.do";
+      // window.location.href = "/aim/showDesktop.do";
     }
   </script>
   <style>

@@ -357,8 +357,9 @@ public class DataImporter extends Action {
                                     }
                                     else {
                                         int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
-                                        Cell cell1 = row.getCell(columnIndex1);
-                                        updateOrgs(importDataModel, cell1.getStringCellValue().trim(), session, "donor");
+
+//                                        Cell cell1 = row.getCell(columnIndex1);
+                                        updateOrgs(importDataModel, columnIndex1>=0?row.getCell(columnIndex1).getStringCellValue().trim():"no org", session, "donor");
                                         updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument);
                                     }
 

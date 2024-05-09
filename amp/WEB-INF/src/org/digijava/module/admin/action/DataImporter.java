@@ -402,7 +402,6 @@ public class DataImporter extends Action {
         return null;
     }
 
-
     public static String findYearSubstring(String text) {
         Pattern pattern = Pattern.compile("(?:19|20)\\d{2}");
         Matcher matcher = pattern.matcher(text);

@@ -696,6 +696,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("{fundingItem}");
         fieldsInfos.add("{financingInstrument}");
         fieldsInfos.add("{typeOfAssistance}");
+        fieldsInfos.add("{secondarySubSector}");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

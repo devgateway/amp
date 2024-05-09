@@ -504,8 +504,8 @@ public class DataImporter extends Action {
 
     private Long getCategoryValue(Session session, String constantKey, String categoryKey, String hql, String possibleValue) {
         if (constantsMap.containsKey(constantKey)) {
-            Long val = constantsMap.get(constantKey);
-            logger.info("In cache... "+constantKey+":"+val);
+            Long val = constantsMap.get(constantKey+"_"+possibleValue);
+            logger.info("In cache... "+constantKey+"_"+possibleValue+":"+val);
             return val;
 
         }
@@ -530,7 +530,7 @@ public class DataImporter extends Action {
 
             }
         }
-        constantsMap.put(constantKey, categoryId);
+        constantsMap.put(constantKey+"_"+possibleValue, categoryId);
         return categoryId;
     }
 

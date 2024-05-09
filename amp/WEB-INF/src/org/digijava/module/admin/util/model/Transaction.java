@@ -74,5 +74,19 @@ public class Transaction {
         this.fixed_exchange_rate = fixed_exchange_rate;
     }
 
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transaction_id=" + transaction_id +
+                ", adjustment_type=" + adjustment_type +
+                ", transaction_date='" + transaction_date + '\'' +
+                ", reporting_date='" + reporting_date + '\'' +
+                ", updated_date='" + updated_date + '\'' +
+                ", transaction_amount=" + transaction_amount +
+                ", currency=" + currency +
+                ", fixed_exchange_rate=" + fixed_exchange_rate +
+                '}';
+    }
+
     // Getters and setters
 }

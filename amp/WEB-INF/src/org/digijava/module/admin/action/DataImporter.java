@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -158,6 +159,12 @@ public class DataImporter extends Action {
 
             // Check if the file is readable and has correct content
             File tempFile = new File(tempFilePath);
+            if (dataImporterForm.getColumnPairs().isEmpty() || !dataImporterForm.getColumnPairs().containsValue("{projectTitle}"))
+            {
+                response.setHeader("errorMessage","You must have atleast the {projectTitle} key in your config.");
+                response.setStatus(400);
+                return mapping.findForward("importData");
+            }
             if (!isFileReadable(tempFile) || !isFileContentValid(tempFile)) {
                 // Handle invalid file
                 logger.error("Invalid file or content.");
@@ -248,7 +255,7 @@ public class DataImporter extends Action {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.FAILED);
             logger.error("Error processing Excel file: " + e.getMessage(), e);
             return 0;
-        } catch (InvalidFormatException e) {
+        } catch (InvalidFormatException | InvalidOperationException e) {
             logger.error("Error processing Excel file: " + e.getMessage(),e);
             return 0;
         }

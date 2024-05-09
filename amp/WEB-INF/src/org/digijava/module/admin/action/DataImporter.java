@@ -309,7 +309,7 @@ public class DataImporter extends Action {
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
-                            case "{projectName}":
+                            case "{projectTitle}":
                                 importDataModel.setProject_title(cell.getStringCellValue().trim());
                                 break;
                             case "{projectDescription}":
@@ -668,7 +668,7 @@ public class DataImporter extends Action {
     }
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
-        fieldsInfos.add("{projectName}");
+        fieldsInfos.add("{projectTitle}");
         fieldsInfos.add("{projectDescription}");
         fieldsInfos.add("{primarySector}");
         fieldsInfos.add("{secondarySector}");

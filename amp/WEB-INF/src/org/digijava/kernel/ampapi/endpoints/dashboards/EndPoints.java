@@ -485,6 +485,7 @@ public class EndPoints {
         spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_NAME));
 
         spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE));
+        spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_TARGET_VALUE));
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 
@@ -533,6 +534,16 @@ public class EndPoints {
                                         AmountCell cell = (AmountCell) entry.getValue();
                                         BigDecimal actualValue = cell.extractValue();
                                         value.setActualValue(actualValue);
+                                    }
+                                    if (col.parentColumn != null
+                                            && col.originalColumnName.equals(MeasureConstants.INDICATOR_TARGET_VALUE)
+                                            && col.parentColumn.parentColumn != null
+                                            && col.parentColumn.parentColumn.originalColumnName.equals(
+                                            NiReportsEngine.FUNDING_COLUMN_NAME)
+                                            && col.parentColumn.parentColumn.parentColumn == null) {
+                                        AmountCell cell = (AmountCell) entry.getValue();
+                                        BigDecimal targetValue = cell.extractValue();
+                                        value.setTargetValue(targetValue);
                                     }
                                 }
                                 valuesList.add(value);

@@ -1244,6 +1244,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
 
         return this;
     }

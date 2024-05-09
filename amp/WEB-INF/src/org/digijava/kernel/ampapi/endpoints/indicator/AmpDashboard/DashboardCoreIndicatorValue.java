@@ -5,15 +5,15 @@ import java.math.BigDecimal;
 public class DashboardCoreIndicatorValue {
     private String indicator;
     private Long indicator_id;
-    private Double targetValue;
+    private BigDecimal targetValue;
     private BigDecimal actualValue;
     private DashboardCoreIndicatorType coreIndicatorType;
 
-    public Double getTargetValue() {
+    public BigDecimal getTargetValue() {
         return targetValue;
     }
 
-    public void setTargetValue(Double targetValue) {
+    public void setTargetValue(BigDecimal targetValue) {
         this.targetValue = targetValue;
     }
 

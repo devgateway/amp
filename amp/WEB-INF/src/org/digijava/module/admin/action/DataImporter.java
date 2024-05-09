@@ -340,22 +340,30 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                                 break;
                             case "{fundingItem}":
+                                int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
+                                Cell detailCell = row.getCell(detailColumn);
+                                String finInstrument= detailCell.getStringCellValue();
+                                 detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
+                                 detailCell = row.getCell(detailColumn);
+                                String typeOfAss = detailCell.getStringCellValue();
+
+
                                 if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
                                 {
                                     if (!config.containsValue("{donorAgency}"))
                                     {
-                                        updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getRandomOrg(session));
+                                        updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), getRandomOrg(session),typeOfAss,finInstrument);
 
                                     }
                                     else {
                                         int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
                                         Cell cell1 = row.getCell(columnIndex1);
                                         updateOrgs(importDataModel, cell1.getStringCellValue().trim(), session, "donor");
-                                        updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
+                                        updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument);
                                     }
 
                                 }else {
-                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization());
+                                    updateFunding(importDataModel,session,cell.getNumericCellValue(),entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument);
                                 }
 
                                 break;
@@ -401,12 +409,12 @@ public class DataImporter extends Action {
 
         return date.format(formatter);
     }
-    private void updateFunding(ImportDataModel importDataModel, Session session, Number amount, String columnHeader, Long orgId) {
+    private void updateFunding(ImportDataModel importDataModel, Session session, Number amount, String columnHeader, Long orgId, String assistanceType, String finIsnt) {
         String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         Long currencyId = getCurrencyId(session);
-        Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql );
-        Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql);
-        Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql);
+        Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql,"" );
+        Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql,assistanceType);
+        Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finIsnt);
         Long orgRole = getOrganizationRole(session);
 
         String yearString = findYearSubstring(columnHeader);
@@ -478,7 +486,7 @@ public class DataImporter extends Action {
         return currencyId;
     }
 
-    private Long getCategoryValue(Session session, String constantKey, String categoryKey, String hql) {
+    private Long getCategoryValue(Session session, String constantKey, String categoryKey, String hql, String possibleValue) {
         if (constantsMap.containsKey(constantKey)) {
             Long val = constantsMap.get(constantKey);
             logger.info("In cache... "+constantKey+":"+val);
@@ -492,6 +500,19 @@ public class DataImporter extends Action {
         query.setParameter("categoryKey", categoryKey);
         List<?> values = query.list();
         Long categoryId = ((AmpCategoryValue) values.get(0)).getId();
+
+        if (!Objects.equals(possibleValue, ""))
+        {
+            for (Object categoryValue : values)
+            {
+                if (Objects.equals(((AmpCategoryValue) categoryValue).getValue().toLowerCase(), possibleValue.toLowerCase()))
+                {
+                    categoryId = ((AmpCategoryValue) categoryValue).getId();
+                    break;
+                }
+
+            }
+        }
         constantsMap.put(constantKey, categoryId);
         return categoryId;
     }
@@ -513,7 +534,7 @@ public class DataImporter extends Action {
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
                 "WHERE c.keyName = :categoryKey";
-        Long statusId = getCategoryValue(session,"statusId",CategoryConstants.ACTIVITY_STATUS_KEY,hql);
+        Long statusId = getCategoryValue(session,"statusId",CategoryConstants.ACTIVITY_STATUS_KEY,hql,"");
         importDataModel.setActivity_status(statusId);
 
     }

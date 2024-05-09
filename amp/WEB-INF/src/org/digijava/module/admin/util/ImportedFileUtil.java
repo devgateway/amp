@@ -31,7 +31,7 @@ public class ImportedFileUtil {
         for (byte b : hash) {
             sb.append(String.format("%02x", b));
         }
-        return sb.toString();
+        return sb +"+"+file.getName();
     }
 
     public static ImportedFilesRecord saveFile(File file, String filename) throws IOException, NoSuchAlgorithmException {

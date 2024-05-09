@@ -502,7 +502,7 @@ public class DataImporter extends Action {
         List<?> values = query.list();
         Long categoryId = ((AmpCategoryValue) values.get(0)).getId();
 
-        if (!Objects.equals(possibleValue, ""))
+        if (!Objects.equals(possibleValue, "")  && !Objects.equals(possibleValue, null))
         {
             for (Object categoryValue : values)
             {

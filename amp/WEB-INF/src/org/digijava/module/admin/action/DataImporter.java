@@ -19,6 +19,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.admin.dbentity.FileStatus;
+import org.digijava.module.admin.dbentity.ImportedFilesRecord;
+import org.digijava.module.admin.util.ImportedFileUtil;
 import org.digijava.module.admin.util.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DataImporterForm;
@@ -78,6 +81,7 @@ public class DataImporter extends Action {
                 }
 
             }
+            headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
             StringBuilder headers = new StringBuilder();
             headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
             for (String option: headersSet) {
@@ -149,11 +153,16 @@ public class DataImporter extends Action {
                 }
             }
             File  tempFile = new File(tempFilePath);
+//            if (!ImportedFileUtil.getImportedFiles(tempFile).isEmpty())
+//            {
+//                response.setHeader("fileStatus", "Failed to import");
+//            }
+            ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile,fileName);
             logger.info("File path is "+tempFilePath+" and size is "+tempFile.length()/ (1024 * 1024) + " mb");
             Instant start = Instant.now();
             logger.info("Start time :" +start);
             InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
-            processFileInBatches(fileInputStream,request,dataImporterForm.getColumnPairs());
+            processFileInBatches(importedFilesRecord,fileInputStream,request,dataImporterForm.getColumnPairs());
 
             logger.info("Done ... deleting the file and clearing cache map");
             Files.delete(tempFile.toPath());
@@ -176,8 +185,9 @@ public class DataImporter extends Action {
     }
 
 
-    public void processFileInBatches(InputStream fileInputStream, HttpServletRequest request,Map<String, String> config) {
+    public void processFileInBatches(ImportedFilesRecord importedFilesRecord,InputStream fileInputStream, HttpServletRequest request,Map<String, String> config) {
         // Open the workbook
+        ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
             int numberOfSheets = workbook.getNumberOfSheets();
             logger.info("Number of sheets: " + numberOfSheets);
@@ -190,7 +200,11 @@ public class DataImporter extends Action {
             }
 
             logger.info("Closing the workbook...");
+            ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.SUCCESS);
+
         } catch (IOException e) {
+            ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.FAILED);
+
             logger.error("Error processing Excel file: " + e.getMessage(), e);
         }
     }
@@ -616,6 +630,8 @@ public class DataImporter extends Action {
         fieldsInfos.add("{actualCommitment}");
         fieldsInfos.add("{plannedDisbursement}");
         fieldsInfos.add("{fundingItem}");
+        fieldsInfos.add("{financingInstrument}");
+        fieldsInfos.add("{typeOfAssistance}");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

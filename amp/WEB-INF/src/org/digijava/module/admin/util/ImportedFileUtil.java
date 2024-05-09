@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Stack;
 
 public class ImportedFileUtil {
     private static final Logger logger = LoggerFactory.getLogger(ImportedFileUtil.class);
@@ -37,9 +36,10 @@ public class ImportedFileUtil {
 
     public static ImportedFilesRecord saveFile(File file, String filename) throws IOException, NoSuchAlgorithmException {
         Session session = PersistenceManager.getRequestDBSession();
-        String generated = generateSHA256Hash(file);
+        String generatedHash = generateSHA256Hash(file);
+        logger.info("Saving File hash is " + generatedHash);
         ImportedFilesRecord importedFilesRecord = new ImportedFilesRecord();
-        importedFilesRecord.setFileHash(generated);
+        importedFilesRecord.setFileHash(generatedHash);
         importedFilesRecord.setFileStatus(FileStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
         session.saveOrUpdate(importedFilesRecord);
@@ -54,8 +54,9 @@ public class ImportedFileUtil {
         session.save(importDataModel);
         session.flush();
     }
-    public static List<ImportedFilesRecord> getImportedFiles(File file) throws IOException, NoSuchAlgorithmException {
+    public static List<ImportedFilesRecord> getSimilarFiles(File file) throws IOException, NoSuchAlgorithmException {
         String hash = generateSHA256Hash(file);
+        logger.info("Checking File hash is " + hash);
         Session session = PersistenceManager.getRequestDBSession();
         Query query = session.createQuery("from ImportedFilesRecord where fileHash = :hash");
         query.setParameter("hash", hash);

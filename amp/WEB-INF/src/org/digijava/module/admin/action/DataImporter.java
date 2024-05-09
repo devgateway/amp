@@ -159,6 +159,18 @@ public class DataImporter extends Action {
 
             // Check if the file is readable and has correct content
             File tempFile = new File(tempFilePath);
+            List<ImportedFilesRecord> similarFiles = ImportedFileUtil.getSimilarFiles(tempFile);
+            if (similarFiles!=null && !similarFiles.isEmpty()) {
+            for (ImportedFilesRecord similarFilesRecord : similarFiles) {
+                logger.info("Similar file: " + similarFilesRecord);
+                if (similarFilesRecord.getFileStatus().equals(FileStatus.IN_PROGRESS))
+                {
+                    response.setHeader("errorMessage","You have a similar file in progress. Please try again later.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
+            }
+            }
             if (dataImporterForm.getColumnPairs().isEmpty() || !dataImporterForm.getColumnPairs().containsValue("{projectTitle}"))
             {
                 response.setHeader("errorMessage","You must have atleast the {projectTitle} key in your config.");

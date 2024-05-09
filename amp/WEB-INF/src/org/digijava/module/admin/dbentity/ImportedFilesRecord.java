@@ -40,4 +40,14 @@ private FileStatus fileStatus;
     public void setFileStatus(FileStatus fileStatus) {
         this.fileStatus = fileStatus;
     }
+
+    @Override
+    public String toString() {
+        return "ImportedFilesRecord{" +
+                "id=" + id +
+                ", fileName='" + fileName + '\'' +
+                ", fileHash='" + fileHash + '\'' +
+                ", fileStatus=" + fileStatus +
+                '}';
+    }
 }

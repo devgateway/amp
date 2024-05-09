@@ -178,7 +178,7 @@ public class DataImporter extends Action {
                 ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
                 // Process the file in batches
                 int res = processFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
-                if (res != 0) {
+                if (res != 1) {
                     // Handle error
                     logger.info("Error processing file  " + tempFile);
                     response.setHeader("errorMessage","Unable to parse the file. Please check the file format/content and try again.");

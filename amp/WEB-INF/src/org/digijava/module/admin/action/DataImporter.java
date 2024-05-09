@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 
 public class DataImporter extends Action {
-    Logger logger = LoggerFactory.getLogger(DataImporter.class);
+    static Logger logger = LoggerFactory.getLogger(DataImporter.class);
     private static final int BATCH_SIZE = 1000;
     private static Map<String, Long> constantsMap=new HashMap<>();
 
@@ -341,11 +341,11 @@ public class DataImporter extends Action {
                                 break;
                             case "{fundingItem}":
                                 int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
-                                Cell detailCell = row.getCell(detailColumn);
-                                String finInstrument= detailCell.getStringCellValue();
+//                                Cell detailCell = row.getCell(detailColumn);
+                                String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
                                  detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
-                                 detailCell = row.getCell(detailColumn);
-                                String typeOfAss = detailCell.getStringCellValue();
+//                                 detailCell = row.getCell(detailColumn);
+                                String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
 
 
                                 if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
@@ -692,14 +692,21 @@ public class DataImporter extends Action {
 
 
     private static int getColumnIndexByName(Sheet sheet, String columnName) {
-        Row headerRow = sheet.getRow(0);
-        for (int i = 0; i < headerRow.getLastCellNum(); i++) {
-            Cell cell = headerRow.getCell(i);
-            if (cell != null && columnName.equals(cell.getStringCellValue())) {
-                return i;
+        try {
+            Row headerRow = sheet.getRow(0);
+            for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+                Cell cell = headerRow.getCell(i);
+                if (cell != null && columnName.equals(cell.getStringCellValue())) {
+                    return i;
+                }
             }
+            return -1;
+        }catch (Exception e)
+        {
+            logger.error("Error getting column index",e);
+            return -1;
         }
-        return -1;
+
     }
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();

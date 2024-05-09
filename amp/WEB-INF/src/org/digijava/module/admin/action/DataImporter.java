@@ -138,8 +138,8 @@ public class DataImporter extends Action {
 
         }
 
-        if (request.getParameter("uploadDataFile")!=null) {
-            logger.info(" this is the action Upload "+request.getParameter("uploadDataFile"));
+        if (request.getParameter("uploadDataFile") != null) {
+            logger.info("This is the action Upload " + request.getParameter("uploadDataFile"));
             String fileName = dataImporterForm.getDataFile().getFileName();
             String tempDirPath = System.getProperty("java.io.tmpdir");
             File tempDir = new File(tempDirPath);
@@ -147,7 +147,7 @@ public class DataImporter extends Action {
                 tempDir.mkdirs();
             }
             String tempFilePath = tempDirPath + File.separator + fileName;
-            try (InputStream inputStream =  dataImporterForm.getDataFile().getInputStream();
+            try (InputStream inputStream = dataImporterForm.getDataFile().getInputStream();
                  FileOutputStream outputStream = new FileOutputStream(tempFilePath)) {
                 byte[] buffer = new byte[8192];
                 int bytesRead;
@@ -155,30 +155,40 @@ public class DataImporter extends Action {
                     outputStream.write(buffer, 0, bytesRead);
                 }
             }
-            File  tempFile = new File(tempFilePath);
-//            if (!ImportedFileUtil.getImportedFiles(tempFile).isEmpty())
-//            {
-//                response.setHeader("fileStatus", "Failed to import");
-//            }
-            ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile,fileName);
-            logger.info("File path is "+tempFilePath+" and size is "+tempFile.length()/ (1024 * 1024) + " mb");
-            Instant start = Instant.now();
-            logger.info("Start time :" +start);
-//            InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
-            processFileInBatches(importedFilesRecord,tempFile,request,dataImporterForm.getColumnPairs());
 
-            logger.info("Done ... deleting the file and clearing cache map");
-            Files.delete(tempFile.toPath());
-            logger.info("Cache map size: "+constantsMap.size());
-            constantsMap.clear();
-            Instant finish = Instant.now();
-            long timeElapsed = Duration.between(start, finish).toMillis();
-            logger.info("Time Elapsed: "+timeElapsed);
+            // Check if the file is readable and has correct content
+            File tempFile = new File(tempFilePath);
+            if (!isFileReadable(tempFile) || !isFileContentValid(tempFile)) {
+                // Handle invalid file
+                logger.error("Invalid file or content.");
+                response.setHeader("errorMessage","Unable to parse the file. Please check the file format/content and try again.");
+                response.setStatus(400);
+                return mapping.findForward("importData");
 
-            response.setHeader("updatedMap","");
-            dataImporterForm.getColumnPairs().clear();
+                // Optionally, you can respond with an error message to the client.
+            } else {
+                // Proceed with processing the file
+                ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
+                // Process the file in batches
+                processFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
 
+                // Clean up
+                Files.delete(tempFile.toPath());
+                logger.info("Cache map size: " + constantsMap.size());
+                constantsMap.clear();
+                logger.info("File path is " + tempFilePath + " and size is " + tempFile.length() / (1024 * 1024) + " mb");
+                Instant start = Instant.now();
+                logger.info("Start time: " + start);
+                Instant finish = Instant.now();
+                long timeElapsed = Duration.between(start, finish).toMillis();
+                logger.info("Time Elapsed: " + timeElapsed);
+
+                // Send response
+                response.setHeader("updatedMap", "");
+                dataImporterForm.getColumnPairs().clear();
+            }
         }
+
         return mapping.findForward("importData");
     }
 
@@ -189,6 +199,26 @@ public class DataImporter extends Action {
         map.entrySet().removeIf(entry -> columnName.equals(entry.getKey()) && selectedField.equals(entry.getValue()));
     }
 
+
+    public static boolean isFileReadable(File file) {
+        if (file == null || !file.exists() || !file.isFile()) {
+            return false;
+        }
+        return file.canRead();
+    }
+
+    // Check if the file content is valid
+    public static boolean isFileContentValid(File file) {
+        // Define your validation criteria here
+        // For example, let's say we want to check if the file contains at least one line
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            return line != null; // If at least one line exists, consider the content valid
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+            return false; // Consider the content invalid if an exception occurs
+        }
+    }
 
     public void processFileInBatches(ImportedFilesRecord importedFilesRecord,File file, HttpServletRequest request,Map<String, String> config) {
         // Open the workbook

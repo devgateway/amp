@@ -141,6 +141,11 @@
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
       alert("File is uploading and will be parsed shortly.");
       xhr.onload = function () {
+        console.log("Status: " + xhr.status);
+        if (xhr.status === 400) {
+          console.error("Unable to parse the file. Please check the file format and try again.");
+          alert( xhr.getResponseHeader('errorMessage'));
+        }
         if (xhr.status === 200) {
           console.log("File Parsed successfully")
         } else {

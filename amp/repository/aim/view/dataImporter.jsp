@@ -100,22 +100,23 @@
       // Append the row to the table body
       tbody.appendChild(row);
     }
+
     function uploadTemplateFile() {
       var formData = new FormData();
       var fileInput = document.getElementById('templateFile');
       formData.append('templateFile', fileInput.files[0]);
-      formData.append('uploadTemplate',"uploadTemplate");
+      formData.append('uploadTemplate', "uploadTemplate");
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
       xhr.onload = function () {
         if (xhr.status === 200) {
-          if (xhr.getResponseHeader('selectTag').length>=1) {
-            document.getElementById('headers').innerHTML =  xhr.getResponseHeader('selectTag');
+          if (xhr.getResponseHeader('selectTag') && xhr.getResponseHeader('selectTag').length >= 1) {
+            document.getElementById('headers').innerHTML = xhr.getResponseHeader('selectTag');
+            alert("The template has been successfully uploaded.");
             document.getElementById("otherComponents").removeAttribute("hidden");
-          }else
-          {
-            console.error("Unable to extract headers")
+          } else {
+            console.error("Unable to extract headers.Please  check the file format and try again");
           }
         } else {
           console.error('Error:', xhr.status);
@@ -147,7 +148,7 @@
         }
       };
       xhr.send(formData);
-      window.location.href = "/";
+      window.location.href = "/aim/showDesktop.do";
     }
   </script>
   <style>

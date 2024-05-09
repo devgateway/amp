@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -163,8 +164,8 @@ public class DataImporter extends Action {
             logger.info("File path is "+tempFilePath+" and size is "+tempFile.length()/ (1024 * 1024) + " mb");
             Instant start = Instant.now();
             logger.info("Start time :" +start);
-            InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
-            processFileInBatches(importedFilesRecord,fileInputStream,request,dataImporterForm.getColumnPairs());
+//            InputStream fileInputStream = Files.newInputStream(tempFile.toPath());
+            processFileInBatches(importedFilesRecord,tempFile,request,dataImporterForm.getColumnPairs());
 
             logger.info("Done ... deleting the file and clearing cache map");
             Files.delete(tempFile.toPath());
@@ -189,10 +190,10 @@ public class DataImporter extends Action {
     }
 
 
-    public void processFileInBatches(ImportedFilesRecord importedFilesRecord,InputStream fileInputStream, HttpServletRequest request,Map<String, String> config) {
+    public void processFileInBatches(ImportedFilesRecord importedFilesRecord,File file, HttpServletRequest request,Map<String, String> config) {
         // Open the workbook
         ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.IN_PROGRESS);
-        try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+        try (Workbook workbook = new XSSFWorkbook(file)) {
             int numberOfSheets = workbook.getNumberOfSheets();
             logger.info("Number of sheets: " + numberOfSheets);
 
@@ -210,6 +211,8 @@ public class DataImporter extends Action {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.FAILED);
 
             logger.error("Error processing Excel file: " + e.getMessage(), e);
+        } catch (InvalidFormatException e) {
+            throw new RuntimeException(e);
         }
     }
 

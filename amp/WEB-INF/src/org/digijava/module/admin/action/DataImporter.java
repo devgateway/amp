@@ -508,6 +508,7 @@ public class DataImporter extends Action {
                 if (Objects.equals(((AmpCategoryValue) categoryValue).getValue().toLowerCase(), possibleValue.toLowerCase()))
                 {
                     categoryId = ((AmpCategoryValue) categoryValue).getId();
+                    logger.info("Found category: "+((AmpCategoryValue) categoryValue).getValue());
                     break;
                 }
 

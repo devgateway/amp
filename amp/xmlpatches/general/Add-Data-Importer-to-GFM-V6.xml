@@ -19,12 +19,10 @@
                 DELETE FROM amp_features_visibility WHERE name='Data Importer';
 
 
-                INSERT INTO amp_features_visibility (id,name,haslevel,parent)
-                SELECT (select nextval('amp_modules_visibility_seq')),'Data Importer',true,
+                INSERT INTO amp_features_visibility (id, name, haslevel, parent)
+                SELECT nextval('amp_features_visibility_seq'), 'Data Importer', true,
                 (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')
-                WHERE
-                NOT EXISTS (SELECT id from amp_features_visibility  WHERE name  = 'Data Importer');
-
+                WHERE NOT EXISTS (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer');
 
                 INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'),
                 (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer'

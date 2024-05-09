@@ -117,6 +117,7 @@
             document.getElementById("otherComponents").removeAttribute("hidden");
           } else {
             console.error("Unable to extract headers.Please  check the file format and try again");
+            alert("Unable to extract headers.Please  check the file format and try again");
           }
         } else {
           console.error('Error:', xhr.status);

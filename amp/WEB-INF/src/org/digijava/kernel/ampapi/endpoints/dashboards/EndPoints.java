@@ -555,6 +555,26 @@ public class EndPoints {
                                 AmpIndicator existingInd = getIndicatorById(indicatorCell.entityId);
                                 if (existingInd != null){
                                     indicatorType.setName(existingInd.getIndicatorsCategory().getValue());
+                                    if(indicatorType.getName().contains("Hectares of land under restoration")){
+                                        indicatorType.setUnit("M ha");
+                                        indicatorType.setCoreType("ha_under_restoration");
+                                    } else if(indicatorType.getName().contains("Tonnes of Co2EQ sequestered")){
+                                        indicatorType.setUnit("M mt");
+                                        indicatorType.setCoreType("t_co2eq_sequestered");
+                                    } else if(indicatorType.getName().contains("No of employment opportunities")){
+                                        indicatorType.setUnit("M");
+                                        indicatorType.setCoreType("no_employments");
+                                    } else if(indicatorType.getName().contains("Quantity of renewable energy consumed annually in MWH")){
+                                        indicatorType.setUnit("M mwh");
+                                        indicatorType.setCoreType("r_energy_consumed");
+                                    } else if(indicatorType.getName().contains("Number of beneficiaries")){
+                                        indicatorType.setUnit("M");
+                                        indicatorType.setCoreType("no_beneficiaries");
+                                    } else {
+                                        // Adding unknown here fo easy debug
+                                        indicatorType.setUnit("Unknown");
+                                        indicatorType.setCoreType("Unknown");
+                                    }
                                 }
                                 value.setCoreIndicatorType(indicatorType);
                                 valuesList.add(value);

@@ -609,6 +609,9 @@ public class DataImporter extends Action {
 
     String resp = objectMapper.writeValueAsString(response);
     importedProject.setImportResponse(resp);
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
     session.saveOrUpdate(importedProject);
     logger.info("Imported project: "+importedProject);
     }

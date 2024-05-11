@@ -609,8 +609,8 @@ public class DataImporter extends Action {
 
     String resp = objectMapper.writeValueAsString(response);
     importedProject.setImportResponse(resp);
-    session.saveOrUpdate(importDataModel);
-    logger.info("Import Response: "+resp);
+    session.saveOrUpdate(importedProject);
+    logger.info("Imported project: "+importedProject);
     }
 
 

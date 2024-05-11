@@ -46,4 +46,15 @@ public class ImportedProject {
     public void setNewProject(boolean newProject) {
         this.newProject = newProject;
     }
+
+    @Override
+    public String toString() {
+        return "ImportedProject{" +
+                "id=" + id +
+                ", importedFilesRecord=" + importedFilesRecord +
+                ", importResponse='" + importResponse + '\'' +
+                ", importStatus=" + importStatus +
+                ", newProject=" + newProject +
+                '}';
+    }
 }

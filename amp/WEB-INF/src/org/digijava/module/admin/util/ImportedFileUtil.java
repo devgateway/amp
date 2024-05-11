@@ -40,7 +40,7 @@ public class ImportedFileUtil {
         logger.info("Saving File hash is " + generatedHash);
         ImportedFilesRecord importedFilesRecord = new ImportedFilesRecord();
         importedFilesRecord.setFileHash(generatedHash);
-        importedFilesRecord.setFileStatus(ImportStatus.UPLOADED);
+        importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
         session.saveOrUpdate(importedFilesRecord);
         session.flush();
@@ -50,7 +50,7 @@ public class ImportedFileUtil {
     public static void updateFileStatus(ImportedFilesRecord importDataModel, ImportStatus status) {
         logger.info("Updating file status to " + status);
         Session session = PersistenceManager.getRequestDBSession();
-        importDataModel.setFileStatus(status);
+        importDataModel.setImportStatus(status);
         session.save(importDataModel);
         session.flush();
     }

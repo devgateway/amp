@@ -37,7 +37,7 @@ private ImportStatus importStatus;
         return importStatus;
     }
 
-    public void setFileStatus(ImportStatus importStatus) {
+    public void setImportStatus(ImportStatus importStatus) {
         this.importStatus = importStatus;
     }
 
@@ -47,7 +47,7 @@ private ImportStatus importStatus;
                 "id=" + id +
                 ", fileName='" + fileName + '\'' +
                 ", fileHash='" + fileHash + '\'' +
-                ", fileStatus=" + importStatus +
+                ", importStatus=" + importStatus +
                 '}';
     }
 }

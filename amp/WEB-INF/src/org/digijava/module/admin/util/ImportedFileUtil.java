@@ -1,7 +1,7 @@
 package org.digijava.module.admin.util;
 
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.admin.dbentity.FileStatus;
+import org.digijava.module.admin.dbentity.ImportStatus;
 import org.digijava.module.admin.dbentity.ImportedFilesRecord;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -40,14 +40,14 @@ public class ImportedFileUtil {
         logger.info("Saving File hash is " + generatedHash);
         ImportedFilesRecord importedFilesRecord = new ImportedFilesRecord();
         importedFilesRecord.setFileHash(generatedHash);
-        importedFilesRecord.setFileStatus(FileStatus.UPLOADED);
+        importedFilesRecord.setFileStatus(ImportStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
         session.saveOrUpdate(importedFilesRecord);
         session.flush();
         return importedFilesRecord;
     }
 
-    public static void updateFileStatus(ImportedFilesRecord importDataModel, FileStatus status) {
+    public static void updateFileStatus(ImportedFilesRecord importDataModel, ImportStatus status) {
         logger.info("Updating file status to " + status);
         Session session = PersistenceManager.getRequestDBSession();
         importDataModel.setFileStatus(status);

@@ -21,8 +21,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.admin.dbentity.FileStatus;
+import org.digijava.module.admin.dbentity.ImportStatus;
 import org.digijava.module.admin.dbentity.ImportedFilesRecord;
+import org.digijava.module.admin.dbentity.ImportedProject;
 import org.digijava.module.admin.util.ImportedFileUtil;
 import org.digijava.module.admin.util.model.*;
 import org.digijava.module.aim.dbentity.*;
@@ -163,7 +164,7 @@ public class DataImporter extends Action {
             if (similarFiles!=null && !similarFiles.isEmpty()) {
             for (ImportedFilesRecord similarFilesRecord : similarFiles) {
                 logger.info("Similar file: " + similarFilesRecord);
-                if (similarFilesRecord.getFileStatus().equals(FileStatus.IN_PROGRESS))
+                if (similarFilesRecord.getImportStatus().equals(ImportStatus.IN_PROGRESS))
                 {
                     response.setHeader("errorMessage","You have a similar file in progress. Please try again later.");
                     response.setStatus(400);
@@ -248,7 +249,8 @@ public class DataImporter extends Action {
 
     public int processFileInBatches(ImportedFilesRecord importedFilesRecord,File file, HttpServletRequest request,Map<String, String> config) {
         // Open the workbook
-        ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.IN_PROGRESS);
+        int res=0;
+        ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(file)) {
             int numberOfSheets = workbook.getNumberOfSheets();
             logger.info("Number of sheets: " + numberOfSheets);
@@ -257,23 +259,24 @@ public class DataImporter extends Action {
             for (int i = 0; i < numberOfSheets; i++) {
                 logger.info("Sheet number: " + i);
                 Sheet sheet = workbook.getSheetAt(i);
-                processSheetInBatches(sheet, request,config);
+                processSheetInBatches(sheet, request,config, importedFilesRecord);
             }
 
             logger.info("Closing the workbook...");
-            ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.SUCCESS);
-            return 1;
+            ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.SUCCESS);
+            res =1;
         } catch (IOException e) {
-            ImportedFileUtil.updateFileStatus(importedFilesRecord, FileStatus.FAILED);
+            ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
             logger.error("Error processing Excel file: " + e.getMessage(), e);
-            return 0;
         } catch (InvalidFormatException | InvalidOperationException e) {
             logger.error("Error processing Excel file: " + e.getMessage(),e);
-            return 0;
         }
+        logger.info("Finished processing file record id: "+importedFilesRecord.getId()+" with status: "+importedFilesRecord.getImportStatus());
+        return res;
+
     }
 
-    private void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config) throws JsonProcessingException {
+    private void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Get the number of rows in the sheet
         int rowCount = sheet.getPhysicalNumberOfRows();
         logger.info("Total number of rows: " + rowCount);
@@ -295,16 +298,19 @@ public class DataImporter extends Action {
             }
 
             // Process the batch
-            processBatch(batch, sheet, request,config);
+            processBatch(batch, sheet, request,config, importedFilesRecord);
         }
     }
 
-    private void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config) throws JsonProcessingException {
+    private void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Process the batch of rows
         SessionUtil.extendSessionIfNeeded(request);
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         for (Row row : batch) {
+            ImportedProject importedProject= new ImportedProject();
+            importedProject.setImportedFilesRecord(importedFilesRecord);
+
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
             importDataModel.setCreated_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
@@ -363,7 +369,7 @@ public class DataImporter extends Action {
 
                 }
             }
-            importTheData(importDataModel, session);
+            importTheData(importDataModel, session, importedProject);
 
         }
     }
@@ -557,7 +563,7 @@ public class DataImporter extends Action {
         importDataModel.setActivity_status(statusId);
 
     }
-    private void importTheData(ImportDataModel importDataModel, Session session) throws JsonProcessingException {
+    private void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject) throws JsonProcessingException {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
@@ -575,11 +581,13 @@ public class DataImporter extends Action {
         logger.info("Data model object: "+importDataModel);
     if (existing==null){
         logger.info("New activity");
-         response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity/new");
+        importedProject.setNewProject(true);
+        response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity/new");
     }
     else
     {
         logger.info("Existing activity");
+        importedProject.setNewProject(false);
         importDataModel.setInternal_id(existing.getAmpActivityId());
         importDataModel.setAmp_id(existing.getAmpId());
         ActivityGroup activityGroup= new ActivityGroup();
@@ -590,7 +598,18 @@ public class DataImporter extends Action {
         response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity/update");
 
     }
-        logger.info("Import Response: "+objectMapper.writeValueAsString(response));
+    if (!response.getErrors().isEmpty())
+    {
+        importedProject.setImportStatus(ImportStatus.FAILED);
+    }else
+    {
+        importedProject.setImportStatus(ImportStatus.SUCCESS);
+
+    }
+
+    String resp = objectMapper.writeValueAsString(response);
+    importedProject.setImportResponse(resp);
+    logger.info("Import Response: "+resp);
     }
 
 

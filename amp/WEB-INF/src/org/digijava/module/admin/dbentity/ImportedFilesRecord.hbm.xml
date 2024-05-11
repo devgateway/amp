@@ -14,7 +14,7 @@
 		<property name="fileName" column="file_name" type="java.lang.String" />
 
 		<property name="fileHash" column="file_hash" type="java.lang.String" />
-		<property name="fileStatus" column="file_status" type="org.digijava.module.admin.dbentity.FileStatus" />
+		<property name="importStatus" column="import_status" type="org.digijava.module.admin.dbentity.ImportStatus" />
 
 
 	</class>

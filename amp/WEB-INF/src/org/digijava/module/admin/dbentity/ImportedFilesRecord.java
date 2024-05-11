@@ -7,7 +7,7 @@ private Long id;
 private String fileName;
 private String fileHash;
 
-private FileStatus fileStatus;
+private ImportStatus importStatus;
 
     public Long getId() {
         return id;
@@ -33,12 +33,12 @@ private FileStatus fileStatus;
         this.fileHash = fileHash;
     }
 
-    public FileStatus getFileStatus() {
-        return fileStatus;
+    public ImportStatus getImportStatus() {
+        return importStatus;
     }
 
-    public void setFileStatus(FileStatus fileStatus) {
-        this.fileStatus = fileStatus;
+    public void setFileStatus(ImportStatus importStatus) {
+        this.importStatus = importStatus;
     }
 
     @Override
@@ -47,7 +47,7 @@ private FileStatus fileStatus;
                 "id=" + id +
                 ", fileName='" + fileName + '\'' +
                 ", fileHash='" + fileHash + '\'' +
-                ", fileStatus=" + fileStatus +
+                ", fileStatus=" + importStatus +
                 '}';
     }
 }

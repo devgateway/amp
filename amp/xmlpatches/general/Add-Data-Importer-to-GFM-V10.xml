@@ -27,7 +27,7 @@
 
                 INSERT INTO amp_features_visibility (id, name, haslevel, parent)
                 SELECT nextval('amp_features_visibility_seq'), 'Import Data', true,
-                (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer')
+                (SELECT id FROM amp_modules_visibility WHERE name = 'Data Importer')
                 WHERE NOT EXISTS (SELECT id FROM amp_modules_visibility WHERE name = 'Import Data');
 
                 INSERT INTO amp_features_visibility (id, name, haslevel, parent)

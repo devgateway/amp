@@ -35,7 +35,7 @@
                 (SELECT id FROM amp_modules_visibility WHERE name = 'Data Importer')
                 WHERE NOT EXISTS (SELECT id FROM amp_features_visibility WHERE name = 'View Progress');
 
-                INSERT INTO amp_visibility_rule_amp_features_visibility
+                INSERT INTO amp_visibility_rule_amp_modules_visibility
                 SELECT currval('amp_visibility_rule_seq'),
                 (SELECT id FROM amp_modules_visibility WHERE name = 'Data Importer'
                 AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools'));

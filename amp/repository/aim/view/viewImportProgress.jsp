@@ -41,6 +41,7 @@
 
                             // Populate import projects table with new data
                             $.each(importProjects, function(index, project) {
+                                console.log("Project " + project);
                                 var row = "<tr>" +
                                     "<td>" + project.id + "</td>" +
                                     "<td>" + project.importStatus + "</td>" +

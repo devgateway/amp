@@ -37,6 +37,8 @@
         </tr>
         </thead>
         <tbody>
+        <jsp:useBean id="importedFilesRecords" scope="request" type="java.util.List"/>
+
         <c:forEach items="${importedFilesRecords}" var="record" varStatus="loop">
             <tr>
                 <td>${record.id}</td>

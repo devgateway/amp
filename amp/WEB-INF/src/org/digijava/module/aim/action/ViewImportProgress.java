@@ -32,7 +32,8 @@ public class ViewImportProgress extends Action {
         logger.info("Params: "+request.getParameterMap());
         if (!request.getParameterMap().containsKey("fileRecordId") || Objects.equals(request.getParameter("fileRecordId"), "") || request.getParameter("fileRecordId")==null)
         {
-           importProgressForm.setImportedFilesRecords(getAllImportFileRecords());
+            request.setAttribute("importedFilesRecords",getAllImportFileRecords());
+//           importProgressForm.setImportedFilesRecords(getAllImportFileRecords());
         }
         else {
 

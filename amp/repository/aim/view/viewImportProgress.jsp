@@ -22,6 +22,40 @@
                 background-color: #dddddd;
             }
         </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $(".view-progress-btn").click(function() {
+                    var fileRecordId = $(this).data("file-record-id");
+
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
+                        type: "POST",
+                        data: { fileRecordId: fileRecordId },
+                        success: function(response) {
+                            // Assuming the server returns a JSON object with importProjects data
+                            var importProjects = response.importProjects;
+
+                            // Clear existing import projects table
+                            $("#import-projects-table tbody").empty();
+
+                            // Populate import projects table with new data
+                            $.each(importProjects, function(index, project) {
+                                var row = "<tr>" +
+                                    "<td>" + project.id + "</td>" +
+                                    "<td>" + project.projectName + "</td>" +
+                                    "<td>" + project.status + "</td>" +
+                                    "</tr>";
+                                $("#import-projects-table tbody").append(row);
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                });
+            });
+        </script>
     </head>
     <body>
     <h2>Imported Files</h2>
@@ -45,13 +79,26 @@
                 <td>${record.fileName}</td>
                 <td>${record.importStatus}</td>
                 <td>
-                    <form action="${pageContext.request.contextPath}/aim/viewImportProgress.do" method="post">
-                        <input type="hidden" name="fileRecordId" value="${record.id}">
-                        <input type="submit" value="View Progress">
-                    </form>
+                    <button class="view-progress-btn" data-file-record-id="${record.id}">View Progress</button>
                 </td>
             </tr>
         </c:forEach>
+        </tbody>
+    </table>
+
+    <!-- Table to display import projects for a particular ImportedFilesRecord -->
+    <h3>Import Projects</h3>
+    <table id="import-projects-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Project
+            <th>Project Name</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Import projects will be populated dynamically using AJAX -->
         </tbody>
     </table>
 

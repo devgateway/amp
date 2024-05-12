@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.dashboards;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,9 +36,12 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -51,7 +55,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -495,6 +503,9 @@ public class EndPoints {
         new MeService().applySettingsAndFilters(new SettingsAndFiltersParameters(), spec);
         GeneratedReport report = EndpointUtils.runReport(spec);
         List<DashboardIndicatorCoreData> resp = processReportData(report);
+        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
+        sendReportsToServer(resp, serverUrl);
+
         SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
         return PublicServices.buildOkResponseWithOriginHeaders(resp);
     }
@@ -595,6 +606,56 @@ public class EndPoints {
         } catch (DgException e) {
             throw new RuntimeException("Failed to load indicator");
         }
+    }
+    public static void sendReportsToServer(List<DashboardIndicatorCoreData> ampCoreIndicatorCoreData, String serverUrl) {
+        try {
+            // Create a URL object with the server's endpoint URL
+            HttpURLConnection connection = getHttpURLConnection(serverUrl);
+            // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
+            Gson gson = new Gson();
+            String jsonData = gson.toJson(ampCoreIndicatorCoreData);
+
+            // Get the output stream of the connection
+            try (OutputStream os = connection.getOutputStream()) {
+                // Write the JSON data to the output stream
+                os.write(jsonData.getBytes("UTF-8"));
+            }
+
+            // Get the HTTP response code
+            int responseCode = connection.getResponseCode();
+
+            // Check if the request was successful (e.g., HTTP 200 OK)
+            if (responseCode == 200) {
+                // The data has been successfully sent to the server
+//                logger.debug("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
+            } else {
+                // Handle the error condition (e.g., log an error message)
+//                logger.debug("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
+            }
+
+            // Close the connection
+            connection.disconnect();
+        } catch (Exception e) {
+//            logger.error("Exception raised when sending data to dashboard", e);
+        }
+    }
+
+    @NotNull
+    private static HttpURLConnection getHttpURLConnection(String serverUrl) throws IOException {
+        URL url = new URL(serverUrl);
+
+        // Open a connection to the server
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Set the HTTP request method to POST
+        connection.setRequestMethod("POST");
+
+        // Set the content type of the request
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        // Enable input and output streams for the connection
+        connection.setDoOutput(true);
+        return connection;
     }
 }
 

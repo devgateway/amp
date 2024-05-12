@@ -29,7 +29,7 @@ public class ViewImportProgress extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ImportProgressForm importProgressForm = (ImportProgressForm) form;
-        if (Objects.equals(request.getParameter("fileRecordId"), "") || request.getParameter("fileRecordId")==null)
+        if (!request.getParameterMap().containsKey("fileRecordId") || Objects.equals(request.getParameter("fileRecordId"), "") || request.getParameter("fileRecordId")==null)
         {
            importProgressForm.setImportedFilesRecords(getAllImportFileRecords());
         }

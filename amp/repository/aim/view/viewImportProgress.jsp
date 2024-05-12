@@ -44,7 +44,7 @@
                 <td>${record.importStatus}</td>
                 <td>
                     <form action="${pageContext.request.contextPath}/aim/viewImportProgress.do" method="post">
-                        <input type="hidden" name="recordId" value="${record.id}">
+                        <input type="hidden" name="fileRecordId" value="${record.id}">
                         <input type="submit" value="View Progress">
                     </form>
                 </td>

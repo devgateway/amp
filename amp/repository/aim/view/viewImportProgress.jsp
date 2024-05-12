@@ -43,8 +43,9 @@
                             $.each(importProjects, function(index, project) {
                                 var row = "<tr>" +
                                     "<td>" + project.id + "</td>" +
-                                    "<td>" + project.projectName + "</td>" +
-                                    "<td>" + project.status + "</td>" +
+                                    "<td>" + project.importStatus + "</td>" +
+                                    "<td>" + project.newProject + "</td>" +
+                                    "<td>" + project.importResponse + "</td>" +
                                     "</tr>";
                                 $("#import-projects-table tbody").append(row);
                             });
@@ -92,9 +93,9 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Project
-            <th>Project Name</th>
-            <th>Status</th>
+            <th>Project Status</th>
+            <th>Is New?</th>
+            <th>Response String</th>
         </tr>
         </thead>
         <tbody>

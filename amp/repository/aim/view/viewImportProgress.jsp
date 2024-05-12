@@ -34,6 +34,8 @@
                         data: { fileRecordId: fileRecordId },
                         success: function(response) {
                             // Assuming the server returns a JSON object with importProjects data
+                            console.log("Response: " + response);
+                            response = JSON.parse(response);
                             var importProjects = response.importedProjects;
 
                             // Clear existing import projects table

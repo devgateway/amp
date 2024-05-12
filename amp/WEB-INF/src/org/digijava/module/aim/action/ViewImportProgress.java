@@ -30,12 +30,10 @@ public class ViewImportProgress extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ImportProgressForm importProgressForm = (ImportProgressForm) form;
         logger.info("Params: "+request.getParameterMap());
-        if (!request.getParameterMap().containsKey("fileRecordId") || Objects.equals(request.getParameter("fileRecordId"), "") || request.getParameter("fileRecordId")==null)
-        {
-            request.setAttribute("importedFilesRecords",getAllImportFileRecords());
-//           importProgressForm.setImportedFilesRecords(getAllImportFileRecords());
-        }
-        else {
+        request.setAttribute("importedFilesRecords",getAllImportFileRecords());
+
+
+        if (request.getParameterMap().containsKey("fileRecordId")){
 
             int startPage = 1;
             int endPage = 10;

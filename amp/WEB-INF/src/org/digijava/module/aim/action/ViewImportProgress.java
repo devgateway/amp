@@ -14,6 +14,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ViewImportProgress extends Action {
+    private static Logger logger =LoggerFactory.getLogger(ViewImportProgress.class);
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ImportProgressForm importProgressForm = (ImportProgressForm) form;
@@ -83,6 +86,7 @@ public class ViewImportProgress extends Action {
         String hql = "FROM ImportedFilesRecord";
         Query query = session.createQuery(hql);
         List<ImportedFilesRecord> importedFilesRecords = query.list();
+        logger.info("importedFilesRecords: " + importedFilesRecords);
         return importedFilesRecords;
     }
 

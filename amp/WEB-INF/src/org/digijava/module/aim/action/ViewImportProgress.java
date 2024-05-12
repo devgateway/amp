@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -36,8 +37,11 @@ public class ViewImportProgress extends Action {
         data.put("endPage", endPage);
         data.put("totalPages", totalPages);
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonData = objectMapper.writeValueAsString(data);
+
         response.setContentType("application/json");
-        response.getWriter().write(new org.json.JSONObject(data).toString());
+        response.getWriter().write(jsonData);
 
         return null;
     }

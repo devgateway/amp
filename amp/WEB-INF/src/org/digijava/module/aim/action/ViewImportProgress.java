@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -50,11 +51,12 @@ public class ViewImportProgress extends Action {
             data.put("totalPages", totalPages);
 
             ObjectMapper objectMapper = new ObjectMapper();
+
             objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            String jsonData = objectMapper.writeValueAsString(data);
+            String jsonData = new Gson().toJson(data);
 
             response.setContentType("application/json");
-
+            logger.info("Json Data: "+jsonData);
             response.getWriter().write(jsonData);
         }
 

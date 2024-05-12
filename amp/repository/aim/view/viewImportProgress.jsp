@@ -45,7 +45,7 @@
                                     "<td>" + project.id + "</td>" +
                                     "<td>" + project.importStatus + "</td>" +
                                     "<td>" + project.newProject + "</td>" +
-                                    "<td>" + project.importResponse + "</td>" +
+                                    "<td>" + JSON.stringify(project.importResponse) + "</td>" +
                                     "</tr>";
                                 $("#import-projects-table tbody").append(row);
                             });

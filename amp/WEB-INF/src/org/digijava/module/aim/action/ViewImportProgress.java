@@ -71,16 +71,22 @@ public class ViewImportProgress extends Action {
     private List<ImportedProject> getImportedProjects(int startPage, int endPage, Long importedFilesRecordId) {
         Session session = PersistenceManager.getRequestDBSession();
 
-        Criteria criteria = session.createCriteria(ImportedProject.class);
+        String hql = "FROM ImportedProject";
 
         if (importedFilesRecordId!= null) {
-            criteria.add(Restrictions.eq("importedFilesRecord", importedFilesRecordId));
+            hql += " WHERE importedFilesRecord.id = :importedFilesRecordId";
         }
 
-        criteria.setFirstResult((startPage - 1) * endPage);
-        criteria.setMaxResults(endPage);
+        Query query = session.createQuery(hql);
 
-        return  criteria.list();
+        if (importedFilesRecordId!= null) {
+            query.setParameter("importedFilesRecordId", importedFilesRecordId);
+        }
+
+        query.setFirstResult((startPage - 1) * endPage);
+        query.setMaxResults(endPage);
+
+        return query.list();
     }
 
     public List<ImportedFilesRecord> getAllImportFileRecords() {

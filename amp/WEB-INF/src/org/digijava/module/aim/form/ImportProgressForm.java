@@ -1,16 +1,19 @@
 package org.digijava.module.aim.form;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.admin.dbentity.ImportedFilesRecord;
 import org.digijava.module.admin.dbentity.ImportedProject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImportProgressForm extends ActionForm {
     private List<ImportedProject> importedProjects;
-    private int startPage;
-    private int endPage;
+    private List<ImportedFilesRecord> importedFilesRecords=new ArrayList<>();
+    private int startPage=1;
+    private int endPage=10;
     private Long totalPages;
-    private Long importProjectId;
+    private Long importedFileRecordId;
 
     public List<ImportedProject> getImportedProjects() {
         return importedProjects;
@@ -44,11 +47,19 @@ public class ImportProgressForm extends ActionForm {
         this.totalPages = totalPages;
     }
 
-    public Long getImportProjectId() {
-        return importProjectId;
+    public Long getImportedFileRecordId() {
+        return importedFileRecordId;
     }
 
-    public void setImportProjectId(Long importProjectId) {
-        this.importProjectId = importProjectId;
+    public void setImportedFileRecordId(Long importedFileRecordId) {
+        this.importedFileRecordId = importedFileRecordId;
+    }
+
+    public List<ImportedFilesRecord> getImportedFilesRecords() {
+        return importedFilesRecords;
+    }
+
+    public void setImportedFilesRecords(List<ImportedFilesRecord> importedFilesRecords) {
+        this.importedFilesRecords = importedFilesRecords;
     }
 }

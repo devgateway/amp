@@ -1,4 +1,4 @@
-package org.digijava.module.admin.action;
+package org.digijava.module.aim.action;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -598,13 +598,13 @@ public class DataImporter extends Action {
         response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity/update");
 
     }
-    if (!response.getErrors().isEmpty())
-    {
-        importedProject.setImportStatus(ImportStatus.FAILED);
-    }else
-    {
-        importedProject.setImportStatus(ImportStatus.SUCCESS);
+    if (response!=null) {
+        if (!response.getErrors().isEmpty()) {
+            importedProject.setImportStatus(ImportStatus.FAILED);
+        } else {
+            importedProject.setImportStatus(ImportStatus.SUCCESS);
 
+        }
     }
 
     String resp = objectMapper.writeValueAsString(response);
@@ -743,7 +743,7 @@ public class DataImporter extends Action {
             return -1;
         }catch (Exception e)
         {
-            logger.error("Error getting column index",e);
+            logger.error("Error getting column index for "+columnName,e);
             return -1;
         }
 

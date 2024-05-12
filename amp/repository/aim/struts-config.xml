@@ -35,6 +35,7 @@
     <form-bean name="aimAddFiscalCalForm" type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
     <form-bean name="aimOrgManagerForm" type="org.digijava.module.aim.form.OrgManagerForm" />
     <form-bean name="dataImporterForm" type="org.digijava.module.aim.form.DataImporterForm" />
+    <form-bean name="viewImportProgressForm" type="org.digijava.module.aim.form.ImportProgressForm" />
     <form-bean name="aimAddOrgForm" type="org.digijava.module.aim.form.AddOrgForm" />
     <form-bean name="aimOrgTypeManagerForm" type="org.digijava.module.aim.form.OrgTypeManagerForm" />
 	<form-bean name="aimAddOrgTypeForm" type="org.digijava.module.aim.form.AddOrgTypeForm" />
@@ -1354,8 +1355,11 @@
 	</action>
     <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
 
-    <action name="dataImporterForm" path="/aim/dataImporter" type="org.digijava.module.admin.action.DataImporter">
+    <action name="dataImporterForm" path="/aim/dataImporter" type="org.digijava.module.aim.action.DataImporter">
       <forward name="importData" path="/showLayout.do?layout=dataImporter" />
+    </action>
+    <action name="viewImportProgressForm" path="/aim/viewImportProgress" type="org.digijava.module.aim.action.ViewImportProgress">
+      <forward name="viewImportProgress" path="/showLayout.do?layout=viewImportProgress" />
     </action>
 
      <action name="quartzJobManagerForm" scope="session" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">

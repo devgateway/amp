@@ -37,11 +37,11 @@ public class ViewImportProgress extends Action {
         }
         else {
 
-            int startPage = Integer.parseInt(request.getParameter("startPage"));
-            int endPage = importProgressForm.getEndPage();
-            Long importProjectId = importProgressForm.getImportedFileRecordId();
+            int startPage = 1;
+            int endPage = 10;
+            Long importedFilesRecordId =Long.parseLong(request.getParameter("fileRecordId"));
 
-            List<ImportedProject> importedProjects = getImportedProjects(startPage, endPage, importProjectId);
+            List<ImportedProject> importedProjects = getImportedProjects(startPage, endPage, importedFilesRecordId);
 
             int totalPages = getTotalPages(importedProjects.size(), endPage);
 
@@ -56,6 +56,7 @@ public class ViewImportProgress extends Action {
             String jsonData = objectMapper.writeValueAsString(data);
 
             response.setContentType("application/json");
+
             response.getWriter().write(jsonData);
         }
 

@@ -29,31 +29,33 @@ public class ViewImportProgress extends Action {
         if (Objects.equals(request.getParameter("fileRecordId"), "") || request.getParameter("fileRecordId")==null)
         {
            importProgressForm.setImportedFilesRecords(getAllImportFileRecords());
-           return mapping.findForward("viewImportProgress");
+        }
+        else {
+
+            int startPage = Integer.parseInt(request.getParameter("startPage"));
+            int endPage = importProgressForm.getEndPage();
+            Long importProjectId = importProgressForm.getImportedFileRecordId();
+
+            List<ImportedProject> importedProjects = getImportedProjects(startPage, endPage, importProjectId);
+
+            int totalPages = getTotalPages(importedProjects.size(), endPage);
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("importedProjects", importedProjects);
+            data.put("startPage", startPage);
+            data.put("endPage", endPage);
+            data.put("totalPages", totalPages);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            String jsonData = objectMapper.writeValueAsString(data);
+
+            response.setContentType("application/json");
+            response.getWriter().write(jsonData);
         }
 
-        int startPage =Integer.parseInt(request.getParameter("startPage"));
-        int endPage = importProgressForm.getEndPage();
-        Long importProjectId = importProgressForm.getImportedFileRecordId();
+        return mapping.findForward("viewImportProgress");
 
-        List<ImportedProject> importedProjects = getImportedProjects(startPage, endPage, importProjectId);
-
-        int totalPages = getTotalPages(importedProjects.size(), endPage);
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("importedProjects", importedProjects);
-        data.put("startPage", startPage);
-        data.put("endPage", endPage);
-        data.put("totalPages", totalPages);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
-        String jsonData = objectMapper.writeValueAsString(data);
-
-        response.setContentType("application/json");
-        response.getWriter().write(jsonData);
-
-        return null;
     }
 
     private int getTotalPages(int totalRecords, int recordsPerPage) {

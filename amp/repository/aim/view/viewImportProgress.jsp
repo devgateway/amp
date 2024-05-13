@@ -68,12 +68,11 @@
                                     "<button class='view-more-btn'>View More</button>" +
                                     "</td>" +
                                     "</tr>";
-                                $("#import-projects-table tbody").append(row);
+                                var $row = $(row); // Convert row to jQuery object
+                                $("#import-projects-table tbody").append($row);
 
-                                // Handle View More button click event
-
-                                // Handle View More button click event
-                                $(".view-more-btn").click(function() {
+                                // Handle View More button click event for this row
+                                $row.find(".view-more-btn").click(function() {
                                     var $tr = $(this).closest("tr");
                                     var $responseCell = $tr.find(".truncated-response");
                                     var fullResponse = JSON.stringify(project.importResponse); // Full response string
@@ -87,7 +86,6 @@
                                         $btn.text("View More");
                                     }
                                 });
-
                             });
                         },
                         error: function(xhr, status, error) {

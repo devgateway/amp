@@ -138,6 +138,7 @@
 
                             // Add pagination controls
                             var totalPages = data.totalPages;
+                            $("#import-projects-table").remove(".pagination");
                             $("#import-projects-table").after('<div class="pagination"></div>');
                             generatePaginationHtml(currentPage, totalPages);
                             // Handle page click event

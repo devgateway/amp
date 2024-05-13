@@ -80,7 +80,7 @@
                             $('#import-projects-table tbody').on('click', '.view-more-btn', function() {
                                 var $row = $(this).closest('tr');
                                 var $responseCell = $row.find('.truncated-response');
-                                var fullResponse = JSON.stringify(dataTable.row($row).data().importResponse);
+                                var fullResponse = JSON.stringify(datatable.row($row).data().importResponse);
                                 var $btn = $(this);
 
                                 if ($btn.text() === "View More") {

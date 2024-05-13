@@ -68,19 +68,24 @@
                             $.each(importProjects, function(index, project) {
                                 var truncatedResponse = JSON.stringify(project.importResponse).substring(0, 50) + "...";
                                 var importResponseHtml = '<span class="truncated-response">' + truncatedResponse + '</span><p></p><br><button class="view-more-btn">View More</button>';
-                                datatable.row.add([
+                                var rowData = [
                                     project.id,
                                     project.importStatus,
                                     project.newProject,
                                     importResponseHtml
-                                ]).draw();
+                                ];
+                                var hiddenData = JSON.stringify(project.importResponse); // Hidden data
+                                var rowNode = datatable.row.add(rowData).node();
+                                $(rowNode).data('hiddenData', hiddenData); //
                             });
+                            datatable.draw(); // Draw the table after adding all rows
+
 
                             // Handle "View More" button click event
                             $('#import-projects-table tbody').on('click', '.view-more-btn', function() {
                                 var $row = $(this).closest('tr');
                                 var $responseCell = $row.find('.truncated-response');
-                                var fullResponse = JSON.stringify(datatable.row($row).data().importResponse);
+                                var fullResponse = $row.data('hiddenData'); // Access hidden data stored as jQuery data
                                 var $btn = $(this);
 
                                 if ($btn.text() === "View More") {

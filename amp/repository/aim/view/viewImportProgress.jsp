@@ -83,6 +83,7 @@
                             console.log("Response: " + JSON.stringify(response));
                             var data = JSON.parse(JSON.stringify(response));
                             $(".countRecords").html(
+                                '<h4 style="color: #f1b0b7">All Projects: ' +data.totalProjects+'</h4>' +
                                 '<h4 style="color: forestgreen">Successful Projects: ' +data.successfulProjects+'</h4>' +
                                 '<h4 style="color: red">Failed Projects: ' +data.failedProjects +'</h4>'
                             );

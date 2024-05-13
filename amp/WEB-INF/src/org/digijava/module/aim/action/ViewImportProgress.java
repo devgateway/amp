@@ -89,7 +89,7 @@ public class ViewImportProgress extends Action {
 
         for (Object[] row : resultList) {
             ImportStatus importStatus = (ImportStatus) row[0];
-            long count = (long) row[1];
+            long count = ((Number) row[1]).longValue();
 
             if (importStatus.equals(ImportStatus.FAILED)) {
                 countsMap.put("failedProjects", count);

@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.admin.dbentity.ImportStatus;
 import org.digijava.module.admin.dbentity.ImportedFilesRecord;
 import org.digijava.module.admin.dbentity.ImportedProject;
 import org.digijava.module.aim.form.ImportProgressForm;
@@ -41,13 +42,16 @@ public class ViewImportProgress extends Action {
             Long importedFilesRecordId =Long.parseLong(request.getParameter("fileRecordId"));
 
             List<ImportedProject> importedProjects = getImportedProjects(startPage, endPage, importedFilesRecordId);
-
+            Long failedProjects = importedProjects.stream().filter(project -> project.getImportStatus().equals(ImportStatus.FAILED)).count();
+            Long successfulProjects = importedProjects.stream().filter(project -> project.getImportStatus().equals(ImportStatus.SUCCESS)).count();
             int totalPages = getTotalPages(importedProjects.size(), endPage);
             Map<String, Object> errors = new HashMap<String, Object>();
 
 
             Map<String, Object> data = new HashMap<>();
             data.put("importedProjects", importedProjects);
+            data.put("failedProjects", failedProjects);
+            data.put("successfulProjects", successfulProjects);
             data.put("startPage", startPage);
             data.put("endPage", endPage);
             data.put("totalPages", totalPages);

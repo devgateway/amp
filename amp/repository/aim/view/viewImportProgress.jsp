@@ -6,6 +6,9 @@
     <head>
         <title>Imported Files</title>
         <style>
+            tr.highlighted-row {
+                background-color: yellow;
+            }
             table {
                 font-family: arial, sans-serif;
                 border-collapse: collapse;
@@ -27,6 +30,10 @@
             $(document).ready(function() {
                 $(".view-progress-btn").click(function() {
                     var fileRecordId = $(this).data("file-record-id");
+                    var currentRow = $(this).closest("tr");
+
+                    // Highlight the clicked row
+                    currentRow.addClass("highlighted-row");
                     <%--var xhr = new XMLHttpRequest();--%>
                     <%--// Create a FormData object to send data in the request body--%>
                     <%--var formData = new FormData();--%>
@@ -76,6 +83,10 @@
                             // Assuming the server returns a JSON object with importProjects data
                             console.log("Response: " + response);
                             var data = JSON.parse(response);
+                            $(".countRecords").html(
+                                '<h4 style="color: forestgreen">Successful Projects: ' +response.successfulProjects+'</h4>' +
+                                '<h4 style="color: red">Failed Projects: ' +response.failedProjects +'</h4>'
+                            );
                             var importProjects = data.importedProjects;
 
                             // Clear existing import projects table
@@ -146,7 +157,10 @@
     </table>
 
     <!-- Table to display import projects for a particular ImportedFilesRecord -->
-    <h3>Import Projects</h3>
+    <h3>File Projects</h3>
+    <div class="countRecords">
+
+    </div>
     <table id="import-projects-table">
         <thead>
         <tr>

@@ -34,7 +34,7 @@ public class ViewImportProgress extends Action {
         request.setAttribute("importedFilesRecords",getAllImportFileRecords());
 
 
-        if (request.getParameterMap().containsKey("fileRecordId")){
+        if (request.getParameterMap().containsKey("fileRecordId") && request.getParameter("fileRecordId")!=null){
 
             int startPage = 1;
             int endPage = 10;

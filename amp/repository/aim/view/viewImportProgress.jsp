@@ -30,77 +30,77 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 
         <script>
-            $(document).ready(function() {
-                var currentPage = 1; // Initial page number
-                var pageSize = 10; // Number of items per page
-                var dataTable = $('#import-projects-table').DataTable({
-                    "serverSide": true,
-                    "ajax": {
-                        "url": "${pageContext.request.contextPath}/aim/viewImportProgress.do",
-                        "type": "POST",
-                        "data": function(d) {
-                            d.fileRecordId = $(".highlighted-row .view-progress-btn").data("file-record-id");
-                            d.pageNumber = d.start / d.length + 1; // Calculate the page number based on start index and page length
-                            d.pageSize = d.length; // Set the page size
-                            return d;
-                        }
-                    }
-                });
 
+
+            $(document).ready(function() {
+
+                var  datatable = $('#import-projects-table').DataTable();
                 $(".view-progress-btn").click(function() {
+                    // $(".file-projects").empty();
                     var fileRecordId = $(this).data("file-record-id");
                     var currentRow = $(this).closest("tr");
-
                     // Unhighlight all other rows
                     $(".highlighted-row").removeClass("highlighted-row");
 
                     // Highlight the clicked row
                     currentRow.addClass("highlighted-row");
 
-                    // Reload DataTable with new data
-                    dataTable.ajax.reload(function(json) {
-                        // Assuming the server returns a JSON object with importProjects data
-                        console.log("Response: " + JSON.stringify(json));
-                        $(".countRecords").html(
-                            '<h4 style="color: #f1b0b7">All Projects: ' +json.totalProjects+'</h4>' +
-                            '<h4 style="color: forestgreen">Successful Projects: ' +json.successfulProjects+'</h4>' +
-                            '<h4 style="color: red">Failed Projects: ' +json.failedProjects +'</h4>'
-                        );
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
+                        type: "POST",
+                        data: { fileRecordId: fileRecordId },
+                        success: function(response) {
+                            // Assuming the server returns a JSON object with importProjects data
+                            console.log("Response: " + JSON.stringify(response));
+                            var data = JSON.parse(JSON.stringify(response));
+                            $(".countRecords").html(
+                                '<h4 style="color: #f1b0b7">All Projects: ' +data.totalProjects+'</h4>' +
+                                '<h4 style="color: forestgreen">Successful Projects: ' +data.successfulProjects+'</h4>' +
+                                '<h4 style="color: red">Failed Projects: ' +data.failedProjects +'</h4>'
+                            );
+                            var importProjects = data.importedProjects;
 
-                        // Clear existing table data
-                        dataTable.clear();
+                            // Clear existing import projects table
+                            // $("#import-projects-table tbody").empty();
+                            $('#import-projects-table').DataTable().clear();
 
-                        // Populate table with new data
-                        $.each(json.importedProjects, function(index, project) {
-                            dataTable.row.add([
-                                project.id,
-                                project.importStatus,
-                                project.newProject,
-                                JSON.stringify(project.importResponse).substring(0, 50) + "..."
-                            ]).draw();
-                        });
+                            // Populate import projects table with new data
+                            $.each(importProjects, function(index, project) {
+                                var truncatedResponse = JSON.stringify(project.importResponse).substring(0, 50) + "...";
+                                var importResponseHtml = '<span class="truncated-response">' + truncatedResponse + '</span><p></p><br><button class="view-more-btn">View More</button>';
+                                datatable.row.add([
+                                    project.id,
+                                    project.importStatus,
+                                    project.newProject,
+                                    importResponseHtml
+                                ]).draw();
+                            });
 
-                        // Handle "View More" button click event
-                        $(".view-more-btn").click(function() {
-                            var $tr = $(this).closest("tr");
-                            var $responseCell = $tr.find(".truncated-response");
-                            var fullResponse = JSON.stringify(json.importedProjects[$tr.index()].importResponse); // Full response string
-                            var $btn = $(this);
+                            // Handle "View More" button click event
+                            $('#import-projects-table tbody').on('click', '.view-more-btn', function() {
+                                var $row = $(this).closest('tr');
+                                var $responseCell = $row.find('.truncated-response');
+                                var fullResponse = JSON.stringify(dataTable.row($row).data().importResponse);
+                                var $btn = $(this);
 
-                            if ($btn.text() === "View More") {
-                                $responseCell.text(fullResponse);
-                                $btn.text("View Less");
-                            } else {
-                                $responseCell.text(fullResponse.substring(0, 50) + "...");
-                                $btn.text("View More");
-                            }
-                        });
+                                if ($btn.text() === "View More") {
+                                    $responseCell.text(fullResponse);
+                                    $btn.text("View Less");
+                                } else {
+                                    $responseCell.text(fullResponse.substring(0, 50) + "...");
+                                    $btn.text("View More");
+                                }
+                            });
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
                     });
+
                 });
             });
         </script>
-
-
     </head>
     <body>
     <h2>Imported Files</h2>

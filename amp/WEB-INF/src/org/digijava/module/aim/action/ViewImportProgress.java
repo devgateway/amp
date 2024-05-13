@@ -43,6 +43,8 @@ public class ViewImportProgress extends Action {
             List<ImportedProject> importedProjects = getImportedProjects(startPage, endPage, importedFilesRecordId);
 
             int totalPages = getTotalPages(importedProjects.size(), endPage);
+            Map<String, Object> errors = new HashMap<String, Object>();
+
 
             Map<String, Object> data = new HashMap<>();
             data.put("importedProjects", importedProjects);
@@ -53,11 +55,13 @@ public class ViewImportProgress extends Action {
             ObjectMapper objectMapper = new ObjectMapper();
 
             objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            String jsonData = new Gson().toJson(data);
+            String jsonData = objectMapper.writeValueAsString(data);
 
             response.setContentType("application/json");
             logger.info("Json Data: "+jsonData);
             response.getWriter().write(jsonData);
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("jsonData",jsonData);
         }
 
         return mapping.findForward("viewImportProgress");

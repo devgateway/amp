@@ -109,14 +109,23 @@
                                 $("#import-projects-table tbody").append(row);
 
                                 // Handle View More button click event
-                                $(".view-more-btn").click(function() {
-                                    var truncatedResponseSpan = $(this).siblings(".truncated-response");
-                                    var fullResponse = truncatedResponseSpan.text().replace("...", "");
 
-                                    // Toggle visibility of full response
-                                    truncatedResponseSpan.text(fullResponse);
-                                    $(this).text("View Less");
+                                // Handle View More button click event
+                                $(".view-more-btn").click(function() {
+                                    var $tr = $(this).closest("tr");
+                                    var $responseCell = $tr.find(".truncated-response");
+                                    var fullResponse = JSON.stringify(project.importResponse); // Full response string
+                                    var $btn = $(this);
+
+                                    if ($btn.text() === "View More") {
+                                        $responseCell.text(fullResponse);
+                                        $btn.text("View Less");
+                                    } else {
+                                        $responseCell.text(truncatedResponse);
+                                        $btn.text("View More");
+                                    }
                                 });
+
                             });
                         },
                         error: function(xhr, status, error) {

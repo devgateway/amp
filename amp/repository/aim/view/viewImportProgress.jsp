@@ -49,7 +49,7 @@
             }
 
             function generatePaginationHtml(currentPage, totalPages) {
-                var paginationHtml = '<div class="pagination">';
+                var paginationHtml = '';
                 paginationHtml += '<button class="prev-btn" disabled>Previous</button>';
 
                 // Show 10 page numbers at a time
@@ -61,9 +61,8 @@
                 }
 
                 paginationHtml += '<button class="next-btn">Next</button>';
-                paginationHtml += '</div>';
 
-                $("#import-projects-table .pagination").html(paginationHtml);
+                $(".pagination").html(paginationHtml);
 
             }
 
@@ -139,8 +138,8 @@
 
                             // Add pagination controls
                             var totalPages = data.totalPages;
+                            $("#import-projects-table").after('<div class="pagination"></div>');
                             generatePaginationHtml(currentPage, totalPages);
-
                             // Handle page click event
                             $(".page-link").click(function() {
                                 currentPage = parseInt($(this).text());

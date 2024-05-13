@@ -123,7 +123,7 @@ public class ViewImportProgress extends Action {
             query.setParameter("importedFilesRecordId", importedFilesRecordId);
         }
 
-        return (long) query.uniqueResult();
+        return ((Number) query.uniqueResult()).longValue();
     }
 
     private long getTotalPages(long totalRecords, int recordsPerPage) {

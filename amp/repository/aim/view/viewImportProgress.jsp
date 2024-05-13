@@ -25,9 +25,10 @@
                 background-color: #dddddd;
             }
         </style>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.css"/>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
         <script>
 
             function makeRequest(fileRecordId,currentPage, pageSize)
@@ -102,61 +103,91 @@
             }
 
             $(document).ready(function() {
-                var fileRecordId; // Declare fileRecordId variable
-
-                $('#import-projects-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
-                        type: "POST",
-                        data: function (d) {
-                            d.fileRecordId = fileRecordId;
-                        }
-                    },
-                    columns: [
-                        { data: "id" },
-                        { data: "importStatus" },
-                        { data: "newProject" },
-                        {
-                            data: "importResponse",
-                            render: function (data, type, row) {
-                                var truncatedResponse = data.substring(0, 50) + "...";
-                                return '<span class="truncated-response">' + truncatedResponse + '</span>' +
-                                    '<button class="view-more-btn">View More</button>';
-                            }
-                        }
-                    ]
-                });
-
+                var currentPage = 1; // Initial page number
+                var pageSize = 10; // Number of items per page
+                $('#import-projects-table').DataTable();
                 $(".view-progress-btn").click(function() {
-                     fileRecordId = $(this).data("file-record-id");
+                    // $(".file-projects").empty();
+                    var fileRecordId = $(this).data("file-record-id");
                     var currentRow = $(this).closest("tr");
-
                     // Unhighlight all other rows
                     $(".highlighted-row").removeClass("highlighted-row");
 
                     // Highlight the clicked row
                     currentRow.addClass("highlighted-row");
 
-                    // Reload DataTable with new data
-                    $('#import-projects-table').DataTable().ajax.reload();
-                });
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
+                        type: "POST",
+                        data: { fileRecordId: fileRecordId },
+                        success: function(response) {
+                            // Assuming the server returns a JSON object with importProjects data
+                            console.log("Response: " + JSON.stringify(response));
+                            var data = JSON.parse(JSON.stringify(response));
+                            $(".countRecords").html(
+                                '<h4 style="color: #f1b0b7">All Projects: ' +data.totalProjects+'</h4>' +
+                                '<h4 style="color: forestgreen">Successful Projects: ' +data.successfulProjects+'</h4>' +
+                                '<h4 style="color: red">Failed Projects: ' +data.failedProjects +'</h4>'
+                            );
+                            var importProjects = data.importedProjects;
 
-                $('#import-projects-table tbody').on('click', '.view-more-btn', function () {
-                    var $row = $(this).closest('tr');
-                    var $responseCell = $row.find('.truncated-response');
-                    var fullResponse = $responseCell.data('full-response');
-                    var $btn = $(this);
+                            // Clear existing import projects table
+                            // $("#import-projects-table tbody").empty();
+                            $('#import-projects-table').DataTable().clear();
 
-                    if ($btn.text() === "View More") {
-                        $responseCell.text(fullResponse);
-                        $btn.text("View Less");
-                    } else {
-                        var truncatedResponse = fullResponse.substring(0, 50) + "...";
-                        $responseCell.text(truncatedResponse);
-                        $btn.text("View More");
-                    }
+                            // Populate import projects table with new data
+                            $.each(importProjects, function(index, project) {
+                                $('#import-projects-table').DataTable().row.add([
+                                    project.id,
+                                    project.importStatus,
+                                    project.newProject,
+                                    JSON.stringify(project.importResponse).substring(0, 50) + "..."
+                                ]).draw();
+                            });
+
+                            // Add pagination controls
+                            // var totalPages = data.totalPages;
+                            // generatePaginationHtml(currentPage, totalPages);
+                            // Handle page click event
+                            // $(".page-link").click(function() {
+                            //     currentPage = parseInt($(this).text());
+                            //     $(".page-link").removeClass("active");
+                            //     $(this).addClass("active");
+                            //
+                            //     // Make new AJAX request with updated pageNumber
+                            //     makeRequest(fileRecordId, currentPage, pageSize);
+                            // });
+
+                            // Handle previous and next button click events
+                            // $(".prev-btn").click(function() {
+                            //     if (currentPage > 1) {
+                            //         currentPage--;
+                            //         $(".page-link").removeClass("active");
+                            //         $(".page-link").eq(currentPage - startPage).addClass("active");
+                            //         generatePaginationHtml(currentPage, totalPages);
+                            //
+                            //         // Make new AJAX request with updated pageNumber
+                            //         makeRequest(fileRecordId, currentPage, pageSize)
+                            //     }
+                            // });
+
+                            // $(".next-btn").click(function() {
+                            //     if (currentPage < totalPages) {
+                            //         currentPage++;
+                            //         $(".page-link").removeClass("active");
+                            //         $(".page-link").eq(currentPage - startPage).addClass("active");
+                            //         generatePaginationHtml(currentPage, totalPages);
+                            //         // Make new AJAX request with updated pageNumber
+                            //         makeRequest(fileRecordId, currentPage, pageSize);
+                            //     }
+                            // });
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+
                 });
             });
         </script>
@@ -209,7 +240,7 @@
         <!-- Import projects will be populated dynamically using AJAX -->
         </tbody>
     </table>
-<%--        <div class="pagination"></div>--%>
+        <div class="pagination"></div>
     </div>
 
     </body>

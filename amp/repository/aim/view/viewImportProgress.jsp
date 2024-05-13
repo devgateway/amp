@@ -102,60 +102,61 @@
             }
 
             $(document).ready(function() {
-                var currentPage = 1; // Initial page number
-                var pageSize = 10; // Number of items per page
+                var fileRecordId; // Declare fileRecordId variable
+
+                $('#import-projects-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
+                        type: "POST",
+                        data: function (d) {
+                            d.fileRecordId = fileRecordId;
+                        }
+                    },
+                    columns: [
+                        { data: "id" },
+                        { data: "importStatus" },
+                        { data: "newProject" },
+                        {
+                            data: "importResponse",
+                            render: function (data, type, row) {
+                                var truncatedResponse = data.substring(0, 50) + "...";
+                                return '<span class="truncated-response">' + truncatedResponse + '</span>' +
+                                    '<button class="view-more-btn">View More</button>';
+                            }
+                        }
+                    ]
+                });
 
                 $(".view-progress-btn").click(function() {
-                    // $(".file-projects").empty();
-                    var fileRecordId = $(this).data("file-record-id");
+                     fileRecordId = $(this).data("file-record-id");
                     var currentRow = $(this).closest("tr");
+
                     // Unhighlight all other rows
                     $(".highlighted-row").removeClass("highlighted-row");
 
                     // Highlight the clicked row
                     currentRow.addClass("highlighted-row");
 
-                    $(document).ready(function() {
-                        $('#import-projects-table').DataTable({
-                            processing: true,
-                            serverSide: true,
-                            ajax: {
-                                url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
-                                type: "POST",
-                                data: function (d) {
-                                    d.fileRecordId = fileRecordId;
-                                }
-                            },
-                            columns: [
-                                { data: "id" },
-                                { data: "importStatus" },
-                                { data: "newProject" },
-                                {
-                                    data: "importResponse",
-                                    render: function (data, type, row) {
-                                        var truncatedResponse = data.substring(0, 50) + "...";
-                                        return '<span class="truncated-response">' + truncatedResponse + '</span>' +
-                                            '<button class="view-more-btn">View More</button>';
-                                    }
-                                }
-                            ]
-                        });
-                        $row.find(".view-more-btn").click(function() {
-                            var $tr = $(this).closest("tr");
-                            var $responseCell = $tr.find(".truncated-response");
-                            var fullResponse = JSON.stringify(project.importResponse); // Full response string
-                            var $btn = $(this);
+                    // Reload DataTable with new data
+                    $('#import-projects-table').DataTable().ajax.reload();
+                });
 
-                            if ($btn.text() === "View More") {
-                                $responseCell.text(fullResponse);
-                                $btn.text("View Less");
-                            } else {
-                                $responseCell.text(truncatedResponse);
-                                $btn.text("View More");
-                            }
-                        });
-                    });
+                $('#import-projects-table tbody').on('click', '.view-more-btn', function () {
+                    var $row = $(this).closest('tr');
+                    var $responseCell = $row.find('.truncated-response');
+                    var fullResponse = $responseCell.data('full-response');
+                    var $btn = $(this);
 
+                    if ($btn.text() === "View More") {
+                        $responseCell.text(fullResponse);
+                        $btn.text("View Less");
+                    } else {
+                        var truncatedResponse = fullResponse.substring(0, 50) + "...";
+                        $responseCell.text(truncatedResponse);
+                        $btn.text("View More");
+                    }
                 });
             });
         </script>

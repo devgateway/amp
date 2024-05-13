@@ -105,7 +105,7 @@
                 var pageSize = 10; // Number of items per page
 
                 $(".view-progress-btn").click(function() {
-                    $(".file-projects").empty();
+                    // $(".file-projects").empty();
                     var fileRecordId = $(this).data("file-record-id");
                     var currentRow = $(this).closest("tr");
                     // Unhighlight all other rows

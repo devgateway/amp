@@ -37,23 +37,20 @@ public class ViewImportProgress extends Action {
 
         if (request.getParameterMap().containsKey("fileRecordId") && request.getParameter("fileRecordId")!=null){
 
-            int startPage = 1;
-            int endPage = 10;
+            int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+            int pageSize = Integer.parseInt(request.getParameter("pageSize"));
             Long importedFilesRecordId =Long.parseLong(request.getParameter("fileRecordId"));
 
-            List<ImportedProject> importedProjects = getImportedProjects(startPage, endPage, importedFilesRecordId);
+            List<ImportedProject> importedProjects = getImportedProjects(pageNumber, pageSize, importedFilesRecordId);
             Long failedProjects = importedProjects.stream().filter(project -> project.getImportStatus().equals(ImportStatus.FAILED)).count();
             Long successfulProjects = importedProjects.stream().filter(project -> project.getImportStatus().equals(ImportStatus.SUCCESS)).count();
-            int totalPages = getTotalPages(importedProjects.size(), endPage);
-            Map<String, Object> errors = new HashMap<String, Object>();
+            int totalPages = getTotalPages(importedProjects.size(), pageSize);
 
 
             Map<String, Object> data = new HashMap<>();
             data.put("importedProjects", importedProjects);
             data.put("failedProjects", failedProjects);
             data.put("successfulProjects", successfulProjects);
-            data.put("startPage", startPage);
-            data.put("endPage", endPage);
             data.put("totalPages", totalPages);
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -76,7 +73,7 @@ public class ViewImportProgress extends Action {
         return (int) Math.ceil((double) totalRecords / recordsPerPage);
     }
 
-    private List<ImportedProject> getImportedProjects(int startPage, int endPage, Long importedFilesRecordId) {
+    private List<ImportedProject> getImportedProjects(int pageNumber, int pageSize, Long importedFilesRecordId) {
         Session session = PersistenceManager.getRequestDBSession();
 
         String hql = "FROM ImportedProject";
@@ -91,8 +88,9 @@ public class ViewImportProgress extends Action {
             query.setParameter("importedFilesRecordId", importedFilesRecordId);
         }
 
-        query.setFirstResult((startPage - 1) * endPage);
-        query.setMaxResults(endPage);
+        int startRecordIndex = (pageNumber - 1) * pageSize; // Calculate the start index for the query
+        query.setFirstResult(startRecordIndex);
+        query.setMaxResults(pageSize); // Set the maximum number of records to retrieve
 
         return query.list();
     }

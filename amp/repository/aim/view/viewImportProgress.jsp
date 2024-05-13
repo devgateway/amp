@@ -27,7 +27,44 @@
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
+
+            function addProjectRow(project) {
+                var responseString = JSON.stringify(project.importResponse);
+                var truncatedResponse = responseString.substring(0, 50) + "..."; // Limit to 50 characters
+
+                var row = "<tr>" +
+                    "<td>" + project.id + "</td>" +
+                    "<td>" + project.importStatus + "</td>" +
+                    "<td>" + project.newProject + "</td>" +
+                    "<td>" +
+                    "<span class='truncated-response'>" + truncatedResponse + "</span>" +
+                    "<button class='view-more-btn'>View More</button>" +
+                    "</td>" +
+                    "</tr>";
+                var $row = $(row); // Convert row to jQuery object
+                $("#import-projects-table tbody").append($row);
+
+                // Handle View More button click event for this row
+                $row.find(".view-more-btn").click(function() {
+                    var $tr = $(this).closest("tr");
+                    var $responseCell = $tr.find(".truncated-response");
+                    var fullResponse = JSON.stringify(project.importResponse); // Full response string
+                    var $btn = $(this);
+
+                    if ($btn.text() === "View More") {
+                        $responseCell.text(fullResponse);
+                        $btn.text("View Less");
+                    } else {
+                        $responseCell.text(truncatedResponse);
+                        $btn.text("View More");
+                    }
+                });
+            }
+
             $(document).ready(function() {
+                var currentPage = 1; // Initial page number
+                var pageSize = 10; // Number of items per page
+
                 $(".view-progress-btn").click(function() {
                     var fileRecordId = $(this).data("file-record-id");
                     var currentRow = $(this).closest("tr");
@@ -40,7 +77,7 @@
                     $.ajax({
                         url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
                         type: "POST",
-                        data: { fileRecordId: fileRecordId },
+                        data: { fileRecordId: fileRecordId, pageNumber: currentPage, pageSize: pageSize },
                         success: function(response) {
                             // Assuming the server returns a JSON object with importProjects data
                             console.log("Response: " + JSON.stringify(response));
@@ -56,37 +93,43 @@
 
                             // Populate import projects table with new data
                             $.each(importProjects, function(index, project) {
-                                var responseString = JSON.stringify(project.importResponse);
-                                var truncatedResponse = responseString.substring(0, 50) + "..."; // Limit to 50 characters
+                                addProjectRow(project);
+                            });
+                            // Add pagination controls
+                            var totalPages = data.totalPages;
+                            var paginationHtml = '<div class="pagination">';
+                            for (var i = 1; i <= totalPages; i++) {
+                                paginationHtml += '<span class="page-link' + (i === currentPage? 'ctive' : '') + '">' + i + '</span>';
+                            }
+                            paginationHtml += '</div>';
+                            $("#import-projects-table").after(paginationHtml);
 
-                                var row = "<tr>" +
-                                    "<td>" + project.id + "</td>" +
-                                    "<td>" + project.importStatus + "</td>" +
-                                    "<td>" + project.newProject + "</td>" +
-                                    "<td>" +
-                                    "<span class='truncated-response'>" + truncatedResponse + "</span>" +
-                                    "<button class='view-more-btn'>View More</button>" +
-                                    "</td>" +
-                                    "</tr>";
-                                var $row = $(row); // Convert row to jQuery object
-                                $("#import-projects-table tbody").append($row);
+                            // Handle page click event
+                            $(".page-link").click(function() {
+                                currentPage = parseInt($(this).text());
+                                $(".page-link").removeClass("active");
+                                $(this).addClass("active");
 
-                                // Handle View More button click event for this row
-                                $row.find(".view-more-btn").click(function() {
-                                    var $tr = $(this).closest("tr");
-                                    var $responseCell = $tr.find(".truncated-response");
-                                    var fullResponse = JSON.stringify(project.importResponse); // Full response string
-                                    var $btn = $(this);
-
-                                    if ($btn.text() === "View More") {
-                                        $responseCell.text(fullResponse);
-                                        $btn.text("View Less");
-                                    } else {
-                                        $responseCell.text(truncatedResponse);
-                                        $btn.text("View More");
+                                // Make new AJAX request with updated pageNumber
+                                $.ajax({
+                                    url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
+                                    type: "POST",
+                                    data: { fileRecordId: fileRecordId, pageNumber: currentPage, pageSize: pageSize },
+                                    success: function(response) {
+                                        // Update table with new data
+                                        var data = JSON.parse(JSON.stringify(response));
+                                        var importProjects = data.importedProjects;
+                                        $("#import-projects-table tbody").empty();
+                                        $.each(importProjects, function(index, project) {
+                                            addProjectRow(project);
+                                        });
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error("Error getting projects " + error);
                                     }
                                 });
                             });
+
                         },
                         error: function(xhr, status, error) {
                             console.error("Error: " + error);

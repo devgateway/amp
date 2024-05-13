@@ -81,11 +81,11 @@
                         data: { fileRecordId: fileRecordId },
                         success: function(response) {
                             // Assuming the server returns a JSON object with importProjects data
-                            console.log("Response: " + response);
-                            var data = JSON.parse(response);
+                            console.log("Response: " + JSON.stringify(response));
+                            var data = JSON.parse(JSON.stringify(response));
                             $(".countRecords").html(
-                                '<h4 style="color: forestgreen">Successful Projects: ' +response.successfulProjects+'</h4>' +
-                                '<h4 style="color: red">Failed Projects: ' +response.failedProjects +'</h4>'
+                                '<h4 style="color: forestgreen">Successful Projects: ' +data.successfulProjects+'</h4>' +
+                                '<h4 style="color: red">Failed Projects: ' +data.failedProjects +'</h4>'
                             );
                             var importProjects = data.importedProjects;
 

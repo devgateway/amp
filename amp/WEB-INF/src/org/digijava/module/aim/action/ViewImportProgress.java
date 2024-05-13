@@ -33,22 +33,22 @@ public class ViewImportProgress extends Action {
 
         if (request.getParameterMap().containsKey("fileRecordId") && request.getParameter("fileRecordId")!=null){
 
-//            int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
-//            int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+            int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+            int pageSize = Integer.parseInt(request.getParameter("pageSize"));
             Long importedFilesRecordId =Long.parseLong(request.getParameter("fileRecordId"));
 
-            List<ImportedProject> importedProjects = getImportedProjects(1, 10, importedFilesRecordId);
+            List<ImportedProject> importedProjects = getImportedProjects(pageNumber, pageSize, importedFilesRecordId);
 //            Long failedProjects = importedProjects.stream().filter(project -> project.getImportStatus().equals(ImportStatus.FAILED)).count();
 //            Long successfulProjects = importedProjects.stream().filter(project -> project.getImportStatus().equals(ImportStatus.SUCCESS)).count();
 //            long totalPages = getTotalPages(importedProjects.size(), pageSize);
-            Map<String, Long> variousCounts = getVariousCounts(importedFilesRecordId);
+            Map<String, Long> variousCounts = getVariousCounts(pageSize, importedFilesRecordId);
 
 
             Map<String, Object> data = new HashMap<>();
             data.put("importedProjects", importedProjects);
             data.put("failedProjects", variousCounts.get("failedProjects"));
             data.put("successfulProjects", variousCounts.get("successfulProjects"));
-//            data.put("totalPages", variousCounts.get("totalPages"));
+            data.put("totalPages", variousCounts.get("totalPages"));
             data.put("totalProjects", variousCounts.get("totalProjects"));
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -66,7 +66,7 @@ public class ViewImportProgress extends Action {
         return mapping.findForward("viewImportProgress");
 
     }
-    private Map<String, Long> getVariousCounts(Long importedFilesRecordId) {
+    private Map<String, Long> getVariousCounts(int pageSize, Long importedFilesRecordId) {
         Session session = PersistenceManager.getRequestDBSession();
 
         String hql = "SELECT importStatus, COUNT(*) FROM ImportedProject";
@@ -100,7 +100,7 @@ public class ViewImportProgress extends Action {
         long totalProjects= getTotalProjects(importedFilesRecordId);
 
         countsMap.put("totalProjects", totalProjects);
-//        countsMap.put("totalPages", getTotalPages(totalProjects,pageSize));
+        countsMap.put("totalPages", getTotalPages(totalProjects,pageSize));
 
         return countsMap;
     }
@@ -145,9 +145,9 @@ public class ViewImportProgress extends Action {
             query.setParameter("importedFilesRecordId", importedFilesRecordId);
         }
 
-//        int startRecordIndex = (pageNumber - 1) * pageSize; // Calculate the start index for the query
-//        query.setFirstResult(startRecordIndex);
-//        query.setMaxResults(pageSize); // Set the maximum number of records to retrieve
+        int startRecordIndex = (pageNumber - 1) * pageSize; // Calculate the start index for the query
+        query.setFirstResult(startRecordIndex);
+        query.setMaxResults(pageSize); // Set the maximum number of records to retrieve
 
         return query.list();
     }

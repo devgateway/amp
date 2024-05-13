@@ -33,16 +33,19 @@
                     formData.append("fileRecordId", fileRecordId);
 
 
-                    xhr.open("GET", "${pageContext.request.contextPath}/aim/viewImportProgress.do", true);
+                    xhr.open("POST", "${pageContext.request.contextPath}/aim/viewImportProgress.do", true);
                     // xhr.setRequestHeader()
                     // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     xhr.onreadystatechange = function () {
+                        console.log("Status code: " + xhr.status);
                         if (xhr.readyState === 4 && xhr.status === 200) {
                             // Update UI or perform any additional actions if needed
-                            console.log("Selected pairs updated successfully.");
+
                             var jsonData = xhr.getResponseHeader('jsonData');
+                            var jsonData2 = xhr.response;
 
                             console.log("Raw response: "+jsonData)
+                            console.log("Raw response 2: "+jsonData2)
                             var data = JSON.parse(jsonData);
                             var importProjects = data.importedProjects;
                             $("#import-projects-table tbody").empty();

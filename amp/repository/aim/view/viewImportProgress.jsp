@@ -7,7 +7,7 @@
         <title>Imported Files</title>
         <style>
             tr.highlighted-row {
-                background-color: yellow;
+                background-color: #a3c293;
             }
             table {
                 font-family: arial, sans-serif;

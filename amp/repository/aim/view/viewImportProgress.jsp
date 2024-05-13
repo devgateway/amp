@@ -208,7 +208,7 @@
         <!-- Import projects will be populated dynamically using AJAX -->
         </tbody>
     </table>
-        <div class="pagination"></div>
+<%--        <div class="pagination"></div>--%>
     </div>
 
     </body>

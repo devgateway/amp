@@ -46,7 +46,7 @@
 
                             console.log("Raw response: "+jsonData)
                             console.log("Raw response 2: "+jsonData2)
-                            var data = JSON.parse(jsonData);
+                            var data = JSON.parse(jsonData2);
                             var importProjects = data.importedProjects;
                             $("#import-projects-table tbody").empty();
 

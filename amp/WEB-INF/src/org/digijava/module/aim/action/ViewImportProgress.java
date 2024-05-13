@@ -61,10 +61,9 @@ public class ViewImportProgress extends Action {
             logger.info("Json Data: "+jsonData);
             response.getWriter().write(jsonData);
             response.setCharacterEncoding("UTF-8");
-            response.setHeader("jsonData",jsonData);
         }
 
-        return mapping.findForward("viewImportProgress");
+        return null;
 
     }
 

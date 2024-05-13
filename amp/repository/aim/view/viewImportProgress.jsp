@@ -41,12 +41,11 @@
                         if (xhr.readyState === 4 && xhr.status === 200) {
                             // Update UI or perform any additional actions if needed
 
-                            var jsonData = xhr.getResponseHeader('jsonData');
-                            var jsonData2 = xhr.response;
+                            // var jsonData = xhr.getResponseHeader('jsonData');
+                            var jsonData = xhr.response;
 
-                            console.log("Raw response: "+jsonData)
-                            console.log("Raw response 2: "+jsonData2)
-                            var data = JSON.parse(jsonData2);
+                            console.log("Raw response : "+jsonData)
+                            var data = JSON.parse(jsonData);
                             var importProjects = data.importedProjects;
                             $("#import-projects-table tbody").empty();
 

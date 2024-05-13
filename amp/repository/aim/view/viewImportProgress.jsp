@@ -31,49 +31,11 @@
                 $(".view-progress-btn").click(function() {
                     var fileRecordId = $(this).data("file-record-id");
                     var currentRow = $(this).closest("tr");
+                    // Unhighlight all other rows
+                    $(".highlighted-row").removeClass("highlighted-row");
 
                     // Highlight the clicked row
                     currentRow.addClass("highlighted-row");
-                    <%--var xhr = new XMLHttpRequest();--%>
-                    <%--// Create a FormData object to send data in the request body--%>
-                    <%--var formData = new FormData();--%>
-                    <%--formData.append("fileRecordId", fileRecordId);--%>
-
-
-                    <%--xhr.open("POST", "${pageContext.request.contextPath}/aim/viewImportProgress.do", true);--%>
-                    <%--// xhr.setRequestHeader()--%>
-                    <%--// xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");--%>
-                    <%--xhr.onreadystatechange = function () {--%>
-                    <%--    console.log("Status code: " + xhr.status);--%>
-                    <%--    if (xhr.readyState === 4 && xhr.status === 200) {--%>
-                    <%--        // Update UI or perform any additional actions if needed--%>
-
-                    <%--        // var jsonData = xhr.getResponseHeader('jsonData');--%>
-                    <%--        var jsonData = xhr.response;--%>
-
-                    <%--        console.log("Raw response : "+jsonData)--%>
-                    <%--        var data = JSON.parse(jsonData);--%>
-                    <%--        var importProjects = data.importedProjects;--%>
-                    <%--        $("#import-projects-table tbody").empty();--%>
-
-                    <%--        // Populate import projects table with new data--%>
-                    <%--        $.each(importProjects, function(index, project) {--%>
-                    <%--            var row = "<tr>" +--%>
-                    <%--                "<td>" + project.id + "</td>" +--%>
-                    <%--                "<td>" + project.importStatus + "</td>" +--%>
-                    <%--                "<td>" + project.newProject + "</td>" +--%>
-                    <%--                "<td>" + JSON.stringify(project.importResponse) + "</td>" +--%>
-                    <%--                "</tr>";--%>
-                    <%--            $("#import-projects-table tbody").append(row);--%>
-                    <%--        });--%>
-
-                    <%--    }--%>
-                    <%--    else--%>
-                    <%--    {--%>
-                    <%--        console.error("Error loading :")--%>
-                    <%--    }--%>
-                    <%--};--%>
-                    <%--xhr.send(formData);--%>
 
                     $.ajax({
                         url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",

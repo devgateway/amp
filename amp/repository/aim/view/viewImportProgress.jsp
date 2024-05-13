@@ -31,7 +31,9 @@
 
         <script>
             $(document).ready(function() {
-                $('#import-projects-table').DataTable({
+                var currentPage = 1; // Initial page number
+                var pageSize = 10; // Number of items per page
+                var dataTable = $('#import-projects-table').DataTable({
                     "serverSide": true,
                     "ajax": {
                         "url": "${pageContext.request.contextPath}/aim/viewImportProgress.do",
@@ -56,10 +58,48 @@
                     currentRow.addClass("highlighted-row");
 
                     // Reload DataTable with new data
-                    $('#import-projects-table').DataTable().ajax.reload();
+                    dataTable.ajax.reload(function(json) {
+                        // Assuming the server returns a JSON object with importProjects data
+                        console.log("Response: " + JSON.stringify(json));
+                        $(".countRecords").html(
+                            '<h4 style="color: #f1b0b7">All Projects: ' +json.totalProjects+'</h4>' +
+                            '<h4 style="color: forestgreen">Successful Projects: ' +json.successfulProjects+'</h4>' +
+                            '<h4 style="color: red">Failed Projects: ' +json.failedProjects +'</h4>'
+                        );
+
+                        // Clear existing table data
+                        dataTable.clear();
+
+                        // Populate table with new data
+                        $.each(json.importedProjects, function(index, project) {
+                            dataTable.row.add([
+                                project.id,
+                                project.importStatus,
+                                project.newProject,
+                                JSON.stringify(project.importResponse).substring(0, 50) + "..."
+                            ]).draw();
+                        });
+
+                        // Handle "View More" button click event
+                        $(".view-more-btn").click(function() {
+                            var $tr = $(this).closest("tr");
+                            var $responseCell = $tr.find(".truncated-response");
+                            var fullResponse = JSON.stringify(json.importedProjects[$tr.index()].importResponse); // Full response string
+                            var $btn = $(this);
+
+                            if ($btn.text() === "View More") {
+                                $responseCell.text(fullResponse);
+                                $btn.text("View Less");
+                            } else {
+                                $responseCell.text(fullResponse.substring(0, 50) + "...");
+                                $btn.text("View More");
+                            }
+                        });
+                    });
                 });
             });
         </script>
+
 
     </head>
     <body>

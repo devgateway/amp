@@ -83,13 +83,29 @@
 
                             // Populate import projects table with new data
                             $.each(importProjects, function(index, project) {
+                                var responseString = JSON.stringify(project.importResponse);
+                                var truncatedResponse = responseString.substring(0, 50) + "..."; // Limit to 50 characters
+
                                 var row = "<tr>" +
                                     "<td>" + project.id + "</td>" +
                                     "<td>" + project.importStatus + "</td>" +
                                     "<td>" + project.newProject + "</td>" +
-                                    "<td>" + JSON.stringify(project.importResponse) + "</td>" +
+                                    "<td>" +
+                                    "<span class='truncated-response'>" + truncatedResponse + "</span>" +
+                                    "<button class='view-more-btn'>View More</button>" +
+                                    "</td>" +
                                     "</tr>";
                                 $("#import-projects-table tbody").append(row);
+
+                                // Handle View More button click event
+                                $(".view-more-btn").click(function() {
+                                    var truncatedResponseSpan = $(this).siblings(".truncated-response");
+                                    var fullResponse = truncatedResponseSpan.text().replace("...", "");
+
+                                    // Toggle visibility of full response
+                                    truncatedResponseSpan.text(fullResponse);
+                                    $(this).text("View Less");
+                                });
                             });
                         },
                         error: function(xhr, status, error) {

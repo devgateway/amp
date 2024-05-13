@@ -116,13 +116,20 @@
                             $.each(importProjects, function(index, project) {
                                 addProjectRow(project);
                             });
+
                             // Add pagination controls
                             var totalPages = data.totalPages;
                             var paginationHtml = '<div class="pagination">';
                             paginationHtml += '<button class="prev-btn" disabled>Previous</button>';
-                            for (var i = 1; i <= totalPages; i++) {
-                                paginationHtml += '<span class="page-link' + (i === currentPage? 'active' : '') + '">' + i + '</span> | ';
+
+                            // Show 10 page numbers at a time
+                            var startPage = currentPage - 5 > 0 ? currentPage - 5 : 1;
+                            var endPage = startPage + 9 <= totalPages ? startPage + 9 : totalPages;
+
+                            for (var i = startPage; i <= endPage; i++) {
+                                paginationHtml += '<span class="page-link' + (i === currentPage? ' active' : '') + '">' + i + '</span> | ';
                             }
+
                             paginationHtml += '<button class="next-btn">Next</button>';
                             paginationHtml += '</div>';
                             $("#import-projects-table").after(paginationHtml);
@@ -134,7 +141,7 @@
                                 $(this).addClass("active");
 
                                 // Make new AJAX request with updated pageNumber
-                                makeRequest(fileRecordId, currentPage,pageSize);
+                                makeRequest(fileRecordId, currentPage, pageSize);
                             });
 
                             // Handle previous and next button click events
@@ -142,22 +149,21 @@
                                 if (currentPage > 1) {
                                     currentPage--;
                                     $(".page-link").removeClass("active");
-                                    $(".page-link").eq(currentPage - 1).addClass("active");
+                                    $(".page-link").eq(currentPage - startPage).addClass("active");
 
                                     // Make new AJAX request with updated pageNumber
-                                    makeRequest(fileRecordId,currentPage,pageSize)
+                                    makeRequest(fileRecordId, currentPage, pageSize)
                                 }
                             });
 
                             $(".next-btn").click(function() {
-                                var totalPages = Math.ceil(data.totalProjects / pageSize);
                                 if (currentPage < totalPages) {
                                     currentPage++;
                                     $(".page-link").removeClass("active");
-                                    $(".page-link").eq(currentPage - 1).addClass("active");
+                                    $(".page-link").eq(currentPage - startPage).addClass("active");
 
                                     // Make new AJAX request with updated pageNumber
-                                    makeRequest(fileRecordId,currentPage,pageSize);
+                                    makeRequest(fileRecordId, currentPage, pageSize);
                                 }
                             });
 
@@ -166,6 +172,7 @@
                             console.error("Error: " + error);
                         }
                     });
+
                 });
             });
         </script>

@@ -27,58 +27,26 @@
             $(document).ready(function() {
                 $(".view-progress-btn").click(function() {
                     var fileRecordId = $(this).data("file-record-id");
-                    var xhr = new XMLHttpRequest();
-                    // Create a FormData object to send data in the request body
-                    var formData = new FormData();
-                    formData.append("fileRecordId", fileRecordId);
+                    <%--var xhr = new XMLHttpRequest();--%>
+                    <%--// Create a FormData object to send data in the request body--%>
+                    <%--var formData = new FormData();--%>
+                    <%--formData.append("fileRecordId", fileRecordId);--%>
 
 
-                    xhr.open("POST", "${pageContext.request.contextPath}/aim/viewImportProgress.do", true);
-                    // xhr.setRequestHeader()
-                    // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function () {
-                        console.log("Status code: " + xhr.status);
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            // Update UI or perform any additional actions if needed
+                    <%--xhr.open("POST", "${pageContext.request.contextPath}/aim/viewImportProgress.do", true);--%>
+                    <%--// xhr.setRequestHeader()--%>
+                    <%--// xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");--%>
+                    <%--xhr.onreadystatechange = function () {--%>
+                    <%--    console.log("Status code: " + xhr.status);--%>
+                    <%--    if (xhr.readyState === 4 && xhr.status === 200) {--%>
+                    <%--        // Update UI or perform any additional actions if needed--%>
 
-                            // var jsonData = xhr.getResponseHeader('jsonData');
-                            var jsonData = xhr.response;
+                    <%--        // var jsonData = xhr.getResponseHeader('jsonData');--%>
+                    <%--        var jsonData = xhr.response;--%>
 
-                            console.log("Raw response : "+jsonData)
-                            var data = JSON.parse(jsonData);
-                            var importProjects = data.importedProjects;
-                            $("#import-projects-table tbody").empty();
-
-                            // Populate import projects table with new data
-                            $.each(importProjects, function(index, project) {
-                                var row = "<tr>" +
-                                    "<td>" + project.id + "</td>" +
-                                    "<td>" + project.importStatus + "</td>" +
-                                    "<td>" + project.newProject + "</td>" +
-                                    "<td>" + JSON.stringify(project.importResponse) + "</td>" +
-                                    "</tr>";
-                                $("#import-projects-table tbody").append(row);
-                            });
-
-                        }
-                        else
-                        {
-                            console.error("Error loading :")
-                        }
-                    };
-                    xhr.send(formData);
-
-                    <%--$.ajax({--%>
-                    <%--    url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",--%>
-                    <%--    type: "POST",--%>
-                    <%--    data: { fileRecordId: fileRecordId },--%>
-                    <%--    success: function(response) {--%>
-                    <%--        // Assuming the server returns a JSON object with importProjects data--%>
-                    <%--        console.log("Response: " + response);--%>
-                    <%--        response = JSON.parse(response);--%>
-                    <%--        var importProjects = response.importedProjects;--%>
-
-                    <%--        // Clear existing import projects table--%>
+                    <%--        console.log("Raw response : "+jsonData)--%>
+                    <%--        var data = JSON.parse(jsonData);--%>
+                    <%--        var importProjects = data.importedProjects;--%>
                     <%--        $("#import-projects-table tbody").empty();--%>
 
                     <%--        // Populate import projects table with new data--%>
@@ -91,11 +59,43 @@
                     <%--                "</tr>";--%>
                     <%--            $("#import-projects-table tbody").append(row);--%>
                     <%--        });--%>
-                    <%--    },--%>
-                    <%--    error: function(xhr, status, error) {--%>
-                    <%--        console.error("Error: " + error);--%>
+
                     <%--    }--%>
-                    <%--});--%>
+                    <%--    else--%>
+                    <%--    {--%>
+                    <%--        console.error("Error loading :")--%>
+                    <%--    }--%>
+                    <%--};--%>
+                    <%--xhr.send(formData);--%>
+
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
+                        type: "POST",
+                        data: { fileRecordId: fileRecordId },
+                        success: function(response) {
+                            // Assuming the server returns a JSON object with importProjects data
+                            console.log("Response: " + response);
+                            var data = JSON.parse(response);
+                            var importProjects = data.importedProjects;
+
+                            // Clear existing import projects table
+                            $("#import-projects-table tbody").empty();
+
+                            // Populate import projects table with new data
+                            $.each(importProjects, function(index, project) {
+                                var row = "<tr>" +
+                                    "<td>" + project.id + "</td>" +
+                                    "<td>" + project.importStatus + "</td>" +
+                                    "<td>" + project.newProject + "</td>" +
+                                    "<td>" + JSON.stringify(project.importResponse) + "</td>" +
+                                    "</tr>";
+                                $("#import-projects-table tbody").append(row);
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
                 });
             });
         </script>

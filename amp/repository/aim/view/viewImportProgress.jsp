@@ -57,7 +57,7 @@
                 var endPage = startPage + 9 <= totalPages? startPage + 9 : totalPages;
 
                 for (var i = startPage; i <= endPage; i++) {
-                    paginationHtml += '<a class="page-link' + (i === currentPage? 'ctive' : '') + '">' + i + '</a> | ';
+                    paginationHtml += '<a class="page-link' + (i === currentPage? 'active' : '') + '">' + i + '</a> | ';
                 }
 
                 paginationHtml += '<button class="next-btn">Next</button>';

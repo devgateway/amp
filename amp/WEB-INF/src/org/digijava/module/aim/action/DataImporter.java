@@ -137,6 +137,7 @@ public class DataImporter extends Action {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setHeader("updatedMap",json);
+            return null;
 
         }
 

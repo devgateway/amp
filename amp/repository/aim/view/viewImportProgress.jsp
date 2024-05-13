@@ -28,6 +28,26 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
 
+            function makeRequest(fileRecordId,currentPage, pageSize)
+            {
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
+                    type: "POST",
+                    data: { fileRecordId: fileRecordId, pageNumber: currentPage, pageSize: pageSize },
+                    success: function(response) {
+                        var data = JSON.parse(JSON.stringify(response));
+                        var importProjects = data.importedProjects;
+                        $("#import-projects-table tbody").empty();
+                        $.each(importProjects, function(index, project) {
+                            addProjectRow(project);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error getting projects: " + error);
+                    }
+                });
+            }
+
             function addProjectRow(project) {
                 var responseString = JSON.stringify(project.importResponse);
                 var truncatedResponse = responseString.substring(0, 50) + "..."; // Limit to 50 characters
@@ -99,9 +119,11 @@
                             // Add pagination controls
                             var totalPages = data.totalPages;
                             var paginationHtml = '<div class="pagination">';
+                            paginationHtml += '<button class="prev-btn" disabled>Previous</button>';
                             for (var i = 1; i <= totalPages; i++) {
-                                paginationHtml += '<span class="page-link' + (i === currentPage? 'ctive' : '') + '">' + i + '</span>';
+                                paginationHtml += '<span class="page-link' + (i === currentPage? 'active' : '') + '">' + i + '</span> | ';
                             }
+                            paginationHtml += '<button class="next-btn">Next</button>';
                             paginationHtml += '</div>';
                             $("#import-projects-table").after(paginationHtml);
 
@@ -112,23 +134,31 @@
                                 $(this).addClass("active");
 
                                 // Make new AJAX request with updated pageNumber
-                                $.ajax({
-                                    url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
-                                    type: "POST",
-                                    data: { fileRecordId: fileRecordId, pageNumber: currentPage, pageSize: pageSize },
-                                    success: function(response) {
-                                        // Update table with new data
-                                        var data = JSON.parse(JSON.stringify(response));
-                                        var importProjects = data.importedProjects;
-                                        $("#import-projects-table tbody").empty();
-                                        $.each(importProjects, function(index, project) {
-                                            addProjectRow(project);
-                                        });
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.error("Error getting projects " + error);
-                                    }
-                                });
+                                makeRequest(fileRecordId, currentPage,pageSize);
+                            });
+
+                            // Handle previous and next button click events
+                            $(".prev-btn").click(function() {
+                                if (currentPage > 1) {
+                                    currentPage--;
+                                    $(".page-link").removeClass("active");
+                                    $(".page-link").eq(currentPage - 1).addClass("active");
+
+                                    // Make new AJAX request with updated pageNumber
+                                    makeRequest(fileRecordId,currentPage,pageSize)
+                                }
+                            });
+
+                            $(".next-btn").click(function() {
+                                var totalPages = Math.ceil(data.totalProjects / pageSize);
+                                if (currentPage < totalPages) {
+                                    currentPage++;
+                                    $(".page-link").removeClass("active");
+                                    $(".page-link").eq(currentPage - 1).addClass("active");
+
+                                    // Make new AJAX request with updated pageNumber
+                                    makeRequest(fileRecordId,currentPage,pageSize);
+                                }
                             });
 
                         },

@@ -48,6 +48,25 @@
                 });
             }
 
+            function generatePaginationHtml(currentPage, totalPages) {
+                var paginationHtml = '<div class="pagination">';
+                paginationHtml += '<button class="prev-btn" disabled>Previous</button>';
+
+                // Show 10 page numbers at a time
+                var startPage = currentPage - 5 > 0? currentPage - 5 : 1;
+                var endPage = startPage + 9 <= totalPages? startPage + 9 : totalPages;
+
+                for (var i = startPage; i <= endPage; i++) {
+                    paginationHtml += '<a class="page-link' + (i === currentPage? 'ctive' : '') + '">' + i + '</a> | ';
+                }
+
+                paginationHtml += '<button class="next-btn">Next</button>';
+                paginationHtml += '</div>';
+
+                $("#import-projects-table .pagination").html(paginationHtml);
+
+            }
+
             function addProjectRow(project) {
                 var responseString = JSON.stringify(project.importResponse);
                 var truncatedResponse = responseString.substring(0, 50) + "..."; // Limit to 50 characters
@@ -86,6 +105,7 @@
                 var pageSize = 10; // Number of items per page
 
                 $(".view-progress-btn").click(function() {
+                    $(".file-projects").empty();
                     var fileRecordId = $(this).data("file-record-id");
                     var currentRow = $(this).closest("tr");
                     // Unhighlight all other rows
@@ -119,20 +139,7 @@
 
                             // Add pagination controls
                             var totalPages = data.totalPages;
-                            var paginationHtml = '<div class="pagination">';
-                            paginationHtml += '<button class="prev-btn" disabled>Previous</button>';
-
-                            // Show 10 page numbers at a time
-                            var startPage = currentPage - 5 > 0 ? currentPage - 5 : 1;
-                            var endPage = startPage + 9 <= totalPages ? startPage + 9 : totalPages;
-
-                            for (var i = startPage; i <= endPage; i++) {
-                                paginationHtml += '<span class="page-link' + (i === currentPage? ' active' : '') + '">' + i + '</span> | ';
-                            }
-
-                            paginationHtml += '<button class="next-btn">Next</button>';
-                            paginationHtml += '</div>';
-                            $("#import-projects-table").after(paginationHtml);
+                            generatePaginationHtml(currentPage, totalPages);
 
                             // Handle page click event
                             $(".page-link").click(function() {
@@ -150,6 +157,7 @@
                                     currentPage--;
                                     $(".page-link").removeClass("active");
                                     $(".page-link").eq(currentPage - startPage).addClass("active");
+                                    generatePaginationHtml(currentPage, totalPages);
 
                                     // Make new AJAX request with updated pageNumber
                                     makeRequest(fileRecordId, currentPage, pageSize)
@@ -161,7 +169,7 @@
                                     currentPage++;
                                     $(".page-link").removeClass("active");
                                     $(".page-link").eq(currentPage - startPage).addClass("active");
-
+                                    generatePaginationHtml(currentPage, totalPages);
                                     // Make new AJAX request with updated pageNumber
                                     makeRequest(fileRecordId, currentPage, pageSize);
                                 }
@@ -207,6 +215,7 @@
     </table>
 
     <!-- Table to display import projects for a particular ImportedFilesRecord -->
+    <div class="file-projects">
     <h3>File Projects</h3>
     <div class="countRecords">
 
@@ -224,6 +233,7 @@
         <!-- Import projects will be populated dynamically using AJAX -->
         </tbody>
     </table>
+    </div>
 
     </body>
 </html:html>

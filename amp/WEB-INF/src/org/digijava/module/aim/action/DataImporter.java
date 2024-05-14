@@ -94,6 +94,7 @@ public class DataImporter extends Action {
             response.setHeader("selectTag",headers.toString());
 
             response.setHeader("updatedMap","");
+
             dataImporterForm.getColumnPairs().clear();
 
             workbook.close();

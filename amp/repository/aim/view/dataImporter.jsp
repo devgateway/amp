@@ -27,8 +27,18 @@
 
 
     }
+    $(document).ready(function() {
+      $('.fields-table tbody').on('click', '.remove-field', function() {
+        console.log("Removing..");
+        var $row = $(this).closest('tr');
+        var selectedField = $row.find('.selected-field').text();
+        var columnName = $row.find('.column-name').text();
+        sendValuesToBackend(columnName,selectedField,"removeField");
 
-    function sendValuesToBackend(columnName, selectedField, action)
+      });
+      });
+
+      function sendValuesToBackend(columnName, selectedField, action)
     {
       var xhr = new XMLHttpRequest();
       // Create a FormData object to send data in the request body
@@ -78,8 +88,10 @@
       //
       // // Create table cells for column name and selected field
       var columnNameCell = document.createElement("td");
+      columnNameCell.className="column-name";
       columnNameCell.textContent = columnName;
       var selectedFieldCell = document.createElement("td");
+      selectedFieldCell.className="selected-field"
       selectedFieldCell.textContent=selectedField;
 
 
@@ -87,9 +99,10 @@
       var removeButtonCell = document.createElement("td");
       var removeButton = document.createElement("button");
       removeButton.textContent = "Remove";
-      removeButton.onclick = function() {
-        sendValuesToBackend(columnName,selectedField,"removeField") // Remove the row when the remove button is clicked
-      };
+      removeButton.className = "remove-field"
+      // removeButton.onclick = function() {
+      //   sendValuesToBackend(columnName,selectedField,"removeField") // Remove the row when the remove button is clicked
+      // };
       removeButtonCell.appendChild(removeButton);
 
       // Append cells to the row
@@ -216,7 +229,7 @@
   <br><br>
 
   <!-- Table to display selected pairs -->
-  <table>
+  <table class="fields-table">
     <thead>
     <tr>
       <th>Column Name</th>

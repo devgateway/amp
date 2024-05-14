@@ -80,7 +80,6 @@
                             });
                             datatable.draw(); // Draw the table after adding all rows
 
-
                             // Handle "View More" button click event
                             $('#import-projects-table tbody').on('click', '.view-more-btn', function() {
                                 var $row = $(this).closest('tr');

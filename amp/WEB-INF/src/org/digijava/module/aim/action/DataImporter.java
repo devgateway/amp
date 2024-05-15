@@ -68,20 +68,23 @@ public class DataImporter extends Action {
 
         if (request.getParameter("uploadTemplate")!=null) {
             logger.info(" this is the action "+request.getParameter("uploadTemplate"));
+            Set<String> headersSet = new HashSet<>();
 
             InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
-            Workbook workbook = new XSSFWorkbook(fileInputStream);
-            int numberOfSheets = workbook.getNumberOfSheets();
-            Set<String> headersSet = new HashSet<>();
-            for (int i=0;i<numberOfSheets;i++)
-            {
-                Sheet sheet = workbook.getSheetAt(i);
-                Row headerRow = sheet.getRow(0);
-                Iterator<Cell> cellIterator = headerRow.cellIterator();
-                while (cellIterator.hasNext()) {
-                    Cell cell = cellIterator.next();
-                    headersSet.add(cell.getStringCellValue());
+            if (request.getParameter("fileType")!=null && (Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
+                Workbook workbook = new XSSFWorkbook(fileInputStream);
+                int numberOfSheets = workbook.getNumberOfSheets();
+                for (int i = 0; i < numberOfSheets; i++) {
+                    Sheet sheet = workbook.getSheetAt(i);
+                    Row headerRow = sheet.getRow(0);
+                    Iterator<Cell> cellIterator = headerRow.cellIterator();
+                    while (cellIterator.hasNext()) {
+                        Cell cell = cellIterator.next();
+                        headersSet.add(cell.getStringCellValue());
+                    }
+
                 }
+                workbook.close();
 
             }
             headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
@@ -97,7 +100,6 @@ public class DataImporter extends Action {
 
             dataImporterForm.getColumnPairs().clear();
 
-            workbook.close();
             }
 
 

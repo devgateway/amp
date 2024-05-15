@@ -15,7 +15,7 @@
         // If the search string is not found, return the original string
         return inputString;
       } else {
-        // Construct the new string with the replacement
+        // Construct the new strin8klg with the replacement
         return inputString.substring(0, lastIndex) + replacement + inputString.substring(lastIndex + search.length);
       }
     }
@@ -36,6 +36,34 @@
         sendValuesToBackend(columnName,selectedField,"removeField");
 
       });
+      $('#file-type').change(function() {
+        var fileType = $(this).val();
+        console.log("File type selected: " + fileType==='excel');
+        if (fileType === "csv") {
+          $('#select-file-label').html("Select csv file");
+          $('#data-file').attr("accept", ".csv");
+          $('#template-file').attr("accept", ".csv");
+          $('#separator-div').hide();
+
+        } else if(fileType==="text") {
+          $('#select-file-label').html("Select text file");
+          $('#data-file').attr("accept", ".txt");
+          $('#template-file').attr("accept", ".txt");
+          $('#separator-div').show();
+        }
+        else if(fileType==="excel") {
+          $('#select-file-label').html("Select excel file");
+          $('#data-file').attr("accept", ".xls,.xlsx");
+          $('#template-file').attr("accept", ".xls,.xlsx");
+          $('#separator-div').hide();
+        }
+        else if(fileType==="json") {
+          $('#select-file-label').html("Select json file");
+          $('#data-file').attr("accept", ".json");
+          $('#template-file').attr("accept", ".json");
+          $('#separator-div').hide();
+        }
+      })
       });
 
       function sendValuesToBackend(columnName, selectedField, action)
@@ -117,8 +145,13 @@
     function uploadTemplateFile() {
       var formData = new FormData();
       var fileInput = document.getElementById('templateFile');
+      var fileType = $('#file-type').val();
+      var dataSeparator = $('#data-separator').val();
+
       formData.append('templateFile', fileInput.files[0]);
       formData.append('uploadTemplate', "uploadTemplate");
+      formData.append('fileType', fileType);
+      formData.append('dataSeparator', dataSeparator);
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
@@ -143,6 +176,9 @@
     function uploadDataFile() {
       var formData = new FormData();
       var fileInput = document.getElementById('dataFile');
+      var fileType = $('#file-type').val();
+      var dataSeparator = $('#data-separator').val();
+
       // Check if a file is selected
       if (!fileInput.files.length) {
         alert("Please select a file to upload.");
@@ -150,6 +186,8 @@
       }
       formData.append('dataFile', fileInput.files[0]);
       formData.append('uploadDataFile',"uploadDataFile");
+      formData.append('fileType',fileType);
+      formData.append('dataSeparator',dataSeparator);
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
@@ -193,9 +231,31 @@
 <h2>Upload File</h2>
 <h3>Data file configuration</h3>
 
+<label>Select file type</label>
+<br>
+<label class="file-type-label" for="file-type"></label>
+<select id="file-type">
+  <option value="csv">CSV</option>
+  <option value="excel">Excel</option>
+  <option value="json">JSON</option>
+  <option value="xml">XML</option>
+  <option value="html">HTML</option>
+</select>
+
 <form id="uploadForm" enctype="multipart/form-data">
   <label>Select Template File:</label>
-  <input type="file" accept=".xls,.xlsx,.csv" id="templateFile" name="templateFile" />
+  <div id="separator-div" hidden="hidden">
+  <label for="data-separator">Column Separator:</label>
+  <br>
+  <select id="data-separator">
+    <option value=",">Comma</option>
+    <option value="|">verticla Line</option>
+    <option value="||">Pipe</option>
+    <option value=" ">Space</option>
+  </select>
+  </div>
+  <br>
+  <input id="template-file" type="file" accept=".xls,.xlsx,.csv" id="templateFile" name="templateFile" />
  <br><br>
   <input type="button" value="Upload Template" onclick="uploadTemplateFile()" />
 </form>
@@ -204,11 +264,6 @@
 
 <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
 
-
-<%--  <jsp:useBean id="fileHeaders" scope="request" type="java.util.Set"/>--%>
-<%--  <bean:write name="dataImporterForm" property="fileHeaders"/>--%>
-
-<%--  <logic:notEmpty name="dataImporterForm" property="fileHeaders">--%>
     <br><br>
     <div id="headers"></div>
 
@@ -242,9 +297,10 @@
     </tbody>
   </table>
   <br><br>
-  <label>Select Excel File:</label>
+
+  <label id="select-file-label">Select Excel File:</label>
 <%--  <html:file property="uploadedFile" name="dataImporterForm"   />--%>
-  <input type="file" accept=".xls,.xlsx,.csv" id="dataFile" name="dataFile" />
+  <input id="data-file" type="file" accept=".xls,.xlsx,.csv" id="dataFile" name="dataFile" />
 
   <br><br>
 <%--  <html:submit property="Upload">Upload</html:submit>--%>

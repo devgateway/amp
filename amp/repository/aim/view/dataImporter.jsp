@@ -237,9 +237,9 @@
 <select id="file-type">
   <option value="csv">CSV</option>
   <option value="excel">Excel</option>
+  <option value="text">Text</option>
   <option value="json">JSON</option>
   <option value="xml">XML</option>
-  <option value="html">HTML</option>
 </select>
 
 <form id="uploadForm" enctype="multipart/form-data">

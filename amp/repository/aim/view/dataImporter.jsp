@@ -248,9 +248,9 @@
   <label for="data-separator">Column Separator:</label>
   <br>
   <select id="data-separator">
-    <option value=",">Comma</option>
-    <option value="|">verticla Line</option>
-    <option value="||">Pipe</option>
+    <option value=",">Comma(,)</option>
+    <option value="|">Vertical Line(|)</option>
+    <option value="||">Pipe(||)</option>
     <option value=" ">Space</option>
   </select>
   </div>

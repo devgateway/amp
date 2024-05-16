@@ -4,6 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -70,22 +75,40 @@ public class DataImporter extends Action {
             logger.info(" this is the action "+request.getParameter("uploadTemplate"));
             Set<String> headersSet = new HashSet<>();
 
-            InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
-            if (request.getParameter("fileType")!=null && (Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
-                Workbook workbook = new XSSFWorkbook(fileInputStream);
-                int numberOfSheets = workbook.getNumberOfSheets();
-                for (int i = 0; i < numberOfSheets; i++) {
-                    Sheet sheet = workbook.getSheetAt(i);
-                    Row headerRow = sheet.getRow(0);
-                    Iterator<Cell> cellIterator = headerRow.cellIterator();
-                    while (cellIterator.hasNext()) {
-                        Cell cell = cellIterator.next();
-                        headersSet.add(cell.getStringCellValue());
+            if (request.getParameter("fileType")!=null) {
+                InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
+                if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
+                    Workbook workbook = new XSSFWorkbook(fileInputStream);
+                    int numberOfSheets = workbook.getNumberOfSheets();
+                    for (int i = 0; i < numberOfSheets; i++) {
+                        Sheet sheet = workbook.getSheetAt(i);
+                        Row headerRow = sheet.getRow(0);
+                        Iterator<Cell> cellIterator = headerRow.cellIterator();
+                        while (cellIterator.hasNext()) {
+                            Cell cell = cellIterator.next();
+                            headersSet.add(cell.getStringCellValue());
+                        }
+
+                    }
+                    workbook.close();
+
+                } else if (Objects.equals(request.getParameter("fileType"), "text")) {
+                    CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
+
+                    try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
+                        String[] headers = reader.readNext(); // Read the first line which contains headers
+
+                        if (headers != null) {
+                            // Print each header
+                            headersSet.addAll(Arrays.asList(headers));
+                        } else {
+                           logger.info("File is empty or does not contain headers.");
+                        }
+                    } catch (IOException | CsvValidationException e) {
+                        e.printStackTrace();
                     }
 
                 }
-                workbook.close();
-
             }
             headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
             StringBuilder headers = new StringBuilder();

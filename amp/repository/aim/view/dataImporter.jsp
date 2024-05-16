@@ -255,7 +255,7 @@
   </select>
   </div>
   <br>
-  <input id="template-file" type="file" accept=".xls,.xlsx,.csv" id="templateFile" name="templateFile" />
+  <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
  <br><br>
   <input type="button" value="Upload Template" onclick="uploadTemplateFile()" />
 </form>
@@ -300,7 +300,7 @@
 
   <label id="select-file-label">Select Excel File:</label>
 <%--  <html:file property="uploadedFile" name="dataImporterForm"   />--%>
-  <input id="data-file" type="file" accept=".xls,.xlsx,.csv" id="dataFile" name="dataFile" />
+  <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
 
   <br><br>
 <%--  <html:submit property="Upload">Upload</html:submit>--%>

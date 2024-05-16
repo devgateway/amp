@@ -29,7 +29,7 @@
     }
     $(document).ready(function() {
       $('.fields-table tbody').on('click', '.remove-field', function() {
-        console.log("Removing..");
+        console.log("Removing...");
         var $row = $(this).closest('tr');
         var selectedField = $row.find('.selected-field').text();
         var columnName = $row.find('.column-name').text();
@@ -38,48 +38,46 @@
       });
       });
 
-      function sendValuesToBackend(columnName, selectedField, action)
-    {
-      var xhr = new XMLHttpRequest();
+    function sendValuesToBackend(columnName, selectedField, action) {
       // Create a FormData object to send data in the request body
       var formData = new FormData();
       formData.append("columnName", columnName);
       formData.append("selectedField", selectedField);
       formData.append(action, action);
-      xhr.open("POST", "${pageContext.request.contextPath}/aim/dataImporter.do", true);
-      // xhr.setRequestHeader()
-      // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          // Update UI or perform any additional actions if needed
-          console.log("Selected pairs updated successfully.");
-          var updatedMapRaw = xhr.getResponseHeader('updatedMap');
 
-          console.log("Raw response: "+updatedMapRaw)
-          var updatedMap = JSON.parse(updatedMapRaw);
+      fetch("${pageContext.request.contextPath}/aim/dataImporter.do", {
+        method: "POST",
+        body: formData
+      })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return response.json();
+              })
+              .then(updatedMap => {
+                // Update UI or perform any additional actions if needed
+                console.log("Selected pairs updated successfully.");
+                console.log("Updated map received:", updatedMap);
+                var tbody = document.getElementById("selected-pairs-table-body");
 
-          // Use updatedMap as needed
-          console.log("Updated map received:", updatedMap);
-          var tbody= document.getElementById("selected-pairs-table-body");
-          // var tbody = table.getElementsByTagName("tbody")[0];
+                // Remove all rows from the table body
+                tbody.innerHTML = "";
 
-          // Remove all rows from the table body
-          while (tbody.firstChild) {
-            tbody.removeChild(tbody.firstChild);
-          }
-          for (var key in updatedMap) {
-            if (updatedMap.hasOwnProperty(key)) {
-              // Access each property using the key
-              var value = updatedMap[key];
-              updateTable(key,value, tbody);
-              console.log('Key:', key, 'Value:', value);
-            }
-          }
-
-        }
-      };
-      xhr.send(formData);
+                for (var key in updatedMap) {
+                  if (updatedMap.hasOwnProperty(key)) {
+                    // Access each property using the key
+                    var value = updatedMap[key];
+                    updateTable(key, value, tbody);
+                    console.log('Key:', key, 'Value:', value);
+                  }
+                }
+              })
+              .catch(error => {
+                console.error("There was a problem with the fetch operation:", error);
+              });
     }
+
     function updateTable(columnName,selectedField, tbody)
     {
 

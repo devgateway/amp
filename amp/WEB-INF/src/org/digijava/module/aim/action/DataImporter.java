@@ -98,6 +98,7 @@ public class DataImporter extends Action {
             dataImporterForm.getColumnPairs().clear();
 
             workbook.close();
+            return null;
             }
 
 
@@ -118,6 +119,7 @@ public class DataImporter extends Action {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setHeader("updatedMap",json);
+            return null;
 
         }
 
@@ -216,6 +218,7 @@ public class DataImporter extends Action {
                 response.setHeader("updatedMap", "");
                 dataImporterForm.getColumnPairs().clear();
             }
+            return null;
         }
 
         return mapping.findForward("importData");

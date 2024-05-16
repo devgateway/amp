@@ -118,8 +118,10 @@ public class DataImporter extends Action {
             // Send JSON response
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.setHeader("updatedMap",json);
-            return null;
+//            response.setHeader("updatedMap",json);
+                response.getWriter().write(json);
+
+                return null;
 
         }
 

@@ -43,7 +43,7 @@
       var formData = new FormData();
       formData.append("columnName", columnName);
       formData.append("selectedField", selectedField);
-      formData.append(action, action);
+      formData.append('action', action);
 
       fetch("${pageContext.request.contextPath}/aim/dataImporter.do", {
         method: "POST",

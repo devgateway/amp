@@ -20,7 +20,6 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
-import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardIndicatorCoreData;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
@@ -369,11 +368,6 @@ public class MeService {
         };
 
         return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
-    }
-
-    public List<DashboardIndicatorCoreData> getIndicatorCoreData(){
-
-        return (List<DashboardIndicatorCoreData>) new DashboardIndicatorCoreData();
     }
 
     private GeneratedReport runIndicatorReport(SettingsAndFiltersParameters settingsAndFilters) {

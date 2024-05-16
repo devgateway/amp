@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.dashboards;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,25 +18,17 @@ import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.*;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
-import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardCoreIndicatorType;
-import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardCoreIndicatorValue;
-import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.DashboardIndicatorCoreData;
+import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.*;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
-import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
-import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -61,12 +54,12 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
 import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
 import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
-import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 
 /**
  * @author Diego Dimunzio
@@ -502,22 +495,22 @@ public class EndPoints {
 
         new MeService().applySettingsAndFilters(new SettingsAndFiltersParameters(), spec);
         GeneratedReport report = EndpointUtils.runReport(spec);
-        List<DashboardIndicatorCoreData> resp = processReportData(report);
-        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
-        sendReportsToServer(resp, serverUrl);
+        List<CoreIndicatorProgressDTO> resp = processReportData(report);
+        String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_URL);
+        sendReportsToServer(resp, "http://localhost:8082/update-core-indicator-progress");
 
         SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
         return PublicServices.buildOkResponseWithOriginHeaders(resp);
     }
 
-    private List<DashboardIndicatorCoreData> processReportData(GeneratedReport report) {
+    private List<CoreIndicatorProgressDTO> processReportData(GeneratedReport report) {
 
         ReportOutputColumn countryData = report.leafHeaders.get(0);
         ReportOutputColumn pilar = report.leafHeaders.get(1);
         ReportOutputColumn donorData = report.leafHeaders.get(2);
         ReportOutputColumn indicatorsData = report.leafHeaders.get(3);
 
-        List<DashboardIndicatorCoreData> ampDashboardCoreIndicator = new ArrayList<>();
+        List<CoreIndicatorProgressDTO> ampDashboardCoreIndicator = new ArrayList<>();
         for (ReportArea child : report.reportContents.getChildren()) {
             TextCell countryDataCell = (TextCell) child.getContents().get(countryData);
             if (child.getChildren() != null) {
@@ -525,16 +518,25 @@ public class EndPoints {
                     TextCell pilarCell = (TextCell) pilarData.getContents().get(pilar);
                         for (ReportArea donor : pilarData.getChildren()) {
                             TextCell donorCell = (TextCell) donor.getContents().get(donorData);
-                            DashboardIndicatorCoreData fundingReport = new DashboardIndicatorCoreData();
-                            fundingReport.setDonor(donorCell.value.toString());
-                            fundingReport.setPillar(pilarCell.value.toString());
-                            fundingReport.setCountry(countryDataCell.value.toString());
-                            List<DashboardCoreIndicatorValue> valuesList = new ArrayList<DashboardCoreIndicatorValue>();
+                            CoreIndicatorProgressDTO fundingReport = new CoreIndicatorProgressDTO();
+                            DonorDTO donorDTO = new DonorDTO();
+                            CountryDTO countryDTO = new CountryDTO();
+                            ProgramDTO programDTO = new ProgramDTO();
+                            donorDTO.setName(donorCell.value.toString());
+                            countryDTO.setName(countryDataCell.value.toString());
+                            programDTO.setName(pilarCell.value.toString());
+                            fundingReport.setProgram(programDTO);
+                            fundingReport.setCountry(countryDTO);
+                            fundingReport.setDonor(donorDTO);
+//                            fundingReport.setDonor(donorCell.value.toString());
+//                            fundingReport.setProgram(pilarCell.value.toString());
+//                            fundingReport.setCountry(countryDataCell.value.toString());
+                            List<CoreIndicatorValueDTO> valuesList = new ArrayList<CoreIndicatorValueDTO>();
                             for(ReportArea indicator : donor.getChildren()){
-                                DashboardCoreIndicatorValue value = new DashboardCoreIndicatorValue();
+                                CoreIndicatorValueDTO value = new CoreIndicatorValueDTO();
                                 TextCell indicatorCell = (TextCell) indicator.getContents().get(indicatorsData);
-                                value.setIndicator(indicatorCell.value.toString());
-                                value.setIndicator_id(indicatorCell.entityId);
+//                                value.setIndicator(indicatorCell.value.toString());
+//                                value.setIndicator_id(indicatorCell.entityId);
 
                                 for (Map.Entry<ReportOutputColumn, ReportCell> entry : indicator.getContents().entrySet()) {
                                     ReportOutputColumn col = entry.getKey();
@@ -547,7 +549,7 @@ public class EndPoints {
                                             && col.parentColumn.parentColumn.parentColumn == null) {
                                         AmountCell cell = (AmountCell) entry.getValue();
                                         BigDecimal actualValue = cell.extractValue();
-                                        value.setActualValue(actualValue);
+                                        value.setActualValue(actualValue.doubleValue());
                                     }
                                     if (col.parentColumn != null
                                             && col.originalColumnName.equals(MeasureConstants.INDICATOR_TARGET_VALUE)
@@ -557,14 +559,14 @@ public class EndPoints {
                                             && col.parentColumn.parentColumn.parentColumn == null) {
                                         AmountCell cell = (AmountCell) entry.getValue();
                                         BigDecimal targetValue = cell.extractValue();
-                                        value.setTargetValue(targetValue);
+                                        value.setTargetValue(targetValue.doubleValue());
                                     }
                                 }
 
                                 // Add category value type for the indicator
-                                DashboardCoreIndicatorType indicatorType = new DashboardCoreIndicatorType();
+                                CoreIndicatorTypeDTO indicatorType = new CoreIndicatorTypeDTO();
                                 AmpIndicator existingInd = getIndicatorById(indicatorCell.entityId);
-                                if (existingInd != null){
+                                if (existingInd != null && existingInd.getIndicatorsCategory() != null){
                                     indicatorType.setName(existingInd.getIndicatorsCategory().getValue());
                                     if(indicatorType.getName().contains("Hectares of land under restoration")){
                                         indicatorType.setUnit("M ha");
@@ -607,12 +609,15 @@ public class EndPoints {
             throw new RuntimeException("Failed to load indicator");
         }
     }
-    public static void sendReportsToServer(List<DashboardIndicatorCoreData> ampCoreIndicatorCoreData, String serverUrl) {
+    public static void sendReportsToServer(List<CoreIndicatorProgressDTO> ampCoreIndicatorCoreData, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
-            // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
-            Gson gson = new Gson();
+            // Create a Gson instance with custom serializer and Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(CoreIndicatorValueDTO.class, new CoreIndicatorValueDTOSerializer())
+                    .create();
+
             String jsonData = gson.toJson(ampCoreIndicatorCoreData);
 
             // Get the output stream of the connection
@@ -646,6 +651,14 @@ public class EndPoints {
 
         // Open a connection to the server
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Encode username and password
+        String auth = "denis:denis"; // Replace with actual username and password
+        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
+        String authHeaderValue = "Basic " + encodedAuth;
+
+        // Set the Authorization header
+        connection.setRequestProperty("Authorization", authHeaderValue);
 
         // Set the HTTP request method to POST
         connection.setRequestMethod("POST");

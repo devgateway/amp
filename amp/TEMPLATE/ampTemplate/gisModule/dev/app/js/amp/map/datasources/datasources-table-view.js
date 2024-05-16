@@ -2,7 +2,9 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var DatasourcesItem = require('./datasources-item-adm-clusters');
+const GisSettings = require("../../services/gis_settings");
 var Template = fs.readFileSync(__dirname + '/datasources-table-template.html', 'utf8');
+// var gisSettings = new GisSettings();
 
 module.exports = Backbone.View.extend({
 
@@ -40,20 +42,23 @@ module.exports = Backbone.View.extend({
         app: self.app
       }).render().el;
 
-      
+      var collection = self.collection.getPageDetails();
+      // collection.gisSettings = gisSettings.gisSettings;
+      collection.sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
+          collection.programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
       self.app.translator.translateDOM(
-        self.template(self.collection.getPageDetails())).then(
+        self.template(collection)).then(
         function(newEl) {
           self.$el.html(newEl);
           self.updatePlannedActualUI();
         });
-      
+
       if((self.collection.getPageDetails().currentPage + 1) >= self.collection.getPageDetails().totalPageCount){
     	  self.$el.find('.load-more').addClass('load-more-hide');
-      }else{    	  
+      }else{
     	  self.$el.find('.load-more').removeClass('load-more-hide');
       }
-      
+
       // drs: review, inconsistant behaviour between chrome and FF
       if (!_.isEmpty(tableContent)) {
         self.$('table', self.$el).append(tableContent);
@@ -85,7 +90,7 @@ module.exports = Backbone.View.extend({
 	  } else {
 		  self.$('.setting-actual').show();
 		  self.$('.setting-planned').hide();
-	  }    
+	  }
   },
 
   toggleDatasources: function() {

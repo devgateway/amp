@@ -98,8 +98,8 @@ module.exports = Backbone.View
     self.featureGroup = L.layerGroup();
 
     return $.Deferred().resolve()  // kick things off, so we can async this sequence with breathAfter
-      .then(breathAfter(function() {  // wait 50ms, then: 
-    	var features = []; 
+      .then(breathAfter(function() {  // wait 50ms, then:
+    	var features = [];
         return _(self.rawData.features)
           .map(_(self._featureToShape).bind(self));
       }))
@@ -120,9 +120,9 @@ module.exports = Backbone.View
 	  } else {
 		  return this._featureToMarker(feature);
 	  }
-	  
+
   },
-  
+
   _featureToMarker: function(feature) {  // 152ms on Phil's computer
 	  var self = this,
 	  marker,
@@ -131,7 +131,7 @@ module.exports = Backbone.View
 
 	  // Calculate only one time and not for all points (we can have thousands).
 	  if (self.maxNumberOfIcons === -1) {
-		  //TODO: Move this code to a config class.        
+		  //TODO: Move this code to a config class.
 		  var useIconsForSectors = app.data.generalSettings.get('use-icons-for-sectors-in-project-list');
 		  var maxIcons = app.data.generalSettings.get('max-locations-icons');
 
@@ -148,13 +148,13 @@ module.exports = Backbone.View
 			  }
 		  } else {
 			  self.maxNumberOfIcons = 0;
-		  }		  
+		  }
 	  }
-	  
+
 	  if (self.rawData.features.length < self.maxNumberOfIcons &&
-			  self.structureMenuModel.get('filterVertical') === 'Primary Sector') {
+          (self.structureMenuModel.get('filterVertical') === 'Primary Sector' || self.structureMenuModel.get('filterVertical') === 'Programs')) {
 		  // create icon
-		  marker = self._createSectorMarker(latlng, feature);
+		  marker = self._createSectorOrProgramMarker(latlng, feature);
 	  } else {
 		  // coloured circle marker, no icon
 		  marker = self._createPlainMarker(latlng, feature);
@@ -183,28 +183,28 @@ module.exports = Backbone.View
 
   // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
   // or if < maxNumberOfIcons icons. Best on FF
-  _createSectorMarker: function(latlng, feature) {
-    var sectorCode = 0; // temp code for catchall...
+        _createSectorOrProgramMarker: function(latlng, feature) {
+    var valCode = 0; // temp code for catchall...
     var filterVertical = this.structureMenuModel.get('filterVertical');
     // feature.properties.activity.attributes.matchesFilters[filterVertical]
     if (feature.properties.activity.attributes &&
         _.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
       if (feature.properties.activity.attributes.matchesFilters[filterVertical] === null) {
         //It has no sector/donor
-        sectorCode = '1';
+          valCode = '1';
       } else if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
-        sectorCode = '0';
-        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
+          valCode = '0';
+        console.warn('TODO: need custom various sectors icon...different from  multi-sector');
       } else {
         if (feature.properties.activity.attributes.matchesFilters[filterVertical][0] instanceof Object) {
-          sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+            valCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
         } else {
-          sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
+            valCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
         }
       }
     }
 
-    var sectorIconStyleCode = this.structureMenuModel.getSelectedIconStyleCode(sectorCode);
+    var sectorIconStyleCode = this.structureMenuModel.getSelectedIconStyleCode(valCode);
 
     var pointIcon = L.divIcon({
       className: 'svg-map-icon ' + sectorIconStyleCode,
@@ -238,13 +238,13 @@ module.exports = Backbone.View
   },
 
   _getColors: function(feature){
-	  if (feature.properties.color) {		  
-		  var color = feature.properties.color.substring(0, feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER)); 
+	  if (feature.properties.color) {
+		  var color = feature.properties.color.substring(0, feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER));
 		  if (color.length > 0) {
-			  return [{hex: function() { return color;}}];	
-		  }	  
+			  return [{hex: function() { return color;}}];
+		  }
 	  }
-	  
+
 	  var colors = this.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
 	      return colour.get('test').call(colour, feature.properties.id);
 	    });
@@ -255,28 +255,28 @@ module.exports = Backbone.View
 	    }
 
 	    if (colors.length === 0) {
-	      colors = [{hex: function() { return 'orange';}}];	      
+	      colors = [{hex: function() { return 'orange';}}];
 	    }
 	    return colors;
 
   },
-  
+
   _featureToLineString: function(feature) {
 	  var colors = this._getColors(feature);
-	  var polyline = L.polyline(feature.geometry.coordinates, {color: colors[0].hex()}); 
+	  var polyline = L.polyline(feature.geometry.coordinates, {color: colors[0].hex()});
 	  polyline.feature = feature;
 	  this._bindPopup(polyline, true);
 	  return polyline;
   },
-  
+
   _featureToPolygon: function(feature) {
 	  var colors = this._getColors(feature);
-	  var polygon = L.polygon(feature.geometry.coordinates, {color: colors[0].hex()}); 
+	  var polygon = L.polygon(feature.geometry.coordinates, {color: colors[0].hex()});
 	  polygon.feature = feature;
 	  this._bindPopup(polygon, true);
 	  return polygon;
   },
-  
+
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function() {
     var self = this;
@@ -309,7 +309,7 @@ module.exports = Backbone.View
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
     /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
 
-    if (feature.properties) {     
+    if (feature.properties) {
       var activityJSON = feature.properties.activity.toJSON();
       shape.bindPopup(self.structureTemplate({
         activityJSON: activityJSON,
@@ -327,7 +327,7 @@ module.exports = Backbone.View
         var projectId = feature.properties.activity.id;
         if (highlight) {
         	self._hilightProject(projectId);
-        }        
+        }
       }
       app.translator.translateDOM($('.cluster-popup'));
     });
@@ -338,7 +338,7 @@ module.exports = Backbone.View
         var projectId = feature.properties.activity.id;
         if (highlight) {
            self._dehilightProject(projectId);
-        }        
+        }
       }
     });
   },
@@ -355,7 +355,7 @@ module.exports = Backbone.View
 	var self = this;
     this.featureGroup.eachLayer(function(layer) {
       if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
-    	  var colors = self._getColors(layer.feature);      
+    	  var colors = self._getColors(layer.feature);
           layer.setStyle({stroke:true, color:colors[0].hex()});
       }
     });
@@ -365,7 +365,7 @@ module.exports = Backbone.View
   // ==================
   // Layer management
   // ==================
-  showLayer: _.debounce(function(layer) {	
+  showLayer: _.debounce(function(layer) {
     var self = this;
     if (this.layerLoadState === 'loading') {
       console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');

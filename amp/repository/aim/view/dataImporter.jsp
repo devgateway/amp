@@ -43,20 +43,23 @@
       var formData = new FormData();
       formData.append("columnName", columnName);
       formData.append("selectedField", selectedField);
-      formData.append('action', action);
+      formData.append(action, action);
 
       fetch("${pageContext.request.contextPath}/aim/dataImporter.do", {
         method: "POST",
         body: formData
       })
               .then(response =>{
-                console.log("Response :" ,response)
                 if (!response.ok) {
                   throw new Error("Network response was not ok");
                 }
+                console.log("Response: ",response.json());
+
                 return response.json();
               })
               .then(updatedMap => {
+                console.log("Map :" ,updatedMap)
+
                 // Update UI or perform any additional actions if needed
                 console.log("Selected pairs updated successfully.");
                 console.log("Updated map received:", updatedMap);

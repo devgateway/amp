@@ -207,9 +207,12 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
 
         // Open a connection to the server
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        String indicatorCoreServerUsername = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_USERNAME);
+        String indicatorCoreServerPassword = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_PASSWORD);
+
 
         // Encode username and password
-        String auth = "denis:denis"; // Replace with actual username and password
+        String auth = indicatorCoreServerUsername + ":" + indicatorCoreServerPassword; // Replace with actual username and password
         String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
         String authHeaderValue = "Basic " + encodedAuth;
 

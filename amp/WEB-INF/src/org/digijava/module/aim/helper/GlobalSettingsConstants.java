@@ -251,4 +251,6 @@ public class GlobalSettingsConstants {
     public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "Number of indicators in M&E Dashboard";
 
     public static final String AMP_DASHBOARD_CORE_INDICATOR_URL = "AMP Dashboard Core Indicator URL";
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_USERNAME = "AMP Dashboard Core Indicator Username";
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_PASSWORD = "AMP Dashboard Core Indicator Password";
 }

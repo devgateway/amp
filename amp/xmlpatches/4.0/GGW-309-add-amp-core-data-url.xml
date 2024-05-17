@@ -12,6 +12,12 @@
 				INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
 				VALUES (nextval('amp_global_settings_seq'), 'AMP Dashboard Core Indicator URL', null, null, 'Amp Dashboard core indicator api url', 'general', null);
 
+				INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
+				VALUES (nextval('amp_global_settings_seq'), 'AMP Dashboard Core Indicator Username', null, null, 'Amp Dashboard core indicator api url server username', 'general', null);
+
+                INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
+				VALUES (nextval('amp_global_settings_seq'), 'AMP Dashboard Core Indicator Password', null, null, 'Amp Dashboard core indicator api url server password', 'general', null);
+
 			]]></lang>
         </script>
     </apply>

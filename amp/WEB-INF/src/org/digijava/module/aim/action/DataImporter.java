@@ -780,32 +780,4 @@ public class DataImporter extends Action {
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 
-    // Method to sort a map by its values
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValues(Map<K, V> map) {
-        // Create a TreeMap to store the sorted entries
-        Map<K, V> sortedMap = new TreeMap<>(new ValueComparator<>(map));
-
-        // Put all entries from the original map into the TreeMap
-        sortedMap.putAll(map);
-
-        return sortedMap;
-    }
-
-    // Custom comparator to compare map entries by values
-    static class ValueComparator<K, V extends Comparable<? super V>> implements Comparator<K> {
-        Map<K, V> map;
-
-        // Constructor that takes the original map
-        public ValueComparator(Map<K, V> map) {
-            this.map = map;
-        }
-
-        // Compare method to compare two keys based on their values in the map
-        @Override
-        public int compare(K key1, K key2) {
-            V value1 = map.get(key1);
-            V value2 = map.get(key2);
-            return value1.compareTo(value2); // Compare values
-        }
-    }
 }

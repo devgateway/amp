@@ -43,7 +43,7 @@
       var formData = new FormData();
       formData.append("columnName", columnName);
       formData.append("selectedField", selectedField);
-      formData.append(action, action);
+      formData.append("action", action);
 
       fetch("${pageContext.request.contextPath}/aim/dataImporter.do", {
         method: "POST",
@@ -120,7 +120,7 @@
       var formData = new FormData();
       var fileInput = document.getElementById('templateFile');
       formData.append('templateFile', fileInput.files[0]);
-      formData.append('uploadTemplate', "uploadTemplate");
+      formData.append('action', "uploadTemplate");
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
@@ -151,7 +151,7 @@
         return;
       }
       formData.append('dataFile', fileInput.files[0]);
-      formData.append('uploadDataFile',"uploadDataFile");
+      formData.append('action',"uploadDataFile");
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);

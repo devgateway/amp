@@ -66,7 +66,7 @@ public class DataImporter extends Action {
         DataImporterForm dataImporterForm = (DataImporterForm)form;
 
 
-        if (request.getParameter("uploadTemplate")!=null) {
+        if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
             logger.info(" this is the action "+request.getParameter("uploadTemplate"));
 
             InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
@@ -104,7 +104,7 @@ public class DataImporter extends Action {
 
 
 
-            if (request.getParameter("addField")!=null) {
+            if (Objects.equals(request.getParameter("action"), "addField")) {
             logger.info(" this is the action "+request.getParameter("addField"));
 
             String columnName = request.getParameter("columnName");
@@ -126,7 +126,7 @@ public class DataImporter extends Action {
         }
 
 
-        if (request.getParameter("removeField")!=null) {
+        if (Objects.equals(request.getParameter("action"), "nullremoveField")) {
             logger.info(" this is the action "+request.getParameter("removeField"));
 
             String columnName = request.getParameter("columnName");
@@ -148,7 +148,7 @@ public class DataImporter extends Action {
 
         }
 
-        if (request.getParameter("uploadDataFile") != null) {
+        if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
             logger.info("This is the action Upload " + request.getParameter("uploadDataFile"));
             String fileName = dataImporterForm.getDataFile().getFileName();
             String tempDirPath = System.getProperty("java.io.tmpdir");

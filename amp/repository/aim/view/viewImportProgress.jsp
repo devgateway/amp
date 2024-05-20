@@ -69,7 +69,7 @@
                                 var filterValue = $(this).val();
                                 if (filterValue === 'all') {
                                     // Clear the filter if the value is 'all'
-                                    datatable.column(1).search('').draw();
+                                    datatable.draw();
                                 } else {
                                     // Apply the filter
                                     datatable.column(1).search(filterValue).draw();

@@ -32,9 +32,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-public class AmpCoreIndicatorJob extends ConnectionCleaningJob implements StatefulJob {
+public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
-    protected static final Logger logger = Logger.getLogger(AmpCoreIndicatorJob.class);
+    protected static final Logger logger = Logger.getLogger(AmpCoreIndicatorFundingJob.class);
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {

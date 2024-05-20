@@ -67,7 +67,7 @@ public class DataImporter extends Action {
 
 
         if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
-            logger.info(" this is the action "+request.getParameter("uploadTemplate"));
+            logger.info(" this is the action "+request.getParameter("action"));
 
             InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
             Workbook workbook = new XSSFWorkbook(fileInputStream);
@@ -104,7 +104,7 @@ public class DataImporter extends Action {
 
 
             if (Objects.equals(request.getParameter("action"), "addField")) {
-            logger.info(" this is the action "+request.getParameter("addField"));
+            logger.info(" this is the action "+request.getParameter("action"));
 
             String columnName = request.getParameter("columnName");
             String selectedField = request.getParameter("selectedField");
@@ -124,8 +124,8 @@ public class DataImporter extends Action {
         }
 
 
-        if (Objects.equals(request.getParameter("action"), "nullremoveField")) {
-            logger.info(" this is the action "+request.getParameter("removeField"));
+        if (Objects.equals(request.getParameter("action"), "removeField")) {
+            logger.info(" this is the action "+request.getParameter("action"));
 
             String columnName = request.getParameter("columnName");
             String selectedField = request.getParameter("selectedField");

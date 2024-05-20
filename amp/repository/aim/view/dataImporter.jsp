@@ -28,14 +28,32 @@
 
     }
     $(document).ready(function() {
-      $('.fields-table tbody').on('click', '.remove-field', function() {
-        console.log("Removing...");
-        var $row = $(this).closest('tr');
-        var selectedField = $row.find('.selected-field').text();
-        var columnName = $row.find('.column-name').text();
-        sendValuesToBackend(columnName,selectedField,"removeField");
+      // $('.fields-table tbody').on('click', '.remove-field', function() {
+      //   console.log("Removing...");
+      //   var $row = $(this).closest('tr');
+      //   var selectedField = $row.find('.selected-field').text();
+      //   var columnName = $row.find('.column-name').text();
+      //   sendValuesToBackend(columnName,selectedField,"removeField");
+      //
+      // });
 
-      });
+      $('.remove-row').click(function() {
+        var selectedRows = $('.fields-table tbody').find('.remove-checkbox:checked').closest('tr');
+
+        selectedRows.each(function() {
+          var columnName = $(this).find('.column-name').text();
+          var selectedField = $(this).find('.selected-field').text();
+
+          // You can now use the columnName and selectedField variables to perform any desired action
+          console.log('Selected row:', columnName, '-', selectedField);
+          sendValuesToBackend(columnName,selectedField,"removeField");
+
+
+          // Remove the row from the table
+          $(this).remove();
+        });
+        });
+
       });
 
     function sendValuesToBackend(columnName, selectedField, action) {
@@ -97,20 +115,18 @@
       selectedFieldCell.textContent=selectedField;
 
 
-      // Create a remove button
-      var removeButtonCell = document.createElement("td");
-      var removeButton = document.createElement("button");
-      removeButton.textContent = "Remove";
-      removeButton.className = "remove-field"
-      // removeButton.onclick = function() {
-      //   sendValuesToBackend(columnName,selectedField,"removeField") // Remove the row when the remove button is clicked
-      // };
-      removeButtonCell.appendChild(removeButton);
+      // Create a checkbox cell
+      var checkboxCell = document.createElement("td");
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "remove-checkbox";
+      checkbox.value = columnName;
+      checkboxCell.appendChild(checkbox);
 
       // Append cells to the row
       row.appendChild(columnNameCell);
       row.appendChild(selectedFieldCell);
-      row.appendChild(removeButtonCell);
+      row.appendChild(checkboxCell);
 
       // Append the row to the table body
       tbody.appendChild(row);
@@ -231,6 +247,8 @@
   <br><br>
 
   <!-- Table to display selected pairs -->
+  <input type="button" value="Remove Selected Rows" class="remove-row">
+
   <table class="fields-table">
     <thead>
     <tr>

@@ -93,7 +93,6 @@ public class DataImporter extends Action {
             headers.append("</select>");
             response.setHeader("selectTag",headers.toString());
 
-            response.setHeader("updatedMap","");
 
             dataImporterForm.getColumnPairs().clear();
 
@@ -119,7 +118,6 @@ public class DataImporter extends Action {
             response.setContentType("application/json");
             response.getWriter().write(json);
             response.setCharacterEncoding("UTF-8");
-//            response.setHeader("updatedMap",json);
 
                 return null;
 

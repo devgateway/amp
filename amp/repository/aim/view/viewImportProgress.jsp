@@ -67,9 +67,9 @@
                             // Add event listener for radio button click
                             $("input[name='project-filter']").change(function() {
                                 var filterValue = $(this).val();
-                                if (filterValue === 'all') {
+                                if (filterValue === 'ALL') {
                                     // Clear the filter if the value is 'all'
-                                    datatable.draw();
+                                    datatable.column(1).search('').draw();
                                 } else {
                                     // Apply the filter
                                     datatable.column(1).search(filterValue).draw();

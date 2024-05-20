@@ -94,6 +94,7 @@ public class DataImporter extends Action {
                         }
                         workbook.close();
 
+
                     } else if (Objects.equals(request.getParameter("fileType"), "text")) {
                         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
 
@@ -126,6 +127,8 @@ public class DataImporter extends Action {
                 dataImporterForm.getColumnPairs().clear();
 
             }
+            return null;
+        }
 
 
             if (Objects.equals(request.getParameter("action"), "addField")) {
@@ -247,8 +250,6 @@ public class DataImporter extends Action {
             }
 
             return mapping.findForward("importData");
-        }
-        return null;
     }
 
 

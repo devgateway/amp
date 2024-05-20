@@ -247,7 +247,6 @@
   <br><br>
 
   <!-- Table to display selected pairs -->
-  <input type="button" value="Remove Selected Rows" class="remove-row">
 
   <table class="fields-table">
     <thead>
@@ -261,6 +260,10 @@
     <!-- Selected pairs will be dynamically added here -->
     </tbody>
   </table>
+  <br>
+  <br>
+  <input type="button" value="Remove Selected Rows" class="remove-row">
+
   <br><br>
   <label>Select Excel File:</label>
 <%--  <html:file property="uploadedFile" name="dataImporterForm"   />--%>

@@ -71,6 +71,8 @@ public class DataImporter extends Action {
         DataImporterForm dataImporterForm = (DataImporterForm)form;
 
 
+        if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
+            logger.info(" this is the action "+request.getParameter("action"));
         if (request.getParameter("uploadTemplate")!=null) {
             logger.info(" this is the action "+request.getParameter("uploadTemplate"));
             Set<String> headersSet = new HashSet<>();
@@ -128,8 +130,8 @@ public class DataImporter extends Action {
 
 
 
-            if (request.getParameter("addField")!=null) {
-            logger.info(" this is the action "+request.getParameter("addField"));
+            if (Objects.equals(request.getParameter("action"), "addField")) {
+            logger.info(" this is the action "+request.getParameter("action"));
 
             String columnName = request.getParameter("columnName");
             String selectedField = request.getParameter("selectedField");
@@ -141,14 +143,16 @@ public class DataImporter extends Action {
 
             // Send JSON response
             response.setContentType("application/json");
+            response.getWriter().write(json);
             response.setCharacterEncoding("UTF-8");
-            response.setHeader("updatedMap",json);
+
+                return null;
 
         }
 
 
-        if (request.getParameter("removeField")!=null) {
-            logger.info(" this is the action "+request.getParameter("removeField"));
+        if (Objects.equals(request.getParameter("action"), "removeField")) {
+            logger.info(" this is the action "+request.getParameter("action"));
 
             String columnName = request.getParameter("columnName");
             String selectedField = request.getParameter("selectedField");
@@ -162,12 +166,14 @@ public class DataImporter extends Action {
             // Send JSON response
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.setHeader("updatedMap",json);
+//            response.setHeader("updatedMap",json);
+            response.getWriter().write(json);
+
             return null;
 
         }
 
-        if (request.getParameter("uploadDataFile") != null) {
+        if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
             logger.info("This is the action Upload " + request.getParameter("uploadDataFile"));
             String fileName = dataImporterForm.getDataFile().getFileName();
             String tempDirPath = System.getProperty("java.io.tmpdir");
@@ -241,6 +247,7 @@ public class DataImporter extends Action {
                 response.setHeader("updatedMap", "");
                 dataImporterForm.getColumnPairs().clear();
             }
+            return null;
         }
 
         return mapping.findForward("importData");

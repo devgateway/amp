@@ -15,7 +15,7 @@
         // If the search string is not found, return the original string
         return inputString;
       } else {
-        // Construct the new strin8klg with the replacement
+        // Construct the new string with the replacement
         return inputString.substring(0, lastIndex) + replacement + inputString.substring(lastIndex + search.length);
       }
     }
@@ -28,13 +28,31 @@
 
     }
     $(document).ready(function() {
-      $('.fields-table tbody').on('click', '.remove-field', function() {
-        console.log("Removing..");
-        var $row = $(this).closest('tr');
-        var selectedField = $row.find('.selected-field').text();
-        var columnName = $row.find('.column-name').text();
-        sendValuesToBackend(columnName,selectedField,"removeField");
+      // $('.fields-table tbody').on('click', '.remove-field', function() {
+      //   console.log("Removing...");
+      //   var $row = $(this).closest('tr');
+      //   var selectedField = $row.find('.selected-field').text();
+      //   var columnName = $row.find('.column-name').text();
+      //   sendValuesToBackend(columnName,selectedField,"removeField");
+      //
+      // });
 
+      $('.remove-row').click(function() {
+        var selectedRows = $('.fields-table tbody').find('.remove-checkbox:checked').closest('tr');
+
+        selectedRows.each(function() {
+          var columnName = $(this).find('.column-name').text();
+          var selectedField = $(this).find('.selected-field').text();
+
+          // You can now use the columnName and selectedField variables to perform any desired action
+          console.log('Selected row:', columnName, '-', selectedField);
+          sendValuesToBackend(columnName,selectedField,"removeField");
+
+
+          // Remove the row from the table
+          $(this).remove();
+        });
+        });
       });
       $('#file-type').change(function() {
         var fileType = $(this).val();
@@ -66,48 +84,52 @@
       })
       });
 
-      function sendValuesToBackend(columnName, selectedField, action)
-    {
-      var xhr = new XMLHttpRequest();
+      });
+
+    function sendValuesToBackend(columnName, selectedField, action) {
       // Create a FormData object to send data in the request body
       var formData = new FormData();
       formData.append("columnName", columnName);
       formData.append("selectedField", selectedField);
-      formData.append(action, action);
-      xhr.open("POST", "${pageContext.request.contextPath}/aim/dataImporter.do", true);
-      // xhr.setRequestHeader()
-      // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          // Update UI or perform any additional actions if needed
-          console.log("Selected pairs updated successfully.");
-          var updatedMapRaw = xhr.getResponseHeader('updatedMap');
+      formData.append("action", action);
 
-          console.log("Raw response: "+updatedMapRaw)
-          var updatedMap = JSON.parse(updatedMapRaw);
+      fetch("${pageContext.request.contextPath}/aim/dataImporter.do", {
+        method: "POST",
+        body: formData
+      })
+              .then(response =>{
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                // console.log("Response: ",response.json());
 
-          // Use updatedMap as needed
-          console.log("Updated map received:", updatedMap);
-          var tbody= document.getElementById("selected-pairs-table-body");
-          // var tbody = table.getElementsByTagName("tbody")[0];
+                return response.json();
+              })
+              .then(updatedMap => {
+                console.log("Map :" ,updatedMap)
 
-          // Remove all rows from the table body
-          while (tbody.firstChild) {
-            tbody.removeChild(tbody.firstChild);
-          }
-          for (var key in updatedMap) {
-            if (updatedMap.hasOwnProperty(key)) {
-              // Access each property using the key
-              var value = updatedMap[key];
-              updateTable(key,value, tbody);
-              console.log('Key:', key, 'Value:', value);
-            }
-          }
+                // Update UI or perform any additional actions if needed
+                console.log("Selected pairs updated successfully.");
+                console.log("Updated map received:", updatedMap);
+                var tbody = document.getElementById("selected-pairs-table-body");
 
-        }
-      };
-      xhr.send(formData);
+                // Remove all rows from the table body
+                tbody.innerHTML = "";
+
+                for (var key in updatedMap) {
+                  if (updatedMap.hasOwnProperty(key)) {
+                    // Access each property using the key
+                    var value = updatedMap[key];
+                    updateTable(key, value, tbody);
+                    console.log('Key:', key, 'Value:', value);
+                  }
+                }
+              })
+              .catch(error => {
+                console.error("There was a problem with the fetch operation:", error);
+              });
     }
+
     function updateTable(columnName,selectedField, tbody)
     {
 
@@ -123,20 +145,18 @@
       selectedFieldCell.textContent=selectedField;
 
 
-      // Create a remove button
-      var removeButtonCell = document.createElement("td");
-      var removeButton = document.createElement("button");
-      removeButton.textContent = "Remove";
-      removeButton.className = "remove-field"
-      // removeButton.onclick = function() {
-      //   sendValuesToBackend(columnName,selectedField,"removeField") // Remove the row when the remove button is clicked
-      // };
-      removeButtonCell.appendChild(removeButton);
+      // Create a checkbox cell
+      var checkboxCell = document.createElement("td");
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "remove-checkbox";
+      checkbox.value = columnName;
+      checkboxCell.appendChild(checkbox);
 
       // Append cells to the row
       row.appendChild(columnNameCell);
       row.appendChild(selectedFieldCell);
-      row.appendChild(removeButtonCell);
+      row.appendChild(checkboxCell);
 
       // Append the row to the table body
       tbody.appendChild(row);
@@ -149,6 +169,7 @@
       var dataSeparator = $('#data-separator').val();
 
       formData.append('templateFile', fileInput.files[0]);
+      formData.append('action', "uploadTemplate");
       formData.append('uploadTemplate', "uploadTemplate");
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
@@ -176,18 +197,13 @@
     function uploadDataFile() {
       var formData = new FormData();
       var fileInput = document.getElementById('dataFile');
-      var fileType = $('#file-type').val();
-      var dataSeparator = $('#data-separator').val();
-
       // Check if a file is selected
       if (!fileInput.files.length) {
         alert("Please select a file to upload.");
         return;
       }
       formData.append('dataFile', fileInput.files[0]);
-      formData.append('uploadDataFile',"uploadDataFile");
-      formData.append('fileType',fileType);
-      formData.append('dataSeparator',dataSeparator);
+      formData.append('action',"uploadDataFile");
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
@@ -296,6 +312,10 @@
     <!-- Selected pairs will be dynamically added here -->
     </tbody>
   </table>
+  <br>
+  <br>
+  <input type="button" value="Remove Selected Rows" class="remove-row">
+
   <br><br>
 
   <label id="select-file-label">Select Excel File:</label>

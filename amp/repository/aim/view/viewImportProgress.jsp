@@ -31,7 +31,6 @@
 
         <script>
 
-
             $(document).ready(function() {
 
                 var  datatable = $('#import-projects-table').DataTable();
@@ -63,6 +62,19 @@
                             // Clear existing import projects table
                             // $("#import-projects-table tbody").empty();
                             $('#import-projects-table').DataTable().clear();
+
+
+                            // Add event listener for radio button click
+                            $("input[name='project-filter']").change(function() {
+                                var filterValue = $(this).val();
+                                if (filterValue === 'ALL') {
+                                    // Clear the filter if the value is 'all'
+                                    datatable.column(1).search('').draw();
+                                } else {
+                                    // Apply the filter
+                                    datatable.column(1).search(filterValue).draw();
+                                }
+                            });
 
                             // Populate import projects table with new data
                             $.each(importProjects, function(index, project) {
@@ -137,7 +149,16 @@
 
     <!-- Table to display import projects for a particular ImportedFilesRecord -->
     <div class="file-projects">
+
     <h3>File Projects</h3>
+        <div class="filter-div">
+            <label for="all-projects">All: </label>
+            <input type="radio" id="all-projects" name="project-filter" value="ALL" checked>
+            <label for="success-projects">Success: </label>
+            <input type="radio" id="success-projects" name="project-filter" value="SUCCESS">
+            <label for="failed-projects">Failed: </label>
+            <input type="radio" id="failed-projects" name="project-filter" value="FAILED">
+        </div>
     <div class="countRecords">
 
     </div>

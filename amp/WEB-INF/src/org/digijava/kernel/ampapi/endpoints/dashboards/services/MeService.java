@@ -385,7 +385,7 @@ public class MeService {
         return EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
     }
 
-    private void applySettingsAndFilters(
+    public void applySettingsAndFilters(
             SettingsAndFiltersParameters settingsAndFilters,
             ReportSpecificationImpl spec) {
 

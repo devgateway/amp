@@ -12,7 +12,6 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
-import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -26,11 +25,8 @@ import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.util.PermissionUtil;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -191,14 +187,14 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
     @Override
     protected void onConfigure() {
-        AmpCategoryValueLocations loc = locationModel.getObject().getLocation();
-        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-        if (loc != null) {
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, loc);
-        }
-        super.onConfigure();
-        if (loc != null) {
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
-        }
+//        AmpCategoryValueLocations loc = locationModel.getObject().getLocation();
+//        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+//        if (loc != null) {
+//            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, loc);
+//        }
+//        super.onConfigure();
+//        if (loc != null) {
+//            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
+//        }
     }
 }

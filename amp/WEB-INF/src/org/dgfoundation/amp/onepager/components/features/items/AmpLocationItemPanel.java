@@ -191,6 +191,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
     @Override
     protected void onConfigure() {
+
+
         AmpCategoryValueLocations loc = locationModel.getObject().getLocation();
         AmpAuthWebSession session = (AmpAuthWebSession) getSession();
         if (loc != null) {

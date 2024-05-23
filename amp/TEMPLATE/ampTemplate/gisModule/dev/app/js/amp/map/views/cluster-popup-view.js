@@ -6,12 +6,10 @@ var Backbone = require('backbone');
 var d3 = require('d3-browserify');
 var nvd3 = window.nv;
 var util = require('../../../libs/local/chart-util');
-const GisSettings = require('../../services/gis_settings');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
-var gisSettings = new GisSettings();
 
 //TODO: put cluster popup code in own folder,
 // with seperate view for charts and table.
@@ -38,14 +36,14 @@ module.exports = Backbone.View.extend({
 
 
   generateInfoWindow: function(popup, admLayer) {
-
+      var self = this;
               var featureCollection = admLayer.get('features');
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;
               });
               // this.cluster.gisSettings = gisSettings.gisSettings;
-                this.cluster.sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
-                this.cluster.programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
+                this.cluster.sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');
+                this.cluster.programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
                  this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
               // get appropriate cluster model:
               if (this.cluster) {

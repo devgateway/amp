@@ -2,9 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var DatasourcesItem = require('./datasources-item-adm-clusters');
-const GisSettings = require("../../services/gis_settings");
 var Template = fs.readFileSync(__dirname + '/datasources-table-template.html', 'utf8');
-// var gisSettings = new GisSettings();
 
 module.exports = Backbone.View.extend({
 

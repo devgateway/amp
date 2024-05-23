@@ -11,7 +11,6 @@ const GisSettings = require('../../services/gis_settings');
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
-var gisSettings = new GisSettings();
 
 //TODO: put cluster popup code in own folder,
 // with seperate view for charts and table.

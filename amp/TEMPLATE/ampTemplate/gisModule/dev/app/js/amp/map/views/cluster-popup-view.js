@@ -38,14 +38,14 @@ module.exports = Backbone.View.extend({
 
 
   generateInfoWindow: function(popup, admLayer) {
-
+      var self = this;
               var featureCollection = admLayer.get('features');
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;
               });
               // this.cluster.gisSettings = gisSettings.gisSettings;
-                this.cluster.sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
-                this.cluster.programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
+                this.cluster.sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');
+                this.cluster.programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
                  this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
               // get appropriate cluster model:
               if (this.cluster) {

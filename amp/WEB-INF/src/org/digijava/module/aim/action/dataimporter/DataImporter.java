@@ -1,13 +1,10 @@
-package org.digijava.module.aim.action;
+package org.digijava.module.aim.action.dataimporter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
+import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
@@ -56,11 +53,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
+import static org.digijava.module.aim.action.dataimporter.ImporterUtil.*;
 
 public class DataImporter extends Action {
     static Logger logger = LoggerFactory.getLogger(DataImporter.class);
     private static final int BATCH_SIZE = 1000;
-    private static Map<String, Long> constantsMap = new HashMap<>();
 
 
     @Override
@@ -108,7 +105,7 @@ public class DataImporter extends Action {
                                 logger.info("File is empty or does not contain headers.");
                             }
                         } catch (IOException | CsvValidationException e) {
-                            e.printStackTrace();
+                            logger.error("An error occurred during extraction of headers.",e);
                         }
 
                     }
@@ -221,20 +218,26 @@ public class DataImporter extends Action {
                 } else {
                     // Proceed with processing the file
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
-                    // Process the file in batches
-                    int res = processFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
-                    if (res != 1) {
-                        // Handle error
-                        logger.info("Error processing file  " + tempFile);
-                        response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
-                        response.setStatus(400);
-                        return mapping.findForward("importData");
+                    if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
+
+                        // Process the file in batches
+                        int res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                        if (res != 1) {
+                            // Handle error
+                            logger.info("Error processing file  " + tempFile);
+                            response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
+                            response.setStatus(400);
+                            return mapping.findForward("importData");
+                        }
+                    } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
+
                     }
+
 
                     // Clean up
                     Files.delete(tempFile.toPath());
-                    logger.info("Cache map size: " + constantsMap.size());
-                    constantsMap.clear();
+                    logger.info("Cache map size: " + ConstantsMap.size());
+                    ConstantsMap.clear();
                     logger.info("File path is " + tempFilePath + " and size is " + tempFile.length() / (1024 * 1024) + " mb");
                     Instant start = Instant.now();
                     logger.info("Start time: " + start);
@@ -253,35 +256,8 @@ public class DataImporter extends Action {
     }
 
 
-    private void removeMapItem(Map<String,String> map,String columnName, String selectedField)
-    {
-        // Check if the entry's key and value match the criteria
-        // Remove the entry
-        map.entrySet().removeIf(entry -> columnName.equals(entry.getKey()) && selectedField.equals(entry.getValue()));
-    }
 
-
-    public static boolean isFileReadable(File file) {
-        if (file == null || !file.exists() || !file.isFile()) {
-            return false;
-        }
-        return file.canRead();
-    }
-
-    // Check if the file content is valid
-    public static boolean isFileContentValid(File file) {
-        // Define your validation criteria here
-        // For example, let's say we want to check if the file contains at least one line
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line = reader.readLine();
-            return line != null; // If at least one line exists, consider the content valid
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception appropriately
-            return false; // Consider the content invalid if an exception occurs
-        }
-    }
-
-    public int processFileInBatches(ImportedFilesRecord importedFilesRecord,File file, HttpServletRequest request,Map<String, String> config) {
+    public int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config) {
         // Open the workbook
         int res=0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
@@ -309,6 +285,7 @@ public class DataImporter extends Action {
         return res;
 
     }
+
 
     private void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Get the number of rows in the sheet
@@ -380,19 +357,19 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
                                 break;
                             case "{fundingItem}":
-                                setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
                                 break;
                             case "{plannedCommitment}":
-                                setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
                                 break;
                             case "{plannedDisbursement}":
-                                setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
                                 break;
                             case "{actualCommitment}":
-                                setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
                                 break;
                             case "{actualDisbursement}":
-                                setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
                                 break;
                             default:
                                 logger.error("Unexpected value: " + entry.getValue());
@@ -408,380 +385,7 @@ public class DataImporter extends Action {
         }
     }
 
-    private void setAFundingItem(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell,boolean commitment, boolean disbursement, String
-            adjustmentType) {
-        int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
-        String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
-        detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
-        String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
 
-        if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
-        {
-            if (!config.containsValue("{donorAgency}"))
-            {
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType);
-
-            }
-            else {
-                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
-                updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org", session, "donor");
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
-            }
-
-        }else {
-            updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
-        }
-    }
-
-    public <K, V> K getKey(Map<K, V> map, V value) {
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (entry.getValue().equals(value)) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-    public static String findYearSubstring(String text) {
-        Pattern pattern = Pattern.compile("(?:19|20)\\d{2}");
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            return matcher.group();
-        } else {
-            return null;
-        }
-    }
-
-
-    private String getFundingDate(String yearString)
-    {
-        LocalDate date = LocalDate.of(Integer.parseInt(yearString), 1, 1);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        return date.format(formatter);
-    }
-    private void updateFunding(ImportDataModel importDataModel, Session session, Number amount, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
-                               adjustmentType) {
-        String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
-        Long currencyId = getCurrencyId(session);
-        Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql,adjustmentType );
-        Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql,assistanceType);
-        Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finInst);
-        Long orgRole = getOrganizationRole(session);
-
-        String yearString = findYearSubstring(columnHeader);
-        String fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
-
-        Funding funding = new Funding();
-        funding.setDonor_organization_id(orgId);
-        funding.setType_of_assistance(assType);
-        funding.setFinancing_instrument(finInstrument);
-        funding.setSource_role(orgRole);
-
-        Transaction transaction = new Transaction();
-        transaction.setCurrency(currencyId);
-        transaction.setAdjustment_type(adjType);
-        transaction.setTransaction_amount(amount.doubleValue());
-        transaction.setTransaction_date(fundingDate);
-        if (commitment) {
-            funding.getCommitments().add(transaction);
-        }
-        if (disbursement) {
-            funding.getDisbursements().add(transaction);
-        }
-
-        DonorOrganization donorOrganization = new DonorOrganization();
-        donorOrganization.setOrganization(orgId);
-        donorOrganization.setPercentage(100.0);
-
-        importDataModel.getDonor_organization().add(donorOrganization);
-        importDataModel.getFundings().add(funding);
-    }
-
-
-    private Long getOrganizationRole(Session session) {
-
-        if (constantsMap.containsKey("orgRole")) {
-            Long val= constantsMap.get("orgRole");
-            logger.info("In cache... orgRole: "+val);
-            return val;
-
-        }
-        if (!session.isOpen()) {
-            session = PersistenceManager.getRequestDBSession();
-        }
-        String hql = "SELECT o.ampRoleId FROM " + AmpRole.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
-
-        Query query = session.createQuery(hql);
-        query.setParameter("name", "%donor%");
-        List<Long> orgRoles = query.list();
-        Long orgRole = orgRoles.get(0);
-        constantsMap.put("orgRole", orgRole);
-        return orgRole;
-    }
-
-    private Long getCurrencyId(Session session) {
-
-        if (constantsMap.containsKey("currencyId")) {
-            Long val = constantsMap.get("currencyId");
-            logger.info("In cache... currency: "+val);
-            return val;
-
-        }
-        if (!session.isOpen()) {
-            session = PersistenceManager.getRequestDBSession();
-        }
-        String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
-                "WHERE ac.currencyCode = :currencyCode";
-
-        Query query = session.createQuery(hql);
-        query.setString("currencyCode", "XOF");
-        Long currencyId = (Long) query.uniqueResult();
-        constantsMap.put("currencyId", currencyId);
-        return currencyId;
-    }
-
-    private Long getCategoryValue(Session session, String constantKey, String categoryKey, String hql, String possibleValue) {
-        String fullKey=constantKey+"_"+possibleValue;
-        if (constantsMap.containsKey(fullKey)) {
-            Long val = constantsMap.get(fullKey);
-            logger.info("In cache... "+fullKey+":"+val);
-            return val;
-
-        }
-        if (!session.isOpen()) {
-            session = PersistenceManager.getRequestDBSession();
-        }
-        Query query = session.createQuery(hql);
-        query.setParameter("categoryKey", categoryKey);
-        List<?> values = query.list();
-        Long categoryId = ((AmpCategoryValue) values.get(0)).getId();
-
-        if (!Objects.equals(possibleValue, "")  && !Objects.equals(possibleValue, null))
-        {
-            for (Object categoryValue : values)
-            {
-                if (Objects.equals(((AmpCategoryValue) categoryValue).getValue().toLowerCase(), possibleValue.toLowerCase()))
-                {
-                    categoryId = ((AmpCategoryValue) categoryValue).getId();
-                    logger.info("Found category: "+((AmpCategoryValue) categoryValue).getValue());
-                    break;
-                }
-
-            }
-        }
-        logger.info("Found category: "+categoryId +" for "+constantKey+"_"+possibleValue);
-        constantsMap.put(fullKey, categoryId);
-        return categoryId;
-    }
-
-    private AmpActivityVersion existingActivity(ImportDataModel importDataModel,Session session)
-    {
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
-        }
-        String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name";
-        Query query= session.createQuery(hql);
-        query.setString("name", importDataModel.getProject_title());
-        List<AmpActivityVersion> ampActivityVersions=query.list();
-        return  !ampActivityVersions.isEmpty()? ampActivityVersions.get(ampActivityVersions.size()-1) :null;
-    }
-    private void setStatus(ImportDataModel importDataModel,Session session)
-    {
-        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
-                "JOIN s.ampCategoryClass c " +
-                "WHERE c.keyName = :categoryKey";
-        Long statusId = getCategoryValue(session,"statusId",CategoryConstants.ACTIVITY_STATUS_KEY,hql,"");
-        importDataModel.setActivity_status(statusId);
-
-    }
-    private void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject) throws JsonProcessingException {
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
-        }
-        ActivityImportRules rules = new ActivityImportRules(true, false,
-                true);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
-        objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-
-        Map<String, Object> map = objectMapper
-                .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
-        JsonApiResponse<ActivitySummary> response;
-        AmpActivityVersion existing = existingActivity(importDataModel,session);
-        logger.info("Existing ?"+existing);
-        logger.info("Data model object: "+importDataModel);
-    if (existing==null){
-        logger.info("New activity");
-        importedProject.setNewProject(true);
-        response= ActivityInterchangeUtils.importActivity(map, false, rules,  "activity/new");
-    }
-    else
-    {
-        logger.info("Existing activity");
-        importedProject.setNewProject(false);
-        importDataModel.setInternal_id(existing.getAmpActivityId());
-        importDataModel.setAmp_id(existing.getAmpId());
-        ActivityGroup activityGroup= new ActivityGroup();
-        activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
-        importDataModel.setActivity_group(activityGroup);
-        map = objectMapper
-                .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
-        response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity/update");
-
-    }
-    if (response!=null) {
-        if (!response.getErrors().isEmpty()) {
-            importedProject.setImportStatus(ImportStatus.FAILED);
-        } else {
-            importedProject.setImportStatus(ImportStatus.SUCCESS);
-
-        }
-    }
-
-    String resp = objectMapper.writeValueAsString(response);
-    importedProject.setImportResponse(resp);
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
-        }
-    session.saveOrUpdate(importedProject);
-    logger.info("Imported project: "+importedProject);
-    }
-
-
-
-    private void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
-    {
-
-        if (constantsMap.containsKey("sector_"+name)) {
-            Long sectorId = constantsMap.get("sector_"+name);
-            logger.info("In cache... sector "+"sector_"+name+":"+sectorId);
-            createSector(importDataModel,primary,sectorId);
-        }
-        else {
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
-            }
-
-            session.doWork(connection -> {
-                String query = primary ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'" : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
-                try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    // Set the name as a parameter to the prepared statement
-                    statement.setString(1, name);
-
-                    // Execute the query and process the results
-                    try (ResultSet resultSet = statement.executeQuery()) {
-                        while (resultSet.next()) {
-                            Long ampSectorId = resultSet.getLong("amp_sector_id");
-                            createSector(importDataModel, primary, ampSectorId);
-                            constantsMap.put("sector_"+name, ampSectorId);
-                        }
-                    }
-
-                } catch (SQLException e) {
-                    logger.error("Error getting sectors", e);
-                }
-            });
-        }
-
-
-
-    }
-
-    private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {
-        Sector sector1 = new Sector();
-        sector1.setSector_percentage(100.00);
-        sector1.setSector(ampSectorId);
-        if (primary) {
-            importDataModel.getPrimary_sectors().add(sector1);
-        }
-        else
-        {
-            importDataModel.getSecondary_sectors().add(sector1);
-
-        }
-    }
-
-    private Long getRandomOrg(Session session)
-    {
-        Long randomOrg;
-        if (constantsMap.containsKey("randomOrg")) {
-            randomOrg = constantsMap.get("randomOrg");
-            logger.info("In cache... randomOrg "+randomOrg);
-        }else {
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
-            }
-            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
-
-            randomOrg = (Long) session.createQuery(hql).setMaxResults(1).uniqueResult();
-            constantsMap.put("randomOrg",randomOrg);
-        }
-        return randomOrg;
-
-
-    }
-
-    private void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
-    {
-        Long orgId;
-
-        if (constantsMap.containsKey("org_"+name)) {
-            orgId = constantsMap.get("org_"+name);
-            logger.info("In cache... organisation "+"org_"+name+":"+orgId);
-        }
-        else {
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
-            }
-            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
-
-            Query query = session.createQuery(hql);
-            query.setParameter("name", "%" + name + "%");
-            List<Long> organisations = query.list();
-            if (!organisations.isEmpty()) {
-                orgId = organisations.get(0);
-            } else {
-                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
-
-                query = session.createQuery(hql).setMaxResults(1);
-                orgId = (Long) query.uniqueResult();
-            }
-            constantsMap.put("org_" + name, orgId);
-        }
-        logger.info("Organisation: " + orgId);
-
-        if (Objects.equals(type, "donor")) {
-                DonorOrganization donorOrganization = new DonorOrganization();
-                donorOrganization.setOrganization(orgId);
-                donorOrganization.setPercentage(100.0);
-                importDataModel.getDonor_organization().add(donorOrganization);
-        }
-
-
-
-    }
-
-
-    private static int getColumnIndexByName(Sheet sheet, String columnName) {
-        try {
-            Row headerRow = sheet.getRow(0);
-            for (int i = 0; i < headerRow.getLastCellNum(); i++) {
-                Cell cell = headerRow.getCell(i);
-                if (cell != null && columnName.equals(cell.getStringCellValue())) {
-                    return i;
-                }
-            }
-            return -1;
-        }catch (Exception e)
-        {
-            logger.error("Error getting column index for "+columnName,e);
-            return -1;
-        }
-
-    }
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
         fieldsInfos.add("{projectTitle}");

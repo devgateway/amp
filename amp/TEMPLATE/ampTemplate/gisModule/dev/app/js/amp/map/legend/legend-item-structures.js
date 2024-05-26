@@ -76,6 +76,8 @@ module.exports = Backbone.View.extend({
 
 				   // render icons if available
 				   console.log("Image buckets",self.model.iconMappings);
+				   console.log("Max num for icons",MAX_NUM_FOR_ICONS);
+				   console.log("Collection length ",self.model.structuresCollection.length);
 				   if ((MAX_NUM_FOR_ICONS === -1 || self.model.structuresCollection.length < MAX_NUM_FOR_ICONS) &&
 					   (self.model.get('filterVertical') === 'Primary Sector' || self.model.get('filterVertical') === 'Programs')) {
 					   console.log("Hello world");

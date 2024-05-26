@@ -113,9 +113,9 @@ module.exports = Backbone.View
 
 
   _featureToShape: function(feature){
-	  if (feature.geometry.type == 'LineString') {
+	  if (feature.geometry.type === 'LineString') {
 		  return this._featureToLineString(feature);
-	  } else if (feature.geometry.type == 'Polygon') {
+	  } else if (feature.geometry.type === 'Polygon') {
 		  return this._featureToPolygon(feature);
 	  } else {
 		  return this._featureToMarker(feature);

@@ -44,7 +44,7 @@ module.exports = Backbone.View.extend({
 					   }
 				   });
 
-
+				   console.log("Filter vertical 2:", self.model.get('filterVertical'));
 
 				   var renderObject = {
 					   status: 'loaded',

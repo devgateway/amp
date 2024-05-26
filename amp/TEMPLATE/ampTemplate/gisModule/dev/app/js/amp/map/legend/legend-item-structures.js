@@ -44,7 +44,7 @@ module.exports = Backbone.View.extend({
 					   }
 				   });
 
-				   console.log("Filter vertical 2:", self.model.get('filterVertical'));
+
 
 				   var renderObject = {
 					   status: 'loaded',
@@ -75,12 +75,8 @@ module.exports = Backbone.View.extend({
 				   }
 
 				   // render icons if available
-				   console.log("Image buckets",self.model.iconMappings);
-				   console.log("Max num for icons",MAX_NUM_FOR_ICONS);
-				   console.log("Collection length ",self.model.structuresCollection.length);
 				   if ((MAX_NUM_FOR_ICONS === -1 || self.model.structuresCollection.length < MAX_NUM_FOR_ICONS) &&
 					   (self.model.get('filterVertical') === 'Primary Sector' || self.model.get('filterVertical') === 'Programs')) {
-					   console.log("Hello world");
 					   renderObject.imageBuckets = self.model.iconMappings;
 					   renderObject.DEFAULT_ICON_CODE =  self.model.DEFAULT_ICON_CODE;
 					   renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');
@@ -125,6 +121,11 @@ module.exports = Backbone.View.extend({
 					   self.model.set('filterVertical', verticalID);
 				   });
 			   });
+
+	  // })
+		//    .catch(error => {
+		// 	   console.error('Error rendering structures:', error);
+		//    });
 
 
 

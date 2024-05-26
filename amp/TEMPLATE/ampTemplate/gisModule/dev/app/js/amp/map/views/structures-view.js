@@ -194,7 +194,7 @@ module.exports = Backbone.View
           valCode = '1';
       } else if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
           valCode = '0';
-        console.warn('TODO: need custom various sectors icon...different from  multi-sector');
+        console.warn('TODO: need custom various sectors/programs icon...different from  multi-sector');
       } else {
         if (feature.properties.activity.attributes.matchesFilters[filterVertical][0] instanceof Object) {
             valCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
@@ -203,6 +203,7 @@ module.exports = Backbone.View
         }
       }
     }
+            console.log("Val code", valCode);
 
     var sectorIconStyleCode = this.structureMenuModel.getSelectedIconStyleCode(valCode);
 

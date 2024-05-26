@@ -15,7 +15,7 @@ function breathAfter(func, context) {
         result = func.apply(context, arguments);
     window.setTimeout(function() {
       finished.resolve(result);
-    }, 50);
+    }, 500);
     return finished.promise();
   };
 }
@@ -154,9 +154,11 @@ module.exports = Backbone.View
 	  if (self.rawData.features.length < self.maxNumberOfIcons &&
           (self.structureMenuModel.get('filterVertical') === 'Primary Sector' || self.structureMenuModel.get('filterVertical') === 'Programs')) {
 		  // create icon
+          console.log("Special marker")
 		  marker = self._createSectorOrProgramMarker(latlng, feature);
 	  } else {
 		  // coloured circle marker, no icon
+          console.log("Plain marker")
 		  marker = self._createPlainMarker(latlng, feature);
 	  }
 

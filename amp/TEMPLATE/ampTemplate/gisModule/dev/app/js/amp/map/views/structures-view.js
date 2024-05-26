@@ -69,6 +69,7 @@ module.exports = Backbone.View
   // Point / Feature Code
   // ==================
   getNewProjectSitesLayer: function() {
+      console.log("New project sites here")
     var self = this;
     // TODO: this approach will block structures drawing on join. Should draw dots as soon
     // as structures load, then update when activitites join is done...
@@ -89,6 +90,7 @@ module.exports = Backbone.View
 
 
   _renderFeatures: function() {
+      console.log("Render here")
     var self = this;
     self.markerCluster.clearLayers();
     self.maxClusterCount = 4; //start it at 4 instead of 0, otherwise clusters of 2 or 3 can be way too big.
@@ -113,6 +115,7 @@ module.exports = Backbone.View
 
 
   _featureToShape: function(feature){
+      console.log("To shape")
 	  if (feature.geometry.type === 'LineString') {
 		  return this._featureToLineString(feature);
 	  } else if (feature.geometry.type === 'Polygon') {

@@ -44,7 +44,7 @@
   <% if (status === 'loading') { %>
     <p><em data-18n="amp.gis:legend-loading">Loading...</em>></p>
 
-  <% }  if (obj.imageBuckets) {
+  <% } else if (obj.imageBuckets) {
     _.each(palletteElements ,function(element) {
       var styleCode =  obj.DEFAULT_ICON_CODE;
       if (obj.imageBuckets[element.code]) {

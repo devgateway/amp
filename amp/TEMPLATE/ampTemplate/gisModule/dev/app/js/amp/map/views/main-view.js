@@ -54,7 +54,7 @@ module.exports = Backbone.View.extend({
 
     this.headerView = new MapHeaderView({app: this.app});
     this.GapViewModel = Backbone.Model.extend({defaults: {isGapAnalysisAvailable: false, isGapAnalysisSelected: false}});
-    
+
     this.headerGapAnalysisView = new MapHeaderGapAnalysisView({app: this.app, model: new this.GapViewModel()});
     this.headerPerformanceToggle = new MapHeaderPerformanceToggle({app: this.app, model: this.app.data.performanceToggleModel});
     this.legendView = new LegendView({app: this.app});
@@ -124,7 +124,7 @@ module.exports = Backbone.View.extend({
               if (feature.properties['BELT'] === true) {
                 return {
                   color: '#29343F',
-                  fillColor: 'green', // Set green color for the feature with NAME 'extra'
+                  fillColor: 'green', // Set green color for the feature with NAME 'BELT'
                   weight: 1.4,
                   dashArray: '1'
                 };

@@ -22,108 +22,110 @@ module.exports = Backbone.View.extend({
 
   },
 
-	render: function() {
-		var self = this;
 
-		self.model.structuresCollection.getStructuresWithActivities().then(function() {
-			var geoJSON = self.model.structuresCollection.toGeoJSON();
-			var customStructureColors = [];
-			geoJSON.features.forEach(function(feature) {
-				if (feature.properties.color && feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER)!== -1) {
-					var splits = feature.properties.color.split(Constants.STRUCTURE_COLORS_DELIMITER);
-					if (customStructureColors.find(function(c) {
-						return c.color === splits[0];
-					}) == null) {
-						customStructureColors.push({
-							color: splits[0],
-							label: splits[1]
-						});
-					}
-				}
-			});
+  render:  function() {
+	  var self = this;
+	  //getStructuresWithActivities was null...
 
-			var renderObject = {
-				status: 'loaded',
-				colourBuckets: self.model.structuresCollection.palette.colours,
-				selectedVertical: self.model.get('filterVertical'),
-				sectorsEnabled: app.data.generalSettings.get('gis-sectors-enabled'),
-				programsEnabled: app.data.generalSettings.get('gis-programs-enabled'),
-				customStructureColors: customStructureColors
-			};
+			   self.model.structuresCollection.getStructuresWithActivities().then(function() {
+				   var geoJSON = self.model.structuresCollection.toGeoJSON();
+				   var customStructureColors = []
+				   geoJSON.features.forEach(function(feature) {
+					   if (feature.properties.color && feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER) !== -1) {
+						   var splits = feature.properties.color.split(Constants.STRUCTURE_COLORS_DELIMITER);
+						   if (customStructureColors.find(function(c) {
+							   return c.color === splits[0]
+						   }) == null) {
+							   customStructureColors.push({
+								   color : splits[0],
+								   label : splits[1]
+							   });
+						   }
+					   }
+				   });
 
-			// TODO: Move this code to a config class.
-			// IT IS REPEATED IN map/views/structures-view.js
-			var MAX_NUM_FOR_ICONS = 0;
-			var useIconsForSectors = app.data.generalSettings.get('use-icons-for-sectors-in-project-list');
-			var maxLocationIcons = app.data.generalSettings.get('max-locations-icons');
-			if (useIconsForSectors!== undefined && useIconsForSectors === true) {
-				if (maxLocationIcons!== undefined && maxLocationIcons!== '') {
-					if (maxLocationIcons === 0) {
-						MAX_NUM_FOR_ICONS = -1; // always show
-					} else {
-						MAX_NUM_FOR_ICONS = maxLocationIcons;
-					}
-				} else {
-					MAX_NUM_FOR_ICONS = 0;
-				}
-			} else {
-				MAX_NUM_FOR_ICONS = 0;
-			}
+				   console.log("Filter vertical 2:", self.model.get('filterVertical'));
 
-			// render icons if available
-			if ((MAX_NUM_FOR_ICONS === -1 || self.model.structuresCollection.length < MAX_NUM_FOR_ICONS) &&
-				(self.model.get('filterVertical') === 'Primary Sector' || self.model.get('filterVertical') === 'Programs')) {
-				self.model.iconMappings.then(function(iconMappings) {
-					renderObject.imageBuckets = iconMappings;
-					renderObject.DEFAULT_ICON_CODE = self.model.DEFAULT_ICON_CODE;
-					renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');
+				   var renderObject = {
+					   status: 'loaded',
+					   colourBuckets: self.model.structuresCollection.palette.colours,
+					   selectedVertical: self.model.get('filterVertical'),
+					   sectorsEnabled: app.data.generalSettings.get('gis-sectors-enabled'),
+					   programsEnabled: app.data.generalSettings.get('gis-programs-enabled'),
+					   customStructureColors: customStructureColors
+				   };
 
-					self.app.translator.promise.then(function() {
-						self.app.translator.translateDOM(
-							self.template(_.extend({}, self.model.toJSON(), renderObject))
-						).then(function(legend) {
-							self.$el.html(legend);
-						});
-					});
+				   //TODO: Move this code to a config class.
+				   //IT IS REPEATED IN map/views/structures-view.js
+				   var MAX_NUM_FOR_ICONS = 0;
+				   var useIconsForSectors = app.data.generalSettings.get('use-icons-for-sectors-in-project-list');
+				   var maxLocationIcons = app.data.generalSettings.get('max-locations-icons');
+				   if (useIconsForSectors !== undefined && useIconsForSectors === true) {
+					   if (maxLocationIcons !== undefined && maxLocationIcons !== '') {
+						   if (maxLocationIcons === 0) {
+							   MAX_NUM_FOR_ICONS = -1; //always show
+						   } else {
+							   MAX_NUM_FOR_ICONS = maxLocationIcons;
+						   }
+					   } else {
+						   MAX_NUM_FOR_ICONS = 0;
+					   }
+				   } else {
+					   MAX_NUM_FOR_ICONS = 0;
+				   }
 
-					if (MAX_NUM_FOR_ICONS!== -1) {
-						self.app.translator.translateList({
-							'amp.gis:legend-popover': 'If there are less than',
-							'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
-							'amp.gis:title-AdministrativeLevel1': 'Administrative Level 1'
-						}).then(function(legendPopoverList) {
-							var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
-								' ',
-								MAX_NUM_FOR_ICONS,
-								' ',
-								legendPopoverList['amp.gis:legend-popover-2']
-							].join('');
-							self.$('[data-toggle="popover"]').popover();
-							self.$('[data-toggle="popover"]').attr('data-content', legendPopover);
-							self.$('[data-toggle="popover"]').show();
-						});
-					} else {
-						self.$('[data-toggle="popover"]').hide();
-					}
-				});
-			} else {
-				self.app.translator.promise.then(function() {
-					self.app.translator.translateDOM(
-						self.template(_.extend({}, self.model.toJSON(), renderObject))
-					).then(function(legend) {
-						self.$el.html(legend);
-					});
-				});
-			}
+				   // render icons if available
+				   console.log("Image buckets",self.model.iconMappings);
+				   if ((MAX_NUM_FOR_ICONS === -1 || self.model.structuresCollection.length < MAX_NUM_FOR_ICONS) &&
+					   (self.model.get('filterVertical') === 'Primary Sector' || self.model.get('filterVertical') === 'Programs')) {
+					   renderObject.imageBuckets = self.model.iconMappings;
+					   renderObject.DEFAULT_ICON_CODE =  self.model.DEFAULT_ICON_CODE;
+					   renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');
+				   }
 
-			// add listener to select
-			self.$('select').change(function() {
-				var verticalID = self.$('option:selected').val();
-				self.model.set('filterVertical', verticalID);
-			});
-		});
+				   self.app.translator.promise.then(function() {
+					   self.app.translator.translateDOM(
+						   self.template(_.extend({}, self.model.toJSON(), renderObject))
+					   ).then(function(legend) {
+						   self.$el.html(legend);
+					   });
 
-		return this;
-	}
+				   });
+
+				   if (MAX_NUM_FOR_ICONS !== -1) {
+					   self.app.translator.translateList({
+						   'amp.gis:legend-popover': 'If there are less than',
+						   'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
+						   'amp.gis:title-AdministrativeLevel1': 'Administrative Level 1'
+					   }).then(function(legendPopoverList) {
+						   var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
+							   ' ',
+							   MAX_NUM_FOR_ICONS,
+							   ' ',
+							   legendPopoverList['amp.gis:legend-popover-2']
+						   ].join('');
+						   self.$('[data-toggle="popover"]').popover();
+						   self.$('[data-toggle="popover"]').attr('data-content', legendPopover);
+						   self.$('[data-toggle="popover"]').show();
+					   });
+				   } else {
+					   self.$('[data-toggle="popover"]').hide();
+				   }
+
+
+
+
+				   // add listener to select. Didn't work when i used 'events'
+				   // probably because happens after view populated...or translate strips events..
+				   self.$('select').change(function() {
+					   var verticalID = self.$('option:selected').val();
+					   self.model.set('filterVertical', verticalID);
+				   });
+			   });
+
+
+
+	  return this;
+  }
 
 });

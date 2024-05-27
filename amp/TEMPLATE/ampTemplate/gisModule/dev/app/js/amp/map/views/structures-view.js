@@ -59,8 +59,6 @@ module.exports = Backbone.View
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
-    this.showLayer(this.structureMenuModel);
-
   },
 
   render: function() {
@@ -374,7 +372,7 @@ module.exports = Backbone.View
   // ==================
   // Layer management
   // ==================
-  showLayer: _.debounce(function(layer) {
+  showLayer: function(layer) {
     var self = this;
     if (this.layerLoadState === 'loading') {
       console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
@@ -392,11 +390,11 @@ module.exports = Backbone.View
 
     this.map.on('zoomend', this._updateZoom, this);
 
-  }, 2000),
+  },
 
   refreshLayer: function() {
     // TODO: this is getting called twice when showing sturctures
-	// this.hideLayer();
+	this.hideLayer();
     this.showLayer(this.structureMenuModel);
   },
 

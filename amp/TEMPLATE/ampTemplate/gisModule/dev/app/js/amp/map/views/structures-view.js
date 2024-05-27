@@ -59,6 +59,8 @@ module.exports = Backbone.View
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
+    this.showLayer(this.structureMenuModel);
+
   },
 
   render: function() {

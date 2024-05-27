@@ -44,6 +44,7 @@ module.exports = Backbone.View
   MAX_CLUSTER_SIZE: 20,
 
   initialize: function(options) {
+      console.log("Initializing structures");
     this.app = options.app;
     this.map = options.map;
 

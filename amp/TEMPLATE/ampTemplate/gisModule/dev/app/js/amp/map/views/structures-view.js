@@ -394,7 +394,7 @@ module.exports = Backbone.View
 
   refreshLayer: function() {
     // TODO: this is getting called twice when showing sturctures
-	this.hideLayer();
+	// this.hideLayer();
     this.showLayer(this.structureMenuModel);
   },
 

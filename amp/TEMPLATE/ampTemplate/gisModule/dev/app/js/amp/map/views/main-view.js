@@ -41,12 +41,11 @@ module.exports = Backbone.View.extend({
       set: this._setMapView,
       empty: { center: [0, 40], zoom: 1 }
     });
-    this.structuresLayersView = new ProjectSitesLayerView({map: this.map, app: this.app});
-
 
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
 
     // init layers
+    this.structuresLayersView = new ProjectSitesLayerView({map: this.map, app: this.app});
     this.admClustersLayersView = new ADMClustersLayersView({map: this.map, app: this.app});
     this.indicatorLayersView = new IndicatorLayersView({map: this.map,
       app: this.app,

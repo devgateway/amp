@@ -365,25 +365,33 @@ module.exports = Backbone.View
   // ==================
   // Layer management
   // ==================
-  showLayer: _.debounce(function(layer) {
-    var self = this;
-    if (this.layerLoadState === 'loading') {
-      console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
-      return;
-    } else if (this.layerLoadState === 'pending') {
-      this.layerLoadState = 'loading';
-    }
+        showLayer: _.debounce(function(layer) {
+            var self = this;
+            if (this.layerLoadState === 'loading') {
+                console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
+                return;
+            } else if (this.layerLoadState === 'pending') {
+                this.layerLoadState = 'loading';
+            }
+            console.log("Selected layer",layer.get('selected'));
 
-    this.structureMenuModel.load().done(function() {
-      if (layer.get('selected')) {
-        self.layerLoadState = 'loaded';
-        self.getNewProjectSitesLayer();
-      }
-    });
+            this.structureMenuModel.load().done(function() {
+                if (layer.get('selected')) {
+                    self.layerLoadState = 'loaded';
+                    self.getNewProjectSitesLayer().then(function(newLayer) {
+                        if (newLayer) {  // Check if data was fetched successfully
+                            self.map.addLayer(newLayer);
+                        } else {
+                            console.error("Failed to fetch data for ProjectSites layer");
+                            // Handle error (e.g., display message to user)
+                        }
+                    });
+                }
+            });
 
-    this.map.on('zoomend', this._updateZoom, this);
+            this.map.on('zoomend', this._updateZoom, this);
 
-  }, 2000),
+        }, 2000),
 
   refreshLayer: function() {
     // TODO: this is getting called twice when showing sturctures

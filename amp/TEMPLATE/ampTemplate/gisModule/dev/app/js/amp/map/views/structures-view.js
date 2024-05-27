@@ -15,7 +15,7 @@ function breathAfter(func, context) {
         result = func.apply(context, arguments);
     window.setTimeout(function() {
       finished.resolve(result);
-    }, 500);
+    }, 10);
     return finished.promise();
   };
 }

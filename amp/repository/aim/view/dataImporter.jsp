@@ -81,10 +81,8 @@
           $('#template-file').attr("accept", ".json");
           $('#separator-div').hide();
         }
-      })
       });
 
-      });
 
     function sendValuesToBackend(columnName, selectedField, action) {
       // Create a FormData object to send data in the request body

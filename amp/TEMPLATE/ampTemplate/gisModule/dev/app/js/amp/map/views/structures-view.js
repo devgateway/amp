@@ -51,12 +51,12 @@ module.exports = Backbone.View
 
     this.initCluster();
 
-    this.listenTo(this.structureMenuModel, 'show', this.showLayer);
-    this.listenTo(this.structureMenuModel, 'hide', this.hideLayer);
+      this.listenTo(this.structureMenuModel, 'show', this.showLayer.bind(this));
+      this.listenTo(this.structureMenuModel, 'hide', this.hideLayer.bind(this));
 
-    this.listenTo(this.app.data.structures, 'refresh', this.refreshLayer);
+      this.listenTo(this.app.data.structures, 'refresh', this.refreshLayer.bind(this));
 
-    this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
+      this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick.bind(this));
 
   },
 
@@ -113,9 +113,9 @@ module.exports = Backbone.View
 
 
   _featureToShape: function(feature){
-	  if (feature.geometry.type == 'LineString') {
+	  if (feature.geometry.type === 'LineString') {
 		  return this._featureToLineString(feature);
-	  } else if (feature.geometry.type == 'Polygon') {
+	  } else if (feature.geometry.type === 'Polygon') {
 		  return this._featureToPolygon(feature);
 	  } else {
 		  return this._featureToMarker(feature);
@@ -369,11 +369,11 @@ module.exports = Backbone.View
     var self = this;
     if (this.layerLoadState === 'loading') {
       console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
-      return;
+      // return;
     } else if (this.layerLoadState === 'pending') {
       this.layerLoadState = 'loading';
     }
-
+      console.log("Selected ",layer.get('selected'))
     this.structureMenuModel.load().done(function() {
       if (layer.get('selected')) {
         self.layerLoadState = 'loaded';

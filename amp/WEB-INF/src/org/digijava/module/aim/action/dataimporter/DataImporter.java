@@ -162,7 +162,7 @@ public class DataImporter extends Action {
             }
 
             if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
-                logger.info("This is the action Upload " + request.getParameter("uploadDataFile"));
+                logger.info("This is the action Upload " + request.getParameter("action"));
                 String fileName = dataImporterForm.getDataFile().getFileName();
                 String tempDirPath = System.getProperty("java.io.tmpdir");
                 File tempDir = new File(tempDirPath);
@@ -207,24 +207,26 @@ public class DataImporter extends Action {
                     // Optionally, you can respond with an error message to the client.
                 } else {
                     // Proceed with processing the file
+                    int res = 0;
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
 
                         // Process the file in batches
-                        int res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
-                        if (res != 1) {
-                            // Handle error
-                            logger.info("Error processing file  " + tempFile);
-                            response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
-                            response.setStatus(400);
-                            return mapping.findForward("importData");
-                        }
+                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                        res=TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                    }
+                    if (res != 1) {
+                        // Handle error
+                        logger.info("Error processing file  " + tempFile);
+                        response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
+                        response.setStatus(400);
+                        return mapping.findForward("importData");
                     }
 
 
                     // Clean up
+                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.SUCCESS);
                     Files.delete(tempFile.toPath());
                     logger.info("Cache map size: " + ConstantsMap.size());
                     ConstantsMap.clear();
@@ -263,7 +265,6 @@ public class DataImporter extends Action {
             }
 
             logger.info("Closing the workbook...");
-            ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.SUCCESS);
             res =1;
         } catch (IOException e) {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);

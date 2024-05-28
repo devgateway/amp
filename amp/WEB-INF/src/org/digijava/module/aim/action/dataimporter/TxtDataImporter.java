@@ -30,8 +30,9 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    public static void processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
     {
+        logger.info("Processing txt file: " + file.getName());
         try (CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(file))) {
             List<Map<String, String>> batch = new ArrayList<>();
             Map<String, String> values;
@@ -52,8 +53,9 @@ public class TxtDataImporter {
                 processBatch(batch, request,config,importedFilesRecord);
             }
         } catch (IOException | CsvValidationException e) {
-            e.printStackTrace();
+            return 0;
         }
+        return 1;
     }
 
 

@@ -53,7 +53,7 @@
           $(this).remove();
         });
         });
-      });
+
       $('.file_type').change(function() {
         var fileType = $(this).val();
         console.log("File type selected: " + fileType==='excel');
@@ -81,6 +81,7 @@
           $('#template-file').attr("accept", ".json");
           $('#separator-div').hide();
         }
+      });
       });
 
 

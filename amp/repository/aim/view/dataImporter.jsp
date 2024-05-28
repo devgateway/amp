@@ -54,7 +54,7 @@
         });
         });
       });
-      $('#file-type').change(function() {
+      $('.file_type').change(function() {
         var fileType = $(this).val();
         console.log("File type selected: " + fileType==='excel');
         if (fileType === "csv") {
@@ -248,7 +248,7 @@
 <label>Select file type</label>
 <br>
 <label class="file-type-label" for="file-type"></label>
-<select id="file-type">
+<select id="file-type" class="file_type">
   <option value="csv">CSV</option>
   <option value="excel">Excel</option>
   <option value="text">Text</option>

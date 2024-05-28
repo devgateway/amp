@@ -30,7 +30,7 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    private void processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
+    public static void processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
     {
         try (CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(file))) {
             List<Map<String, String>> batch = new ArrayList<>();

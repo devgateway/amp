@@ -1,10 +1,11 @@
 package org.digijava.module.aim.action.dataimporter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opencsv.*;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
@@ -18,22 +19,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
-import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.dbentity.ImportStatus;
 import org.digijava.module.admin.dbentity.ImportedFilesRecord;
 import org.digijava.module.admin.dbentity.ImportedProject;
 import org.digijava.module.admin.util.ImportedFileUtil;
-import org.digijava.module.admin.util.model.*;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.admin.util.model.ImportDataModel;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,17 +35,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.*;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 import static org.digijava.module.aim.action.dataimporter.ImporterUtil.*;
 
 public class DataImporter extends Action {
@@ -230,7 +220,7 @@ public class DataImporter extends Action {
                             return mapping.findForward("importData");
                         }
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-
+                        TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
                     }
 
 

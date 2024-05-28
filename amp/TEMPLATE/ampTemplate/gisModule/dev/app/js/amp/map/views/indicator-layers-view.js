@@ -18,26 +18,26 @@ module.exports = Backbone.View.extend({
       self.listenTo(self.app.data.indicators, 'show', self.showLayer);
       self.listenTo(self.app.data.indicators, 'hide', self.hideLayer);
       self.listenTo(self.app.data.indicators, 'sync', self.refreshLayer);
-      
+
       self.listenTo(self.app.data.indicators, 'applyFilter', self.refreshGapLayer);
       self.listenTo(self.app.data.indicators, 'applySettings', self.refreshGapLayer);
-      self.listenTo(self.app.data.indicators, 'reset', self.clearLayers);        
+      self.listenTo(self.app.data.indicators, 'reset', self.clearLayers);
       self.listenTo(self.app.data.hilightFundingCollection, 'show', self.refreshLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'sync', self.refreshLayer);
     });
   },
   // clears applied layers from the map when gis sidebar is refreshed
-  clearLayers: function(){	 
+  clearLayers: function(){
 	  var self = this;
 	  var layerIds = _.keys(this.leafletLayerMap);
 	  _.each(layerIds, function(cid){
 		  var layer = self.leafletLayerMap[cid];
 		  if(!_.isUndefined(layer)){
-			  self.map.removeLayer(layer);			   
-		  }		
+			  self.map.removeLayer(layer);
+		  }
 		  delete self.leafletLayerMap[cid];
-	  });	  
+	  });
   },
   refreshGapLayer: function(layer) {
 	if (layer.get('selected')) {
@@ -69,7 +69,7 @@ module.exports = Backbone.View.extend({
 			  //prevent race condition 'show' calls adding multiple versions of the layer.
 			  this.leafletLayerMap[layer.cid] = 'loading';
 		  }
-		  
+
 		  layer.loadAll().done(function() {
 			  var layerType = layer.get('type');
 			  if (layerType === 'joinBoundaries') {  // geojson
@@ -83,7 +83,7 @@ module.exports = Backbone.View.extend({
 			  }
 			  self.leafletLayerMap[layer.cid] = loadedLayer;
 
-			  // only add it to the map if is still selected.      
+			  // only add it to the map if is still selected.
 			  if (layer.get('selected')) {
 				  self.map.addLayer(loadedLayer);
 				  if (loadedLayer.bringToBack && layerType !== 'wms') {
@@ -98,7 +98,7 @@ module.exports = Backbone.View.extend({
 			  if (layer._changing) {
 				  delete layer._loaded;
 			  }
-		  });    	
+		  });
 	  }
 
   },
@@ -127,7 +127,7 @@ module.exports = Backbone.View.extend({
         if (!colour || featureValue == null) {
           colour = {hex: function() {return '#354';}};
           console.warn('No colour matched for the value ' + featureValue);
-          
+
         }
         return {
           color: colour.hex(),
@@ -150,6 +150,7 @@ module.exports = Backbone.View.extend({
   tmpFundingOnEachFeature: function(feature, layer, layerModel) {
 	  var self = this;
 	  // Add popup
+      console.log("Properties ", feature.properties)
 	  if (feature && feature.properties) {
 		  // TODO: drs append  format value.
 		  var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
@@ -158,19 +159,19 @@ module.exports = Backbone.View.extend({
 		  // this is a custom one.
 		  if (colorRamp) {
 			  titleString = layerModel.get('title');
-		  }      
+		  }
 
-		  //only for not customs layers    	 
+		  //only for not customs layers
 		  if (titleString === '') {
 			  var fundingTypeId = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
-			  titleString = self.app.data.settingsWidget.definitions.findFundingTypeById(fundingTypeId).name;        
+			  titleString = self.app.data.settingsWidget.definitions.findFundingTypeById(fundingTypeId).name;
 		  }
 		  var formattedTitleString = ['<strong>',
 		                              titleString,
 		                              ': ',
 		                              '</strong>'].join('');
 
-		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));    
+		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));
 		  var value;
 		  var percentIndicator = self.app.data.indicatorTypes.findWhere({'value': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
 		  var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'value': Constants.INDICATOR_TYPE_RATIO_OTHER});
@@ -178,13 +179,13 @@ module.exports = Backbone.View.extend({
 			  value = ampFormatter.format(feature.properties.value * 100);
 		  }else{
 			  value = ampFormatter.format(feature.properties.value)
-		  }        
+		  }
 
-		  var fundingPopupTemplate; 		  
+		  var fundingPopupTemplate;
 		  if (_.isUndefined(feature.properties.value) || _.isNull(feature.properties.value)) {
 			  fundingPopupTemplate =  ['<strong>', feature.properties.name, '</strong>', '<br/>', '<div class="leaflet-popup-content-group">',
                   self.app.translator.translateSync("amp.gis:popup-no-data","No Data"), '</div>'].join('');
-	      } else {	    	  
+	      } else {
 	    	  fundingPopupTemplate = ['<strong>', feature.properties.name, '</strong>', '<br/>',
                   '<div class="leaflet-popup-content-group">',
                   '<div class="leaflet-popup-content-label">', formattedTitleString, '</div>',

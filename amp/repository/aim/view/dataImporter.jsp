@@ -163,7 +163,7 @@
 
     function uploadTemplateFile() {
       var formData = new FormData();
-      var fileInput = document.getElementById('templateFile');
+      var fileInput = document.getElementById('template-file');
       var fileType = $('#file-type').val();
       var dataSeparator = $('#data-separator').val();
 
@@ -195,7 +195,7 @@
 
     function uploadDataFile() {
       var formData = new FormData();
-      var fileInput = document.getElementById('dataFile');
+      var fileInput = document.getElementById('data-file');
       // Check if a file is selected
       if (!fileInput.files.length) {
         alert("Please select a file to upload.");

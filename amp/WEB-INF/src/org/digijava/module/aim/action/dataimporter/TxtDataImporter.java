@@ -41,7 +41,7 @@ public class TxtDataImporter {
 
                 if (batch.size() == BATCH_SIZE) {
                     // Process the batch
-                    processBatch(batch);
+                    processBatch(batch, request,config,importedFilesRecord);
                     // Clear the batch for the next set of rows
                     batch.clear();
                 }
@@ -49,7 +49,7 @@ public class TxtDataImporter {
 
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
-                processBatch(batch);
+                processBatch(batch, request,config,importedFilesRecord);
             }
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
@@ -95,19 +95,19 @@ public class TxtDataImporter {
                         updateOrgs(importDataModel,row.get(entry.getKey().trim()), session, "donor");
                         break;
                     case "{fundingItem}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual");
                         break;
                     case "{plannedCommitment}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned");
                         break;
                     case "{plannedDisbursement}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned");
                         break;
                     case "{actualCommitment}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual");
                         break;
                     case "{actualDisbursement}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual");
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());

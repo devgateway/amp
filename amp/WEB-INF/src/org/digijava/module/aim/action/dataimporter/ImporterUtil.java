@@ -71,30 +71,30 @@ public class ImporterUtil {
         }
     }
 
-    static void setAFundingItemForTxt(Map<String, String> row ,Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, boolean commitment, boolean disbursement, String
+    static void setAFundingItemForTxt(Map<String, String> row ,Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session,Number value, boolean commitment, boolean disbursement, String
             adjustmentType) {
 //        int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
         String finInstrument= row.get(getKey(config, "{financingInstrument}"));
         finInstrument = finInstrument!= null? finInstrument : "";
 
         //        detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
-        String typeOfAss =row.get(getKey(config, "{typeOfAssistance}")); ;
+        String typeOfAss =row.get(getKey(config, "{typeOfAssistance}"));
         typeOfAss=typeOfAss!=null? typeOfAss:"";
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("{donorAgency}"))
             {
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType);
+                updateFunding(importDataModel, session, value, entry.getKey(), getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType);
 
             }
             else {
-                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
-                updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org", session, "donor");
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+                String donorColumn = row.get(getKey(config, "{donorAgency}"));
+                updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org", session, "donor");
+                updateFunding(importDataModel, session, value, entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
             }
 
         }else {
-            updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+            updateFunding(importDataModel, session, value, entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
         }
     }
 

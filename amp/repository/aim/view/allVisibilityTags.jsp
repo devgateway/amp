@@ -207,7 +207,8 @@
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
 <feature:display name="Documents Tab" module="Document"></feature:display> 
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Donor Report" module="Report Types"></feature:display> 
+<feature:display name="Donor Report" module="Report Types"></feature:display>
+<feature:display name="Indicator Report" module="Report Types"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
@@ -628,6 +629,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Donor Group" feature="Funding Information"></field:display>
 <field:display name="Donor Type" feature="Funding Information"></field:display>
 <field:display name="Donor Budget Code" feature="Funding Information"></field:display>
+<field:display name="Indicator Donor Agency" feature="Funding Information"></field:display>
 <field:display name="Donor Country" feature="Funding Information"></field:display>
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Objective" feature="Funding Information"></field:display> 

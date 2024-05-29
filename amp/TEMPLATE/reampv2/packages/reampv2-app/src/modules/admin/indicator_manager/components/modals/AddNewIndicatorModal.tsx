@@ -432,9 +432,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           options={categories}
                           onChange={(value) => {
                             // set the formik value with the selected values and remove the label
-                            if (value) {
                               props.setFieldValue('indicatorsCategory', parseInt(value?.value));
-                            }
                           }}
                           isClearable
                           getOptionValue={(option: any) => option.value}

@@ -36,27 +36,32 @@ module.exports = Backbone.View.extend({
 
 
   generateInfoWindow: function(popup, admLayer) {
-    var featureCollection = admLayer.get('features');
-    this.cluster = _.find(featureCollection, function(feature) {
-      return feature.properties.admName === popup._source._clusterId;
-    });
+      var self = this;
+              var featureCollection = admLayer.get('features');
+              this.cluster = _.find(featureCollection, function (feature) {
+                  return feature.properties.admName === popup._source._clusterId;
+              });
+              // this.cluster.gisSettings = gisSettings.gisSettings;
+                this.cluster.sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');
+                this.cluster.programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
+                 this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+              // get appropriate cluster model:
+              if (this.cluster) {
+                  popup.setContent(this.template(this.cluster));
+                  this.tempDOM = $(popup._contentNode);
 
-    this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();    
-    // get appropriate cluster model:
-    if (this.cluster) {
-      popup.setContent(this.template(this.cluster));
-      this.tempDOM = $(popup._contentNode);
+                  this._generateCharts();
+                  return this._generateProjectList(popup, this.cluster);
+              } else {
+                  console.error('no matching cluster: ', admLayer, popup._source._clusterId);
+                  this.popup.setContent('error finding cluster');
+              }
 
-      this._generateCharts();
-      return this._generateProjectList(popup, this.cluster);
-    } else {
-      console.error('no matching cluster: ', admLayer, popup._source._clusterId);
-      this.popup.setContent('error finding cluster');
-    }
   },
 
   _generateCharts: function() {
     this._generateSectorChart();
+    this._generateProgramChart();
     var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
       if (selected.toLowerCase().indexOf('ssc') >= 0) {
           this._generateExecutingChart();
@@ -64,6 +69,14 @@ module.exports = Backbone.View.extend({
           this._generateDonorChart();
     }
   },
+    _generateProgramChart: function() {
+        var self = this;
+        // this.set('showProgramType', true);
+        this._getTops('pr').then(function(data) {
+            self.tempDOM.find('#charts-pane-program .loading').remove();
+            self._generateBaseChart(data, '#charts-pane-program .amp-chart svg');
+        });
+    },
 
   _generateSectorChart: function() {
     var self = this;
@@ -158,19 +171,23 @@ module.exports = Backbone.View.extend({
 
     var payload = { limit: 5};
     _.extend(payload, this.app.data.filter.serialize());
-
-    // get funding type, ask for consistancy form API, and at least put this function inside settings collection..
-    var settings = this.app.data.settingsWidget.toAPIFormat(); 	
-
+    // get funding type, ask for consistency form API, and at least put this function inside settings collection..
+    var settings = this.app.data.settingsWidget.toAPIFormat();
+    // settings['program-settings'] = 'National Plan Objective';
+      console.log("Settings",settings)
+      if (!settings['program-settings'])
+      {
+          _.extend(settings,{'program-settings':"National Planning Objectives Level 1"})
+      }
     _.extend(payload, {settings: settings});
 
     //API wants these in the url, but other params go in post, strange but it's the way it is...
     tmpModel.url += '?limit=' + payload.limit;
-    payload.filters['activity-id'] = this.cluster.properties.activityid;    
+    payload.filters['activity-id'] = this.cluster.properties.activityid;
     if (this.cluster.properties.admLevel) {
        payload.filters[this.cluster.properties.admLevel.toLowerCase()] = [this.cluster.properties.admId];
     }
-    
+
     return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
 
@@ -193,7 +210,7 @@ module.exports = Backbone.View.extend({
   // table should show planned comitments and dispursements,
   // otherwise show actual values.
   _updatePlannedActualUI: function() {
-	  var self = this;       
+	  var self = this;
 	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
       self.tempDOM.find('.setting-scc').hide();
       self.tempDOM.find('.setting-executings').hide();
@@ -209,7 +226,7 @@ module.exports = Backbone.View.extend({
 	  } else {
 		  self.tempDOM.find('.setting-actual').show();
 		  self.tempDOM.find('.setting-planned').hide();
-	  }    
+	  }
   },
 
 
@@ -227,8 +244,8 @@ module.exports = Backbone.View.extend({
 		  this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
 				  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
 	  }
-      
-	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {        
+
+	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {
 		  self.tempDOM.find('#projects-pane .loading').remove();
 		  /* Format the numerical columns */
 		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));
@@ -249,7 +266,7 @@ module.exports = Backbone.View.extend({
               columnName2 = fundingType + ' Disbursements';
           }
 
-		  var activityFormatted = _.map(activityCollection, function(activity) {             
+		  var activityFormatted = _.map(activityCollection, function(activity) {
 			  var formattedColumnName1 = ampFormatter.format(activity.get(columnName1));
 			  var formattedColumnName2 = ampFormatter.format(activity.get(columnName2));
 

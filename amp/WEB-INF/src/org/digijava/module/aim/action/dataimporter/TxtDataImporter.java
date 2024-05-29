@@ -39,7 +39,7 @@ public class TxtDataImporter {
         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
 
 //        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
-        try (CSVReaderHeaderAware reader = new CSVReaderHeaderAwareBuilder(new FileReader(file)).withCSVParser(parser).withSkipLines(1).build()) {
+        try (CSVReaderHeaderAware reader = new CSVReaderHeaderAwareBuilder(new FileReader(file)).withCSVParser(parser).build()) {
             List<Map<String, String>> batch = new ArrayList<>();
             Map<String, String> values;
 

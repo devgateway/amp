@@ -53,6 +53,7 @@ public class TxtDataImporter {
                 processBatch(batch, request,config,importedFilesRecord);
             }
         } catch (IOException | CsvValidationException e) {
+            logger.error("Error processing txt file "+e.getMessage(),e);
             return 0;
         }
         return 1;

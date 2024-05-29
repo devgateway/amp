@@ -63,7 +63,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         GeneratedReport report = EndpointUtils.runReport(spec);
         List<CoreIndicatorProgressDTO> resp = processReportData(report);
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_URL);
-        sendReportsToServer(resp, "http://localhost:8082/update-core-indicator-progress");
+        sendReportsToServer(resp, serverUrl + "/update-core-indicator-progress");
     }
 
     private List<CoreIndicatorProgressDTO> processReportData(GeneratedReport report) {

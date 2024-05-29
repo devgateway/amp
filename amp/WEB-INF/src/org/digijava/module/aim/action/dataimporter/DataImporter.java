@@ -162,7 +162,7 @@ public class DataImporter extends Action {
             }
 
             if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
-                logger.info("This is the action Upload " + request.getParameter("action"));
+                logger.info("This is the action " + request.getParameter("action"));
                 String fileName = dataImporterForm.getDataFile().getFileName();
                 String tempDirPath = System.getProperty("java.io.tmpdir");
                 File tempDir = new File(tempDirPath);

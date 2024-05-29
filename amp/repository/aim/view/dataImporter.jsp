@@ -195,6 +195,8 @@
 
     function uploadDataFile() {
       var formData = new FormData();
+      var fileType = $('#file-type').val();
+      var dataSeparator = $('#data-separator').val();
       var fileInput = document.getElementById('data-file');
       // Check if a file is selected
       if (!fileInput.files.length) {
@@ -203,6 +205,8 @@
       }
       formData.append('dataFile', fileInput.files[0]);
       formData.append('action',"uploadDataFile");
+      formData.append('fileType', fileType);
+      formData.append('dataSeparator', dataSeparator);
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);

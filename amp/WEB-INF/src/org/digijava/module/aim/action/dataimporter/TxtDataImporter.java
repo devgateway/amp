@@ -1,6 +1,9 @@
 package org.digijava.module.aim.action.dataimporter;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderHeaderAware;
+import com.opencsv.CSVReaderHeaderAwareBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -33,12 +36,16 @@ public class TxtDataImporter {
     public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
     {
         logger.info("Processing txt file: " + file.getName());
-        try (CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(file))) {
+        CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
+
+//        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
+        try (CSVReaderHeaderAware reader = new CSVReaderHeaderAwareBuilder(new FileReader(file)).withCSVParser(parser).withSkipLines(1).build()) {
             List<Map<String, String>> batch = new ArrayList<>();
             Map<String, String> values;
 
             while ((values = reader.readMap()) != null) {
                 batch.add(values);
+                logger.info("Batch this far: "+batch);
 
                 if (batch.size() == BATCH_SIZE) {
                     // Process the batch

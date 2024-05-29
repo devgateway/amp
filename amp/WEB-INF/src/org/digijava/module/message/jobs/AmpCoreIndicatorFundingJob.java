@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
-    protected static final Logger logger = Logger.getLogger(AmpDonorFundingJob.class);
+    protected static final Logger logger = Logger.getLogger(AmpCoreIndicatorFundingJob.class);
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -92,7 +92,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
                         fundingReport.setCountry(countryDTO);
                         fundingReport.setDonor(donorDTO);
                         List<CoreIndicatorValueDTO> valuesList = new ArrayList<CoreIndicatorValueDTO>();
-                        for(ReportArea indicator : donor.getChildren()){
+                        for (ReportArea indicator : donor.getChildren()) {
                             CoreIndicatorValueDTO value = new CoreIndicatorValueDTO();
                             TextCell indicatorCell = (TextCell) indicator.getContents().get(indicatorsData);
 //                                value.setIndicator(indicatorCell.value.toString());
@@ -126,21 +126,21 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
                             // Add category value type for the indicator
                             CoreIndicatorTypeDTO indicatorType = new CoreIndicatorTypeDTO();
                             AmpIndicator existingInd = getIndicatorById(indicatorCell.entityId);
-                            if (existingInd != null && existingInd.getIndicatorsCategory() != null){
+                            if (existingInd != null && existingInd.getIndicatorsCategory() != null) {
                                 indicatorType.setName(existingInd.getIndicatorsCategory().getValue());
-                                if(indicatorType.getName().contains("Hectares of land under restoration")){
+                                if (indicatorType.getName().contains("Hectares of land under restoration")) {
                                     indicatorType.setUnit("M ha");
                                     indicatorType.setCoreType("ha_under_restoration");
-                                } else if(indicatorType.getName().contains("Tonnes of Co2EQ sequestered")){
+                                } else if (indicatorType.getName().contains("Tonnes of Co2EQ sequestered")) {
                                     indicatorType.setUnit("M mt");
                                     indicatorType.setCoreType("t_co2eq_sequestered");
-                                } else if(indicatorType.getName().contains("No of employment opportunities")){
+                                } else if (indicatorType.getName().contains("No of employment opportunities")) {
                                     indicatorType.setUnit("M");
                                     indicatorType.setCoreType("no_employments");
-                                } else if(indicatorType.getName().contains("Quantity of renewable energy consumed annually in MWH")){
+                                } else if (indicatorType.getName().contains("Quantity of renewable energy consumed annually in MWH")) {
                                     indicatorType.setUnit("M mwh");
                                     indicatorType.setCoreType("r_energy_consumed");
-                                } else if(indicatorType.getName().contains("Number of beneficiaries")){
+                                } else if (indicatorType.getName().contains("Number of beneficiaries")) {
                                     indicatorType.setUnit("M");
                                     indicatorType.setCoreType("no_beneficiaries");
                                 } else {
@@ -166,13 +166,14 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         return ampDashboardCoreIndicator;
     }
 
-    private AmpIndicator getIndicatorById(Long indicatorId){
+    private AmpIndicator getIndicatorById(Long indicatorId) {
         try {
             return IndicatorUtil.getIndicator(indicatorId);
         } catch (DgException e) {
             throw new RuntimeException("Failed to load indicator");
         }
     }
+
     public static void sendReportsToServer(List<CoreIndicatorProgressDTO> ampCoreIndicatorCoreData, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL

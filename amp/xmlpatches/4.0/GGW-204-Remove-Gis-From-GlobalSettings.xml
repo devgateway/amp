@@ -2,14 +2,16 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-    <jira>AMP-29996</jira>
-    <author>ginchauspe</author>
+    <jira>GGW-204</jira>
+    <author>bmokandu</author>
     <description>Enable Multicountry switch in GIS.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES (nextval('amp_global_settings_seq'), 'Multicountry Enabled', 'false', 't_Boolean', 'Multicountry Enabled', 'general', null, TRUE);
+                DELETE FROM amp_global_settings WHERE settingsname='Multicountry Enabled';
+                DELETE FROM amp_global_settings WHERE settingsname='Programs Enabled';
+                DELETE FROM amp_global_settings WHERE settingsname='Sectors Enabled';
+                DELETE FROM amp_global_settings WHERE settingsname='Login Required';
 			]]></lang>
         </script>
     </apply>

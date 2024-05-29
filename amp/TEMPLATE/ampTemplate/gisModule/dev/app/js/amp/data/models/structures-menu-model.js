@@ -5,23 +5,27 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
-
+var $ = require('jquery');
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
-
-  defaults: {
-    title: 'Project Sites',
-    value: '',
-    helpText: '',
-    filterVertical: 'Primary Sector'
-  },
+      defaults: {
+        title: 'Project Sites',
+        value: '',
+        helpText: '',
+        filterVertical: 'Primary Sector'
+      },
 
   initialize: function(things, options) {
+        this.generalSettings =options.generalSettings
+    console.log("General sett: "+this.generalSettings)
+    console.log("Sectors sett: "+this.generalSettings.get('gis-sectors-enabled'))
     this.appData = options.appData;
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
+
+
     this.attachListeners();
   },
 
@@ -41,7 +45,17 @@ module.exports = Backbone.Model
 
   attachListeners: function() {
     var self = this;
-
+    var sectorsEnabled= self.generalSettings.get('gis-sectors-enabled');
+    var programsEnabled= self.generalSettings.get('gis-programs-enabled');
+    console.log(programsEnabled,sectorsEnabled)
+    if (programsEnabled && !sectorsEnabled) {
+      self.set('filterVertical','Programs');
+    } else if (!programsEnabled && !sectorsEnabled) {
+      self.set('filterVertical', 'Donor Agency');
+    }else if (programsEnabled && sectorsEnabled) {
+      self.set('filterVertical','Primary Sector');
+    }
+    console.log("Filter vertical default ",self.get('filterVertical'));
     this.listenTo(this, 'change:selected', function(other, show) {
       if (self.structuresCollection._lastFetch) {  // what does this do?
         this.trigger(show ? 'show' : 'hide', this);
@@ -56,10 +70,10 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:filterVertical', function() {
       self.structuresCollection.updatePaletteSet();
     });
-    
-    
+
+
     this.listenTo(this.appData.performanceToggleModel, 'change:isPerformanceToggleSelected', this.applyFilters);
-    
+
   },
 
   applyFilters: function() {
@@ -137,7 +151,7 @@ module.exports = Backbone.Model
     740: '740',
     998: '998'
   },
-  
+
   DEFAULT_ICON_CODE: '998', //if no icon can be found using the sector code in the activity, default to unspecified
 
   getSelectedIconStyleCode: function(sectorCode) {

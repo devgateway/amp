@@ -68,6 +68,7 @@ public class TxtDataImporter {
 
 
     private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) {
+        logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -84,6 +85,7 @@ public class TxtDataImporter {
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
+            logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 switch (entry.getValue()) {
                     case "{projectTitle}":

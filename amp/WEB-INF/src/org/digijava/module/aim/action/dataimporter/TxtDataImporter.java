@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action.dataimporter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderHeaderAware;
@@ -67,7 +68,7 @@ public class TxtDataImporter {
     }
 
 
-    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) {
+    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         Session session = PersistenceManager.getRequestDBSession();
@@ -126,6 +127,9 @@ public class TxtDataImporter {
                         break;
                 }
             }
+            importTheData(importDataModel, session, importedProject);
+
         }
+
     }
 }

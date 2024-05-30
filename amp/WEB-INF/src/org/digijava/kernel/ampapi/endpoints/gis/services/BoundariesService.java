@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -45,7 +44,8 @@ public class BoundariesService {
         if (country.length()==2) {
 
             path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
-            if (country.equalsIgnoreCase("ZZ")) {
+            if (country.equalsIgnoreCase("ZZ"))
+            {
                 path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
 
             }
@@ -58,7 +58,6 @@ public class BoundariesService {
 
                 path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
 
-
             }
         }
         else
@@ -67,14 +66,14 @@ public class BoundariesService {
         }
 
 
-//        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
-//        {
-//            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-//            if (countryIso != null) {
-//                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
-//            }
+        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
+        {
+            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+            if (countryIso != null) {
+                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+            }
 
-//        }
+        }
         logger.info("Boundaries path is: "+path);
         try (InputStream is = Files.newInputStream(Paths.get(path))) {
             String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);

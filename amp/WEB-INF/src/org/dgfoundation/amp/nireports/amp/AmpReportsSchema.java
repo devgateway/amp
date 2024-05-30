@@ -1,6 +1,52 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import com.google.common.collect.ImmutableMap;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_4;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_0;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_3;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_RAW;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_1;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_2;
+import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION;
+import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_GROUP;
+import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_TYPE;
+import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ROOT;
+import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSECTOR;
+import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSUBSECTOR;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGE;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGEIFLOWER;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACT;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACTIFGREATER;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.VARIABLE;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_0;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_1;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_2;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_3;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_4;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_5;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_ALL_IDS;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.servlet.ServletContext;
+
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -22,7 +68,6 @@ import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.*;
-import org.dgfoundation.amp.nireports.schema.NiDimension.*;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -38,19 +83,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContext;
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.*;
-import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.*;
-import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.*;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.*;
+
 
 /**
  * the big, glorious, immaculate, AMP NiReports schema.
@@ -1044,7 +1078,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             Map<Long, String> dbColumns = SQLUtils.collectKeyValue(conn, "SELECT columnid, columnname FROM amp_columns");
             Set<String> columnNamestoBeMigrated = dbColumns.values().stream()
                     .filter(z -> this.measures.containsKey(z) && !this.columns.containsKey(z)).collect(Collectors.toSet());
-            if (columnNamestoBeMigrated.size() > 0) {
+            if (!columnNamestoBeMigrated.isEmpty()) {
                 List<String> columnNames = Arrays.asList("amp_report_id", "measureid", "order_id");
                 String columnNamesJoined = SQLUtils.generateCSV(columnNamestoBeMigrated.stream().map(z -> String.format("'%s'", z)).collect(Collectors.toList()));
                 String query = String.format("SELECT arc.amp_report_id, am.measureid, counts.order_id FROM amp_report_column arc " +
@@ -1136,7 +1170,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
                 MeasuresVisibility.resetMeasuresList();
             }
-            return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
+            return toBeAdded.stream().map(Object::toString).collect(Collectors.toSet());
         });
     }
 
@@ -1210,6 +1244,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
 
         return this;
     }
@@ -1385,14 +1420,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
-    
+
     @Override
     public AmpAmountColumn getFundingFetcher(NiReportsEngine engine) {
         switch(engine.spec.getReportType()) {
-            
-            case ArConstants.DONOR_TYPE: 
+
+            case ArConstants.DONOR_TYPE:
                 return donorFundingColumn;
-                
+
             case ArConstants.PLEDGES_TYPE:
                 return pledgeFundingColumn;
 
@@ -1605,14 +1640,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      */
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
-        List<VSplitStrategy> raw = super.getSubMeasureHierarchies(engine, cc);
+        List<VSplitStrategy> raw = new ArrayList<>(super.getSubMeasureHierarchies(engine, cc));
 
         if (disableSubmeasureSplittingByColumn(engine))
             return raw; // let the subclasses the chance to disable submeasures
-
-        if (raw == null) {
-            raw = new ArrayList<>();
-        }
 
         AmpReportsScratchpad scratch = AmpReportsScratchpad.get(engine);
 
@@ -1639,7 +1670,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         // should this measure be split by Currencies?
         boolean splitByCurrencies = cc.behaviour.canBeSplitByCurrency() && cc.splitCell != null
                 && engine.spec.isShowOriginalCurrency();
-        
+
         if (splitByCurrencies) {
             logger.info("Raw: "+raw);
             logger.info("Used currency: "+scratch.usedCurrency);

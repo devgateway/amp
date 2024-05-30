@@ -55,6 +55,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     return DateUtil.dateToString(date, settingsReducer['default-date-format']);
   }
 
+  const convertDateToISO = (date?: string) => {
+    if (!date) {
+      return '';
+    }
+    return DateUtil.toISO8601(date, settingsReducer['default-date-format']);
+  };
+
   const handleClose = () => setShow(false);
   const createIndicatorState = useSelector((state: any) => state.createIndicatorReducer);
 
@@ -130,14 +137,12 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
         if (programScheme.startDate) {
           formikRef.current?.setFieldValue("base.originalValueDate", "");
-          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
-          setBaseOriginalValueDateDisabled(true);
+          formikRef?.current?.setFieldValue("base.originalValueDate", convertDateToISO(programScheme.startDate || ''));
         }
 
         if (programScheme.endDate) {
           formikRef.current?.setFieldValue("target.originalValueDate", "");
-          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
-          setTargetOriginalValueDateDisabled(true);
+          formikRef?.current?.setFieldValue("target.originalValueDate", convertDateToISO(programScheme.endDate || ''));
         }
       }
 
@@ -175,6 +180,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectorsReducer.sectors, programsReducer.programs, programsReducer.programSchemes])
 
+  console.log("indicator===>", createIndicatorState);
+
   useDidMountEffect(() => {
     if (createIndicatorState.loading) {
       MySwal.fire({
@@ -198,12 +205,15 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       return;
     }
 
-    MySwal.fire({
-      title: 'Error',
-      text: createIndicatorState.loading ? 'Error creating indicator' : createIndicatorState.error,
-      icon: 'error',
-      confirmButtonText: 'Ok',
-    });
+    if (createIndicatorState.error && !createIndicatorState.loading && !createIndicatorState.createdIndicator) {
+      MySwal.fire({
+        title: 'Error',
+        text: createIndicatorState.loading ? 'Error creating indicator' : createIndicatorState.error,
+        icon: 'error',
+        confirmButtonText: 'Ok',
+      });
+    }
+
   }, [createIndicatorState])
 
   const initialValues: IndicatorFormValues = {
@@ -251,6 +261,16 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         validationSchema={translatedIndicatorValidationSchema(translations)}
         onSubmit={(values) => {
           const { name, description, code, sectors, programId, ascending, creationDate, base, target, indicatorsCategory } = values;
+          if (selectedProgramSchemeId && !programId) {
+            MySwal.fire({
+              title: 'Error',
+              text: translations['amp.indicatormanager:errors-program-is-required'],
+              icon: 'error',
+              confirmButtonText: 'Ok',
+            })
+
+            return;
+          }
 
           const indicatorData = {
             name,
@@ -412,9 +432,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           options={categories}
                           onChange={(value) => {
                             // set the formik value with the selected values and remove the label
-                            if (value) {
                               props.setFieldValue('indicatorsCategory', parseInt(value?.value));
-                            }
                           }}
                           isClearable
                           getOptionValue={(option: any) => option.value}

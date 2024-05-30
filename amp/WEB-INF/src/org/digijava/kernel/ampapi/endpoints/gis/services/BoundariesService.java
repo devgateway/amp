@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -44,8 +45,7 @@ public class BoundariesService {
         if (country.length()==2) {
 
             path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
-            if (country.equalsIgnoreCase("ZZ"))
-            {
+            if (country.equalsIgnoreCase("ZZ")) {
                 path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
 
             }
@@ -57,6 +57,7 @@ public class BoundariesService {
             if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("GG") && !country.equalsIgnoreCase("ZZ")) {
 
                 path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
+
 
             }
         }

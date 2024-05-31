@@ -240,12 +240,12 @@ border-right: 1px solid rgb(208, 208, 208);
     <div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
 		<logic:iterate name="myForm" property="publicFiltersUnpositioned" id="filter">
 
-<%--			<c:if test="${fn:length(report.name) > 25}" >--%>
-<%--				<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.name}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>--%>
-<%--			</c:if>--%>
-<%--			<c:if test="${fn:length(report.name) <= 25}" >--%>
-<%--				<div href="#" onclick="setNewTab('${filter.name}', ${filter.id})" class="panelList" id="Div${filter.id}"> ${filter.name}</div>--%>
-<%--			</c:if>--%>
+			<c:if test="${fn:length(report.name) > 25}" >
+				<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.name}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
+			</c:if>
+			<c:if test="${fn:length(report.name) <= 25}" >
+				<div href="#" onclick="setNewTab('${filter.name}', ${filter.id})" class="panelList" id="Div${filter.id}"> ${filter.name}</div>
+			</c:if>
 
 		</logic:iterate>
 	</div>

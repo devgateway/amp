@@ -11,8 +11,10 @@ function RetrieveFilters( dynamicListObj) {
 			this.dynamicListObj.filterWrapper	= fw;
 			this.dynamicListObj.sendRequest(false);
 		}
-		else
+		else {
 			alert("The returned filter info is empty !");
+
+		}
 	}
 	RetrieveFilters.prototype.failure	= function (o) {
 		alert("We are sorry but your request cannot be processed at this time");
@@ -28,12 +30,12 @@ function FilterWrapper( trnObj ) {
 	this.filterFileTypes		= new Array();
 	this.filterOwners			= new Array();
 	this.filterTeamIds			= new Array();
-	this.filterKeywords			= new Array();	
+	this.filterKeywords			= new Array();
 	this.filterOrganisations	= new Array();
 	this.filterFromDate			= new Array();
 	this.filterToDate			= new Array();
 	this.filterKeywordMode   	= new Array();
-	
+
 	this.trnObj				= {
 			labels: "Labels",
 			filters: "Filters",
@@ -42,12 +44,12 @@ function FilterWrapper( trnObj ) {
 	};
 	if ( trnObj != null )
 		this.trnObj			= trnObj;
-	
+
 }
 
 FilterWrapper.prototype.labelsToHTML	= function(text) {
 	var ret	= "";
-	ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>" + this.trnObj.labels + ":</b><span> "; 
+	ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>" + this.trnObj.labels + ":</b><span> ";
 	if ( this.filterLabels.length > 0) {
 		for (var i=0; i<this.filterLabels.length; i++) {
 			var l	= this.filterLabels[i];
@@ -58,9 +60,9 @@ FilterWrapper.prototype.labelsToHTML	= function(text) {
 	}
 	else
 		ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'>"+this.trnObj.none +"<span>";
-	
+
 	//ret += "<a style='cursor:pointer; text-decoration:none; color: blue'> Add Label </a>";
-	return ret;	
+	return ret;
 }
 
 FilterWrapper.prototype.fToHTML	= function() {
@@ -97,9 +99,9 @@ FilterWrapper.prototype.fToHTML	= function() {
 			ret += "</span>, ";
 		}
 	}
-	
-	
-	
+
+
+
 	if ( ret.charAt(ret.length-2)==',' ) {
 		ret		= ret.substring(0, ret.length-2);
 	}
@@ -108,12 +110,12 @@ FilterWrapper.prototype.fToHTML	= function() {
 
 FilterWrapper.prototype.kToHTML	= function() {
 	var ret	= "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>" + this.trnObj.keywords + ":</b><span> ";
-	if ( this.filterKeywords.length > 0 ) {		
+	if ( this.filterKeywords.length > 0 ) {
 		ret += "<span>";
 		for (var i=0;i < this.filterKeywords.length ; i ++){
 			ret += this.filterKeywords[i].key +" ";
 		}
-		ret += "</span>, ";		
+		ret += "</span>, ";
 	}
 	if ( ret.charAt(ret.length-2)==',' ) {
 		ret		= ret.substring(0, ret.length-2);
@@ -128,7 +130,7 @@ FilterWrapper.prototype.mToHTML	= function() {
 	} else {
 		ret += "<span>" + '<digi:trn>Any keyword</digi:trn>';
 	}
-		
+
 	return ret;
 }
 
@@ -137,7 +139,7 @@ AbstractDynamicList.prototype.setKeywordTextboxInformation = function (inputId,b
 	this.searchBox	= document.getElementById(inputId);
 	YAHOO.util.Event.on(this.searchBtn,"click", this.sendRequest, this, true);
 	YAHOO.util.Event.on(this.searchBox,"keydown", handleKeyPress, this, true);
-	
+
 };
 
 AbstractDynamicList.prototype.setKeywordTextboxInformationPublic = function (inputId,buttonId,id,listObj){
@@ -147,13 +149,13 @@ AbstractDynamicList.prototype.setKeywordTextboxInformationPublic = function (inp
 	this.objId	= id;
 	YAHOO.util.Event.on(this.searchBtn,"click", this.sendRequestPublic, this, true, this.objId, this.listObject);
 	//YAHOO.util.Event.on(this.searchBox,"keydown", handleKeyPress, this, true);
-	
+
 };
 
 
 
 function handleKeyPress(arg) {
-	
+
 	if(!arg || arg.keyCode != 13)
 		return;
 	this.sendRequest(true);
@@ -164,18 +166,18 @@ function AbstractDynamicList (containerEl, thisObjName, fDivId, trnObj) {
 	this.containerEl	= containerEl;
 	this.thisObjName	= thisObjName;
 	this.fDivId			= fDivId;
-	
+
 	this.filterWrapper	= new FilterWrapper(trnObj);
-	
+
 	this.reqString		= "";
-	
+
 	this.fPanel				= null;
-	
+
 	this.keywordModePanel	= null;
-	
+
 	this.filterInfoDivId	= null;
-	
-	this.trnObj				= trnObj;	
+
+	this.trnObj				= trnObj;
 }
 
 AbstractDynamicList.prototype.clearBody		= function () {
@@ -185,9 +187,9 @@ AbstractDynamicList.prototype.clearBody		= function () {
 /* the function called when "Apply Filters" is clicked: constructs an GET URL and loads it programmatically */
 AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	this.reqString		= "";
-	if ( shouldRetrieveFilters != null && !shouldRetrieveFilters) 
+	if ( shouldRetrieveFilters != null && !shouldRetrieveFilters)
 		this.createFilterString(false);
-	else 
+	else
 		this.createFilterString(true);
 	this.createReqString();
 	var callbackObj		= getCallbackForOtherDocuments(this.containerEl, null, this.thisObjName +"DivId");
@@ -196,11 +198,11 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do?ajaxDocumentList=true&dynamicList='+this.thisObjName+
 			this.reqString, callbackObj );
 	this.closeAll();
-	
+
 	if (this.filterInfoDivId != null && document.getElementById(this.filterInfoDivId)) {
 		var divEl = document.getElementById(this.filterInfoDivId);
 		divEl.innerHTML = this.filterWrapper.labelsToHTML(getlabelsext()) + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML(getfiltertext())
-		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.kToHTML(getkeywordsext()) 
+		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.kToHTML(getkeywordsext())
 		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.mToHTML(getkeywordModeext());
 	}
 };
@@ -222,7 +224,7 @@ AbstractDynamicList.prototype.sendRequestPublic	= function (shouldRetrieveFilter
 				reqStr	+= "&"+field+"="+this.filterWrapper[field][i].key;
 		}
 	}
-	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+reqStr+'&action=jsonfilter&filterId='+this.objId, 
+	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+reqStr+'&action=jsonfilter&filterId='+this.objId,
 			new RetrieveFilters(this));
 };
 
@@ -243,7 +245,7 @@ AbstractDynamicList.prototype.resetFilterData		= function (panelId, shouldRetrie
 	var elems = panel.getElementsByTagName('select');
 	for (var i = 0; i < elems.length; i++) {
 		var optList = elems[i];
-		
+
 		for (var optInd = 0; optInd < optList.length; optInd++) {
             if (optInd == 0) {
                 optList[optInd].setAttribute("selected", "true");
@@ -252,7 +254,7 @@ AbstractDynamicList.prototype.resetFilterData		= function (panelId, shouldRetrie
                 optList[optInd].removeAttribute("selected");
                 optList[optInd].selected=false;
             }
-			
+
 	    }
 	}
 
@@ -278,14 +280,14 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 	if(divEl != null)
 	{
 	form = divEl.getElementsByTagName("form")[0];
-	
+
 	for (var field in this.filterWrapper) {
 		if ( field.indexOf("filter") == 0 && field!="filterLabels" && field!="filterKeywords" && field!="filterFromDate" && field!="filterToDate") {
 			var selectEl	= form.elements[field];
 			if(typeof selectEl == 'undefined')
 				continue;
 			var optionEl	= selectEl.options[selectEl.selectedIndex];
-			
+
 			this.filterWrapper[field]	= new Array();
 			this.filterWrapper[field].push( new KeyValue(optionEl.value, optionEl.text) );
 		} else if (field=="filterFromDate" || field=="filterToDate"){
@@ -294,7 +296,7 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 			this.filterWrapper[field].push( new KeyValue(elem.value, elem.text) );
 		}
 	}
-	}	
+	}
 	if (this.searchBox != null && this.searchBox.value.length > 0) {
 		var typedText = this.searchBox.value.split(" ");
 		this.filterWrapper["filterKeywords"] = new Array();
@@ -305,11 +307,11 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 		this.filterWrapper["filterKeywords"] = new Array();
 		this.filterWrapper["filterKeywords"].push( new KeyValue('', 'keyword'+i) );
 	}
-	
+
 	if(this.keywordModePanel != null) {
 		this.filterWrapper["filterKeywordMode"] = new Array();
 		this.filterWrapper["filterKeywordMode"].push(new KeyValue(
-				this.keywordModePanel.firstElement.selectedOptions[0].value, 
+				this.keywordModePanel.firstElement.selectedOptions[0].value,
 				this.keywordModePanel.firstElement.selectedOptions[0].text));
 	}
 }
@@ -324,11 +326,11 @@ AbstractDynamicList.prototype.createFilterString	= function (shouldRetrieveFilte
 					this.reqString	+= "&"+field+"="+this.filterWrapper[field][i].key;
 			}
 		}
-		
+
 		if (this.keywordModePanel != null) {
 			this.reqString += "&" + "keywordMode" +"=" + this.filterWrapper["filterKeywordMode"][0].key;
 		}
-	
+
 	for (var i=0; i<this.filterWrapper.filterLabels.length; i++) {
 		this.reqString	+= "&filterLabelsUUID=" + this.filterWrapper.filterLabels[i].uuid ;
 	}
@@ -345,9 +347,9 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 		if (divEl == null) {
 		    return null;
 		}
-		
-		var panel 		= 
-			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", 
+
+		var panel 		=
+			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px",
 				visible:true, draggable:true, close: true,
 				modal:false,
 				effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
@@ -357,12 +359,12 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 		panel.setBody(divEl);
 
 		panel.render(document.body);
-		
+
 		this.fPanel		= panel;
-		
+
 		/* Yep, hardcoded stuff: the filter buttons are hardcoded so that the first one is "Apply Filters", the second one is "Reset Filters" and the third one is "Close window" */
 		divEl.style.display	= "";
-		var buttonEls	= divEl.getElementsByTagName("button");		
+		var buttonEls	= divEl.getElementsByTagName("button");
 		YAHOO.util.Event.on(buttonEls[0], "click", this.sendRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[1], "click", this.sendResetRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[2], "click", this.closeAll, this, true);
@@ -385,24 +387,24 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 		if (this.fPanel != null) this.fPanel.show();
 //		this.fPanel = null;
 	}
-	
+
 	if (this.keywordModePanel != null) {
 		this.keywordModePanel.hide();
 	}
-	
+
 	return this.fPanel;
 }
 
 AbstractDynamicList.prototype.getKeywordModePanel = function (buttonId, divId) {
 	if (this.keywordModePanel == null) {
 		var divEl = document.getElementById(divId);
-		
+
 		if (divEl == null) {
 		    return null;
 		}
-		
-		var panel 		= 
-			new YAHOO.widget.Panel("KeywordModePanel"+divId, { width:"400px", 
+
+		var panel 		=
+			new YAHOO.widget.Panel("KeywordModePanel"+divId, { width:"400px",
 				visible:true, draggable:true, close: true,
 				modal:false,
 				effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
@@ -411,25 +413,25 @@ AbstractDynamicList.prototype.getKeywordModePanel = function (buttonId, divId) {
 		panel.setBody(divEl);
 
 		panel.render(document.body);
-		
+
 		this.keywordModePanel = panel;
-		
+
 		divEl.style.display	= "";
-		var buttonEls	= divEl.getElementsByTagName("button");		
+		var buttonEls	= divEl.getElementsByTagName("button");
 		YAHOO.util.Event.on(buttonEls[0], "click", this.sendRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[1], "click", this.closeAll, this, true);
 		var closeButtons = panel.element.getElementsByClassName("container-close");
 		YAHOO.util.Event.on(closeButtons[0], "click", this.closeAll, this, true);
-	} 
-	
+	}
+
 	if (this.fPanel != null) {
 		this.fPanel.hide();
 	}
-	
+
 	if (this.keywordModePanel != null) {
 		this.keywordModePanel.show();
 	}
-	
+
 	return this.keywordModePanel;
 }
 
@@ -443,7 +445,7 @@ AbstractDynamicList.prototype.closeAll = function (e) {
 		}
 		this.fPanel.hide();
 	}
-	
+
 	if(this.keywordModePanel != null) {
 		this.keywordModePanel.hide();
 	}
@@ -469,19 +471,19 @@ DynamicList.prototype.parent		= AbstractDynamicList;
 DynamicList.prototype.constructor	= DynamicList;
 
 function DynamicList(containerEl, thisObjName, fDivId, teamId, username, trnObj) {
-	
+
 	this.parent.call(this, containerEl, thisObjName, fDivId, trnObj);
-	
+
 	this.teamId			= teamId;
 	this.username		= username;
-	
+
 }
 
 DynamicList.prototype.createReqString	= function () {
 	this.reqString 	+= "&otherTeamId="+this.teamId;
-	if ( this.username != null ) 
+	if ( this.username != null )
 		this.reqString	+= "&otherUsername="+this.username;
-	
+
 	return this.reqString;
 }
 
@@ -493,7 +495,7 @@ SharedDynamicList.prototype.parent		= AbstractDynamicList;
 SharedDynamicList.prototype.constructor	= SharedDynamicList;
 
 /**
- * 
+ *
  * @param containerEl
  * @returns {SharedDynamicList}
  */
@@ -512,7 +514,7 @@ PublicDynamicList.prototype.parent		= AbstractDynamicList;
 PublicDynamicList.prototype.constructor	= PublicDynamicList;
 
 /**
- * 
+ *
  * @param containerEl
  * @returns {PublicDynamicList}
  */

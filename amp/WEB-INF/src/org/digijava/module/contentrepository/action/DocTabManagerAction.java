@@ -184,13 +184,14 @@ public class DocTabManagerAction extends MultiAction {
 
         if (availableDocumentFilters != null) {
             for (DocumentFilter df: availableDocumentFilters) {
-                logger.info("Document filter "+df);
+                logger.info("Document filter " + df);
+                if (df.getFilterLabels() != null) {
 
-                if (df.getPublicViewPosition() != null) {
-                    positioned.add(df);
+                    if (df.getPublicViewPosition() != null) {
+                        positioned.add(df);
+                    } else
+                        unPositioned.add(df);
                 }
-                else
-                    unPositioned.add(df);
             }
             myForm.setPublicFiltersPositioned( new ArrayList<DocumentFilter>() );
             myForm.getPublicFiltersPositioned().addAll(positioned);

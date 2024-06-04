@@ -150,6 +150,7 @@
 <feature:display name="Documents Tab" module="Document"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Donor Report" module="Report Types"></feature:display>
+<feature:display name="Indicator Report" module="Report Types"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>
 <feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display>
 <feature:display name="Event Tab" module="Messages"></feature:display>

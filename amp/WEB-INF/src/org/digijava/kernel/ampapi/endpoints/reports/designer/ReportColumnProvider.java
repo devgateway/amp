@@ -129,6 +129,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
                     .put(COMPONENT, COMPONENT_HIERARCHIES)
                     .put(REGIONAL, REGIONAL_HIERARCHIES)
                     .put(PLEDGE, PLEDGE_HIERARCHIES)
+                    .put(INDICATOR, DONOR_HIERARCHIES)
                     .build();
 
     private static final Comparator<AmpColumns> ME_COLS_COMPARATOR =

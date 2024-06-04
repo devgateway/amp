@@ -26,7 +26,10 @@ public enum ReportType {
     REGIONAL((long) REGIONAL_TYPE, "R"),
 
     @JsonProperty("P")
-    PLEDGE((long) PLEDGES_TYPE, "P");
+    PLEDGE((long) PLEDGES_TYPE, "P"),
+
+    @JsonProperty("I")
+    INDICATOR((long) INDICATOR_TYPE, "I");
 
     private Long id;
 
@@ -77,4 +80,6 @@ public enum ReportType {
     public boolean isRegional() {
         return this.equals(REGIONAL);
     }
+    public boolean isIndicator() {return this.equals(INDICATOR);}
+
 }

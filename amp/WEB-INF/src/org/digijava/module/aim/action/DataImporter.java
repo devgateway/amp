@@ -340,6 +340,7 @@ public class DataImporter extends Action {
                             case "{projectDescription}":
                                 importDataModel.setDescription(cell.getStringCellValue().trim());
                                 break;
+                            case "{projectStatus}":
                             case "{projectLocation}":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                                 break;
@@ -381,28 +382,31 @@ public class DataImporter extends Action {
         }
     }
 
+
+
     private void setAFundingItem(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell,boolean commitment, boolean disbursement, String
             adjustmentType) {
         int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
         String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
         detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
         String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+        String separateFundingDate=!config.containsValue("{transactionDate}")?null:getKey(config, "{transactionDate}");
 
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("{donorAgency}"))
             {
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType);
+                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType);
 
             }
             else {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
                 updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org", session, "donor");
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
             }
 
         }else {
-            updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+            updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), separateFundingDate,new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
         }
     }
 
@@ -434,7 +438,7 @@ public class DataImporter extends Action {
 
         return date.format(formatter);
     }
-    private void updateFunding(ImportDataModel importDataModel, Session session, Number amount, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
+    private void updateFunding(ImportDataModel importDataModel, Session session, Number amount,String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
                                adjustmentType) {
         String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         Long currencyId = getCurrencyId(session);
@@ -443,7 +447,15 @@ public class DataImporter extends Action {
         Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finInst);
         Long orgRole = getOrganizationRole(session);
 
-        String yearString = findYearSubstring(columnHeader);
+        String yearString;
+        if (separateFundingDate!=null)
+        {
+            yearString=findYearSubstring(separateFundingDate);
+        }
+        else {
+            yearString=findYearSubstring(columnHeader);
+        }
+
         String fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
 
         Funding funding = new Funding();
@@ -772,6 +784,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("{plannedDisbursement}");
         fieldsInfos.add("{plannedCommitment}");
         fieldsInfos.add("{fundingItem}");
+        fieldsInfos.add("{transactionDate}");
         fieldsInfos.add("{financingInstrument}");
         fieldsInfos.add("{typeOfAssistance}");
         fieldsInfos.add("{secondarySubSector}");

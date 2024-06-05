@@ -26,7 +26,10 @@ import org.digijava.module.admin.dbentity.ImportedFilesRecord;
 import org.digijava.module.admin.dbentity.ImportedProject;
 import org.digijava.module.admin.util.ImportedFileUtil;
 import org.digijava.module.admin.util.model.*;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -45,6 +48,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -390,7 +394,6 @@ public class DataImporter extends Action {
         String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
         detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
         String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
-
         int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "{transactionDate}"));
         String separateFundingDate = separateFundingDateColumn>=0? row.getCell(separateFundingDateColumn).getStringCellValue(): null;
         int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "{currencyCode}"));
@@ -433,14 +436,60 @@ public class DataImporter extends Action {
     }
 
 
-    private String getFundingDate(String yearString)
+    private String getFundingDate(String dateString)
     {
-        LocalDate date = LocalDate.of(Integer.parseInt(yearString), 1, 1);
+        LocalDate date = LocalDate.now();
+        if (isCommonDateFormat(dateString)){
+            List<DateTimeFormatter> formatters = Arrays.asList(
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                    DateTimeFormatter.ofPattern("MM/dd/yyyy"),
+                    DateTimeFormatter.ofPattern("MM-dd-yyyy"),
+                    DateTimeFormatter.ofPattern("yyyy/MM/dd"),
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            );
 
+            for (DateTimeFormatter formatter : formatters) {
+                try {
+                    date = LocalDate.parse(dateString, formatter);
+                    break;
+                } catch (DateTimeParseException e) {
+                    // Continue to next formatter
+                }
+            }
+        }
+        else {
+            date = LocalDate.of(Integer.parseInt(dateString), 1, 1);
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return date.format(formatter);
     }
+
+
+    public static boolean isCommonDateFormat(String dateString) {
+        List<String> dateFormats = Arrays.asList(
+                "yyyy-MM-dd",
+                "dd-MM-yyyy",
+                "MM-dd-yyyy",
+                "MM/dd/yyyy",
+                "dd/MM/yyyy",
+                "dd.MM.yyyy",
+                "yyyy/MM/dd"
+        );
+
+        for (String dateFormat : dateFormats) {
+            try {
+                LocalDate.parse(dateString, DateTimeFormatter.ofPattern(dateFormat));
+                return true;
+            } catch (Exception e) {
+                // Ignore and continue with the next format
+            }
+        }
+
+        return false;
+    }
+
     private void updateFunding(ImportDataModel importDataModel, Session session, Number amount,String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
                                adjustmentType, String currencyCode) {
         String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
@@ -450,16 +499,24 @@ public class DataImporter extends Action {
         Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finInst);
         Long orgRole = getOrganizationRole(session);
 
-        String yearString;
+        String yearString = null;
+        String fundingDate;
         if (separateFundingDate!=null)
         {
-            yearString=findYearSubstring(separateFundingDate);
+            if (isCommonDateFormat(separateFundingDate)){
+            fundingDate=getFundingDate(separateFundingDate);
+            }else {
+                yearString = findYearSubstring(separateFundingDate);
+                fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+
+            }
         }
         else {
             yearString=findYearSubstring(columnHeader);
+            fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+
         }
 
-        String fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
 
         Funding funding = new Funding();
         funding.setDonor_organization_id(orgId);

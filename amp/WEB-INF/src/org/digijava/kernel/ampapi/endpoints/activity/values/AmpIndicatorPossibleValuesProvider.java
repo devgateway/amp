@@ -11,6 +11,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Octavian Ciubotaru
@@ -23,7 +24,8 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         List<PossibleValue> pvs = new ArrayList<>();
         for (AmpIndicator indicator : indicators) {
             List<Long> sectorIds = getSectorIds(indicator.getSectors());
-            IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds, indicator.getProgram().getAmpThemeId());
+            Set<Long> programIds = indicator.getValuesTheme().stream().map(value->value.getTheme().getAmpThemeId()).collect(Collectors.toSet());
+            IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds, programIds);
             pvs.add(new PossibleValue(indicator.getIndicatorId(), indicator.getName(), ImmutableMap.of(), extraInfo));
         }
         return pvs;

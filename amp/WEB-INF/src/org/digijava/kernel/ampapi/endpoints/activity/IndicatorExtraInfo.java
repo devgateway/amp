@@ -14,13 +14,21 @@ public class IndicatorExtraInfo {
     @JsonProperty("sector-ids")
     private final List<Long> sectorIds;
 
-    public IndicatorExtraInfo(String code, List<Long> sectorIds) {
+
+
+    private final Long programId;
+
+    public IndicatorExtraInfo(String code, List<Long> sectorIds, Long programId) {
         this.code = code;
         this.sectorIds = sectorIds;
+        this.programId = programId;
     }
 
     public String getCode() {
         return code;
+    }
+    public Long getProgramId() {
+        return programId;
     }
 
     public List<Long> getSectorIds() {

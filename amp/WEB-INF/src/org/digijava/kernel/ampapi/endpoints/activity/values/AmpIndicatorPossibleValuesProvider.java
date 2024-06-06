@@ -23,7 +23,7 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         List<PossibleValue> pvs = new ArrayList<>();
         for (AmpIndicator indicator : indicators) {
             List<Long> sectorIds = getSectorIds(indicator.getSectors());
-            IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds);
+            IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds, indicator.getProgram().getAmpThemeId());
             pvs.add(new PossibleValue(indicator.getIndicatorId(), indicator.getName(), ImmutableMap.of(), extraInfo));
         }
         return pvs;

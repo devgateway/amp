@@ -16,6 +16,7 @@ public class IndicatorExtraInfo {
 
 
 
+    @JsonProperty("program-id")
     private final Long programId;
 
     public IndicatorExtraInfo(String code, List<Long> sectorIds, Long programId) {

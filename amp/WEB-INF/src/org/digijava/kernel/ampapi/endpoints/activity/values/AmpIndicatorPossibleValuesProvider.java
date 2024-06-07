@@ -5,9 +5,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.IndicatorExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.AbstractPossibleValuesBaseProvider;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +28,7 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         List<PossibleValue> pvs = new ArrayList<>();
         for (AmpIndicator indicator : indicators) {
             List<Long> sectorIds = getSectorIds(indicator.getSectors());
-            Set<Long> programIds = getProgramIds(indicator.getValuesTheme());
+            List<Long> programIds = getProgramIds(indicator.getIndicatorId());
             IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds, programIds);
             pvs.add(new PossibleValue(indicator.getIndicatorId(), indicator.getName(), ImmutableMap.of(), extraInfo));
         }
@@ -41,12 +43,17 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         return sectorIds;
     }
 
-    private Set<Long> getProgramIds(Set<IndicatorTheme> indicatorThemes) {
-        Set<Long> programIds = new HashSet<>();
-        for (IndicatorTheme indicatorTheme : indicatorThemes) {
-            programIds.add(indicatorTheme.getTheme().getAmpThemeId());
-        }
-        return programIds;
+    private List<Long> getProgramIds(Long indicatorId) {
+
+        Session session = PersistenceManager.getRequestDBSession();
+        String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
+                "WHERE indicator_id = :indicatorId AND sub_clazz = 'p'";
+        List<Long> themeIds = session.createNativeQuery(sql)
+                .setParameter("indicatorId", indicatorId)
+                .getResultList();
+        session.close();
+        return themeIds;
+
     }
 
     @Override

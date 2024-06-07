@@ -30,11 +30,11 @@ import java.util.function.Supplier;
 /**
  * AMP Activity Endpoint for Possible Values -- /activity/fields/:fieldName
  * and all the methods only it might have use of
- * 
+ *
  * @author acartaleanu
  */
 public class PossibleValuesEnumerator {
-    
+
     public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 
     private Map<String, List<PossibleValue>> cache = new ConcurrentHashMap<>();
@@ -133,7 +133,6 @@ public class PossibleValuesEnumerator {
                     String.format("Failed to obtain possible values for %s.", longFieldName), e);
         }
     }
-
     public List<PossibleValue> getPossibleValuesCachedForField(String longFieldName, List<APIField> apiFields) {
         Timestamp lastModificationDate = getLastModificationDateForEntities();
         if (cachedUpToDate == null) {
@@ -183,7 +182,7 @@ public class PossibleValuesEnumerator {
             if (apiField.getDiscriminatorValue() != null) {
                 configString = apiField.getDiscriminatorValue();
             }
-            
+
             return getPossibleValuesProviderForField(longFieldName.substring(longFieldName.indexOf('~') + 1),
                     configString, apiField.getChildren());
         } else {
@@ -230,12 +229,12 @@ public class PossibleValuesEnumerator {
     }
 
     /**
-     * Complex fields are discriminated fields -- when several underscorified paths 
+     * Complex fields are discriminated fields -- when several underscorified paths
      * lead to the same Java field. This method gets possible values for such fields
      * @param apiField
      * @param discriminatorValue
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     private PossibleValuesProvider getPossibleValuesForComplexField(APIField apiField, String discriminatorValue)
             throws Exception {
@@ -247,7 +246,7 @@ public class PossibleValuesEnumerator {
             throw InterchangeUtils.newServerErrorException("Field without discriminator value. " + apiField);
         }
 
-        Class<? extends PossibleValuesProvider> pvpClass = apiField.getPossibleValuesProviderClass(); 
+        Class<? extends PossibleValuesProvider> pvpClass = apiField.getPossibleValuesProviderClass();
         PossibleValuesProvider pvp = null;
         if (pvpClass != null) {
             pvp = pvpClass.getDeclaredConstructor(String.class).newInstance(discriminatorValue);
@@ -272,11 +271,11 @@ public class PossibleValuesEnumerator {
         }
         return pvp;
     }
-    
+
     /**
      * Generic method for obtaining possible values for most cases (without any fancy special cases)
-     * @return 
-     * @throws Exception 
+     * @return
+     * @throws Exception
      */
     private PossibleValuesProvider getPossibleValuesForField(APIField apiField) throws Exception {
         Class<?> clazz = apiField.getApiType().getType();

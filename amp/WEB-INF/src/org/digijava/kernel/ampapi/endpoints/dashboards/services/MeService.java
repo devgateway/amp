@@ -35,9 +35,11 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 
 import java.math.BigDecimal;
+import java.time.Year;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -157,6 +159,15 @@ public class MeService {
 
         if (yearValues.size() > yearsCount) {
             yearValues = yearValues.subList(0, yearsCount);
+        } else if (yearValues.size() < yearsCount) {
+            List<YearValue> newYearValues = new ArrayList<>(yearsCount);
+            newYearValues.addAll(yearValues);
+
+            for (int i = yearValues.size(); i < yearsCount; i++) {
+                newYearValues.add(new YearValue(Year.now().getValue() - i, BigDecimal.ZERO));
+            }
+
+            yearValues = newYearValues;
         }
 
         return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);

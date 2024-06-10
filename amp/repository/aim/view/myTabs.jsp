@@ -13,17 +13,17 @@
 		if (ReportContextData.contextIdExists()){
 			ReportContextData.getFromRequest(true); // instantiate a RCD instance - will crash if no ampReportId exists in the context (this is ok), will create a new RCD if not existing (That is ok too - we might render this tab without having gone through viewNewAdvancedReport)
 		}
-		
+
 		org.digijava.module.aim.dbentity.AmpReports report = (org.digijava.module.aim.dbentity.AmpReports) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_TAB_REPORT);
 		//Long currentTabAmpReportId = (report != null) ? report.getAmpReportId() : null;
 		if (report != null)
 			{
 				if (report.getDrilldownTab())
-					pageContext.setAttribute("currentTabReport", report);							
+					pageContext.setAttribute("currentTabReport", report);
 				else
 					new RuntimeException("Current tab report is not a drill-down tab!").printStackTrace();
 			}
-		
+
 	}
 %>
 
@@ -33,10 +33,10 @@
 
     	var statusDiv = document.getElementById("statusValue");
     	if (!statusDiv) return;
-    	 
+
     	var offsetByServerSide = 44;
-    	var xmlhttp; 
-	
+    	var xmlhttp;
+
     	if(window.ActiveXObject)
     		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
     	else
@@ -45,9 +45,9 @@
     	<logic:notPresent name="currentTabReport">
     		return;
     	</logic:notPresent>
-    	
+
 	<logic:present name="currentTabReport">
-    	
+
 		xmlhttp.open("GET","/aim/viewNewAdvancedReport.do~loadstatus=true~ampReportId=<bean:write name="currentTabReport" property="ampReportId"/>&"+new Date().getTime(),true);
 
 		xmlhttp.onreadystatechange=function()
@@ -82,16 +82,16 @@
 		   }
 		}
 		xmlhttp.send(null);
-	</logic:present>		
+	</logic:present>
     }
-    
+
 </script>
 
 <c:set var="showCurrSettings">
-	<digi:trn key="rep:showCurrSettings" jsFriendly="true">Show current settings</digi:trn> 
+	<digi:trn key="rep:showCurrSettings" jsFriendly="true">Show current settings</digi:trn>
 </c:set>
 <c:set var="hideCurrSettings">
-	<digi:trn key="rep:hideCurrSettings" jsFriendly="true">Hide current settings</digi:trn> 
+	<digi:trn key="rep:hideCurrSettings" jsFriendly="true">Hide current settings</digi:trn>
 </c:set>
 
 <script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
@@ -118,9 +118,9 @@ var myTabsObject;
 			currentDiv.hoverColor = hoverColor;
 			currentDiv.onmouseout = setHover;
 			currentDiv.onmouseover = unsetHover;
-		
+
 		}
-		
+
 	}
 	function setHover()
 	{
@@ -134,7 +134,7 @@ var myTabsObject;
 	function initAllTabs() {
 		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
 		//Initialize all tabs
-		myTabsObject = new YAHOOAmp.widget.TabView("demo"); 
+		myTabsObject = new YAHOOAmp.widget.TabView("demo");
 		//Create "More..." tab
 		var objeto = document.createElement("DIV");
 		objeto.innerHTML = "<digi:trn jsFriendly='true'>More Tabs...</digi:trn>";
@@ -143,16 +143,16 @@ var myTabsObject;
 		objeto.id = "moreTabs";
 
 		//Add it to the Tab bar
-		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
+		myTabsObject.addTab( new YAHOOAmp.widget.Tab({
 			labelEl: objeto
-			
-		}), myTabsObject.get('tabs').length+1); 
+
+		}), myTabsObject.get('tabs').length+1);
 
 		//Get the position and create the panel
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
 		var xPos = region.left;
 		var yPos = region.bottom;
-		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], 
+		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos],
 					width:"320px", height:"225px", visible:false,
 					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 					constraintoviewport:true }  );
@@ -165,7 +165,7 @@ var myTabsObject;
 		<logic:notEmpty name="currentTabReport" scope="page">
 		if(!tabExists('Tab-<c:out value="${currentTabReport.ampReportId}"/>'))
 			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="currentTabReport" property="ampReportId"/>~widget=true", "<c:out value="${currentTabReport.name}" />", "<c:out value="${fn:substring(currentTabReport.name, 0, 25)}" />", "Tab-<c:out value="${currentTabReport.ampReportId}" />");
-		</logic:notEmpty>	
+		</logic:notEmpty>
 	}
 	function tabExists(tabCheckName){
 		if (document.getElementById(tabCheckName)) return true;
@@ -180,33 +180,33 @@ var myTabsObject;
 		}
 
 		var objeto = document.createElement("DIV");
-	
+
 		objeto.innerHTML = label.replace("<", "&lt;").replace(">", "&gt;")+'...';
 		objeto.id = "replaceableTab";
 
-		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
+		myTabsObject.addTab( new YAHOOAmp.widget.Tab({
 			labelEl: objeto
-			
-		}), myTabsObject.get('tabs').length-1); 
+
+		}), myTabsObject.get('tabs').length-1);
 		var tabObject = document.getElementById("replaceableTab");
 
 		if(tabObject.parentNode.tagName == "A")
 		{
 			tabObject.parentNode.title = labelComplete;
-			tabObject.parentNode.rel= "ajaxcontentarea"; 
+			tabObject.parentNode.rel= "ajaxcontentarea";
 			tabObject.parentNode.href = url;
 			tabObject.parentNode.id = id;
 		}
 		var len = document.getElementById("scrollableDiv").getElementsByTagName("DIV").length;
-		for (var i = 0; i < len; i++) 
-			{	
+		for (var i = 0; i < len; i++)
+			{
 			document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display='';
 			}
 		//console.log(labelComplete);
 		if(document.getElementById(labelComplete) != null){
-			document.getElementById(labelComplete).style.display = 'none';	
+			document.getElementById(labelComplete).style.display = 'none';
 		}
-		
+
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
 		$('#MyTabs .tabs-trigger').click(function(){
@@ -232,7 +232,7 @@ var myTabsObject;
 
 	function isListEmpty(){
 		var len = document.getElementById("scrollableDiv").getElementsByTagName("DIV").length;
-		for (i = 0; i < len; i++){	
+		for (i = 0; i < len; i++){
 			if(document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display != 'none'){
 				return false;
 			}
@@ -240,7 +240,7 @@ var myTabsObject;
 		return true;
 	}
 
-    function changeTab(e) {  
+    function changeTab(e) {
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
 		var xPos = region.left;
 		var yPos = region.bottom;
@@ -256,7 +256,7 @@ var myTabsObject;
 			return !containsElement(element, evt.relatedTarget);
 		}
 	}
-	
+
 	function containsElement(container, containee) {
 		while (containee) {
 			if (container == containee) {
@@ -268,12 +268,12 @@ var myTabsObject;
 	}
 
 
-	
+
 
 </script>
 <script language="JavaScript">
 /*	function addActivity() {
-		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";
 	}
 	*/
 
@@ -304,7 +304,7 @@ function toggleSettings(){
  	 		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";
  	 	 }
 	}
-	
+
 	var tabName	= "Tab-By Project";
 	<logic:empty name="currentTabReport" scope="page">
 		<logic:notEmpty name="defaultTeamReport" scope="session">
@@ -319,9 +319,9 @@ function toggleSettings(){
 	</logic:empty>
 	<logic:notEmpty name="currentTabReport" scope="page">
 		tabName	= 'Tab-<bean:write name="currentTabReport" scope="page" property="ampReportId"/>';
-	</logic:notEmpty>	
+	</logic:notEmpty>
 </script>
-	
+
 <digi:context name="digiContext" property="context" />
 
 
@@ -330,19 +330,19 @@ function toggleSettings(){
 	<jsp:param name="is_a_tab" value="true" />
 </jsp:include>
 
-<div id="content"  > 
+<div id="content"  >
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 
 <ul id="MyTabs" class="yui-nav"">
-<c:set var="counter" value="0"/> 
+<c:set var="counter" value="0"/>
 <logic:present name="myTabs" scope="session">
-		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
 					<logic:equal name="report" property="drilldownTab" value="true">
 	                    <c:set var="counter" value="${counter+1}" />
 	                    <%-- <c:set var="reportNameTrn">
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
 	                    </c:set> --%>
-	                   
+
 	                    <c:if test="${counter <= 6}">
 	                    	<li>
 	                    	<c:if test="${fn:length(report.name) > 25}" >
@@ -351,14 +351,14 @@ function toggleSettings(){
 	                    	<c:if test="${fn:length(report.name) <= 25}" >
 								<a class="tab-trigger" id='Tab-${report.ampReportId}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
 	                    	</c:if>
-	                                                                
+
 	                    </li>
 	                    </c:if>
 					</logic:equal>
 		</logic:iterate>
 </logic:present>
-	
-</ul>									
+
+</ul>
 <div class="yui-content" style="display:none">
 </div>
 </div>
@@ -367,7 +367,7 @@ function toggleSettings(){
 		 Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.
 	</digi:trn>
 </div>
-</div> 
+</div>
 
 <c:set var="loadstatustext">
 	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
@@ -397,7 +397,7 @@ DIV.panelList {
         <c:set var="showMoreTab" value="false"/>
 		<logic:iterate name="myActiveTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
           	<c:set var="showTab" value="true"/>
-			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
             	<c:if test="${tab.id == report.id}">
                 	<c:set var="showTab" value="false"/>
                 </c:if>
@@ -405,7 +405,7 @@ DIV.panelList {
 			<c:if test="${showTab}">
 			        <c:set var="showMoreTab" value="true"/>
 					<logic:equal name="report" property="drilldownTab" value="true">
-	                   <%--  <c:set var="reportNameTrn"> 
+	                   <%--  <c:set var="reportNameTrn">
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
 	                    </c:set> --%>
 	                   <c:if test="${fn:length(report.name) > 25}" >

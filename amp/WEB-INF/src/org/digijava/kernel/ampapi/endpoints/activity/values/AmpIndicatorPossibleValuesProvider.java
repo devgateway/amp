@@ -38,7 +38,6 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         }
         return pvs;
     }
-
     private List<Long> getSectorIds(Set<AmpSector> sectors) {
         List<Long> sectorIds = new ArrayList<>();
         for (AmpSector sector : sectors) {

@@ -1,5 +1,5 @@
 /*
-* AMP GLOBAL SETTINGS 
+* AMP GLOBAL SETTINGS
 */
 package org.digijava.module.aim.dbentity;
 
@@ -15,45 +15,45 @@ import java.util.List;
 import java.util.Map;
 
 public class AmpGlobalSettings implements Serializable {
-    
+
     @JsonIgnore
     private Long globalId;
-    
+
     @JsonProperty("settingName")
     @ApiModelProperty(value = "the name of the global settings", example = "Link Mode of Payment to Funding Status")
     private String globalSettingsName;
-    
+
     @JsonProperty("settingValue")
     @ApiModelProperty(value = "the current value of the settings", example = "false")
     private String globalSettingsValue;
-    
+
     @JsonProperty("possibleValues")
     @ApiModelProperty(value = "the type of possible values",
             allowableValues = "t_Boolean, t_Integer, t_Double, t_year_default_start, t_year_default_end, "
                     + "t_static_range, t_static_year, t_audit_trial_clenaup, t_components_sort, "
-                    + "t_daily_currency_update_hour, t_timeout_currency_update, v_g_settings_activity_statusess",
+                    + "t_daily_currency_update_hour, t_timeout_currency_update, v_g_settings_activity_statusess, v_g_settings_indicator_programs",
             example = "t_Boolean")
     private String globalSettingsPossibleValues;
-    
+
     @JsonProperty("description")
     @ApiModelProperty(example = "Link Mode of Payment to Funding Status Description")
     private String globalSettingsDescription; //a description that will appear on mouseover
-    
+
     @JsonProperty("section")
     @ApiModelProperty(example = "funding")
     private String section;
-    
+
     @JsonIgnore
     private transient String[] listOfValues;
-    
+
     @JsonProperty("valueTranslatable")
     @ApiModelProperty("if the global settings has translations")
     private Boolean valueTranslatable;
-    
+
     @JsonProperty("possibleValuesIds")
     @ApiModelProperty("possible values of the current setting in a { \"name1\" : \"value1\", ...} format")
     private Map<String, String> possibleValuesIds = new HashMap<>();
-    
+
     @JsonIgnore
     private Boolean internal;
 
@@ -128,11 +128,11 @@ public class AmpGlobalSettings implements Serializable {
     public String[] getListOfValues() {
         return listOfValues;
     }
-    
+
     public void setListOfValues(String[] listOfValues) {
         this.listOfValues = listOfValues;
     }
-    
+
     public Map<String, String> getPossibleValuesIds() {
         List<KeyValue> possibleValues = ConfigHelper.getPossibleValues(globalSettingsPossibleValues);
         if (possibleValues != null) {
@@ -140,7 +140,7 @@ public class AmpGlobalSettings implements Serializable {
                 possibleValuesIds.put(value.getValue(), value.getKey());
             }
         }
-        
+
         return possibleValuesIds;
     }
 
@@ -151,14 +151,14 @@ public class AmpGlobalSettings implements Serializable {
     public void setInternal(Boolean internal) {
         this.internal = internal;
     }
-    
+
     public void updateValuesFromSetting(AmpGlobalSettings setting) {
         this.globalSettingsName = setting.getGlobalSettingsName();
         this.globalSettingsValue = setting.getGlobalSettingsValue();
         this.globalSettingsDescription = setting.getGlobalSettingsDescription();
         this.section = setting.getSection();
         this.valueTranslatable = setting.getValueTranslatable();
-        
+
         if ("null".equalsIgnoreCase(setting.getGlobalSettingsPossibleValues())) {
             this.globalSettingsPossibleValues = "";
         } else {

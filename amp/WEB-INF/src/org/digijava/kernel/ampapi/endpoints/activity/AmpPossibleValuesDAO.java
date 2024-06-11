@@ -1,14 +1,19 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -227,11 +232,40 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @Override
     public List<AmpIndicator> getIndicators() {
-        return InterchangeUtils.getSessionWithPendingChanges()
+        boolean filterIndicatorsByProgram= FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FILTER_INDICATORS_BY_PROGRAM);
+
+        List<AmpIndicator> indicators= InterchangeUtils.getSessionWithPendingChanges()
                 .createCriteria(AmpIndicator.class)
                 .setCacheable(true)
                 .setCacheRegion(CACHE)
                 .list();
+        List<AmpIndicator> filteredIndicators = new ArrayList<>();
+        if (filterIndicatorsByProgram)
+        {
+            String globalProgramScheme = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GLOBAL_PROGRAM_SCHEME);
+            if (globalProgramScheme!=null) {
+                Long programSettingId = Long.parseLong(globalProgramScheme);
+                Session session = PersistenceManager.getRequestDBSession();
+                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE t.indlevel= :settingId";
+                Query query = session.createQuery(hql);
+                query.setParameter("settingId", programSettingId);
+                List<AmpTheme> globalSchemePrograms = query.list();
+                for (AmpIndicator indicator : indicators) {
+
+                    for (IndicatorTheme indicatorTheme : indicator.getValuesTheme()) {
+                        boolean containsProgram = globalSchemePrograms.contains(indicatorTheme.getTheme());
+                        if (containsProgram) {
+                            filteredIndicators.add(indicator);
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        return !filterIndicatorsByProgram?indicators:filteredIndicators;
     }
 
     @Override

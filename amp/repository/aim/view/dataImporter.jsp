@@ -314,10 +314,10 @@
   </select>
 </div>
 
-
+<br>
 <label for="configuration">Select Existing Configuration by name:</label>
 <select id="configuration"  class="existing-config" style="width: 300px;">
-  <option value="none">Select Existing Config</option>
+  <option value="none">None</option>
   <jsp:useBean id="configNames" scope="request" type="java.util.List"/>
   <c:forEach items="${configNames}" var="configName" varStatus="loop">
     <option value="${configName}">${configName}</option>

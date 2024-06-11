@@ -2,12 +2,9 @@
 <hibernate-mapping>
     <class name="org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues" table="DATA_IMPORTER_CONFIG_VALUES">
         <cache usage="read-write" />
-        <id name="id" column="id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">DATA_IMPORTER_CONFIG_VALUES_SEQ</param>
-            </generator>
+        <id name="configKey" column="config_key" type="string">
+            <generator class="assigned" />
         </id>
-        <property name="configKey" column="config_key" type="string"/>
         <property name="configValue" column="config_value" type="string"/>
 
 

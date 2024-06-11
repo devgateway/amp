@@ -245,9 +245,11 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 .setCacheRegion(CACHE)
                 .list();
         List<AmpIndicator> filteredIndicators = new ArrayList<>();
+        logger.info("Filter indicators by program: "+filterIndicatorsByProgram);
         if (filterIndicatorsByProgram)
         {
             String globalProgramScheme = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GLOBAL_PROGRAM_SCHEME);
+            logger.info("Global program scheme: "+globalProgramScheme);
             if (globalProgramScheme!=null) {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();

@@ -92,7 +92,7 @@
                     throw new Error("Network response was not ok");
                   }
                   // console.log("Response: ",response.json());
-
+                  $("#templateUploadForm").hide();
                   return response.json();
                 })
                 .then(updatedMap => {
@@ -327,7 +327,7 @@
 
 
 
-<form id="uploadForm" enctype="multipart/form-data">
+<form id="templateUploadForm" enctype="multipart/form-data">
   <label>Select Template File:</label>
 
   <br>

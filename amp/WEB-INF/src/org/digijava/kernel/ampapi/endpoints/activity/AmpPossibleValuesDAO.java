@@ -15,6 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -30,6 +32,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
 
     private static final int LOC_QUERY_COL_NUM = 8;
+    private static final Logger logger = LoggerFactory.getLogger(AmpPossibleValuesDAO.class);
 
 
     /**
@@ -255,9 +258,10 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
                 List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
-
+                logger.info("Global scheme programs: "+globalSchemeProgramIds);
                 for (AmpIndicator indicator : indicators) {
                     List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
+                    logger.info("Indicator programs: "+indicatorPrograms);
 
                     for (Long progId : indicatorPrograms) {
                         boolean containsProgram = globalSchemeProgramIds.contains(progId);
@@ -278,7 +282,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     private List<Long> getProgramIds(Long indicatorId) {
         Session session = PersistenceManager.getRequestDBSession();
         String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
-                "WHERE indicator_id = :indicatorId AND sub_clazz = 'a'";
+                "WHERE indicator_id = :indicatorId AND sub_clazz = 'p'";
         List<Long> themeIds = session.createNativeQuery(sql)
                 .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
                 .getResultList();

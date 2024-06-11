@@ -316,6 +316,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId);
                 List<AmpTheme> globalSchemePrograms = query.list();
+                List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
 
                 String sql = "SELECT * FROM AMP_INDICATOR_CONNECTION " +
                         "WHERE activity_id = :activityId AND sub_clazz = 'a'";
@@ -324,26 +325,23 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                         .getResultList();
                 List<AmpIndicator> validIndicators = new ArrayList<>();
                 for (IndicatorActivity indicatorActivity : indicatorActivities) {
-//
-                    for (IndicatorTheme indicatorTheme : indicatorActivity.getIndicator().getValuesTheme()) {
-                        boolean containsProgram = globalSchemePrograms.contains(indicatorTheme.getTheme());
+                    AmpIndicator indicator = indicatorActivity.getIndicator();
+                    List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
+                    for (Long progId : indicatorPrograms) {
+                        boolean containsProgram = globalSchemeProgramIds.contains(progId);
                         if (containsProgram) {
                             validIndicators.add(indicatorActivity.getIndicator());
                             break;
                         }
                     }
-                }
-//                for (AmpIndicator indicator : indicators) {
-//                    List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
-//
-//                    for (Long progId : indicatorPrograms) {
-//                        boolean containsProgram = globalSchemeProgramIds.contains(progId);
+//                    for (IndicatorTheme indicatorTheme : indicatorActivity.getIndicator().getValuesTheme()) {
+//                        boolean containsProgram = globalSchemePrograms.contains(indicatorTheme.getTheme());
 //                        if (containsProgram) {
-//                            filteredIndicators.add(indicator);
+//                            validIndicators.add(indicatorActivity.getIndicator());
 //                            break;
 //                        }
 //                    }
-//                }
+                }
                 if (validIndicators.isEmpty()) {
                     addError(ValidationErrors.INDICATORS_NOT_BELONG_TO_PROGRAM_SCHEME.withDetails(ampActivityVersion.getAmpActivityId()+""));
                 }
@@ -353,6 +351,18 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
         }
     }
+
+    private List<Long> getProgramIds(Long indicatorId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
+                "WHERE indicator_id = :indicatorId AND sub_clazz = 'a'";
+        List<Long> themeIds = session.createNativeQuery(sql)
+                .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
+                .getResultList();
+        return themeIds;
+
+    }
+
 
     /**
      * Before proceeding with import, check if user provided correct amp id and activity id fields.

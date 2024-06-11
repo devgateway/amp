@@ -47,7 +47,6 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
     }
 
     private List<Long> getProgramIds(Long indicatorId) {
-
         Session session = PersistenceManager.getRequestDBSession();
         String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
                 "WHERE indicator_id = :indicatorId AND sub_clazz = 'p'";

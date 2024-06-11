@@ -7,6 +7,7 @@ import java.util.Set;
 public class GlobalSettingsConstants {
 
     public static final String DEFAULT_COUNTRY = "Default Country";
+    public static final String FILTER_INDICATORS_BY_PROGRAM = "Filter indicators by program";
 
     public static final String FEATURE_TEMPLATE = "Feature Template";
 

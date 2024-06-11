@@ -213,7 +213,7 @@ public class DataImporter extends Action {
                     }
                 }
                 if (dataImporterForm.getColumnPairs().isEmpty() || !dataImporterForm.getColumnPairs().containsValue("{projectTitle}")) {
-                    response.setHeader("errorMessage", "You must have atleast the {projectTitle} key in your config.");
+                    response.setHeader("errorMessage", "You must have at least the {projectTitle} key in your config.");
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }

@@ -77,6 +77,7 @@
 
       $('.existing-config').change(function() {
         var configName = $(this).val();
+        if (configName!=='none'){
 
         var formData = new FormData();
         formData.append("configName", configName);
@@ -117,6 +118,7 @@
                 .catch(error => {
                   console.error("There was a problem with the fetch operation:", error);
                 });
+        }
       });
       });
 

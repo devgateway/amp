@@ -5,12 +5,15 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportManager.PUBLIC_REPORT_GENERATOR_MODULE_NAME;
+import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportManager.PUBLIC_VIEW_CHECKBOX;
 
 /**
  *  Enumerate all options of report designer depending on report profile (tab/report), report type
@@ -19,7 +22,7 @@ import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportManage
  * @author Viorel Chihai
  */
 public class ReportOptionProvider {
-
+    private static final Logger logger = LoggerFactory.getLogger(ReportOptionProvider.class);
     public static final List<ReportOptionConfiguration> REPORT_PROFILE_OPTIONS = ImmutableList.of(
         new ReportOptionConfiguration("funding-donor", "Donor Report (Donor Funding)", null,
                 "Donor Report", "Report Types"),
@@ -104,14 +107,13 @@ public class ReportOptionProvider {
 
         options.addAll(REPORT_PROFILE_OPTIONS.stream()
                 .filter(r -> isOptionVisibleForReportType(r, reportType))
-                .map(r -> getOptionFromConfiguration(r))
+                .map(this::getOptionFromConfiguration)
                 .collect(Collectors.toList()));
 
         options.addAll(getPledgesProfileOptions());
         if (!reportType.isPledge()) {
             options.addAll(getManagementOrReportProfileOptions());
         }
-
         if (isCurrentMemberManager()) {
             options.addAll(getManagementOptions());
         }
@@ -151,7 +153,7 @@ public class ReportOptionProvider {
 
     private List<ReportOption> getManagementOptions() {
         return MANAGEMENT_OPTIONS.stream()
-                .map(r -> getOptionFromConfiguration(r))
+                .map(this::getOptionFromConfiguration)
                 .collect(Collectors.toList());
     }
 

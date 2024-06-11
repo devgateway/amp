@@ -181,7 +181,7 @@ public class DbUtil {
 
     /**
      * Removes the team-reports and member-reports association table.
-     * 
+     *
      * @param reportId
      *            A Long array of the reports to be updated
      * @param teamId
@@ -263,7 +263,7 @@ public class DbUtil {
 
     /**
      * Associated the reports with the given team
-     * 
+     *
      * @param reportId
      *            The Long array of reportIds which are to be associated with
      *            the given team
@@ -738,7 +738,7 @@ public class DbUtil {
     /**
      * Loads all objects of T from database, using request session. TODO there
      * are several methods like this, let's refactor to one.
-     * 
+     *
      * @param <T>
      * @param object
      * @return
@@ -751,7 +751,7 @@ public class DbUtil {
     /**
      * Loads all objects of T from database. Client should care about opening
      * and releasing session which is passed as parameter to this method.
-     * 
+     *
      * @param <T>
      * @param object
      * @param session
@@ -903,7 +903,7 @@ public class DbUtil {
     /**
      * This function gets all organizations whose names begin with
      * namesFirstLetter and name or acronym contain keyword
-     * 
+     *
      * @author Dare
      */
     public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter, String keyword) {
@@ -924,7 +924,7 @@ public class DbUtil {
      * This function gets all organizations whose names begin with
      * namesFirstLetter and name or acronym contain keyword and organisation
      * type is orgType
-     * 
+     *
      * @author Mouhamad
      */
     public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter, String keyword, Long orgType) {
@@ -1207,7 +1207,7 @@ public class DbUtil {
     }
 
     /**
-     * 
+     *
      * @return List of Mul and Bil organization groups
      */
 
@@ -1352,7 +1352,7 @@ public class DbUtil {
 
     /**
      * general function to save/update object
-     * 
+     *
      * @param object
      * @throws Exception
      */
@@ -2347,7 +2347,7 @@ public class DbUtil {
             qry.setParameter("ampActId", ampActId, LongType.INSTANCE);
             col = qry.list();
         } catch (Exception e1) {
-            logger.error("could not retrieve AmpReportSector " + e1.getMessage());
+            logger.error("could not retrieve indicator " + e1.getMessage());
             e1.printStackTrace(System.out);
         }
         return col;
@@ -2507,9 +2507,9 @@ public class DbUtil {
 
     /**
      * //for sorting users by Email
-     * 
+     *
      * @author dare
-     * 
+     *
      */
     public static class HelperEmailComparator implements Comparator {
         private Order order;
@@ -2599,9 +2599,9 @@ public class DbUtil {
 
     /**
      * This class is used for sorting AmpOrgGroup by code.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
+     *
      */
     public static class HelperAmpOrgGroupCodeComparator implements Comparator<AmpOrgGroup> {
         Locale locale;
@@ -2627,9 +2627,9 @@ public class DbUtil {
 
     /**
      * This class is used for sorting AmpOrgGroup by Type.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
+     *
      */
     public static class HelperAmpOrgGroupTypeComparator implements Comparator<AmpOrgGroup> {
         public int compare(AmpOrgGroup o1, AmpOrgGroup o2) {
@@ -2662,9 +2662,9 @@ public class DbUtil {
 
     /**
      * This class is used for sorting organisations by name.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
+     *
      */
     public static class HelperAmpOrganisationNameComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2693,9 +2693,9 @@ public class DbUtil {
 
     /**
      * This class is used for sorting organisations by acronym.
-     * 
+     *
      * @author Dare Roinishvili
-     * 
+     *
      */
     public static class HelperAmpOrganisatonAcronymComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2733,9 +2733,9 @@ public class DbUtil {
      * This class is used for sorting organisation by group. such long and
      * complicated case is necessary because orgGroup maybe empty for
      * organisation
-     * 
+     *
      * @author Dare Roinishvili
-     * 
+     *
      */
     public static class HelperAmpOrganisationGroupComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2789,9 +2789,9 @@ public class DbUtil {
      * This class is used for sorting organisation by Type. such long and
      * complicated case is necessary because orgType maybe empty for
      * organisation
-     * 
+     *
      * @author Dare Roinisvili
-     * 
+     *
      */
     public static class HelperAmpOrganisationTypeComparator implements Comparator<AmpOrganisation> {
         Locale locale;
@@ -2855,9 +2855,9 @@ public class DbUtil {
     /**
      * Compares Values by type(actual,base,target) Used in Multi Program Manager
      * to sort them in order: base,actual,target of the same year
-     * 
+     *
      * @author dare
-     * 
+     *
      */
     public static class IndicatorValuesComparatorByTypeAndYear implements Comparator<AmpPrgIndicatorValue> {
         public int compare(AmpPrgIndicatorValue o1, AmpPrgIndicatorValue o2) {
@@ -2985,9 +2985,9 @@ public class DbUtil {
 
     /**
      * //for sorting users by Email
-     * 
+     *
      * @author dare
-     * 
+     *
      */
     public static class HelperEmailComparatorAsc implements Comparator {
         public int compare(Object obj1, Object obj2) {
@@ -3113,24 +3113,24 @@ public class DbUtil {
                 .add(Restrictions.sqlRestriction("trim({alias}.code) = ?", agreementCode, StringType.INSTANCE))
                 .uniqueResult();
     }
-    
+
     public static boolean hasDonorRole(Long id){
         Session session = null;
         Query query = null;
         boolean result = false;
         try {
-            session = PersistenceManager.getRequestDBSession();         
+            session = PersistenceManager.getRequestDBSession();
             String queryString = "select count(*) from "    + AmpOrgRole.class.getName()
                     + " r where (r.organisation.id = :orgId) and r.role.roleCode = :code";
             query = session.createQuery(queryString);
-            query.setLong("orgId", id); 
+            query.setLong("orgId", id);
             query.setString("code", Constants.FUNDING_AGENCY);
-            Integer count = (Integer) query.uniqueResult();         
-            result = count > 0;         
+            Integer count = (Integer) query.uniqueResult();
+            result = count > 0;
         } catch (Exception e) {
             logger.error("Exception from hasDonorRole()", e);
         }
-        
-        return result;  
+
+        return result;
     }
 }

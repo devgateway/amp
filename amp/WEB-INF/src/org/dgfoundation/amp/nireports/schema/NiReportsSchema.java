@@ -1,10 +1,6 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -89,7 +85,8 @@ public interface NiReportsSchema {
      * @return
      */
     public default List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
-        return cc.behaviour.getSubMeasureHierarchies(engine);
+        List<VSplitStrategy> res = cc.behaviour.getSubMeasureHierarchies(engine);
+        return res!=null?res:new ArrayList<>();
     }
 
     SubDimensions getSubDimensions();

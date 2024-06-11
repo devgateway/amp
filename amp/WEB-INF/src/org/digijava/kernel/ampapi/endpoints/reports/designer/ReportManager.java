@@ -83,6 +83,7 @@ public class ReportManager {
     public static final String REPORT = "report";
 
     public static final String PUBLIC_REPORT_GENERATOR_MODULE_NAME = "Public Report Generator";
+    public static final String PUBLIC_VIEW_CHECKBOX = "Public View Checkbox";
 
     private static TranslatorService translatorService = AMPTranslatorService.INSTANCE;
 
@@ -473,7 +474,7 @@ public class ReportManager {
         boolean isMultilingual = TranslationSettings.getCurrent().isMultilingual();
         Map<String, String> translations = new HashMap<>();
         if (isMultilingual) {
-            MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 
+            MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class,
                     ampReport.getAmpReportId(), "name", null, null);
             translations = mifv.getTranslations();
         }

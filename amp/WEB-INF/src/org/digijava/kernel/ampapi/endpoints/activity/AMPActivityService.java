@@ -20,11 +20,15 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion;
 
 public class AMPActivityService implements ActivityService {
-    
+    Logger logger = LoggerFactory.getLogger(AMPActivityService.class);
+
+
     /**
      * Checks if the activity is stale. Used only for the case when new activity versions are created.
      */
@@ -37,7 +41,7 @@ public class AMPActivityService implements ActivityService {
         if (activityCount.longValue() == 0) {
             return false;
         }
-        
+
         Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
                 .createAlias("ampActivityLastVersion", "a")
                 .add(Restrictions.and(
@@ -45,10 +49,10 @@ public class AMPActivityService implements ActivityService {
                         Restrictions.eq("version", activityGroupVersion)))
                 .setProjection(Projections.count("a.ampActivityId"))
                 .uniqueResult();
-        
+
         return latestActivityCount.longValue() == 0;
     }
-    
+
     /**
      * @param ampTeamMember    team member
      * @return true if add activity is allowed
@@ -60,7 +64,7 @@ public class AMPActivityService implements ActivityService {
                 && (FeaturesUtil.isVisibleField("Add Activity Button")
                 || FeaturesUtil.isVisibleField("Add SSC Button"));
     }
-    
+
     /**
      * @param ampTeamMember    team member
      * @param activityId    activity id
@@ -69,26 +73,27 @@ public class AMPActivityService implements ActivityService {
     @Override
     public boolean isEditableActivity(AmpTeamMember ampTeamMember, Long activityId) {
         TeamMember tm = new TeamMember(ampTeamMember);
+        logger.info("Team ID:"+tm.getTeamId());
         return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(tm).contains(activityId);
     }
-    
+
     @Override
     public AmpActivityVersion getActivity(Long activityId) throws DgException {
         return ActivityUtil.loadActivity(activityId);
     }
-    
+
     @Override
     public AmpActivityVersion saveActivity(AmpActivityVersion newActivity, List<AmpContentTranslation> translations,
             List<AmpContentTranslation> cumulativeTranslations,
             AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
             EditorStore editorStore, Site site) throws Exception {
-        
+
         Session session = PersistenceManager.getSession();
         return saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
                 Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                 session, saveContext, editorStore, site);
     }
-    
+
     @Override
     public void updateLuceneIndex(AmpActivityVersion newActivity, AmpActivityVersion oldActivity, boolean update,
                                   TranslationSettings trnSettings, List<AmpContentTranslation> translations,
@@ -97,6 +102,6 @@ public class AMPActivityService implements ActivityService {
         Locale lang = Locale.forLanguageTag(trnSettings.getDefaultLangCode());
         LuceneUtil.addUpdateActivity(rootPath, update, site, lang, newActivity, oldActivity, translations);
     }
-    
-    
+
+
 }

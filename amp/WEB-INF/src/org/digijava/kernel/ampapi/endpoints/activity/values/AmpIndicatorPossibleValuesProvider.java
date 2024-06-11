@@ -53,7 +53,6 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         List<Long> themeIds = session.createNativeQuery(sql)
                 .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
                 .getResultList();
-        session.close();
         return themeIds;
 
     }

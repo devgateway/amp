@@ -28,6 +28,7 @@ import org.digijava.kernel.ampapi.exception.ImportFailedException;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.DBPersistenceTransactionManager;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.PersistenceTransactionManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
@@ -40,6 +41,7 @@ import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.validator.ActivityValidationContext;
@@ -48,7 +50,10 @@ import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.hibernate.Session;
 import org.hibernate.StaleStateException;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
@@ -56,6 +61,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
@@ -269,6 +275,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             org.digijava.module.aim.util.ActivityUtil.setCurrentWorkspacePrefixIntoRequest(newActivity);
 
             validateAndImport(newActivity, newJson);
+            checkIndicators(newActivity);
 
             if (errors.isEmpty()) {
                 prepareToSave();
@@ -289,6 +296,48 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         if (!errors.isEmpty()) {
             logger.error("Errors occurred during activity import: "+errors);
             throw new ImportFailedException("Trigger rollback");
+        }
+    }
+
+    private void checkIndicators(AmpActivityVersion ampActivityVersion)
+    {
+        boolean filterIndicatorsByProgram= FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FILTER_INDICATORS_BY_PROGRAM);
+        if (filterIndicatorsByProgram)
+        {
+
+            String globalProgramScheme = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GLOBAL_PROGRAM_SCHEME);
+            if (globalProgramScheme!=null) {
+
+                Long programSettingId = Long.parseLong(globalProgramScheme);
+                Session session = PersistenceManager.getRequestDBSession();
+                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE t.indlevel= :settingId";
+                Query query = session.createQuery(hql);
+                query.setParameter("settingId", programSettingId);
+                List<AmpTheme> globalSchemePrograms = query.list();
+
+                String sql = "SELECT * FROM AMP_INDICATOR_CONNECTION " +
+                        "WHERE activity_id = :activityId AND sub_clazz = 'a'";
+                List<IndicatorActivity> indicatorActivities = session.createNativeQuery(sql)
+                        .setParameter("activityId", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE)
+                        .getResultList();
+                List<AmpIndicator> validIndicators = new ArrayList<>();
+                for (IndicatorActivity indicatorActivity : indicatorActivities) {
+//
+                    for (IndicatorTheme indicatorTheme : indicatorActivity.getIndicator().getValuesTheme()) {
+                        boolean containsProgram = globalSchemePrograms.contains(indicatorTheme.getTheme());
+                        if (containsProgram) {
+                            validIndicators.add(indicatorActivity.getIndicator());
+                            break;
+                        }
+                    }
+                }
+                if (!validIndicators.isEmpty()) {
+                    addError(ValidationErrors.INDICATORS_NOT_BELONG_TO_PROGRAM_SCHEME.withDetails(ampActivityVersion.getAmpActivityId()+""));
+                }
+
+            }
+
+
         }
     }
 

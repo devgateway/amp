@@ -90,7 +90,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
               </div>
               <div className={styles.view_item}>
                 <h4 className={styles.label}>{translations["amp.indicatormanager:indicator-description"]}</h4>
-                <p className={styles.value}>{indicator.description  === "" || '' ? 'No Description available': indicator.description}</p>
+                <p className={styles.value}>{indicator.description  === "" || '' ? translations["amp.indicatormanager:no-description-available"]: indicator.description}</p>
               </div>
             </Row>
 

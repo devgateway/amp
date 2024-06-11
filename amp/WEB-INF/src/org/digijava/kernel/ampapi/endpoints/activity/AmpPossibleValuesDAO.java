@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Octavian Ciubotaru
@@ -253,11 +254,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
+                List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
 
                 for (AmpIndicator indicator : indicators) {
+                    List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
 
-                    for (IndicatorConnection indicatorTheme : indicator.getValuesTheme()) {
-                        boolean containsProgram = globalSchemePrograms.contains(((IndicatorTheme)indicatorTheme).getTheme());
+                    for (Long progId : indicatorPrograms) {
+                        boolean containsProgram = globalSchemeProgramIds.contains(progId);
                         if (containsProgram) {
                             filteredIndicators.add(indicator);
                             break;
@@ -272,14 +275,14 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
         return !filterIndicatorsByProgram?indicators:filteredIndicators;
     }
 
-    private List<AmpIndicator> getPrograms(Long indicatorId) {
+    private List<Long> getProgramIds(Long indicatorId) {
         Session session = PersistenceManager.getRequestDBSession();
-        String sql = "SELECT ic FROM AMP_INDICATOR_CONNECTION " +
-                "WHERE ic.indicator_id = :indicatorId AND ic.sub_clazz = 'a'";
-        List<AmpIndicator> indicators = session.createNativeQuery(sql)
+        String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
+                "WHERE indicator_id = :indicatorId AND sub_clazz = 'a'";
+        List<Long> themeIds = session.createNativeQuery(sql)
                 .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
                 .getResultList();
-        return indicators;
+        return themeIds;
 
     }
 

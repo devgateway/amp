@@ -333,6 +333,17 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                         }
                     }
                 }
+//                for (AmpIndicator indicator : indicators) {
+//                    List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
+//
+//                    for (Long progId : indicatorPrograms) {
+//                        boolean containsProgram = globalSchemeProgramIds.contains(progId);
+//                        if (containsProgram) {
+//                            filteredIndicators.add(indicator);
+//                            break;
+//                        }
+//                    }
+//                }
                 if (validIndicators.isEmpty()) {
                     addError(ValidationErrors.INDICATORS_NOT_BELONG_TO_PROGRAM_SCHEME.withDetails(ampActivityVersion.getAmpActivityId()+""));
                 }

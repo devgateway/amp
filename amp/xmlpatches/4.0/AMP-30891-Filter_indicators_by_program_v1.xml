@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30891</jira>
+    <keyword>Views</keyword>
+    <author>bmokandu</author>
+    <description>add global setting to filter indicators by program</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                delete from amp_global_settings where  settings_name='Filter indicators by program' and section='general';
+
+                insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section)
+                values (nextval('amp_global_settings_seq'), 'Filter indicators by program','true','t_Boolean','Filter indicators by program', 'Programs');
+
+
+                CREATE OR REPLACE VIEW v_g_settings_indicator_programs AS
+                SELECT amp_program_settings_id, name AS value FROM amp_program_settings;
+
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
+                ((select max(id) + 1 FROM amp_global_settings), 'Global Program Scheme', (select max(id) from v_g_settings_indicator_programs), 'v_g_settings_indicator_programs', 'Global Program Scheme to be used to filter indicators', 'Programs');
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>
+
+

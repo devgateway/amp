@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
  * @author Octavian Ciubotaru
  */
 public class AmpPossibleValuesDAO implements PossibleValuesDAO {
+    private static final Logger logger = LoggerFactory.getLogger(AmpPossibleValuesDAO.class);
 
     public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
 
     private static final int LOC_QUERY_COL_NUM = 8;
-    private static final Logger logger = LoggerFactory.getLogger(AmpPossibleValuesDAO.class);
 
 
     /**
@@ -245,11 +245,11 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 .setCacheRegion(CACHE)
                 .list();
         List<AmpIndicator> filteredIndicators = new ArrayList<>();
-        logger.info("Filter indicators by program: "+filterIndicatorsByProgram);
+        logger.error("Filter indicators by program: "+filterIndicatorsByProgram);
         if (filterIndicatorsByProgram)
         {
             String globalProgramScheme = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GLOBAL_PROGRAM_SCHEME);
-            logger.info("Global program scheme: "+globalProgramScheme);
+            logger.error("Global program scheme: "+globalProgramScheme);
             if (globalProgramScheme!=null) {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
@@ -260,10 +260,10 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
                 List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
-                logger.info("Global scheme programs: "+globalSchemeProgramIds);
+                logger.error("Global scheme programs: "+globalSchemeProgramIds);
                 for (AmpIndicator indicator : indicators) {
                     List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
-                    logger.info("Indicator programs: "+indicatorPrograms);
+                    logger.error("Indicator programs: "+indicatorPrograms);
 
                     for (Long progId : indicatorPrograms) {
                         boolean containsProgram = globalSchemeProgramIds.contains(progId);

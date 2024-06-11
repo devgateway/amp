@@ -35,6 +35,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,53 +49,119 @@ public class ImporterUtil {
     private static final Logger logger = LoggerFactory.getLogger(ImporterUtil.class);
      static void setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, String
             adjustmentType) {
-        int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
-        String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
-        detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
-        String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+         int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
+         String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+         detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
+         String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+         int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "{transactionDate}"));
+         String separateFundingDate = separateFundingDateColumn>=0? row.getCell(separateFundingDateColumn).getStringCellValue(): null;
+         int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "{currencyCode}"));
+         String currencyCode=currencyCodeColumn>=0? row.getCell(currencyCodeColumn).getStringCellValue(): "XOF";
 
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("{donorAgency}"))
             {
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType);
+                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode);
 
             }
             else {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
                 updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org", session, "donor");
-                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+                updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode);
             }
 
         }else {
-            updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+            updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode);
         }
+    }
+
+
+    private static String getFundingDate(String dateString)
+    {
+        LocalDate date = LocalDate.now();
+        if (isCommonDateFormat(dateString)){
+            List<DateTimeFormatter> formatters = Arrays.asList(
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                    DateTimeFormatter.ofPattern("MM/dd/yyyy"),
+                    DateTimeFormatter.ofPattern("MM-dd-yyyy"),
+                    DateTimeFormatter.ofPattern("yyyy/MM/dd"),
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            );
+
+            for (DateTimeFormatter formatter : formatters) {
+                try {
+                    date = LocalDate.parse(dateString, formatter);
+                    break;
+                } catch (DateTimeParseException e) {
+                    // Continue to next formatter
+                }
+            }
+        }
+        else {
+            date = LocalDate.of(Integer.parseInt(dateString), 1, 1);
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return date.format(formatter);
+    }
+
+
+    public static boolean isCommonDateFormat(String dateString) {
+        List<String> dateFormats = Arrays.asList(
+                "yyyy-MM-dd",
+                "dd-MM-yyyy",
+                "MM-dd-yyyy",
+                "MM/dd/yyyy",
+                "dd/MM/yyyy",
+                "dd.MM.yyyy",
+                "yyyy/MM/dd"
+        );
+
+        for (String dateFormat : dateFormats) {
+            try {
+                LocalDate.parse(dateString, DateTimeFormatter.ofPattern(dateFormat));
+                return true;
+            } catch (Exception e) {
+                // Ignore and continue with the next format
+            }
+        }
+
+        return false;
     }
 
     static void setAFundingItemForTxt(Map<String, String> row ,Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session,Number value, boolean commitment, boolean disbursement, String
             adjustmentType) {
-//        int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
         String finInstrument= row.get(getKey(config, "{financingInstrument}"));
         finInstrument = finInstrument!= null? finInstrument : "";
 
-        //        detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
         String typeOfAss =row.get(getKey(config, "{typeOfAssistance}"));
         typeOfAss=typeOfAss!=null? typeOfAss:"";
+
+
+        String separateFundingDate =row.get(getKey(config, "{transactionDate}"));
+        separateFundingDate=separateFundingDate!=null? separateFundingDate:"";
+
+        String currencyCode =row.get(getKey(config, "{currencyCode}"));
+        currencyCode=currencyCode!=null? currencyCode:"XOF";
+
+
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("{donorAgency}"))
             {
-                updateFunding(importDataModel, session, value, entry.getKey(), getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType);
+                updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode);
 
             }
             else {
                 String donorColumn = row.get(getKey(config, "{donorAgency}"));
                 updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org", session, "donor");
-                updateFunding(importDataModel, session, value, entry.getKey(),  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+                updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode);
             }
 
         }else {
-            updateFunding(importDataModel, session, value, entry.getKey(), new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType);
+            updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode);
         }
     }
 
@@ -146,25 +213,34 @@ public class ImporterUtil {
     }
 
 
-    private static String getFundingDate(String yearString)
-    {
-        LocalDate date = LocalDate.of(Integer.parseInt(yearString), 1, 1);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        return date.format(formatter);
-    }
-    private static void updateFunding(ImportDataModel importDataModel, Session session, Number amount, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
-            adjustmentType) {
+     private static void updateFunding(ImportDataModel importDataModel, Session session, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
+             adjustmentType, String currencyCode) {
         String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
-        Long currencyId = getCurrencyId(session);
+        Long currencyId = getCurrencyId(session,currencyCode);
         Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql,adjustmentType );
         Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql,assistanceType);
         Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finInst);
         Long orgRole = getOrganizationRole(session);
 
-        String yearString = findYearSubstring(columnHeader);
-        String fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+        String yearString = null;
+        String fundingDate;
+        if (separateFundingDate!=null)
+        {
+            if (isCommonDateFormat(separateFundingDate)){
+            fundingDate=getFundingDate(separateFundingDate);
+            }else {
+                yearString = findYearSubstring(separateFundingDate);
+                fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+
+            }
+        }
+        else {
+            yearString=findYearSubstring(columnHeader);
+            fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+
+        }
+
 
         Funding funding = new Funding();
         funding.setDonor_organization_id(orgId);
@@ -214,7 +290,7 @@ public class ImporterUtil {
         return orgRole;
     }
 
-    private static Long getCurrencyId(Session session) {
+    private static Long getCurrencyId(Session session, String currencyCode) {
 
         if (ConstantsMap.containsKey("currencyId")) {
             Long val = ConstantsMap.get("currencyId");
@@ -229,7 +305,7 @@ public class ImporterUtil {
                 "WHERE ac.currencyCode = :currencyCode";
 
         Query query = session.createQuery(hql);
-        query.setString("currencyCode", "XOF");
+        query.setString("currencyCode", currencyCode);
         Long currencyId = (Long) query.uniqueResult();
         ConstantsMap.put("currencyId", currencyId);
         return currencyId;

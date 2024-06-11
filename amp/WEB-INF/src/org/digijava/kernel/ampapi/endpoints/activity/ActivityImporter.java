@@ -331,7 +331,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                         }
                     }
                 }
-                if (!validIndicators.isEmpty()) {
+                if (validIndicators.isEmpty()) {
                     addError(ValidationErrors.INDICATORS_NOT_BELONG_TO_PROGRAM_SCHEME.withDetails(ampActivityVersion.getAmpActivityId()+""));
                 }
 

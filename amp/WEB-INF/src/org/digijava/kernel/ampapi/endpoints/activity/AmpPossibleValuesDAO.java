@@ -256,8 +256,8 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
                 for (AmpIndicator indicator : indicators) {
 
-                    for (IndicatorTheme indicatorTheme : indicator.getValuesTheme()) {
-                        boolean containsProgram = globalSchemePrograms.contains(indicatorTheme.getTheme());
+                    for (IndicatorConnection indicatorTheme : indicator.getValuesTheme()) {
+                        boolean containsProgram = globalSchemePrograms.contains(((IndicatorTheme)indicatorTheme).getTheme());
                         if (containsProgram) {
                             filteredIndicators.add(indicator);
                             break;
@@ -270,6 +270,17 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
 
         return !filterIndicatorsByProgram?indicators:filteredIndicators;
+    }
+
+    private List<AmpIndicator> getPrograms(Long indicatorId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        String sql = "SELECT ic FROM AMP_INDICATOR_CONNECTION " +
+                "WHERE ic.indicator_id = :indicatorId AND ic.sub_clazz = 'a'";
+        List<AmpIndicator> indicators = session.createNativeQuery(sql)
+                .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
+                .getResultList();
+        return indicators;
+
     }
 
     @Override

@@ -21,40 +21,43 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
-import org.digijava.kernel.ampapi.endpoints.ndd.utils.DashboardUtils;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpIndicatorLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
-import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.hibernate.Session;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static org.digijava.module.aim.util.IndicatorUtil.findIndicatorConnectionByLocationCategoryValue;
+
 
 public class MeService {
     protected static final Logger logger = Logger.getLogger(MeService.class);
@@ -69,17 +72,17 @@ public class MeService {
 
 
     public List<MEIndicatorDTO> getIndicatorsByProgram (Long programId) {
-        List<AmpIndicator> indicators = new ArrayList<>();
-        AmpTheme program = ProgramUtil.getThemeById(programId);
+        Set<AmpIndicator> programIndicators = null;
 
-        Set<IndicatorTheme> programIndicators =  program.getIndicators();
+        try {
+            programIndicators = IndicatorUtil.getThemeIndicators(programId);
+        } catch (Exception e) {
+            throw new ApiRuntimeException(NOT_FOUND,
+                    ApiError.toError("Program with id " + programId + " does not exist"));
+        }
 
 
-        programIndicators.forEach(indicator -> {
-            indicators.add(indicator.getIndicator());
-        });
-
-        return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
+        return programIndicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
     }
 
     public List<MEIndicatorDTO> getIndicatorsBySector (Long sectorId) {
@@ -123,6 +126,135 @@ public class MeService {
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
         return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+    }
+
+    public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
+        List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<ProgramIndicatorValues>();
+
+        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+
+        if (yearsCount < 5) {
+            yearsCount = 5;
+        }
+
+        // Getting params array of objectives
+        List<Integer> objectiveIds = (List<Integer>) params.getFilters().get("national-planning-objectives-level-1");
+
+        for (Integer objectiveId : objectiveIds) {
+            Long id = Long.valueOf(objectiveId);
+            AmpTheme objective = ProgramUtil.getThemeById(id);
+            List<AmpTheme> programSubThemes =  new ArrayList<>();
+            // Check if the objectives are pillars only
+            if(!objective.getIndlevel().equals(1)){
+                continue;
+            }
+            try {
+                programSubThemes = ProgramUtil.getSubThemes(id);
+            } catch (DgException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Clone or create a new instance of params for each programId
+            SettingsAndFiltersParameters modifiedParams = cloneWithSingleObjective(params, id);
+
+            ProgramIndicatorValues programValues = new ProgramIndicatorValues(objective.getAmpThemeId(), objective.getName());
+            // Get all sub programs from parent theme and create objective/sub programs from it
+            for(AmpTheme subProgram: programSubThemes) {
+                ProgramIndicatorValues subProgramValue = new ProgramIndicatorValues(subProgram.getAmpThemeId(), subProgram.getName());
+                Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(modifiedParams);
+
+                List<IndicatorYearValues> indicatorValues = new ArrayList<IndicatorYearValues>();
+                for (Map.Entry<Long, List<YearValue>> entry : indicatorsWithYearValues.entrySet()) {
+                    // Access the indicator ID (key)
+                    Long indicatorId = entry.getKey();
+                    AmpIndicator existingIndicator = getIndicatorById(indicatorId);
+                    // Check to see it the value is added to the same subProgram
+                    if(existingIndicator.getProgram().getAmpThemeId().equals(subProgram.getAmpThemeId())){
+                        IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+                        // Include indicators name
+                        singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
+                        indicatorValues.add(singelIndicatorYearValues);
+                    }
+                }
+
+                // As an update we need to return indicators with also no values and give them values of 0
+                addIndicatorsWithNoValues(params, subProgram.getAmpThemeId(), indicatorValues, yearsCount);
+
+                subProgramValue.setIndicators(indicatorValues);
+                programIndicatorValues.add(subProgramValue);
+            }
+        }
+
+        return programIndicatorValues;
+    }
+
+    private void addIndicatorsWithNoValues(SettingsAndFiltersParameters params, Long id, List<IndicatorYearValues> indicatorValues, int yearsCount){
+        // Get the first element of the location category value id, NOTE here we are taking the first element
+        // since the api sends one location id in the array at a time
+        List<Integer> locationIds = (List<Integer>) params.getFilters().get("administrative-level-0");
+        if (locationIds != null && !locationIds.isEmpty()) {
+            Long locationId = Long.valueOf(locationIds.get(0));
+            List<IndicatorActivity> locationIndicatorConnections = new ArrayList<>();
+            try {
+                locationIndicatorConnections = findIndicatorConnectionByLocationCategoryValue(locationId);
+            } catch (DgException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Filter indicators that contains the same objective
+            List<IndicatorActivity> filteredIndicatorsList = locationIndicatorConnections.stream()
+                    // Filter the list based on the nested ampThemeId matching the objectiveId
+                    .filter(indicatorActivity -> indicatorActivity.getActivity() != null && indicatorActivity.getActivity().getActPrograms() != null)
+                    .filter(indicatorActivity -> indicatorActivity.getActivity().getActPrograms().stream()
+                            .anyMatch(ampActivityProgram -> ampActivityProgram.getProgram() != null && id.equals(ampActivityProgram.getProgram().getAmpThemeId())))
+                    .collect(Collectors.toList());
+
+            for(IndicatorActivity filteredIndicator :filteredIndicatorsList){
+                if(!indicatorValues.stream()
+                        .anyMatch(indicator -> indicator.getIndicator().equals(filteredIndicator.getIndicator()))) {
+
+                    Map<Long, List<YearValue>> indicatorsWithYearValuesDummy = new HashMap<>();
+
+                    IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(filteredIndicator.getIndicator(), indicatorsWithYearValuesDummy, yearsCount);
+                    // Include indicators name
+                    singelIndicatorYearValues.setIndicatorName(filteredIndicator.getIndicator().getName());
+                    indicatorValues.add(singelIndicatorYearValues);
+                }
+            }
+
+            // If filter indicator by location is active also include all other indicators by the country
+            if(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION)){
+                List<AmpIndicatorLocation> indicatorLocations = new ArrayList<>();
+                try {
+                    indicatorLocations = IndicatorUtil.findIndicatorLocationByLocationId(locationId);
+                } catch (DgException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Check if the indicators in this indicator locations are associated with the objective
+                List<AmpIndicator> objectiveIndicators = indicatorLocations.stream()
+                        .filter(indicator -> indicator.getIndicator() != null && indicator.getIndicator().getProgram() != null)
+                        .map(AmpIndicatorLocation::getIndicator)
+                        .filter(indicator -> id.equals(indicator.getProgram().getAmpThemeId()))
+                        .collect(Collectors.toList());
+
+                // Check if the indicators in objecitve indicators are present in indicatorValues
+                if(objectiveIndicators != null && !objectiveIndicators.isEmpty()){
+                    for (AmpIndicator objIndicator: objectiveIndicators){
+                        if(!indicatorValues.stream()
+                                .anyMatch(indicator -> indicator.getIndicator().equals(objIndicator))) {
+
+                            Map<Long, List<YearValue>> indicatorsWithYearValuesDummy = new HashMap<>();
+
+                            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(objIndicator, indicatorsWithYearValuesDummy, yearsCount);
+                            // Include indicators name
+                            singelIndicatorYearValues.setIndicatorName(objIndicator.getName());
+                            indicatorValues.add(singelIndicatorYearValues);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
@@ -209,6 +341,51 @@ public class MeService {
         return data;
     }
 
+    public List<SectorClassificationDTO> getSectorClassification () {
+        List<SectorClassificationDTO> sectorClassificationDTOs = new ArrayList<>();
+        List<AmpClassificationConfiguration> sectorClassificationConfig = SectorUtil.getAllClassificationConfigs()
+                .stream()
+                .filter(config -> config.getClassification() != null)
+                .collect(Collectors.toList());
+
+        for (AmpClassificationConfiguration config : sectorClassificationConfig) {
+            AmpSectorScheme scheme = config.getClassification();
+            List<AmpSector> schemeSectors = (List<AmpSector>) SectorUtil.getSectorLevel1(Math.toIntExact(scheme.getAmpSecSchemeId()));
+            SectorDTO[] children = schemeSectors.stream().map(SectorDTO::new).toArray(SectorDTO[]::new);
+
+            SectorSchemeDTO schemeDTO = new SectorSchemeDTO(scheme, children);
+            sectorClassificationDTOs.add(new SectorClassificationDTO(config, schemeDTO));
+        }
+
+        return sectorClassificationDTOs;
+    }
+
+    public List<MEIndicatorDTO> getIndicatorsBySectorClassification (Long sectorClassificationId) {
+        List<AmpIndicator> indicators = new ArrayList<>();
+        AmpClassificationConfiguration sectorClassification = null;
+
+        try {
+            sectorClassification = SectorUtil.getClassificationConfigById(sectorClassificationId);
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicators");
+        }
+
+
+        if (sectorClassification == null) {
+            throw new ApiRuntimeException(NOT_FOUND,
+                    ApiError.toError("Sector classification with id " + sectorClassificationId + " does not exist"));
+        };
+
+        List<AmpSector> schemeSectors = (List<AmpSector>) SectorUtil.getSectorLevel1(
+                Math.toIntExact(sectorClassification.getClassification().getAmpSecSchemeId()));
+
+        for (AmpSector sector : schemeSectors) {
+            indicators.addAll(sector.getIndicators());
+        };
+
+        return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
+    }
+
     private GeneratedReport runIndicatorReport(SettingsAndFiltersParameters settingsAndFilters) {
         ReportSpecificationImpl
                 spec = new ReportSpecificationImpl("indicator-data", ArConstants.INDICATOR_TYPE);
@@ -224,7 +401,7 @@ public class MeService {
         return EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
     }
 
-    private void applySettingsAndFilters(
+    public void applySettingsAndFilters(
             SettingsAndFiltersParameters settingsAndFilters,
             ReportSpecificationImpl spec) {
 
@@ -247,4 +424,30 @@ public class MeService {
             throw new RuntimeException("Failed to load indicators");
         }
     }
+
+    private AmpIndicator getIndicatorById(Long indicatorId){
+        try {
+            return IndicatorUtil.getIndicator(indicatorId);
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicator");
+        }
+    }
+
+    // Helper method to clone the original params and update the "national-planning-objectives-level-2" filter
+    private SettingsAndFiltersParameters cloneWithSingleObjective(SettingsAndFiltersParameters originalParams, Long objectiveId) {
+        // Implement the cloning or creation of a new instance based on the original
+        // This could involve deep copying fields or creating a new instance and manually copying values
+        SettingsAndFiltersParameters modifiedParams = new SettingsAndFiltersParameters();
+
+        // Copy settings and other filters as needed
+        modifiedParams.setSettings(originalParams.getSettings());
+
+        // Update the "national-planning-objectives-level-2" filter with a single objectiveId
+        Map<String, Object> filters = new HashMap<>(originalParams.getFilters());
+        filters.put("national-planning-objectives-level-1", Arrays.asList(objectiveId.intValue())); // Convert back to Integer if necessary
+        modifiedParams.setFilters(filters);
+
+        return modifiedParams;
+    }
+
 }

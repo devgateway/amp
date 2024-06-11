@@ -102,6 +102,7 @@ public class MeasureConstants {
 
     //type = I
     public static final String INDICATOR_ACTUAL_VALUE = "Indicator Actual Value";
+    public static final String INDICATOR_TARGET_VALUE = "Indicator Target Value";
 
     public static final String ALWAYS_PRESENT = "Always Present";
 }

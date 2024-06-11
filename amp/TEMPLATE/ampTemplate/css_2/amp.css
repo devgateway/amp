@@ -1440,3 +1440,5 @@ div.footer {
     display:block;
     margin:auto;
 }
+
+.indicator_values_button_display{display: flex;}

@@ -14,6 +14,7 @@ import org.digijava.kernel.util.ModuleUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -52,6 +53,8 @@ public class IndicatorManagerService {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static final String FILTER_BY_PROGRAM = "Filter By Program";
+
+    public static final String FILTER_BY_INDICATOR_LOCATION = "Filter By Indicator Location";
     public static final String FILTER_BY_SECTOR = "Filter By Sector";
 
     public static String INDICATOR_CATEGORY_KEY = "core_indicator_type";
@@ -105,9 +108,12 @@ public class IndicatorManagerService {
 
         Set<AmpIndicatorGlobalValue> indicatorValues = new HashSet<>();
 
+        AmpTheme program = null;
+
         if (indicatorRequest.getProgramId() != null) {
-            indicator.setProgram(ProgramUtil.getTheme(indicatorRequest.getProgramId()));
-            validateProgramSettingsAndGlobalValues(indicatorRequest, indicator);
+            program = ProgramUtil.getTheme(indicatorRequest.getProgramId());
+            indicator.setProgram(program);
+//            validateProgramSettingsAndGlobalValues(indicatorRequest, indicator);
         }
 
         if (indicatorRequest.getBaseValue() != null) {
@@ -146,9 +152,16 @@ public class IndicatorManagerService {
             indicator.setIndicatorsCategory(categoryValue);
         }
 
-
-
         session.save(indicator);
+
+        if (program != null) {
+            try {
+                IndicatorUtil.assignIndicatorToTheme(program, indicator);
+            } catch (DgException e) {
+                throw new ApiRuntimeException(BAD_REQUEST,
+                        ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " could not be assigned to program with id " + program.getAmpThemeId()));
+            }
+        }
 
         return new MEIndicatorDTO(indicator);
     }
@@ -266,6 +279,7 @@ public class IndicatorManagerService {
 
     public List<ProgramSchemeDTO> getProgramScheme() {
         return ProgramUtil.getAmpActivityProgramSettingsList(false).stream()
+                .filter(program -> program.getDefaultHierarchy() != null)
                 .map(ProgramSchemeDTO::new)
                 .collect(Collectors.toList());
     }
@@ -289,9 +303,12 @@ public class IndicatorManagerService {
             indicator.setType(indRequest.isAscending() ? "A" : "D");
             indicator.setCreationDate(indRequest.getCreationDate());
 
+            AmpTheme program = null;
+
             if (indRequest.getProgramId() != null) {
-                indicator.setProgram(ProgramUtil.getTheme(indRequest.getProgramId()));
-                validateProgramSettingsAndGlobalValues(indRequest, indicator);
+                program = ProgramUtil.getTheme(indRequest.getProgramId());
+                indicator.setProgram(program);
+//                validateProgramSettingsAndGlobalValues(indRequest, indicator);
             }
 
             Set <AmpIndicatorGlobalValue> updatedValues = new HashSet<>();
@@ -331,6 +348,15 @@ public class IndicatorManagerService {
             }
 
             session.update(indicator);
+            if (program != null) {
+                try {
+                    IndicatorUtil.assignIndicatorToTheme(program, indicator);
+                } catch (DgException e) {
+                    throw new ApiRuntimeException(BAD_REQUEST,
+                            ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " could not be assigned to program with id " + program.getAmpThemeId()));
+                }
+            }
+
             return new MEIndicatorDTO(indicator);
         }
 

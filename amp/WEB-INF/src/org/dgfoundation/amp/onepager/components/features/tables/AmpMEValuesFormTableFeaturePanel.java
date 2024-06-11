@@ -21,6 +21,7 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
 
     protected IModel<Set<AmpIndicatorValue>> parentModel;
     protected IModel<Set<AmpIndicatorValue>> setModel;
+    protected IModel<Set<AmpIndicatorValue>> setBaseTargetModel;
 
     public AmpMEValuesFormTableFeaturePanel(
             String id, IModel<AmpIndicator> model, IModel<IndicatorActivity> indicatorActivity, IModel<AmpActivityLocation> location, String fmName, boolean hideLeadingNewLine, int titleHeaderColSpan) throws Exception {
@@ -35,6 +36,13 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
             @Override
             public boolean condition(AmpIndicatorValue item) {
                 return item.getValueType() == AmpIndicatorValue.ACTUAL && item.getActivityLocation() == location.getObject();
+            }
+        };
+
+        setBaseTargetModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
+            @Override
+            public boolean condition(AmpIndicatorValue item) {
+                return (item.getValueType() == AmpIndicatorValue.BASE || item.getValueType() == AmpIndicatorValue.TARGET) && item.getActivityLocation() == location.getObject();
             }
         };
     }

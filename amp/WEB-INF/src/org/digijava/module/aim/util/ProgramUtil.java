@@ -1435,14 +1435,7 @@ public class ProgramUtil {
             programSettings = createDefaultAmpActivityProgramSettingsList();
         }
 
-        Iterator<AmpActivityProgramSettings> iterator = programSettings.iterator();
-
-        while(iterator.hasNext()){
-            AmpActivityProgramSettings programSetting = iterator.next();
-            if(programSetting.getDefaultHierarchy() == null) {
-                iterator.remove();
-            }
-        }
+        programSettings.removeIf(programSetting -> programSetting.getDefaultHierarchy() == null);
 
         return programSettings;
     }
@@ -1501,7 +1494,7 @@ public class ProgramUtil {
         Transaction tx = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             if (settings != null) {
                 for (Object o : settings) {
                     AmpActivityProgramSettings setting = (AmpActivityProgramSettings) o;
@@ -1529,6 +1522,7 @@ public class ProgramUtil {
                         }
 
                         session.update(oldSetting);
+                        session.flush();
                     }
 
                 }

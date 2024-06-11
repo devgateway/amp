@@ -122,13 +122,13 @@ public class TeamUtil {
         return result;
     }
 
-    public static Set getRelatedTeamsForMember(TeamMember tm) 
+    public static Set getRelatedTeamsForMember(TeamMember tm)
     {
-        AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());      
+        AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
         return getRelatedTeamsForTeams(Arrays.asList(new AmpTeam[]{ampTeam}));
     }
 
-    
+
     public static Set getComputedOrgs(Collection relatedTeams) {
         Set teamAssignedOrgs = new TreeSet();
             Session session = PersistenceManager.getSession();
@@ -144,8 +144,8 @@ public class TeamUtil {
             }
         return teamAssignedOrgs;
     }
-    
-    
+
+
     public static Collection getAllTeams(Long teamId[]) {
         Session session = null;
         Collection col = new ArrayList();
@@ -190,7 +190,7 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } 
+        }
         return col;
     }
 
@@ -211,7 +211,7 @@ public class TeamUtil {
         }
        return col;
     }
-    
+
     public static Collection getAllRelatedTeamsByType(String type) {
         Session session = null;
         Collection col = new ArrayList();
@@ -249,13 +249,13 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } 
+        }
         colSet.addAll(col);
         //return col;
         return colSet;
     }
-    
-    
+
+
     /**
      * Retrieves all SSC workspaces
      * @return
@@ -263,7 +263,7 @@ public class TeamUtil {
     public static List<AmpTeam> getAllSSCWorkspaces() {
         return getAllTeamsByPrefix(Constants.SSC_WORKSPACE_PREFIX);
     }
-    
+
     /**
      * Retrieves all workspaces by the given workspace prefix
      * @param wsPrefix
@@ -272,7 +272,7 @@ public class TeamUtil {
     public static List<AmpTeam> getAllTeamsByPrefix(String wsPrefix) {
         Session session = null;
         List<AmpTeam> teams = new ArrayList<AmpTeam>();
-        
+
         try {
             session = PersistenceManager.getSession();
             String query = "select team from "
@@ -286,7 +286,7 @@ public class TeamUtil {
         }
         return teams;
     }
-    
+
     /**
      * Creates a new team
      *
@@ -316,8 +316,8 @@ public class TeamUtil {
                 // team.getName() + " already exist");
                 teamExist = true;
                 return teamExist;
-            } 
-            
+            }
+
             // save the new team
             session.save(team);
 
@@ -336,7 +336,7 @@ public class TeamUtil {
                     if (fiscal != null)
                         break;
                 }
-            } 
+            }
             else
                 logger.error("[createTeam(-)] fiscal calendar collection is empty");
 
@@ -359,14 +359,14 @@ public class TeamUtil {
             session.save(ampAppSettings);
 
             // update all child workspaces parent team
-            if(childTeams != null && childTeams.size() > 0) {               
+            if(childTeams != null && childTeams.size() > 0) {
                 for(AmpTeam childTeam:childTeams)
                 {
                     childTeam.setParentTeamId(team);
                     session.update(childTeam);
                 }
             }
-                
+
                 //link shared resources with team
             List<Object[]> sharedDocs = null;
             String qstr="select c.nodeUUID,c.sharedNodeVersionUUID from " +CrSharedDoc.class.getName()  +" c where " +
@@ -415,13 +415,13 @@ public class TeamUtil {
                 AmpTeam team = (AmpTeam) itr.next();
                 if(team.getOrganizations()!=null){
                      team.getOrganizations().size(); //lazy init;
-                }               
+                }
                 workspace = new Workspace();
                 if (null == team.getDescription()) {
                     workspace.setDescription(null);
                 }
                 else {
-                    workspace.setDescription(team.getDescription().trim()); 
+                    workspace.setDescription(team.getDescription().trim());
                 }
                 workspace.setId(team.getAmpTeamId().toString());
                 workspace.setName(team.getName());
@@ -436,7 +436,7 @@ public class TeamUtil {
                 workspace.setWorkspacePrefix(team.getWorkspacePrefix());
                 workspace.setCrossteamvalidation(team.getCrossteamvalidation());
                 workspace.setIsolated(team.getIsolated());
-    
+
                 AmpTeamSummaryNotificationSettings notificationSettings =
                         (AmpTeamSummaryNotificationSettings) session.get(AmpTeamSummaryNotificationSettings.class,
                                 team.getAmpTeamId());
@@ -447,8 +447,8 @@ public class TeamUtil {
                     workspace.setSendSummaryChangesApprover(notificationSettings.getNotifyApprover());
                     workspace.setSendSummaryChangesManager(notificationSettings.getNotifyManager());
                 }
-                
-                
+
+
                 if (team.getParentTeamId() != null){
                     workspace.setParentTeamId(team.getParentTeamId().getAmpTeamId());
                     workspace.setParentTeamName(team.getParentTeamId().getName());
@@ -663,12 +663,12 @@ public class TeamUtil {
 
         } catch(Exception e) {
             throw new RuntimeException(e);
-        } 
+        }
         return memExist;
     }
-    
+
     /**
-     * 
+     *
      * @param teamId
      */
     public static void unlinkParentWorkspace(Long teamId) {
@@ -676,7 +676,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            
+
 //beginTransaction();
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
             team.setParentTeamId(null);
@@ -686,8 +686,8 @@ public class TeamUtil {
             logger.error(e.getMessage(), e);
         }
     }
-        
-    
+
+
     /**
      * Removes a team
      *
@@ -700,9 +700,9 @@ public class TeamUtil {
         Query qry = null;
 
         try {
-            
+
             RepairDbUtil.repairDb();
-            
+
             session = PersistenceManager.getRequestDBSession();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
@@ -744,7 +744,7 @@ public class TeamUtil {
                 t.setParentTeamId(null);
                 session.update(t);
             }
-            
+
             // Remove reference from RelatedTeam
             qryStr = "select t from " + AmpTeam.class.getName() + " t"
                 + " where (t.relatedTeamId=:teamId)";
@@ -776,9 +776,9 @@ public class TeamUtil {
             deleteAmpSummaryNotificationSettiongs(teamId);
 
             session.delete(team);
-            
+
             //remove related permissions
-            
+
             List <GatePermission> gatePermissionList=PMUtil.getPermissionsByTeam(String.valueOf(teamId));
             for (GatePermission perm:gatePermissionList) {
                 perm.setActions(null);
@@ -786,10 +786,10 @@ public class TeamUtil {
                 for (CompositePermission comp:perm.getCompositeLinkedPermissions()) {
                     comp.getPermissions().remove(perm);
                 }
-                
+
                 session.delete(perm);
             }
-            
+
             //tx.commit();
         } catch(ObjectNotFoundException objectNotFoundEx) {
             logger.error("Execption from removeTeam() :" + objectNotFoundEx.getMessage());
@@ -805,16 +805,16 @@ public class TeamUtil {
         Session session = PersistenceManager.getSession();
         AmpTeamSummaryNotificationSettings notificationSettings =
                 (AmpTeamSummaryNotificationSettings) session.get(AmpTeamSummaryNotificationSettings.class, teamId);
-    
+
         if (notificationSettings != null) {
             session.delete(notificationSettings);
         }
     }
-    
+
     private static void deleteAmpNPDSettiongs(Long teamId) {
         Session session = PersistenceManager.getSession();
         NpdSettings npdSettings = (NpdSettings) session.get(NpdSettings.class, teamId);
-        
+
         if (npdSettings != null) {
             session.delete(npdSettings);
         }
@@ -862,18 +862,18 @@ public class TeamUtil {
         }
         return member;
     }
-    
+
     public static void addTeamMember(AmpTeamMember member,
-                                     /*AmpApplicationSettings appSettings,*/ 
+                                     /*AmpApplicationSettings appSettings,*/
                                     Site site) {
         Session session = null;
-       
+
         try {
             session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
             session.saveOrUpdate(member);
             //session.saveOrUpdate(appSettings);
-            
+
             if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
@@ -900,7 +900,7 @@ public class TeamUtil {
             e.printStackTrace();
             throw new RuntimeException(e);
 
-        } 
+        }
     }
 
     public static boolean isMemberExisting(Long teamId, String email) {
@@ -930,7 +930,7 @@ public class TeamUtil {
         return memberExist;
     }
 
- 
+
     public static void removeActivitiesFromTeam(Long[] activities, Long teamId) {
         Session session = null;
         Transaction tx = null;
@@ -1002,21 +1002,21 @@ public class TeamUtil {
         }
         return team;
     }
- 
+
     /**
-     * gets list of documents attached any of the AmpActivityId's in the given list 
+     * gets list of documents attached any of the AmpActivityId's in the given list
      * @return
      */
     public static Map<Long, List<AmpActivityDocument>> getDocumentsByActivityIds(Collection<Long> activityIds) {
         Map<Long, List<AmpActivityDocument>> result = new java.util.TreeMap<Long, List<AmpActivityDocument>>();
-        
+
         if (activityIds.size() == 0)
             return result;
-        
+
         String queryString = "select doc, doc.ampActivity.ampActivityId FROM "
             + AmpActivityDocument.class.getName() + " doc WHERE doc.ampActivity.ampActivityId IN ("
             + getCommaSeparatedList(activityIds) + ")";
-        
+
         Session session = PersistenceManager.getRequestDBSession();
         Query qry = session.createQuery(queryString.toString());
         for (Object[] rs : (List<Object[]>) qry.list()) {
@@ -1026,7 +1026,7 @@ public class TeamUtil {
         }
         return result;
     }
-    
+
     /**
      * to avoid loading huge datasets from the DB, because AmpActivityVersions has huge rows
      * DO NOT ADD collections as names here, as they (mostly) don't work but lead to Hibernate crashing
@@ -1065,19 +1065,19 @@ public class TeamUtil {
             if(!includedraft){
                 queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
             }
-            if(keyword!=null && keyword.length()>0){
+            if(keyword!=null && !keyword.isEmpty()){
                 queryString.append(" and lower(").append(activityNameHql).append(") like lower(:name)");
             }
-            
+
             qry = session.createQuery(queryString.toString());
-            if(keyword!=null && keyword.length()>0){
+            if(keyword!=null && !keyword.isEmpty()){
                 qry.setParameter("name", "%" + keyword + "%",StringType.INSTANCE);
             }
             if(teamId!=null){
                 qry.setParameter("teamId", teamId, LongType.INSTANCE);
-            }          
+            }
             col  = qry.list();
-            Map<Long, Object[]> res = new TreeMap<Long, Object[]>();
+            Map<Long, Object[]> res = new TreeMap<>();
             for(Object[] obj:col)
                 res.put((Long) obj[0], obj);
             return res;
@@ -1085,11 +1085,11 @@ public class TeamUtil {
             logger.debug("Exception from getAllTeamAmpActivitiesResume()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } 
+        }
     }
 
     /**
-     *  
+     *
      * @param teamId
      * @param includedraft
      * @param keyword
@@ -1105,13 +1105,13 @@ public class TeamUtil {
         } catch (SQLException ex) {
             return null;
         }
-        
+
     }
-    
+
   public static List<AmpActivity> getAllTeamAmpActivities(Long teamId, boolean includedraft, final String keyword)
   {
       final StringBuilder queryString = new StringBuilder("select distinct(amp_activity_id) from amp_activity A WHERE ");
-        
+
       queryString.append(" (A.deleted is null or A.deleted=false) ") ;
       if (teamId == null) {
           queryString.append(" and (A.amp_team_id is null)") ;
@@ -1148,17 +1148,17 @@ public class TeamUtil {
         try {
             Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
             childIds.add(teamId);
-            if(childIds != null && childIds.size() > 0) { 
+            if(childIds != null && childIds.size() > 0) {
                 session = PersistenceManager.getRequestDBSession();
                 String activityNameHql = AmpActivityVersion.hqlStringForName("a");
-                StringBuilder queryString = new StringBuilder("select new AmpActivityVersion(a.ampActivityId," + activityNameHql + ", a.ampId) from "+ AmpActivityGroup.class.getName()+" g inner join g.ampActivityLastVersion a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )");     
+                StringBuilder queryString = new StringBuilder("select new AmpActivityVersion(a.ampActivityId," + activityNameHql + ", a.ampId) from "+ AmpActivityGroup.class.getName()+" g inner join g.ampActivityLastVersion a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )");
                 if(keyword!=null && keyword.length()>0){
                     queryString.append(" and lower(" + activityNameHql + ") like lower(:name)") ;
                 }
                 qry = session.createQuery(queryString.toString());
                 if(keyword!=null){
                     qry.setParameter("name", "%" + keyword + "%",StringType.INSTANCE);
-                } 
+                }
                 qry.setParameterList("params", childIds);
                 activities = qry.list();
             }
@@ -1166,12 +1166,12 @@ public class TeamUtil {
             logger.debug("Exception from getAllManagementTeamActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } 
+        }
         return activities;
     }
 
 
-    
+
     public static Collection<AmpActivityVersion> getAllTeamActivities(Long teamId, boolean includedraft, String keyword) {
         Session session = null;
         Collection<AmpActivityVersion> col = new ArrayList();
@@ -1179,7 +1179,7 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "";
             Query qry = null;
-            String activityNameHql = AmpActivityVersion.hqlStringForName("act");    
+            String activityNameHql = AmpActivityVersion.hqlStringForName("act");
             queryString = "select new AmpActivityVersion(act.ampActivityId, " + activityNameHql + ", act.ampId,act.archived) from "+ AmpActivity.class.getName()    + " act  ";
             if(teamId!=null){
                 queryString+="where act.team="+teamId;
@@ -1196,14 +1196,14 @@ public class TeamUtil {
             qry = session.createQuery(queryString);
             if(keyword!=null){
                 qry.setParameter("name", "%" + keyword + "%", StringType.INSTANCE);
-            } 
+            }
             col=(ArrayList) qry.list();
         } catch (Exception e) {
             logger.debug("Exception from getAllTeamActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } 
-        return col;     
+        }
+        return col;
     }
 
     public static String getCommaSeparatedList(Collection<?> objs)
@@ -1217,7 +1217,7 @@ public class TeamUtil {
         }
         return buf.toString();
     }
-    
+
     public static List<ReportsCollection> getTeamReportsCollection(Long teamId, Boolean tabs,String keyword) {
         Session session = null;
         ArrayList<ReportsCollection> col = null;
@@ -1264,7 +1264,7 @@ public class TeamUtil {
 //                          rc.setTeamView(false);
 //                      } else {
 //                          rc.setTeamView(true);
-//                      }       
+//                      }
                 col.add(rc);
             }
             Collections.sort(col);
@@ -1274,7 +1274,7 @@ public class TeamUtil {
         }
         return col;
     }
-    
+
     public static List<ReportsCollection> getTeamReportsCollection(Long teamId, int currentPage, int recordPerPage, Boolean tabs, String keyword) {
         Session session = null;
         try {
@@ -1282,7 +1282,7 @@ public class TeamUtil {
             String queryString = "select new "+ReportsCollection.class.getName()+"(r, tr.teamView) from "
                 + AmpTeamReports.class.getName()
                 + " tr inner join tr.report r where (tr.team=:teamId) ";
-            
+
             if (tabs != null) {
                 if (tabs) {
                     queryString += " and r.drilldownTab=true ";
@@ -1297,7 +1297,7 @@ public class TeamUtil {
             }
             queryString += "  order by tr.report";
             Query qry = session.createQuery(queryString);
-            
+
             if(keyword!=null&&keyword.trim().length()>0){
                 qry.setParameter("keyword", '%' + keyword.trim() + '%', StringType.INSTANCE);
             }
@@ -1320,7 +1320,7 @@ public class TeamUtil {
            session = PersistenceManager.getRequestDBSession();
            String queryString = "select r, tr.teamView from "
                + AmpTeamReports.class.getName()
-               + " tr inner join tr.report r where (tr.team=:teamId) "; 
+               + " tr inner join tr.report r where (tr.team=:teamId) ";
            if (tabs != null) {
                 if (tabs) {
                     queryString += " and r.drilldownTab=true ";
@@ -1333,7 +1333,7 @@ public class TeamUtil {
                queryString += " and lower(" + reportNameHql + ") like lower(:keyword) ";
            }
            queryString += " order by tr.report";
-           
+
            Query qry = session.createQuery(queryString);
            if(keyword != null && keyword.trim().length() > 0){
                qry.setParameter("keyword", '%' + keyword + '%', StringType.INSTANCE);
@@ -1362,9 +1362,9 @@ public class TeamUtil {
 
     public synchronized static List<AmpReports> getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId) {
         return getAllTeamReports(teamId, getTabs, currentPage, reportPerPage, inlcludeMemberReport, memberId, name, reportCategoryId, null);
-        
-    }    
-    
+
+    }
+
     public synchronized static List<AmpReports> getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId,Boolean onlyCategorized) {
        Session session  = null;
         List<AmpReports> col        = new ArrayList<AmpReports>();
@@ -1373,10 +1373,10 @@ public class TeamUtil {
            if ( getTabs!=null ) {
                    tabFilter    = "r.drilldownTab=:getTabs AND";
            }
-           
+
             session = PersistenceManager.getRequestDBSession();
             AmpTeam team = session.load(AmpTeam.class, teamId);
-            
+
             /*AMP-2685 Team leader should not see all reports*/
             AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
             String queryString = null;
@@ -1384,8 +1384,8 @@ public class TeamUtil {
             String reportNameHql = AmpReports.hqlStringForName("r");
             if(team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                 queryString = "select DISTINCT r from " + AmpReports.class.getName()
-                    + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
-                    + AmpTeamReports.class.getName() 
+                    + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
+                    + AmpTeamReports.class.getName()
                     + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
 //                   if (name != null) {
 //                     queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
@@ -1397,10 +1397,10 @@ public class TeamUtil {
                      queryString += " and r.reportCategory=:repCat ";
                   }
 
-                   if (name != null) 
+                   if (name != null)
                    {
                         queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-                     // queryString +=  " order by " + reportNameHql;                   
+                     // queryString +=  " order by " + reportNameHql;
                    }
                    qry = session.createQuery(queryString);
                    qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
@@ -1443,7 +1443,7 @@ public class TeamUtil {
                 if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
                      qry.setParameter("repCat", reportCategoryId, LongType.INSTANCE);
                 }
-                
+
                 if (currentPage !=null){
                    qry.setFirstResult(currentPage);
                 }
@@ -1453,8 +1453,8 @@ public class TeamUtil {
                 col = qry.list();
             }else if(inlcludeMemberReport){
                queryString="select distinct r from " + AmpReports.class.getName()+
-                "  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
-                " or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
+                "  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+
+                " or r.id in (select r2.id from "+ AmpTeamReports.class.getName() +
                 " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
 //               if(name!=null){
 //                 queryString += String.format(" and lower(%s) like lower(:name)", reportNameHql);
@@ -1465,12 +1465,12 @@ public class TeamUtil {
                if(reportCategoryId !=null && !reportCategoryId.equals(0L)){
                  queryString += " and r.reportCategory=:repCat ";
               }
-               if (name != null) 
+               if (name != null)
                {
                     queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-                    // queryString +=  " order by " + reportNameHql;                   
+                    // queryString +=  " order by " + reportNameHql;
                }
-              qry = session.createQuery(queryString); 
+              qry = session.createQuery(queryString);
               qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
               qry.setParameter("teamId", teamId, LongType.INSTANCE);
               if ( getTabs!=null )
@@ -1497,13 +1497,13 @@ public class TeamUtil {
         }
         ArrayList<AmpReports> resultList    = new ArrayList<AmpReports>(col);
         Collections.sort(resultList);
-        return col; 
-    
+        return col;
+
  }
-    
-    
-    public static ArrayList<AmpReports> getLastShownReports(Long teamId, Long memberId, Boolean getTabs,Boolean onlyCategorized) 
-    {       
+
+
+    public static ArrayList<AmpReports> getLastShownReports(Long teamId, Long memberId, Boolean getTabs,Boolean onlyCategorized)
+    {
         Session session     = null;
         ArrayList<AmpReports> col = new ArrayList<AmpReports>();
         String tabFilter    = "";
@@ -1520,25 +1520,25 @@ public class TeamUtil {
 //beginTransaction();
             String queryString = null;
             Query qry = null;
-            //oracle doesn't support order by from a column that is not part of the distinct Statement  so we have to include the  m.lastView  in the select part 
+            //oracle doesn't support order by from a column that is not part of the distinct Statement  so we have to include the  m.lastView  in the select part
 
             queryString="select distinct r,m.lastView from " + AmpReports.class.getName()+
             "  r inner join r.logs m where "+tabFilter+favourites+" (m.member is not null and m.member.ampTeamMemId=:ampTeamMemId) order by m.lastView desc";
-            qry = session.createQuery(queryString); 
+            qry = session.createQuery(queryString);
             qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
             if ( getTabs!=null )
               qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
-             
-         //Sience we include a new column in the query the return will be an collection havin an array the object    
+
+         //Sience we include a new column in the query the return will be an collection havin an array the object
            Iterator itData = qry.iterate();
             while(itData.hasNext()){
                 col.add((AmpReports)((Object[])itData.next())[0]);
             }
           //end fix for oracle
-            
+
             if (col.isEmpty()){
                 queryString="select distinct r from " + AmpReports.class.getName()+ " r where r.drilldownTab=false AND "+favourites+"  r.ownerId is not null and r.ownerId=:ampTeamMemId";
-                qry = session.createQuery(queryString); 
+                qry = session.createQuery(queryString);
                 qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
                 col = new ArrayList<AmpReports>(qry.list());
             }
@@ -1547,16 +1547,16 @@ public class TeamUtil {
             logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);
         }
-        return col; 
+        return col;
  }
- 
+
     public static List<AmpTeam> getAllManagementWorkspaces()
     {
         return getAllTeams(null, "management");
     }
 
     /**
-     * 
+     *
      * @param teamId
      * @param getTabs when true - gets only reports marked as desktop tabs, when false - gets only reports NOT marked as desktop tabs, when null - gets all reports
      * @param inlcludeMemberReport
@@ -1571,7 +1571,7 @@ public class TeamUtil {
             if ( getTabs!=null ) {
                tabFilter    = "r.drilldownTab=:getTabs AND";
             }
-            
+
             session = PersistenceManager.getRequestDBSession();
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
 
@@ -1587,7 +1587,7 @@ public class TeamUtil {
                     qry.setParameter("getTabs", getTabs, BooleanType.INSTANCE);
                 Long longCount = (Long) qry.uniqueResult();
                 count       = longCount.intValue();
-                
+
             } else if (!inlcludeMemberReport){
                 queryString = "select r from "
                     + AmpTeamReports.class.getName()+" tr inner join tr.report r "
@@ -1599,11 +1599,11 @@ public class TeamUtil {
                count=qry.list().size();
             }else if(inlcludeMemberReport){
                queryString="select distinct r from " + AmpReports.class.getName()+
-                "  r left join r.members m where " + tabFilter + 
-                " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
-                " or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
+                "  r left join r.members m where " + tabFilter +
+                " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+
+                " or r.id in (select r2.id from "+ AmpTeamReports.class.getName() +
                 " tr inner join  tr.report r2 where tr.team=:teamId))";
-              qry = session.createQuery(queryString); 
+              qry = session.createQuery(queryString);
               qry.setParameter("ampTeamMemId", memberId, LongType.INSTANCE);
               qry.setParameter("teamId", teamId, LongType.INSTANCE);
                 if ( getTabs!=null )
@@ -1616,7 +1616,7 @@ public class TeamUtil {
         }
         return count;
     }
-    
+
 
     public static AmpTeamReports getAmpTeamReport(Long teamId, Long reportId) {
         Session session = null;
@@ -1659,7 +1659,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select tr.report.ampReportId from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
+            String queryString = "select tr.report.ampReportId from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", id, LongType.INSTANCE);
             List ids=qry.list();
@@ -1683,7 +1683,7 @@ public class TeamUtil {
         catch(Exception e)
         {
             throw new RuntimeException(e);
-        }        
+        }
     }
 
     public static List<AmpTeam> getAllTeams() {
@@ -1700,26 +1700,26 @@ public class TeamUtil {
                     + "order by " + teamNameHql;
             qry = session.createQuery(queryString);
             qry.setCacheable(true);
-            
+
             List<AmpTeam> rawTeams = qry.list();
             Set<Long> teamIds = new HashSet<>();
-            
+
             for(AmpTeam team:rawTeams) {
                 if (!teamIds.contains(team.getAmpTeamId())) {
-                    teams.add(team);                    
+                    teams.add(team);
                 }
                 teamIds.add(team.getAmpTeamId());
             }
-            
+
         } catch(Exception e) {
             logger.debug("cannot get All teams");
             logger.debug(e.toString());
             throw new RuntimeException(e);
         }
-        
+
         return teams;
     }
-    
+
     public static List<AmpTeam> getAllTeams(String keyword,String type) {
         Session session = null;
         Query qry = null;
@@ -1728,7 +1728,7 @@ public class TeamUtil {
         String accessType=null;
         if(!type.equalsIgnoreCase("all"))
             accessType = (type != null && type.equals("management")) ? "Management" : "Team";
-        
+
         try {
             session = PersistenceManager.getSession();
             session.clear();
@@ -1764,7 +1764,7 @@ public class TeamUtil {
             logger.debug("cannot get All teams");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } 
+        }
         return teams;
     }
 
@@ -1804,7 +1804,7 @@ public class TeamUtil {
                 AmpTeam ampTeam = list.removeFirst();
                 visitedTeams.add(ampTeam.getAmpTeamId());
                 //if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
-                if(ampTeam.getAccessType().equals("Team") || 
+                if(ampTeam.getAccessType().equals("Team") ||
                             (ampTeam.getComputation()!=null && ampTeam.getComputation()==true) )
                     teams.add(ampTeam);
                 else {
@@ -1853,7 +1853,7 @@ public class TeamUtil {
     }
 
 }
-    
+
     public static class HelperAmpTeamNameComparatorDescTrimmed implements Comparator {
         public int compare(Object obj1, Object obj2) {
             AmpTeam team1 = (AmpTeam) obj1;
@@ -1861,8 +1861,8 @@ public class TeamUtil {
             return team2.getName().trim().toLowerCase().compareTo(team1.getName().trim().toLowerCase());
         }
     }
-        
-    
+
+
     public static List<AmpTeam> getTeamByOrg(Long orgId) {
         List<AmpTeam> retValue = new ArrayList<AmpTeam>();
         if (orgId != null ){
@@ -1901,44 +1901,44 @@ public class TeamUtil {
             return null;
         }
     }
-    
+
     /**
      * @return true if logged in as Amp Admin
      */
     public static boolean isCurrentMemberAdmin(){
         return "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
     }
-    
+
     /**
      * @return true of the user is in actual workspace
      */
     public static boolean isUserInWorkspace() {
         return !isCurrentMemberAdmin() && getCurrentMember() != null;
     }
-    
+
     /**
      * uses {@link TLSUtils} to get the current request's team member
      * @return AmpTeamMember
      */
     public static AmpTeamMember getCurrentAmpTeamMember(){
-        TeamMember tm = getCurrentMember(); 
+        TeamMember tm = getCurrentMember();
         return (tm == null || tm.getTeamId() == null) ? null : getAmpTeamMember(tm.getMemberId());
     }
-    
+
     /**
      * setup the SESSION vars for a logged-in user
      * @param member
      */
     public static TeamMember setupFiltersForLoggedInUser(HttpServletRequest request, AmpTeamMember member) {
         HttpSession session = request.getSession();
-        
+
         TeamMember tm = new TeamMember(member);
 
         //now teamHead is configured within TeamMember constructor, but leaving this special case here
         //is it still needed? if yes, then should be moved within TeamMemberUtil.isHeadRole()
         if (
             //very ugly but we have no choice - only one team head role possible :(
-            member.getAmpMemberRole().getRole().equals("Top Management")                
+            member.getAmpMemberRole().getRole().equals("Top Management")
             ) {
                 tm.setTeamHead(true);
             }
@@ -1954,7 +1954,7 @@ public class TeamUtil {
                 FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL));
         return tm;
     }
-    
+
     public static void getTeams(AmpTeam team, List<AmpTeam> teams) {
         teams.add(team);
         Collection<AmpTeam> childrenTeams =  TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());

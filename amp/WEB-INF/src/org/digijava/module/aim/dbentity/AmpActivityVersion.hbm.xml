@@ -102,10 +102,10 @@
 
 
 		<many-to-one name="team" column="amp_team_id"
-			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="delete" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" />
 
 		<many-to-one name="activityCreator" column="activity_creator"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember"/>
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
 
 		<property name="approvalStatus" column="approval_status">
 		    <type name="org.digijava.module.aim.dbentity.NamedEnumType">
@@ -124,7 +124,7 @@
 
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
 		<many-to-one name="modifiedBy" column="modified_by"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="delete" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
 		<set name="selectedEffectivenessIndicatorOptions" table="AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS" lazy="false" cascade="all">
 			<cache usage="read-write" />
@@ -262,12 +262,11 @@
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorActivity" />
 		</set>
-
 		<many-to-one name="approvedBy" column="approvedBy"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 		<property name="approvalDate" column="approvalDate" type="java.util.Date" />
 
-		<set name="activityContacts" inverse="false" cascade="delete" lazy="false">
+		<set name="activityContacts" inverse="false" cascade="all" lazy="false">
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
 		</set>
@@ -302,10 +301,10 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityGroup" />
 		</set>
 
-		
+
 		&activityFields;
 	</class>
-	
+
 	<class name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" polymorphism="explicit" lazy="true">
 		<cache usage="read-write" />
 		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
@@ -313,15 +312,15 @@
 				<param name="sequence_name">AMP_ACTIVITY_VERSION_seq</param>
 			</generator>
 		</id>
-		<!-- 
+		<!--
 		<subselect>
 			select * from amp_activity
 		</subselect>
 		<synchronize table="amp_activity"/>
 		<id column="amp_activity_id" />
-		 -->		
+		 -->
 
-		&activityFields;		
+		&activityFields;
 	</class>
-	
+
 </hibernate-mapping>

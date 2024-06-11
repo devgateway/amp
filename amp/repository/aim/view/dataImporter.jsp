@@ -28,14 +28,6 @@
 
     }
     $(document).ready(function() {
-      // $('.fields-table tbody').on('click', '.remove-field', function() {
-      //   console.log("Removing...");
-      //   var $row = $(this).closest('tr');
-      //   var selectedField = $row.find('.selected-field').text();
-      //   var columnName = $row.find('.column-name').text();
-      //   sendValuesToBackend(columnName,selectedField,"removeField");
-      //
-      // });
 
       $('.remove-row').click(function() {
         var selectedRows = $('.fields-table tbody').find('.remove-checkbox:checked').closest('tr');
@@ -81,6 +73,50 @@
           $('#template-file').attr("accept", ".json");
           $('#separator-div').hide();
         }
+      });
+
+      $('.existing-config').change(function() {
+        var configName = $(this).val();
+
+        var formData = new FormData();
+        formData.append("configName", configName);
+        formData.append("action", "configByName");
+
+        fetch("${pageContext.request.contextPath}/aim/dataImporter.do", {
+          method: "POST",
+          body: formData
+        })
+                .then(response =>{
+                  if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                  }
+                  // console.log("Response: ",response.json());
+
+                  return response.json();
+                })
+                .then(updatedMap => {
+                  console.log("Map :" ,updatedMap)
+
+                  // Update UI or perform any additional actions if needed
+                  console.log("Selected pairs updated successfully.");
+                  console.log("Updated map received:", updatedMap);
+                  var tbody = document.getElementById("selected-pairs-table-body");
+
+                  // Remove all rows from the table body
+                  tbody.innerHTML = "";
+
+                  for (var key in updatedMap) {
+                    if (updatedMap.hasOwnProperty(key)) {
+                      // Access each property using the key
+                      var value = updatedMap[key];
+                      updateTable(key, value, tbody);
+                      console.log('Key:', key, 'Value:', value);
+                    }
+                  }
+                })
+                .catch(error => {
+                  console.error("There was a problem with the fetch operation:", error);
+                });
       });
       });
 
@@ -247,6 +283,18 @@
 </head>
 <body>
 <h2>Data Importer</h2>
+<label for="configuration">Select Existing Configuration by name:</label>
+<select id="configuration"  class="existing-config" style="width: 300px;">
+  <option value="none">Select Existing Config</option>
+  <jsp:useBean id="configNames" scope="request" type="java.util.List"/>
+  <c:forEach items="${configNames}" var="configName" varStatus="loop">
+    <option value="${configName}">${configName}</option>
+    <br>
+  </c:forEach>
+</select>
+
+
+
 <h2>Upload File</h2>
 <h3>Data file configuration</h3>
 
@@ -336,11 +384,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $('.select2').select2();
-  });
-</script>
+
 
 </body>
 </html:html>

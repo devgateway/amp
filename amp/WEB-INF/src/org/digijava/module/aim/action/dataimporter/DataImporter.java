@@ -20,13 +20,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
-import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
+import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,10 +54,31 @@ public class DataImporter extends Action {
         // List of fields
         List<String> fieldsInfo = getEntityFieldsInfo();
         request.setAttribute("fieldsInfo", fieldsInfo);
+        List<String> configNames= getConfigNames();
+        request.setAttribute("configNames", configNames);
         DataImporterForm dataImporterForm = (DataImporterForm) form;
 
+        if (Objects.equals(request.getParameter("action"), "configByName")) {
+            logger.info(" this is the action " + request.getParameter("action"));
+            String configName = request.getParameter("configName");
+            Map<String, String> config= getConfigByName(configName);
+            dataImporterForm.setColumnPairs(config);
 
-        if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
+            logger.info("Column Pairs:" + config);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(config);
+
+            // Send JSON response
+            response.setContentType("application/json");
+            response.getWriter().write(json);
+            response.setCharacterEncoding("UTF-8");
+
+            return null;
+        }
+
+
+            if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
             logger.info(" this is the action " + request.getParameter("action"));
             if (request.getParameter("uploadTemplate") != null) {
                 logger.info(" this is the action " + request.getParameter("uploadTemplate"));
@@ -154,7 +174,6 @@ public class DataImporter extends Action {
                 // Send JSON response
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-//            response.setHeader("updatedMap",json);
                 response.getWriter().write(json);
 
                 return null;
@@ -165,6 +184,7 @@ public class DataImporter extends Action {
                 logger.info("This is the action " + request.getParameter("action"));
                 String fileName = dataImporterForm.getDataFile().getFileName();
                 String tempDirPath = System.getProperty("java.io.tmpdir");
+                saveImportConfig(request, fileName,dataImporterForm.getColumnPairs());
                 File tempDir = new File(tempDirPath);
                 if (!tempDir.exists()) {
                     tempDir.mkdirs();
@@ -245,6 +265,66 @@ public class DataImporter extends Action {
             }
 
             return mapping.findForward("importData");
+    }
+    private static List<String> getConfigNames()
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql = "SELECT c.configName FROM DataImporterConfig c";
+        Query query = session.createQuery(hql);
+
+        // Execute query and get the list of configNames
+        List< String> configNames = query.list();
+        return configNames==null?Collections.emptyList():configNames;
+
+    }
+
+    private static Map<String, String> getConfigByName(String configName) {
+    logger.info("Getting import config");
+    Session session = PersistenceManager.getRequestDBSession();
+
+    if (!session.isOpen()) {
+        session = PersistenceManager.getRequestDBSession();
+    }
+
+    Query query = session.createQuery("d.configValues FROM DataImporterConfig d WHERE configName = :configName");
+    query.setParameter("configName", configName);
+    query.setMaxResults(1);
+
+    // Add return statement
+    return (Map<String,String>) query.list().get(0);
+}
+    private static void saveImportConfig(HttpServletRequest request,String fileName, Map<String,String> config)
+    {
+        logger.info("Saving import config");
+        Session session = PersistenceManager.getRequestDBSession();
+
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String configName= fileName+"_"+ LocalDateTime.now().toString().replace(":", "_");
+
+        if (request.getParameter("configName") != null)
+        {
+            configName=request.getParameter("configName");
+            Query query = session.createQuery("FROM DataImporterConfig WHERE configName = :configName");
+            query.setParameter("configName", configName);
+            List<DataImporterConfig> existingConfigs = query.list();
+
+            if (!existingConfigs.isEmpty()) {
+                configName += "_" + LocalDateTime.now().toString().replace(":", "_");
+            }
+        }
+
+        DataImporterConfig dataImporterConfig= new DataImporterConfig();
+            dataImporterConfig.setConfigValues(config);
+            dataImporterConfig.setConfigName(configName);
+            session.saveOrUpdate(dataImporterConfig);
+            logger.info("Saved configuration");
+
     }
 
 

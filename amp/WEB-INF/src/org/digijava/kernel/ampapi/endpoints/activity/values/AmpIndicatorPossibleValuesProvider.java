@@ -45,7 +45,6 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         }
         return sectorIds;
     }
-
     private List<Long> getProgramIds(Long indicatorId) {
 
         Session session = PersistenceManager.getRequestDBSession();

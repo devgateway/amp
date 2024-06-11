@@ -14,6 +14,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -246,10 +247,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             if (globalProgramScheme!=null) {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
-                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE t.indlevel= :settingId";
+                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
+//                String hql = "SELECT t FROM AmpTheme t JOIN FETCH t.programSettings ps WHERE ps.defaultHierarchy = :settingId";
+
                 Query query = session.createQuery(hql);
-                query.setParameter("settingId", programSettingId);
+                query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
+
                 for (AmpIndicator indicator : indicators) {
 
                     for (IndicatorTheme indicatorTheme : indicator.getValuesTheme()) {

@@ -283,20 +283,24 @@ public class DataImporter extends Action {
     }
 
     private static Map<String, String> getConfigByName(String configName) {
-    logger.info("Getting import config");
-    Session session = PersistenceManager.getRequestDBSession();
+        logger.info("Getting import config for configName: {}", configName);
+        Session session = PersistenceManager.getRequestDBSession();;
+        Map<String, String> configValues = null;
 
-    if (!session.isOpen()) {
-        session = PersistenceManager.getRequestDBSession();
+            String hql = "SELECT d.configValues FROM DataImporterConfig d WHERE d.configName = :configName";
+            Query query = session.createQuery(hql);
+            query.setParameter("configName", configName);
+            query.setMaxResults(1);
+
+            List<Map<String, String>> resultList = query.list();
+
+            if (!resultList.isEmpty()) {
+                configValues = resultList.get(0);
+            }
+
+
+        return configValues;
     }
-
-    Query query = session.createQuery("d.configValues FROM DataImporterConfig d WHERE configName = :configName");
-    query.setParameter("configName", configName);
-    query.setMaxResults(1);
-
-    // Add return statement
-    return (Map<String,String>) query.list().get(0);
-}
     private static void saveImportConfig(HttpServletRequest request,String fileName, Map<String,String> config)
     {
         logger.info("Saving import config");

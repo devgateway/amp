@@ -311,7 +311,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
 //                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE t.indlevel= :settingId";
-                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
+                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
 
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId);

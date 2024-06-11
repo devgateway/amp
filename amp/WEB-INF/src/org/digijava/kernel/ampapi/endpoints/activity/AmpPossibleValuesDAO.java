@@ -247,7 +247,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             if (globalProgramScheme!=null) {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
-                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
+                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
 //                String hql = "SELECT t FROM AmpTheme t JOIN FETCH t.programSettings ps WHERE ps.defaultHierarchy = :settingId";
 
                 Query query = session.createQuery(hql);

@@ -1,4 +1,4 @@
-package org.digijava.module.admin.dbentity;
+package org.digijava.module.aim.action.dataimporter.dbentity;
 
 public class ImportedProject {
     private Long id;

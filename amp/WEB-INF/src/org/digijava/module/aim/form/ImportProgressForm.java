@@ -1,8 +1,8 @@
 package org.digijava.module.aim.form;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.admin.dbentity.ImportedFilesRecord;
-import org.digijava.module.admin.dbentity.ImportedProject;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 
 import java.util.ArrayList;
 import java.util.List;

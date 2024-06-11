@@ -1,0 +1,19 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig" table="DATA_IMPORTER_CONFIG">
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native">
+                <param name="sequence">DATA_IMPORTER_CONFIG_SEQ</param>
+            </generator>
+        </id>
+        <property name="configName" unique="true" column="config_name" type="string"/>
+
+        <map name="configValues" table="DATA_IMPORTER_CONFIG_VALUES">
+            <cache usage="read-write" />
+            <key column="data_importer_config_id"/>
+            <map-key column="config_key" type="string"/>
+            <element column="config_value" type="string"/>
+        </map>
+    </class>
+</hibernate-mapping>

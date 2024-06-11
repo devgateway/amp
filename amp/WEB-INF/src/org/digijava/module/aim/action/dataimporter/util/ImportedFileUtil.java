@@ -1,8 +1,8 @@
-package org.digijava.module.admin.util;
+package org.digijava.module.aim.action.dataimporter.util;
 
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.admin.dbentity.ImportStatus;
-import org.digijava.module.admin.dbentity.ImportedFilesRecord;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;

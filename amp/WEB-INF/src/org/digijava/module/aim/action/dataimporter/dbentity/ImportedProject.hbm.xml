@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.digijava.module.admin.dbentity.ImportedProject"
+    <class name="org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject"
            table="IMPORTED_PROJECT">
         <cache usage="read-write" />
         <id name="id" column="id" type="java.lang.Long">
@@ -10,12 +10,12 @@
                 <param name="sequence">IMPORTED_PROJECT_SEQ</param>
             </generator>
         </id>
-        <many-to-one name="importedFilesRecord" column="imported_file_record_id" class="org.digijava.module.admin.dbentity.ImportedFilesRecord" not-null="true"/>
+        <many-to-one name="importedFilesRecord" column="imported_file_record_id" class="org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord" not-null="true"/>
 
         <property name="importResponse" column="import_response" type="java.lang.String" length="10000" />
         <property name="newProject" column="new_project" type="java.lang.Boolean" />
 
-        <property name="importStatus" column="import_status" type="org.digijava.module.admin.dbentity.ImportStatus" />
+        <property name="importStatus" column="import_status" type="org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus" />
 
 
     </class>

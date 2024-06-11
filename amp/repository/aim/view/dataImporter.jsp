@@ -285,15 +285,7 @@
 </head>
 <body>
 <h2>Data Importer</h2>
-<label for="configuration">Select Existing Configuration by name:</label>
-<select id="configuration"  class="existing-config" style="width: 300px;">
-  <option value="none">Select Existing Config</option>
-  <jsp:useBean id="configNames" scope="request" type="java.util.List"/>
-  <c:forEach items="${configNames}" var="configName" varStatus="loop">
-    <option value="${configName}">${configName}</option>
-    <br>
-  </c:forEach>
-</select>
+
 
 
 
@@ -311,9 +303,7 @@
   <option value="xml">XML</option>
 </select>
 
-<form id="uploadForm" enctype="multipart/form-data">
-  <label>Select Template File:</label>
-  <div id="separator-div" hidden="hidden">
+<div id="separator-div" hidden="hidden">
   <label for="data-separator">Column Separator:</label>
   <br>
   <select id="data-separator">
@@ -322,15 +312,36 @@
     <option value="||">Pipe(||)</option>
     <option value=" ">Space</option>
   </select>
-  </div>
+</div>
+
+
+<label for="configuration">Select Existing Configuration by name:</label>
+<select id="configuration"  class="existing-config" style="width: 300px;">
+  <option value="none">Select Existing Config</option>
+  <jsp:useBean id="configNames" scope="request" type="java.util.List"/>
+  <c:forEach items="${configNames}" var="configName" varStatus="loop">
+    <option value="${configName}">${configName}</option>
+    <br>
+  </c:forEach>
+</select>
+
+
+
+<form id="uploadForm" enctype="multipart/form-data">
+  <label>Select Template File:</label>
+
   <br>
   <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
  <br><br>
   <input type="button" value="Upload Template" onclick="uploadTemplateFile()" />
 </form>
 
-<div id="otherComponents" hidden>
 
+
+
+
+
+<div id="otherComponents" hidden>
 <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
 
     <br><br>

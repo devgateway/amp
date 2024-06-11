@@ -1,12 +1,13 @@
 package org.digijava.module.aim.action.dataimporter.dbentity;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DataImporterConfig implements Serializable {
     private Long id;
     private String configName;
-    private Map<String, String> configValues;
+    private Set<DataImporterConfigValues> configValues= new HashSet<>();
 
 
     public Long getId() {
@@ -25,11 +26,12 @@ public class DataImporterConfig implements Serializable {
         this.configName = configName;
     }
 
-    public Map<String, String> getConfigValues() {
+    public Set<DataImporterConfigValues> getConfigValues() {
         return configValues;
     }
 
-    public void setConfigValues(Map<String, String> configValues) {
+    public void setConfigValues(Set<DataImporterConfigValues> configValues)
+    {
         this.configValues = configValues;
     }
 }

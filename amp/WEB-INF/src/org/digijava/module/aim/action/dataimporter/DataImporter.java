@@ -20,10 +20,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig;
-import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
-import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
-import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
+import org.digijava.module.aim.action.dataimporter.dbentity.*;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.form.DataImporterForm;
@@ -284,18 +281,23 @@ public class DataImporter extends Action {
 
     private static Map<String, String> getConfigByName(String configName) {
         logger.info("Getting import config for configName: {}", configName);
-        Session session = PersistenceManager.getRequestDBSession();;
-        Map<String, String> configValues = null;
+        Session session = PersistenceManager.getRequestDBSession();
+        Map<String, String> configValues = new HashMap<>();
 
-            String hql = "SELECT d.configValues FROM DataImporterConfig d WHERE d.configName = :configName";
+            String hql = "FROM DataImporterConfig d WHERE d.configName = :configName";
             Query query = session.createQuery(hql);
             query.setParameter("configName", configName);
             query.setMaxResults(1);
 
-            List<Map<String, String>> resultList = query.list();
+            List<DataImporterConfig> resultList = query.list();
+
 
             if (!resultList.isEmpty()) {
-                configValues = resultList.get(0);
+                Set<DataImporterConfigValues> values = resultList.get(0).getConfigValues();
+                if (!values.isEmpty())
+                {
+                    values.forEach(value-> configValues.put(value.getConfigKey(),value.getConfigValue()));
+                }
             }
 
 
@@ -324,7 +326,9 @@ public class DataImporter extends Action {
         }
 
         DataImporterConfig dataImporterConfig= new DataImporterConfig();
-            dataImporterConfig.setConfigValues(config);
+        Set<DataImporterConfigValues> configValues= new HashSet<>();
+            config.forEach((key, value)-> configValues.add(new DataImporterConfigValues(key,value)));
+            dataImporterConfig.setConfigValues(configValues);
             dataImporterConfig.setConfigName(configName);
             session.saveOrUpdate(dataImporterConfig);
             logger.info("Saved configuration");

@@ -6,6 +6,11 @@ public class DataImporterConfigValues implements Serializable {
     private String configKey;
     private String configValue;
 
+    public DataImporterConfigValues(String configKey, String configValue) {
+        this.configKey = configKey;
+        this.configValue = configValue;
+    }
+
     public String getConfigKey() {
         return configKey;
     }

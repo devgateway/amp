@@ -140,6 +140,9 @@ public class ReportColumnProvider extends ReportEntityProvider {
             Comparator.comparing(c -> ME_COLUMNS_ORDER.getOrDefault(c.getColumnName(), DEFAULT_ORDER_VALUE));
 
     private TranslatorService translatorService;
+    public TranslatorService getTranslatorService() {
+        return translatorService;
+    }
 
     private Map<ReportType, Map<String, List<AmpColumns>>> ampTreeColumnsMapByType = new HashMap<>();
 

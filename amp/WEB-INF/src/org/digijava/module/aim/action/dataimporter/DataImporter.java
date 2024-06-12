@@ -304,7 +304,6 @@ public class DataImporter extends Action {
                 }
             }
 
-
         return configValues;
     }
     private static void saveImportConfig(HttpServletRequest request,String fileName, Map<String,String> config)

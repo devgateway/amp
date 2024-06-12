@@ -255,13 +255,17 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             if (globalProgramScheme!=null) {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
-                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
-                AmpActivityProgramSettings settings =ProgramUtil.getAmpActivityProgramSettings(programSettingId);
-                logger.info("Strange Program settings indicators: "+settings.getDefaultHierarchy().getIndicators());
+                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.siblings JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
+
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
                 List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+               globalSchemePrograms.forEach(scheme->{
+                   List<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+                   logger.info("Children: "+children);
+                   globalSchemeProgramIds.addAll(children);
+               });
                 logger.info("Global scheme programs: "+globalSchemeProgramIds);
                 for (AmpIndicator indicator : indicators) {
                     List<BigInteger> indicatorPrograms= getProgramIds(indicator.getIndicatorId());

@@ -233,7 +233,7 @@ public class ActivityUtil {
 
                 }
 
-                session.flush();
+//                session.flush();
 
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);

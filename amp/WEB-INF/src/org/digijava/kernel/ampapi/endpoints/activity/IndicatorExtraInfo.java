@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
@@ -16,14 +17,14 @@ public class IndicatorExtraInfo {
     private final List<Long> sectorIds;
 
 
-    public List<Long> getProgramIds() {
+    public List<BigInteger> getProgramIds() {
         return programIds;
     }
 
     @JsonProperty("program-ids")
-    private final List<Long> programIds;
+    private final List<BigInteger> programIds;
 
-    public IndicatorExtraInfo(String code, List<Long> sectorIds, List<Long> programIds) {
+    public IndicatorExtraInfo(String code, List<Long> sectorIds, List<BigInteger> programIds) {
         this.code = code;
         this.sectorIds = sectorIds;
         this.programIds = programIds;

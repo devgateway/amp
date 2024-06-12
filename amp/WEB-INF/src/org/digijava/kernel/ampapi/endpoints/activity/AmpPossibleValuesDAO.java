@@ -303,7 +303,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     }
 
 
-    private List<BigInteger> getProgramIds(Long indicatorId) {
+    public static List<BigInteger> getProgramIds(Long indicatorId) {
         Session session = PersistenceManager.getRequestDBSession();
         String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
                 "WHERE indicator_id = :indicatorId AND sub_clazz='p'";

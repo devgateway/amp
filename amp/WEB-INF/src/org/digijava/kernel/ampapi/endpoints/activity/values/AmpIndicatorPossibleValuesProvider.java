@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.values;
 
 import com.google.common.collect.ImmutableMap;
+import org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO;
 import org.digijava.kernel.ampapi.endpoints.activity.IndicatorExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
@@ -15,6 +16,7 @@ import org.hibernate.type.LongType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +35,7 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
         for (AmpIndicator indicator : indicators) {
             logger.info("Indicator: "+indicator);
             List<Long> sectorIds = getSectorIds(indicator.getSectors());
-            List<Long> programIds = getProgramIds(indicator.getIndicatorId());
+            List<BigInteger> programIds = AmpPossibleValuesDAO.getProgramIds(indicator.getIndicatorId());
             IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds, programIds);
             pvs.add(new PossibleValue(indicator.getIndicatorId(), indicator.getName(), ImmutableMap.of(), extraInfo));
         }

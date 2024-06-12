@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.*;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -52,6 +53,7 @@ import static org.digijava.kernel.ampapi.endpoints.async.AsyncActivityIndirectPr
 @Path("activity")
 @Api("activity")
 public class InterchangeEndpoints {
+    Logger logger = Logger.getLogger(InterchangeEndpoints.class);
 
     @Context
     private UriInfo uri;
@@ -135,7 +137,14 @@ public class InterchangeEndpoints {
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, mergedList)));
+                    .collect(toMap(identity(), fieldName ->{
+
+                                List<PossibleValue> possibleValues= InterchangeUtils.possibleValuesFor(fieldName, mergedList);
+                                logger.info("PossibleValues at endpoint: " + possibleValues);
+                                return possibleValues;
+
+                    }
+                    ));
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {

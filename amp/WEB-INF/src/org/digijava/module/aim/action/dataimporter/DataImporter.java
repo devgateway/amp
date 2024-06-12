@@ -285,7 +285,7 @@ public class DataImporter extends Action {
         Session session = PersistenceManager.getRequestDBSession();
         Map<String, String> configValues = new HashMap<>();
 
-            String hql = "FROM DataImporterConfig d WHERE d.configName = :configName";
+        String hql = "SELECT d FROM DataImporterConfig d JOIN FETCH d.configValues WHERE d.configName = :configName";
             Query query = session.createQuery(hql);
             query.setParameter("configName", configName, StringType.INSTANCE);
             query.setMaxResults(1);

@@ -9,7 +9,7 @@
         </id>
         <property name="configName" unique="true" column="config_name" type="string"/>
 
-        <set name="configValues" table="DATA_IMPORTER_CONFIG_VALUES" inverse="true" lazy="false">
+        <set name="configValues" inverse="true" lazy="false">
             <cache usage="read-write" />
             <key column="data_importer_config_id"/>
             <one-to-many class="org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues"/>

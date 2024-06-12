@@ -27,10 +27,9 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
     private static final Logger logger= LoggerFactory.getLogger(AmpIndicatorPossibleValuesProvider.class);
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
-        logger.error("Getting indicators");
         List<AmpIndicator> indicators = possibleValuesDAO.getIndicators();
         List<PossibleValue> pvs = new ArrayList<>();
-        logger.error("Indicators: "+indicators);
+        logger.info("Indicators: "+indicators);
         for (AmpIndicator indicator : indicators) {
             List<Long> sectorIds = getSectorIds(indicator.getSectors());
             List<Long> programIds = getProgramIds(indicator.getIndicatorId());

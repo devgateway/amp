@@ -275,7 +275,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             org.digijava.module.aim.util.ActivityUtil.setCurrentWorkspacePrefixIntoRequest(newActivity);
 
             validateAndImport(newActivity, newJson);
-            checkIndicators(newActivity);
+
 
             if (errors.isEmpty()) {
                 prepareToSave();
@@ -284,7 +284,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 List<AmpContentTranslation> cumulativeTranslations = new ArrayList<>();
                 newActivity = activityService.saveActivity(newActivity, getTranslations(), cumulativeTranslations,
                         modifiedBy, draftChange, saveContext, getEditorStore(), getSite());
-
+                checkIndicators(newActivity);
                 activityService.updateLuceneIndex(newActivity, oldActivity, update, trnSettings, cumulativeTranslations,
                         getSite());
             }
@@ -318,31 +318,21 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 List<AmpTheme> globalSchemePrograms = query.list();
                 List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
 
-                String sql = "SELECT * FROM AMP_INDICATOR_CONNECTION " +
-                        "WHERE activity_id = :activityId AND sub_clazz = 'a'";
-                List<IndicatorActivity> indicatorActivities = session.createNativeQuery(sql)
+                String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
+                        "WHERE activity_id = :activityId ";
+                List<Long> activityPrograms = session.createNativeQuery(sql)
                         .setParameter("activityId", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE)
                         .getResultList();
-                List<AmpIndicator> validIndicators = new ArrayList<>();
-                for (IndicatorActivity indicatorActivity : indicatorActivities) {
-                    AmpIndicator indicator = indicatorActivity.getIndicator();
-                    List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
-                    for (Long progId : indicatorPrograms) {
+                List<Long> progsNotFound = new ArrayList<>();
+                 for (Long progId : activityPrograms) {
                         boolean containsProgram = globalSchemeProgramIds.contains(progId);
-                        if (containsProgram) {
-                            validIndicators.add(indicatorActivity.getIndicator());
-                            break;
+                        if (!containsProgram) {
+                            progsNotFound.add(progId);
                         }
                     }
-//                    for (IndicatorTheme indicatorTheme : indicatorActivity.getIndicator().getValuesTheme()) {
-//                        boolean containsProgram = globalSchemePrograms.contains(indicatorTheme.getTheme());
-//                        if (containsProgram) {
-//                            validIndicators.add(indicatorActivity.getIndicator());
-//                            break;
-//                        }
-//                    }
-                }
-                if (validIndicators.isEmpty()) {
+
+
+                if (!progsNotFound.isEmpty()) {
                     addError(ValidationErrors.INDICATORS_NOT_BELONG_TO_PROGRAM_SCHEME.withDetails(ampActivityVersion.getAmpActivityId()+""));
                 }
 

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author Octavian Ciubotaru
  */
 public class AmpPossibleValuesDAO implements PossibleValuesDAO {
-    private static final Logger logger = LoggerFactory.getLogger(AmpPossibleValuesDAO.class);
+    private static Logger logger = LoggerFactory.getLogger(AmpPossibleValuesDAO.class);
 
     public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
 
@@ -45,17 +45,17 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<Object[]> getCategoryValues(String discriminatorOption) {
         String select = "SELECT acv.id, acv.value, acv.deleted, acv.index ";
         String from = "from " + AmpCategoryValue.class.getName() + " acv ";
-        String where;
+        StringBuilder where;
         List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         if (prefixes == null) {
             prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
         }
         if (prefixes != null && prefixes.size() > 0) {
-            where = " WHERE acv.ampCategoryClass.keyName IN (";
+            where = new StringBuilder(" WHERE acv.ampCategoryClass.keyName IN (");
             for (String prefix : prefixes) {
-                where += "'" + prefix + discriminatorOption + "', ";
+                where.append("'").append(prefix).append(discriminatorOption).append("', ");
             }
-            where += "'" + discriminatorOption + "') ORDER BY acv.id";
+            where.append("'").append(discriminatorOption).append("') ORDER BY acv.id");
             select += ", acv.ampCategoryClass.keyName ";
             List<Object[]> result = query(select + from + where);
             result.forEach(row -> {
@@ -64,7 +64,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             });
             return result;
         } else {
-            where = " WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id";
+            where = new StringBuilder(" WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id");
             select += ", '' ";
             return query(select + from + where);
         }
@@ -245,11 +245,11 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 .setCacheRegion(CACHE)
                 .list();
         List<AmpIndicator> filteredIndicators = new ArrayList<>();
-        logger.error("Filter indicators by program: "+filterIndicatorsByProgram);
+        logger.info("Filter indicators by program: "+filterIndicatorsByProgram);
         if (filterIndicatorsByProgram)
         {
             String globalProgramScheme = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GLOBAL_PROGRAM_SCHEME);
-            logger.error("Global program scheme: "+globalProgramScheme);
+            logger.info("Global program scheme: "+globalProgramScheme);
             if (globalProgramScheme!=null) {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
@@ -260,10 +260,10 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
                 List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
-                logger.error("Global scheme programs: "+globalSchemeProgramIds);
+                logger.info("Global scheme programs: "+globalSchemeProgramIds);
                 for (AmpIndicator indicator : indicators) {
                     List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
-                    logger.error("Indicator programs: "+indicatorPrograms);
+                    logger.info("Indicator programs: "+indicatorPrograms);
 
                     for (Long progId : indicatorPrograms) {
                         boolean containsProgram = globalSchemeProgramIds.contains(progId);

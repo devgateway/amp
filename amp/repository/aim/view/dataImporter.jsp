@@ -118,6 +118,9 @@
                 .catch(error => {
                   console.error("There was a problem with the fetch operation:", error);
                 });
+        }else
+        {
+          $("#templateUploadForm").show();
         }
       });
       });

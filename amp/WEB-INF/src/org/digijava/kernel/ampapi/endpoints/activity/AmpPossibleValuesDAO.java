@@ -261,12 +261,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
+                globalSchemePrograms.forEach(ampTheme -> processThemeWithChildren(ampTheme, globalSchemePrograms));
                 Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
-               globalSchemePrograms.forEach(scheme->{
-                   Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
-                   logger.info("Children: "+children);
-                   globalSchemeProgramIds.addAll(children);
-               });
+//               globalSchemePrograms.forEach(scheme->{
+//                   Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+//                   logger.info("Children: "+children);
+//                   globalSchemeProgramIds.addAll(children);
+//               });
                 logger.info("Global scheme programs: "+globalSchemeProgramIds);
                 for (AmpIndicator indicator : indicators) {
                     List<BigInteger> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
@@ -289,6 +290,16 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
         return !filterIndicatorsByProgram?indicators:filteredIndicators;
     }
+
+    private void processThemeWithChildren(AmpTheme theme, List<AmpTheme> allThemes) {
+        // Process child themes (siblings) recursively
+        allThemes.add(theme);
+        for (AmpTheme childTheme : theme.getSiblings()) {
+            logger.info("Processing child theme: "+childTheme.getName());
+            processThemeWithChildren(childTheme, allThemes);
+        }
+    }
+
 
     private List<BigInteger> getProgramIds(Long indicatorId) {
         Session session = PersistenceManager.getRequestDBSession();

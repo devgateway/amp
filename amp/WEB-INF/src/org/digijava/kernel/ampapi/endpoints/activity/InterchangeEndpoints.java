@@ -140,7 +140,9 @@ public class InterchangeEndpoints {
                     .collect(toMap(identity(), fieldName ->{
 
                                 List<PossibleValue> possibleValues= InterchangeUtils.possibleValuesFor(fieldName, mergedList);
-                                logger.info("PossibleValues at endpoint: " + possibleValues);
+                                if(fieldName.contains("indicator")) {
+                                    logger.info("PossibleValues at endpoint: " + possibleValues);
+                                }
                                 return possibleValues;
 
                     }

@@ -16,9 +16,9 @@
 	<!-- Configure HTTP and HTTPS port -->
  	<http-port>80</http-port>
  	<https-port>443</https-port>
- 		
+
 	<!-- Hibernate class -->
-	<hibernate-classes required="false">              
+	<hibernate-classes required="false">
 		<!-- kernel classes -->
 		<hibernate-class>org.digijava.kernel.request.SiteDomain</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.Address</hibernate-class>
@@ -48,10 +48,11 @@
 		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
         <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
+        <hibernate-class>org.digijava.module.categorymanager.dbentity.AmpCategoryValue</hibernate-class>
     </hibernate-classes>
 
-	
-<!-- 
+
+<!--
 	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
             <description>Digi's feed publishing service</description>
      </service>
@@ -66,33 +67,33 @@
 			By adding those two properties, the patcher will read first any patch from any folder that contains
 			..AMP113a.. first and then ... AMP113b... etc...
 			-->
-			
-			<!-- 
-            <property name="schedulerProperties(locationPriority)">AMP113a,AMP113b,AMP113c.....</property> 
+
+			<!--
+            <property name="schedulerProperties(locationPriority)">AMP113a,AMP113b,AMP113c.....</property>
             <property name="schedulerName">LocationPriorityXmlPatcherScheduler</property>
              -->
    	 </service>
 
 
     <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">
-        <description>Service to determine which agents will use SSO</description> 
-        <!-- What to do if user-agent header does not exist --> 
-        <property name="ignoreUndefined">true</property> 
-        <!-- Default Behavior --> 
-        <property name="ignoreByDefault">true</property> 
-        <!-- Checking Order --> 
-        <property name="checkAllowedFirst">false</property> 
-        <!-- Allow and Ignore directives. Can contain Java expressions. 
+        <description>Service to determine which agents will use SSO</description>
+        <!-- What to do if user-agent header does not exist -->
+        <property name="ignoreUndefined">true</property>
+        <!-- Default Behavior -->
+        <property name="ignoreByDefault">true</property>
+        <!-- Checking Order -->
+        <property name="checkAllowedFirst">false</property>
+        <!-- Allow and Ignore directives. Can contain Java expressions.
               There are 2 constants available: agent and agentWithCase
-          --> 
-        <property name="allowedAgents">(agent.indexOf("mozilla") != -1)||(agent.indexOf("opera") != -1)</property> 
+          -->
+        <property name="allowedAgents">(agent.indexOf("mozilla") != -1)||(agent.indexOf("opera") != -1)</property>
         <property name="ignoredAgents">agent.indexOf("googlebot") != -1</property>
     </service>
 
 	<service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
             <description>Daily Currency Rates Service</description>
     </service>
-  
+
 	<service id="digiAuditClenaerService" class="org.digijava.module.aim.services.auditcleaner.AuditCleanerService">
             <description>This service will delete the audit log</description>
     </service>

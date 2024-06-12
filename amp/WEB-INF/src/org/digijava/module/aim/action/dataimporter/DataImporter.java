@@ -27,7 +27,6 @@ import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.type.ObjectType;
 import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -296,11 +295,7 @@ public class DataImporter extends Action {
 
 
             if (!resultList.isEmpty()) {
-                DataImporterConfig dataImporterConfig = resultList.get(0);
-                 hql = "FROM DataImporterConfigValues WHERE dataImporterConfig = :dataImporterConfig";
-                 query = session.createQuery(hql);
-                query.setParameter("dataImporterConfig", dataImporterConfig, ObjectType.INSTANCE);
-                Set<DataImporterConfigValues> values = new HashSet<>(query.list());
+                Set<DataImporterConfigValues> values = resultList.get(0).getConfigValues();
                 logger.info("Config Values found: {}",values);
 
                 if (!values.isEmpty())

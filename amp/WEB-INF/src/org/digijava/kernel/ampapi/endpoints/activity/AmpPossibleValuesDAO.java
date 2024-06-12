@@ -287,9 +287,10 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             }
 
         }
+        indicators=!filterIndicatorsByProgram?indicators:filteredIndicators;
 
 
-        return !filterIndicatorsByProgram?indicators:filteredIndicators;
+        return indicators;
     }
 
     public static void processThemeWithChildren(AmpTheme theme, Set<AmpTheme> allThemes) {

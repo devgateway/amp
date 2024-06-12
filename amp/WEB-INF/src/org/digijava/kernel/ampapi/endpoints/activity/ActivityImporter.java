@@ -301,6 +301,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
     private void checkIndicators(AmpActivityVersion ampActivityVersion)
     {
+        logger.info("Checking indicators");
         boolean filterIndicatorsByProgram= FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FILTER_INDICATORS_BY_PROGRAM);
         if (filterIndicatorsByProgram)
         {
@@ -323,6 +324,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 List<Long> activityPrograms = session.createNativeQuery(sql)
                         .setParameter("activityId", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE)
                         .getResultList();
+                logger.info("Activity programs "+activityPrograms);
                 List<Long> progsNotFound = new ArrayList<>();
                  for (Long progId : activityPrograms) {
                         boolean containsProgram = globalSchemeProgramIds.contains(progId);

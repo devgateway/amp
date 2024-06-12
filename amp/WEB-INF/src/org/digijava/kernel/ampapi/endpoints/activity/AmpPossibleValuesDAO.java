@@ -254,7 +254,6 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
                 String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
-//                String hql = "SELECT t FROM AmpTheme t JOIN FETCH t.programSettings ps WHERE ps.defaultHierarchy = :settingId";
 
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
@@ -284,7 +283,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     private List<Long> getProgramIds(Long indicatorId) {
         Session session = PersistenceManager.getRequestDBSession();
         String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
-                "WHERE indicator_id = :indicatorId";
+                "WHERE indicator_id = :indicatorId AND sub_clazz='p'";
         List<Long> themeIds = session.createNativeQuery(sql)
                 .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
                 .getResultList();

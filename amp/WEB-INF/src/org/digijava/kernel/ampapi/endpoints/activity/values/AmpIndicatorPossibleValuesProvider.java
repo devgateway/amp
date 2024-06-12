@@ -37,6 +37,7 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
             IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds, programIds);
             pvs.add(new PossibleValue(indicator.getIndicatorId(), indicator.getName(), ImmutableMap.of(), extraInfo));
         }
+        logger.info("Indicator PossibleValues: "+pvs);
         return pvs;
     }
     private List<Long> getSectorIds(Set<AmpSector> sectors) {

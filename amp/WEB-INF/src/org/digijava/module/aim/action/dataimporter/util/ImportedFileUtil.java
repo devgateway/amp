@@ -51,7 +51,7 @@ public class ImportedFileUtil {
         logger.info("Updating file status to " + status);
         Session session = PersistenceManager.getRequestDBSession();
         importDataModel.setImportStatus(status);
-        session.save(importDataModel);
+        session.saveOrUpdate(importDataModel);
         session.flush();
     }
     public static List<ImportedFilesRecord> getSimilarFiles(File file) throws IOException, NoSuchAlgorithmException {

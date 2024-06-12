@@ -5,6 +5,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.IndicatorExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.AbstractPossibleValuesBaseProvider;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBaseProvider {
     private static final Logger logger= LoggerFactory.getLogger(AmpIndicatorPossibleValuesProvider.class);
     @Override
-    public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
+    public List<PossibleValue> getPossibleValues(TranslatorService translatorService) throws DgException {
         List<AmpIndicator> indicators = possibleValuesDAO.getIndicators();
         List<PossibleValue> pvs = new ArrayList<>();
         logger.info("Indicators: "+indicators);

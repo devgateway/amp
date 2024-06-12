@@ -329,9 +329,10 @@ public class DataImporter extends Action {
 
         DataImporterConfig dataImporterConfig= new DataImporterConfig();
         Set<DataImporterConfigValues> configValues= new HashSet<>();
-            dataImporterConfig.setConfigValues(configValues);
             dataImporterConfig.setConfigName(configName);
         config.forEach((key, value)-> configValues.add(new DataImporterConfigValues(key,value,dataImporterConfig)));
+        dataImporterConfig.getConfigValues().addAll(configValues);
+
         session.saveOrUpdate(dataImporterConfig);
             logger.info("Saved configuration: {}", dataImporterConfig);
 

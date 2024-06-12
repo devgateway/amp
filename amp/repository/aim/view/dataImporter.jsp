@@ -299,8 +299,8 @@
 <br>
 <label class="file-type-label" for="file-type"></label>
 <select id="file-type" class="file_type">
-  <option value="csv">CSV</option>
   <option value="excel">Excel</option>
+  <option value="csv">CSV</option>
   <option value="text">Text</option>
   <option value="json">JSON</option>
   <option value="xml">XML</option>

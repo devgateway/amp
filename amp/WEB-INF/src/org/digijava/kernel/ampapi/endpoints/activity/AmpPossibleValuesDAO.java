@@ -5,12 +5,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -236,7 +238,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     }
 
     @Override
-    public List<AmpIndicator> getIndicators() {
+    public List<AmpIndicator> getIndicators() throws DgException {
         boolean filterIndicatorsByProgram= FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FILTER_INDICATORS_BY_PROGRAM);
 
         List<AmpIndicator> indicators= InterchangeUtils.getSessionWithPendingChanges()
@@ -254,7 +256,8 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
                 String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
-
+                AmpActivityProgramSettings settings =ProgramUtil.getAmpActivityProgramSettings(programSettingId);
+                logger.info("Strange Program settings indicators: "+settings.getDefaultHierarchy().getIndicators());
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();

@@ -23,6 +23,7 @@ import org.hibernate.type.LongType;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -260,7 +261,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
-                List<AmpTheme> globalSchemePrograms = query.list();
+                Set<AmpTheme> globalSchemePrograms = new HashSet<>(query.list());
                 globalSchemePrograms.forEach(ampTheme -> processThemeWithChildren(ampTheme, globalSchemePrograms));
                 Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
 //               globalSchemePrograms.forEach(scheme->{
@@ -291,7 +292,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
         return !filterIndicatorsByProgram?indicators:filteredIndicators;
     }
 
-    public static void processThemeWithChildren(AmpTheme theme, List<AmpTheme> allThemes) {
+    public static void processThemeWithChildren(AmpTheme theme, Set<AmpTheme> allThemes) {
         // Process child themes (siblings) recursively
         allThemes.add(theme);
         for (AmpTheme childTheme : theme.getSiblings()) {

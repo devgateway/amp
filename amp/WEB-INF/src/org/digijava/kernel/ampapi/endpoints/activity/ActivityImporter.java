@@ -317,7 +317,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
-                List<AmpTheme> globalSchemePrograms = query.list();
+                Set<AmpTheme> globalSchemePrograms = new HashSet<>(query.list());
                 globalSchemePrograms.forEach(ampTheme -> AmpPossibleValuesDAO.processThemeWithChildren(ampTheme,globalSchemePrograms));
                 Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
 //                globalSchemePrograms.forEach(scheme->{

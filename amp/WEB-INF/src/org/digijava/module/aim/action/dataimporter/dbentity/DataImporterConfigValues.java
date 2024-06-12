@@ -8,6 +8,10 @@ public class DataImporterConfigValues implements Serializable {
     private DataImporterConfig dataImporterConfig;
     private Long id;
 
+    public DataImporterConfigValues() {
+
+    }
+
     public Long getId() {
         return id;
     }

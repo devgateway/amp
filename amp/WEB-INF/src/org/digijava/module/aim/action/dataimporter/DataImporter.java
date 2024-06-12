@@ -334,7 +334,10 @@ public class DataImporter extends Action {
         dataImporterConfig.setConfigName(configName);
 
         config.forEach((key, value) -> {
-            DataImporterConfigValues configValue = new DataImporterConfigValues(key, value, dataImporterConfig);
+            DataImporterConfigValues configValue = new DataImporterConfigValues();
+            configValue.setConfigKey(key);
+            configValue.setConfigValue(value);
+            configValue.setDataImporterConfig(dataImporterConfig);
             configValues.add(configValue);
         });
 

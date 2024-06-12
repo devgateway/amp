@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
@@ -15,8 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author Octavian Ciubotaru
  */
 public class AmpPossibleValuesDAO implements PossibleValuesDAO {
-    private static Logger logger = LoggerFactory.getLogger(AmpPossibleValuesDAO.class);
+    private static Logger logger = Logger.getLogger(AmpPossibleValuesDAO.class);
 
     public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
 

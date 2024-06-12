@@ -27,6 +27,7 @@ import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -181,7 +182,6 @@ public class DataImporter extends Action {
                 logger.info("This is the action " + request.getParameter("action"));
                 String fileName = dataImporterForm.getDataFile().getFileName();
                 String tempDirPath = System.getProperty("java.io.tmpdir");
-                saveImportConfig(request, fileName,dataImporterForm.getColumnPairs());
                 File tempDir = new File(tempDirPath);
                 if (!tempDir.exists()) {
                     tempDir.mkdirs();
@@ -221,9 +221,10 @@ public class DataImporter extends Action {
                     response.setStatus(400);
                     return mapping.findForward("importData");
 
-                    // Optionally, you can respond with an error message to the client.
                 } else {
                     // Proceed with processing the file
+                    saveImportConfig(request, fileName,dataImporterForm.getColumnPairs());
+
                     int res = 0;
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
@@ -286,10 +287,11 @@ public class DataImporter extends Action {
 
             String hql = "FROM DataImporterConfig d WHERE d.configName = :configName";
             Query query = session.createQuery(hql);
-            query.setParameter("configName", configName);
+            query.setParameter("configName", configName, StringType.INSTANCE);
             query.setMaxResults(1);
 
             List<DataImporterConfig> resultList = query.list();
+            logger.info("Configs found: {}",resultList);
 
 
             if (!resultList.isEmpty()) {
@@ -331,7 +333,7 @@ public class DataImporter extends Action {
             dataImporterConfig.setConfigValues(configValues);
             dataImporterConfig.setConfigName(configName);
             session.saveOrUpdate(dataImporterConfig);
-            logger.info("Saved configuration");
+            logger.info("Saved configuration: {}", dataImporterConfig);
 
     }
 

@@ -26,4 +26,12 @@ public class DataImporterConfigValues implements Serializable {
     public void setConfigValue(String configValue) {
         this.configValue = configValue;
     }
+
+    @Override
+    public String toString() {
+        return "DataImporterConfigValues{" +
+                "configKey='" + configKey + '\'' +
+                ", configValue='" + configValue + '\'' +
+                '}';
+    }
 }

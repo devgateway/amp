@@ -34,4 +34,13 @@ public class DataImporterConfig implements Serializable {
     {
         this.configValues = configValues;
     }
+
+    @Override
+    public String toString() {
+        return "DataImporterConfig{" +
+                "id=" + id +
+                ", configName='" + configName + '\'' +
+                ", configValues=" + configValues +
+                '}';
+    }
 }

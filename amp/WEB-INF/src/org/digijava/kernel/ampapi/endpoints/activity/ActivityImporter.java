@@ -311,13 +311,20 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
                 Long programSettingId = Long.parseLong(globalProgramScheme);
                 Session session = PersistenceManager.getRequestDBSession();
-//                String hql = "FROM " + AmpTheme.class.getName() + " t WHERE t.indlevel= :settingId";
-                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
+//
+
+                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.siblings JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
 
                 Query query = session.createQuery(hql);
-                query.setParameter("settingId", programSettingId);
+                query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
-                List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+                Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+                globalSchemePrograms.forEach(scheme->{
+                    Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+                    logger.info("Children: "+children);
+                    globalSchemeProgramIds.addAll(children);
+                });
+                logger.info("Global scheme Programs: "+globalSchemeProgramIds);
 
                 String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
                         "WHERE activity_id = :activityId ";

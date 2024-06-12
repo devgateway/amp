@@ -30,8 +30,8 @@ public class AmpIndicatorPossibleValuesProvider extends AbstractPossibleValuesBa
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) throws DgException {
         List<AmpIndicator> indicators = possibleValuesDAO.getIndicators();
         List<PossibleValue> pvs = new ArrayList<>();
-        logger.info("Indicators: "+indicators);
         for (AmpIndicator indicator : indicators) {
+            logger.info("Indicator: "+indicator);
             List<Long> sectorIds = getSectorIds(indicator.getSectors());
             List<Long> programIds = getProgramIds(indicator.getIndicatorId());
             IndicatorExtraInfo extraInfo = new IndicatorExtraInfo(indicator.getCode(), sectorIds, programIds);

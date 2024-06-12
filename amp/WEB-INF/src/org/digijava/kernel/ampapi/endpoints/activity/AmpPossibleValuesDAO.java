@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -260,9 +261,9 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
-                List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+                Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
                globalSchemePrograms.forEach(scheme->{
-                   List<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+                   Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
                    logger.info("Children: "+children);
                    globalSchemeProgramIds.addAll(children);
                });

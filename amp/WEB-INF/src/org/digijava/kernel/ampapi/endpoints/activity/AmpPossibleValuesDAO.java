@@ -261,14 +261,16 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 List<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
                 logger.info("Global scheme programs: "+globalSchemeProgramIds);
                 for (AmpIndicator indicator : indicators) {
-                    List<Long> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
+                    List<BigInteger> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
                     logger.info("Indicator programs: "+indicatorPrograms);
 
-                    for (Long progId : indicatorPrograms) {
-                        boolean containsProgram = globalSchemeProgramIds.contains(progId);
-                        if (containsProgram) {
-                            filteredIndicators.add(indicator);
-                            break;
+                    for (BigInteger progId : indicatorPrograms) {
+                        if (progId!=null) {
+                            boolean containsProgram = globalSchemeProgramIds.contains(progId.longValue());
+                            if (containsProgram) {
+                                filteredIndicators.add(indicator);
+                                break;
+                            }
                         }
                     }
                 }
@@ -280,11 +282,11 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
         return !filterIndicatorsByProgram?indicators:filteredIndicators;
     }
 
-    private List<Long> getProgramIds(Long indicatorId) {
+    private List<BigInteger> getProgramIds(Long indicatorId) {
         Session session = PersistenceManager.getRequestDBSession();
         String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
                 "WHERE indicator_id = :indicatorId AND sub_clazz='p'";
-        List<Long> themeIds = session.createNativeQuery(sql)
+        List<BigInteger> themeIds = session.createNativeQuery(sql)
                 .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
                 .getResultList();
         return themeIds;

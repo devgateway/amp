@@ -318,12 +318,13 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 Query query = session.createQuery(hql);
                 query.setParameter("settingId", programSettingId, LongType.INSTANCE);
                 List<AmpTheme> globalSchemePrograms = query.list();
+                globalSchemePrograms.forEach(ampTheme -> AmpPossibleValuesDAO.processThemeWithChildren(ampTheme,globalSchemePrograms));
                 Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
-                globalSchemePrograms.forEach(scheme->{
-                    Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
-                    logger.info("Children: "+children);
-                    globalSchemeProgramIds.addAll(children);
-                });
+//                globalSchemePrograms.forEach(scheme->{
+//                    Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+//                    logger.info("Children: "+children);
+//                    globalSchemeProgramIds.addAll(children);
+//                });
                 logger.info("Global scheme Programs: "+globalSchemeProgramIds);
 
                 String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +

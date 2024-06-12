@@ -291,7 +291,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
         return !filterIndicatorsByProgram?indicators:filteredIndicators;
     }
 
-    private void processThemeWithChildren(AmpTheme theme, List<AmpTheme> allThemes) {
+    public static void processThemeWithChildren(AmpTheme theme, List<AmpTheme> allThemes) {
         // Process child themes (siblings) recursively
         allThemes.add(theme);
         for (AmpTheme childTheme : theme.getSiblings()) {

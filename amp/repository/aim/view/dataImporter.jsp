@@ -91,7 +91,7 @@
                   if (!response.ok) {
                     throw new Error("Network response was not ok");
                   }
-                  // console.log("Response: ",response.json());
+                  console.log("Response: ",response);
                   $("#templateUploadForm").hide();
                   return response.json();
                 })

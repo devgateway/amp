@@ -5,10 +5,20 @@ import java.io.Serializable;
 public class DataImporterConfigValues implements Serializable {
     private String configKey;
     private String configValue;
+    private DataImporterConfig dataImporterConfig;
 
-    public DataImporterConfigValues(String configKey, String configValue) {
+    public DataImporterConfig getDataImporterConfig() {
+        return dataImporterConfig;
+    }
+
+    public void setDataImporterConfig(DataImporterConfig dataImporterConfig) {
+        this.dataImporterConfig = dataImporterConfig;
+    }
+
+    public DataImporterConfigValues(String configKey, String configValue, DataImporterConfig dataImporterConfig) {
         this.configKey = configKey;
         this.configValue = configValue;
+        this.dataImporterConfig = dataImporterConfig;
     }
 
     public String getConfigKey() {

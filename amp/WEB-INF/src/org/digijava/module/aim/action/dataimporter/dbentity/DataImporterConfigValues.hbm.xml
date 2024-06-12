@@ -6,6 +6,7 @@
             <generator class="assigned" />
         </id>
         <property name="configValue" column="config_value" type="string"/>
+        <many-to-one name="dataImporterConfig" column="data_importer_config_id" class="org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig" not-null="true" />
 
 
     </class>

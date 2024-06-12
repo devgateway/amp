@@ -330,13 +330,19 @@ public class DataImporter extends Action {
         }
 
         DataImporterConfig dataImporterConfig= new DataImporterConfig();
-        Set<DataImporterConfigValues> configValues= new HashSet<>();
-            dataImporterConfig.setConfigName(configName);
-        config.forEach((key, value)-> configValues.add(new DataImporterConfigValues(key,value,dataImporterConfig)));
-        dataImporterConfig.getConfigValues().addAll(configValues);
+        Set<DataImporterConfigValues> configValues = new HashSet<>();
+        dataImporterConfig.setConfigName(configName);
+
+        config.forEach((key, value) -> {
+            DataImporterConfigValues configValue = new DataImporterConfigValues(key, value, dataImporterConfig);
+            configValues.add(configValue);
+        });
+
+        dataImporterConfig.setConfigValues(configValues);
 
         session.saveOrUpdate(dataImporterConfig);
-            logger.info("Saved configuration: {}", dataImporterConfig);
+
+        logger.info("Saved configuration: {}", dataImporterConfig);
 
     }
 

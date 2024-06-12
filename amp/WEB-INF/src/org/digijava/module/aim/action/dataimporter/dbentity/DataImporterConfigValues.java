@@ -6,6 +6,15 @@ public class DataImporterConfigValues implements Serializable {
     private String configKey;
     private String configValue;
     private DataImporterConfig dataImporterConfig;
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public DataImporterConfig getDataImporterConfig() {
         return dataImporterConfig;

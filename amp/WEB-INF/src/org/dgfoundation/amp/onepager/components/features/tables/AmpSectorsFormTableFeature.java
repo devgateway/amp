@@ -89,6 +89,8 @@ public class AmpSectorsFormTableFeature extends
                 if (ampActivitySector.getClassificationConfig().getId().equals(sectorClassification.getId()))
                     sectorsByClassification.add(ampActivitySector.getSectorId());
             }
+            logger.info("Selected sectors: " + selectedSectors);
+            logger.info("Selected sectors by classification: " + sectorsByClassification);
 
             updateListener.onUpdate(sectorsByClassification);
         }
@@ -380,19 +382,19 @@ public class AmpSectorsFormTableFeature extends
                 refreshTable(target);
 
                 // Check if only one choice is available for the selected Primary Sector
-                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                    List<AmpSector> choices = (List<AmpSector>) this.getChoices("");
-                    logger.info("Choices: " + choices);
-
-                    if (choices.size() == 1) {
-                        // Automatically add the only available Secondary Sector to the secondary table
-                        AmpActivitySector secondarySector = getAmpActivitySector(choices.get(0));
-                        setModel.getObject().add(secondarySector);
-                        triggerUpdateEvent(setModel.getObject(), sectorClassification);
-                        target.add(list.getParent());
-                        refreshTable(target);
-                    }
-                }
+//                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+//                    List<AmpSector> choices = (List<AmpSector>) this.getChoices("");
+//                    logger.info("Choices: " + choices);
+//
+//                    if (choices.size() == 1) {
+//                        // Automatically add the only available Secondary Sector to the secondary table
+//                        AmpActivitySector secondarySector = getAmpActivitySector(choices.get(0));
+//                        setModel.getObject().add(secondarySector);
+//                        triggerUpdateEvent(setModel.getObject(), sectorClassification);
+//                        target.add(list.getParent());
+//                        refreshTable(target);
+//                    }
+//                }
 
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,

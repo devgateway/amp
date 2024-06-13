@@ -65,6 +65,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         secondarySectorsTable = new AmpSectorsFormTableFeature(view.newChildId(),
                 secondaryConf.getName() + " Sectors", am, secondaryConf);
 
+
         view.add(primarySectorsTable);
         view.add(secondarySectorsTable);
     }

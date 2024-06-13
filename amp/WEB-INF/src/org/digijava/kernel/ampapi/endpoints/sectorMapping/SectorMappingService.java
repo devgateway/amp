@@ -29,7 +29,7 @@ public class SectorMappingService {
 //            if (sec.getParentSectorId()!=null) {
 //                objDTO.parent = new GenericSelectObjDTO(sec.getParentSectorId().getAmpSectorId(), sec.getParentSectorId().getName());
 //            }
-            Collection<Sector> childSectors = SectorUtil.getSubSectors(((AmpSector) sector).getAmpSectorId());
+            Collection<Sector> childSectors = SectorUtil.getSubSectors(sec.getAmpSectorId());
             childSectors.forEach(s -> objDTO.children.add(new GenericSelectObjDTO(s.getSectorId(), s.getSectorName())));
             sectors.add(objDTO);
         });

@@ -501,9 +501,11 @@ public class DataImporter extends Action {
         fieldsInfos.add("{plannedDisbursement}");
         fieldsInfos.add("{plannedCommitment}");
         fieldsInfos.add("{fundingItem}");
+        fieldsInfos.add("{transactionDate}");
         fieldsInfos.add("{financingInstrument}");
         fieldsInfos.add("{typeOfAssistance}");
         fieldsInfos.add("{secondarySubSector}");
+        fieldsInfos.add("{currency}");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

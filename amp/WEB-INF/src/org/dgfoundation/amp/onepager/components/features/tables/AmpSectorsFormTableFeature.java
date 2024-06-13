@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
+import org.jetbrains.annotations.NotNull;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
 
@@ -352,8 +353,8 @@ public class AmpSectorsFormTableFeature extends
                 return DbUtil.filter(choice.getName());
             }
 
-            @Override
-            public void onSelect(AjaxRequestTarget target, AmpSector choice) {
+
+            private AmpActivitySector getAmpActivitySector(AmpSector choice) {
                 AmpActivitySector activitySector = new AmpActivitySector();
                 activitySector.setSectorId(choice);
                 activitySector.setActivityId(am.getObject());
@@ -363,6 +364,12 @@ public class AmpSectorsFormTableFeature extends
                 }
 
                 activitySector.setClassificationConfig(sectorClassification);
+                return activitySector;
+            }
+
+            @Override
+            public void onSelect(AjaxRequestTarget target, AmpSector choice) {
+                AmpActivitySector activitySector = getAmpActivitySector(choice);
                 if (setModel.getObject() == null) setModel.setObject(new HashSet<AmpActivitySector>());
                 setModel.getObject().add(activitySector);
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
@@ -376,10 +383,11 @@ public class AmpSectorsFormTableFeature extends
                     this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
                             k -> new ArrayList<>());
                     ((List<AmpActivitySector>)this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(activitySector);
-//                    if (this.getChoices("").size() == 1)
-//                    {
-//                        this.getModel().setObject(((List<AmpSector>)this.getChoices("")).get(0));
-//                    }
+                    if (this.getChoices("").size() == 1)
+                    {
+                        activitySector = getAmpActivitySector(((List<AmpSector>)this.getChoices("")).get(0));
+                        setModel.getObject().add(activitySector);
+                    }
                 }
             }
 
@@ -445,4 +453,6 @@ public class AmpSectorsFormTableFeature extends
 
         add(this.searchSectors);
     }
+
+
 }

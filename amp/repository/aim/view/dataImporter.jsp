@@ -28,7 +28,7 @@
 
     }
     $(document).ready(function() {
-
+      $('#existing-config').val('0');
       $('.remove-row').click(function() {
         var selectedRows = $('.fields-table tbody').find('.remove-checkbox:checked').closest('tr');
 
@@ -93,6 +93,7 @@
                   }
                   console.log("Response: ",response);
                   $("#templateUploadForm").hide();
+                  $('#existing-config').val('0');
                   return response.json();
                 })
                 .then(updatedMap => {
@@ -118,6 +119,7 @@
                   $('#add-field').hide();
                   $('.remove-row').hide();
                   $('#selected-field').hide();
+                  $('#existing-config').val('1');
 
 
                 })
@@ -209,6 +211,7 @@
     }
 
     function uploadTemplateFile() {
+      $('#existing-config').val('0');
       var formData = new FormData();
       var fileInput = document.getElementById('template-file');
       var fileType = $('#file-type').val();
@@ -244,6 +247,8 @@
       var formData = new FormData();
       var fileType = $('#file-type').val();
       var dataSeparator = $('#data-separator').val();
+      var existingConfig = $('#existing-config').val();
+      console.log("Existing configuration: "  + existingConfig);
       var fileInput = document.getElementById('data-file');
       // Check if a file is selected
       if (!fileInput.files.length) {
@@ -254,6 +259,7 @@
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
+      formData.append('existingConfig', existingConfig);
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
@@ -396,6 +402,7 @@
   <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
 
   <br><br>
+  <input type="text" id="existing-config" hidden="hidden"/>
 <%--  <html:submit property="Upload">Upload</html:submit>--%>
   <input type="button" value="Upload" onclick="uploadDataFile()">
 

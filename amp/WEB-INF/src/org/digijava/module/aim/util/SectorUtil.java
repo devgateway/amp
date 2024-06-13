@@ -730,6 +730,30 @@ public class SectorUtil {
         return col;
     }
 
+
+    public static Collection getSectorsByScheme(Integer schemeId) {
+        String queryString = null;
+        Session session = null;
+        Collection col = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            queryString = "select pi from "
+                    + AmpSector.class.getName()
+                    + " pi where pi.ampSecSchemeId=:schemeId and (pi.deleted is null or pi.deleted = false) order by " + AmpSector.hqlStringForName("pi");
+            qry = session.createQuery(queryString);
+            qry.setParameter("schemeId", schemeId, IntegerType.INSTANCE);
+            col = qry.list();
+            // session.flush();
+        } catch (Exception ex) {
+            logger.error("Unable to get report names  from database "
+                    + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return col;
+    }
+
     /*
      * get scheme to be edited
      */

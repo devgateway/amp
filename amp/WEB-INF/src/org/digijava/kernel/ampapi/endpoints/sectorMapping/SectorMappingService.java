@@ -23,11 +23,12 @@ public class SectorMappingService {
     public List<GenericSelectObjDTO> getSectorsByScheme(final Long schemeId) {
         List<GenericSelectObjDTO> sectors = new ArrayList<>();
 
-        SectorUtil.getSectorLevel1(schemeId.intValue()).forEach(sector -> {
-            GenericSelectObjDTO objDTO =new GenericSelectObjDTO(((AmpSector) sector).getAmpSectorId(), ((AmpSector) sector).getName());
-
-            Collection<Sector> childSectors = SectorUtil.getSubSectors(((AmpSector) sector).getAmpSectorId());
-            childSectors.forEach(s -> objDTO.children.add(new GenericSelectObjDTO(s.getSectorId(), s.getSectorName())));
+        SectorUtil.getSectorsByScheme(schemeId.intValue()).forEach(sector -> {
+            AmpSector sec = (AmpSector) sector;
+            GenericSelectObjDTO objDTO =new GenericSelectObjDTO(sec.getAmpSectorId(), sec.getName());
+            objDTO.parent = new GenericSelectObjDTO(sec.getParentSectorId().getAmpSectorId(),sec.getParentSectorId().getName());
+//            Collection<Sector> childSectors = SectorUtil.getSubSectors(((AmpSector) sector).getAmpSectorId());
+//            childSectors.forEach(s -> objDTO.children.add(new GenericSelectObjDTO(s.getSectorId(), s.getSectorName())));
             sectors.add(objDTO);
         });
 

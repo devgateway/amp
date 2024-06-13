@@ -238,9 +238,9 @@
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Sector Mapping</digi:trn>
                               </c:set>
-                              <digi:link href="/TEMPLATE/reampv2/build/index.html#/sector-mapping" title="${translation}">
+                              <a href="/TEMPLATE/reampv2/build/index.html#/sector-mapping" title="${translation}">
                                 <digi:trn>Sector Mapping</digi:trn>
-                              </digi:link>
+                              </a>
                             </td>
                           </tr>
                         </module:display>

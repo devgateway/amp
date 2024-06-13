@@ -341,8 +341,6 @@ public class AmpSectorsFormTableFeature extends
             }
         });
 
-        this.searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
-                new ArrayList<>());
 
         this.searchSectors = new AmpAutocompleteFieldPanel<AmpSector>(
                 "searchSectors", "Search " + fmName, AmpSectorSearchModel.class) {
@@ -377,6 +375,10 @@ public class AmpSectorsFormTableFeature extends
                     this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
                             k -> new ArrayList<>());
                     ((List<AmpActivitySector>)this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(activitySector);
+                    if (this.getChoices("").size() == 1)
+                    {
+                        this.getModel().setObject(((List<AmpSector>)this.getChoices("")).get(0));
+                    }
                 }
             }
 

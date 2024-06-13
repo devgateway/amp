@@ -6,7 +6,6 @@ public class GenericSelectObjDTO {
     public Long id;
     public String value;
     public List<GenericSelectObjDTO> children=new ArrayList<>();
-    public GenericSelectObjDTO parent;
 
 
     public GenericSelectObjDTO(Long id, String value) {

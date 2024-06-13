@@ -34,6 +34,7 @@ import org.digijava.module.aim.util.DbUtil;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
 import org.digijava.module.aim.util.SectorUtil;
@@ -377,24 +378,16 @@ public class AmpSectorsFormTableFeature extends
 
                 Collection<AmpSector> choices = super.getChoices(input);
 
-                logger.info("getChoices: "+ choices);
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                    Collection<AmpActivitySector> selectedSectors = setModel.getObject();
+                    logger.info("Selected sectors: " + selectedSectors);
 
-                    // Get the selected sectors from the parent component
-
-                    AmpActivitySector selectedSector = (AmpActivitySector) this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
-                    logger.info("Selected sectors: " + selectedSector);
-                    // Remove the already selected sectors from the choices list
-                    if(selectedSector!=null) {
-                        for (AmpSector sector : choices) {
-
-                            if (Objects.equals(sector.getAmpSectorId(), selectedSector.getSectorId().getAmpSectorId())) {
-                                logger.info("Removing sector: " + sector.getAmpSectorId());
-                                choices.remove(sector);
-                                break;
-                            }
-                        }
+                    if (selectedSectors!= null) {
+                        choices.removeAll(selectedSectors.stream()
+                                .map(AmpActivitySector::getSectorId)
+                                .collect(Collectors.toList()));
                     }
+
                 }
 
                 return choices;

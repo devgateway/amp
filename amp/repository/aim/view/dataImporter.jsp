@@ -114,6 +114,8 @@
                       console.log('Key:', key, 'Value:', value);
                     }
                   }
+                  document.getElementById("otherComponents").removeAttribute("hidden");
+
                 })
                 .catch(error => {
                   console.error("There was a problem with the fetch operation:", error);

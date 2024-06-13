@@ -478,6 +478,7 @@ public class AmpSectorsFormTableFeature extends
                 }
             }
         }
+        target.add(list.getParent());
     }
 
 

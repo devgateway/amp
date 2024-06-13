@@ -223,7 +223,11 @@ public class DataImporter extends Action {
 
                 } else {
                     // Proceed with processing the file
-                    saveImportConfig(request, fileName,dataImporterForm.getColumnPairs());
+                    String existingConfig = request.getParameter("existingConfig");
+                    logger.info("Existing configuration: {}",existingConfig);
+                    if (!Objects.equals(existingConfig, "1")) {
+                        saveImportConfig(request, fileName, dataImporterForm.getColumnPairs());
+                    }
 
                     int res = 0;
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);

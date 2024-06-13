@@ -43,7 +43,7 @@ public class ImportedFileUtil {
         importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
         session.saveOrUpdate(importedFilesRecord);
-        session.flush();
+//        session.flush();
         return importedFilesRecord;
     }
 

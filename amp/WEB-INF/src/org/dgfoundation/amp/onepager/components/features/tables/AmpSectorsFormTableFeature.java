@@ -306,6 +306,7 @@ public class AmpSectorsFormTableFeature extends
                     public void onClick(AjaxRequestTarget target) {
                         AmpActivitySector sectorToDelete = item.getModelObject();
                         setModel.getObject().remove(sectorToDelete);
+                        ((List<AmpActivitySector>)getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).remove(sectorToDelete);
                         triggerDeleteEvent(sectorToDelete.getSectorId());
                         triggerUpdateEvent(setModel.getObject(), sectorClassification);
                         target.add(listParent);

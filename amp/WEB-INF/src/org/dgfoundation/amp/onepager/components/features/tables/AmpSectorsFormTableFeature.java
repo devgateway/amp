@@ -341,6 +341,9 @@ public class AmpSectorsFormTableFeature extends
             }
         });
 
+        this.searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
+                new ArrayList<>());
+
         this.searchSectors = new AmpAutocompleteFieldPanel<AmpSector>(
                 "searchSectors", "Search " + fmName, AmpSectorSearchModel.class) {
             private static final long serialVersionUID = 1227775244079125152L;
@@ -367,10 +370,13 @@ public class AmpSectorsFormTableFeature extends
                 target.add(list.getParent());
                 refreshTable(target);
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                    if (this.getChoices("").size() == 1) {
-                        AmpSector onlyChoice = this.getChoices("").iterator().next();
-                        onSelect(target, onlyChoice);
-                    }
+//                    if (this.getChoices("").size() == 1) {
+//                        AmpSector onlyChoice = this.getChoices("").iterator().next();
+//                        onSelect(target, onlyChoice);
+//                    }
+                    this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
+                            k -> new ArrayList<>());
+                    ((List<AmpActivitySector>)this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(activitySector);
                 }
             }
 
@@ -381,7 +387,7 @@ public class AmpSectorsFormTableFeature extends
                 Collection<AmpSector> choices = super.getChoices(input);
 
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                    Collection<AmpActivitySector> selectedSectors = setModel.getObject();
+                    List<AmpActivitySector> selectedSectors = (List<AmpActivitySector>) this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
                     logger.info("Selected sectors: " + selectedSectors);
 
                     if (selectedSectors!= null) {

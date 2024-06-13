@@ -381,7 +381,7 @@ public class AmpSectorsFormTableFeature extends
                 target.add(list.getParent());
                 refreshTable(target);
 
-                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                if (sectorClassification.getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     populateSecondarySectorsFor1Choice(target,sectorClassification);
                 }
 

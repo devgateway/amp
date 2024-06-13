@@ -367,8 +367,10 @@ public class AmpSectorsFormTableFeature extends
                 target.add(list.getParent());
                 refreshTable(target);
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                    this.getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
-                            activitySector);
+                    if (this.getChoices("").size() == 1) {
+                        AmpSector onlyChoice = this.getChoices("").iterator().next();
+                        onSelect(target, onlyChoice);
+                    }
                 }
             }
 

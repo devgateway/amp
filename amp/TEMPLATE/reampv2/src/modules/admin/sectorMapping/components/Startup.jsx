@@ -21,7 +21,7 @@ class Startup extends Component {
         if (translationPending) {
             return (<Loading />);
         } else {
-            document.title = translations['amp.admin.ndd:page-title'];
+            document.title = translations['amp.admin.sectorMapping:page-title'];
             return (
                 <SectorMappingContext.Provider value={{ translations, api }}>
                     {children}

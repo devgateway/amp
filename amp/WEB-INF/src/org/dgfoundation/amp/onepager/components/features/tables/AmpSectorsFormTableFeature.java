@@ -393,9 +393,16 @@ public class AmpSectorsFormTableFeature extends
                     logger.info("Selected sectors: " + selectedSectors);
 
                     if (selectedSectors!= null) {
-                        choices.removeAll(selectedSectors.stream()
-                                .map(AmpActivitySector::getSectorId)
-                                .collect(Collectors.toList()));
+                        for (AmpSector choice : choices) {
+                            for (AmpActivitySector ampActivitySector: selectedSectors)
+                            {
+                                if (Objects.equals(choice.getAmpSectorId(), ampActivitySector.getSectorId().getAmpSectorId()))
+                                {
+                                    choices.remove(choice);
+                                    break;
+                                }
+                            }
+                        }
                     }
 
                 }

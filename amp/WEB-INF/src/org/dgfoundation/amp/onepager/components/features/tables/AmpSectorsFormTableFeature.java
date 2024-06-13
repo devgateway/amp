@@ -471,14 +471,16 @@ public class AmpSectorsFormTableFeature extends
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND);
                     logger.info("Choices: " + choices);
+                    if (choices != null) {
 
-                    if (choices.size() == 1) {
-                        for (AmpSector secondarySector : choices) {
-                            AmpActivitySector newSector = new AmpActivitySector();
-                            newSector.setSectorId(secondarySector);
-                            newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
-                            newSector.setClassificationConfig(sectorClassification);
-                            setModel.getObject().add(newSector);
+                        if (choices.size() == 1) {
+                            for (AmpSector secondarySector : choices) {
+                                AmpActivitySector newSector = new AmpActivitySector();
+                                newSector.setSectorId(secondarySector);
+                                newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
+                                newSector.setClassificationConfig(sectorClassification);
+                                setModel.getObject().add(newSector);
+                            }
                         }
                     }
                 }

@@ -117,7 +117,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             }
         });
 
-        if (itemIds.size() == 0) {
+        if (itemIds.isEmpty()) {
             return new ArrayList<>();
         }
 

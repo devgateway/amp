@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8"%> 
+<%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -35,21 +35,21 @@
 		labelDiv.id	 		= "labelDivId";
 		labelDiv.innerHTML	= tabName;
 
-		myTabsObject.addTab( new YAHOO.widget.Tab({ 
+		myTabsObject.addTab( new YAHOO.widget.Tab({
 			labelEl: labelDiv,
 			content: "<div id='replaceableDiv' class='resource_box'><div  style='padding-left:10px' id='replaceableFilterInfoDiv'></div><div id='replaceableDiv_markup' align='left'></div></div>",
 			active: true
-		}), myTabsObject.get('tabs').length-1); 
-		
+		}), myTabsObject.get('tabs').length-1);
+
 		//var tabObject = document.getElementById("replaceableTab");
-		
+
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
 		replaceableListObj.containerEl		= document.getElementById("replaceableDiv_markup");
 		replaceableListObj.filterInfoDivId	= "replaceableFilterInfoDiv";
-		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?action=jsonfilter&filterId='+filterId, 
+		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?action=jsonfilter&filterId='+filterId,
 				new RetrieveFilters(replaceableListObj) );
-		
+
 	}
 
 	function scrollableDivStrips(oddColor, evenColor, hoverColor){
@@ -69,9 +69,9 @@
 			currentDiv.hoverColor = hoverColor;
 			currentDiv.onmouseout = setHover;
 			currentDiv.onmouseover = unsetHover;
-		
+
 		}
-		
+
 	}
 	function setHover()
 	{
@@ -100,18 +100,18 @@
 	}
 
 
-	
+
 	function initTabs( ) {
 		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
 
-		
+
 		myTabsObject 	= new YAHOO.widget.TabView("demo");
 		<logic:notEmpty name="myForm" property="publicFiltersUnpositioned">
 			var tabs		= myTabsObject.get("tabs");
 			var moreTab		= myTabsObject.getTab(tabs.length-1);
 			moreTab.set("disabled", true);
 		</logic:notEmpty>
-	
+
 		var region = YAHOO.util.Dom.getRegion("moreTabsTab");
 		var xPos = region.left;
 		var yPos = region.bottom;
@@ -124,7 +124,7 @@
 		allTabsPanel.setBody(divAllTabs);
 
 	}
-	
+
 	function afterPageLoad(e) {
 		initTabs();
 		publicListObj			= new PublicDynamicList(document.getElementById("allPublicResources_markup"), "publicListObj",null);
@@ -134,14 +134,14 @@
 			//if(public${filter.id}ListObj.setKeywordTextboxInformationPublic)
 				public${filter.id}ListObj.setKeywordTextboxInformationPublic("tabSearchStr${filter.id}","tabSearchButtonId${filter.id}","${filter.id}","public${filter.id}ListObj");
 			public${filter.id}ListObj.filterInfoDivId	= "FilterInfoDiv${filter.id}";
-			YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+'&action=jsonfilter&filterId=${filter.id}', 
+			YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+'&action=jsonfilter&filterId=${filter.id}',
 					new RetrieveFilters(public${filter.id}ListObj) );
 		</c:forEach>
-		
+
 		replaceableListObj			= new PublicDynamicList(document.getElementById("replaceableDiv_markup"), "replaceableListObj",null);
 	}
 
-YAHOO.util.Event.on(window, "load", afterPageLoad); 
+YAHOO.util.Event.on(window, "load", afterPageLoad);
 
 </script>
 
@@ -193,11 +193,11 @@ border-right: 1px solid rgb(208, 208, 208);
 </style>
 
 
-			
+
 			<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center">
 			<tr><td>
 			<div style="width:1000px;" class="yui-skin-sam" id="content">
-				<div id="demo" class="yui-navset">			
+				<div id="demo" class="yui-navset">
 				<ul class="yui-nav">
 					<li id="allPublicResourcesTab" class="selected"><a href="#allPublicResourcesRef"><div><digi:trn>All Public Documents</digi:trn></div></a>
 					<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
@@ -206,7 +206,7 @@ border-right: 1px solid rgb(208, 208, 208);
 					<logic:notEmpty name="myForm" property="publicFiltersUnpositioned">
 						<li id="moreTabsTab"><a><div onclick="allTabsPanel.show()"><digi:trn>More Tabs</digi:trn>...</div></a></li>
 					</logic:notEmpty>
-			    </ul>            
+			    </ul>
 			    <div class="yui-content" style="border-color: #d0d0d0">
 			    	<div id="allPublicResourcesRef">
 			    		<div id="allPublicResources_markup" align="left"></div>
@@ -223,15 +223,15 @@ border-right: 1px solid rgb(208, 208, 208);
 			    			<div id="${filter.id}_markup" align="left"></div>
 			    		</div>
 			    	</c:forEach>
-			    	
+
 					<!--End public Resources-->
 				</div>
 			</div>
 			</div>
-			
-			
+
+
 		</td></tr></table>
-		
+
 
 <br/>
 
@@ -239,14 +239,14 @@ border-right: 1px solid rgb(208, 208, 208);
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
     <div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
 		<logic:iterate name="myForm" property="publicFiltersUnpositioned" id="filter">
-          
+
 			<c:if test="${fn:length(report.name) > 25}" >
 				<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.name}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
 			</c:if>
 			<c:if test="${fn:length(report.name) <= 25}" >
 				<div href="#" onclick="setNewTab('${filter.name}', ${filter.id})" class="panelList" id="Div${filter.id}"> ${filter.name}</div>
 			</c:if>
-					
+
 		</logic:iterate>
-	</div>	
+	</div>
 </div>

@@ -13,7 +13,6 @@
 		<many-to-one name="ampActivityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"
 			not-null="true" />
-
 		<set name="responses" table="AMP_GPISURVEY_RESPONSE" inverse="true"
 			cascade="save-update">
 			<cache usage="read-write" />

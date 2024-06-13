@@ -266,4 +266,31 @@ public class ReportRequest {
     public void setIncludeLocationChildren(final Boolean includeLocationChildren) {
         this.includeLocationChildren = includeLocationChildren;
     }
+
+    @Override
+    public String toString() {
+        return "ReportRequest{" +
+                "name=" + name +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", groupingOption='" + groupingOption + '\'' +
+                ", summary=" + summary +
+                ", tab=" + tab +
+                ", publicView=" + publicView +
+                ", workspaceLinked=" + workspaceLinked +
+                ", alsoShowPledges=" + alsoShowPledges +
+                ", showOriginalCurrency=" + showOriginalCurrency +
+                ", allowEmptyFundingColumns=" + allowEmptyFundingColumns +
+                ", splitByFunding=" + splitByFunding +
+                ", reportCategory=" + reportCategory +
+                ", ownerId=" + ownerId +
+                ", includeLocationChildren=" + includeLocationChildren +
+                ", columns=" + columns +
+                ", hierarchies=" + hierarchies +
+                ", measures=" + measures +
+                ", filters=" + filters +
+                ", settings=" + settings +
+                ", reportData=" + reportData +
+                '}';
+    }
 }

@@ -29,17 +29,8 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_ALL_IDS;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -1654,14 +1645,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      */
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
-        List<VSplitStrategy> raw = super.getSubMeasureHierarchies(engine, cc);
+        List<VSplitStrategy> raw = new ArrayList<>(super.getSubMeasureHierarchies(engine, cc));
 
         if (disableSubmeasureSplittingByColumn(engine))
             return raw; // let the subclasses the chance to disable submeasures
-
-        if (raw == null) {
-            raw = new ArrayList<>();
-        }
 
         AmpReportsScratchpad scratch = AmpReportsScratchpad.get(engine);
 

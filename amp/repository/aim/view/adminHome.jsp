@@ -178,6 +178,19 @@
                     <div class="admin_landing_page_box_cont">
                       <div class="admin_landing_page_box_title"><digi:trn>Backbone lists of AMP</digi:trn></div>
                       <table border="0" cellspacing="2" cellpadding="2">
+
+                        <tr>
+                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td class="admin_box_label">
+                            <c:set var="translation">
+                              <digi:trn invisibleLinks="true">Click here to Import Data</digi:trn>
+                            </c:set>
+                            <digi:link href="/aim/dataImporter.do" title="${translation}" contextPath="" >
+                              <digi:trn>Data Importer</digi:trn>
+                            </digi:link>
+                          </td>
+                        </tr>
+
                         <module:display name="Category Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>

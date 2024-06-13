@@ -375,6 +375,8 @@
     <!-- quartzJobManager settings -->
     <page name="quartzJobManager" title="- Job Manager" />
     <page name="addQuartzJob" title=" - Add Job" />
+    <page name="dataImporter" title=" - Data Importer" />
+    <page name="viewImportProgress" title=" - View Importer Progress" />
     <page name="editQuartzJob" title=" - Edit Job" />
 
     <page name="addQuartzJobClass" title=" - Add Job Class" />

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
 <secondary-pages>
-	
+
 
 	<page name="allContacts" page="viewAddressBook" title=" - Address Book"/>
 	<page name="addContact" page="addEditAmpContact" title=" - Add/Edit Contact"/>
@@ -9,7 +9,7 @@
 	<page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
 	<page name="viewAhSurveis" title=" - View AhSurveis " />
 	<page name="addSectorToIndicator" title="- Add Sector" />
-	
+
 	<page name="manageGPI" title=" - Manage Global Partnership Indicators" />
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
@@ -29,6 +29,7 @@
 	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page page="addNewTheme" name="addNewTheme" title="AMP - Add NewProgram"/>
 	<page name="sectorManager" title=" - Sector Manager" />
+	<page name="sectorMapping" title=" - Sector Mapping" />
 	<page name="BudgetManager" title=" - Budget Manager" />
 	<page name="departmentsmanager" title=" - Departments Manager" />
 	<page name="addSector" title=" - Add Sector" />
@@ -176,7 +177,7 @@
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
 	<page page="showDocumentsInPopup"  name="aim_showDocumentsInPopup"  title="AMP - Related Documents"/>
-	
+
 	<page name="viewActivityHistory" page="viewActivityHistory" title=" - View Activity History"/>
 	<page name="viewActivityDifferences" page="viewActivityDifferences" title=" - View Activity Differences"/>
 	<page name="viewActivitySummaryChanges" page="viewActivitySummaryChanges" title="Show Change Summary"/>
@@ -258,7 +259,7 @@
 	<page page="addIssue" name="aim_addIssue" title="AMP - Add Issue" />
 	<page page="addMeasure" name="aim_addMeasure" title="AMP - Add Measure" />
 	<page page="addActor" name="aim_addActor" title="AMP - Add Actor" />
-	
+
 	<page page="addObservation" name="aim_addObservation" title="AMP - Add Observation" />
 	<page page="addRegionalObservationMeasure" name="aim_addRegionalObservationMeasure" title="AMP - Add Measure" />
 	<page page="addRegionalObservationActor" name="aim_addRegionalObservationActor" title="AMP - Add Actor" />
@@ -319,11 +320,11 @@
 	<page name="dataFreezeManager" title=" - Data Freeze Manager" />
 
 	<page page="filters/filterPicker2" name="aim_filterPicker2" title="AMP - Reports Filter Picker" />
-	
+
 	<page page="viewParisIndicatorPopupFilter" name="PI_Filter" title="AMP - PI Reports Filter" />
-	
+
 	<page page="query/queryEngine" name="aim_queryEngine" title=" - Query" />
-	
+
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
 	<page page="printableActivityRisk" name="aim_printActRisk" title="AMP - Activity-Risk" />
 
@@ -392,7 +393,7 @@
 	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title=" - Update Team Member" />
 	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title=" - Assign Team Member" />
 	<page name="contactsPrintPreview" page="addressBookPrintPreview"></page>
-	
+
 	<page name="wicketHeader" page="wicketHeader"></page>
 	<page name="wicketAdminHeader" page="wicketAdminHeader"></page>
 	<page name="wicketFooter" page="wicketFooter"></page>
@@ -418,7 +419,7 @@
 	<teaser name="myReports" action="getDesktopReports.do">
 		myReports.jsp
 	</teaser>
-	
+
 	<teaser name="myLastVersions" action="getLastVersions.do">
 		myLastVersions.jsp
 	</teaser>
@@ -538,7 +539,7 @@
 	<teaser name="channelOverviewObjective" action="channelOverviewObjective.do">
                 viewChannelOverviewObjective.jsp
     </teaser>
-    
+
     <teaser name="regionalObservations" action="regionalObservations.do">
     	viewRegionalObservations.jsp
 	</teaser>

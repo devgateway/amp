@@ -452,7 +452,7 @@ public class AmpSectorsFormTableFeature extends
         //For mappings between sectors with different classifications, we configure the search to show only the sectors
         // mapped to the selected sectors from the primary classification in dropdown list.
         if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-            List<AmpSector> primarySectorsSelected = new ArrayList<AmpSector>();
+            List<AmpSector> primarySectorsSelected = new ArrayList<>();
             for (AmpActivitySector ampActivitySector : setModel.getObject()) {
                 if (ampActivitySector.getClassificationConfig().getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     primarySectorsSelected.add(ampActivitySector.getSectorId());
@@ -465,6 +465,23 @@ public class AmpSectorsFormTableFeature extends
         }
 
         add(this.searchSectors);
+
+
+        // Check if only one choice is available for the selected Primary Sector
+                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                    List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND);
+                    logger.info("Choices: " + choices);
+
+                    if (choices.size() == 1) {
+                        for (AmpSector secondarySector : choices) {
+                            AmpActivitySector newSector = new AmpActivitySector();
+                            newSector.setSectorId(secondarySector);
+                            newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
+                            newSector.setClassificationConfig(sectorClassification);
+                            setModel.getObject().add(newSector);
+                        }
+                    }
+                }
     }
 
 

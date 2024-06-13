@@ -81,6 +81,7 @@ public class AmpSectorSearchModel extends
             List<AmpSector> list = crit.list();
 
             ret = (Collection<AmpSector>) createTreeView(list);
+            getParams().put(PARAM.DST_SECTORS_FOUND, ret);
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         } finally {

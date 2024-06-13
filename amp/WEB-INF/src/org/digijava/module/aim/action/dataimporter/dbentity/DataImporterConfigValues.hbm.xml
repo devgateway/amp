@@ -10,7 +10,5 @@
         <property name="configKey" column="config_key" type="string"/>
         <property name="configValue" column="config_value" type="string"/>
         <many-to-one name="dataImporterConfig" column="data_importer_config_id" class="org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig" not-null="true" />
-
-
     </class>
 </hibernate-mapping>

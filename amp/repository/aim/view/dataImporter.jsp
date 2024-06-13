@@ -115,6 +115,10 @@
                     }
                   }
                   document.getElementById("otherComponents").removeAttribute("hidden");
+                  $('#add-field').hide();
+                  $('.remove-row').hide();
+                  $('#selected-field').hide();
+
 
                 })
                 .catch(error => {
@@ -365,7 +369,7 @@
   </select>
   <br><br>
 
-  <input type="button" value="Add Field" onclick="addField()">
+  <input type="button" id="add-field" value="Add Field" onclick="addField()">
   <br><br>
 
   <!-- Table to display selected pairs -->

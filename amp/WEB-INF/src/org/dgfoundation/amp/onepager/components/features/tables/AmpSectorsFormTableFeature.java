@@ -365,6 +365,33 @@ public class AmpSectorsFormTableFeature extends
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
                 target.add(list.getParent());
                 refreshTable(target);
+                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                    this.getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
+                            activitySector);
+                }
+            }
+
+
+            @Override
+            public Collection<AmpSector> getChoices(String input) {
+                Collection<AmpSector> choices = super.getChoices(input);
+                logger.info("getChoices: "+ choices);
+
+                // Get the selected sectors from the parent component
+                AmpActivitySector selectedSector = (AmpActivitySector) this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
+                logger.info("Selected sectors: " + selectedSector);
+                // Remove the already selected sectors from the choices list
+                for (AmpSector sector : choices) {
+
+                    if (Objects.equals(sector.getAmpSectorId(), selectedSector.getSectorId().getAmpSectorId()))
+                    {
+                        logger.info("Removing sector: " + sector.getAmpSectorId());
+                        choices.remove(sector);
+                        break;
+                    }
+                }
+
+                return choices;
             }
 
             @Override

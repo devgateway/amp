@@ -381,20 +381,9 @@ public class AmpSectorsFormTableFeature extends
                 target.add(list.getParent());
                 refreshTable(target);
 
-                // Check if only one choice is available for the selected Primary Sector
-//                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-//                    List<AmpSector> choices = (List<AmpSector>) this.getChoices("");
-//                    logger.info("Choices: " + choices);
-//
-//                    if (choices.size() == 1) {
-//                        // Automatically add the only available Secondary Sector to the secondary table
-//                        AmpActivitySector secondarySector = getAmpActivitySector(choices.get(0));
-//                        setModel.getObject().add(secondarySector);
-//                        triggerUpdateEvent(setModel.getObject(), sectorClassification);
-//                        target.add(list.getParent());
-//                        refreshTable(target);
-//                    }
-//                }
+                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                    populateSecondarySectorsFor1Choice(target,sectorClassification);
+                }
 
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
@@ -410,7 +399,7 @@ public class AmpSectorsFormTableFeature extends
 
                 Collection<AmpSector> choices = super.getChoices(input);
                 Set<AmpSector> choices2 = new HashSet<>(choices);
-                logger.info("Choices: " + choices);
+
 
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     List<AmpActivitySector> selectedSectors = (List<AmpActivitySector>) this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
@@ -468,22 +457,27 @@ public class AmpSectorsFormTableFeature extends
 
 
         // Check if only one choice is available for the selected Primary Sector
-                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                    List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND);
-                    logger.info("Choices: " + choices);
-                    if (choices != null) {
+//                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+//
+//                }
+    }
 
-                        if (choices.size() == 1) {
-                            for (AmpSector secondarySector : choices) {
-                                AmpActivitySector newSector = new AmpActivitySector();
-                                newSector.setSectorId(secondarySector);
-                                newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
-                                newSector.setClassificationConfig(sectorClassification);
-                                setModel.getObject().add(newSector);
-                            }
-                        }
-                    }
+    private void populateSecondarySectorsFor1Choice(AjaxRequestTarget target, AmpClassificationConfiguration sectorClassification)
+    {
+        List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND);
+        logger.info("Choices: " + choices);
+        if (choices != null) {
+
+            if (choices.size() == 1) {
+                for (AmpSector secondarySector : choices) {
+                    AmpActivitySector newSector = new AmpActivitySector();
+                    newSector.setSectorId(secondarySector);
+                    newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
+                    newSector.setClassificationConfig(sectorClassification);
+                    setModel.getObject().add(newSector);
                 }
+            }
+        }
     }
 
 

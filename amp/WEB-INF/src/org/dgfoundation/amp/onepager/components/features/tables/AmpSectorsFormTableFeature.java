@@ -378,19 +378,27 @@ public class AmpSectorsFormTableFeature extends
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
                 target.add(list.getParent());
                 refreshTable(target);
+
+                // Check if only one choice is available for the selected Primary Sector
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                    this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
-                            k -> new ArrayList<>());
-                    ((List<AmpActivitySector>)this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(activitySector);
-                    logger.info("Choices: " + this.getChoices(""));
-                    if (this.getChoices("").size() == 1)
-                    {
-                        activitySector = getAmpActivitySector(((List<AmpSector>)this.getChoices("")).get(0));
-                        setModel.getObject().add(activitySector);
+                    List<AmpSector> choices = (List<AmpSector>) this.getChoices("");
+                    logger.info("Choices: " + choices);
+
+                    if (choices.size() == 1) {
+                        // Automatically add the only available Secondary Sector to the secondary table
+                        AmpActivitySector secondarySector = getAmpActivitySector(choices.get(0));
+                        setModel.getObject().add(secondarySector);
                         triggerUpdateEvent(setModel.getObject(), sectorClassification);
                         target.add(list.getParent());
                         refreshTable(target);
                     }
+                }
+
+                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                    this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
+                            k -> new ArrayList<>());
+                    ((List<AmpActivitySector>)this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(activitySector);
+
                 }
             }
 

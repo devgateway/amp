@@ -307,7 +307,10 @@ public class AmpSectorsFormTableFeature extends
                     public void onClick(AjaxRequestTarget target) {
                         AmpActivitySector sectorToDelete = item.getModelObject();
                         setModel.getObject().remove(sectorToDelete);
-                        ((List<AmpActivitySector>)getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).remove(sectorToDelete);
+                        if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME) && (getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)!=null)) {
+                                ((List<AmpActivitySector>) getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).remove(sectorToDelete);
+
+                        }
                         triggerDeleteEvent(sectorToDelete.getSectorId());
                         triggerUpdateEvent(setModel.getObject(), sectorClassification);
                         target.add(listParent);
@@ -370,23 +373,23 @@ public class AmpSectorsFormTableFeature extends
             @Override
             public void onSelect(AjaxRequestTarget target, AmpSector choice) {
                 AmpActivitySector activitySector = getAmpActivitySector(choice);
-                if (setModel.getObject() == null) setModel.setObject(new HashSet<AmpActivitySector>());
+                if (setModel.getObject() == null) setModel.setObject(new HashSet<>());
                 setModel.getObject().add(activitySector);
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
                 target.add(list.getParent());
                 refreshTable(target);
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-//                    if (this.getChoices("").size() == 1) {
-//                        AmpSector onlyChoice = this.getChoices("").iterator().next();
-//                        onSelect(target, onlyChoice);
-//                    }
                     this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
                             k -> new ArrayList<>());
                     ((List<AmpActivitySector>)this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(activitySector);
+                    logger.info("Choices: " + this.getChoices(""));
                     if (this.getChoices("").size() == 1)
                     {
                         activitySector = getAmpActivitySector(((List<AmpSector>)this.getChoices("")).get(0));
                         setModel.getObject().add(activitySector);
+                        triggerUpdateEvent(setModel.getObject(), sectorClassification);
+                        target.add(list.getParent());
+                        refreshTable(target);
                     }
                 }
             }
@@ -400,7 +403,6 @@ public class AmpSectorsFormTableFeature extends
 
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     List<AmpActivitySector> selectedSectors = (List<AmpActivitySector>) this.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
-                    logger.info("Selected sectors: " + selectedSectors);
 
                     if (selectedSectors!= null) {
                         for (AmpSector choice : choices2) {

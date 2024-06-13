@@ -7,6 +7,7 @@ import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.MappingConfigurati
 import org.digijava.kernel.ampapi.endpoints.sectorMapping.dto.SchemaClassificationDTO;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.util.SectorUtil;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,7 +24,11 @@ public class SectorMappingService {
         List<GenericSelectObjDTO> sectors = new ArrayList<>();
 
         SectorUtil.getSectorLevel1(schemeId.intValue()).forEach(sector -> {
-            sectors.add(new GenericSelectObjDTO(((AmpSector) sector).getAmpSectorId(), ((AmpSector) sector).getName()));
+            GenericSelectObjDTO objDTO =new GenericSelectObjDTO(((AmpSector) sector).getAmpSectorId(), ((AmpSector) sector).getName());
+
+            Collection<Sector> childSectors = SectorUtil.getSubSectors(((AmpSector) sector).getAmpSectorId());
+            childSectors.forEach(s -> objDTO.children.add(new GenericSelectObjDTO(s.getSectorId(), s.getSectorName())));
+            sectors.add(objDTO);
         });
 
         return sectors;
@@ -58,8 +63,8 @@ public class SectorMappingService {
         // All Mappings
         mappingConf.sectorMapping = SectorUtil.getAllSectorMappings();
         if (mappingConf.sectorMapping != null && !mappingConf.sectorMapping.isEmpty()) {
-            AmpSector srcSector = ((AmpSectorMapping) ((ArrayList)mappingConf.sectorMapping).get(0)).getSrcSector();
-            AmpSector dstSector = ((AmpSectorMapping) ((ArrayList)mappingConf.sectorMapping).get(0)).getDstSector();
+            AmpSector srcSector = ((AmpSectorMapping) ((ArrayList<?>)mappingConf.sectorMapping).get(0)).getSrcSector();
+            AmpSector dstSector = ((AmpSectorMapping) ((ArrayList<?>)mappingConf.sectorMapping).get(0)).getDstSector();
 
             Long srcSchemeId = srcSector.getAmpSecSchemeId().getAmpSecSchemeId();
             if (srcSchemeId != null) {

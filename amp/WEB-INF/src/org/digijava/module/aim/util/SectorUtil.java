@@ -289,8 +289,8 @@ public class SectorUtil {
                 }
             }
 
-            for (int i = 0; i < sectorList.size(); i++) {
-                Sector sec = (Sector) sectorList.get(i);
+            for (Object o : sectorList) {
+                Sector sec = (Sector) o;
                 updateSectorOrganisation(sec.getSectorId(), organisation);
             }
         } catch (Exception e) {
@@ -300,17 +300,17 @@ public class SectorUtil {
     }
 
     // Retreives all sub-sectors within the sector with id 'parentSecId'
-    public static Collection getSubSectors(Long parentSecId) {
+    public static Collection<Sector> getSubSectors(Long parentSecId) {
 
-        Session session = null;
-        Query qry = null;
-        Collection col = new ArrayList();
-        Iterator itr = null;
-        AmpSector ampSector = null;
+        Session session;
+        Query qry;
+        Collection<Sector> col = new ArrayList<>();
+        Iterator itr;
+        AmpSector ampSector;
 
         try {
             session = PersistenceManager.getSession();
-            String queryString = new String();
+            String queryString;
 
             if (parentSecId.intValue() == 0) {
                 queryString = "select s from " + AmpSector.class.getName()
@@ -323,6 +323,7 @@ public class SectorUtil {
                         + " and (s.deleted is null or s.deleted = false) order by " + AmpSector.hqlStringForName("s");
 
                 qry = session.createQuery(queryString);
+                qry.setCacheable(true);
                 qry.setParameter("parentSectorId", parentSecId, LongType.INSTANCE);
             }
             itr = qry.list().iterator();
@@ -557,29 +558,21 @@ public class SectorUtil {
         Long id = null;
             Collection<AmpClassificationConfiguration> configs = SectorUtil
                     .getAllClassificationConfigs();
-            Iterator<AmpClassificationConfiguration> confIter = configs
-                    .iterator();
-            while (confIter.hasNext()) {
-                AmpClassificationConfiguration conf = confIter.next();
-                if (configurationName.equals(conf.getName())) {
-                    if (conf.getClassification() != null)
-                        id = conf.getClassification().getAmpSecSchemeId();
-                }
+        for (AmpClassificationConfiguration conf : configs) {
+            if (configurationName.equals(conf.getName()) && (conf.getClassification() != null))
+                    {id = conf.getClassification().getAmpSecSchemeId();
             }
+        }
             if (id != null) {
                 Collection<AmpSector> dbReturnSet = SectorUtil
                         .getAllParentSectors(id);
-                Iterator<AmpSector> iter = dbReturnSet.iterator();
-                while (iter.hasNext()) {
-                    AmpSector ampSector = iter.next();
+                for (AmpSector ampSector : dbReturnSet) {
                     ampSector.setName(ampSector.getName().toUpperCase());
                     ret.add(ampSector);
                     Collection<AmpSector> dbChildReturnSet = SectorUtil
                             .getAllChildSectors(ampSector.getAmpSectorId());
 
-                    Iterator<AmpSector> iterSub = dbChildReturnSet.iterator();
-                    while (iterSub.hasNext()) {
-                        AmpSector ampSubSector = (AmpSector) iterSub.next();
+                    for (AmpSector ampSubSector : dbChildReturnSet) {
                         String temp = " -- " + ampSubSector.getName();
                         ampSubSector.setName(temp);
                         ret.add(ampSubSector);

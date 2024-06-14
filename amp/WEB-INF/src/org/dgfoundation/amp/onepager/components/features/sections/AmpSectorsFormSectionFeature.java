@@ -250,7 +250,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                                     Restrictions.eq( "deleted", Boolean.FALSE)
                             )));
 
-            List<AmpSector> srcSectorSelected = (List<AmpSector>) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
+            List<AmpSector> srcSectorSelected = (List<AmpSector>) this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
             Junction junction2 = null;
             if (srcSectorSelected != null && !srcSectorSelected.isEmpty()) {
                 List<Long> ids = searchSectorsDstFromMapping(srcSectorSelected);

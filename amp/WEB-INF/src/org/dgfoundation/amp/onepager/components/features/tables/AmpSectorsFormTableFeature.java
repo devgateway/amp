@@ -475,7 +475,7 @@ public class AmpSectorsFormTableFeature extends
         AmpSector selectedSector =(AmpSector) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
 //        List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
        List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
-        logger.info("Choices found: " + selectedSector);
+        logger.info("Choices found: " + choices);
         if (choices.size() == 1) {
             for (AmpSector secondarySector : choices) {
                 AmpActivitySector newSector = new AmpActivitySector();

@@ -385,7 +385,7 @@ public class AmpSectorsFormTableFeature extends
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                    this.getModelParams().put(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED,choice);
-                    populateSecondarySectorsFor1Choice(target,sectorClassification);
+//                    populateSecondarySectorsFor1Choice(target,sectorClassification);
                 }
 
                 target.add(list.getParent());
@@ -469,48 +469,7 @@ public class AmpSectorsFormTableFeature extends
 //                }
     }
 
-    private void populateSecondarySectorsFor1Choice(AjaxRequestTarget target, AmpClassificationConfiguration sectorClassification)
-    {
 
-        AmpSector selectedSector =(AmpSector) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
-//        List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
-       List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
-        logger.info("Choices found: " + choices);
-        if (choices.size() == 1) {
-            for (AmpSector secondarySector : choices) {
-                AmpActivitySector newSector = new AmpActivitySector();
-                newSector.setSectorId(secondarySector);
-                newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
-                newSector.setClassificationConfig(sectorClassification);
-                setModel.getObject().add(newSector);
-            }
-        }
-        target.add(list.getParent());
-
-
-    }
-
-
-    private List<AmpSector> searchSectorsDstFromMapping(AmpSector srcSector) {
-        Session session = PersistenceManager.getRequestDBSession();
-        List<AmpSector> dstSectorIds = new ArrayList<>();
-        String hql = "SELECT sm.dstSector FROM AmpSectorMapping sm WHERE sm.srcSector.ampSectorId = :srcSectorId";
-
-        try {
-            Query query = session.createQuery(hql);
-            query.setParameter("srcSectorId", srcSector.getAmpSectorId(), LongType.INSTANCE);
-            dstSectorIds = query.list();
-
-//            for (Object obj : resultList) {
-//                dstSectorIds.add((AmpSector) obj);
-//            }
-        } catch (HibernateException e) {
-            // Handle the exception
-            e.printStackTrace();
-        }
-
-        return dstSectorIds;
-    }
 
 
 }

@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -12,13 +13,20 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpSectorsFormTableFeature;
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableDeleteListener;
+import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.SectorUtil;
 
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.type.LongType;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -31,6 +39,8 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
 
     private AmpSectorsFormTableFeature primarySectorsTable;
     private AmpSectorsFormTableFeature secondarySectorsTable;
+    AmpClassificationConfiguration primaryConf = new AmpClassificationConfiguration();
+    AmpClassificationConfiguration secondaryConf = new AmpClassificationConfiguration();
 
     /**
      * @param id
@@ -47,8 +57,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
 
         List<AmpClassificationConfiguration> allClassificationConfigs = SectorUtil.getAllClassificationConfigsOrdered();
 
-        AmpClassificationConfiguration primaryConf = new AmpClassificationConfiguration();
-        AmpClassificationConfiguration secondaryConf = new AmpClassificationConfiguration();
+
         for (AmpClassificationConfiguration conf : allClassificationConfigs) {
             if (conf.getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                 primaryConf = conf;
@@ -86,7 +95,57 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                  secondarySectorsTable.updateBasedOnData(data);
                  target.add(secondarySectorsTable.getSearchSectors());
              }
+            populateSecondarySectorsFor1Choice(secondarySectorsTable,primarySectorsTable,target,secondaryConf);
+
         }
+
+
+
+
+    }
+
+    private void populateSecondarySectorsFor1Choice(AmpSectorsFormTableFeature secondarySectorsTable,AmpSectorsFormTableFeature primarySectorsTable,AjaxRequestTarget target, AmpClassificationConfiguration sectorClassification)
+    {
+
+        AmpSector selectedSector =(AmpSector) this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
+        if (selectedSector!=null) {
+            List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
+            logger.info("Choices found: " + choices);
+            if (choices.size() == 1) {
+                for (AmpSector secondarySector : choices) {
+                    AmpActivitySector newSector = new AmpActivitySector();
+                    newSector.setSectorId(secondarySector);
+                    newSector.setActivityId(secondarySectorsTable.getSetModel().getObject().iterator().next().getActivityId()); // Assuming activityId is the same
+                    newSector.setClassificationConfig(sectorClassification);
+                    secondarySectorsTable.getSetModel().getObject().add(newSector);
+                }
+            }
+            target.add(secondarySectorsTable.getList().getParent());
+        }
+
+
+    }
+
+
+    private List<AmpSector> searchSectorsDstFromMapping(AmpSector srcSector) {
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpSector> dstSectorIds = new ArrayList<>();
+        String hql = "SELECT sm.dstSector FROM AmpSectorMapping sm WHERE sm.srcSector.ampSectorId = :srcSectorId";
+
+        try {
+            Query query = session.createQuery(hql);
+            query.setParameter("srcSectorId", srcSector.getAmpSectorId(), LongType.INSTANCE);
+            dstSectorIds = query.list();
+
+//            for (Object obj : resultList) {
+//                dstSectorIds.add((AmpSector) obj);
+//            }
+        } catch (HibernateException e) {
+            // Handle the exception
+            e.printStackTrace();
+        }
+
+        return dstSectorIds;
     }
 
     /**

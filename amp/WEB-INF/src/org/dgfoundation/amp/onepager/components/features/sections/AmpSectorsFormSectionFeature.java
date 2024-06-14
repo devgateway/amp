@@ -21,9 +21,13 @@ import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.SectorUtil;
 
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 
@@ -113,9 +117,10 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         try {
             if (selectedSector!=null) {
                 List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
-                choices = (List<AmpSector>) createTreeView(choices);
+//                choices = (List<AmpSector>) createTreeView(choices);
 
                 logger.info("Choices found: " + choices);
+                load();
                 if (choices.size() == 1) {
                     for (AmpSector secondarySector : choices) {
                         AmpActivitySector newSector = new AmpActivitySector();
@@ -220,6 +225,85 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         }
 
         return dstSectorIds;
+    }
+
+
+    protected Collection<AmpSector> load() {
+        Collection<AmpSector> ret= new ArrayList<>();
+        Session session = PersistenceManager.getSession();
+        try {
+            session.enableFilter("isDeletedFilter").setParameter("deleted", Boolean.FALSE);
+
+            Integer maxResults = (Integer) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
+            AmpSectorScheme scheme = (AmpSectorScheme) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SECTOR_SCHEME);
+            Criteria crit = session.createCriteria(AmpSector.class);
+            crit.setCacheable(true);
+            Junction junction = Restrictions.conjunction().add(
+                    Restrictions.and(
+                            Restrictions.eq("ampSecSchemeId", scheme),
+                            Restrictions.or(
+                                    Restrictions.isNull("deleted"),
+                                    Restrictions.eq( "deleted", Boolean.FALSE)
+                            )));
+
+            List<AmpSector> srcSectorSelected = (List<AmpSector>) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
+            Junction junction2 = null;
+            if (srcSectorSelected != null && !srcSectorSelected.isEmpty()) {
+                List<Long> ids = searchSectorsDstFromMapping(srcSectorSelected);
+                if (!ids.isEmpty()) {
+                    junction2 = Restrictions.conjunction().add(
+                            Restrictions.in("ampSectorId", ids));
+                }
+            }
+
+            crit.add(junction);
+            if (junction2 != null) crit.add(junction2);
+            crit.addOrder(Order.asc("name"));
+            if (maxResults != null && maxResults != 0) crit.setMaxResults(maxResults);
+            List<AmpSector> list = crit.list();
+
+            logger.info("List here 1: " + list);
+
+            ret = (Collection<AmpSector>) createTreeView(list);
+            logger.info("List here: " + ret);
+            this.secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND, ret);
+        } catch (HibernateException e) {
+            throw new RuntimeException(e);
+        } finally {
+            session.disableFilter("isDeletedFilter");
+        }
+        return ret;
+    }
+
+    /*
+     * Search for sectors that are mapped to the given sector
+     * */
+    private List<Long> searchSectorsDstFromMapping(List<AmpSector> srcSectors) {
+        List<Long> ids = new ArrayList<Long>();
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            Criteria crit = session.createCriteria(AmpSectorMapping.class);
+            crit.setCacheable(true);
+
+            if (srcSectors != null && !srcSectors.isEmpty()) {
+                Junction junction = Restrictions.conjunction().add(
+                        Restrictions.in("srcSector", srcSectors)
+                );
+
+                crit.add(junction);
+                List<AmpSectorMapping> list = crit.list();
+                if (list != null && !list.isEmpty()) {
+                    for (AmpSectorMapping mapping : list) {
+                        ids.add(mapping.getDstSector().getAmpSectorId());
+                    }
+                }
+            }
+        } catch (HibernateException e) {
+            throw new RuntimeException(e);
+        } finally {
+            session.disableFilter("isDeletedFilter");
+        }
+        return ids;
     }
 
     /**

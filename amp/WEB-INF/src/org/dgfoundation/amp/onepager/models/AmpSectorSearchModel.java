@@ -98,10 +98,6 @@ public class AmpSectorSearchModel extends
         }
         return ret;
     }
-    public  Collection<? extends AmpAutoCompleteDisplayable> createTree(Collection<AmpSector> collection)
-    {
-        return createTreeView(collection);
-    }
 
     /*
     * Search for sectors that are mapped to the given sector

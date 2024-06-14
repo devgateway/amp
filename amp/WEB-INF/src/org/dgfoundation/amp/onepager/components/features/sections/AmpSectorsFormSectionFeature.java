@@ -137,7 +137,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                     target.add(secondarySectorsTable.getList().getParent());
 
                 }
-                primarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, choices);
+                secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, choices);
 
 //                List<AmpSector> srcSectorSelected = (List<AmpSector>) primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
 

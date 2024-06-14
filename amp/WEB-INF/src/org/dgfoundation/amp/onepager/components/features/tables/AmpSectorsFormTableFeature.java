@@ -407,6 +407,12 @@ public class AmpSectorsFormTableFeature extends
 
                 Collection<AmpSector> choices = super.getChoices(input);
                 Set<AmpSector> choices2 = new HashSet<>(choices);
+                List<AmpSector> newChoices = (List<AmpSector>)getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, choices);
+                if (newChoices!=null)
+                {
+                    choices=newChoices;
+                    choices2= new HashSet<>(newChoices);
+                }
 
 
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {

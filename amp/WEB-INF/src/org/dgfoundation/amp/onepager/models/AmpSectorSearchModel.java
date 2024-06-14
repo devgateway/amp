@@ -34,7 +34,7 @@ public class AmpSectorSearchModel extends
         CURRENT_SRC_SECTOR_SELECTED,
         SRC_SECTOR_SELECTED, // used in case of sector mapping exists
         DST_SECTOR_SELECTED,
-        DST_SECTORS_FOUND
+        NEW_CHOICES, DST_SECTORS_FOUND
     }
 
     public AmpSectorSearchModel(String input,String language,

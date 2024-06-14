@@ -110,21 +110,26 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
 
         AmpSector selectedSector =(AmpSector) this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
         logger.info("Selected sector: " + selectedSector);
-
-        if (selectedSector!=null) {
-            List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
-            logger.info("Choices found: " + choices);
-            if (choices.size() == 1) {
-                for (AmpSector secondarySector : choices) {
-                    AmpActivitySector newSector = new AmpActivitySector();
-                    newSector.setSectorId(secondarySector);
-                    newSector.setActivityId(secondarySectorsTable.getSetModel().getObject().iterator().next().getActivityId()); // Assuming activityId is the same
-                    newSector.setClassificationConfig(sectorClassification);
-                    secondarySectorsTable.getSetModel().getObject().add(newSector);
+        try {
+            if (selectedSector!=null) {
+                List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
+                logger.info("Choices found: " + choices);
+                if (choices.size() == 1) {
+                    for (AmpSector secondarySector : choices) {
+                        AmpActivitySector newSector = new AmpActivitySector();
+                        newSector.setSectorId(secondarySector);
+                        newSector.setActivityId(secondarySectorsTable.getSetModel().getObject().iterator().next().getActivityId()); // Assuming activityId is the same
+                        newSector.setClassificationConfig(sectorClassification);
+                        secondarySectorsTable.getSetModel().getObject().add(newSector);
+                    }
                 }
+                target.add(secondarySectorsTable.getList().getParent());
             }
-            target.add(secondarySectorsTable.getList().getParent());
+        }catch (Exception e) {
+            logger.error("Error",e);
         }
+
+
 
 
     }

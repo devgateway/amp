@@ -22,6 +22,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
@@ -37,6 +39,7 @@ public class AmpSectorSearchModel extends
         DST_SECTOR_SELECTED,
         NEW_CHOICES, DST_SECTORS_FOUND
     }
+    Logger logger = LoggerFactory.getLogger(AmpSectorSearchModel.class);
 
     public AmpSectorSearchModel(String input,String language,
             Map<AmpAutoCompleteModelParam, Object> params) {
@@ -83,8 +86,10 @@ public class AmpSectorSearchModel extends
             if (maxResults != null && maxResults != 0) crit.setMaxResults(maxResults);
             List<AmpSector> list = crit.list();
 
+            logger.info("List here 1: " + list);
 
             ret = (Collection<AmpSector>) createTreeView(list);
+            logger.info("List here: " + ret);
             getParams().put(PARAM.DST_SECTORS_FOUND, ret);
         } catch (HibernateException e) {
             throw new RuntimeException(e);

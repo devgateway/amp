@@ -382,11 +382,11 @@ public class AmpSectorsFormTableFeature extends
                 AmpActivitySector activitySector = getAmpActivitySector(choice);
                 if (setModel.getObject() == null) setModel.setObject(new HashSet<>());
                 setModel.getObject().add(activitySector);
-                triggerUpdateEvent(setModel.getObject(), sectorClassification);
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                   this.getModelParams().put(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED,choice);
-//                    populateSecondarySectorsFor1Choice(target,sectorClassification);
+                    this.getModelParams().put(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED,choice);
                 }
+                triggerUpdateEvent(setModel.getObject(), sectorClassification);
+
 
                 target.add(list.getParent());
                 refreshTable(target);

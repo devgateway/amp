@@ -88,6 +88,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
      */
     @Override
     public void onUpdate(List<AmpSector> data) {
+        logger.info("IN UPDATE");
         if (secondarySectorsTable != null) {
             // Update user interface
              AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
@@ -108,6 +109,8 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
     {
 
         AmpSector selectedSector =(AmpSector) this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
+        logger.info("Selected sector: " + selectedSector);
+
         if (selectedSector!=null) {
             List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
             logger.info("Choices found: " + choices);

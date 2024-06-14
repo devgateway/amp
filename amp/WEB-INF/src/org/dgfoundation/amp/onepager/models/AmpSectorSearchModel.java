@@ -30,6 +30,7 @@ public class AmpSectorSearchModel extends
 
     public enum PARAM implements AmpAutoCompleteModelParam {
         SECTOR_SCHEME,
+        CURRENT_SRC_SECTOR_SELECTED,
         SRC_SECTOR_SELECTED, // used in case of sector mapping exists
         DST_SECTOR_SELECTED,
         DST_SECTORS_FOUND
@@ -46,9 +47,8 @@ public class AmpSectorSearchModel extends
 
     @Override
     protected Collection<AmpSector> load() {
-        Collection<AmpSector> ret = null;
+        Collection<AmpSector> ret= new ArrayList<>();
         try {
-            ret = new ArrayList<AmpSector>();
             session = PersistenceManager.getSession();
             session.enableFilter("isDeletedFilter").setParameter("deleted", Boolean.FALSE);
 

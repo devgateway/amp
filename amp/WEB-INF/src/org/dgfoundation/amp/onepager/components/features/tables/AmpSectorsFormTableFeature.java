@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import org.apache.ecs.html.A;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
@@ -27,6 +28,7 @@ import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
@@ -38,7 +40,13 @@ import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
 import org.digijava.module.aim.util.SectorUtil;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.LongType;
 import org.jetbrains.annotations.NotNull;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
@@ -84,14 +92,11 @@ public class AmpSectorsFormTableFeature extends
     protected void triggerUpdateEvent(Set<AmpActivitySector> selectedSectors,
                                       AmpClassificationConfiguration sectorClassification) {
         if (updateListener != null) {
-            List<AmpSector> sectorsByClassification = new ArrayList<AmpSector>();
+            List<AmpSector> sectorsByClassification = new ArrayList<>();
             for (AmpActivitySector ampActivitySector : selectedSectors) {
                 if (ampActivitySector.getClassificationConfig().getId().equals(sectorClassification.getId()))
                     sectorsByClassification.add(ampActivitySector.getSectorId());
             }
-            logger.info("Selected sectors: " + selectedSectors);
-            logger.info("Selected sectors by classification: " + sectorsByClassification);
-
             updateListener.onUpdate(sectorsByClassification);
         }
     }
@@ -378,12 +383,14 @@ public class AmpSectorsFormTableFeature extends
                 if (setModel.getObject() == null) setModel.setObject(new HashSet<>());
                 setModel.getObject().add(activitySector);
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
+                if (sectorClassification.getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
+                   this.getModelParams().put(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED,choice);
+                    populateSecondarySectorsFor1Choice(target,sectorClassification);
+                }
+
                 target.add(list.getParent());
                 refreshTable(target);
 
-                if (sectorClassification.getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-                    populateSecondarySectorsFor1Choice(target,sectorClassification);
-                }
 
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     this.getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
@@ -464,21 +471,45 @@ public class AmpSectorsFormTableFeature extends
 
     private void populateSecondarySectorsFor1Choice(AjaxRequestTarget target, AmpClassificationConfiguration sectorClassification)
     {
-        List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND);
-        logger.info("Choices: " + choices);
-        if (choices != null) {
 
-            if (choices.size() == 1) {
-                for (AmpSector secondarySector : choices) {
-                    AmpActivitySector newSector = new AmpActivitySector();
-                    newSector.setSectorId(secondarySector);
-                    newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
-                    newSector.setClassificationConfig(sectorClassification);
-                    setModel.getObject().add(newSector);
-                }
+        AmpSector selectedSector =(AmpSector) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
+//        List<AmpSector> choices = (List<AmpSector>) this.searchSectors.getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED);
+       List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
+        logger.info("Choices found: " + selectedSector);
+        if (choices.size() == 1) {
+            for (AmpSector secondarySector : choices) {
+                AmpActivitySector newSector = new AmpActivitySector();
+                newSector.setSectorId(secondarySector);
+                newSector.setActivityId(setModel.getObject().iterator().next().getActivityId()); // Assuming activityId is the same
+                newSector.setClassificationConfig(sectorClassification);
+                setModel.getObject().add(newSector);
             }
         }
         target.add(list.getParent());
+
+
+    }
+
+
+    private List<AmpSector> searchSectorsDstFromMapping(AmpSector srcSector) {
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpSector> dstSectorIds = new ArrayList<>();
+        String hql = "SELECT sm.dstSector FROM AmpSectorMapping sm WHERE sm.srcSector.ampSectorId = :srcSectorId";
+
+        try {
+            Query query = session.createQuery(hql);
+            query.setParameter("srcSectorId", srcSector.getAmpSectorId(), LongType.INSTANCE);
+            dstSectorIds = query.list();
+
+//            for (Object obj : resultList) {
+//                dstSectorIds.add((AmpSector) obj);
+//            }
+        } catch (HibernateException e) {
+            // Handle the exception
+            e.printStackTrace();
+        }
+
+        return dstSectorIds;
     }
 
 

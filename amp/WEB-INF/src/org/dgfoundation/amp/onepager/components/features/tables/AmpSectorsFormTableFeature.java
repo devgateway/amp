@@ -410,7 +410,7 @@ public class AmpSectorsFormTableFeature extends
                 List<AmpSector> newChoices = (List<AmpSector>)getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, choices);
                 if (newChoices!=null)
                 {
-                    choices=newChoices;
+                    choices= newChoices;
                     choices2= new HashSet<>(newChoices);
                 }
 

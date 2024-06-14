@@ -15,6 +15,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorMapping;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -42,6 +43,7 @@ public class AmpSectorSearchModel extends
         super(input, language, params);
         // TODO Auto-generated constructor stub
     }
+
 
     private static final long serialVersionUID = 8211300754918658832L;
     private Session session;
@@ -81,6 +83,7 @@ public class AmpSectorSearchModel extends
             if (maxResults != null && maxResults != 0) crit.setMaxResults(maxResults);
             List<AmpSector> list = crit.list();
 
+
             ret = (Collection<AmpSector>) createTreeView(list);
             getParams().put(PARAM.DST_SECTORS_FOUND, ret);
         } catch (HibernateException e) {
@@ -89,6 +92,10 @@ public class AmpSectorSearchModel extends
             session.disableFilter("isDeletedFilter");
         }
         return ret;
+    }
+    public  Collection<? extends AmpAutoCompleteDisplayable> createTree(Collection<AmpSector> collection)
+    {
+        return createTreeView(collection);
     }
 
     /*

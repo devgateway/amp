@@ -4,8 +4,7 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -13,10 +12,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpSectorsFormTableFeature;
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableDeleteListener;
+import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.SectorUtil;
 
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
@@ -112,6 +113,8 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         try {
             if (selectedSector!=null) {
                 List<AmpSector> choices = searchSectorsDstFromMapping(selectedSector);
+                choices = (List<AmpSector>) createTreeView(choices);
+
                 logger.info("Choices found: " + choices);
                 if (choices.size() == 1) {
                     for (AmpSector secondarySector : choices) {
@@ -147,6 +150,46 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
 
 
     }
+
+
+    protected void addToRootTree(Collection<AmpAutoCompleteDisplayable> tree, AmpAutoCompleteDisplayable obj,
+                                 boolean searchHit) {
+        if (obj.getParent() == null)
+            tree.add(obj);
+        else {
+            if (searchHit)
+                obj.getVisibleSiblings().addAll(obj.getNonDeletedChildren());
+            obj.getParent().getVisibleSiblings().add(obj);
+            addToRootTree(tree, obj.getParent(), false);
+        }
+    }
+
+    protected void addToRootList(Collection<AmpAutoCompleteDisplayable> list, AmpAutoCompleteDisplayable obj) {
+        list.add(obj);
+        Collection<? extends AmpAutoCompleteDisplayable> children = obj.getVisibleSiblings();
+        for (AmpAutoCompleteDisplayable ampSector : children) {
+            addToRootList(list, ampSector);
+        }
+    }
+
+    protected Collection<? extends AmpAutoCompleteDisplayable> createTreeView(Collection l) {
+        Boolean b = (Boolean) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH);
+        if (b != null && b)
+            return l;
+        Collection<AmpAutoCompleteDisplayable> ret = new ArrayList<AmpAutoCompleteDisplayable>();
+
+        Set<AmpAutoCompleteDisplayable> root = new TreeSet<AmpAutoCompleteDisplayable>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
+        for (Object o : l)
+            addToRootTree(root, (AmpAutoCompleteDisplayable) o, true);
+        for (Object o : root) {
+            addToRootList(ret, (AmpAutoCompleteDisplayable) o);
+        }
+
+        return ret;
+    }
+
+
+
 
 
     private List<AmpSector> searchSectorsDstFromMapping(AmpSector srcSector) {

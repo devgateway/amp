@@ -89,7 +89,7 @@ public class AmpSectorsFormTableFeature extends
      * @param selectedSectors           the set of selected sectors
      * @param sectorClassification     the current sector classification configuration
      */
-    protected void triggerUpdateEvent(Set<AmpActivitySector> selectedSectors,
+    public void triggerUpdateEvent(Set<AmpActivitySector> selectedSectors,
                                       AmpClassificationConfiguration sectorClassification) {
         if (updateListener != null) {
             List<AmpSector> sectorsByClassification = new ArrayList<>();

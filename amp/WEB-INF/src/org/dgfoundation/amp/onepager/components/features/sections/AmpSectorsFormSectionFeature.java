@@ -117,11 +117,12 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         try {
             if (selectedSector!=null) {
                 List<AmpSector> choices = (List<AmpSector>)load();
-//                choices = (List<AmpSector>) createTreeView(choices);
+                List<AmpSector> sectorChoices = searchSectorsDstFromMapping(selectedSector);
+
 
                 logger.info("Choices found: " + choices);
-                load();
-                if (choices.size() == 1) {
+                logger.info("Sector Choices found: " + sectorChoices);
+                if (sectorChoices.size() == 1) {
                     for (AmpSector secondarySector : choices) {
                         AmpActivitySector newSector = new AmpActivitySector();
                         newSector.setSectorId(secondarySector);
@@ -138,9 +139,9 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                 }
                 List<AmpSector> srcSectorSelected = (List<AmpSector>) this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
 
-                secondarySectorsTable.updateBasedOnData(srcSectorSelected);
+//                secondarySectorsTable.updateBasedOnData(srcSectorSelected);
 
-                secondarySectorsTable.triggerUpdateEvent(secondarySectorsTable.getSetModel().getObject(), sectorClassification);
+//                secondarySectorsTable.triggerUpdateEvent(secondarySectorsTable.getSetModel().getObject(), sectorClassification);
                 secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, choices);
 
                 target.add(secondarySectorsTable.getSearchSectors());
@@ -262,10 +263,8 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
             if (maxResults != null && maxResults != 0) crit.setMaxResults(maxResults);
             List<AmpSector> list = crit.list();
 
-            logger.info("List here 1: " + list);
 
             ret = (Collection<AmpSector>) createTreeView(list);
-            logger.info("List here: " + ret);
             this.secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND, ret);
         } catch (HibernateException e) {
             throw new RuntimeException(e);

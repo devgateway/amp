@@ -96,7 +96,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                  target.add(secondarySectorsTable.getSearchSectors());
              }
              if (this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.ACTION)=="add" || this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.ACTION)=="add") {
-                 populateSecondarySectorsFor1Choice(secondarySectorsTable, primarySectorsTable, target, secondaryConf);
+                 populateSecondarySectorsFor1Choice( target, secondaryConf);
              }
 
         }
@@ -106,7 +106,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
 
     }
 
-    private void populateSecondarySectorsFor1Choice(AmpSectorsFormTableFeature secondarySectorsTable,AmpSectorsFormTableFeature primarySectorsTable,AjaxRequestTarget target, AmpClassificationConfiguration sectorClassification)
+    private void populateSecondarySectorsFor1Choice(AjaxRequestTarget target, AmpClassificationConfiguration sectorClassification)
     {
 
         AmpSector selectedSector =(AmpSector) this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
@@ -121,10 +121,11 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                         newSector.setSectorId(secondarySector);
                         newSector.setActivityId(secondarySectorsTable.getSetModel().getObject().iterator().next().getActivityId()); // Assuming activityId is the same
                         newSector.setClassificationConfig(sectorClassification);
+                        secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED, newSector);
                         secondarySectorsTable.getSetModel().getObject().add(newSector);
                     }
                 }
-                target.add(secondarySectorsTable.getList().getParent());
+                target.add(secondarySectorsTable);
             }
         }catch (Exception e) {
             logger.error("Error",e);

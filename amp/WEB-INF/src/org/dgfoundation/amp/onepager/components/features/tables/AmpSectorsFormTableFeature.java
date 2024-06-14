@@ -389,8 +389,6 @@ public class AmpSectorsFormTableFeature extends
                     this.getModelParams().put(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED,choice);
                 }
                 triggerUpdateEvent(setModel.getObject(), sectorClassification);
-
-
                 target.add(list.getParent());
                 refreshTable(target);
 

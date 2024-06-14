@@ -16,16 +16,14 @@ import org.dgfoundation.amp.onepager.interfaces.ISectorTableDeleteListener;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.SectorUtil;
 
 import org.dgfoundation.amp.onepager.interfaces.ISectorTableUpdateListener;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 
 /**
@@ -125,7 +123,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                         secondarySectorsTable.getSetModel().getObject().add(newSector);
                     }
                 }
-                target.add(secondarySectorsTable);
+                target.add(secondarySectorsTable.getList().getParent());
             }
         }catch (Exception e) {
             logger.error("Error",e);
@@ -146,10 +144,19 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
             Query query = session.createQuery(hql);
             query.setParameter("srcSectorId", srcSector.getAmpSectorId(), LongType.INSTANCE);
             dstSectorIds = query.list();
+            if (dstSectorIds.isEmpty())
+            {
+                AmpSectorScheme scheme = (AmpSectorScheme) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SECTOR_SCHEME);
 
-//            for (Object obj : resultList) {
-//                dstSectorIds.add((AmpSector) obj);
-//            }
+                session = PersistenceManager.getSession();
+                String sql = "select pi from "
+                        + AmpSector.class.getName()
+                        + " pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null and (pi.deleted is null or pi.deleted = false)";
+                query = session.createQuery(sql);
+                query.setParameter("schemeId", scheme.getAmpSecSchemeId(), LongType.INSTANCE);
+                dstSectorIds = query.list();
+            }
+
         } catch (HibernateException e) {
             // Handle the exception
             e.printStackTrace();

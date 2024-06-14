@@ -463,11 +463,6 @@ public class AmpSectorsFormTableFeature extends
 
         add(this.searchSectors);
 
-
-        // Check if only one choice is available for the selected Primary Sector
-//                if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME)) {
-//
-//                }
     }
 
 

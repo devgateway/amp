@@ -119,6 +119,8 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                         newSector.setSectorId(secondarySector);
                         newSector.setActivityId(secondarySectorsTable.getSetModel().getObject().iterator().next().getActivityId()); // Assuming activityId is the same
                         newSector.setClassificationConfig(sectorClassification);
+                        this.secondarySectorsTable.getSearchSectors().getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
+                                k -> new ArrayList<>());
                         ((List<AmpActivitySector>)secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(newSector);
 
                         secondarySectorsTable.getSetModel().getObject().add(newSector);

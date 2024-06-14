@@ -88,7 +88,6 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
      */
     @Override
     public void onUpdate(List<AmpSector> data) {
-        logger.info("IN UPDATE");
         if (secondarySectorsTable != null) {
             // Update user interface
              AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
@@ -96,7 +95,9 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                  secondarySectorsTable.updateBasedOnData(data);
                  target.add(secondarySectorsTable.getSearchSectors());
              }
-            populateSecondarySectorsFor1Choice(secondarySectorsTable,primarySectorsTable,target,secondaryConf);
+             if (this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.ACTION)=="add" || this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.ACTION)=="add") {
+                 populateSecondarySectorsFor1Choice(secondarySectorsTable, primarySectorsTable, target, secondaryConf);
+             }
 
         }
 

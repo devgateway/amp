@@ -313,6 +313,8 @@ public class AmpSectorsFormTableFeature extends
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         AmpActivitySector sectorToDelete = item.getModelObject();
+                        getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.ACTION,"del");
+
                         setModel.getObject().remove(sectorToDelete);
                         if (sectorClassification.getName().equals(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME) && (getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)!=null)) {
                                 ((List<AmpActivitySector>) getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).remove(sectorToDelete);
@@ -382,6 +384,7 @@ public class AmpSectorsFormTableFeature extends
                 AmpActivitySector activitySector = getAmpActivitySector(choice);
                 if (setModel.getObject() == null) setModel.setObject(new HashSet<>());
                 setModel.getObject().add(activitySector);
+                this.getModelParams().put(AmpSectorSearchModel.PARAM.ACTION,"add");
                 if (sectorClassification.getName().equals(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME)) {
                     this.getModelParams().put(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED,choice);
                 }

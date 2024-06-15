@@ -116,7 +116,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         logger.info("Selected sector: " + selectedSector);
         try {
             if (selectedSector!=null) {
-                List<AmpSector> choices = (List<AmpSector>)secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND);
+                List<AmpSector> choices = (List<AmpSector>)load();
                 List<AmpSector> sectorChoices = searchSectorsDstFromMapping(selectedSector);
 
 

@@ -144,7 +144,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                     secondarySectorsTable.triggerUpdateEvent(secondarySectorsTable.getSetModel().getObject(), sectorClassification);
 
 
-                    target.add(secondarySectorsTable);
+                    target.add(secondarySectorsTable.getSearchSectors());
                 }
                 else
                 {

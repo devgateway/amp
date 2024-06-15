@@ -123,7 +123,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                 logger.info("Choices found: " + choices);
                 logger.info("Sector Choices found: " + sectorChoices);
                 if (sectorChoices.size() == 1) {
-                    for (AmpSector secondarySector : choices) {
+                    for (AmpSector secondarySector : sectorChoices) {
                         AmpActivitySector newSector = new AmpActivitySector();
                         newSector.setSectorId(secondarySector);
                         newSector.setActivityId(secondarySectorsTable.getSetModel().getObject().iterator().next().getActivityId()); // Assuming activityId is the same
@@ -135,22 +135,18 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                         secondarySectorsTable.getSetModel().getObject().add(newSector);
                     }
                     target.add(secondarySectorsTable.getList().getParent());
-//                    secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, choices);
+
+                }
+                secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, choices);
+
+                List<AmpSector> srcSectorSelected = (List<AmpSector>) primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
 //
-//                    List<AmpSector> srcSectorSelected = (List<AmpSector>) primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
-////
-//                    secondarySectorsTable.updateBasedOnData(srcSectorSelected);
-////
-//                    secondarySectorsTable.triggerUpdateEvent(secondarySectorsTable.getSetModel().getObject(), sectorClassification);
+                secondarySectorsTable.updateBasedOnData(srcSectorSelected);
+//
+                secondarySectorsTable.triggerUpdateEvent(secondarySectorsTable.getSetModel().getObject(), sectorClassification);
 
-
-                    target.add(secondarySectorsTable.getSearchSectors());
-                }
-                else
-                {
-                    return;
-                }
-
+                target.add(secondarySectorsTable.getSearchSectors());
+                target.add(secondarySectorsTable);
 
 
 

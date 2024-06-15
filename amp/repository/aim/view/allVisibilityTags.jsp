@@ -20,9 +20,9 @@
 <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
-<module:display name="Sector Mapping" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Sector Mapping" parentModule="ADMINISTRATIVE SECTION"/>
 
-<module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display>
+<module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"/>
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>

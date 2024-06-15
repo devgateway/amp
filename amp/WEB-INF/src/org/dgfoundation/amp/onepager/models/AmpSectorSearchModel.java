@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.models;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
@@ -109,6 +111,17 @@ public class AmpSectorSearchModel extends
             session = PersistenceManager.getSession();
             Criteria crit = session.createCriteria(AmpSectorMapping.class);
             crit.setCacheable(true);
+            Query query;
+            for (AmpSector sector : srcSectors) {
+                 query =session.createQuery("FROM " + AmpSectorMapping.class.getName() + " am WHERE am.srcSector.ampSectorId = :sectorId");
+                 query.setParameter("sectorId", sector.getAmpSectorId());
+                 List<AmpSectorMapping> list = query.list();
+                 if (list== null || list.isEmpty()) {
+                    return Collections.emptyList();
+                 }
+
+            }
+
 
             if (srcSectors != null && !srcSectors.isEmpty()) {
                 Junction junction = Restrictions.conjunction().add(

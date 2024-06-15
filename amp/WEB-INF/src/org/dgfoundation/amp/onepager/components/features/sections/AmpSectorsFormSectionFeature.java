@@ -198,9 +198,6 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
     }
 
 
-
-
-
     private List<AmpSector> searchSectorsDstFromMapping(AmpSector srcSector) {
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpSector> dstSectorIds = new ArrayList<>();

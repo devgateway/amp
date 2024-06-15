@@ -116,11 +116,8 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
         logger.info("Selected sector: " + selectedSector);
         try {
             if (selectedSector!=null) {
-//                List<AmpSector> choices = (List<AmpSector>)load();
                 List<AmpSector> sectorChoices = searchSectorsDstFromMapping(selectedSector);
 
-
-//                logger.info("Choices found: " + choices);
                 logger.info("Sector Choices found: " + sectorChoices);
                 if (sectorChoices.size() == 1) {
                     for (AmpSector secondarySector : sectorChoices) {
@@ -140,9 +137,9 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
                 else {
                     secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.NEW_CHOICES, secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND));
                 }
-                List<AmpSector> srcSectorSelected = (List<AmpSector>) primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
-//
-                secondarySectorsTable.updateBasedOnData(srcSectorSelected);
+//                List<AmpSector> srcSectorSelected = (List<AmpSector>) primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
+////
+//                secondarySectorsTable.updateBasedOnData(srcSectorSelected);
 //
                 secondarySectorsTable.triggerUpdateEvent(secondarySectorsTable.getSetModel().getObject(), sectorClassification);
 

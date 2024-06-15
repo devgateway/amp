@@ -71,6 +71,7 @@ public class AmpSectorSearchModel extends
                             )));
 
             List<AmpSector> srcSectorSelected = (List<AmpSector>) getParams().get(PARAM.SRC_SECTOR_SELECTED);
+            logger.info("SEctors selected: " + srcSectorSelected);
             Junction junction2 = null;
             if (srcSectorSelected != null && !srcSectorSelected.isEmpty()) {
                 List<Long> ids = searchSectorsDstFromMapping(srcSectorSelected);

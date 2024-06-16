@@ -29,6 +29,7 @@
 	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page page="addNewTheme" name="addNewTheme" title="AMP - Add NewProgram"/>
 	<page name="sectorManager" title=" - Sector Manager" />
+	<page name="sectorMapping" title=" - Sector Mapping" />
 	<page name="BudgetManager" title=" - Budget Manager" />
 	<page name="departmentsmanager" title=" - Departments Manager" />
 	<page name="addSector" title=" - Add Sector" />

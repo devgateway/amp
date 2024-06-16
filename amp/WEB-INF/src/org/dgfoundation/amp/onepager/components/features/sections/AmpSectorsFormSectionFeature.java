@@ -76,6 +76,14 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
 
         secondarySectorsTable = new AmpSectorsFormTableFeature(view.newChildId(),
                 secondaryConf.getName() + " Sectors", am, secondaryConf);
+        Set<AmpActivitySector> alreadyslectedSecSectors = secondarySectorsTable.getSetModel().getObject();
+        if (alreadyslectedSecSectors!=null) {
+            for (AmpActivitySector ampActivitySector: alreadyslectedSecSectors) {
+                secondarySectorsTable.getSearchSectors().getModelParams().computeIfAbsent(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED,
+                        k -> new ArrayList<>());
+                ((List<AmpActivitySector>) secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.DST_SECTOR_SELECTED)).add(ampActivitySector);
+            }
+        }
 
 
         view.add(primarySectorsTable);

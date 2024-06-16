@@ -113,12 +113,10 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
     {
 
         AmpSector selectedSector =(AmpSector) this.primarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.CURRENT_SRC_SECTOR_SELECTED);
-        logger.info("Selected sector: " + selectedSector);
         try {
             if (selectedSector!=null) {
                 List<AmpSector> sectorChoices = searchSectorsDstFromMapping(selectedSector);
 
-                logger.info("Sector Choices found: " + sectorChoices);
                 if (sectorChoices.size() == 1) {
                     for (AmpSector secondarySector : sectorChoices) {
                         AmpActivitySector newSector = new AmpActivitySector();
@@ -150,42 +148,6 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
 
     }
 
-
-    protected void addToRootTree(Collection<AmpAutoCompleteDisplayable> tree, AmpAutoCompleteDisplayable obj,
-                                 boolean searchHit) {
-        if (obj.getParent() == null)
-            tree.add(obj);
-        else {
-            if (searchHit)
-                obj.getVisibleSiblings().addAll(obj.getNonDeletedChildren());
-            obj.getParent().getVisibleSiblings().add(obj);
-            addToRootTree(tree, obj.getParent(), false);
-        }
-    }
-
-    protected void addToRootList(Collection<AmpAutoCompleteDisplayable> list, AmpAutoCompleteDisplayable obj) {
-        list.add(obj);
-        Collection<? extends AmpAutoCompleteDisplayable> children = obj.getVisibleSiblings();
-        for (AmpAutoCompleteDisplayable ampSector : children) {
-            addToRootList(list, ampSector);
-        }
-    }
-
-    protected Collection<? extends AmpAutoCompleteDisplayable> createTreeView(Collection l) {
-        Boolean b = (Boolean) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH);
-        if (b != null && b)
-            return l;
-        Collection<AmpAutoCompleteDisplayable> ret = new ArrayList<AmpAutoCompleteDisplayable>();
-
-        Set<AmpAutoCompleteDisplayable> root = new TreeSet<AmpAutoCompleteDisplayable>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
-        for (Object o : l)
-            addToRootTree(root, (AmpAutoCompleteDisplayable) o, true);
-        for (Object o : root) {
-            addToRootList(ret, (AmpAutoCompleteDisplayable) o);
-        }
-
-        return ret;
-    }
 
 
     private List<AmpSector> searchSectorsDstFromMapping(AmpSector srcSector) {
@@ -219,81 +181,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel
     }
 
 
-    protected Collection<AmpSector> load() {
-        Collection<AmpSector> ret= new ArrayList<>();
-        Session session = PersistenceManager.getSession();
-        try {
-            session.enableFilter("isDeletedFilter").setParameter("deleted", Boolean.FALSE);
 
-            Integer maxResults = (Integer) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
-            AmpSectorScheme scheme = (AmpSectorScheme) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SECTOR_SCHEME);
-            Criteria crit = session.createCriteria(AmpSector.class);
-            crit.setCacheable(true);
-            Junction junction = Restrictions.conjunction().add(
-                    Restrictions.and(
-                            Restrictions.eq("ampSecSchemeId", scheme),
-                            Restrictions.or(
-                                    Restrictions.isNull("deleted"),
-                                    Restrictions.eq( "deleted", Boolean.FALSE)
-                            )));
-
-            List<AmpSector> srcSectorSelected = (List<AmpSector>) this.secondarySectorsTable.getSearchSectors().getModelParams().get(AmpSectorSearchModel.PARAM.SRC_SECTOR_SELECTED);
-            Junction junction2 = null;
-            if (srcSectorSelected != null && !srcSectorSelected.isEmpty()) {
-                List<Long> ids = searchSectorsDstFromMapping(srcSectorSelected);
-                if (!ids.isEmpty()) {
-                    junction2 = Restrictions.conjunction().add(
-                            Restrictions.in("ampSectorId", ids));
-                }
-            }
-
-            crit.add(junction);
-            if (junction2 != null) crit.add(junction2);
-            crit.addOrder(Order.asc("name"));
-            if (maxResults != null && maxResults != 0) crit.setMaxResults(maxResults);
-            List<AmpSector> list = crit.list();
-
-
-            ret = (Collection<AmpSector>) createTreeView(list);
-            this.secondarySectorsTable.getSearchSectors().getModelParams().put(AmpSectorSearchModel.PARAM.DST_SECTORS_FOUND, ret);
-        } catch (HibernateException e) {
-            throw new RuntimeException(e);
-        } finally {
-            session.disableFilter("isDeletedFilter");
-        }
-        return ret;
-    }
-
-    /*
-     * Search for sectors that are mapped to the given sector
-     * */
-    private List<Long> searchSectorsDstFromMapping(List<AmpSector> srcSectors) {
-        List<Long> ids = new ArrayList<Long>();
-        Session session = PersistenceManager.getRequestDBSession();
-        try {
-            Criteria crit = session.createCriteria(AmpSectorMapping.class);
-            crit.setCacheable(true);
-
-            if (srcSectors != null && !srcSectors.isEmpty()) {
-                Junction junction = Restrictions.conjunction().add(
-                        Restrictions.in("srcSector", srcSectors)
-                );
-
-                crit.add(junction);
-                List<AmpSectorMapping> list = crit.list();
-                if (list != null && !list.isEmpty()) {
-                    for (AmpSectorMapping mapping : list) {
-                        ids.add(mapping.getDstSector().getAmpSectorId());
-                    }
-                }
-            }
-        } catch (HibernateException e) {
-            throw new RuntimeException(e);
-        } finally {
-            session.disableFilter("isDeletedFilter");
-        }
-        return ids;
-    }
 
     /**
      * Updates the user interface when a deletion event is triggered.

@@ -73,7 +73,6 @@ public class AmpSectorSearchModel extends
                             )));
 
             List<AmpSector> srcSectorSelected = (List<AmpSector>) getParams().get(PARAM.SRC_SECTOR_SELECTED);
-            logger.info("SEctors selected: " + srcSectorSelected);
             Junction junction2 = null;
             if (srcSectorSelected != null && !srcSectorSelected.isEmpty()) {
                 List<Long> ids = searchSectorsDstFromMapping(srcSectorSelected);
@@ -89,10 +88,8 @@ public class AmpSectorSearchModel extends
             if (maxResults != null && maxResults != 0) crit.setMaxResults(maxResults);
             List<AmpSector> list = crit.list();
 
-            logger.info("List here 1: " + list);
 
             ret = (Collection<AmpSector>) createTreeView(list);
-            logger.info("List here: " + ret);
             getParams().put(PARAM.DST_SECTORS_FOUND, ret);
         } catch (HibernateException e) {
             throw new RuntimeException(e);

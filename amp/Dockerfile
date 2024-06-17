@@ -52,8 +52,7 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 # HACK otherwise amp-settings won't compile!
 COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci \
+RUN npm ci \
     && npm run build
 
 FROM node as compile-gis-layers-manager

@@ -52,6 +52,9 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 # HACK otherwise amp-settings won't compile!
 COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
+
+RUN test -f package-lock.json || npm install
+
 RUN npm ci \
     && npm run build
 

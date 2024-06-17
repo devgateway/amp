@@ -327,8 +327,7 @@ public final class XmlPatcherUtil {
             lazyPatch.getLogs().add(log);
             sess.saveOrUpdate(lazyPatch);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            logger.error("Error updating log into patch" +e.getMessage(), e);
         }
     }
 

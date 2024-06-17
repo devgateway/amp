@@ -57,6 +57,7 @@
 						  fund.agreement,
 						  fund.amp_funding_id,
 						  fund.vulnerable_group_va,
+						  fund.project_results_available,
 						  o.amp_country_id ) v
                     ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>

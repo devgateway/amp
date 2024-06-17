@@ -140,7 +140,6 @@ public class GlobalSettingsConstants {
     public static final String AUTOMATIC_AUDIT_LOGGER_CLEANUP = "Automatic Audit Logger Cleanup";
 
     public static final String NPD_DEFAULT_PROGRAM = "NPD Default Program";
-    public static final String MULTI_COUNTRY_GIS_ENABLED = "Multicountry Enabled";
 
     public static final String COMPONENT_TYPE = "Default Component Type";
 
@@ -278,4 +277,10 @@ public class GlobalSettingsConstants {
     public static final String EXEMPT_ORGANIZATION_DOCUMENTS = "Exempt organization to see documents";
 
     public static final String AMP_DASHBOARD_URL = "AMP Dashboard URL";
+
+    public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "Number of indicators in M&E Dashboard";
+
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_URL = "AMP Dashboard Core Indicator URL";
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_USERNAME = "AMP Dashboard Core Indicator Username";
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_PASSWORD = "AMP Dashboard Core Indicator Password";
 }

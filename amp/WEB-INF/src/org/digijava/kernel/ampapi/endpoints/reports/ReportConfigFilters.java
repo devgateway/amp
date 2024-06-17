@@ -16,7 +16,6 @@ public class ReportConfigFilters {
 
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.FiltersPH")
     private Map<String, Object> filters;
-
     @JsonProperty("include-location-children")
     private Boolean includeLocationChildren;
 

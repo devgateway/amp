@@ -17,14 +17,14 @@ module.exports = Backbone.View.extend({
 
 
   render: function() {
-	  var self = this;	  
-	  $.when(self.app.data.generalSettings.loaded, self.collection.load()).then(function() {		 	  
+	  var self = this;
+	  $.when(self.app.data.generalSettings.loaded, self.collection.load()).then(function() {
 			  //TODO: inefficient to constantly redraw (if already on page), put in temp obj first.
 			  // then only append once.
 			  self.collection.each(function(project) {
 				  // it joins on activity init, but for some reason it was being overridden...
-				  // temp dirty force rejoin for now, otherwise use: getJoinedVersion          
-				  var ampFormatter = new chartUtils.DecimalFormat(self.app.data.generalSettings.get('number-format'));          
+				  // temp dirty force rejoin for now, otherwise use: getJoinedVersion
+				  var ampFormatter = new chartUtils.DecimalFormat(self.app.data.generalSettings.get('number-format'));
 				  // dec 31st, 2014 tried getjoinedversion INSTEAD OF tempDirtyForceJoin, but still doesn't work
                   project.appData = this.app.data;
 				  project.tempDirtyForceJoin().then(function() {
@@ -53,23 +53,27 @@ module.exports = Backbone.View.extend({
 					  var formattedColumnName2 = ampFormatter.format(project.attributes[columnName2]);
 					  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
 
-                      var activity = project.toJSON()
+                      var activity = project.toJSON();
                       var orgColumnName = activity[orgColumn];
 
                       // put them on the page.
-					  self.$el.append(self.template({
-						  activity: activity,
-                          orgColumnName: orgColumnName ? orgColumnName : '',
-                          formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
-                          formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
-					  }));
-				 
+
+                          self.$el.append(self.template({
+                              sectorsEnabled: self.app.data.generalSettings.get('gis-sectors-enabled'),
+                              programsEnabled: self.app.data.generalSettings.get('gis-programs-enabled'),
+                              activity: activity,
+                              orgColumnName: orgColumnName ? orgColumnName : '',
+                              formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
+                              formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
+                          }));
+
+
 			  });
 
 		  });
 	  });
-	  
-	  
+
+
 	  return this;
   }
 

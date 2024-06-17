@@ -1,7 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -11,16 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
 
@@ -39,7 +38,7 @@ public class BoundariesService {
      * @return
      */
     public static List<Boundary> getBoundaries() {
-        String path;
+        String path = "";
         String country=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode"));
         if (country.length()==2) {
 
@@ -60,26 +59,22 @@ public class BoundariesService {
 
             }
         }
-        else
+
+
+        if (!FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
         {
-            throw new RuntimeException("Wrong country code format :"+country);
+            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+            if (countryIso != null) {
+                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+            }
+
         }
-
-
-//        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MULTI_COUNTRY_GIS_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
-//        {
-//            String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-//            if (countryIso != null) {
-//                path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
-//            }
-
-//        }
         logger.info("Boundaries path is: "+path);
         try (InputStream is = Files.newInputStream(Paths.get(path))) {
             String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);
             return MAPPER.readValue(jsonTxt, new TypeReference<List<Boundary>>() { });
         } catch (IOException e) {
-            logger.error("Failed to load boundaries for BOAD", e);
+            logger.error("Failed to load boundaries for AMP", e);
             throw new RuntimeException(e);
         }
     }

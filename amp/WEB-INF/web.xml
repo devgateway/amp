@@ -10,7 +10,9 @@
 	<!-- ******************************************* -->
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
-
+	<session-config>
+		<session-timeout>5</session-timeout>
+	</session-config>
 	<filter>
 		<filter-name>javamelody</filter-name>
 		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
@@ -418,8 +420,6 @@
 				web, directly
 			</description>
 			<url-pattern>*.xml</url-pattern>
-			<http-method>GET</http-method>
-			<http-method>POST</http-method>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>DigiAdmin</role-name>

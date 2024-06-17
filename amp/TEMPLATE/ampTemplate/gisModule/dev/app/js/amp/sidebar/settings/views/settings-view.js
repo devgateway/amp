@@ -34,7 +34,7 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.render.apply(this);
 
-    self.$('.content').html(this.template({title: this.title}));
+      self.$('.content').html(this.template({title: this.title}));
     // add content    
        
     this.app.data.settingsWidget.setElement(this.el.querySelector('#amp-settings'));

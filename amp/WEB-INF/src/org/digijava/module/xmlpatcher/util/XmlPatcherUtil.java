@@ -43,7 +43,7 @@ import java.util.*;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
- * 
+ *
  */
 public final class XmlPatcherUtil {
     private static Logger logger = Logger.getLogger(XmlPatcherUtil.class);
@@ -51,7 +51,7 @@ public final class XmlPatcherUtil {
     /**
      * Finds and saves to db all new patch names and locations, that were not
      * recorded previously.
-     * 
+     *
      * @param dir
      *            the dir to seek for unrecorded patches
      * @param patchNames
@@ -79,8 +79,8 @@ public final class XmlPatcherUtil {
                 continue;
             }
             if (patchNames.contains(f.getName())) {
-                
-                AmpXmlPatch patch = patchesMap.get(f.getName());                
+
+                AmpXmlPatch patch = patchesMap.get(f.getName());
                 //if no recorded patch is found, then there are two unrecorded patches with same name=>fail
                 //if there is a recorded patch but its path is different than the current file=>fail
                 if(patch==null || !patch.getLocation().equals(computePatchFileLocation(f,appPath))) {
@@ -115,15 +115,15 @@ public final class XmlPatcherUtil {
         return patchFile.getAbsolutePath().substring(
                 appPath.length(),
                 patchFile.getAbsolutePath().length() - patchFile.getName().length()).replaceAll("\\\\", "/");
-        
+
     }
-    
+
     /**
      * Checks if the jdbc connection is compatible with the given language type.
      * This will check if the language type is part of the URL of the
      * connection. Example language type "oracle". The oracle string should
      * always be part of the jdbc URL
-     * 
+     *
      * @return true if the langType is compatible with the connection
      */
     public static boolean isSQLCompatible(String langType) {
@@ -146,11 +146,11 @@ public final class XmlPatcherUtil {
      * Gets the JDBC connection out of the Session Factory. Do not get the
      * connection directly from the session
      * (org.hibernate.session.Session#connection is deprecated)
-     * 
+     *
      * @return the connection object
      */
     public static Connection getConnection() {
-    
+
         try {
             return PersistenceManager.getJdbcConnection();
         } catch (SQLException e) {
@@ -165,7 +165,7 @@ public final class XmlPatcherUtil {
      * (repository/modulename/xmlpatches). However this is not hardcoded. One
      * usual location that is outside /repository/ is the generic patches dir
      * (that do not belong to one specific module)
-     * 
+     *
      * @param root
      *            the root dir to start searching
      * @return a set of FileS that represent discovered patch directories
@@ -193,7 +193,7 @@ public final class XmlPatcherUtil {
     /**
      * Gets all the patch names which are also the primary keys, of all
      * discovered patches.
-     * 
+     *
      * @return a set with the patch names, naturally ordered
      * @throws DgException
      * @throws SQLException
@@ -216,7 +216,7 @@ public final class XmlPatcherUtil {
     static javax.xml.transform.TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance( );
     static javax.xml.transform.Transformer cached_transformer;
     static String lastPathTransformerPath = null;
-    
+
     static Unmarshaller cached_unmarshaller;
     static String lastUnmarshallerPath = null;
 
@@ -225,19 +225,19 @@ public final class XmlPatcherUtil {
         //logger.error("requested Transformer for " + xslName);
         // recreate transformer if a different one was requested or this is the first call
         boolean needToRecreate = lastPathTransformerPath == null || (!lastPathTransformerPath.equals(xslName));
-        
+
         //logger.error("needToRecreate = " + needToRecreate);
         if (needToRecreate)
             cached_transformer = transFact.newTransformer(new StreamSource(xslName));
-        
+
         lastPathTransformerPath = xslName;
         return cached_transformer;
     }
-    
+
     static Unmarshaller getUnmarshaller(String schemaURI) throws JAXBException, SAXException
     {
         boolean needToRecreate = lastUnmarshallerPath == null || (!lastUnmarshallerPath.equals(schemaURI));
-        
+
         if (needToRecreate)
         {
             JAXBContext jc = JAXBContext.newInstance(XmlPatcherConstants.jaxbPackage);
@@ -252,11 +252,11 @@ public final class XmlPatcherUtil {
         lastUnmarshallerPath = schemaURI;
         return cached_unmarshaller;
     }
-    
+
     public static java.util.Map<AmpXmlPatch, Patch> loadedPatches = new HashMap<AmpXmlPatch, Patch>();
     /**
      * Unmarshalls using JAXB the xml file that the AmpXmlPatch object points to
-     * 
+     *
      * @param serviceContext
      * @param p
      *            the patch file metaobject that holds the location URI
@@ -269,7 +269,7 @@ public final class XmlPatcherUtil {
      */
     public static Patch getUnmarshalledPatch(ServiceContext serviceContext,
             AmpXmlPatch p, AmpXmlPatchLog log) {
-        try 
+        try
         {
             if ((!loadedPatches.containsKey(p)))
             {
@@ -277,13 +277,13 @@ public final class XmlPatcherUtil {
                 javax.xml.transform.Transformer trans = getTransformer(serviceContext.getRealPath("/")+XmlPatcherConstants.xslLocation);
                 Unmarshaller um = getUnmarshaller(serviceContext.getRealPath("/") + XmlPatcherConstants.xsdLocation);
                 JAXBResult result = new JAXBResult(um);
-                
+
                 trans.transform(new StreamSource(getXmlPatchAbsoluteFileName(p, serviceContext)), result);
                 Object tree=result.getResult();
-            
+
                 JAXBElement<Patch> enclosing = (JAXBElement<Patch>) tree;
                 Patch funcResult = enclosing.getValue();
-            
+
                 loadedPatches.put(p, funcResult);
             }
             return loadedPatches.get(p);
@@ -295,7 +295,7 @@ public final class XmlPatcherUtil {
             throw new Error(e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public static void deleteUnitTestPatches() throws DgException,
             HibernateException, SQLException {
@@ -303,7 +303,7 @@ public final class XmlPatcherUtil {
         Query query = session.createQuery("select p from "
                 + AmpXmlPatch.class.getName() + " p WHERE p.patchId LIKE 'junit-test%'");
         List list = query.list();
-        
+
         Iterator iterator = list.iterator();
         while(iterator.hasNext()) {
             AmpXmlPatch p=(AmpXmlPatch) iterator.next();
@@ -336,7 +336,7 @@ public final class XmlPatcherUtil {
      * Reconstructs the absolute location of the patch file on the disk based on
      * the patch name, the relative path inside the WAR plus the absolute WAR
      * path
-     * 
+     *
      * @param p
      * @param serviceContext
      * @return
@@ -346,21 +346,21 @@ public final class XmlPatcherUtil {
         return serviceContext.getRealPath("/") + p.getLocation()
                 + p.getPatchId();
     }
-    
+
     /**
      * Checks if the current patch is deprecating other patches (has deprecate tags). If so, it deprecates those patches.
      * This is run BEFORE the actual patch execution is invoked, thus it prevents deprecated patches to ever be applied.
      * @param p
      * @param log
-     * @throws SQLException 
-     * @throws HibernateException 
+     * @throws SQLException
+     * @throws HibernateException
      */
     public static void applyDeprecationTags(Patch p, AmpXmlPatchLog log) throws HibernateException, SQLException {
         if (p==null || p.getDeprecate()==null) return;
         for (String deprecatedId : p.getDeprecate()) {
             // load the deprecated patch metadata:
             Session session = PersistenceManager.getSession();
-            
+
             AmpXmlPatch patch = (AmpXmlPatch) session.get(AmpXmlPatch.class,
                     deprecatedId);
             if (patch == null) {
@@ -378,7 +378,7 @@ public final class XmlPatcherUtil {
 
     /**
      * Returns the list of XmlPatches that are not in close state
-     * 
+     *
      * @see XmlPatcherConstants.PatchStates
      * @return the Hibernate query result
      * @throws DgException
@@ -387,23 +387,39 @@ public final class XmlPatcherUtil {
      */
     public static List<AmpXmlPatch> getAllDiscoveredUnclosedPatches()
             throws DgException, HibernateException, SQLException {
-        Session session = PersistenceManager.getRequestDBSession();
-        Query query = session
-                .createQuery("from " + AmpXmlPatch.class.getName()
-                        + " p WHERE p.state NOT IN ("
-                        + XmlPatcherConstants.PatchStates.CLOSED + ","
-                        + XmlPatcherConstants.PatchStates.DEPRECATED + ","
-                        + XmlPatcherConstants.PatchStates.DELETED + ") "
-                        + "and p.patchId not like '%.class'");
-        List<AmpXmlPatch> list = query.list();
-        return list;
-    }
-    
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
 
-    
+            // Clear pending operations to avoid unexpected flushes
+            session.flush();
+            session.clear();
+
+            Query<AmpXmlPatch> query = session.createQuery(
+                    "from " + AmpXmlPatch.class.getName() + " p " +
+                            "WHERE p.state NOT IN (:closed, :deprecated, :deleted) " +
+                            "AND p.patchId not like '%.class'", AmpXmlPatch.class);
+            query.setParameter("closed", XmlPatcherConstants.PatchStates.CLOSED);
+            query.setParameter("deprecated", XmlPatcherConstants.PatchStates.DEPRECATED);
+            query.setParameter("deleted", XmlPatcherConstants.PatchStates.DELETED);
+
+            return query.list();
+        } catch (Exception e) {
+            // Log the exception and rethrow
+            logger.error("Error fetching unclosed patches", e);
+            throw e;
+        } finally {
+            if (session != null) {
+                session.close(); // Ensure the session is closed properly
+            }
+        }
+    }
+
+
+
     /**
      * Returns the count of the list of discovered XmlPatches
-     * 
+     *
      * @return the Hibernate query result
      * @throws HibernateException
      */
@@ -412,12 +428,12 @@ public final class XmlPatcherUtil {
         Session session = PersistenceManager.getRequestDBSession();
         return ((Long)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
     }
-    
-    
-    
+
+
+
     /**
      * Returns the list of discovered XmlPatches
-     * 
+     *
      * @return the Hibernate query result
      * @throws DgException
      * @throws HibernateException
@@ -432,8 +448,8 @@ public final class XmlPatcherUtil {
         List<AmpXmlPatch> list = query.list();
         return list;
     }
-    
-    
+
+
     /**
      * Creates a map with the key patchId and the value AmpXmlPatch based on {@link #getAllDiscoveredPatches()}
      * @return the map
@@ -450,7 +466,7 @@ public final class XmlPatcherUtil {
         }
         return ret;
     }
-    
+
     /**
      * Returns the list of discovered XmlPatches using pagination
      * @param startIndexInt - the start of index
@@ -482,7 +498,7 @@ public final class XmlPatcherUtil {
 
     /**
      * Digests the file contents and produces its MD5 as output
-     * 
+     *
      * @param f
      *            the file to digest the contents
      * @return the MD5 for the file

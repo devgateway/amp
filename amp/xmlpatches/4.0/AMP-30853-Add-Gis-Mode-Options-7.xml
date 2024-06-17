@@ -8,7 +8,8 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-
+DELETE FROM amp_category_value_location WHERE location_name='Ecowas Multicountry';
+DELETE FROM amp_category_value_location WHERE location_name='GGW Multicountry';
 INSERT INTO amp_category_value_location (id, parent_category_value, location_name, code, iso, iso3)
 VALUES
     (
@@ -36,11 +37,7 @@ VALUES
         '0001',
         'GG',
         'GGW'
-    )
-
-ON CONFLICT (iso) DO UPDATE
-    SET location_name = EXCLUDED.location_name,
-        code = EXCLUDED.code;
+    );
 DROP VIEW IF EXISTS v_g_gis_options;
 CREATE OR REPLACE VIEW v_g_gis_options AS SELECT iso as id, location_name || '-' || iso AS value FROM amp_category_value_location WHERE iso IS NOT NULL AND iso3 IS NOT NULL;
 DELETE from amp_global_settings where settingsname='GIS Mode';

@@ -381,38 +381,20 @@ public final class XmlPatcherUtil {
      *
      * @see XmlPatcherConstants.PatchStates
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<AmpXmlPatch> getAllDiscoveredUnclosedPatches()
-            throws DgException, HibernateException, SQLException {
-        Session session = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-
-            // Clear pending operations to avoid unexpected flushes
-//            session.flush();
-//            session.clear();
-
-            Query<AmpXmlPatch> query = session.createQuery(
-                    "from " + AmpXmlPatch.class.getName() + " p " +
-                            "WHERE p.state NOT IN (:closed, :deprecated, :deleted) " +
-                            "AND p.patchId not like '%.class'", AmpXmlPatch.class);
-            query.setParameter("closed", XmlPatcherConstants.PatchStates.CLOSED);
-            query.setParameter("deprecated", XmlPatcherConstants.PatchStates.DEPRECATED);
-            query.setParameter("deleted", XmlPatcherConstants.PatchStates.DELETED);
-
-            return query.list();
-        } catch (Exception e) {
-            // Log the exception and rethrow
-            logger.error("Error fetching unclosed patches", e);
-            throw e;
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
-            }
-        }
+            throws HibernateException {
+        Session session = PersistenceManager.getRequestDBSession();
+        Query query = session
+                .createQuery("from " + AmpXmlPatch.class.getName()
+                        + " p WHERE p.state NOT IN ("
+                        + XmlPatcherConstants.PatchStates.CLOSED + ","
+                        + XmlPatcherConstants.PatchStates.DEPRECATED + ","
+                        + XmlPatcherConstants.PatchStates.DELETED + ") "
+                        + "and p.patchId not like '%.class'");
+        List<AmpXmlPatch> list = query.list();
+        return list;
     }
 
 

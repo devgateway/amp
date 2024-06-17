@@ -5,6 +5,7 @@
  */
 package org.digijava.module.xmlpatcher.util;
 
+import net.sf.saxon.trans.XPathException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -287,6 +288,13 @@ public final class XmlPatcherUtil {
                 loadedPatches.put(p, funcResult);
             }
             return loadedPatches.get(p);
+        }
+        catch (XPathException e)
+        {
+            logger.error(String.format("error while unmarshalling patch %s: %s", p, e.getMessage()), e);
+            if (log != null) log.appendToLog(e);
+            return null;
+
         }
         catch (Exception e)
         {

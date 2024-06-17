@@ -122,10 +122,11 @@ public class XmlPatcherService extends AbstractServiceImpl {
                     continue;
                 }
                 log.setFileChecksum(XmlPatcherUtil.getFileMD5(f));
+
                 Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
                         ampPatch, null); //we don't record unmarshalling logs here. we do that when we run the patch
-
-                XmlPatcherUtil.applyDeprecationTags(patch,log);
+                if (patch!=null)
+                    XmlPatcherUtil.applyDeprecationTags(patch,log);
             } catch (NoSuchAlgorithmException | IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);

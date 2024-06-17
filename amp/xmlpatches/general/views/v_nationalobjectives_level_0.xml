@@ -15,27 +15,27 @@
 			</script>
  			<test>val.equalsIgnoreCase("true")</test>
 		</condition>
-	</trigger> 
+	</trigger>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_nationalobjectives_level_0;
 				CREATE OR REPLACE VIEW v_nationalobjectives_level_0 AS
-				    SELECT 
-                        aav.amp_activity_id, 
-                        v.name, 
-                        COALESCE(v.amp_program_id, -999999999) AS amp_program_id, 
+				    SELECT
+                        aav.amp_activity_id,
+                        v.name,
+                        COALESCE(v.amp_program_id, -999999999) AS amp_program_id,
                         v.percentage,
                         COALESCE(v.cnt_nulls, 0) AS cnt_nulls
                     FROM amp_activity_version aav
                     LEFT JOIN (
 						SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, apl.id0 AS amp_program_id, SUM(a.program_percentage) as percentage, COUNT(*) - COUNT(a.program_percentage) AS cnt_nulls
-							FROM amp_activity_program a	
+							FROM amp_activity_program a
 								JOIN ni_all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
 								LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id0
 								JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
 	   						WHERE aps.name = 'National Plan Objective'
-						GROUP BY a.amp_activity_id, apl.id0, level.amp_theme_id
+						GROUP BY a.amp_activity_id, apl.id0, level.amp_theme_id,level.name
                     ) v
                     ON aav.amp_activity_id = v.amp_activity_id;
 			</lang>

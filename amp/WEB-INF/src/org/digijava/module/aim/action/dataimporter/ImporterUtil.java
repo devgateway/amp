@@ -56,7 +56,7 @@ public class ImporterUtil {
          String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
          int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "{transactionDate}"));
          String separateFundingDate = separateFundingDateColumn>=0? row.getCell(separateFundingDateColumn).getStringCellValue(): null;
-         int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "{currencyCode}"));
+         int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "{currency}"));
          String currencyCode=currencyCodeColumn>=0? row.getCell(currencyCodeColumn).getStringCellValue(): "XOF";
 
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
@@ -144,7 +144,7 @@ public class ImporterUtil {
         String separateFundingDate =row.get(getKey(config, "{transactionDate}"));
         separateFundingDate=separateFundingDate!=null? separateFundingDate:"";
 
-        String currencyCode =row.get(getKey(config, "{currencyCode}"));
+        String currencyCode =row.get(getKey(config, "{currency}"));
         currencyCode=currencyCode!=null? currencyCode:"XOF";
 
 

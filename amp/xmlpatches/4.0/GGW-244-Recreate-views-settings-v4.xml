@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>GGW-244</jira>
+	<jira>GGW-2443</jira>
 	<keyword>Views</keyword>
-	<author>Denis Mbugua</author>
+	<author>Denis Mbugua   </author>
 	<description>Update create views settings to enable creation of views</description>
 	<apply>
 		<script>

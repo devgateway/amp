@@ -392,8 +392,8 @@ public final class XmlPatcherUtil {
             session = PersistenceManager.getRequestDBSession();
 
             // Clear pending operations to avoid unexpected flushes
-            session.flush();
-            session.clear();
+//            session.flush();
+//            session.clear();
 
             Query<AmpXmlPatch> query = session.createQuery(
                     "from " + AmpXmlPatch.class.getName() + " p " +

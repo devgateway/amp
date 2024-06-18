@@ -5,12 +5,13 @@
 <hibernate-mapping>
     <class name="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog" table="AMP_XML_PATCH_LOG">
     <cache usage="read-write" />
-        <id name="id" type="java.lang.Long" unsaved-value="null" column="id">
+        <id name="id" type="java.lang.Long" column="id">
             <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
             	<param name="sequence_name">AMP_XML_PATCH_LOG_seq</param>
+                <param name="increment_size">1</param>
             </generator>
         </id>
-        <many-to-one name="patch" class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch">
+        <many-to-one name="patch" class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch" cascade="none">
             <column name="patch_id" />
         </many-to-one>
         <property name="log" type="text"/>

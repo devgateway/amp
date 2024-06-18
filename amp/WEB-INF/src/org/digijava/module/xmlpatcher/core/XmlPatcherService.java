@@ -117,13 +117,11 @@ public class XmlPatcherService extends AbstractServiceImpl {
                     //logger.info("Marking patch "+ampPatch.getPatchId()+" as deleted");
                     XmlPatcherUtil.addLogToPatch(ampPatch, log);
                     ampPatch.setState(XmlPatcherConstants.PatchStates.DELETED);
-                    DbUtil.saveOrUpdate(log);
                     DbUtil.update(ampPatch);
                     iterator.remove();
                     continue;
                 }
                 log.setFileChecksum(XmlPatcherUtil.getFileMD5(f));
-                DbUtil.saveOrUpdate(log);
 
                 Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
                         ampPatch, null); //we don't record unmarshalling logs here. we do that when we run the patch
@@ -144,8 +142,6 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 iterator.remove();
                 log.setElapsed(System.currentTimeMillis() - timeStart);
                 XmlPatcherUtil.addLogToPatch(ampPatch, log);
-                DbUtil.saveOrUpdate(log);
-
                 DbUtil.update(ampPatch);
             }
         }
@@ -181,8 +177,6 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
-            DbUtil.saveOrUpdate(log);
-
             Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
                     ampPatch, log);
             boolean success = false;
@@ -218,8 +212,6 @@ public class XmlPatcherService extends AbstractServiceImpl {
 
             log.setElapsed(System.currentTimeMillis() - timeStart);
             if(success || log.getError()) XmlPatcherUtil.addLogToPatch(ampPatch, log);
-            DbUtil.saveOrUpdate(log);
-
             DbUtil.update(ampPatch);
             if (!success && log.getError() && patch != null && patch.isFailOnError()) {
                 throw new XmlPatcherHaltExecutionException(ampPatch.getPatchId());

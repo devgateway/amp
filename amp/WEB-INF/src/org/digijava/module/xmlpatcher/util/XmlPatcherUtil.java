@@ -332,6 +332,7 @@ public final class XmlPatcherUtil {
             AmpXmlPatch lazyPatch = sess.load(AmpXmlPatch.class,
                     p.getPatchId());
             log.setPatch(lazyPatch);
+            DbUtil.saveOrUpdate(log);
             lazyPatch.getLogs().add(log);
             sess.saveOrUpdate(lazyPatch);
         } catch (Exception e) {

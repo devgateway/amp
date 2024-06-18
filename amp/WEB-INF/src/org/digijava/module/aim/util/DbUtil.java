@@ -1273,6 +1273,11 @@ public class DbUtil {
         session.update(object);
     }
 
+    public static void saveOrUpdate(Object object) {
+        Session session = PersistenceManager.getSession();
+        session.update(object);
+    }
+
     public static void updateField(String className, Long id, String fieldName, Object newValue) {
         try {
             Session session = PersistenceManager.getRequestDBSession();

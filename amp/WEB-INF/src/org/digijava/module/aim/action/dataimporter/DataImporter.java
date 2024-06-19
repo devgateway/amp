@@ -439,6 +439,9 @@ public class DataImporter extends Action {
                             case "{projectTitle}":
                                 importDataModel.setProject_title(cell.getStringCellValue().trim());
                                 break;
+                            case "{projectCode}":
+                                importDataModel.setProject_code(cell.getStringCellValue().trim());
+                                break;
                             case "{projectDescription}":
                                 importDataModel.setDescription(cell.getStringCellValue().trim());
                                 break;
@@ -506,6 +509,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("{typeOfAssistance}");
         fieldsInfos.add("{secondarySubSector}");
         fieldsInfos.add("{currency}");
+        fieldsInfos.add("{projectCode}");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

@@ -261,7 +261,7 @@ public class ImporterUtil {
             funding.getDisbursements().add(transaction);
         }
 
-        DonorOrganization donorOrganization = new DonorOrganization();
+        Organization donorOrganization = new Organization();
         donorOrganization.setOrganization(orgId);
         donorOrganization.setPercentage(100.0);
 
@@ -524,7 +524,7 @@ public class ImporterUtil {
         logger.info("Organisation: " + orgId);
 
         if (Objects.equals(type, "donor")) {
-            DonorOrganization donorOrganization = new DonorOrganization();
+            Organization donorOrganization = new Organization();
             donorOrganization.setOrganization(orgId);
             donorOrganization.setPercentage(100.0);
             importDataModel.getDonor_organization().add(donorOrganization);

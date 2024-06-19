@@ -92,6 +92,9 @@ public class TxtDataImporter {
                     case "{projectTitle}":
                         importDataModel.setProject_title(row.get(entry.getKey()));
                         break;
+                    case "{projectCode}":
+                        importDataModel.setProject_code(row.get(entry.getKey()));
+                        break;
                     case "{projectDescription}":
                         importDataModel.setDescription(row.get(entry.getKey().trim()));
                         break;

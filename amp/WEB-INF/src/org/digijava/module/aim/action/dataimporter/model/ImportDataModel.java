@@ -11,6 +11,16 @@ public class ImportDataModel {
     private Long internal_id;
     private String amp_id;
     private String project_title;
+
+    public String getProject_code() {
+        return project_code;
+    }
+
+    public void setProject_code(String project_code) {
+        this.project_code = project_code;
+    }
+
+    private String project_code;
     private String description;
     private String objective;
     private Object document_space;
@@ -21,9 +31,9 @@ public class ImportDataModel {
     private Set<Sector> primary_sectors=new HashSet<>();
     private Set<Sector> secondary_sectors=new HashSet<>();
     private Set<Location> locations=new HashSet<>();
-    private Set<DonorOrganization> donor_organization=new HashSet<>();
-    private Set<Object> responsible_organization=new HashSet<>();
-    private Set<Object> executing_agency=new HashSet<>();
+    private Set<Organization> donor_organization=new HashSet<>();
+    private Set<Organization> responsible_organization=new HashSet<>();
+    private Set<Organization> executing_agency=new HashSet<>();
     private Set<Object> activity_internal_ids;
     private Set<Funding> fundings= new HashSet<>();
     private Set<Object> issues;
@@ -166,27 +176,27 @@ public class ImportDataModel {
         this.locations = locations;
     }
 
-    public Set<DonorOrganization> getDonor_organization() {
+    public Set<Organization> getDonor_organization() {
         return donor_organization;
     }
 
-    public void setDonor_organization(Set<DonorOrganization> donor_organization) {
+    public void setDonor_organization(Set<Organization> donor_organization) {
         this.donor_organization = donor_organization;
     }
 
-    public Set<Object> getResponsible_organization() {
+    public Set<Organization> getResponsible_organization() {
         return responsible_organization;
     }
 
-    public void setResponsible_organization(Set<Object> responsible_organization) {
+    public void setResponsible_organization(Set<Organization> responsible_organization) {
         this.responsible_organization = responsible_organization;
     }
 
-    public Set<Object> getExecuting_agency() {
+    public Set<Organization> getExecuting_agency() {
         return executing_agency;
     }
 
-    public void setExecuting_agency(Set<Object> executing_agency) {
+    public void setExecuting_agency(Set<Organization> executing_agency) {
         this.executing_agency = executing_agency;
     }
 

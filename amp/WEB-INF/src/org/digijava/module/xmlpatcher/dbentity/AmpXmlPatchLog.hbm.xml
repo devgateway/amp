@@ -11,7 +11,7 @@
                 <param name="increment_size">1</param>
             </generator>
         </id>
-        <many-to-one name="patch" class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch" cascade="merge">
+        <many-to-one name="patch" class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch" cascade="none">
             <column name="patch_id" />
         </many-to-one>
         <property name="log" type="text"/>

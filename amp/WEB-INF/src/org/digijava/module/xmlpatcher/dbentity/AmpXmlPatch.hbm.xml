@@ -17,7 +17,7 @@
         <property name="state" type="java.lang.Short">
             <column name="state" />
         </property>
-        <set name="logs" inverse="false" table="AMP_XML_PATCH_LOG" lazy="true" cascade="none">
+        <set name="logs" inverse="false" table="AMP_XML_PATCH_LOG" lazy="true" cascade="save-update">
         	<cache usage="read-write"/>
             <key column="patch_id"/>
 <!--            <index column="idx"/>-->

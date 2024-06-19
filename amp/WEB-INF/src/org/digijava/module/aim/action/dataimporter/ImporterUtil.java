@@ -511,20 +511,20 @@ public class ImporterUtil {
                 session = PersistenceManager.getRequestDBSession();
             }
             String hql = "";
+            Query query;
+            List<Long> organisations= new ArrayList<>();
             if (name!=null) {
                 hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
-            }
-
-
-            Query query = session.createQuery(hql);
-            query.setParameter("name", "%" + name + "%");
-            List<Long> organisations = query.list();
-            if (organisations.isEmpty())
-            {
-                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.orgCode)=LOWER(:code)";
                  query = session.createQuery(hql);
-                query.setParameter("code",  code);
+                query.setParameter("name", "%" + name + "%");
                 organisations = query.list();
+            }
+            if (organisations.isEmpty() && (code!=null)) {
+                    hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.orgCode)=LOWER(:code)";
+                    query = session.createQuery(hql);
+                    query.setParameter("code", code);
+                    organisations = query.list();
+
             }
             if (!organisations.isEmpty()) {
                 orgId = organisations.get(0);

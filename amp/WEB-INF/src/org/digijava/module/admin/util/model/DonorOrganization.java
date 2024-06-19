@@ -1,27 +1,10 @@
 package org.digijava.module.admin.util.model;
 
+
 import java.util.Objects;
 
-public class DonorOrganization {
-    private Long id;
-    private Long organization;
+public class DonorOrganization extends Organization {
     private Double percentage;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Long organization) {
-        this.organization = organization;
-    }
 
     public Double getPercentage() {
         return percentage;
@@ -47,8 +30,8 @@ public class DonorOrganization {
     @Override
     public String toString() {
         return "DonorOrganization{" +
-                "id=" + id +
-                ", organization=" + organization +
+                "id=" + this.getId() +
+                ", organization=" + this.getOrganization() +
                 ", percentage=" + percentage +
                 '}';
     }

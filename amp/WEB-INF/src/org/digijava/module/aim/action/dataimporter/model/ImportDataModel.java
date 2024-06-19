@@ -31,7 +31,7 @@ public class ImportDataModel {
     private Set<Sector> primary_sectors=new HashSet<>();
     private Set<Sector> secondary_sectors=new HashSet<>();
     private Set<Location> locations=new HashSet<>();
-    private Set<Organization> donor_organization=new HashSet<>();
+    private Set<DonorOrganization> donor_organization=new HashSet<>();
     private Set<Organization> responsible_organization=new HashSet<>();
     private Set<Organization> executing_agency=new HashSet<>();
     private Set<Object> activity_internal_ids;
@@ -176,11 +176,11 @@ public class ImportDataModel {
         this.locations = locations;
     }
 
-    public Set<Organization> getDonor_organization() {
+    public Set<DonorOrganization> getDonor_organization() {
         return donor_organization;
     }
 
-    public void setDonor_organization(Set<Organization> donor_organization) {
+    public void setDonor_organization(Set<DonorOrganization> donor_organization) {
         this.donor_organization = donor_organization;
     }
 

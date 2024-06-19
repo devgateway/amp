@@ -433,6 +433,8 @@ public class DataImporter extends Action {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
+                    int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "{donorAgencyCode}"));
+                    String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
@@ -455,7 +457,7 @@ public class DataImporter extends Action {
                                 updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
                                 break;
                             case "{donorAgency}":
-                                updateOrgs(importDataModel, cell.getStringCellValue().trim(), session, "donor");
+                                updateOrgs(importDataModel, cell.getStringCellValue().trim(),donorAgencyCode, session, "donor");
                                 break;
                             case "{fundingItem}":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
@@ -497,6 +499,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("{projectStartDate}");
         fieldsInfos.add("{projectEndDate}");
         fieldsInfos.add("{donorAgency}");
+        fieldsInfos.add("{donorAgencyCode}");
         fieldsInfos.add("{executingAgency}");
         fieldsInfos.add("{implementingAgency}");
         fieldsInfos.add("{actualDisbursement}");

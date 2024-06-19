@@ -68,7 +68,9 @@ public class ImporterUtil {
             }
             else {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
-                updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org", session, "donor");
+                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "{donorAgencyCode}"));
+                String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
+                updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org",donorAgencyCode, session, "donor");
                 updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode);
             }
 
@@ -157,7 +159,9 @@ public class ImporterUtil {
             }
             else {
                 String donorColumn = row.get(getKey(config, "{donorAgency}"));
-                updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org", session, "donor");
+                String donorAgencyCode= row.get(getKey(config, "{donorAgencyCode}"));
+
+                updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
                 updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode);
             }
 
@@ -494,23 +498,34 @@ public class ImporterUtil {
 
     }
 
-    static void updateOrgs(ImportDataModel importDataModel, String name, Session session, String type)
+    static void updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
     {
         Long orgId;
 
-        if (ConstantsMap.containsKey("org_"+name)) {
-            orgId = ConstantsMap.get("org_"+name);
-            logger.info("In cache... organisation "+"org_"+name+":"+orgId);
+        if (ConstantsMap.containsKey("org_"+name+"_"+code)) {
+            orgId = ConstantsMap.get("org_"+name+"_"+code);
+            logger.info("In cache... organisation "+"org_"+name+"_"+code+":"+orgId);
         }
         else {
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
-            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
+            String hql = "";
+            if (name!=null) {
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
+            }
+
 
             Query query = session.createQuery(hql);
             query.setParameter("name", "%" + name + "%");
             List<Long> organisations = query.list();
+            if (organisations.isEmpty())
+            {
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.orgCode)=LOWER(:code)";
+                 query = session.createQuery(hql);
+                query.setParameter("code",  code);
+                organisations = query.list();
+            }
             if (!organisations.isEmpty()) {
                 orgId = organisations.get(0);
             } else {
@@ -519,7 +534,7 @@ public class ImporterUtil {
                 query = session.createQuery(hql).setMaxResults(1);
                 orgId = (Long) query.uniqueResult();
             }
-            ConstantsMap.put("org_" + name, orgId);
+            ConstantsMap.put("org_"+name+"_"+code, orgId);
         }
         logger.info("Organisation: " + orgId);
 

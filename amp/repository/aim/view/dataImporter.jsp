@@ -231,6 +231,9 @@
             document.getElementById('headers').innerHTML = xhr.getResponseHeader('selectTag');
             alert("The template has been successfully uploaded.");
             document.getElementById("otherComponents").removeAttribute("hidden");
+            $('#add-field').show();
+            $('.remove-row').show();
+            $('#selected-field').show();
           } else {
             console.error("Unable to extract headers.Please  check the file format and try again");
             alert("Unable to extract headers.Please  check the file format and try again");

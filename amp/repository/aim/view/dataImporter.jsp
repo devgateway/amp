@@ -234,6 +234,7 @@
             $('#add-field').show();
             $('.remove-row').show();
             $('#selected-field').show();
+            $(".fields-table").load(location.href + " .fields-table");
           } else {
             console.error("Unable to extract headers.Please  check the file format and try again");
             alert("Unable to extract headers.Please  check the file format and try again");

@@ -22,12 +22,6 @@
 
 package org.digijava.module.admin.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
@@ -45,6 +39,8 @@ import org.digijava.module.aim.helper.KeyValue;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.*;
 
 public class DbUtil {
 
@@ -200,7 +196,7 @@ public class DbUtil {
             logger.debug("Unable to get group from database ", ex);
             throw new AdminException("Unable to get group from database ", ex);
         }
-        return group;   
+        return group;
     }
     public static void editGroup(Group group) throws AdminException {
         Session sess = null;

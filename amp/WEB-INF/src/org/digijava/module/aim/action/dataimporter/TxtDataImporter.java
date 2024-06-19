@@ -1,12 +1,16 @@
 package org.digijava.module.aim.action.dataimporter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderHeaderAware;
+import com.opencsv.CSVReaderHeaderAwareBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.admin.dbentity.ImportedFilesRecord;
-import org.digijava.module.admin.dbentity.ImportedProject;
-import org.digijava.module.admin.util.model.ImportDataModel;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
+import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -30,18 +34,23 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    private void processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
     {
-        try (CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(file))) {
+        logger.info("Processing txt file: " + file.getName());
+        CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
+
+//        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
+        try (CSVReaderHeaderAware reader = new CSVReaderHeaderAwareBuilder(new FileReader(file)).withCSVParser(parser).build()) {
             List<Map<String, String>> batch = new ArrayList<>();
             Map<String, String> values;
 
             while ((values = reader.readMap()) != null) {
                 batch.add(values);
+                logger.info("Batch this far: "+batch);
 
                 if (batch.size() == BATCH_SIZE) {
                     // Process the batch
-                    processBatch(batch);
+                    processBatch(batch, request,config,importedFilesRecord);
                     // Clear the batch for the next set of rows
                     batch.clear();
                 }
@@ -49,15 +58,18 @@ public class TxtDataImporter {
 
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
-                processBatch(batch);
+                processBatch(batch, request,config,importedFilesRecord);
             }
         } catch (IOException | CsvValidationException e) {
-            e.printStackTrace();
+            logger.error("Error processing txt file "+e.getMessage(),e);
+            return 0;
         }
+        return 1;
     }
 
 
-    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) {
+    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
+        logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -74,6 +86,7 @@ public class TxtDataImporter {
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
+            logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 switch (entry.getValue()) {
                     case "{projectTitle}":
@@ -95,25 +108,28 @@ public class TxtDataImporter {
                         updateOrgs(importDataModel,row.get(entry.getKey().trim()), session, "donor");
                         break;
                     case "{fundingItem}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual");
                         break;
                     case "{plannedCommitment}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned");
                         break;
                     case "{plannedDisbursement}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned");
                         break;
                     case "{actualCommitment}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual");
                         break;
                     case "{actualDisbursement}":
-                        setAFundingItem(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual");
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());
                         break;
                 }
             }
+            importTheData(importDataModel, session, importedProject);
+
         }
+
     }
 }

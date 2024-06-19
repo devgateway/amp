@@ -1,4 +1,6 @@
-package org.digijava.module.admin.util.model;
+package org.digijava.module.aim.action.dataimporter.model;
+
+import org.digijava.module.admin.util.model.*;
 
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 

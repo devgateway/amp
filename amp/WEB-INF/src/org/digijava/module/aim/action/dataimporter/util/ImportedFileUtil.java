@@ -1,8 +1,8 @@
-package org.digijava.module.admin.util;
+package org.digijava.module.aim.action.dataimporter.util;
 
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.admin.dbentity.ImportStatus;
-import org.digijava.module.admin.dbentity.ImportedFilesRecord;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class ImportedFileUtil {
         importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
         session.saveOrUpdate(importedFilesRecord);
-        session.flush();
+//        session.flush();
         return importedFilesRecord;
     }
 
@@ -51,7 +51,7 @@ public class ImportedFileUtil {
         logger.info("Updating file status to " + status);
         Session session = PersistenceManager.getRequestDBSession();
         importDataModel.setImportStatus(status);
-        session.save(importDataModel);
+        session.saveOrUpdate(importDataModel);
         session.flush();
     }
     public static List<ImportedFilesRecord> getSimilarFiles(File file) throws IOException, NoSuchAlgorithmException {

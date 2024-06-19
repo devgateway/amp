@@ -1,4 +1,4 @@
-package org.digijava.module.admin.dbentity;
+package org.digijava.module.aim.action.dataimporter.dbentity;
 
 import java.io.Serializable;
 

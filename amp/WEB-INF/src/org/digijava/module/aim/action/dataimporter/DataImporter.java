@@ -20,14 +20,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.admin.dbentity.ImportStatus;
-import org.digijava.module.admin.dbentity.ImportedFilesRecord;
-import org.digijava.module.admin.dbentity.ImportedProject;
-import org.digijava.module.admin.util.ImportedFileUtil;
-import org.digijava.module.admin.util.model.ImportDataModel;
+import org.digijava.module.aim.action.dataimporter.dbentity.*;
+import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
+import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,10 +52,31 @@ public class DataImporter extends Action {
         // List of fields
         List<String> fieldsInfo = getEntityFieldsInfo();
         request.setAttribute("fieldsInfo", fieldsInfo);
+        List<String> configNames= getConfigNames();
+        request.setAttribute("configNames", configNames);
         DataImporterForm dataImporterForm = (DataImporterForm) form;
 
+        if (Objects.equals(request.getParameter("action"), "configByName")) {
+            logger.info(" this is the action " + request.getParameter("action"));
+            String configName = request.getParameter("configName");
+            Map<String, String> config= getConfigByName(configName);
+            dataImporterForm.setColumnPairs(config);
 
-        if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
+            logger.info("Column Pairs:" + config);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(config);
+
+            // Send JSON response
+            response.setContentType("application/json");
+            response.getWriter().write(json);
+            response.setCharacterEncoding("UTF-8");
+
+            return null;
+        }
+
+
+            if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
             logger.info(" this is the action " + request.getParameter("action"));
             if (request.getParameter("uploadTemplate") != null) {
                 logger.info(" this is the action " + request.getParameter("uploadTemplate"));
@@ -154,7 +172,6 @@ public class DataImporter extends Action {
                 // Send JSON response
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-//            response.setHeader("updatedMap",json);
                 response.getWriter().write(json);
 
                 return null;
@@ -162,7 +179,7 @@ public class DataImporter extends Action {
             }
 
             if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
-                logger.info("This is the action Upload " + request.getParameter("uploadDataFile"));
+                logger.info("This is the action " + request.getParameter("action"));
                 String fileName = dataImporterForm.getDataFile().getFileName();
                 String tempDirPath = System.getProperty("java.io.tmpdir");
                 File tempDir = new File(tempDirPath);
@@ -193,7 +210,7 @@ public class DataImporter extends Action {
                     }
                 }
                 if (dataImporterForm.getColumnPairs().isEmpty() || !dataImporterForm.getColumnPairs().containsValue("{projectTitle}")) {
-                    response.setHeader("errorMessage", "You must have atleast the {projectTitle} key in your config.");
+                    response.setHeader("errorMessage", "You must have at least the {projectTitle} key in your config.");
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }
@@ -204,27 +221,34 @@ public class DataImporter extends Action {
                     response.setStatus(400);
                     return mapping.findForward("importData");
 
-                    // Optionally, you can respond with an error message to the client.
                 } else {
                     // Proceed with processing the file
+                    String existingConfig = request.getParameter("existingConfig");
+                    logger.info("Existing configuration: {}",existingConfig);
+                    if (!Objects.equals(existingConfig, "1")) {
+                        saveImportConfig(request, fileName, dataImporterForm.getColumnPairs());
+                    }
+
+                    int res = 0;
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
 
                         // Process the file in batches
-                        int res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
-                        if (res != 1) {
-                            // Handle error
-                            logger.info("Error processing file  " + tempFile);
-                            response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
-                            response.setStatus(400);
-                            return mapping.findForward("importData");
-                        }
+                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-
+                        res=TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                    }
+                    if (res != 1) {
+                        // Handle error
+                        logger.info("Error processing file  " + tempFile);
+                        response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
+                        response.setStatus(400);
+                        return mapping.findForward("importData");
                     }
 
 
                     // Clean up
+                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.SUCCESS);
                     Files.delete(tempFile.toPath());
                     logger.info("Cache map size: " + ConstantsMap.size());
                     ConstantsMap.clear();
@@ -243,6 +267,91 @@ public class DataImporter extends Action {
             }
 
             return mapping.findForward("importData");
+    }
+    private static List<String> getConfigNames()
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql = "SELECT c.configName FROM DataImporterConfig c";
+        Query query = session.createQuery(hql);
+
+        // Execute query and get the list of configNames
+        List< String> configNames = query.list();
+        return configNames==null?Collections.emptyList():configNames;
+
+    }
+
+    private static Map<String, String> getConfigByName(String configName) {
+        logger.info("Getting import config for configName: {}", configName);
+        Session session = PersistenceManager.getRequestDBSession();
+        Map<String, String> configValues = new HashMap<>();
+
+            String hql = "FROM DataImporterConfig WHERE configName = :configName";
+            Query query = session.createQuery(hql);
+            query.setParameter("configName", configName, StringType.INSTANCE);
+            query.setMaxResults(1);
+
+            List<DataImporterConfig> resultList = query.list();
+            logger.info("Configs found: {}",resultList);
+
+
+            if (!resultList.isEmpty()) {
+                Set<DataImporterConfigValues> values = resultList.get(0).getConfigValues();
+                logger.info("Config Values found: {}",values);
+
+                if (!values.isEmpty())
+                {
+                    values.forEach(value-> configValues.put(value.getConfigKey(),value.getConfigValue()));
+                }
+            }
+
+        return configValues;
+    }
+    private static void saveImportConfig(HttpServletRequest request,String fileName, Map<String,String> config)
+    {
+        logger.info("Saving import config");
+        Session session = PersistenceManager.getRequestDBSession();
+
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String configName= fileName+"_"+ LocalDateTime.now().toString().replace(":", "_");
+
+        if (request.getParameter("configName") != null)
+        {
+            configName=request.getParameter("configName");
+            Query query = session.createQuery("FROM DataImporterConfig WHERE configName = :configName");
+            query.setParameter("configName", configName);
+            List<DataImporterConfig> existingConfigs = query.list();
+
+            if (!existingConfigs.isEmpty()) {
+                configName += "_" + LocalDateTime.now().toString().replace(":", "_");
+            }
+        }
+
+        DataImporterConfig dataImporterConfig= new DataImporterConfig();
+        Set<DataImporterConfigValues> configValues = new HashSet<>();
+        dataImporterConfig.setConfigName(configName);
+        session.saveOrUpdate(dataImporterConfig);
+        for (Map.Entry<String, String> entry : config.entrySet()) {
+            DataImporterConfigValues configValue = new DataImporterConfigValues();
+            configValue.setConfigKey(entry.getKey());
+            configValue.setConfigValue(entry.getValue());
+            configValue.setDataImporterConfig(dataImporterConfig);
+            configValues.add(configValue);
+            session.saveOrUpdate(configValue);
+        }
+
+
+        dataImporterConfig.setConfigValues(configValues);
+
+
+
+        logger.info("Saved configuration: {}", dataImporterConfig);
+
     }
 
 
@@ -263,7 +372,6 @@ public class DataImporter extends Action {
             }
 
             logger.info("Closing the workbook...");
-            ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.SUCCESS);
             res =1;
         } catch (IOException e) {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
@@ -393,9 +501,11 @@ public class DataImporter extends Action {
         fieldsInfos.add("{plannedDisbursement}");
         fieldsInfos.add("{plannedCommitment}");
         fieldsInfos.add("{fundingItem}");
+        fieldsInfos.add("{transactionDate}");
         fieldsInfos.add("{financingInstrument}");
         fieldsInfos.add("{typeOfAssistance}");
         fieldsInfos.add("{secondarySubSector}");
+        fieldsInfos.add("{currency}");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

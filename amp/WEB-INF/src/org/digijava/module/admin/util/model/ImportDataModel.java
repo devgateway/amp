@@ -1,5 +1,7 @@
 package org.digijava.module.admin.util.model;
 
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,8 +27,8 @@ public class ImportDataModel {
     private Set<Object> issues;
     private Long team;
     private PpcAmount ppc_amount;
-    private Set<Object> donor_contact_information;
-    private Set<Object> project_coordinator_contact_information;
+    private Set<AmpActivityContact> donor_contact_information;
+    private Set<AmpActivityContact> project_coordinator_contact_information;
     private Set<Object> sector_ministry_contact_information;
     private Set<Object> mofed_contact_information;
     private Set<Object> implementing_executing_agency_contact_information;
@@ -226,19 +228,19 @@ public class ImportDataModel {
         this.ppc_amount = ppc_amount;
     }
 
-    public Set<Object> getDonor_contact_information() {
+    public Set<AmpActivityContact> getDonor_contact_information() {
         return donor_contact_information;
     }
 
-    public void setDonor_contact_information(Set<Object> donor_contact_information) {
+    public void setDonor_contact_information(Set<AmpActivityContact> donor_contact_information) {
         this.donor_contact_information = donor_contact_information;
     }
 
-    public Set<Object> getProject_coordinator_contact_information() {
+    public Set<AmpActivityContact> getProject_coordinator_contact_information() {
         return project_coordinator_contact_information;
     }
 
-    public void setProject_coordinator_contact_information(Set<Object> project_coordinator_contact_information) {
+    public void setProject_coordinator_contact_information(Set<AmpActivityContact> project_coordinator_contact_information) {
         this.project_coordinator_contact_information = project_coordinator_contact_information;
     }
 

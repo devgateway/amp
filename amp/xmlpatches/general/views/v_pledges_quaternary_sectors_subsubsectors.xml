@@ -15,7 +15,7 @@
 			</script>
  			<test>val.equalsIgnoreCase("true")</test>
 		</condition>
-	</trigger> 
+	</trigger>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
@@ -39,7 +39,7 @@
 								JOIN all_sectors_with_levels ass ON afps.amp_sector_id = ass.amp_sector_id
 								LEFT JOIN amp_sector rs ON rs.amp_sector_id = aswl.id2
 						WHERE ass.sector_config_name = 'Quaternary'
-						GROUP BY afps.pledge_id, aswl.id2, rs.amp_sector_id
+						GROUP BY afps.pledge_id, aswl.id2, rs.amp_sector_id, rs.name
 					) v
 					ON afp.id = v.pledge_id;
         	</lang>

@@ -69,7 +69,7 @@ public final class LocationUtil {
                     + " l where l.geoCode =:geoCode order by l.id";
             Query qry = session.createQuery(queryString);
             qry.setString("geoCode", geoCode);
-            
+
             Collection result   = qry.list();
             if ( result != null && result.size() > 0 ) {
                 return (AmpCategoryValueLocations) result.iterator().next();
@@ -242,15 +242,13 @@ public final class LocationUtil {
         }
     }
 
-    public static int getIndicatorValuesCountByAmpLocation(AmpLocation ampLocation) {
+    public static Long getIndicatorValuesCountByAmpLocation(AmpLocation ampLocation) {
         Session session = PersistenceManager.getSession();
 
-        int indicatorValuesCount = (int) session.createCriteria(AmpLocationIndicatorValue.class)
+        return (Long) session.createCriteria(AmpLocationIndicatorValue.class)
                 .add(Restrictions.eq("location", ampLocation))
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
-
-        return indicatorValuesCount;
     }
 
     public static List<AmpCategoryValueLocations> getAllVisibleLocations() {

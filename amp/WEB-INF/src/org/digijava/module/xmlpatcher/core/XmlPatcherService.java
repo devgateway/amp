@@ -42,7 +42,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
      * to dynamically instantiate the scheduler
      */
     private String schedulerName;
-    
+
     /**
      * The scheduler used by the patcher service. The default scheduler is set
      * in the service constructor. However another scheduler may be provided in
@@ -67,7 +67,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
         schedulerName = NaturalOrderXmlPatcherScheduler.class.getSimpleName();
     }
 
-    
+
     /**
      * Schedules the patch list for execution until the previous list is identical in size with the current list, meaning no more patches have been executed.
      * This is required to have all patch dependencies fullfilled
@@ -80,17 +80,17 @@ public class XmlPatcherService extends AbstractServiceImpl {
     public int processAllUnclosedPatches(
             Collection<AmpXmlPatch> scheduledPatches,
             ServiceContext serviceContext) throws DgException {
-    
+
         Collection<AmpXmlPatch> previouslyUnclosedPatches=null;
         Collection<AmpXmlPatch> currentUnclosedPatches=null;
-        
+
         do {
             previouslyUnclosedPatches=currentUnclosedPatches;
             currentUnclosedPatches = processUnclosedPatches(scheduledPatches, serviceContext);
         }  while(previouslyUnclosedPatches==null || currentUnclosedPatches.size()!=previouslyUnclosedPatches.size());
         return currentUnclosedPatches.size();
     }
-    
+
     /**
      * Iterates the list of patches and applies deprecation tags
      * @param scheduledPatches
@@ -106,7 +106,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
             AmpXmlPatch ampPatch = iterator.next();
             long timeStart = System.currentTimeMillis();
             AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
-            logger.debug("Reading patch: "+ampPatch.getPatchId());
+            logger.info("Reading patch: "+ampPatch.getPatchId());
             try {
                 File f=new File(
                         XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
@@ -122,10 +122,11 @@ public class XmlPatcherService extends AbstractServiceImpl {
                     continue;
                 }
                 log.setFileChecksum(XmlPatcherUtil.getFileMD5(f));
+
                 Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
                         ampPatch, null); //we don't record unmarshalling logs here. we do that when we run the patch
-                
-                XmlPatcherUtil.applyDeprecationTags(patch,log);
+                if (patch!=null)
+                    XmlPatcherUtil.applyDeprecationTags(patch,log);
             } catch (NoSuchAlgorithmException | IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
@@ -142,11 +143,11 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 log.setElapsed(System.currentTimeMillis() - timeStart);
                 XmlPatcherUtil.addLogToPatch(ampPatch, log);
                 DbUtil.update(ampPatch);
-            }   
+            }
         }
 
     }
-    
+
     /**
      * Attempts to execute the given collection of unclosed patches. The
      * collection is ordered using a scheduler that was given as a parameter in
@@ -154,7 +155,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
      * <p>
      * The collection is iterated and each patch is invoked. If the patch worker
      * will return false it means the patch was not applied.
-     * 
+     *
      * @param scheduledPatches
      * @param serviceContext
      * @throws DgException
@@ -198,12 +199,12 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 if(patch.isCloseOnSuccess()) ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED);
                 else ampPatch.setState(XmlPatcherConstants.PatchStates.OPEN);
                 iterator.remove();
-                
+
             } else if (log.getError()) {
                 logger.info("Failed to apply patch " + ampPatch.getPatchId());
                 ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
                 iterator.remove();
-            } else {    
+            } else {
                 logger.debug("Will not apply " + ampPatch.getPatchId()
                         + " due to conditions not met.");
                 ampPatch.setState(XmlPatcherConstants.PatchStates.OPEN);
@@ -274,7 +275,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
     /**
      * Discovers new patches in the known locations (Digi modules directories or
      * the generic patch directory).
-     * 
+     *
      * @param  appPath the application Path - usually serviceContext.getRealPath("/")
      * @throws DgException
      * @throws SQLException

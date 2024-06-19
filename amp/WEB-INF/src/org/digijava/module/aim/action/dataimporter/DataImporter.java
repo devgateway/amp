@@ -435,6 +435,9 @@ public class DataImporter extends Action {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
                     int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "{donorAgencyCode}"));
                     String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
+
+                    int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "{responsibleOrganizationCode}"));
+                    String responsibleOrgCode= donorAgencyCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
@@ -458,6 +461,9 @@ public class DataImporter extends Action {
                                 break;
                             case "{donorAgency}":
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(),donorAgencyCode, session, "donor");
+                                break;
+                            case "{responsibleOrganization}":
+                                updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "responsibleOrg");
                                 break;
                             case "{fundingItem}":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
@@ -500,6 +506,8 @@ public class DataImporter extends Action {
         fieldsInfos.add("{projectEndDate}");
         fieldsInfos.add("{donorAgency}");
         fieldsInfos.add("{donorAgencyCode}");
+        fieldsInfos.add("{responsibleOrganization}");
+        fieldsInfos.add("{responsibleOrganizationCode}");
         fieldsInfos.add("{executingAgency}");
         fieldsInfos.add("{implementingAgency}");
         fieldsInfos.add("{actualDisbursement}");

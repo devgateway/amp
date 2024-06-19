@@ -89,6 +89,7 @@ public class TxtDataImporter {
             logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 String donorAgencyCode= row.get(getKey(config, "{donorAgencyCode}"));
+                String responsibleOrgCode= row.get(getKey(config, "{responsibleOrganizationCode}"));
                 switch (entry.getValue()) {
                     case "{projectTitle}":
                         importDataModel.setProject_title(row.get(entry.getKey()));
@@ -110,6 +111,9 @@ public class TxtDataImporter {
                         break;
                     case "{donorAgency}":
                         updateOrgs(importDataModel,row.get(entry.getKey().trim()),donorAgencyCode, session, "donor");
+                        break;
+                    case "{responsibleOrganization}":
+                        updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "responsibleOrg");
                         break;
                     case "{fundingItem}":
                         setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual");

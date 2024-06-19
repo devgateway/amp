@@ -544,6 +544,13 @@ public class ImporterUtil {
             donorOrganization.setPercentage(100.0);
             importDataModel.getDonor_organization().add(donorOrganization);
         }
+        else if (Objects.equals(type, "responsibleOrg"))
+        {
+            Organization responsibleOrg = new Organization();
+            responsibleOrg.setOrganization(orgId);
+            importDataModel.getResponsible_organization().add(responsibleOrg);
+
+        }
 
 
 

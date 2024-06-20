@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.*;
+import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.form.DataImporterForm;
@@ -419,6 +420,7 @@ public class DataImporter extends Action {
         for (Row row : batch) {
             ImportedProject importedProject= new ImportedProject();
             importedProject.setImportedFilesRecord(importedFilesRecord);
+            List<Funding> fundings= new ArrayList<>();
 
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
@@ -432,12 +434,14 @@ public class DataImporter extends Action {
             logger.info("Row Number: "+row.getRowNum()+", Sheet Name: "+sheet.getSheetName());
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
+                    Funding funding = null;
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
                     int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
                     String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
 
                     int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
                     String responsibleOrgCode= donorAgencyCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
+
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
@@ -466,29 +470,33 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "responsibleOrg");
                                 break;
                             case "Funding Item":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
+                                 funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
                                 break;
                             case "Planned Commitment":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
-                                break;
+                                 funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
+                                 break;
                             case "Planned Disbursement":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
+                                funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
                                 break;
                             case "Actual Commitment":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
+                                funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
                                 break;
                             case "Actual Disbursement":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
+                                funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
                                 break;
                             default:
                                 logger.error("Unexpected value: " + entry.getValue());
                                 break;
+
                         }
 
 
+                    }
+                    fundings.add(funding);
 
                 }
-            }
+
+
             importTheData(importDataModel, session, importedProject);
 
         }

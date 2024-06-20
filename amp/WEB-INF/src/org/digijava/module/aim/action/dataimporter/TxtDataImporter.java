@@ -88,46 +88,46 @@ public class TxtDataImporter {
             setStatus(importDataModel, session);
             logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
-                String donorAgencyCode= row.get(getKey(config, "{donorAgencyCode}"));
-                String responsibleOrgCode= row.get(getKey(config, "{responsibleOrganizationCode}"));
+                String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
+                String responsibleOrgCode= row.get(getKey(config, "Responsible Organization Code"));
                 switch (entry.getValue()) {
-                    case "{projectTitle}":
+                    case "Project Title":
                         importDataModel.setProject_title(row.get(entry.getKey()));
                         break;
-                    case "{projectCode}":
+                    case "Project Code":
                         importDataModel.setProject_code(row.get(entry.getKey()));
                         break;
-                    case "{projectDescription}":
+                    case "Project Description":
                         importDataModel.setDescription(row.get(entry.getKey().trim()));
                         break;
-                    case "{projectLocation}":
+                    case "Project Location":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                         break;
-                    case "{primarySector}":
+                    case "Primary Sector":
                         updateSectors(importDataModel, row.get(entry.getKey().trim()), session, true);
                         break;
-                    case "{secondarySector}":
+                    case "Secondary Sector":
                         updateSectors(importDataModel, row.get(entry.getKey().trim()), session, false);
                         break;
-                    case "{donorAgency}":
+                    case "Donor Agency":
                         updateOrgs(importDataModel,row.get(entry.getKey().trim()),donorAgencyCode, session, "donor");
                         break;
-                    case "{responsibleOrganization}":
+                    case "Responsible Organization":
                         updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "responsibleOrg");
                         break;
-                    case "{fundingItem}":
+                    case "Funding Item":
                         setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual");
                         break;
-                    case "{plannedCommitment}":
+                    case "Planned Commitment":
                         setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned");
                         break;
-                    case "{plannedDisbursement}":
+                    case "Planned Disbursement":
                         setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned");
                         break;
-                    case "{actualCommitment}":
+                    case "Actual Commitment":
                         setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual");
                         break;
-                    case "{actualDisbursement}":
+                    case "Actual Disbursement":
                         setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual");
                         break;
                     default:

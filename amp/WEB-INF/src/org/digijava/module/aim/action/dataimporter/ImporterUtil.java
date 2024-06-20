@@ -50,25 +50,25 @@ public class ImporterUtil {
     private static final Logger logger = LoggerFactory.getLogger(ImporterUtil.class);
      static void setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, String
             adjustmentType) {
-         int detailColumn = getColumnIndexByName(sheet, getKey(config, "{financingInstrument}"));
+         int detailColumn = getColumnIndexByName(sheet, getKey(config, "Financing Instrument"));
          String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
-         detailColumn = getColumnIndexByName(sheet, getKey(config, "{typeOfAssistance}"));
+         detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
          String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
-         int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "{transactionDate}"));
+         int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
          String separateFundingDate = separateFundingDateColumn>=0? row.getCell(separateFundingDateColumn).getStringCellValue(): null;
-         int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "{currency}"));
+         int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "Currency"));
          String currencyCode=currencyCodeColumn>=0? row.getCell(currencyCodeColumn).getStringCellValue(): "XOF";
 
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
-            if (!config.containsValue("{donorAgency}"))
+            if (!config.containsValue("Donor Agency"))
             {
                 updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode);
 
             }
             else {
-                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "{donorAgency}"));
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "{donorAgencyCode}"));
+                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "Donor Agency"));
+                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
                 String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
                 updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org",donorAgencyCode, session, "donor");
                 updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode);
@@ -136,30 +136,30 @@ public class ImporterUtil {
 
     static void setAFundingItemForTxt(Map<String, String> row ,Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session,Number value, boolean commitment, boolean disbursement, String
             adjustmentType) {
-        String finInstrument= row.get(getKey(config, "{financingInstrument}"));
+        String finInstrument= row.get(getKey(config, "Financing Instrument"));
         finInstrument = finInstrument!= null? finInstrument : "";
 
-        String typeOfAss =row.get(getKey(config, "{typeOfAssistance}"));
+        String typeOfAss =row.get(getKey(config, "Type Of Assistance"));
         typeOfAss=typeOfAss!=null? typeOfAss:"";
 
 
-        String separateFundingDate =row.get(getKey(config, "{transactionDate}"));
+        String separateFundingDate =row.get(getKey(config, "Transaction Date"));
         separateFundingDate=separateFundingDate!=null? separateFundingDate:"";
 
-        String currencyCode =row.get(getKey(config, "{currency}"));
+        String currencyCode =row.get(getKey(config, "Currency"));
         currencyCode=currencyCode!=null? currencyCode:"XOF";
 
 
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
-            if (!config.containsValue("{donorAgency}"))
+            if (!config.containsValue("Donor Agency"))
             {
                 updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode);
 
             }
             else {
-                String donorColumn = row.get(getKey(config, "{donorAgency}"));
-                String donorAgencyCode= row.get(getKey(config, "{donorAgencyCode}"));
+                String donorColumn = row.get(getKey(config, "Donor Agency"));
+                String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
 
                 updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
                 updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode);

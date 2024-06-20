@@ -209,8 +209,8 @@ public class DataImporter extends Action {
                         }
                     }
                 }
-                if (dataImporterForm.getColumnPairs().isEmpty() || !dataImporterForm.getColumnPairs().containsValue("{projectTitle}")) {
-                    response.setHeader("errorMessage", "You must have at least the {projectTitle} key in your config.");
+                if (dataImporterForm.getColumnPairs().isEmpty() || !dataImporterForm.getColumnPairs().containsValue("Project Title")) {
+                    response.setHeader("errorMessage", "You must have at least the Project Title key in your config.");
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }
@@ -433,51 +433,51 @@ public class DataImporter extends Action {
 
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
-                    int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "{donorAgencyCode}"));
+                    int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
                     String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
 
-                    int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "{responsibleOrganizationCode}"));
+                    int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
                     String responsibleOrgCode= donorAgencyCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
-                            case "{projectTitle}":
+                            case "Project Title":
                                 importDataModel.setProject_title(cell.getStringCellValue().trim());
                                 break;
-                            case "{projectCode}":
+                            case "Project Code":
                                 importDataModel.setProject_code(cell.getStringCellValue().trim());
                                 break;
-                            case "{projectDescription}":
+                            case "Project Description":
                                 importDataModel.setDescription(cell.getStringCellValue().trim());
                                 break;
-                            case "{projectLocation}":
+                            case "Project Location":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                                 break;
-                            case "{primarySector}":
+                            case "Primary Sector":
                                 updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
                                 break;
-                            case "{secondarySector}":
+                            case "Secondary Sector":
                                 updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
                                 break;
-                            case "{donorAgency}":
+                            case "Donor Agency":
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(),donorAgencyCode, session, "donor");
                                 break;
-                            case "{responsibleOrganization}":
+                            case "Responsible Organization":
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "responsibleOrg");
                                 break;
-                            case "{fundingItem}":
+                            case "Funding Item":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
                                 break;
-                            case "{plannedCommitment}":
+                            case "Planned Commitment":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
                                 break;
-                            case "{plannedDisbursement}":
+                            case "Planned Disbursement":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
                                 break;
-                            case "{actualCommitment}":
+                            case "Actual Commitment":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
                                 break;
-                            case "{actualDisbursement}":
+                            case "Actual Disbursement":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
                                 break;
                             default:
@@ -497,30 +497,32 @@ public class DataImporter extends Action {
 
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
-        fieldsInfos.add("{projectTitle}");
-        fieldsInfos.add("{projectDescription}");
-        fieldsInfos.add("{primarySector}");
-        fieldsInfos.add("{secondarySector}");
-        fieldsInfos.add("{projectLocation}");
-        fieldsInfos.add("{projectStartDate}");
-        fieldsInfos.add("{projectEndDate}");
-        fieldsInfos.add("{donorAgency}");
-        fieldsInfos.add("{donorAgencyCode}");
-        fieldsInfos.add("{responsibleOrganization}");
-        fieldsInfos.add("{responsibleOrganizationCode}");
-        fieldsInfos.add("{executingAgency}");
-        fieldsInfos.add("{implementingAgency}");
-        fieldsInfos.add("{actualDisbursement}");
-        fieldsInfos.add("{actualCommitment}");
-        fieldsInfos.add("{plannedDisbursement}");
-        fieldsInfos.add("{plannedCommitment}");
-        fieldsInfos.add("{fundingItem}");
-        fieldsInfos.add("{transactionDate}");
-        fieldsInfos.add("{financingInstrument}");
-        fieldsInfos.add("{typeOfAssistance}");
-        fieldsInfos.add("{secondarySubSector}");
-        fieldsInfos.add("{currency}");
-        fieldsInfos.add("{projectCode}");
+        fieldsInfos.add("Project Title");
+        fieldsInfos.add("Project Description");
+        fieldsInfos.add("Primary Sector");
+        fieldsInfos.add("Secondary Sector");
+        fieldsInfos.add("Project Location");
+        fieldsInfos.add("Project Start Date");
+        fieldsInfos.add("Project End Date");
+        fieldsInfos.add("Donor Agency");
+        fieldsInfos.add("Donor Agency Code");
+        fieldsInfos.add("Responsible Organization");
+        fieldsInfos.add("Responsible Organization Code");
+        fieldsInfos.add("Executing Agency");
+        fieldsInfos.add("Implementing Agency");
+        fieldsInfos.add("Actual Disbursement");
+        fieldsInfos.add("Actual Commitment");
+        fieldsInfos.add("Planned Disbursement");
+        fieldsInfos.add("Planned Commitment");
+        fieldsInfos.add("Funding Item");
+        fieldsInfos.add("Transaction Date");
+        fieldsInfos.add("Financing Instrument");
+        fieldsInfos.add("Type Of Assistance");
+        fieldsInfos.add("Secondary Subsector");
+        fieldsInfos.add("Currency");
+        fieldsInfos.add("Project Code");
+        fieldsInfos.add("Component Name");
+        fieldsInfos.add("Component Code");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

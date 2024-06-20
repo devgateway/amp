@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -421,32 +423,28 @@ public class ImporterUtil {
         logger.info("Imported project: "+importedProject);
     }
 
-    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, Long adjustmentTypeId, boolean commitment, boolean disbursement, Funding funding)
-    {
-        Long activityId =(Long) response.getContent().getAmpActivityId();
+    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, Long adjustmentTypeId, Funding funding) {
+        Long activityId = (Long) response.getContent().getAmpActivityId();
         Session session = PersistenceManager.getRequestDBSession();
         if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getRequestDBSession();
         }
-        String hql= "FROM "+AmpActivityVersion.class.getName()+" a WHERE a.ampActivityId= :activityId";
+        String hql = "FROM " + AmpActivityVersion.class.getName() + " a WHERE a.ampActivityId= :activityId";
         Query query = session.createQuery(hql);
         query.setParameter("activityId", activityId);
         query.setMaxResults(1);
         List<AmpActivityVersion> activityVersions = query.list();
 
-        if (activityVersions!=null && !activityVersions.isEmpty())
-        {
-            AmpActivityVersion ampActivityVersion= (AmpActivityVersion) query.list().get(0);
+        if (activityVersions != null && !activityVersions.isEmpty()) {
+            AmpActivityVersion ampActivityVersion = (AmpActivityVersion) query.list().get(0);
             AmpComponent ampComponent = new AmpComponent();
-            boolean found=false;
+            boolean found = false;
 
-            for (AmpComponent component: ampActivityVersion.getComponents())
-            {
-                if (component.getTitle().equalsIgnoreCase(componentName))
-                {
-                    logger.info("Found component: "+component.getTitle());
-                    ampComponent=component;
-                    found=true;
+            for (AmpComponent component : ampActivityVersion.getComponents()) {
+                if (component.getTitle().equalsIgnoreCase(componentName)) {
+                    logger.info("Found component: " + component.getTitle());
+                    ampComponent = component;
+                    found = true;
 
                     break;
                 }
@@ -458,31 +456,55 @@ public class ImporterUtil {
             ampComponentFunding.setComponent(ampComponent);
             ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(adjustmentTypeId));
             ampComponentFunding.setReportingDate(new Date());
+
             ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
-            if (commitment)
-            {
+            if (!funding.getCommitments().isEmpty()) {
                 ampComponentFunding.setTransactionType(0);
                 ampComponentFunding.setTransactionAmount(funding.getCommitments().get(0).getTransaction_amount());
+                ampComponentFunding.setTransactionDate(convertStringToDate(funding.getCommitments().get(0).getTransaction_date()));
             }
-            if (disbursement)
-            {
+            if (!funding.getDisbursements().isEmpty()) {
                 ampComponentFunding.setTransactionType(1);
                 ampComponentFunding.setTransactionAmount(funding.getDisbursements().get(0).getTransaction_amount());
+                ampComponentFunding.setTransactionDate(convertStringToDate(funding.getDisbursements().get(0).getTransaction_date()));
+
             }
             ampComponent.getFundings().add(ampComponentFunding);
-            if (found)
-            {
+            if (found) {
                 logger.info("Found component in  activity already. So we just save the component.");
                 session.update(ampComponent);
-            }
-            else
-            {
+            } else {
                 ampActivityVersion.getComponents().add(ampComponent);
                 logger.info("Added component and now saving the activity");
                 session.saveOrUpdate(ampActivityVersion);
 
             }
         }
+    }
+
+        public static Date convertStringToDate(String dateString) {
+        SimpleDateFormat[] formats = {
+                new SimpleDateFormat("dd/MM/yyyy"),
+                new SimpleDateFormat("MM/dd/yyyy"),
+                new SimpleDateFormat("yyyy-MM-dd"),
+                new SimpleDateFormat("MM-dd-yyyy"),
+                new SimpleDateFormat("yyyy/MM/dd"),
+                new SimpleDateFormat("dd-MM-yyyy")
+        };
+
+
+
+        for (SimpleDateFormat format : formats) {
+            try {
+                return format.parse(dateString);
+            } catch (ParseException e) {
+                // Try the next format
+            }
+        }
+
+        // If none of the formats matched, return null
+        return null;
+
 
 
     }
@@ -518,6 +540,21 @@ public class ImporterUtil {
         {
             return ampOrganisations.get(0);
         }
+        return null;
+    }
+    protected static AmpCurrency getAmpCurrencyById(Long id)
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql = "FROM " + AmpCurrency.class.getName() + " a " +
+                "WHERE a.ampCurrencyId = :id";
+        Query query= session.createQuery(hql);
+        query.setParameter("id", id);
+        List<AmpCurrency> ampCurrencies=query.list();
+        if (ampCurrencies!=null && !ampCurrencies.isEmpty())
+            return ampCurrencies.get(0);
         return null;
     }
 

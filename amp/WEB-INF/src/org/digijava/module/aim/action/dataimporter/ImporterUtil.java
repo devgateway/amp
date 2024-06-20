@@ -14,12 +14,8 @@ import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
-import org.digijava.module.admin.util.model.*;
-import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.action.dataimporter.model.*;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
@@ -412,6 +408,7 @@ public class ImporterUtil {
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
 
+
             }
         }
 
@@ -422,6 +419,31 @@ public class ImporterUtil {
         }
         session.saveOrUpdate(importedProject);
         logger.info("Imported project: "+importedProject);
+    }
+
+    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode)
+    {
+        Long activityId =(Long) response.getContent().getAmpActivityId();
+        Session session = PersistenceManager.getRequestDBSession();
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql= "FROM "+AmpActivityVersion.class.getName()+" a WHERE a.ampActivityId= :activityId";
+        Query query = session.createQuery(hql);
+        query.setParameter("activityId", activityId);
+        query.setMaxResults(1);
+        List<AmpActivityVersion> activityVersions = query.list();
+        if (activityVersions!=null && !activityVersions.isEmpty())
+        {
+            AmpActivityVersion ampActivityVersion= (AmpActivityVersion) query.list().get(0);
+
+            AmpComponent ampComponent = new AmpComponent();
+            ampComponent.setTitle(componentName);
+            ampComponent.setCode(componentCode);
+            ampActivityVersion.getComponents().add(ampComponent);
+        }
+
+
     }
 
 

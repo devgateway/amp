@@ -1,6 +1,6 @@
-package org.digijava.module.admin.util.model;
+package org.digijava.module.aim.action.dataimporter.model;
 
-public class InternalId extends Organization{
+public class InternalId extends Organization {
     private String internal_id;
 
     public String getInternal_id() {

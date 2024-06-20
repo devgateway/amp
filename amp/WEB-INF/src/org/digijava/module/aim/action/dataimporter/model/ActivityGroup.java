@@ -1,4 +1,4 @@
-package org.digijava.module.admin.util.model;
+package org.digijava.module.aim.action.dataimporter.model;
 
 public class ActivityGroup {
     private Long version;

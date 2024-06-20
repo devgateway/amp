@@ -421,7 +421,7 @@ public class ImporterUtil {
         logger.info("Imported project: "+importedProject);
     }
 
-    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode)
+    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, Long adjustmentTypeId, boolean commitment, boolean disbursement, Funding funding)
     {
         Long activityId =(Long) response.getContent().getAmpActivityId();
         Session session = PersistenceManager.getRequestDBSession();
@@ -433,17 +433,92 @@ public class ImporterUtil {
         query.setParameter("activityId", activityId);
         query.setMaxResults(1);
         List<AmpActivityVersion> activityVersions = query.list();
+
         if (activityVersions!=null && !activityVersions.isEmpty())
         {
             AmpActivityVersion ampActivityVersion= (AmpActivityVersion) query.list().get(0);
-
             AmpComponent ampComponent = new AmpComponent();
+            boolean found=false;
+
+            for (AmpComponent component: ampActivityVersion.getComponents())
+            {
+                if (component.getTitle().equalsIgnoreCase(componentName))
+                {
+                    logger.info("Found component: "+component.getTitle());
+                    ampComponent=component;
+                    found=true;
+
+                    break;
+                }
+            }
+
             ampComponent.setTitle(componentName);
             ampComponent.setCode(componentCode);
-            ampActivityVersion.getComponents().add(ampComponent);
+            AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
+            ampComponentFunding.setComponent(ampComponent);
+            ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(adjustmentTypeId));
+            ampComponentFunding.setReportingDate(new Date());
+            ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
+            if (commitment)
+            {
+                ampComponentFunding.setTransactionType(0);
+                ampComponentFunding.setTransactionAmount(funding.getCommitments().get(0).getTransaction_amount());
+            }
+            if (disbursement)
+            {
+                ampComponentFunding.setTransactionType(1);
+                ampComponentFunding.setTransactionAmount(funding.getDisbursements().get(0).getTransaction_amount());
+            }
+            ampComponent.getFundings().add(ampComponentFunding);
+            if (found)
+            {
+                logger.info("Found component in  activity already. So we just save the component.");
+                session.update(ampComponent);
+            }
+            else
+            {
+                ampActivityVersion.getComponents().add(ampComponent);
+                logger.info("Added component and now saving the activity");
+                session.saveOrUpdate(ampActivityVersion);
+
+            }
         }
 
 
+    }
+    private static AmpCategoryValue getCategoryValueObjectById(Long id)
+    {
+        Session session= PersistenceManager.getRequestDBSession();
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql = "FROM " + AmpCategoryValue.class.getName() + " a " +
+                "WHERE a.id = :id";
+        Query query= session.createQuery(hql);
+        query.setParameter("id", id);
+        List<AmpCategoryValue> ampCategoryValues=query.list();
+        if (ampCategoryValues!=null && !ampCategoryValues.isEmpty())
+        {
+            return ampCategoryValues.get(0);
+        }
+        return null;
+    }
+    protected static AmpOrganisation getAmpOrganisationById(Long id)
+    {
+        Session session= PersistenceManager.getRequestDBSession();
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql = "FROM " + AmpOrganisation.class.getName() + " a " +
+                "WHERE a.ampOrgId = :id";
+        Query query= session.createQuery(hql);
+        query.setParameter("id", id);
+        List<AmpOrganisation> ampOrganisations=query.list();
+        if (ampOrganisations!=null && !ampOrganisations.isEmpty())
+        {
+            return ampOrganisations.get(0);
+        }
+        return null;
     }
 
 

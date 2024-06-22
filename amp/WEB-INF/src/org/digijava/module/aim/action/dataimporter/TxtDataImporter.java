@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.digijava.module.aim.action.dataimporter.ImporterUtil.*;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
 
 public class TxtDataImporter {
     private static final int BATCH_SIZE = 1000;

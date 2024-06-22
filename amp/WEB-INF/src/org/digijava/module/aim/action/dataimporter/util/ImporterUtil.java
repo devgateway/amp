@@ -1,4 +1,4 @@
-package org.digijava.module.aim.action.dataimporter;
+package org.digijava.module.aim.action.dataimporter.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,12 +42,12 @@ import java.util.regex.Pattern;
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 
 public class ImporterUtil {
-    protected static Map<String, Long> ConstantsMap = new HashMap<>();
+    public static Map<String, Long> ConstantsMap = new HashMap<>();
 
     private static final int BATCH_SIZE = 1000;
     private static final Logger logger = LoggerFactory.getLogger(ImporterUtil.class);
-     static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, String
-            adjustmentType) {
+     public static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, String
+             adjustmentType) {
          int detailColumn = getColumnIndexByName(sheet, getKey(config, "Financing Instrument"));
          String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
          detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
@@ -139,7 +139,7 @@ public class ImporterUtil {
         return false;
     }
 
-    static Funding setAFundingItemForTxt(Map<String, String> row ,Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session,Number value, boolean commitment, boolean disbursement, String
+    public static Funding setAFundingItemForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, String
             adjustmentType) {
         String finInstrument= row.get(getKey(config, "Financing Instrument"));
         finInstrument = finInstrument!= null? finInstrument : "";
@@ -201,7 +201,7 @@ public class ImporterUtil {
         }
     }
 
-    protected static void removeMapItem(Map<String,String> map,String columnName, String selectedField)
+    public static void removeMapItem(Map<String, String> map, String columnName, String selectedField)
     {
         // Check if the entry's key and value match the criteria
         // Remove the entry
@@ -380,7 +380,7 @@ public class ImporterUtil {
         List<AmpActivityVersion> ampActivityVersions=query.list();
         return  !ampActivityVersions.isEmpty()? ampActivityVersions.get(ampActivityVersions.size()-1) :null;
     }
-    protected static void setStatus(ImportDataModel importDataModel,Session session)
+    public static void setStatus(ImportDataModel importDataModel, Session session)
     {
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
@@ -389,7 +389,7 @@ public class ImporterUtil {
         importDataModel.setActivity_status(statusId);
 
     }
-    static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject,String componentName, String componentCode,Long responsibleOrgId, List<Funding> fundings) throws JsonProcessingException {
+    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings) throws JsonProcessingException {
         // TODO: 20/06/2024 update this method to insert componets using addComponent method
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
@@ -593,7 +593,7 @@ public class ImporterUtil {
 
 
 
-    static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
+    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
     {
 
         if (ConstantsMap.containsKey("sector_"+name)) {
@@ -665,7 +665,7 @@ public class ImporterUtil {
 
     }
 
-    static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
+    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
     {
         Long orgId;
 
@@ -723,7 +723,7 @@ public class ImporterUtil {
 
 
     }
-    protected static int getColumnIndexByName(Sheet sheet, String columnName) {
+    public static int getColumnIndexByName(Sheet sheet, String columnName) {
         try {
             Row headerRow = sheet.getRow(0);
             for (int i = 0; i < headerRow.getLastCellNum(); i++) {

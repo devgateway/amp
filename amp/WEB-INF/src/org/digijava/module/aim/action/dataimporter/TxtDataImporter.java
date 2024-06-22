@@ -10,6 +10,7 @@ import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
+import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
@@ -77,6 +78,7 @@ public class TxtDataImporter {
         for (Map<String, String> row : batch) {
             ImportedProject importedProject= new ImportedProject();
             importedProject.setImportedFilesRecord(importedFilesRecord);
+            List<Funding> fundings= new ArrayList<>();
 
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
@@ -86,10 +88,15 @@ public class TxtDataImporter {
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
+            String componentName= row.get(getKey(config, "Component Name"));
+            String componentCode= row.get(getKey(config, "Component Code"));
+            Long responsibleOrgId=null;
+
             logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
                 String responsibleOrgCode= row.get(getKey(config, "Responsible Organization Code"));
+                Funding funding = null;
                 switch (entry.getValue()) {
                     case "Project Title":
                         importDataModel.setProject_title(row.get(entry.getKey()));
@@ -113,29 +120,32 @@ public class TxtDataImporter {
                         updateOrgs(importDataModel,row.get(entry.getKey().trim()),donorAgencyCode, session, "donor");
                         break;
                     case "Responsible Organization":
-                        updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "responsibleOrg");
+                        responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "responsibleOrg");
                         break;
                     case "Funding Item":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual");
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual");
                         break;
                     case "Planned Commitment":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned");
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned");
                         break;
                     case "Planned Disbursement":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned");
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned");
                         break;
                     case "Actual Commitment":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual");
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual");
                         break;
                     case "Actual Disbursement":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual");
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual");
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());
                         break;
                 }
+                fundings.add(funding);
+
             }
-            importTheData(importDataModel, session, importedProject);
+
+            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings);
 
         }
 

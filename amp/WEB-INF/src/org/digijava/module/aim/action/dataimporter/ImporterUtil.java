@@ -139,14 +139,14 @@ public class ImporterUtil {
         return false;
     }
 
-    static void setAFundingItemForTxt(Map<String, String> row ,Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session,Number value, boolean commitment, boolean disbursement, String
+    static Funding setAFundingItemForTxt(Map<String, String> row ,Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session,Number value, boolean commitment, boolean disbursement, String
             adjustmentType) {
         String finInstrument= row.get(getKey(config, "Financing Instrument"));
         finInstrument = finInstrument!= null? finInstrument : "";
 
         String typeOfAss =row.get(getKey(config, "Type Of Assistance"));
         typeOfAss=typeOfAss!=null? typeOfAss:"";
-
+        Funding funding;
 
         String separateFundingDate =row.get(getKey(config, "Transaction Date"));
         separateFundingDate=separateFundingDate!=null? separateFundingDate:"";
@@ -165,7 +165,7 @@ public class ImporterUtil {
         {
             if (!config.containsValue("Donor Agency"))
             {
-                updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
+                funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
 
             }
             else {
@@ -173,12 +173,13 @@ public class ImporterUtil {
                 String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
 
                 updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
-                updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
+                funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
             }
 
         }else {
-            updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName, componentCode);
+            funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName, componentCode);
         }
+        return funding;
     }
 
     public static <K, V> K getKey(Map<K, V> map, V value) {
@@ -388,8 +389,8 @@ public class ImporterUtil {
         importDataModel.setActivity_status(statusId);
 
     }
-    static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject) throws JsonProcessingException {
-        // TODO: 20/06/2024 update this method to insert componets using addComponent method 
+    static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject,String componentName, String componentCode,Long responsibleOrgId, List<Funding> fundings) throws JsonProcessingException {
+        // TODO: 20/06/2024 update this method to insert componets using addComponent method
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
@@ -429,6 +430,8 @@ public class ImporterUtil {
                 importedProject.setImportStatus(ImportStatus.FAILED);
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
+                logger.info("Successfully imported the project. Now adding component if present");
+                addComponents(response,componentName,componentCode,responsibleOrgId,fundings);
 
 
             }
@@ -443,7 +446,7 @@ public class ImporterUtil {
         logger.info("Imported project: "+importedProject);
     }
 
-    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, Long adjustmentTypeId, List<Funding> fundings) {
+    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings) {
         Long activityId = (Long) response.getContent().getAmpActivityId();
         Session session = PersistenceManager.getRequestDBSession();
         if (!session.isOpen()) {
@@ -477,17 +480,21 @@ public class ImporterUtil {
                 if (funding != null) {
                     AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
                     ampComponentFunding.setComponent(ampComponent);
-                    ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(adjustmentTypeId));
                     ampComponentFunding.setReportingDate(new Date());
+                    if (responsibleOrgId!=null)
+                    {
+                        ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
+                    }
 
-                    ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
                     if (!funding.getCommitments().isEmpty()) {
                         ampComponentFunding.setTransactionType(0);
+                        ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(funding.getCommitments().get(0).getAdjustment_type()));
                         ampComponentFunding.setTransactionAmount(funding.getCommitments().get(0).getTransaction_amount());
                         ampComponentFunding.setTransactionDate(convertStringToDate(funding.getCommitments().get(0).getTransaction_date()));
                     }
                     if (!funding.getDisbursements().isEmpty()) {
                         ampComponentFunding.setTransactionType(1);
+                        ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(funding.getDisbursements().get(0).getAdjustment_type()));
                         ampComponentFunding.setTransactionAmount(funding.getDisbursements().get(0).getTransaction_amount());
                         ampComponentFunding.setTransactionDate(convertStringToDate(funding.getDisbursements().get(0).getTransaction_date()));
 
@@ -658,7 +665,7 @@ public class ImporterUtil {
 
     }
 
-    static void updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
+    static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
     {
         Long orgId;
 
@@ -711,6 +718,7 @@ public class ImporterUtil {
             importDataModel.getResponsible_organization().add(responsibleOrg);
 
         }
+        return orgId;
 
 
 

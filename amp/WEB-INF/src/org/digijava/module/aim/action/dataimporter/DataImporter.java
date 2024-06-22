@@ -431,8 +431,14 @@ public class DataImporter extends Action {
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel, session);
 
-            logger.info("Row Number: "+row.getRowNum()+", Sheet Name: "+sheet.getSheetName());
+            int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, "Component Code"));
+            String componentCode= componentCodeColumn>=0? row.getCell(componentCodeColumn).getStringCellValue(): null;
 
+            int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
+            String componentName= componentNameColumn>=0? row.getCell(componentNameColumn).getStringCellValue(): null;
+            Long responsibleOrgId = null;
+
+            logger.info("Row Number: "+row.getRowNum()+", Sheet Name: "+sheet.getSheetName());
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     Funding funding = null;
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
@@ -440,7 +446,9 @@ public class DataImporter extends Action {
                     String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
 
                     int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
-                    String responsibleOrgCode= donorAgencyCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
+                    String responsibleOrgCode= responsibleOrgCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
+
+
 
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
@@ -467,7 +475,7 @@ public class DataImporter extends Action {
                                 updateOrgs(importDataModel, cell.getStringCellValue().trim(),donorAgencyCode, session, "donor");
                                 break;
                             case "Responsible Organization":
-                                updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "responsibleOrg");
+                                responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "responsibleOrg");
                                 break;
                             case "Funding Item":
                                  funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
@@ -497,7 +505,7 @@ public class DataImporter extends Action {
                 }
 
 
-            importTheData(importDataModel, session, importedProject);
+            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings);
 
         }
     }

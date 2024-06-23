@@ -34,7 +34,7 @@ import java.util.Map;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
 
 public class ExcelImporter {
-    static Logger logger = LoggerFactory.getLogger(DataImporter.class);
+    static Logger logger = LoggerFactory.getLogger(ExcelImporter.class);
     private static final int BATCH_SIZE = 1000;
 
     public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config) {
@@ -69,7 +69,7 @@ public class ExcelImporter {
     public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Get the number of rows in the sheet
         int rowCount = sheet.getPhysicalNumberOfRows();
-        logger.info("Total number of rows: " + rowCount);
+        logger.info("There are {} rows in sheet {} " , rowCount, sheet.getSheetName());
 
         // Process each row in batches
         for (int i = 0; i < rowCount; i += BATCH_SIZE) {

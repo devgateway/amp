@@ -44,21 +44,24 @@ public class TxtDataImporter {
         try (CSVReaderHeaderAware reader = new CSVReaderHeaderAwareBuilder(new FileReader(file)).withCSVParser(parser).build()) {
             List<Map<String, String>> batch = new ArrayList<>();
             Map<String, String> values;
-
+            int batchNumber =1;
             while ((values = reader.readMap()) != null) {
                 batch.add(values);
-                logger.info("Batch this far: "+batch);
 
                 if (batch.size() == BATCH_SIZE) {
+                    logger.info("Batch number here: {}",batchNumber);
+
                     // Process the batch
                     processBatch(batch, request,config,importedFilesRecord);
                     // Clear the batch for the next set of rows
                     batch.clear();
+                    batchNumber+=1;
                 }
             }
 
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
+                logger.info("Processing last batch of size {}", batch.size());
                 processBatch(batch, request,config,importedFilesRecord);
             }
         } catch (IOException | CsvValidationException e) {

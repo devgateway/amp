@@ -475,6 +475,7 @@ public class ImporterUtil {
 
             ampComponent.setTitle(componentName);
             ampComponent.setCode(componentCode);
+            ampComponent.setActivity(ampActivityVersion);
 
             for (Funding funding: fundings) {
                 if (funding != null) {

@@ -239,6 +239,9 @@ public class ImporterUtil {
 
      private static Funding updateFunding(ImportDataModel importDataModel, Session session, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
              adjustmentType, String currencyCode, String componentName, String componentCode, String activityName) {
+         if (!session.isOpen()) {
+             session = PersistenceManager.getRequestDBSession();
+         }
         String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         Long currencyId = getCurrencyId(session,currencyCode);
         Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql,adjustmentType );

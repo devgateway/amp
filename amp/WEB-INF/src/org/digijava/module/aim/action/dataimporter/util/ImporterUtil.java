@@ -63,11 +63,14 @@ public class ImporterUtil {
          int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, "Component Code"));
          String componentCode= componentCodeColumn>=0? row.getCell(componentCodeColumn).getStringCellValue(): null;
 
+         int activityNameColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
+         String activityName= activityNameColumn>=0? row.getCell(activityNameColumn).getStringCellValue(): null;
+
          if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("Donor Agency"))
             {
-                funding=updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
+                funding=updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode,activityName);
 
             }
             else {
@@ -75,11 +78,11 @@ public class ImporterUtil {
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
                 String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
                 updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
+                funding=updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode,activityName);
             }
 
         }else {
-            funding=updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
+            funding=updateFunding(importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode,activityName);
         }
          return funding;
     }
@@ -160,12 +163,15 @@ public class ImporterUtil {
         String componentCode =row.get(getKey(config, "Component Code"));
         componentCode=componentCode!=null? componentCode:"";
 
+        String activityName =row.get(getKey(config, "Project Title"));
+        activityName=activityName!=null? activityName:"";
+
 
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("Donor Agency"))
             {
-                funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
+                funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode,activityName);
 
             }
             else {
@@ -173,11 +179,11 @@ public class ImporterUtil {
                 String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
 
                 updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode);
+                funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName, componentCode,activityName);
             }
 
         }else {
-            funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName, componentCode);
+            funding=updateFunding(importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName, componentCode,activityName);
         }
         return funding;
     }
@@ -232,15 +238,26 @@ public class ImporterUtil {
 
 
      private static Funding updateFunding(ImportDataModel importDataModel, Session session, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
-             adjustmentType, String currencyCode, String componentName, String componentCode) {
+             adjustmentType, String currencyCode, String componentName, String componentCode, String activityName) {
         String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         Long currencyId = getCurrencyId(session,currencyCode);
         Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql,adjustmentType );
         Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql,assistanceType);
         Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finInst);
         Long orgRole = getOrganizationRole(session);
+        AmpActivityVersion ampActivityVersion = null;
+        if (activityName!=null)
+        {
+            String hql = "FROM "+AmpActivityVersion.class.getName()+" a WHERE a.name= :activityName";
+            Query query= session.createQuery(hql);
+            query.setCacheable(true);
+            query.setParameter("activityName", activityName);
+            List<AmpActivityVersion> ampActivityVersions=query.list();
+            ampActivityVersion= !ampActivityVersions.isEmpty()?ampActivityVersions.get(0):null;
+        }
 
-        String yearString = null;
+
+        String yearString;
         String fundingDate;
         if (separateFundingDate!=null)
         {
@@ -257,6 +274,14 @@ public class ImporterUtil {
             fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
 
         }
+         if (ampActivityVersion!=null)
+         {
+//        for (AmpFunding ampFunding: ampActivityVersion.getFunding())
+//        {
+//            Funding funding = new Funding();
+//
+//        }
+         }
 
 
         Funding funding = new Funding();
@@ -376,6 +401,7 @@ public class ImporterUtil {
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
                 "WHERE a.name = :name";
         Query query= session.createQuery(hql);
+        query.setCacheable(true);
         query.setString("name", importDataModel.getProject_title());
         List<AmpActivityVersion> ampActivityVersions=query.list();
         return  !ampActivityVersions.isEmpty()? ampActivityVersions.get(ampActivityVersions.size()-1) :null;
@@ -490,11 +516,13 @@ public class ImporterUtil {
                     if (!funding.getCommitments().isEmpty()) {
                         ampComponentFunding.setTransactionType(0);
                         ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(funding.getCommitments().get(0).getAdjustment_type()));
+                        ampComponentFunding.setCurrency(getAmpCurrencyById(funding.getCommitments().get(0).getCurrency()));
                         ampComponentFunding.setTransactionAmount(funding.getCommitments().get(0).getTransaction_amount());
                         ampComponentFunding.setTransactionDate(convertStringToDate(funding.getCommitments().get(0).getTransaction_date()));
                     }
                     if (!funding.getDisbursements().isEmpty()) {
                         ampComponentFunding.setTransactionType(1);
+                        ampComponentFunding.setCurrency(getAmpCurrencyById(funding.getDisbursements().get(0).getCurrency()));
                         ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(funding.getDisbursements().get(0).getAdjustment_type()));
                         ampComponentFunding.setTransactionAmount(funding.getDisbursements().get(0).getTransaction_amount());
                         ampComponentFunding.setTransactionDate(convertStringToDate(funding.getDisbursements().get(0).getTransaction_date()));

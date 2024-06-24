@@ -50,7 +50,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 /**
  * Reusable component capturing an amount item in AMP (the tuple amount /
  * currency / date )
- * 
+ *
  * @author mpostelnicu@dgateway.org since Nov 2, 2010
  */
 public class AmpFundingAmountComponent<T> extends Panel {
@@ -70,17 +70,17 @@ public class AmpFundingAmountComponent<T> extends Panel {
             int startYear = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
             int range = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
             boolean fiscal = MTEFYearsModel.getFiscal();
-            
+
             list = new ArrayList<KeyValue>(range);
-            
+
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_YEAR, 1);
-            
+
             for (int i = 0; i < range; i++) {
                 calendar.set(Calendar.YEAR, startYear + i);
                 list.add(MTEFYearsModel.convert(calendar.getTime(), fiscal));
             }
-            
+
             return list;
         }
     };
@@ -93,7 +93,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
         this(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate,
                 isMTEFProjection, false,null);
     }
-    
+
     public AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
             String propertyAmount, String fmCurrency, String propertyCurrency,
             String fmDate, String propertyDate, boolean isMTEFProjection,String amountSize) {
@@ -101,7 +101,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
                 isMTEFProjection, false,amountSize);
     }
 
-    
+
     protected AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
             String propertyAmount, String fmCurrency, String propertyCurrency,
             String fmDate, String propertyDate, boolean isMTEFProjection, boolean fundingComponentTableMode,String amountSize) {
@@ -112,16 +112,16 @@ public class AmpFundingAmountComponent<T> extends Panel {
         this.isMTEFProjection=isMTEFProjection;
         amount = new AmpTextFieldPanel<Double>("amount",
                 new PropertyModel<Double>(model, propertyAmount), fmAmount, hideLabel, hideNewLine) {
-            
+
             @Override
             protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
                 AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
                 if(parentPanel ==null)
-                    parentPanel = findParent(AmpComponentField.class);              
+                    parentPanel = findParent(AmpComponentField.class);
                 if(parentPanel ==null)
                     parentPanel = findParent(AmpRegionalFundingItemFeaturePanel.class);
                 if(parentPanel==null)
-                    parentPanel = findParent(AmpComponentFormTableAnnualBudget.class);              
+                    parentPanel = findParent(AmpComponentFormTableAnnualBudget.class);
                 parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
                     @Override
                     public void component(AmpCollectionValidatorField component,
@@ -130,20 +130,20 @@ public class AmpFundingAmountComponent<T> extends Panel {
                         visit.dontGoDeeper();
                     }
                 });
-                
+
 
                 onFundingDetailChanged(target);
             }
-            
+
             public IConverter getInternalConverter(java.lang.Class<?> type) {
                 return CustomDoubleConverter.INSTANCE;
             }
         };
         amount.getTextContainer().setRequired(true);
         if(amountSize==null)
-            amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("9")));
+            amount.getTextContainer().add(new AttributeModifier("size", new Model<>("9")));
         else
-            amount.getTextContainer().add(new AttributeModifier("size", new Model<String>(amountSize)));
+            amount.getTextContainer().add(new AttributeModifier("size", new Model<>(amountSize)));
 
         add(amount);
 
@@ -225,14 +225,14 @@ public class AmpFundingAmountComponent<T> extends Panel {
         } else if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
             AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
                     "date", new PropertyModel<Date>(model, propertyDate), fmDate, null, hideLabel, hideNewLine);
-            
+
             datetmp.getDate().setRequired(true);
             datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));
             date = datetmp;
         } else {
             MTEFYearsModel yearModel = new MTEFYearsModel(new PropertyModel<Date>(model, propertyDate));
 
-            AmpSelectFieldPanel<KeyValue> datetmp = new AmpSelectFieldPanel<KeyValue>("date", yearModel, 
+            AmpSelectFieldPanel<KeyValue> datetmp = new AmpSelectFieldPanel<KeyValue>("date", yearModel,
                         mtefYearsChoices, fmDate, true, true, new ChoiceRenderer<KeyValue>("value", "key"));
             date = datetmp;
         }
@@ -243,10 +243,10 @@ public class AmpFundingAmountComponent<T> extends Panel {
 
         setRenderBodyOnly(true);
     }
-    
+
     /**
      * Method called when the amount field value has been changed
-     * 
+     *
      * @param target
      */
     protected void onFundingDetailChanged(AjaxRequestTarget target) {
@@ -282,7 +282,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
         return date;
     }
     private void sendEvent(AjaxRequestTarget target){
-        
+
     }
     public void setAmountValidator(final AmpCollectionValidatorField validationHiddenField){
         validationFields.add(validationHiddenField);
@@ -292,7 +292,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
             protected void onUpdate(final AjaxRequestTarget target) {
                 AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
                 if(parentPanel ==null)
-                    parentPanel = findParent(AmpComponentField.class);              
+                    parentPanel = findParent(AmpComponentField.class);
                 if(parentPanel ==null)
                     parentPanel = findParent(AmpRegionalFundingItemFeaturePanel.class);
                 parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {

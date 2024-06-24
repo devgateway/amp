@@ -190,6 +190,7 @@ public class ImporterUtil {
 
     public static <K, V> K getKey(Map<K, V> map, V value) {
          logger.info("Map here: " + map);
+         logger.info("Value here: " + value);
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (entry.getValue().equals(value)) {
                 return entry.getKey();

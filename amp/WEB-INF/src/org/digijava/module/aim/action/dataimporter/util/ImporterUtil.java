@@ -319,7 +319,6 @@ public class ImporterUtil {
         return funding;
     }
 
-
     private static Long getOrganizationRole(Session session) {
 
         if (ConstantsMap.containsKey("orgRole")) {

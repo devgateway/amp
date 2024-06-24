@@ -189,8 +189,6 @@ public class ImporterUtil {
     }
 
     public static <K, V> K getKey(Map<K, V> map, V value) {
-         logger.info("Map here: " + map);
-         logger.info("Value here: " + value);
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (entry.getValue().equals(value)) {
                 return entry.getKey();
@@ -420,7 +418,6 @@ public class ImporterUtil {
 
     }
     public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings) throws JsonProcessingException {
-        // TODO: 20/06/2024 update this method to insert componets using addComponent method
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
@@ -506,6 +503,7 @@ public class ImporterUtil {
             ampComponent.setTitle(componentName);
             ampComponent.setCode(componentCode);
             ampComponent.setActivity(ampActivityVersion);
+            logger.info("Fundings: {}",fundings);
 
             for (Funding funding: fundings) {
                 if (funding != null) {

@@ -535,6 +535,7 @@ public class ImporterUtil {
 
                 }
             }
+            logger.info("Component:  {}",ampComponent);
             if (found) {
                 logger.info("Found component in  activity already. So we just save the component.");
                 session.update(ampComponent);

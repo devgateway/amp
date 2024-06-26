@@ -493,6 +493,7 @@ public class ImporterUtil {
             AmpActivityVersion ampActivityVersion = (AmpActivityVersion) query.list().get(0);
             AmpComponent ampComponent = new AmpComponent();
             boolean found = false;
+            logger.info("Compnent name: " + componentName);
 
             for (AmpComponent component : ampActivityVersion.getComponents()) {
                 if (StringUtils.equalsIgnoreCase(component.getTitle(),componentName) || StringUtils.equalsIgnoreCase(component.getCode(), componentCode)) {

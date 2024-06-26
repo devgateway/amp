@@ -462,7 +462,9 @@ public class ImporterUtil {
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
                 logger.info("Successfully imported the project. Now adding component if present");
-                if (componentName!=null && componentName!="") {
+                logger.info("--------------------------------");
+                logger.info("Component name at start: " + componentName);
+                if (componentName!=null && !componentName.isEmpty()) {
                     addComponents(response, componentName, componentCode, responsibleOrgId, fundings);
                 }
                 if (!session.isOpen()) {

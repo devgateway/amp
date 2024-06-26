@@ -558,9 +558,9 @@ public class ImporterUtil {
 
     private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
 //        Session session = PersistenceManager.getRequestDBSession();
-        String sql = "SELECT COUNT(*) FROM amp_component_funding WHERE reporting_organization_id = ? " +
-                "AND adjustment_type_id = ? AND transaction_amount = ? " +
-                "AND transaction_date = ? AND component_id = ?";
+        String sql = "SELECT COUNT(*) FROM amp_component_funding WHERE rep_organization_id = ? " +
+                "AND adjustment_type = ? AND transaction_amount = ? " +
+                "AND transaction_date = ? AND amp_component_id = ?";
 
         try (PreparedStatement statement =PersistenceManager.getJdbcConnection().prepareStatement(sql)) {
             statement.setLong(1, ampComponentFunding.getReportingOrganization().getAmpOrgId());

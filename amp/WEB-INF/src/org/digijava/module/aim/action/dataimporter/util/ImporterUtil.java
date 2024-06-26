@@ -491,7 +491,7 @@ public class ImporterUtil {
             boolean found = false;
 
             for (AmpComponent component : ampActivityVersion.getComponents()) {
-                if (component.getTitle().equalsIgnoreCase(componentName) || component.getCode().equalsIgnoreCase(componentCode)) {
+                if (Objects.equals(component.getTitle(),componentName) || Objects.equals(component.getCode(), componentCode)) {
                     logger.info("Found component: " + component.getTitle());
                     ampComponent = component;
                     found = true;

@@ -565,16 +565,16 @@ public class ImporterUtil {
                 "WHERE a.reportingOrganization = :ampOrganisation " +
                 "AND a.adjustmentType = :adjustmentType " +
                 "AND a.transactionAmount = :transactionAmount " +
-                "AND a.transactionDate = :transactionDate "+
-                "AND a.component = :ampComponent";
+                "AND a.transactionDate = :transactionDate ";
+//                "AND a.component = :ampComponent";
         Query query= session.createQuery(hql);
         query.setParameter("ampOrganisation", ampComponentFunding.getReportingOrganization(), ObjectType.INSTANCE);
         query.setParameter("adjustmentType", ampComponentFunding.getAdjustmentType(), ObjectType.INSTANCE);
         query.setParameter("transactionAmount", ampComponentFunding.getTransactionAmount(), DoubleType.INSTANCE);
         query.setParameter("transactionDate", ampComponentFunding.getTransactionDate(), DateType.INSTANCE);
-        query.setParameter("ampComponent",ampComponent, ObjectType.INSTANCE);
+//        query.setParameter("ampComponent",ampComponent, ObjectType.INSTANCE);
         List<AmpComponentFunding> ampComponentFundings=query.list();
-        return !ampComponentFundings.isEmpty();
+        return !ampComponentFundings.isEmpty() && ampComponentFundings.get(0).getComponent().equals(ampComponent);
     }
 
         public static Date convertStringToDate(String dateString) {

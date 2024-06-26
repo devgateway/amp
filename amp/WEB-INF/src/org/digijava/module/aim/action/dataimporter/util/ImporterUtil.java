@@ -489,17 +489,18 @@ public class ImporterUtil {
         if (activityVersions != null && !activityVersions.isEmpty()) {
             AmpActivityVersion ampActivityVersion = (AmpActivityVersion) query.list().get(0);
             AmpComponent ampComponent = new AmpComponent();
-            boolean found = false;
 
             for (AmpComponent component : ampActivityVersion.getComponents()) {
+                logger.info("Component in loop: " + component);
+                logger.info("Component Name: " + componentName);
                 if (StringUtils.equalsIgnoreCase(component.getTitle(),componentName) || StringUtils.equalsIgnoreCase(component.getCode(), componentCode)) {
                     logger.info("Found component: " + component.getTitle());
                     ampComponent = component;
-                    found = true;
 
                     break;
                 }
             }
+            logger.info("Component after loop: " + ampComponent);
 
             ampComponent.setTitle(componentName);
             ampComponent.setCode(componentCode);
@@ -537,7 +538,7 @@ public class ImporterUtil {
             }
             logger.info("Component:  {}",ampComponent);
 //            if (found) {
-                logger.info("Found component in  activity already. So we just save the component.");
+//                logger.info("Found component in  activity already. So we just save the component.");
                 session.saveOrUpdate(ampComponent);
 //            } else {
 //                ampActivityVersion.getComponents().add(ampComponent);

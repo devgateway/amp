@@ -505,7 +505,7 @@ public class ImporterUtil {
             ampComponent.setActivity(ampActivityVersion);
             logger.info("Fundings: {}",fundings);
 
-            for (Funding funding: fundings) {
+            for (Funding funding: new HashSet<>(fundings)) {
                 if (funding != null) {
                     AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
                     ampComponentFunding.setComponent(ampComponent);

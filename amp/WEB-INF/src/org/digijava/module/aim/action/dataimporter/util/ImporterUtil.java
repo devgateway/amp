@@ -463,6 +463,7 @@ public class ImporterUtil {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
                 logger.info("Successfully imported the project. Now adding component if present");
                 addComponents(response,componentName,componentCode,responsibleOrgId,fundings);
+                session.flush();
 
 
             }

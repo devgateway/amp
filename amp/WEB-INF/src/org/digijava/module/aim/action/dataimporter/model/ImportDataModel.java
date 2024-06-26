@@ -31,6 +31,7 @@ public class ImportDataModel {
     private Set<Location> locations=new HashSet<>();
     private Set<DonorOrganization> donor_organization=new HashSet<>();
     private Set<Organization> responsible_organization=new HashSet<>();
+    private Set<Organization> beneficiary_agency=new HashSet<>();
     private Set<Organization> executing_agency=new HashSet<>();
     private Set<Object> activity_internal_ids;
     private Set<Funding> fundings= new HashSet<>();
@@ -100,6 +101,13 @@ public class ImportDataModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public Set<Organization> getBeneficiary_agency() {
+        return beneficiary_agency;
+    }
+
+    public void setBeneficiary_agency(Set<Organization> beneficiary_agency) {
+        this.beneficiary_agency = beneficiary_agency;
     }
 
     public String getObjective() {

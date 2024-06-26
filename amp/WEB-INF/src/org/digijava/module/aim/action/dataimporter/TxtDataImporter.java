@@ -125,6 +125,9 @@ public class TxtDataImporter {
                     case "Responsible Organization":
                         responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "responsibleOrg");
                         break;
+                    case "Beneficiary Agency":
+                        responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "beneficiaryAgency");
+                        break;
                     case "Funding Item":
                         funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual");
                         break;

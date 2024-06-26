@@ -388,6 +388,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("Project Code");
         fieldsInfos.add("Component Name");
         fieldsInfos.add("Component Code");
+        fieldsInfos.add("Beneficiary Agency");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

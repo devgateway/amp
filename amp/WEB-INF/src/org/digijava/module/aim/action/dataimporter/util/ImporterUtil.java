@@ -750,6 +750,13 @@ public class ImporterUtil {
             importDataModel.getResponsible_organization().add(responsibleOrg);
 
         }
+        else if (Objects.equals(type, "beneficiaryAgency"))
+        {
+            Organization beneficiaryAgency = new Organization();
+            beneficiaryAgency.setOrganization(orgId);
+            importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
+
+        }
         return orgId;
 
 

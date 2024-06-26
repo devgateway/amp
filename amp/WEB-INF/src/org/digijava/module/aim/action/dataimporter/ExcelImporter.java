@@ -157,6 +157,9 @@ public class ExcelImporter {
                         case "Responsible Organization":
                             responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "responsibleOrg");
                             break;
+                        case "Beneficiary Agency":
+                            responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "beneficiaryAgency");
+                            break;
                         case "Funding Item":
                             funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
                             break;

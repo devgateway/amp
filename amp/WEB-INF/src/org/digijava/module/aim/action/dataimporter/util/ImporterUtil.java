@@ -465,6 +465,10 @@ public class ImporterUtil {
                 if (componentName!=null && componentName!="") {
                     addComponents(response, componentName, componentCode, responsibleOrgId, fundings);
                 }
+                if (!session.isOpen()) {
+                    session=PersistenceManager.getRequestDBSession();
+                }
+
                 session.flush();
 
 

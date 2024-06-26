@@ -538,9 +538,14 @@ public class ImporterUtil {
                         ampComponentFunding.setTransactionDate(convertStringToDate(funding.getDisbursements().get(0).getTransaction_date()));
 
                     }
-
+                    if (found){
                     if (!componentFundingExists(ampComponentFunding, ampComponent)) {
                         ampComponent.getFundings().add(ampComponentFunding);
+                    }
+                    }else
+                    {
+                        ampComponent.getFundings().add(ampComponentFunding);
+
                     }
 
                 }

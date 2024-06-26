@@ -21,6 +21,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.DateType;
+import org.hibernate.type.DoubleType;
+import org.hibernate.type.ObjectType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -489,21 +492,22 @@ public class ImporterUtil {
         if (activityVersions != null && !activityVersions.isEmpty()) {
             AmpActivityVersion ampActivityVersion = (AmpActivityVersion) query.list().get(0);
             AmpComponent ampComponent = new AmpComponent();
+            boolean found = false;
 
             for (AmpComponent component : ampActivityVersion.getComponents()) {
-                logger.info("Component in loop: " + component);
-                logger.info("Component Name: " + componentName);
                 if (StringUtils.equalsIgnoreCase(component.getTitle(),componentName) || StringUtils.equalsIgnoreCase(component.getCode(), componentCode)) {
                     logger.info("Found component: " + component.getTitle());
                     ampComponent = component;
+                    found = true;
 
                     break;
                 }
             }
-            logger.info("Component after loop: " + ampComponent);
+            if (!found){
+                ampComponent.setTitle(componentName);
+                ampComponent.setCode(componentCode);
+            }
 
-            ampComponent.setTitle(componentName);
-            ampComponent.setCode(componentCode);
             ampComponent.setActivity(ampActivityVersion);
             logger.info("Fundings: {}",fundings);
 
@@ -532,7 +536,10 @@ public class ImporterUtil {
                         ampComponentFunding.setTransactionDate(convertStringToDate(funding.getDisbursements().get(0).getTransaction_date()));
 
                     }
-                    ampComponent.getFundings().add(ampComponentFunding);
+
+                    if (!componentFundingExists(ampComponentFunding, ampComponent)) {
+                        ampComponent.getFundings().add(ampComponentFunding);
+                    }
 
                 }
             }
@@ -547,6 +554,27 @@ public class ImporterUtil {
 
 //            }
         }
+    }
+
+    private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
+         Session session= PersistenceManager.getRequestDBSession();
+        if (!session.isOpen()) {
+            session=PersistenceManager.getRequestDBSession();
+        }
+        String hql = "FROM " + AmpComponentFunding.class.getName() + " a " +
+                "WHERE a.reportingOrganization = :ampOrganisation " +
+                "AND a.adjustmentType = :adjustmentType " +
+                "AND a.transactionAmount = :transactionAmount " +
+                "AND a.transactionDate = :transactionDate "+
+                "AND a.component = :ampComponent";
+        Query query= session.createQuery(hql);
+        query.setParameter("ampOrganisation", ampComponentFunding.getReportingOrganization(), ObjectType.INSTANCE);
+        query.setParameter("adjustmentType", ampComponentFunding.getAdjustmentType(), ObjectType.INSTANCE);
+        query.setParameter("transactionAmount", ampComponentFunding.getTransactionAmount(), DoubleType.INSTANCE);
+        query.setParameter("transactionDate", ampComponentFunding.getTransactionDate(), DateType.INSTANCE);
+        query.setParameter("ampComponent",ampComponent, ObjectType.INSTANCE);
+        List<AmpComponentFunding> ampComponentFundings=query.list();
+        return !ampComponentFundings.isEmpty();
     }
 
         public static Date convertStringToDate(String dateString) {

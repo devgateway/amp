@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -491,7 +492,7 @@ public class ImporterUtil {
             boolean found = false;
 
             for (AmpComponent component : ampActivityVersion.getComponents()) {
-                if (Objects.equals(component.getTitle(),componentName) || Objects.equals(component.getCode(), componentCode)) {
+                if (StringUtils.equalsIgnoreCase(component.getTitle(),componentName) || StringUtils.equalsIgnoreCase(component.getCode(), componentCode)) {
                     logger.info("Found component: " + component.getTitle());
                     ampComponent = component;
                     found = true;

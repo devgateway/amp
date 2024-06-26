@@ -38,7 +38,6 @@ public class ExcelImporter {
     private static final int BATCH_SIZE = 1000;
 
     public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config) {
-        // Open the workbook
         int res=0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(file)) {

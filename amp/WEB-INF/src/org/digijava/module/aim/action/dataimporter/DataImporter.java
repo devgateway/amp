@@ -68,7 +68,7 @@ public class DataImporter extends Action {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(config);
 
-            // Send JSON response
+            // Send response
             response.setContentType("application/json");
             response.getWriter().write(json);
             response.setCharacterEncoding("UTF-8");
@@ -148,7 +148,7 @@ public class DataImporter extends Action {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String json = objectMapper.writeValueAsString(dataImporterForm.getColumnPairs());
 
-                // Send JSON response
+                // Send response
                 response.setContentType("application/json");
                 response.getWriter().write(json);
                 response.setCharacterEncoding("UTF-8");
@@ -170,7 +170,7 @@ public class DataImporter extends Action {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String json = objectMapper.writeValueAsString(dataImporterForm.getColumnPairs());
 
-                // Send JSON response
+                // Send response
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(json);
@@ -279,7 +279,6 @@ public class DataImporter extends Action {
         String hql = "SELECT c.configName FROM DataImporterConfig c";
         Query query = session.createQuery(hql);
 
-        // Execute query and get the list of configNames
         List< String> configNames = query.list();
         return configNames==null?Collections.emptyList():configNames;
 
@@ -392,32 +391,4 @@ public class DataImporter extends Action {
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 
-    // Method to sort a map by its values
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValues(Map<K, V> map) {
-        // Create a TreeMap to store the sorted entries
-        Map<K, V> sortedMap = new TreeMap<>(new ValueComparator<>(map));
-
-        // Put all entries from the original map into the TreeMap
-        sortedMap.putAll(map);
-
-        return sortedMap;
-    }
-
-    // Custom comparator to compare map entries by values
-    static class ValueComparator<K, V extends Comparable<? super V>> implements Comparator<K> {
-        Map<K, V> map;
-
-        // Constructor that takes the original map
-        public ValueComparator(Map<K, V> map) {
-            this.map = map;
-        }
-
-        // Compare method to compare two keys based on their values in the map
-        @Override
-        public int compare(K key1, K key2) {
-            V value1 = map.get(key1);
-            V value2 = map.get(key2);
-            return value1.compareTo(value2); // Compare values
-        }
-    }
 }

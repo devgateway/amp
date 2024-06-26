@@ -536,15 +536,15 @@ public class ImporterUtil {
                 }
             }
             logger.info("Component:  {}",ampComponent);
-            if (found) {
+//            if (found) {
                 logger.info("Found component in  activity already. So we just save the component.");
-                session.update(ampComponent);
-            } else {
-                ampActivityVersion.getComponents().add(ampComponent);
-                logger.info("Added component and now saving the activity");
-                session.saveOrUpdate(ampActivityVersion);
+                session.saveOrUpdate(ampComponent);
+//            } else {
+//                ampActivityVersion.getComponents().add(ampComponent);
+//                logger.info("Added component and now saving the activity");
+//                session.saveOrUpdate(ampActivityVersion);
 
-            }
+//            }
         }
     }
 

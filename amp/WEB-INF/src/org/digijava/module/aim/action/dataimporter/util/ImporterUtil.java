@@ -557,24 +557,29 @@ public class ImporterUtil {
     }
 
     private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
-         Session session= PersistenceManager.getRequestDBSession();
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
+//        Session session = PersistenceManager.getRequestDBSession();
+        String sql = "SELECT COUNT(*) FROM amp_component_funding WHERE reporting_organization_id = ? " +
+                "AND adjustment_type_id = ? AND transaction_amount = ? " +
+                "AND transaction_date = ? AND component_id = ?";
+
+        try (PreparedStatement statement =PersistenceManager.getJdbcConnection().prepareStatement(sql)) {
+            statement.setLong(1, ampComponentFunding.getReportingOrganization().getAmpOrgId());
+            statement.setLong(2, ampComponentFunding.getAdjustmentType().getId());
+            statement.setDouble(3, ampComponentFunding.getTransactionAmount());
+            statement.setDate(4, new java.sql.Date(ampComponentFunding.getTransactionDate().getTime()));
+            statement.setLong(5, ampComponent.getAmpComponentId());
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Error executing native query", e);
         }
-        String hql = "FROM " + AmpComponentFunding.class.getName() + " a " +
-                "WHERE a.reportingOrganization = :ampOrganisation " +
-                "AND a.adjustmentType = :adjustmentType " +
-                "AND a.transactionAmount = :transactionAmount " +
-                "AND a.transactionDate = :transactionDate ";
-//                "AND a.component = :ampComponent";
-        Query query= session.createQuery(hql);
-        query.setParameter("ampOrganisation", ampComponentFunding.getReportingOrganization(), ObjectType.INSTANCE);
-        query.setParameter("adjustmentType", ampComponentFunding.getAdjustmentType(), ObjectType.INSTANCE);
-        query.setParameter("transactionAmount", ampComponentFunding.getTransactionAmount(), DoubleType.INSTANCE);
-        query.setParameter("transactionDate", ampComponentFunding.getTransactionDate(), DateType.INSTANCE);
-//        query.setParameter("ampComponent",ampComponent, ObjectType.INSTANCE);
-        List<AmpComponentFunding> ampComponentFundings=query.list();
-        return !ampComponentFundings.isEmpty() && ampComponentFundings.get(0).getComponent().equals(ampComponent);
+
+        return false;
     }
 
         public static Date convertStringToDate(String dateString) {

@@ -547,6 +547,7 @@ public class ImporterUtil {
                     }
                     if (found){
                     if (!componentFundingExists(ampComponentFunding, ampComponent)) {
+
                         ampComponent.getFundings().add(ampComponentFunding);
                     }
                     }else
@@ -558,15 +559,15 @@ public class ImporterUtil {
                 }
             }
             logger.info("Component:  {}",ampComponent);
-//            if (found) {
-//                logger.info("Found component in  activity already. So we just save the component.");
-                session.saveOrUpdate(ampComponent);
-//            } else {
-//                ampActivityVersion.getComponents().add(ampComponent);
-//                logger.info("Added component and now saving the activity");
-//                session.saveOrUpdate(ampActivityVersion);
+            if (found) {
+                logger.info("Found component in  activity already. So we just save the component.");
+                session.update(ampComponent);
+            } else {
+                ampActivityVersion.getComponents().add(ampComponent);
+                logger.info("Added component and now saving the activity");
+                session.saveOrUpdate(ampActivityVersion);
 
-//            }
+            }
         }
     }
 

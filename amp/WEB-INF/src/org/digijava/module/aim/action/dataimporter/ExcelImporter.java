@@ -116,6 +116,7 @@ public class ExcelImporter {
             int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
             String componentName= componentNameColumn>=0? row.getCell(componentNameColumn).getStringCellValue(): null;
             Long responsibleOrgId = null;
+            Funding fundingItem = new Funding();
 
             logger.info("Row Number: "+row.getRowNum()+", Sheet Name: "+sheet.getSheetName());
             for (Map.Entry<String, String> entry : config.entrySet()) {
@@ -160,19 +161,19 @@ public class ExcelImporter {
                             responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "beneficiaryAgency");
                             break;
                         case "Funding Item":
-                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual");
+                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual",fundingItem);
                             break;
                         case "Planned Commitment":
-                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned");
+                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned",fundingItem);
                             break;
                         case "Planned Disbursement":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned");
+                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned",fundingItem);
                             break;
                         case "Actual Commitment":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual");
+                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual",fundingItem);
                             break;
                         case "Actual Disbursement":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual");
+                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual",fundingItem);
                             break;
                         default:
                             logger.error("Unexpected value: " + entry.getValue());
@@ -182,7 +183,9 @@ public class ExcelImporter {
 
 
                 }
-                fundings.add(funding);
+                fundings.add(fundingItem);
+                logger.info("Funding items :{}",fundings);
+
 
             }
 

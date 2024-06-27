@@ -235,6 +235,7 @@ public class ImporterUtil {
 
      private static Funding updateFunding(Funding fundingItem,ImportDataModel importDataModel, Session session, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
              adjustmentType, String currencyCode, String componentName) {
+         // TODO: 27/06/2024 pick Month from file and use it in funding
          if (!session.isOpen()) {
              session = PersistenceManager.getRequestDBSession();
          }
@@ -394,7 +395,7 @@ public class ImporterUtil {
         importDataModel.setActivity_status(statusId);
 
     }
-    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings) throws JsonProcessingException {
+    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) throws JsonProcessingException {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
@@ -438,7 +439,7 @@ public class ImporterUtil {
                 logger.info("--------------------------------");
                 logger.info("Component name at start: " + componentName);
                 if (componentName!=null && !componentName.isEmpty()) {
-                    addComponents(response, componentName, componentCode, responsibleOrgId, fundings);
+                    addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, projectCode);
                 }
                 if (!session.isOpen()) {
                     session=PersistenceManager.getRequestDBSession();
@@ -459,7 +460,7 @@ public class ImporterUtil {
         logger.info("Imported project: "+importedProject);
     }
 
-    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings) {
+    static void addComponentsAndProjectCode(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) {
         Long activityId = (Long) response.getContent().getAmpActivityId();
         Session session = PersistenceManager.getRequestDBSession();
         if (!session.isOpen()) {
@@ -560,6 +561,12 @@ public class ImporterUtil {
 
                 }
             }
+            boolean updateActivity=false;
+            if (projectCode!=null && !projectCode.isEmpty())
+            {
+                ampActivityVersion.setProjectCode(projectCode);
+                updateActivity=true;
+            }
 
             logger.info("Component:  {}",ampComponent);
             if (found) {
@@ -567,10 +574,13 @@ public class ImporterUtil {
                 session.update(ampComponent);
             } else {
                 ampActivityVersion.getComponents().add(ampComponent);
+                updateActivity=true;
                 logger.info("Added component and now saving the activity");
-                session.saveOrUpdate(ampActivityVersion);
-
             }
+            if (updateActivity) {
+                session.saveOrUpdate(ampActivityVersion);
+            }
+
         }
     }
 

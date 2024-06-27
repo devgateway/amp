@@ -115,6 +115,16 @@ public class ExcelImporter {
 
             int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
             String componentName= componentNameColumn>=0? row.getCell(componentNameColumn).getStringCellValue(): null;
+
+            int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
+            String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
+
+            int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
+            String responsibleOrgCode= responsibleOrgCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
+
+
+            int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
+            String projectCode= projectCodeColumn>=0? row.getCell(projectCodeColumn).getStringCellValue(): null;
             Long responsibleOrgId = null;
             Funding fundingItem = new Funding();
 
@@ -122,11 +132,7 @@ public class ExcelImporter {
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 Funding funding = null;
                 int columnIndex = getColumnIndexByName(sheet, entry.getKey());
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
-                String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
 
-                int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
-                String responsibleOrgCode= responsibleOrgCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
 
 
 
@@ -189,7 +195,7 @@ public class ExcelImporter {
             }
 
 
-            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings);
+            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings,projectCode);
 
         }
     }

@@ -362,6 +362,7 @@ public class DataImporter extends Action {
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
         fieldsInfos.add("Project Title");
+        fieldsInfos.add("Project Code");
         fieldsInfos.add("Project Description");
         fieldsInfos.add("Primary Sector");
         fieldsInfos.add("Secondary Sector");

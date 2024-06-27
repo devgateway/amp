@@ -94,12 +94,13 @@ public class TxtDataImporter {
             setStatus(importDataModel, session);
             String componentName= row.get(getKey(config, "Component Name"));
             String componentCode= row.get(getKey(config, "Component Code"));
+            String projectCode= row.get(getKey(config, "Project Code"));
+            String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
+            String responsibleOrgCode= row.get(getKey(config, "Responsible Organization Code"));
             Long responsibleOrgId=null;
 
             logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
-                String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
-                String responsibleOrgCode= row.get(getKey(config, "Responsible Organization Code"));
                 Funding funding = null;
                 switch (entry.getValue()) {
                     case "Project Title":
@@ -153,7 +154,7 @@ public class TxtDataImporter {
 
             }
 
-            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings);
+            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings, projectCode);
 
         }
 

@@ -273,7 +273,7 @@ public class ImporterUtil {
         Transaction transaction = new Transaction();
         transaction.setCurrency(currencyId);
         transaction.setAdjustment_type(adjType);
-        transaction.setTransaction_amount(amount.doubleValue());
+        transaction.setTransaction_amount(amount!=null?amount.doubleValue():0.0);
         transaction.setTransaction_date(fundingDate);
         if (commitment) {
             fundingItem.getCommitments().add(transaction);

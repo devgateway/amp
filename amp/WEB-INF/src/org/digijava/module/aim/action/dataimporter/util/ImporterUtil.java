@@ -252,16 +252,7 @@ public class ImporterUtil {
         Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql,assistanceType);
         Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finInst);
         Long orgRole = getOrganizationRole(session);
-        AmpActivityVersion ampActivityVersion = null;
-        if (activityName!=null)
-        {
-            String hql = "FROM "+AmpActivityVersion.class.getName()+" a WHERE a.name= :activityName";
-            Query query= session.createQuery(hql);
-            query.setCacheable(true);
-            query.setParameter("activityName", activityName);
-            List<AmpActivityVersion> ampActivityVersions=query.list();
-            ampActivityVersion= !ampActivityVersions.isEmpty()?ampActivityVersions.get(0):null;
-        }
+
 
 
         String yearString;
@@ -281,14 +272,7 @@ public class ImporterUtil {
             fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
 
         }
-         if (ampActivityVersion!=null)
-         {
-//        for (AmpFunding ampFunding: ampActivityVersion.getFunding())
-//        {
-//            Funding funding = new Funding();
-//
-//        }
-         }
+
 
 
         Funding funding = new Funding();
@@ -315,7 +299,7 @@ public class ImporterUtil {
         donorOrganization.setPercentage(100.0);
 
         importDataModel.getDonor_organization().add(donorOrganization);
-         if (componentName==null && componentCode==null)
+         if (componentName==null || componentName.isEmpty())
          {
              importDataModel.getFundings().add(funding);
 

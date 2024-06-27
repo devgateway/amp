@@ -184,7 +184,6 @@ public class ExcelImporter {
 
                 }
                 fundings.add(fundingItem);
-                logger.info("Funding items :{}",fundings);
 
 
             }

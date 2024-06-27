@@ -493,46 +493,76 @@ public class ImporterUtil {
             }
 
             ampComponent.setActivity(ampActivityVersion);
-            logger.info("Fundings: {}",fundings);
+            logger.info("Fundings before: {}",fundings);
 
             for (Funding funding: new HashSet<>(fundings)) {
                 if (funding != null) {
-                    AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
-                    ampComponentFunding.setComponent(ampComponent);
-                    ampComponentFunding.setReportingDate(new Date());
-                    if (responsibleOrgId!=null)
-                    {
-                        ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
-                    }
+
 
                     if (!funding.getCommitments().isEmpty()) {
-                        ampComponentFunding.setTransactionType(0);
-                        ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(funding.getCommitments().get(0).getAdjustment_type()));
-                        ampComponentFunding.setCurrency(getAmpCurrencyById(funding.getCommitments().get(0).getCurrency()));
-                        ampComponentFunding.setTransactionAmount(funding.getCommitments().get(0).getTransaction_amount());
-                        ampComponentFunding.setTransactionDate(convertStringToDate(funding.getCommitments().get(0).getTransaction_date()));
+                        for (Transaction commitment: funding.getCommitments())
+                        {
+                            AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
+                            ampComponentFunding.setComponent(ampComponent);
+                            ampComponentFunding.setReportingDate(new Date());
+                            if (responsibleOrgId!=null)
+                            {
+                                ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
+                            }
+                            ampComponentFunding.setTransactionType(0);
+                            ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(commitment.getAdjustment_type()));
+                            ampComponentFunding.setCurrency(getAmpCurrencyById(commitment.getCurrency()));
+                            ampComponentFunding.setTransactionAmount(commitment.getTransaction_amount());
+                            ampComponentFunding.setTransactionDate(convertStringToDate(commitment.getTransaction_date()));
+
+                            if (found){
+                                if (!componentFundingExists(ampComponentFunding, ampComponent)) {
+
+                                    ampComponent.getFundings().add(ampComponentFunding);
+                                }
+                            }else
+                            {
+                                ampComponent.getFundings().add(ampComponentFunding);
+
+                            }
+
+                        }
+
                     }
                     if (!funding.getDisbursements().isEmpty()) {
-                        ampComponentFunding.setTransactionType(1);
-                        ampComponentFunding.setCurrency(getAmpCurrencyById(funding.getDisbursements().get(0).getCurrency()));
-                        ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(funding.getDisbursements().get(0).getAdjustment_type()));
-                        ampComponentFunding.setTransactionAmount(funding.getDisbursements().get(0).getTransaction_amount());
-                        ampComponentFunding.setTransactionDate(convertStringToDate(funding.getDisbursements().get(0).getTransaction_date()));
+                        for (Transaction disbursement: funding.getDisbursements())
+                        {
+                            AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
+                            ampComponentFunding.setComponent(ampComponent);
+                            ampComponentFunding.setReportingDate(new Date());
+                            if (responsibleOrgId!=null)
+                            {
+                                ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
+                            }
+                            ampComponentFunding.setTransactionType(1);
+                            ampComponentFunding.setCurrency(getAmpCurrencyById(disbursement.getCurrency()));
+                            ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(disbursement.getAdjustment_type()));
+                            ampComponentFunding.setTransactionAmount(disbursement.getTransaction_amount());
+                            ampComponentFunding.setTransactionDate(convertStringToDate(disbursement.getTransaction_date()));
+                            if (found){
+                                if (!componentFundingExists(ampComponentFunding, ampComponent)) {
 
-                    }
-                    if (found){
-                    if (!componentFundingExists(ampComponentFunding, ampComponent)) {
+                                    ampComponent.getFundings().add(ampComponentFunding);
+                                }
+                            }else
+                            {
+                                ampComponent.getFundings().add(ampComponentFunding);
 
-                        ampComponent.getFundings().add(ampComponentFunding);
-                    }
-                    }else
-                    {
-                        ampComponent.getFundings().add(ampComponentFunding);
+                            }
+                        }
+
 
                     }
 
                 }
             }
+            logger.info("Fundings after: {}",ampComponent.getFundings());
+
             logger.info("Component:  {}",ampComponent);
             if (found) {
                 logger.info("Found component in  activity already. So we just save the component.");

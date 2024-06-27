@@ -475,7 +475,7 @@ public class ImporterUtil {
             AmpActivityVersion ampActivityVersion = (AmpActivityVersion) query.list().get(0);
             AmpComponent ampComponent = new AmpComponent();
             boolean found = false;
-            logger.info("Compnent name: " + componentName);
+            logger.info("Component name: {}" ,componentName);
 
             for (AmpComponent component : ampActivityVersion.getComponents()) {
                 if (component.getTitle()!=null && StringUtils.equalsIgnoreCase(component.getTitle(), componentName)) {
@@ -493,7 +493,6 @@ public class ImporterUtil {
             }
 
             ampComponent.setActivity(ampActivityVersion);
-            logger.info("Fundings before: {}",fundings);
 
             for (Funding funding: new HashSet<>(fundings)) {
                 if (funding != null) {
@@ -561,7 +560,6 @@ public class ImporterUtil {
 
                 }
             }
-            logger.info("Fundings after: {}",ampComponent.getFundings());
 
             logger.info("Component:  {}",ampComponent);
             if (found) {

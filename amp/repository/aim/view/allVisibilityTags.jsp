@@ -109,7 +109,6 @@
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Program Mapping Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Data Importer" parentModule="Tools"></module:display>
 
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
 
@@ -177,8 +176,7 @@
 <feature:display name="IATI Importer" module="Tools"></feature:display>
 <feature:display name="AutoGeocoder" module="Tools"></feature:display>
 <feature:display name="Address Book" module="Tools"></feature:display>
-<feature:display name="Import Data" module="Data Importer"></feature:display>
-<feature:display name="View Progress" module="Data Importer"></feature:display>
+<feature:display name="Data Importer" module="Tools"></feature:display>
 <field:display name="Unassigned Activities" feature="Workspace Info"></field:display>
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>
 <field:display name="Archived Activities" feature="Workspace Info"></field:display>

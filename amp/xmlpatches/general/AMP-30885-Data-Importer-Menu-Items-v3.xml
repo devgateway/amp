@@ -47,8 +47,8 @@
 
 
                 INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'),
-                (SELECT id FROM amp_features_visibility WHERE name = 'Import Data')
-                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Data Importer'));
+                (SELECT id FROM amp_features_visibility WHERE name = 'Import Data'
+                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Data Importer')));
 
                 <!--                Import Progress-->
 
@@ -68,8 +68,8 @@
 
 
                 INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'),
-                (SELECT id FROM amp_features_visibility WHERE name = 'View Progress')
-                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Data Importer'));
+                (SELECT id FROM amp_features_visibility WHERE name = 'View Progress'
+                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Data Importer')));
 
             </lang>
         </script>

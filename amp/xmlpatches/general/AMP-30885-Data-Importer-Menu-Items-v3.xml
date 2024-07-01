@@ -39,16 +39,16 @@
                 UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Import Data') AND view_type=2;
 
 
-                INSERT INTO amp_features_visibility (id,name,haslevel,parent)
-                SELECT (select nextval('amp_features_visibility_seq')),'Import Data',true,
-                (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')
-                WHERE
-                NOT EXISTS (SELECT id from amp_features_visibility  WHERE name  = 'Import Data');
+<!--                INSERT INTO amp_features_visibility (id,name,haslevel,parent)-->
+<!--                SELECT (select nextval('amp_features_visibility_seq')),'Import Data',true,-->
+<!--                (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')-->
+<!--                WHERE-->
+<!--                NOT EXISTS (SELECT id from amp_features_visibility  WHERE name  = 'Import Data');-->
 
 
-                INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'),
-                (SELECT id FROM amp_features_visibility WHERE name = 'Import Data'
-                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')));
+<!--                INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'),-->
+<!--                (SELECT id FROM amp_features_visibility WHERE name = 'Import Data'-->
+<!--                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')));-->
 
                 <!--                Import Progress-->
 
@@ -60,16 +60,16 @@
                 UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'View Progress') AND view_type=2;
 
 
-                INSERT INTO amp_features_visibility (id,name,haslevel,parent)
-                SELECT (select nextval('amp_features_visibility_seq')),'View Progress',true,
-                (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')
-                WHERE
-                NOT EXISTS (SELECT id from amp_features_visibility  WHERE name  = 'View Progress');
+<!--                INSERT INTO amp_features_visibility (id,name,haslevel,parent)-->
+<!--                SELECT (select nextval('amp_features_visibility_seq')),'View Progress',true,-->
+<!--                (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')-->
+<!--                WHERE-->
+<!--                NOT EXISTS (SELECT id from amp_features_visibility  WHERE name  = 'View Progress');-->
 
 
-                INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'),
-                (SELECT id FROM amp_features_visibility WHERE name = 'View Progress'
-                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')));
+<!--                INSERT INTO amp_visibility_rule_amp_features_visibility(select currval('amp_visibility_rule_seq'),-->
+<!--                (SELECT id FROM amp_features_visibility WHERE name = 'View Progress'-->
+<!--                AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')));-->
 
             </lang>
         </script>

@@ -37,6 +37,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -459,6 +461,7 @@ public class ImporterUtil {
         session.saveOrUpdate(importedProject);
         logger.info("Imported project: "+importedProject);
     }
+
 
     static void addComponentsAndProjectCode(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) {
         Long activityId = (Long) response.getContent().getAmpActivityId();

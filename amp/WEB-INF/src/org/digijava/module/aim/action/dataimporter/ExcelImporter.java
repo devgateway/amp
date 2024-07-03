@@ -128,7 +128,7 @@ public class ExcelImporter {
             Long responsibleOrgId = null;
             Funding fundingItem = new Funding();
 
-            logger.info("Row Number: "+row.getRowNum()+", Sheet Name: "+sheet.getSheetName());
+            logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 Funding funding = null;
                 int columnIndex = getColumnIndexByName(sheet, entry.getKey());

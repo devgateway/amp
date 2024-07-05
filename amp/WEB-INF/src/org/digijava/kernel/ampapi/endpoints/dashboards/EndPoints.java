@@ -480,24 +480,29 @@ public class EndPoints {
                 spec = new ReportSpecificationImpl("indicator-data", ArConstants.INDICATOR_TYPE);
         spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
         spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
-        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        spec.addColumn(new ReportColumn(ColumnConstants.INDICATOR_DONOR));
         spec.addColumn(new ReportColumn(ColumnConstants.INDICATOR_NAME));
 
         spec.getHierarchies().add(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
         spec.getHierarchies().add(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+//        spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_DONOR));
         spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_NAME));
 
         spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE));
         spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_TARGET_VALUE));
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+        spec.setShowOriginalCurrency(false);
+        spec.setDisplayEmptyFundingRows(false);
+        ReportSettingsImpl reportSettings = new ReportSettingsImpl();
+        spec.setSettings(reportSettings);
 
         new MeService().applySettingsAndFilters(new SettingsAndFiltersParameters(), spec);
         GeneratedReport report = EndpointUtils.runReport(spec);
         List<CoreIndicatorProgressDTO> resp = processReportData(report);
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_URL);
-        sendReportsToServer(resp, "http://localhost:8082/update-core-indicator-progress");
+//        sendReportsToServer(resp, "http://localhost:8082/update-core-indicator-progress");
 
         SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
         return PublicServices.buildOkResponseWithOriginHeaders(resp);
@@ -588,6 +593,10 @@ public class EndPoints {
                                         indicatorType.setUnit("Unknown");
                                         indicatorType.setCoreType("Unknown");
                                     }
+                                } else {
+                                    indicatorType.setName("Unknown");
+                                    indicatorType.setUnit("Unknown");
+                                    indicatorType.setCoreType("Unknown");
                                 }
                                 value.setCoreIndicatorType(indicatorType);
                                 valuesList.add(value);

@@ -204,14 +204,15 @@
 <feature:display name="Create Message Form" module="Messages"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
 <feature:display name="Step1" module="Custom Fields"></feature:display>
-<feature:display name="Disbursement Orders" module="Funding"></feature:display>
-<feature:display name="Documents Tab" module="Document"></feature:display>
-<feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
+<feature:display name="Disbursement Orders" module="Funding"></feature:display> 
+<feature:display name="Documents Tab" module="Document"></feature:display> 
+<feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Donor Report" module="Report Types"></feature:display>
-<feature:display name="Edit Activity" module="Previews"></feature:display>
-<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display>
-<feature:display name="Event Tab" module="Messages"></feature:display>
-<feature:display name="Filter Button" module="Report and Tab Options"></feature:display>
+<feature:display name="Indicator Report" module="Report Types"></feature:display>
+<feature:display name="Edit Activity" module="Previews"></feature:display> 
+<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
+<feature:display name="Event Tab" module="Messages"></feature:display> 
+<feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Page Size" module="Report and Tab Options"></feature:display>
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display>
@@ -628,6 +629,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Donor Group" feature="Funding Information"></field:display>
 <field:display name="Donor Type" feature="Funding Information"></field:display>
 <field:display name="Donor Budget Code" feature="Funding Information"></field:display>
+<field:display name="Indicator Donor Agency" feature="Funding Information"></field:display>
 <field:display name="Donor Country" feature="Funding Information"></field:display>
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display>
 <field:display name="Donor Objective" feature="Funding Information"></field:display>

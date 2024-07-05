@@ -701,13 +701,17 @@ public class IndicatorUtil {
                 List<IndicatorActivity> result=null;
                 Session session=PersistenceManager.getRequestDBSession();
                 String oql="from "+IndicatorActivity.class.getName()+" conn ";
-                oql+=" where conn.activityLocation.location.id=:locationId";
+                if (locationId != null) {
+                    oql += " where conn.activityLocation.location.id=:locationId";
+                }
                 try {
                     Query query=session.createQuery(oql);
-                    query.setParameter("locationId", locationId, LongType.INSTANCE);
+                    if (locationId != null) {
+                        query.setParameter("locationId", locationId, LongType.INSTANCE);
+                    }
                     result= (List<IndicatorActivity>) query.list();
                 } catch (ObjectNotFoundException e) {
-                    logger.debug("Cannot find conenction for location value("+locationId+")!");
+                    logger.debug("Cannot find connection for location value("+locationId+")!");
                 } catch (HibernateException e) {
                     throw new DgException("Error searching conenction for location category value("+locationId+")!",e);
                 }

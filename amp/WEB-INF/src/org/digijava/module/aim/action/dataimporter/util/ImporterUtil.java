@@ -49,10 +49,29 @@ public class ImporterUtil {
 
     private static final int BATCH_SIZE = 1000;
     private static final Logger logger = LoggerFactory.getLogger(ImporterUtil.class);
+
+    private static Double parseDouble(String number)
+    {
+        try
+        {
+            return Double.parseDouble(number);
+        }
+        catch(NumberFormatException e)
+        {
+            //not a double
+            return null;
+        }
+
+    }
      public static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, String
              adjustmentType, Funding fundingItem) {
          int detailColumn = getColumnIndexByName(sheet, getKey(config, "Financing Instrument"));
          String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+
+         detailColumn = getColumnIndexByName(sheet, getKey(config, "Exchange Rate"));
+         String exchangeRate= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+         Double exchangeRateValue = !exchangeRate.isEmpty()?parseDouble(exchangeRate): Double.valueOf(0.0);
+
          detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
          String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
          int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
@@ -68,7 +87,7 @@ public class ImporterUtil {
         {
             if (!config.containsValue("Donor Agency"))
             {
-                funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName);
+                funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
 
             }
             else {
@@ -76,11 +95,11 @@ public class ImporterUtil {
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
                 String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
                 updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName);
+                funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
             }
 
         }else {
-            funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName);
+            funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
         }
          return funding;
     }
@@ -165,11 +184,17 @@ public class ImporterUtil {
         activityName=activityName!=null? activityName:"";
 
 
+        String exchangeRate = row.get(getKey(config, "Exchange Rate"));
+        exchangeRate=exchangeRate!=null? exchangeRate:"";
+
+        Double exchangeRateValue = !exchangeRate.isEmpty()?parseDouble(exchangeRate): Double.valueOf(0.0);
+
+
         if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("Donor Agency"))
             {
-                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName);
+                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
 
             }
             else {
@@ -177,11 +202,11 @@ public class ImporterUtil {
                 String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
 
                 updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName);
+                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
             }
 
         }else {
-            funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName);
+            funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName,exchangeRateValue);
         }
         return funding;
     }
@@ -236,7 +261,7 @@ public class ImporterUtil {
 
 
      private static Funding updateFunding(Funding fundingItem,ImportDataModel importDataModel, Session session, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
-             adjustmentType, String currencyCode, String componentName) {
+             adjustmentType, String currencyCode, String componentName, Double exchangeRate) {
          // TODO: 27/06/2024 pick Month from file and use it in funding
          if (!session.isOpen()) {
              session = PersistenceManager.getRequestDBSession();
@@ -278,6 +303,7 @@ public class ImporterUtil {
         transaction.setAdjustment_type(adjType);
         transaction.setTransaction_amount(amount!=null?amount.doubleValue():0.0);
         transaction.setTransaction_date(fundingDate);
+        transaction.setFixed_exchange_rate(exchangeRate);
         if (commitment) {
             fundingItem.getCommitments().add(transaction);
         }

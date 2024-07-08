@@ -367,6 +367,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("Project Start Date");
         fieldsInfos.add("Project End Date");
         fieldsInfos.add("Donor Agency");
+        fieldsInfos.add("Exchange Rate");
         fieldsInfos.add("Donor Agency Code");
         fieldsInfos.add("Responsible Organization");
         fieldsInfos.add("Responsible Organization Code");

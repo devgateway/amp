@@ -133,9 +133,6 @@ public class ExcelImporter {
                 Funding funding = null;
                 int columnIndex = getColumnIndexByName(sheet, entry.getKey());
 
-
-
-
                 if (columnIndex >= 0) {
                     Cell cell = row.getCell(columnIndex);
                     switch (entry.getValue()) {
@@ -181,6 +178,7 @@ public class ExcelImporter {
                         case "Actual Disbursement":
                             funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual",fundingItem);
                             break;
+                        case "Reporting Date":
                         default:
                             logger.error("Unexpected value: " + entry.getValue());
                             break;

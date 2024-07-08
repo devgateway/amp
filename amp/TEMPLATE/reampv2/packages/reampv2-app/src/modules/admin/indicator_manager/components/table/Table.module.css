@@ -28,7 +28,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    float: right;
 }
 
 .sector_filter_container {
@@ -54,4 +53,8 @@
 
 .table_footer {
     background-color: red;
+}
+
+.filter_select {
+    width: 350px;
 }

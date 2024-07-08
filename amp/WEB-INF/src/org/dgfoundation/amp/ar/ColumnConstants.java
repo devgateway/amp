@@ -79,7 +79,10 @@ public class ColumnConstants {
     public static final String GEOCODE = "GeoId";
     public static final String DISBURSEMENT_ID = "Disbursement ID";
     public static final String DONOR_ACRONYM = "Organization Acronym";
+    public static final String INDICATOR_DONOR = "Indicator Donor Agency";
+
     public static final String DONOR_AGENCY = "Donor Agency";
+
     public static final String DONOR_ID = "Donor Id";
     public static final String DONOR_COMMITMENT_DATE = "Donor Commitment Date";
     public static final String DONOR_CONTACT_EMAIL = "Donor Contact Email";

@@ -34,13 +34,17 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.management.MBeanServer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
+import java.io.File;
+import java.io.FileInputStream;
 import java.lang.management.ManagementFactory;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -168,10 +172,7 @@ public class AMPStartupListener extends HttpServlet implements
             }
             
             logger.info("loading the activity->pledge view twins configuration and checking for consistency...");
-            int a = PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.size();
-            if (a < 0)
-                throw new RuntimeException("should not happen!");
-            
+
             logger.info("loading the column ancestorship relationships and checking for consistency with the database...");
             logger.info("loaded relationships for " + ARDimension.columnAncestors.size() + " columns"); // DO NOT DELETE THIS LINE! it has the sideeffect of checking database for consistency (else it will crash anyway at the first run report)
             
@@ -180,7 +181,6 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
             ContentRepositoryManager.initialize();
-            
             checkDatabaseSanity();
             initNiReports();
             importGazeteer();
@@ -250,6 +250,8 @@ public class AMPStartupListener extends HttpServlet implements
             PersistenceManager.cleanupSession(session);
         }
     }
+
+
     
     public void maintainMondrianCaches()
     {

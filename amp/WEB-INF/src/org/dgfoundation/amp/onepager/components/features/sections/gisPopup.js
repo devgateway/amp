@@ -5,12 +5,12 @@ function gisPopup(caller, data){
 	callerGisObject = caller;
 	if (data) {
 	    try {
-	    	structuresData = JSON.parse(data);	    	
+	    	structuresData = JSON.parse(data);
 	    } catch(e) {
 	        console.log('invalid json string');
 	    }
 	}
-	
+
 	window.open("/esrigis/mainmap.do?popup=true", "", param);
 }
 

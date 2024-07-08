@@ -50,8 +50,8 @@ public class CKEditorBehavior extends Behavior{
     }
 
     protected String getAddCKEditorScript(Component c) {
-        return "" //
-                + " CKEDITOR.replace('" + c.getMarkupId() + "');"; //
+        //
+        return " CKEDITOR.replace('" + c.getMarkupId() + "');"; //
     }
 
     public void bind(Component component) {

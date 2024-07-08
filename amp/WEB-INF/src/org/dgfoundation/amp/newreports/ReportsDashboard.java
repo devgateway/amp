@@ -9,10 +9,13 @@ public class ReportsDashboard {
 
     private String country;
     private String status;
+    private String reportingSystem;
+    private String typeOfAssistance;
     private String currency;
     private String year;
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
+
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
         this.actualDisbursement = BigDecimal.ZERO;
@@ -90,6 +93,7 @@ public class ReportsDashboard {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
+
     public void sumWith(ReportsDashboard other) {
         if (other.actualCommitment != null) {
             this.actualCommitment = this.actualCommitment.add(other.actualCommitment);
@@ -97,5 +101,21 @@ public class ReportsDashboard {
         if (other.actualDisbursement != null) {
             this.actualDisbursement = this.actualDisbursement.add(other.actualDisbursement);
         }
+    }
+
+    public String getReportingSystem() {
+        return reportingSystem;
+    }
+
+    public void setReportingSystem(String reportingSystem) {
+        this.reportingSystem = reportingSystem;
+    }
+
+    public String getTypeOfAssistance() {
+        return typeOfAssistance;
+    }
+
+    public void setTypeOfAssistance(String typeOfAssistance) {
+        this.typeOfAssistance = typeOfAssistance;
     }
 }

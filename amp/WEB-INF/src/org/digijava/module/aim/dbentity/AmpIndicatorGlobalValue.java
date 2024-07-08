@@ -20,7 +20,6 @@ public class AmpIndicatorGlobalValue implements Serializable {
     public static final int ACTUAL = 1;
     public static final int BASE = 2;
     public static final int REVISED = 3;
-
     @JsonIgnore
     private Long id;
 

@@ -80,15 +80,13 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
                 Set<AmpActivityProgram> specificProgs = new HashSet<AmpActivityProgram>();
 
                 if (programSettings != null && programSettings.getObject() != null && allProgs != null) {
-                    Iterator<AmpActivityProgram> it = allProgs.iterator();
-                    while (it.hasNext()) {
-                        AmpActivityProgram prog = it.next();
+                    for (AmpActivityProgram prog : allProgs) {
                         if (prog != null && prog.getProgramSetting() != null && prog.getProgramSetting().getAmpProgramSettingsId().equals(programSettings.getObject().getAmpProgramSettingsId()))
                             specificProgs.add(prog);
                     }
                 }
 
-                return new ArrayList<AmpActivityProgram>(specificProgs);
+                return new ArrayList<>(specificProgs);
             }
         };
 
@@ -241,12 +239,13 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
 
         });
 
-        final AmpAutocompleteFieldPanel<AmpTheme> searchThemes = new AmpAutocompleteFieldPanel<AmpTheme>("search", "Add Program",
+        final AmpAutocompleteFieldPanel<AmpTheme> searchThemes = new AmpAutocompleteFieldPanel<AmpTheme>("searchThemes", "Add Program",
                 programSettingsString, AmpThemeSearchModel.class) {
             /**
              *
              */
             private static final long serialVersionUID = 9205254457879832345L;
+
 
             @Override
             protected String getChoiceValue(AmpTheme choice) {
@@ -303,6 +302,21 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel<AmpActi
                     send(getPage(), Broadcast.BREADTH, new DirectProgramMappingUpdateEvent(target));
                 }
                 send(getPage(), Broadcast.BREADTH, new ProgramSelectedEvent(target));
+            }
+
+            @Override
+            protected Collection<AmpTheme> getChoices(String input) {
+//                return super.getChoices(input);
+                Collection<AmpTheme> choices = super.getChoices(input);
+                Iterator<AmpTheme> iterator = choices.iterator();
+                while (iterator.hasNext()) {
+                    AmpTheme choice = iterator.next();
+                    if (choice.getIndlevel().equals(0)) {  // Replace with your actual criteria check
+                        iterator.remove();  // Remove the choice
+                        // Or, you could set a disabled flag on the choice object
+                    }
+                }
+                return choices;
             }
 
             @Override

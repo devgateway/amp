@@ -102,7 +102,8 @@ public class ReportColumnProvider extends ReportEntityProvider {
             CONTRACTING_AGENCY, CONTRACTING_AGENCY_ACRONYM, CONTRACTING_AGENCY_GROUPS, CONTRACTING_AGENCY_TYPE,
             PROJECT_IMPLEMENTING_UNIT, TYPE_OF_COOPERATION, TYPE_OF_IMPLEMENTATION, MULTI_STAKEHOLDER_PARTNERSHIP,
             CONCESSIONALITY_LEVEL, DISASTER_RESPONSE_MARKER, PROJECT_CATEGORY, PROJECT_RESULTS_AVAILABLE,
-            INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE
+            INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
+            REPORTING_SYSTEM, INDICATOR_DONOR
     );
 
     private static final List<String> COMPONENT_HIERARCHIES = ImmutableList.of(
@@ -128,6 +129,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
                     .put(COMPONENT, COMPONENT_HIERARCHIES)
                     .put(REGIONAL, REGIONAL_HIERARCHIES)
                     .put(PLEDGE, PLEDGE_HIERARCHIES)
+                    .put(INDICATOR, DONOR_HIERARCHIES)
                     .build();
 
     private static final Comparator<AmpColumns> ME_COLS_COMPARATOR =
@@ -344,7 +346,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
                 .equalsIgnoreCase("true")) {
             return true;
         }
-        
+
         if (profile.isTab() && MEASURELESS_ONLY_HIERARCHIES.contains(columnName)) {
             return false;
         }

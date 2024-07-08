@@ -58,6 +58,8 @@ public class AmpGeneralSettings {
     @JsonProperty("gap-analysis-map")
     private Boolean gapAnalysisMap;
 
+
+
     @JsonProperty("has-ssc-workspaces")
     private Boolean hasSscWorkspaces;
 
@@ -99,6 +101,18 @@ public class AmpGeneralSettings {
 
     @JsonProperty("ndd-mapping-indirect-level")
     private Integer nddMappingIndirectLevel;
+
+
+    @JsonProperty("multi-country-gis-enabled")
+    private Boolean multiCountryEnabled;
+    @JsonProperty("gis-sectors-enabled")
+    private Boolean sectorsEnabled;
+
+    @JsonProperty("gis-programs-enabled")
+    private Boolean programsEnabled;
+
+    @JsonProperty("login-required")
+    private Boolean loginRequired;
 
     @JsonProperty("ndd-mapping-program-level")
     private Integer nddMappingProgramLevel;
@@ -152,6 +166,9 @@ public class AmpGeneralSettings {
 
     @JsonProperty(SettingsConstants.NUMBER_OF_INDICATORS_IN_DASHBOARD)
     private Long numberOfIndicatorsInDashboard;
+
+    @JsonProperty(SettingsConstants.INDICATOR_FILTER_BY_LOCATION)
+    private Boolean indicatorFilterByLocation;
 
     public Boolean getUseIconsForSectorsInProjectList() {
         return useIconsForSectorsInProjectList;
@@ -546,11 +563,51 @@ public class AmpGeneralSettings {
         this.indicatorFilterByProgram = indicatorFilterByProgram;
     }
 
+    public Boolean getIndicatorFilterByLocation() {
+        return indicatorFilterByLocation;
+    }
+
+    public void setIndicatorFilterByLocation(Boolean indicatorFilterByLocation) {
+        this.indicatorFilterByLocation = indicatorFilterByLocation;
+    }
+
     public Long getNumberOfIndicatorsInDashboard() {
         return numberOfIndicatorsInDashboard;
     }
 
     public void setNumberOfIndicatorsInDashboard(Long numberOfIndicatorsInDashboard) {
         this.numberOfIndicatorsInDashboard = numberOfIndicatorsInDashboard;
+    }
+
+    public Boolean getMultiCountryEnabled() {
+        return multiCountryEnabled;
+    }
+
+    public void setMultiCountryEnabled(Boolean multiCountryEnabled) {
+        this.multiCountryEnabled = multiCountryEnabled;
+    }
+
+    public Boolean getSectorsEnabled() {
+        return sectorsEnabled;
+    }
+
+    public void setSectorsEnabled(Boolean sectorsEnabled) {
+        this.sectorsEnabled = sectorsEnabled;
+    }
+
+    public Boolean getProgramsEnabled() {
+        return programsEnabled;
+    }
+
+    public void setProgramsEnabled(Boolean programsEnabled) {
+        this.programsEnabled = programsEnabled;
+    }
+
+    public Boolean getLoginRequired() {
+        return loginRequired;
+    }
+
+    public void setLoginRequired(Boolean loginRequired) {
+        this.loginRequired = loginRequired;
     }
 }

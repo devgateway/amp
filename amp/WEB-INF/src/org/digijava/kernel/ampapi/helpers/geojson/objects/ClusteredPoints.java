@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ClusteredPoints {
 
-    private List<Long> activityids;
+    private List<Long> activityids= new ArrayList<>();
     private String lat;
     private String lon;
     private String admin;
@@ -54,5 +54,16 @@ public class ClusteredPoints {
 
     public void setAdmId(Long admId) {
         this.admId = admId;
+    }
+
+    @Override
+    public String toString() {
+        return "ClusteredPoints{" +
+                "activityids=" + activityids +
+                ", lat='" + lat + '\'' +
+                ", lon='" + lon + '\'' +
+                ", admin='" + admin + '\'' +
+                ", admId=" + admId +
+                '}';
     }
 }

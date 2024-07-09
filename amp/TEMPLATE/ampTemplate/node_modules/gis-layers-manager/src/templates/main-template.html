@@ -1,0 +1,13 @@
+<% if(caller === 'GIS'){ %>
+<div class="panel-heading">
+  <a type="button" class="close cancel"  aria-hidden="true">&times;</a>
+  <h3 data-i18n="amp.gis-layers-manager:title" class="panel-title">GIS Layers Manager</h3>
+</div>
+<%}else{ %>
+   <h1 data-i18n="amp.gis-layers-manager:title" class="admintitle">GIS Layers Manager</h1>
+<%}%>
+<div class="panel-body layer-manager-body">
+<div   id="layers-admin"></div>
+<div  id="layers-wizard"></div>
+<div  id="population-layer-view"></div>
+</div>

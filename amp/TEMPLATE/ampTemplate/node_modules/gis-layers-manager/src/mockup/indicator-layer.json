@@ -1,0 +1,122 @@
+{
+	"id": "cd668b38-7418-437e-98d0-7aaea80aa326",
+	"name": {
+		"en": "LocalStorage"
+	},
+	"description": {
+		"en": "LocalStorage"
+	},
+	"unit": {
+		"en": "people"
+	},
+	"admLevelId": "Region",
+	"accessTypeId": 3,
+	"createdOn": "24/07/2016",
+	"updatedOn": "24/07/2016",
+	"isStoredInLocalStorage": "true",
+	"colorRamp": [{
+		"color": "#e9cfc1",
+		"order": 1
+	},
+	{
+		"color": "#e5bca8",
+		"order": 2
+	},
+	{
+		"color": "#e3a78d",
+		"order": 3
+	},
+	{
+		"color": "#e39070",
+		"order": 4
+	},
+	{
+		"color": "#e07958",
+		"order": 5
+	},
+	{
+		"color": "#d76448",
+		"order": 6
+	},
+	{
+		"color": "#cf4c3a",
+		"order": 7
+	},
+	{
+		"color": "#c72d2e",
+		"order": 8
+	},
+	{
+		"color": "#b02137",
+		"order": 9
+	},
+	{
+		"color": "#981538",
+		"order": 10
+	}],
+	"values": [{
+		"value": 6000.0,
+		"geoId": "1645456",
+		"ndi": "Dili"
+	},
+	{
+		"value": 12000.0,
+		"geoId": "1651539",
+		"name": "Oecussi"
+	},
+	{
+		"value": 7000.0,
+		"geoId": "1644865",
+		"name": "Ermera"
+	},
+	{
+		"value": 3000.0,
+		"geoId": "1649538",
+		"name": "Baucau"
+	},
+	{
+		"value": 2000.0,
+		"geoId": "1651809",
+		"name": "Ainaro"
+	},
+	{
+		"value": 4000.0,
+		"geoId": "1648513",
+		"name": "Bobonaro"
+	},
+	{
+		"value": 5000.0,
+		"geoId": "1639462",
+		"name": "Cova Lima"
+	},
+	{
+		"value": 9000.0,
+		"geoId": "1637729",
+		"name": "Liquica"
+	},
+	{
+		"value": 13000.0,
+		"geoId": "1622470",
+		"name": "Viqueque"
+	},
+	{
+		"value": 10000.0,
+		"geoId": "1636525",
+		"name": "Manatuto"
+	},
+	{
+		"value": 8000.0,
+		"geoId": "1638294",
+		"name": "Lautem"
+	},
+	{
+		"value": 11000.0,
+		"geoId": "1636309",
+		"name": "Manufahi"
+	},
+	{
+		"value": 1000.0,
+		"geoId": "1651815",
+		"name": "Aileu"
+	}]
+}

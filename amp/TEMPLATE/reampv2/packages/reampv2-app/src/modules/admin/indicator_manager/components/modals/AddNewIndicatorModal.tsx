@@ -41,13 +41,13 @@ interface IndicatorFormValues {
 }
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
+  const { show, setShow, translations, filterBySector, filterByProgram } = props;
 
   const ascendingOptions = [
     { value: true, label: translations["amp.indicatormanager:true"] },
     { value: false, label: translations["amp.indicatormanager:false"] }
   ];
 
-  const { show, setShow, translations, filterBySector, filterByProgram } = props;
   const nodeRef = useRef(null);
   const dispatch = useDispatch();
   const settingsReducer: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);

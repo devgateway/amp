@@ -46,7 +46,7 @@ interface IndicatorFormValues {
 }
 
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
-  const { show, setShow, indicator, translations } = props;
+  const { show, setShow, indicator, translations, filterBySector, filterByProgram } = props;
 
   const ascendingOptions = [
     { value: true, label: translations["amp.indicatormanager:true"] },

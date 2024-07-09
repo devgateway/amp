@@ -46,6 +46,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
@@ -64,6 +65,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.time.Year;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -279,6 +283,15 @@ public class MeService {
 
         if (yearValues.size() > yearsCount) {
             yearValues = yearValues.subList(0, yearsCount);
+        } else if (yearValues.size() < yearsCount) {
+            List<YearValue> newYearValues = new ArrayList<>(yearsCount);
+            newYearValues.addAll(yearValues);
+
+            for (int i = yearValues.size(); i < yearsCount; i++) {
+                newYearValues.add(new YearValue(Year.now().getValue() - i, BigDecimal.ZERO));
+            }
+
+            yearValues = newYearValues;
         }
 
         return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);

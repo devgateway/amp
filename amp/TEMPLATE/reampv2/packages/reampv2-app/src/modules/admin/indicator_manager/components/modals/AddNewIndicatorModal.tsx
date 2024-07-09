@@ -20,11 +20,6 @@ import lodash from 'lodash';
 
 const MySwal = withReactContent(Swal);
 
-const ascendingOptions = [
-  { value: true, label: 'True' },
-  { value: false, label: 'False' }
-];
-
 interface AddNewIndicatorModalProps extends DefaultComponentProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,6 +42,12 @@ interface IndicatorFormValues {
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const { show, setShow, translations, filterBySector, filterByProgram } = props;
+
+  const ascendingOptions = [
+    { value: true, label: translations["amp.indicatormanager:true"] },
+    { value: false, label: translations["amp.indicatormanager:false"] }
+  ];
+
   const nodeRef = useRef(null);
   const dispatch = useDispatch();
   const settingsReducer: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
@@ -186,7 +187,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     if (createIndicatorState.loading) {
       MySwal.fire({
         icon: 'info',
-        title: 'Creating Indicator...',
+        title: `${translations["amp.indicatormanager:creating-indicator"]}...`,
         timer: 1000
       });
       return;
@@ -194,10 +195,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
     if (!createIndicatorState.loading && !createIndicatorState?.error && createIndicatorState?.createdIndicator?.id) {
       MySwal.fire({
-        title: 'Success',
-        text: 'Indicator created successfully',
+        title: translations["amp.indicatormanager:success"],
+        text: translations["amp.indicatormanager:save-success"],
         icon: 'success',
-        confirmButtonText: 'Ok',
+        confirmButtonText: translations["amp.indicatormanager:ok"],
       }).then(() => {
         dispatch(getIndicators());
         handleClose();
@@ -207,10 +208,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
     if (createIndicatorState.error && !createIndicatorState.loading && !createIndicatorState.createdIndicator) {
       MySwal.fire({
-        title: 'Error',
-        text: createIndicatorState.loading ? 'Error creating indicator' : createIndicatorState.error,
+        title: translations["amp.indicatormanager:error"],
+        text: createIndicatorState.loading ? translations["Error creating indicator"] : createIndicatorState.error,
         icon: 'error',
-        confirmButtonText: 'Ok',
+        confirmButtonText: translations["amp.indicatormanager:ok"],
       });
     }
 
@@ -263,10 +264,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
           const { name, description, code, sectors, programId, ascending, creationDate, base, target, indicatorsCategory } = values;
           if (selectedProgramSchemeId && !programId) {
             MySwal.fire({
-              title: 'Error',
+              title: translations['amp.indicatormanager:error'],
               text: translations['amp.indicatormanager:errors-program-is-required'],
               icon: 'error',
-              confirmButtonText: 'Ok',
+              confirmButtonText: translations['amp.indicatormanager:ok'],
             })
 
             return;
@@ -368,7 +369,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       onChange={(value) => {
                         if (value) props.setFieldValue('ascending', value.value)
                       }}
-                      defaultValue={ascendingOptions[1]}
+                      defaultValue={{
+                        value: false,
+                        label: translations["amp.indicatormanager:true"]
+                      }}
                     />
                     <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                       {props.errors.ascending}
@@ -378,6 +382,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   <Form.Group className={styles.view_item} controlId="formCreationDate">
                     <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
                     <DateInput
+                        translations={translations}
                       name="creationDate"
                       defaultValue={props.values.creationDate}
                       disabled
@@ -430,6 +435,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         <Select
                           name="categories"
                           options={categories}
+                          placeholder={translations["amp.indicatormanager:select"]}
                           onChange={(value) => {
                             // set the formik value with the selected values and remove the label
                               props.setFieldValue('indicatorsCategory', parseInt(value?.value));
@@ -461,11 +467,16 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                 <Select
                                     name="programScheme"
                                     options={programSchemes}
+                                    placeholder={translations["amp.indicatormanager:select"]}
+
                                     onChange={(selectedValue) => {
                                       // set the formik value with the selected values and remove the label
-                                      if (selectedValue) {
-                                        handleProgramSchemeChange(selectedValue.value, props);
-                                      }
+                                        if (selectedValue) {
+                                            handleProgramSchemeChange(selectedValue.value, props);
+                                        }else {
+                                            handleProgramSchemeChange(null, props);
+                                            setProgramFieldVisible(false);
+                                        }
                                     }}
                                     isClearable
                                     getOptionValue={(option) => option.value}
@@ -492,6 +503,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                 programs.length > 0 ? (
                                         <Select
                                             name="programs"
+                                            placeholder={translations["amp.indicatormanager:select"]}
                                             options={programs}
                                             onChange={(selectedValue) => {
                                               // set the formik value with the selected values and remove the label
@@ -544,6 +556,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                       <DateInput
+                          translations={translations}
                         name="base.originalValueDate"
                         value={props.values.base.originalValueDate}
                         onChange={(value) => {
@@ -584,6 +597,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
                       <DateInput
+                          translations={translations}
                         value={props.values.base.revisedValueDate}
                         onChange={(value) => {
                           if (value) {
@@ -625,7 +639,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Form.Group>
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
-                      <DateInput
+                      <DateInput translations={translations}
                         name="target.originalValueDate"
                         value={props.values.target.originalValueDate}
                         onChange={(value) => {
@@ -666,6 +680,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                       <DateInput
+                          translations={translations}
                         value={props.values.target.revisedValueDate}
                         onChange={(value) => {
                           if (value) {

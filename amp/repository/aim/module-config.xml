@@ -276,6 +276,7 @@
 		<hibernate-class>org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurrency</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

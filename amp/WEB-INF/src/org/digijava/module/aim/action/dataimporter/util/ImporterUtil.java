@@ -16,12 +16,15 @@ import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurrency;
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +68,7 @@ public class ImporterUtil {
 
     }
      public static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, String
-             adjustmentType, Funding fundingItem) {
+             adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity) {
          int detailColumn = getColumnIndexByName(sheet, getKey(config, "Financing Instrument"));
          String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
 
@@ -78,7 +81,16 @@ public class ImporterUtil {
          int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
          String separateFundingDate = separateFundingDateColumn>=0? row.getCell(separateFundingDateColumn).getStringCellValue(): null;
          int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "Currency"));
-         String currencyCode=currencyCodeColumn>=0? row.getCell(currencyCodeColumn).getStringCellValue(): "XOF";
+         String currencyCode=currencyCodeColumn>=0? row.getCell(currencyCodeColumn).getStringCellValue(): CurrencyUtil.getDefaultCurrency().getCurrencyCode();
+         if (existingActivity!=null)
+         {
+             String existingActivityCurrencyCode = getCurrencyCodeFromExistingImported(existingActivity.getName());
+             if (existingActivityCurrencyCode!=null)
+             {
+                 currencyCode = existingActivityCurrencyCode;
+             }
+         }
+         saveCurrencyCode(currencyCode,importDataModel.getProject_title());
             Funding funding;
          int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
          String componentName= componentNameColumn>=0? row.getCell(componentNameColumn).getStringCellValue(): null;
@@ -103,6 +115,103 @@ public class ImporterUtil {
             funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
         }
          return funding;
+    }
+
+
+
+    public static Funding setAFundingItemForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, String
+            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity) {
+        String finInstrument= row.get(getKey(config, "Financing Instrument"));
+        finInstrument = finInstrument!= null? finInstrument : "";
+
+        String typeOfAss =row.get(getKey(config, "Type Of Assistance"));
+        typeOfAss=typeOfAss!=null? typeOfAss:"";
+        Funding funding;
+
+        String separateFundingDate =row.get(getKey(config, "Transaction Date"));
+        separateFundingDate=separateFundingDate!=null? separateFundingDate:"";
+
+        String currencyCode =row.get(getKey(config, "Currency"));
+        currencyCode=currencyCode!=null? currencyCode: CurrencyUtil.getDefaultCurrency().getCurrencyCode();
+        if (existingActivity!=null)
+        {
+            String existingActivityCurrencyCode = getCurrencyCodeFromExistingImported(existingActivity.getName());
+            if (existingActivityCurrencyCode!=null)
+            {
+                currencyCode = existingActivityCurrencyCode;
+            }
+        }
+        saveCurrencyCode(currencyCode,importDataModel.getProject_title());
+        String componentName =row.get(getKey(config, "Component Name"));
+        componentName=componentName!=null? componentName:"";
+
+
+        String exchangeRate = row.get(getKey(config, "Exchange Rate"));
+        exchangeRate=exchangeRate!=null? exchangeRate:"";
+
+        Double exchangeRateValue = !exchangeRate.isEmpty()?parseDouble(exchangeRate): Double.valueOf(0.0);
+
+
+        if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
+        {
+            if (!config.containsValue("Donor Agency"))
+            {
+                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+
+            }
+            else {
+                String donorColumn = row.get(getKey(config, "Donor Agency"));
+                String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
+
+                updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
+                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+            }
+
+        }else {
+            funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName,exchangeRateValue);
+        }
+        return funding;
+    }
+
+
+    private static void saveCurrencyCode(String currencyCode, String projectName) {
+        Session session = getSession();
+
+        String hql = "FROM " + ImportedProjectCurrency.class.getName() + " ipc WHERE ipc.importedProjectName = :importedProjectName";
+        Query query = session.createQuery(hql);
+        query.setParameter("importedProjectName", projectName);
+        List<ImportedProjectCurrency> importedProjectCurrencies = query.list();
+
+        if (importedProjectCurrencies.isEmpty()) {
+            ImportedProjectCurrency importedProjectCurrency = new ImportedProjectCurrency();
+            importedProjectCurrency.setCurrencyCode(currencyCode);
+            importedProjectCurrency.setImportedProjectName(projectName);
+            session.saveOrUpdate(importedProjectCurrency);
+        } else {
+            importedProjectCurrencies.get(0).setCurrencyCode(currencyCode);
+            session.update(importedProjectCurrencies.get(0));
+        }
+
+        session.flush();
+    }
+
+    private static String getCurrencyCodeFromExistingImported(String importedProjectName)
+    {
+        Session session = getSession();
+        String hql = "FROM "+ ImportedProjectCurrency.class.getName() +" ipc where ipc.importedProjectName= :importedProjectName";
+        Query query = session.createQuery(hql);
+        query.setParameter("importedProjectName", importedProjectName);
+        List<ImportedProjectCurrency> importedProjectCurrencies = query.list();
+        return importedProjectCurrencies!=null&&!importedProjectCurrencies.isEmpty()?importedProjectCurrencies.get(0).getCurrencyCode():null;
+    }
+
+    @NotNull
+    private static Session getSession() {
+        Session session = PersistenceManager.getRequestDBSession();
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        return session;
     }
 
 
@@ -160,52 +269,6 @@ public class ImporterUtil {
         return false;
     }
 
-    public static Funding setAFundingItemForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, String
-            adjustmentType, Funding fundingItem) {
-        String finInstrument= row.get(getKey(config, "Financing Instrument"));
-        finInstrument = finInstrument!= null? finInstrument : "";
-
-        String typeOfAss =row.get(getKey(config, "Type Of Assistance"));
-        typeOfAss=typeOfAss!=null? typeOfAss:"";
-        Funding funding;
-
-        String separateFundingDate =row.get(getKey(config, "Transaction Date"));
-        separateFundingDate=separateFundingDate!=null? separateFundingDate:"";
-
-        String currencyCode =row.get(getKey(config, "Currency"));
-        currencyCode=currencyCode!=null? currencyCode:"XOF";
-
-        String componentName =row.get(getKey(config, "Component Name"));
-        componentName=componentName!=null? componentName:"";
-
-
-        String exchangeRate = row.get(getKey(config, "Exchange Rate"));
-        exchangeRate=exchangeRate!=null? exchangeRate:"";
-
-        Double exchangeRateValue = !exchangeRate.isEmpty()?parseDouble(exchangeRate): Double.valueOf(0.0);
-
-
-        if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
-        {
-            if (!config.containsValue("Donor Agency"))
-            {
-                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
-
-            }
-            else {
-                String donorColumn = row.get(getKey(config, "Donor Agency"));
-                String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
-
-                updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
-            }
-
-        }else {
-            funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName,exchangeRateValue);
-        }
-        return funding;
-    }
-
     public static <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (entry.getValue().equals(value)) {
@@ -258,9 +321,7 @@ public class ImporterUtil {
      private static Funding updateFunding(Funding fundingItem,ImportDataModel importDataModel, Session session, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
              adjustmentType, String currencyCode, String componentName, Double exchangeRate) {
          // TODO: 27/06/2024 pick Month from file and use it in funding
-         if (!session.isOpen()) {
-             session = PersistenceManager.getRequestDBSession();
-         }
+         session=getSession();
         String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         Long currencyId = getCurrencyId(session,currencyCode);
         Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql,adjustmentType );
@@ -352,6 +413,10 @@ public class ImporterUtil {
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
+        if (currencyCode==null)
+        {
+            currencyCode="USD";
+        }
         String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
                 "WHERE ac.currencyCode = :currencyCode";
 
@@ -396,7 +461,7 @@ public class ImporterUtil {
         return categoryId;
     }
 
-    private static AmpActivityVersion existingActivity(ImportDataModel importDataModel, Session session)
+    public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session)
     {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
@@ -405,8 +470,8 @@ public class ImporterUtil {
                 "WHERE a.name = :name OR a.projectCode = :projectCode";
         Query query= session.createQuery(hql);
         query.setCacheable(true);
-        query.setString("name", importDataModel.getProject_title());
-        query.setString("projectCode", importDataModel.getProject_code());
+        query.setString("name", projectTitle);
+        query.setString("projectCode", projectCode);
         List<AmpActivityVersion> ampActivityVersions=query.list();
         return  !ampActivityVersions.isEmpty()? ampActivityVersions.get(ampActivityVersions.size()-1) :null;
     }
@@ -419,7 +484,7 @@ public class ImporterUtil {
         importDataModel.setActivity_status(statusId);
 
     }
-    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) throws JsonProcessingException {
+    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
@@ -432,7 +497,6 @@ public class ImporterUtil {
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
         JsonApiResponse<ActivitySummary> response;
-        AmpActivityVersion existing = existingActivity(importDataModel,session);
         logger.info("Existing ?"+existing);
         logger.info("Data model object: "+importDataModel);
         if (existing==null){
@@ -464,7 +528,7 @@ public class ImporterUtil {
                 logger.info("--------------------------------");
                 logger.info("Component name at start: " + componentName);
                 if (componentName!=null && !componentName.isEmpty()) {
-                    addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, projectCode);
+                    addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
                 }
                 if (!session.isOpen()) {
                     session=PersistenceManager.getRequestDBSession();

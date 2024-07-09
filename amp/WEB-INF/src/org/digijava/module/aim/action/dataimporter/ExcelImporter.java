@@ -16,6 +16,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -124,7 +125,19 @@ public class ExcelImporter {
 
 
             int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
-            String projectCode= projectCodeColumn>=0? row.getCell(projectCodeColumn).getStringCellValue(): null;
+            String projectCode= projectCodeColumn>=0? row.getCell(projectCodeColumn).getStringCellValue(): "";
+            importDataModel.setProject_code(projectCode);
+
+            int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
+            String projectTitle= projectTitleColumn>=0? row.getCell(projectTitleColumn).getStringCellValue(): "";
+            importDataModel.setProject_title(projectTitle);
+
+            int projectDescColumn = getColumnIndexByName(sheet, getKey(config, "Project Description"));
+            String projectDesc= projectDescColumn>=0? row.getCell(projectDescColumn).getStringCellValue(): null;
+            importDataModel.setDescription(projectDesc);
+
+            AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
+
             Long responsibleOrgId = null;
             Funding fundingItem = new Funding();
 
@@ -136,15 +149,6 @@ public class ExcelImporter {
                 if (columnIndex >= 0) {
                     Cell cell = row.getCell(columnIndex);
                     switch (entry.getValue()) {
-                        case "Project Title":
-                            importDataModel.setProject_title(cell.getStringCellValue().trim());
-                            break;
-                        case "Project Code":
-                            importDataModel.setProject_code(cell.getStringCellValue().trim());
-                            break;
-                        case "Project Description":
-                            importDataModel.setDescription(cell.getStringCellValue().trim());
-                            break;
                         case "Project Location":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                             break;
@@ -164,19 +168,19 @@ public class ExcelImporter {
                             responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "beneficiaryAgency");
                             break;
                         case "Funding Item":
-                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual",fundingItem);
+                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual",fundingItem,existing);
                             break;
                         case "Planned Commitment":
-                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned",fundingItem);
+                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned",fundingItem,existing);
                             break;
                         case "Planned Disbursement":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned",fundingItem);
+                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned",fundingItem,existing);
                             break;
                         case "Actual Commitment":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual",fundingItem);
+                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual",fundingItem,existing);
                             break;
                         case "Actual Disbursement":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual",fundingItem);
+                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual",fundingItem,existing);
                             break;
                         case "Reporting Date":
                         default:
@@ -193,7 +197,7 @@ public class ExcelImporter {
             }
 
 
-            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings,projectCode);
+            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings, existing);
 
         }
     }

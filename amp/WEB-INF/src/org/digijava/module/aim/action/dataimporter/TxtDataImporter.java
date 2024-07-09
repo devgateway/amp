@@ -12,6 +12,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -95,6 +96,14 @@ public class TxtDataImporter {
             String componentName= row.get(getKey(config, "Component Name"));
             String componentCode= row.get(getKey(config, "Component Code"));
             String projectCode= row.get(getKey(config, "Project Code"));
+            String projectTitle= row.get(getKey(config, "Project Title"));
+            String projectDesc= row.get(getKey(config, "Project Description"));
+            AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
+
+            importDataModel.setProject_title(projectTitle);
+            importDataModel.setProject_code(projectCode);
+            importDataModel.setDescription(projectDesc);
+
             String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
             String responsibleOrgCode= row.get(getKey(config, "Responsible Organization Code"));
             Long responsibleOrgId=null;
@@ -103,15 +112,6 @@ public class TxtDataImporter {
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 Funding funding = null;
                 switch (entry.getValue()) {
-                    case "Project Title":
-                        importDataModel.setProject_title(row.get(entry.getKey()));
-                        break;
-                    case "Project Code":
-                        importDataModel.setProject_code(row.get(entry.getKey()));
-                        break;
-                    case "Project Description":
-                        importDataModel.setDescription(row.get(entry.getKey().trim()));
-                        break;
                     case "Project Location":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                         break;
@@ -131,19 +131,19 @@ public class TxtDataImporter {
                         responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "beneficiaryAgency");
                         break;
                     case "Funding Item":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual",fundingItem);
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual",fundingItem,existing);
                         break;
                     case "Planned Commitment":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned",fundingItem);
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned",fundingItem,existing);
                         break;
                     case "Planned Disbursement":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned",fundingItem);
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned",fundingItem,existing);
                         break;
                     case "Actual Commitment":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual",fundingItem);
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual",fundingItem,existing);
                         break;
                     case "Actual Disbursement":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual",fundingItem);
+                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual",fundingItem,existing);
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());
@@ -154,7 +154,7 @@ public class TxtDataImporter {
 
             }
 
-            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings, projectCode);
+            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings,existing);
 
         }
 

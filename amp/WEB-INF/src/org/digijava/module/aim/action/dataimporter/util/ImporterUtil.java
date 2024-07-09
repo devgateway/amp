@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.digijava.kernel.Constants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -453,6 +454,7 @@ public class ImporterUtil {
             ActivityGroup activityGroup= new ActivityGroup();
             activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
             importDataModel.setActivity_group(activityGroup);
+            updateFundingAndOrgsWithAlreadyExisting(existing,importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
             response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity/update");
@@ -486,6 +488,62 @@ public class ImporterUtil {
         }
         session.saveOrUpdate(importedProject);
         logger.info("Imported project: "+importedProject);
+    }
+
+    private static void updateFundingAndOrgsWithAlreadyExisting(AmpActivityVersion ampActivityVersion,ImportDataModel importDataModel)
+    {
+        if (ampActivityVersion.getFunding()!=null)
+        {
+            for (AmpFunding ampFunding : ampActivityVersion.getFunding())
+            {
+                Funding funding = new Funding();
+                funding.setDonor_organization_id(ampFunding.getAmpDonorOrgId().getAmpOrgId());
+                funding.setType_of_assistance(ampFunding.getTypeOfAssistance().getId());
+                funding.setFinancing_instrument(ampFunding.getFinancingInstrument().getId());
+                funding.setSource_role(ampFunding.getSourceRole().getAmpRoleId());
+                for (AmpFundingDetail ampFundingDetail: ampFunding.getFundingDetails()) {
+                    Transaction transaction = new Transaction();
+                    transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
+                    transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType().getId());
+                    transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
+                    if (ampFundingDetail.getTransactionDate() != null) {
+                        transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toString()));
+                    }
+                    transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
+                    if (ampFundingDetail.getTransactionType() == 0) {
+                        funding.getCommitments().add(transaction);
+                    } else if (ampFundingDetail.getTransactionType() == 1) {
+                        funding.getDisbursements().add(transaction);
+                    }
+                }
+
+            }
+        }
+        if (ampActivityVersion.getOrgrole()!=null) {
+            for (AmpOrgRole ampOrgRole:ampActivityVersion.getOrgrole())
+            {
+                if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
+                    DonorOrganization donorOrganization = new DonorOrganization();
+                    donorOrganization.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
+                    donorOrganization.setPercentage((double) ampOrgRole.getPercentage());
+                    importDataModel.getDonor_organization().add(donorOrganization);
+                }
+                else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA"))
+                {
+                    Organization responsibleOrg = new Organization();
+                    responsibleOrg.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
+                    importDataModel.getResponsible_organization().add(responsibleOrg);
+
+                }
+                else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("BA"))
+                {
+                    Organization beneficiaryAgency = new Organization();
+                    beneficiaryAgency.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
+                    importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
+
+                }
+            }
+        }
     }
 
 

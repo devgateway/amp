@@ -178,12 +178,6 @@ public class ImporterUtil {
         String componentName =row.get(getKey(config, "Component Name"));
         componentName=componentName!=null? componentName:"";
 
-        String componentCode =row.get(getKey(config, "Component Code"));
-        componentCode=componentCode!=null? componentCode:"";
-
-        String activityName =row.get(getKey(config, "Project Title"));
-        activityName=activityName!=null? activityName:"";
-
 
         String exchangeRate = row.get(getKey(config, "Exchange Rate"));
         exchangeRate=exchangeRate!=null? exchangeRate:"";
@@ -408,10 +402,11 @@ public class ImporterUtil {
             session=PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name";
+                "WHERE a.name = :name OR a.projectCode = :projectCode";
         Query query= session.createQuery(hql);
         query.setCacheable(true);
         query.setString("name", importDataModel.getProject_title());
+        query.setString("projectCode", importDataModel.getProject_code());
         List<AmpActivityVersion> ampActivityVersions=query.list();
         return  !ampActivityVersions.isEmpty()? ampActivityVersions.get(ampActivityVersions.size()-1) :null;
     }

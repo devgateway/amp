@@ -383,7 +383,6 @@ public class DataImporter extends Action {
         fieldsInfos.add("Type Of Assistance");
         fieldsInfos.add("Secondary Subsector");
         fieldsInfos.add("Currency");
-        fieldsInfos.add("Project Code");
         fieldsInfos.add("Component Name");
         fieldsInfos.add("Component Code");
         fieldsInfos.add("Beneficiary Agency");

@@ -173,7 +173,6 @@ public class ImporterUtil {
         return funding;
     }
 
-
     private static void saveCurrencyCode(String currencyCode, String projectName) {
         Session session = getSession();
 

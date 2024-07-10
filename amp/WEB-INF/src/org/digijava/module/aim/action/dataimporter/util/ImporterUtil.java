@@ -587,13 +587,14 @@ public class ImporterUtil {
 
             }
         }
-        if (ampActivityVersion.getOrgrole()!=null) {
+        if (ampActivityVersion.getOrgrole()!=null && !ampActivityVersion.getOrgrole().isEmpty()) {
+            Double perc =(double) 100/ampActivityVersion.getOrgrole().size();
             for (AmpOrgRole ampOrgRole:ampActivityVersion.getOrgrole())
             {
                 if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
                     DonorOrganization donorOrganization = new DonorOrganization();
                     donorOrganization.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    donorOrganization.setPercentage((double) ampOrgRole.getPercentage());
+                    donorOrganization.setPercentage(ampOrgRole.getPercentage()!=null?(double) ampOrgRole.getPercentage():perc);
                     importDataModel.getDonor_organization().add(donorOrganization);
                 }
                 else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA"))

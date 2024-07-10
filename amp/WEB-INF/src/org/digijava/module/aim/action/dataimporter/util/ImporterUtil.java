@@ -737,6 +737,9 @@ public class ImporterUtil {
 
             for (Funding funding: new HashSet<>(fundings)) {
                 if (funding != null) {
+                    if (funding.getDonor_organization_id()==null){
+                        continue;
+                    }
 
 
                     if (!funding.getCommitments().isEmpty()) {
@@ -772,6 +775,8 @@ public class ImporterUtil {
                     if (!funding.getDisbursements().isEmpty()) {
                         for (Transaction disbursement: funding.getDisbursements())
                         {
+                            logger.info("Disbursement: " + disbursement);
+
                             AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
                             ampComponentFunding.setComponent(ampComponent);
                             ampComponentFunding.setReportingDate(new Date());
@@ -785,7 +790,9 @@ public class ImporterUtil {
                             ampComponentFunding.setTransactionAmount(disbursement.getTransaction_amount());
                             ampComponentFunding.setTransactionDate(convertStringToDate(disbursement.getTransaction_date()));
                             if (found){
-                                if (!componentFundingExists(ampComponentFunding, ampComponent)) {
+                                boolean fundingExists=componentFundingExists(ampComponentFunding, ampComponent);
+                                logger.info("Funding exists: " + fundingExists);
+                                if (!fundingExists) {
 
                                     ampComponent.getFundings().add(ampComponentFunding);
                                 }
@@ -811,7 +818,7 @@ public class ImporterUtil {
             logger.info("Component:  {}",ampComponent);
             if (found) {
                 logger.info("Found component in  activity already. So we just update the component.");
-                session.update(ampComponent);
+                session.saveOrUpdate(ampComponent);
             } else {
                 ampActivityVersion.getComponents().add(ampComponent);
                 updateActivity=true;

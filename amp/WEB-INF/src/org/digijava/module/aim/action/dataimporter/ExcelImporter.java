@@ -91,6 +91,15 @@ public class ExcelImporter {
             processBatch(batch, sheet, request,config, importedFilesRecord);
         }
     }
+    private static String getStringValueFromCell(Cell cell, boolean nullable)
+    {
+        try {
+            return cell.getStringCellValue();
+        }catch (Exception e) {
+            logger.error("Error getting cell {} value: ", cell.getColumnIndex(), e);
+            return nullable?null:"";
+        }
+    }
 
     public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Process the batch of rows
@@ -113,28 +122,28 @@ public class ExcelImporter {
                 setStatus(importDataModel);
 
                 int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, "Component Code"));
-                String componentCode = componentCodeColumn >= 0 ? row.getCell(componentCodeColumn).getStringCellValue() : null;
+                String componentCode = componentCodeColumn >= 0 ? getStringValueFromCell(row.getCell(componentCodeColumn),true) : null;
 
                 int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
-                String componentName = componentNameColumn >= 0 ? row.getCell(componentNameColumn).getStringCellValue() : null;
+                String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn),true): null;
 
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
-                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? row.getCell(donorAgencyCodeColumn).getStringCellValue() : null;
+                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn),true) : null;
 
                 int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
-                String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? row.getCell(responsibleOrgCodeColumn).getStringCellValue() : null;
+                String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? getStringValueFromCell(row.getCell(responsibleOrgCodeColumn),true) : null;
 
 
                 int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
-                String projectCode = projectCodeColumn >= 0 ? row.getCell(projectCodeColumn).getStringCellValue() : "";
+                String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(row.getCell(projectCodeColumn),false) : "";
                 importDataModel.setProject_code(projectCode);
 
                 int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
-                String projectTitle = projectTitleColumn >= 0 ? row.getCell(projectTitleColumn).getStringCellValue() : "";
+                String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(row.getCell(projectTitleColumn),false) : "";
                 importDataModel.setProject_title(projectTitle);
 
                 int projectDescColumn = getColumnIndexByName(sheet, getKey(config, "Project Description"));
-                String projectDesc = projectDescColumn >= 0 ? row.getCell(projectDescColumn).getStringCellValue() : null;
+                String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(row.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);
 
                 AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);

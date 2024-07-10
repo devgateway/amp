@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -804,7 +805,13 @@ public class ImporterUtil {
                 "AND transaction_date = ? AND amp_component_id = ?";
 
         try (PreparedStatement statement =PersistenceManager.getJdbcConnection().prepareStatement(sql)) {
-            statement.setLong(1, ampComponentFunding.getReportingOrganization().getAmpOrgId());
+            if (ampComponentFunding.getReportingOrganization()!=null) {
+                statement.setLong(1, ampComponentFunding.getReportingOrganization().getAmpOrgId());
+            }
+            else
+            {
+                statement.setNull(1, Types.BIGINT);
+            }
             statement.setLong(2, ampComponentFunding.getAdjustmentType().getId());
             statement.setDouble(3, ampComponentFunding.getTransactionAmount());
             statement.setDate(4, new java.sql.Date(ampComponentFunding.getTransactionDate().getTime()));

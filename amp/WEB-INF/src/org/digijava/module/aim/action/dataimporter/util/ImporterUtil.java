@@ -850,8 +850,8 @@ public class ImporterUtil {
             statement.setDouble(3, ampComponentFunding.getTransactionAmount());
             logger.info("Transaction Amount: " + ampComponentFunding.getTransactionAmount());
 
-            statement.setDate(4, new java.sql.Date(ampComponentFunding.getTransactionDate().getTime()));
-            logger.info("Transaction Date: " + new java.sql.Date(ampComponentFunding.getTransactionDate().getTime()));
+            statement.setTimestamp(4, new java.sql.Timestamp(ampComponentFunding.getTransactionDate().getTime()));
+            logger.info("Transaction Date: " + new java.sql.Timestamp(ampComponentFunding.getTransactionDate().getTime()));
 
             statement.setLong(5, ampComponent.getAmpComponentId());
             logger.info("AMP Component ID: " + ampComponent.getAmpComponentId());

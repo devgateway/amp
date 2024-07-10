@@ -93,8 +93,6 @@ public class ImporterUtil {
             Funding funding;
          int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
          String componentName= componentNameColumn>=0? row.getCell(componentNameColumn).getStringCellValue(): null;
-
-
          if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("Donor Agency"))

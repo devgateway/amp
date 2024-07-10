@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -41,8 +40,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,7 +97,7 @@ public class ImporterUtil {
         {
             if (!config.containsValue("Donor Agency"))
             {
-                funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+                funding=updateFunding(fundingItem,importDataModel, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
 
             }
             else {
@@ -108,11 +105,11 @@ public class ImporterUtil {
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
                 String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
                 updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+                funding=updateFunding(fundingItem,importDataModel, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
             }
 
         }else {
-            funding=updateFunding(fundingItem,importDataModel, session, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+            funding=updateFunding(fundingItem,importDataModel, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
         }
          return funding;
     }
@@ -156,7 +153,7 @@ public class ImporterUtil {
         {
             if (!config.containsValue("Donor Agency"))
             {
-                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+                funding=updateFunding(fundingItem,importDataModel, value, entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
 
             }
             else {
@@ -164,11 +161,11 @@ public class ImporterUtil {
                 String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
 
                 updateOrgs(importDataModel, donorColumn!=null && !donorColumn.isEmpty() ? donorColumn.trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+                funding=updateFunding(fundingItem,importDataModel, value, entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
             }
 
         }else {
-            funding=updateFunding(fundingItem,importDataModel, session, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName,exchangeRateValue);
+            funding=updateFunding(fundingItem,importDataModel, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName,exchangeRateValue);
         }
         return funding;
     }
@@ -317,15 +314,14 @@ public class ImporterUtil {
 
 
 
-     private static Funding updateFunding(Funding fundingItem,ImportDataModel importDataModel, Session session, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
+     private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String separateFundingDate, String columnHeader, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
              adjustmentType, String currencyCode, String componentName, Double exchangeRate) {
          // TODO: 27/06/2024 pick Month from file and use it in funding
-         session=getSession();
-        String catHql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
+         Session session = getSession();
         Long currencyId = getCurrencyId(session,currencyCode);
-        Long adjType = getCategoryValue(session, "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,catHql,adjustmentType );
-        Long assType = getCategoryValue(session, "assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, catHql,assistanceType);
-        Long finInstrument = getCategoryValue(session, "finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, catHql,finInst);
+        Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, adjustmentType );
+        Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, assistanceType);
+        Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, finInst);
         Long orgRole = getOrganizationRole(session);
 
 
@@ -426,7 +422,8 @@ public class ImporterUtil {
         return currencyId;
     }
 
-    private static Long getCategoryValue(Session session, String constantKey, String categoryKey, String hql, String possibleValue) {
+    private static Long getCategoryValue(String constantKey, String categoryKey, String possibleValue) {
+        String hql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         String fullKey=constantKey+"_"+possibleValue;
         if (ConstantsMap.containsKey(fullKey)) {
             Long val = ConstantsMap.get(fullKey);
@@ -434,9 +431,7 @@ public class ImporterUtil {
             return val;
 
         }
-        if (!session.isOpen()) {
-            session = PersistenceManager.getRequestDBSession();
-        }
+        Session session = getSession();
         Query query = session.createQuery(hql);
         query.setParameter("categoryKey", categoryKey);
         List<?> values = query.list();
@@ -479,7 +474,7 @@ public class ImporterUtil {
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
                 "JOIN s.ampCategoryClass c " +
                 "WHERE c.keyName = :categoryKey";
-        Long statusId = getCategoryValue(session,"statusId",CategoryConstants.ACTIVITY_STATUS_KEY,hql,"");
+        Long statusId = getCategoryValue("statusId",CategoryConstants.ACTIVITY_STATUS_KEY, "");
         importDataModel.setActivity_status(statusId);
 
     }
@@ -550,19 +545,23 @@ public class ImporterUtil {
 
     private static void updateFundingAndOrgsWithAlreadyExisting(AmpActivityVersion ampActivityVersion,ImportDataModel importDataModel)
     {
+
         if (ampActivityVersion.getFunding()!=null)
         {
+            Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, "" );
+            Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "");
+            Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, "");
             for (AmpFunding ampFunding : ampActivityVersion.getFunding())
             {
                 Funding funding = new Funding();
                 funding.setDonor_organization_id(ampFunding.getAmpDonorOrgId().getAmpOrgId());
-                funding.setType_of_assistance(ampFunding.getTypeOfAssistance().getId());
-                funding.setFinancing_instrument(ampFunding.getFinancingInstrument().getId());
+                funding.setType_of_assistance(ampFunding.getTypeOfAssistance()!=null?ampFunding.getTypeOfAssistance().getId():assType);
+                funding.setFinancing_instrument(ampFunding.getFinancingInstrument()!=null?ampFunding.getFinancingInstrument().getId():finInstrument);
                 funding.setSource_role(ampFunding.getSourceRole().getAmpRoleId());
                 for (AmpFundingDetail ampFundingDetail: ampFunding.getFundingDetails()) {
                     Transaction transaction = new Transaction();
                     transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
-                    transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType().getId());
+                    transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType()!=null?ampFundingDetail.getAdjustmentType().getId():adjType);
                     transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
                     if (ampFundingDetail.getTransactionDate() != null) {
                         transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toString()));

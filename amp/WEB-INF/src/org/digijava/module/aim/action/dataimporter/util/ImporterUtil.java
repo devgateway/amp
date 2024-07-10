@@ -733,6 +733,7 @@ public class ImporterUtil {
             }
 
             ampComponent.setActivity(ampActivityVersion);
+            logger.info("Component fundings: {}",fundings);
 
             for (Funding funding: new HashSet<>(fundings)) {
                 if (funding != null) {

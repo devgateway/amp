@@ -141,10 +141,11 @@ public class ExcelImporter {
 
                 AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                 Long responsibleOrgId = null;
-                Funding fundingItem = new Funding();
 
                 logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
                 for (Map.Entry<String, String> entry : config.entrySet()) {
+                    Funding fundingItem = new Funding();
+
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
 
                     if (columnIndex >= 0) {
@@ -196,6 +197,7 @@ public class ExcelImporter {
 
 
                 }
+                logger.info("Fundings at this point: {}",fundings);
 
 
                 importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);

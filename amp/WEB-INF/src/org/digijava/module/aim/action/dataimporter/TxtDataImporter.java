@@ -82,7 +82,6 @@ public class TxtDataImporter {
             ImportedProject importedProject= new ImportedProject();
             importedProject.setImportedFilesRecord(importedFilesRecord);
             List<Funding> fundings= new ArrayList<>();
-            Funding fundingItem = new Funding();
 
 
             ImportDataModel importDataModel = new ImportDataModel();
@@ -110,6 +109,7 @@ public class TxtDataImporter {
 
             logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
+                Funding fundingItem = new Funding();
                 switch (entry.getValue()) {
                     case "Project Location":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());

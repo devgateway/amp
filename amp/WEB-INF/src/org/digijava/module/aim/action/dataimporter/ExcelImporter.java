@@ -98,106 +98,108 @@ public class ExcelImporter {
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         for (Row row : batch) {
-            ImportedProject importedProject= new ImportedProject();
-            importedProject.setImportedFilesRecord(importedFilesRecord);
-            List<Funding> fundings= new ArrayList<>();
+            if (row != null) {
+                ImportedProject importedProject = new ImportedProject();
+                importedProject.setImportedFilesRecord(importedFilesRecord);
+                List<Funding> fundings = new ArrayList<>();
 
-            ImportDataModel importDataModel = new ImportDataModel();
-            importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
-            importDataModel.setCreated_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
-            importDataModel.setTeam(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam().getAmpTeamId());
-            importDataModel.setIs_draft(true);
-            OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-            importDataModel.setCreation_date(now.format(formatter));
-            setStatus(importDataModel);
+                ImportDataModel importDataModel = new ImportDataModel();
+                importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
+                importDataModel.setCreated_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
+                importDataModel.setTeam(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam().getAmpTeamId());
+                importDataModel.setIs_draft(true);
+                OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+                importDataModel.setCreation_date(now.format(formatter));
+                setStatus(importDataModel);
 
-            int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, "Component Code"));
-            String componentCode= componentCodeColumn>=0? row.getCell(componentCodeColumn).getStringCellValue(): null;
+                int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, "Component Code"));
+                String componentCode = componentCodeColumn >= 0 ? row.getCell(componentCodeColumn).getStringCellValue() : null;
 
-            int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
-            String componentName= componentNameColumn>=0? row.getCell(componentNameColumn).getStringCellValue(): null;
+                int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
+                String componentName = componentNameColumn >= 0 ? row.getCell(componentNameColumn).getStringCellValue() : null;
 
-            int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
-            String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
+                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
+                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? row.getCell(donorAgencyCodeColumn).getStringCellValue() : null;
 
-            int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
-            String responsibleOrgCode= responsibleOrgCodeColumn>=0? row.getCell(responsibleOrgCodeColumn).getStringCellValue(): null;
+                int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
+                String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? row.getCell(responsibleOrgCodeColumn).getStringCellValue() : null;
 
 
-            int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
-            String projectCode= projectCodeColumn>=0? row.getCell(projectCodeColumn).getStringCellValue(): "";
-            importDataModel.setProject_code(projectCode);
+                int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
+                String projectCode = projectCodeColumn >= 0 ? row.getCell(projectCodeColumn).getStringCellValue() : "";
+                importDataModel.setProject_code(projectCode);
 
-            int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
-            String projectTitle= projectTitleColumn>=0? row.getCell(projectTitleColumn).getStringCellValue(): "";
-            importDataModel.setProject_title(projectTitle);
+                int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
+                String projectTitle = projectTitleColumn >= 0 ? row.getCell(projectTitleColumn).getStringCellValue() : "";
+                importDataModel.setProject_title(projectTitle);
 
-            int projectDescColumn = getColumnIndexByName(sheet, getKey(config, "Project Description"));
-            String projectDesc= projectDescColumn>=0? row.getCell(projectDescColumn).getStringCellValue(): null;
-            importDataModel.setDescription(projectDesc);
+                int projectDescColumn = getColumnIndexByName(sheet, getKey(config, "Project Description"));
+                String projectDesc = projectDescColumn >= 0 ? row.getCell(projectDescColumn).getStringCellValue() : null;
+                importDataModel.setDescription(projectDesc);
 
-            AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
+                AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
 
-            Long responsibleOrgId = null;
-            Funding fundingItem = new Funding();
+                Long responsibleOrgId = null;
+                Funding fundingItem = new Funding();
 
-            logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
-            for (Map.Entry<String, String> entry : config.entrySet()) {
-                int columnIndex = getColumnIndexByName(sheet, entry.getKey());
+                logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
+                for (Map.Entry<String, String> entry : config.entrySet()) {
+                    int columnIndex = getColumnIndexByName(sheet, entry.getKey());
 
-                if (columnIndex >= 0) {
-                    Cell cell = row.getCell(columnIndex);
-                    switch (entry.getValue()) {
-                        case "Project Location":
+                    if (columnIndex >= 0) {
+                        Cell cell = row.getCell(columnIndex);
+                        switch (entry.getValue()) {
+                            case "Project Location":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
-                            break;
-                        case "Primary Sector":
-                            updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
-                            break;
-                        case "Secondary Sector":
-                            updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
-                            break;
-                        case "Donor Agency":
-                            updateOrgs(importDataModel, cell.getStringCellValue().trim(),donorAgencyCode, session, "donor");
-                            break;
-                        case "Responsible Organization":
-                            responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "responsibleOrg");
-                            break;
-                        case "Beneficiary Agency":
-                            responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "beneficiaryAgency");
-                            break;
-                        case "Funding Item":
-                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, true, "Actual", fundingItem, existing);
-                            break;
-                        case "Planned Commitment":
-                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Planned", fundingItem, existing);
-                            break;
-                        case "Planned Disbursement":
-                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Planned", fundingItem, existing);
-                            break;
-                        case "Actual Commitment":
-                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Actual", fundingItem, existing);
-                            break;
-                        case "Actual Disbursement":
-                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Actual", fundingItem, existing);
-                            break;
-                        case "Reporting Date":
-                        default:
-                            logger.error("Unexpected value: " + entry.getValue());
-                            break;
+                                break;
+                            case "Primary Sector":
+                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
+                                break;
+                            case "Secondary Sector":
+                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
+                                break;
+                            case "Donor Agency":
+                                updateOrgs(importDataModel, cell.getStringCellValue().trim(), donorAgencyCode, session, "donor");
+                                break;
+                            case "Responsible Organization":
+                                responsibleOrgId = updateOrgs(importDataModel, cell.getStringCellValue().trim(), responsibleOrgCode, session, "responsibleOrg");
+                                break;
+                            case "Beneficiary Agency":
+                                responsibleOrgId = updateOrgs(importDataModel, cell.getStringCellValue().trim(), responsibleOrgCode, session, "beneficiaryAgency");
+                                break;
+                            case "Funding Item":
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, true, "Actual", fundingItem, existing);
+                                break;
+                            case "Planned Commitment":
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Planned", fundingItem, existing);
+                                break;
+                            case "Planned Disbursement":
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Planned", fundingItem, existing);
+                                break;
+                            case "Actual Commitment":
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Actual", fundingItem, existing);
+                                break;
+                            case "Actual Disbursement":
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Actual", fundingItem, existing);
+                                break;
+                            case "Reporting Date":
+                            default:
+                                logger.error("Unexpected value: " + entry.getValue());
+                                break;
+
+                        }
+
 
                     }
+                    fundings.add(fundingItem);
 
 
                 }
-                fundings.add(fundingItem);
 
+
+                importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
 
             }
-
-
-            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings, existing);
-
         }
     }
 }

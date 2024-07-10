@@ -221,7 +221,11 @@ public class ImporterUtil {
                     DateTimeFormatter.ofPattern("MM/dd/yyyy"),
                     DateTimeFormatter.ofPattern("MM-dd-yyyy"),
                     DateTimeFormatter.ofPattern("yyyy/MM/dd"),
-                    DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS"),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
             );
 
             for (DateTimeFormatter formatter : formatters) {
@@ -250,7 +254,10 @@ public class ImporterUtil {
                 "MM/dd/yyyy",
                 "dd/MM/yyyy",
                 "dd.MM.yyyy",
-                "yyyy/MM/dd"
+                "yyyy/MM/dd",
+                "yyyy-MM-dd HH:mm:ss.S",
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm:ss.SSS"
         );
 
         for (String dateFormat : dateFormats) {
@@ -760,6 +767,10 @@ public class ImporterUtil {
                 new SimpleDateFormat("yyyy-MM-dd"),
                 new SimpleDateFormat("MM-dd-yyyy"),
                 new SimpleDateFormat("yyyy/MM/dd"),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S"),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS"),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
                 new SimpleDateFormat("dd-MM-yyyy")
         };
 

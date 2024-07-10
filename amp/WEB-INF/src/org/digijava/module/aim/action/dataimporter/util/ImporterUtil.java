@@ -789,6 +789,7 @@ public class ImporterUtil {
                             ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(disbursement.getAdjustment_type()));
                             ampComponentFunding.setTransactionAmount(disbursement.getTransaction_amount());
                             ampComponentFunding.setTransactionDate(convertStringToDate(disbursement.getTransaction_date()));
+
                             if (found){
                                 boolean fundingExists=componentFundingExists(ampComponentFunding, ampComponent);
                                 logger.info("Funding exists: " + fundingExists);

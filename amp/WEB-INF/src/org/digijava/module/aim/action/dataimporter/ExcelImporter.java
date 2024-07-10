@@ -96,7 +96,7 @@ public class ExcelImporter {
         try {
             return cell.getStringCellValue();
         }catch (Exception e) {
-            logger.error("Error getting cell {} value: ", cell.getColumnIndex(), e);
+            logger.error("Error getting cell {} value: ", cell, e);
             return nullable?null:"";
         }
     }

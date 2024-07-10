@@ -602,7 +602,6 @@ public class ImporterUtil {
                     Organization responsibleOrg = new Organization();
                     responsibleOrg.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
                     importDataModel.getResponsible_organization().add(responsibleOrg);
-
                 }
                 else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("BA"))
                 {

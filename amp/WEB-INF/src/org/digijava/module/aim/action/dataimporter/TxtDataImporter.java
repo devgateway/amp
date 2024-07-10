@@ -110,7 +110,6 @@ public class TxtDataImporter {
 
             logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
-                Funding funding = null;
                 switch (entry.getValue()) {
                     case "Project Location":
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
@@ -131,19 +130,19 @@ public class TxtDataImporter {
                         responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "beneficiaryAgency");
                         break;
                     case "Funding Item":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,true, "Actual",fundingItem,existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, true, "Actual", fundingItem, existing);
                         break;
                     case "Planned Commitment":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Planned",fundingItem,existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, "Planned", fundingItem, existing);
                         break;
                     case "Planned Disbursement":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Planned",fundingItem,existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, "Planned", fundingItem, existing);
                         break;
                     case "Actual Commitment":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),true,false, "Actual",fundingItem,existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, "Actual", fundingItem, existing);
                         break;
                     case "Actual Disbursement":
-                        funding=setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())),false,true, "Actual",fundingItem,existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, "Actual", fundingItem, existing);
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());

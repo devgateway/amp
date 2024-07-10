@@ -143,7 +143,6 @@ public class ExcelImporter {
 
             logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
             for (Map.Entry<String, String> entry : config.entrySet()) {
-                Funding funding = null;
                 int columnIndex = getColumnIndexByName(sheet, entry.getKey());
 
                 if (columnIndex >= 0) {
@@ -168,19 +167,19 @@ public class ExcelImporter {
                             responsibleOrgId=updateOrgs(importDataModel, cell.getStringCellValue().trim(),responsibleOrgCode, session, "beneficiaryAgency");
                             break;
                         case "Funding Item":
-                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,true, "Actual",fundingItem,existing);
+                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, true, "Actual", fundingItem, existing);
                             break;
                         case "Planned Commitment":
-                            funding = setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Planned",fundingItem,existing);
+                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Planned", fundingItem, existing);
                             break;
                         case "Planned Disbursement":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Planned",fundingItem,existing);
+                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Planned", fundingItem, existing);
                             break;
                         case "Actual Commitment":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,true,false, "Actual",fundingItem,existing);
+                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Actual", fundingItem, existing);
                             break;
                         case "Actual Disbursement":
-                            funding=setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell,false,true, "Actual",fundingItem,existing);
+                            setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Actual", fundingItem, existing);
                             break;
                         case "Reporting Date":
                         default:

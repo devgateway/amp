@@ -468,6 +468,10 @@ public class ImporterUtil {
 
     public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session)
     {
+        if (projectTitle.trim().isEmpty() &&  projectCode.trim().isEmpty())
+        {
+            return null;
+        }
         if (!session.isOpen()) {
             session=PersistenceManager.getRequestDBSession();
         }
@@ -480,11 +484,8 @@ public class ImporterUtil {
         List<AmpActivityVersion> ampActivityVersions=query.list();
         return  !ampActivityVersions.isEmpty()? ampActivityVersions.get(ampActivityVersions.size()-1) :null;
     }
-    public static void setStatus(ImportDataModel importDataModel, Session session)
+    public static void setStatus(ImportDataModel importDataModel)
     {
-        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s " +
-                "JOIN s.ampCategoryClass c " +
-                "WHERE c.keyName = :categoryKey";
         Long statusId = getCategoryValue("statusId",CategoryConstants.ACTIVITY_STATUS_KEY, "");
         importDataModel.setActivity_status(statusId);
 
@@ -504,6 +505,12 @@ public class ImporterUtil {
         JsonApiResponse<ActivitySummary> response;
         logger.info("Existing ?"+existing);
         logger.info("Data model object: "+importDataModel);
+        if (importDataModel.getProject_title().trim().isEmpty() &&  importDataModel.getProject_code().trim().isEmpty())
+        {
+            logger.info("Project title and code are empty. Skipping import");
+            importedProject.setImportStatus(ImportStatus.SKIPPED);
+            return;
+        }
         if (existing==null){
             logger.info("New activity");
             importedProject.setNewProject(true);

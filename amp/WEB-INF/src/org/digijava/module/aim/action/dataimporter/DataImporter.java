@@ -207,8 +207,9 @@ public class DataImporter extends Action {
                         }
                     }
                 }
-                if (dataImporterForm.getColumnPairs().isEmpty() || !dataImporterForm.getColumnPairs().containsValue("Project Title")) {
-                    response.setHeader("errorMessage", "You must have at least the Project Title key in your config.");
+                if (dataImporterForm.getColumnPairs().isEmpty() ||(!dataImporterForm.getColumnPairs().containsValue("Project Title") && !dataImporterForm.getColumnPairs().containsValue("Project Code"))) {
+
+                    response.setHeader("errorMessage", "You must have at least the 'Project Title' or 'Project Code' column in your config.");
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }

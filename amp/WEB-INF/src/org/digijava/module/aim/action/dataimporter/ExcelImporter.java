@@ -109,7 +109,7 @@ public class ExcelImporter {
             importDataModel.setIs_draft(true);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
-            setStatus(importDataModel, session);
+            setStatus(importDataModel);
 
             int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, "Component Code"));
             String componentCode= componentCodeColumn>=0? row.getCell(componentCodeColumn).getStringCellValue(): null;

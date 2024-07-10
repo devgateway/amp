@@ -92,7 +92,7 @@ public class TxtDataImporter {
             importDataModel.setIs_draft(true);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
-            setStatus(importDataModel, session);
+            setStatus(importDataModel);
             String componentName= row.get(getKey(config, "Component Name"));
             String componentCode= row.get(getKey(config, "Component Code"));
             String projectCode= row.get(getKey(config, "Project Code"));

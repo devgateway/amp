@@ -200,10 +200,10 @@ public class ImporterUtil {
             if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)) {
                 Date date = cell.getDateCellValue();
                 String formattedDate = formatDateFromDateObject(date);
-                System.out.println(formattedDate);
+                logger.info(formattedDate);
                 return formattedDate;
             } else {
-                System.out.println("The cell does not contain a valid date.");
+                logger.info("The cell does not contain a valid date.");
                 return null;
             }
         }catch(Exception e)
@@ -775,7 +775,6 @@ public class ImporterUtil {
                     if (!funding.getDisbursements().isEmpty()) {
                         for (Transaction disbursement: funding.getDisbursements())
                         {
-                            logger.info("Disbursement: " + disbursement);
 
                             AmpComponentFunding ampComponentFunding = new AmpComponentFunding();
                             ampComponentFunding.setComponent(ampComponent);
@@ -792,7 +791,6 @@ public class ImporterUtil {
 
                             if (found){
                                 boolean fundingExists=componentFundingExists(ampComponentFunding, ampComponent);
-                                logger.info("Funding exists: " + fundingExists);
                                 if (!fundingExists) {
 
                                     ampComponent.getFundings().add(ampComponentFunding);
@@ -833,32 +831,41 @@ public class ImporterUtil {
     }
 
     private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
-//        Session session = PersistenceManager.getRequestDBSession();
         String sql = "SELECT COUNT(*) FROM amp_component_funding WHERE rep_organization_id = ? " +
                 "AND adjustment_type = ? AND transaction_amount = ? " +
                 "AND transaction_date = ? AND amp_component_id = ?";
 
-        try (PreparedStatement statement =PersistenceManager.getJdbcConnection().prepareStatement(sql)) {
-            if (ampComponentFunding.getReportingOrganization()!=null) {
+        try (PreparedStatement statement = PersistenceManager.getJdbcConnection().prepareStatement(sql)) {
+            if (ampComponentFunding.getReportingOrganization() != null) {
                 statement.setLong(1, ampComponentFunding.getReportingOrganization().getAmpOrgId());
-            }
-            else
-            {
+                logger.info("Reporting Organization ID: " + ampComponentFunding.getReportingOrganization().getAmpOrgId());
+            } else {
                 statement.setNull(1, Types.BIGINT);
+                logger.info("Reporting Organization ID: null");
             }
+
             statement.setLong(2, ampComponentFunding.getAdjustmentType().getId());
+            logger.info("Adjustment Type ID: " + ampComponentFunding.getAdjustmentType().getId());
+
             statement.setDouble(3, ampComponentFunding.getTransactionAmount());
+            logger.info("Transaction Amount: " + ampComponentFunding.getTransactionAmount());
+
             statement.setDate(4, new java.sql.Date(ampComponentFunding.getTransactionDate().getTime()));
+            logger.info("Transaction Date: " + new java.sql.Date(ampComponentFunding.getTransactionDate().getTime()));
+
             statement.setLong(5, ampComponent.getAmpComponentId());
+            logger.info("AMP Component ID: " + ampComponent.getAmpComponentId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     int count = resultSet.getInt(1);
+                    logger.info("Count: " + count);
                     return count > 0;
                 }
             }
         } catch (SQLException e) {
             logger.error("Error executing native query", e);
+            e.printStackTrace();
         }
 
         return false;

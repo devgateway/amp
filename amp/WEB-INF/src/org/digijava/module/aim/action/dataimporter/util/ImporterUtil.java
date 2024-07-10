@@ -238,7 +238,12 @@ public class ImporterUtil {
             }
         }
         else {
-            date = LocalDate.of(Integer.parseInt(dateString), 1, 1);
+            if (StringUtils.isNumeric(dateString)) {
+                date = LocalDate.of(Integer.parseInt(dateString), 1, 1);
+            }
+            else {
+                throw new IllegalArgumentException("Invalid year format: " + dateString);
+            }
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

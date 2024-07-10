@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.format.CellFormatType;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
@@ -76,7 +78,7 @@ public class ImporterUtil {
          detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
          String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
          int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
-         String separateFundingDate = separateFundingDateColumn>=0? row.getCell(separateFundingDateColumn).getStringCellValue(): null;
+         String separateFundingDate = separateFundingDateColumn>=0? getDateFromExcel(row,separateFundingDateColumn): null;
          int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "Currency"));
          String currencyCode=currencyCodeColumn>=0? row.getCell(currencyCodeColumn).getStringCellValue(): CurrencyUtil.getDefaultCurrency().getCurrencyCode();
          if (existingActivity!=null)
@@ -113,6 +115,7 @@ public class ImporterUtil {
         }
          return funding;
     }
+
 
 
 
@@ -168,6 +171,22 @@ public class ImporterUtil {
             funding=updateFunding(fundingItem,importDataModel, value, entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType,currencyCode,componentName,exchangeRateValue);
         }
         return funding;
+    }
+
+
+    private static String getDateFromExcel(Row row, int columnIndex)
+    {
+        Cell cell = row.getCell(columnIndex); // Assuming the date is in the first column
+
+        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+            Date date = cell.getDateCellValue();
+            String formattedDate = formatDateFromDateObject(date);
+            System.out.println(formattedDate);
+            return formattedDate;
+        } else {
+            System.out.println("The cell does not contain a valid date.");
+            return null;
+        }
     }
 
     private static void saveCurrencyCode(String currencyCode, String projectName) {
@@ -248,6 +267,38 @@ public class ImporterUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return date.format(formatter);
+    }
+
+
+    private static String formatDateFromDateObject(Date date)
+    {
+
+            List<SimpleDateFormat> formatters = Arrays.asList(
+                    new SimpleDateFormat("yyyy-MM-dd"),
+                    new SimpleDateFormat("dd/MM/yyyy"),
+                    new SimpleDateFormat("MM/dd/yyyy"),
+                    new SimpleDateFormat("MM-dd-yyyy"),
+                     new SimpleDateFormat("yyyy/MM/dd"),
+                    new SimpleDateFormat("dd-MM-yyyy"),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S"),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S"),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS"),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+            );
+        String formattedDate = null;
+
+            for (SimpleDateFormat formatter : formatters) {
+                try {
+                     formattedDate = formatter.format(date);
+
+                    break;
+                } catch (DateTimeParseException e) {
+                    // Continue to next formatter
+                }
+            }
+
+
+        return formattedDate;
     }
 
 

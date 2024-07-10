@@ -205,7 +205,7 @@ public class ImporterUtil {
             session.update(importedProjectCurrencies.get(0));
         }
 
-        session.flush();
+//        session.flush();
     }
 
     private static String getCurrencyCodeFromExistingImported(String importedProjectName)

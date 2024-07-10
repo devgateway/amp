@@ -421,7 +421,6 @@ public class ImporterUtil {
         ConstantsMap.put("currencyId", currencyId);
         return currencyId;
     }
-
     private static Long getCategoryValue(String constantKey, String categoryKey, String possibleValue) {
         String hql="SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         String fullKey=constantKey+"_"+possibleValue;

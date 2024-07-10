@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
 
@@ -91,15 +92,7 @@ public class ExcelImporter {
             processBatch(batch, sheet, request,config, importedFilesRecord);
         }
     }
-    private static String getStringValueFromCell(Cell cell, boolean nullable)
-    {
-        try {
-            return cell.getStringCellValue();
-        }catch (Exception e) {
-            logger.error("Error getting cell {} value: ", cell, e);
-            return nullable?null:"";
-        }
-    }
+
 
     public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Process the batch of rows
@@ -161,19 +154,19 @@ public class ExcelImporter {
 //                        ampActivityVersion.addLocation(new AmpActivityLocation());
                                 break;
                             case "Primary Sector":
-                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, true);
+                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, true);
                                 break;
                             case "Secondary Sector":
-                                updateSectors(importDataModel, cell.getStringCellValue().trim(), session, false);
+                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, false);
                                 break;
                             case "Donor Agency":
-                                updateOrgs(importDataModel, cell.getStringCellValue().trim(), donorAgencyCode, session, "donor");
+                                updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, "donor");
                                 break;
                             case "Responsible Organization":
-                                responsibleOrgId = updateOrgs(importDataModel, cell.getStringCellValue().trim(), responsibleOrgCode, session, "responsibleOrg");
+                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, "responsibleOrg");
                                 break;
                             case "Beneficiary Agency":
-                                responsibleOrgId = updateOrgs(importDataModel, cell.getStringCellValue().trim(), responsibleOrgCode, session, "beneficiaryAgency");
+                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, "beneficiaryAgency");
                                 break;
                             case "Funding Item":
                                 setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, true, "Actual", fundingItem, existing);

@@ -70,18 +70,18 @@ public class ImporterUtil {
      public static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, String
              adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity) {
          int detailColumn = getColumnIndexByName(sheet, getKey(config, "Financing Instrument"));
-         String finInstrument= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+         String finInstrument= detailColumn>=0? getStringValueFromCell(row.getCell(detailColumn),false): "";
 
          detailColumn = getColumnIndexByName(sheet, getKey(config, "Exchange Rate"));
-         String exchangeRate= detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+         String exchangeRate= detailColumn>=0? getStringValueFromCell(row.getCell(detailColumn),false): "";
          Double exchangeRateValue = !exchangeRate.isEmpty()?parseDouble(exchangeRate): Double.valueOf(0.0);
 
          detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
-         String typeOfAss = detailColumn>=0? row.getCell(detailColumn).getStringCellValue(): "";
+         String typeOfAss = detailColumn>=0? getStringValueFromCell(row.getCell(detailColumn),false): "";
          int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
          String separateFundingDate = separateFundingDateColumn>=0? getDateFromExcel(row,separateFundingDateColumn): null;
          int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "Currency"));
-         String currencyCode=currencyCodeColumn>=0? row.getCell(currencyCodeColumn).getStringCellValue(): CurrencyUtil.getDefaultCurrency().getCurrencyCode();
+         String currencyCode=currencyCodeColumn>=0? getStringValueFromCell(row.getCell(currencyCodeColumn),true): CurrencyUtil.getDefaultCurrency().getCurrencyCode();
          if (existingActivity!=null)
          {
              String existingActivityCurrencyCode = getCurrencyCodeFromExistingImported(existingActivity.getName());
@@ -93,24 +93,24 @@ public class ImporterUtil {
          saveCurrencyCode(currencyCode,importDataModel.getProject_title());
             Funding funding;
          int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
-         String componentName= componentNameColumn>=0? row.getCell(componentNameColumn).getStringCellValue(): null;
+         String componentName= componentNameColumn>=0? getStringValueFromCell(row.getCell(componentNameColumn),true): null;
          if (importDataModel.getDonor_organization()==null || importDataModel.getDonor_organization().isEmpty())
         {
             if (!config.containsValue("Donor Agency"))
             {
-                funding=updateFunding(fundingItem,importDataModel, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+                funding=updateFunding(fundingItem,importDataModel, getNumericValueFromCell(cell), entry.getKey(),separateFundingDate, getRandomOrg(session),typeOfAss,finInstrument, commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
 
             }
             else {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "Donor Agency"));
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
-                String donorAgencyCode= donorAgencyCodeColumn>=0? row.getCell(donorAgencyCodeColumn).getStringCellValue(): null;
-                updateOrgs(importDataModel, columnIndex1>=0? row.getCell(columnIndex1).getStringCellValue().trim():"no org",donorAgencyCode, session, "donor");
-                funding=updateFunding(fundingItem,importDataModel, cell.getNumericCellValue(), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+                String donorAgencyCode= donorAgencyCodeColumn>=0? getStringValueFromCell(row.getCell(donorAgencyCodeColumn),true): null;
+                updateOrgs(importDataModel, columnIndex1>=0? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim():"no org",donorAgencyCode, session, "donor");
+                funding=updateFunding(fundingItem,importDataModel, getNumericValueFromCell(cell), entry.getKey(),separateFundingDate,  new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
             }
 
         }else {
-            funding=updateFunding(fundingItem,importDataModel, cell.getNumericCellValue(), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
+            funding=updateFunding(fundingItem,importDataModel, getNumericValueFromCell(cell), entry.getKey(),separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(),typeOfAss,finInstrument,commitment,disbursement, adjustmentType, currencyCode,componentName,exchangeRateValue);
         }
          return funding;
     }
@@ -172,20 +172,45 @@ public class ImporterUtil {
         return funding;
     }
 
+    public static String getStringValueFromCell(Cell cell, boolean nullable)
+    {
+        try {
+            return cell.getStringCellValue();
+        }catch (Exception e) {
+            logger.error("Error getting cell {} value: ", cell, e);
+            return nullable?null:"";
+        }
+    }
+
+    public static Number getNumericValueFromCell(Cell cell)
+    {
+        try {
+            return cell.getNumericCellValue();
+        }catch (Exception e) {
+            logger.error("Error getting cell {} value: ", cell, e);
+            return 0;
+        }
+    }
+
 
     private static String getDateFromExcel(Row row, int columnIndex)
     {
         Cell cell = row.getCell(columnIndex); // Assuming the date is in the first column
-
-        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)) {
-            Date date = cell.getDateCellValue();
-            String formattedDate = formatDateFromDateObject(date);
-            System.out.println(formattedDate);
-            return formattedDate;
-        } else {
-            System.out.println("The cell does not contain a valid date.");
+        try {
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+                Date date = cell.getDateCellValue();
+                String formattedDate = formatDateFromDateObject(date);
+                System.out.println(formattedDate);
+                return formattedDate;
+            } else {
+                System.out.println("The cell does not contain a valid date.");
+                return null;
+            }
+        }catch(Exception e)
+        {
             return null;
         }
+
     }
 
     private static void saveCurrencyCode(String currencyCode, String projectName) {

@@ -230,6 +230,7 @@ public class DataImporter extends Action {
 
                     int res = 0;
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
+                    logger.info("Saved file record: {}",importedFilesRecord);
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
 
                         // Process the file in batches

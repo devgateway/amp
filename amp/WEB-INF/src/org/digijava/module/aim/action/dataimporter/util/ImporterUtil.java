@@ -574,6 +574,8 @@ public class ImporterUtil {
             ActivityGroup activityGroup= new ActivityGroup();
             activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
             importDataModel.setActivity_group(activityGroup);
+            importDataModel.setProject_title(existing.getName());
+            importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ?importDataModel.getProject_code():existing.getProjectCode());
             updateFundingAndOrgsWithAlreadyExisting(existing,importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});

@@ -10,14 +10,6 @@ public class ImportDataModel {
     private String amp_id;
     private String project_title;
 
-    public String getProject_code() {
-        return project_code;
-    }
-
-    public void setProject_code(String project_code) {
-        this.project_code = project_code;
-    }
-
     private String project_code;
     private String description;
     private String objective;
@@ -94,7 +86,13 @@ public class ImportDataModel {
     public void setProject_title(String project_title) {
         this.project_title = project_title;
     }
+    public String getProject_code() {
+        return project_code;
+    }
 
+    public void setProject_code(String project_code) {
+        this.project_code = project_code;
+    }
     public String getDescription() {
         return description;
     }
@@ -508,6 +506,7 @@ public class ImportDataModel {
                 "internal_id=" + internal_id +
                 ", amp_id='" + amp_id + '\'' +
                 ", project_title='" + project_title + '\'' +
+                ", project_code='" + project_code + '\'' +
                 ", description='" + description + '\'' +
                 ", objective='" + objective + '\'' +
                 ", document_space=" + document_space +

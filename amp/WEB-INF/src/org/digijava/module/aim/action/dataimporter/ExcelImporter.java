@@ -147,7 +147,6 @@ public class ExcelImporter {
                 importDataModel.setDescription(projectDesc);
 
                 AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
-
                 Long responsibleOrgId = null;
                 Funding fundingItem = new Funding();
 

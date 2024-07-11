@@ -624,7 +624,6 @@ public class ImporterUtil {
 
                 session.flush();
 
-
             }
         }
 

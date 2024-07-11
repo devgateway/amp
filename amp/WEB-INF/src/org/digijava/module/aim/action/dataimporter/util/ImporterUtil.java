@@ -616,11 +616,6 @@ public class ImporterUtil {
                 if (componentName!=null && !componentName.isEmpty()) {
                     addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
                 }
-                if (!session.isOpen()) {
-                    session=PersistenceManager.getRequestDBSession();
-                }
-
-                session.flush();
 
             }
         }
@@ -631,6 +626,8 @@ public class ImporterUtil {
             session=PersistenceManager.getRequestDBSession();
         }
         session.saveOrUpdate(importedProject);
+        session.flush();
+
         logger.info("Imported project: "+importedProject);
     }
 

@@ -515,7 +515,6 @@ public class ImporterUtil {
             Long val = ConstantsMap.get(fullKey);
             logger.info("In cache... "+fullKey+":"+val);
             return val;
-
         }
         Session session = getSession();
         Query query = session.createQuery(hql);

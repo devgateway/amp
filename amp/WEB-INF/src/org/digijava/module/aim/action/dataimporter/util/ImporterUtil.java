@@ -563,7 +563,6 @@ public class ImporterUtil {
     {
         Long statusId = getCategoryValue("statusId",CategoryConstants.ACTIVITY_STATUS_KEY, "");
         importDataModel.setActivity_status(statusId);
-
     }
     public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
         if (!session.isOpen()) {

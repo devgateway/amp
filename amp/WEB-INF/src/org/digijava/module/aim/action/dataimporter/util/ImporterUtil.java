@@ -606,7 +606,6 @@ public class ImporterUtil {
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {});
             response= ActivityInterchangeUtils.importActivity(map, true, rules,  "activity/update");
-
         }
         if (response!=null) {
             if (!response.getErrors().isEmpty()) {

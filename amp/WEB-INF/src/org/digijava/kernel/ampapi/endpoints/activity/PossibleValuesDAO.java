@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.*;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public interface PossibleValuesDAO {
 
     boolean isIndicatorRiskRatingValid(Long id);
 
-    List<AmpIndicator> getIndicators();
+    List<AmpIndicator> getIndicators() throws DgException;
 
     boolean isIndicatorValid(Long id);
 

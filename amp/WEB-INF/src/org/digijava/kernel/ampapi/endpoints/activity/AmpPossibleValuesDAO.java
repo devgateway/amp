@@ -1,24 +1,38 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.apache.log4j.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class AmpPossibleValuesDAO implements PossibleValuesDAO {
+    private static Logger logger = Logger.getLogger(AmpPossibleValuesDAO.class);
 
     public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
 
@@ -35,17 +49,17 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<Object[]> getCategoryValues(String discriminatorOption) {
         String select = "SELECT acv.id, acv.value, acv.deleted, acv.index ";
         String from = "from " + AmpCategoryValue.class.getName() + " acv ";
-        String where;
+        StringBuilder where;
         List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         if (prefixes == null) {
             prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
         }
         if (prefixes != null && prefixes.size() > 0) {
-            where = " WHERE acv.ampCategoryClass.keyName IN (";
+            where = new StringBuilder(" WHERE acv.ampCategoryClass.keyName IN (");
             for (String prefix : prefixes) {
-                where += "'" + prefix + discriminatorOption + "', ";
+                where.append("'").append(prefix).append(discriminatorOption).append("', ");
             }
-            where += "'" + discriminatorOption + "') ORDER BY acv.id";
+            where.append("'").append(discriminatorOption).append("') ORDER BY acv.id");
             select += ", acv.ampCategoryClass.keyName ";
             List<Object[]> result = query(select + from + where);
             result.forEach(row -> {
@@ -54,7 +68,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             });
             return result;
         } else {
-            where = " WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id";
+            where = new StringBuilder(" WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id");
             select += ", '' ";
             return query(select + from + where);
         }
@@ -226,12 +240,78 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     }
 
     @Override
-    public List<AmpIndicator> getIndicators() {
-        return InterchangeUtils.getSessionWithPendingChanges()
+    public List<AmpIndicator> getIndicators() throws DgException {
+        boolean filterIndicatorsByProgram= FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FILTER_INDICATORS_BY_PROGRAM);
+
+        List<AmpIndicator> indicators= InterchangeUtils.getSessionWithPendingChanges()
                 .createCriteria(AmpIndicator.class)
                 .setCacheable(true)
                 .setCacheRegion(CACHE)
                 .list();
+        List<AmpIndicator> filteredIndicators = new ArrayList<>();
+        logger.info("Filter indicators by program: "+filterIndicatorsByProgram);
+        if (filterIndicatorsByProgram)
+        {
+            String globalProgramScheme = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GLOBAL_PROGRAM_SCHEME);
+            logger.info("Global program scheme: "+globalProgramScheme);
+            if (globalProgramScheme!=null) {
+                Long programSettingId = Long.parseLong(globalProgramScheme);
+                Session session = PersistenceManager.getRequestDBSession();
+                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.siblings JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
+
+                Query query = session.createQuery(hql);
+                query.setParameter("settingId", programSettingId, LongType.INSTANCE);
+                Set<AmpTheme> globalSchemePrograms = new HashSet<>(query.list());
+                globalSchemePrograms.forEach(ampTheme -> processThemeWithChildren(ampTheme, globalSchemePrograms));
+                Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+//               globalSchemePrograms.forEach(scheme->{
+//                   Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+//                   logger.info("Children: "+children);
+//                   globalSchemeProgramIds.addAll(children);
+//               });
+                logger.info("Global scheme programs: "+globalSchemeProgramIds);
+                for (AmpIndicator indicator : indicators) {
+                    List<BigInteger> indicatorPrograms= getProgramIds(indicator.getIndicatorId());
+                    logger.info("Indicator programs: "+indicatorPrograms);
+
+                    for (BigInteger progId : indicatorPrograms) {
+                        if (progId!=null) {
+                            boolean containsProgram = globalSchemeProgramIds.contains(progId.longValue());
+                            if (containsProgram) {
+                                filteredIndicators.add(indicator);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        indicators=!filterIndicatorsByProgram?indicators:filteredIndicators;
+
+
+        return indicators;
+    }
+
+    public static void processThemeWithChildren(AmpTheme theme, Set<AmpTheme> allThemes) {
+        // Process child themes (siblings) recursively
+        allThemes.add(theme);
+        for (AmpTheme childTheme : theme.getSiblings()) {
+            logger.info("Processing child theme: "+childTheme.getName());
+            processThemeWithChildren(childTheme, allThemes);
+        }
+    }
+
+
+    public static List<BigInteger> getProgramIds(Long indicatorId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
+                "WHERE indicator_id = :indicatorId AND sub_clazz='p'";
+        List<BigInteger> themeIds = session.createNativeQuery(sql)
+                .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
+                .getResultList();
+        return themeIds;
+
     }
 
     @Override

@@ -28,6 +28,7 @@ import org.digijava.kernel.ampapi.exception.ImportFailedException;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.DBPersistenceTransactionManager;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.PersistenceTransactionManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
@@ -40,6 +41,7 @@ import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.validator.ActivityValidationContext;
@@ -48,7 +50,10 @@ import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.hibernate.Session;
 import org.hibernate.StaleStateException;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
@@ -56,6 +61,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
@@ -270,6 +276,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
             validateAndImport(newActivity, newJson);
 
+
             if (errors.isEmpty()) {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
@@ -277,7 +284,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 List<AmpContentTranslation> cumulativeTranslations = new ArrayList<>();
                 newActivity = activityService.saveActivity(newActivity, getTranslations(), cumulativeTranslations,
                         modifiedBy, draftChange, saveContext, getEditorStore(), getSite());
-
+                checkIndicators(newActivity);
                 activityService.updateLuceneIndex(newActivity, oldActivity, update, trnSettings, cumulativeTranslations,
                         getSite());
             }
@@ -291,6 +298,71 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             throw new ImportFailedException("Trigger rollback");
         }
     }
+
+    private void checkIndicators(AmpActivityVersion ampActivityVersion)
+    {
+        logger.info("Checking indicators");
+        boolean filterIndicatorsByProgram= FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FILTER_INDICATORS_BY_PROGRAM);
+        if (filterIndicatorsByProgram)
+        {
+
+            String globalProgramScheme = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GLOBAL_PROGRAM_SCHEME);
+            if (globalProgramScheme!=null) {
+
+                Long programSettingId = Long.parseLong(globalProgramScheme);
+                Session session = PersistenceManager.getRequestDBSession();
+//
+
+                String hql = "FROM " + AmpTheme.class.getName() + " t JOIN FETCH t.siblings JOIN FETCH t.programSettings ps WHERE ps.ampProgramSettingsId= :settingId";
+
+                Query query = session.createQuery(hql);
+                query.setParameter("settingId", programSettingId, LongType.INSTANCE);
+                Set<AmpTheme> globalSchemePrograms = new HashSet<>(query.list());
+                globalSchemePrograms.forEach(ampTheme -> AmpPossibleValuesDAO.processThemeWithChildren(ampTheme,globalSchemePrograms));
+                Set<Long> globalSchemeProgramIds = globalSchemePrograms.stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+//                globalSchemePrograms.forEach(scheme->{
+//                    Set<Long> children = scheme.getSiblings().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toSet());
+//                    logger.info("Children: "+children);
+//                    globalSchemeProgramIds.addAll(children);
+//                });
+                logger.info("Global scheme Programs: "+globalSchemeProgramIds);
+
+                String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
+                        "WHERE activity_id = :activityId ";
+                List<Long> activityPrograms = session.createNativeQuery(sql)
+                        .setParameter("activityId", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE)
+                        .getResultList();
+                logger.info("Activity programs "+activityPrograms);
+                List<Long> progsNotFound = new ArrayList<>();
+                 for (Long progId : activityPrograms) {
+                        boolean containsProgram = globalSchemeProgramIds.contains(progId);
+                        if (!containsProgram) {
+                            progsNotFound.add(progId);
+                        }
+                    }
+
+
+                if (!progsNotFound.isEmpty()) {
+                    addError(ValidationErrors.INDICATORS_NOT_BELONG_TO_PROGRAM_SCHEME.withDetails(ampActivityVersion.getAmpActivityId()+""));
+                }
+
+            }
+
+
+        }
+    }
+
+    private List<Long> getProgramIds(Long indicatorId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        String sql = "SELECT theme_id FROM AMP_INDICATOR_CONNECTION " +
+                "WHERE indicator_id = :indicatorId AND sub_clazz = 'a'";
+        List<Long> themeIds = session.createNativeQuery(sql)
+                .setParameter("indicatorId", indicatorId, LongType.INSTANCE)
+                .getResultList();
+        return themeIds;
+
+    }
+
 
     /**
      * Before proceeding with import, check if user provided correct amp id and activity id fields.

@@ -133,7 +133,7 @@ public class AmpActivityProgramSettingsAction
 
     private ActionMessages validate(List<AmpActivityProgramSettingsDTO> settingsList) {
         ActionMessages errors = new ActionMessages();
-        settingsList.stream().forEach((setting) -> {
+        settingsList.forEach((setting) -> {
             AmpActivityProgramSettings oldSetting = null;
             try {
                 oldSetting = ProgramUtil.getAmpActivityProgramSettings(setting.getAmpProgramSettingsId());

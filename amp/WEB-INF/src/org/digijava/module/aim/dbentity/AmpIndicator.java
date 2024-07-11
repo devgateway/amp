@@ -14,7 +14,7 @@ import java.util.Set;
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable, Identifiable
 {
-    
+
     //IATI-check: to be ignored
     private static final long serialVersionUID = 1L;
 //  @Interchangeable(fieldTitle="Indicator ID")
@@ -51,7 +51,7 @@ public class AmpIndicator implements Serializable, Identifiable
      * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorActivity} is subclass of {@link IndicatorConnection}
      * @see IndicatorConnection
      */
-    
+
     private Set<IndicatorActivity> valuesActivity;
 
     /**
@@ -60,7 +60,7 @@ public class AmpIndicator implements Serializable, Identifiable
      * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorTheme} is subclass of {@link IndicatorConnection}
      * @see IndicatorConnection
      */
-    
+
     private Set<IndicatorTheme> valuesTheme;
 
     private Set<AmpIndicatorGlobalValue> indicatorValues;
@@ -202,5 +202,28 @@ public class AmpIndicator implements Serializable, Identifiable
                 .filter(AmpIndicatorGlobalValue::isTargetValue)
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "AmpIndicator{" +
+                "indicatorId=" + indicatorId +
+                ", defaultInd=" + defaultInd +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", type='" + type + '\'' +
+                ", creationDate=" + creationDate +
+                ", category=" + category +
+                ", description='" + description + '\'' +
+                ", sectors=" + sectors +
+                ", program=" + program +
+                ", comments='" + comments + '\'' +
+                ", unit='" + unit + '\'' +
+                ", valuesActivity=" + valuesActivity +
+                ", valuesTheme=" + valuesTheme +
+                ", indicatorValues=" + indicatorValues +
+                ", indicatorsCategory=" + indicatorsCategory +
+                ", risk=" + risk +
+                '}';
     }
 }

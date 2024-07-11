@@ -125,7 +125,7 @@ public class InterchangeUtils {
      */
     public static Session getSessionWithPendingChanges() {
         Session session = PersistenceManager.getSession();
-        session.setFlushMode(FlushMode.COMMIT);
+        session.setHibernateFlushMode(FlushMode.COMMIT);
         return session;
     }
 

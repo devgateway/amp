@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * 
+ *
  * @author Sebas New add/edit theme action
  */
 public class AddTheme extends Action {
@@ -65,7 +65,7 @@ public class AddTheme extends Action {
 
     /**
      * Prepare a blank form to enter a new program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -90,7 +90,7 @@ public class AddTheme extends Action {
 
     /**
      * Save the new program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -111,7 +111,7 @@ public class AddTheme extends Action {
 
     /**
      * Prepare the form to edit a program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -141,11 +141,11 @@ public class AddTheme extends Action {
      */
     public boolean checkExisting(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         ThemeForm themeForm = (ThemeForm) form;
-        
+
         boolean existing = false;
         AmpTheme theme = ProgramUtil.getTheme(themeForm.getProgramName());
         if (theme != null) {
-            
+
             if (themeForm.getThemeId() != null
                     && !themeForm.getThemeId().equals(theme.getAmpThemeId())
                     && theme.getName().equals(themeForm.getProgramName())
@@ -186,11 +186,11 @@ public class AddTheme extends Action {
 
         return existing;
     }
-    
-    
+
+
     /**
      * Save the current edited program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -212,7 +212,7 @@ public class AddTheme extends Action {
 
     /**
      * Prepare a blank form to enter a new sub program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -226,10 +226,10 @@ public class AddTheme extends Action {
         int indlevel = Integer.parseInt(request.getParameter("indlevel"));
 
         themeForm.setParentId(id);
-        
+
         AmpTheme parent= ProgramUtil.getThemeById(themeForm.getParentId());
         themeForm.setParentProgram(parent.getName());
-        
+
         themeForm.setPrgLevel(indlevel);
         themeForm.setProgramName(null);
         themeForm.setProgramCode(null);
@@ -246,7 +246,7 @@ public class AddTheme extends Action {
 
     /**
      * Save the new sub program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -268,7 +268,7 @@ public class AddTheme extends Action {
 
     /**
      * Prepare the form to edit a sub program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -290,7 +290,7 @@ public class AddTheme extends Action {
 
     /**
      * Save the current edited sub program
-     * 
+     *
      * @param mapping
      * @param form
      * @param request
@@ -304,7 +304,7 @@ public class AddTheme extends Action {
 
     /**
      * Fill theme using form values
-     * 
+     *
      * @param ampTheme
      * @param themeForm
      */
@@ -324,11 +324,11 @@ public class AddTheme extends Action {
         ampTheme.setEnvironmentConsiderations(themeForm.getProgramEnvironmentConsiderations());
         ampTheme.setShowInRMFilters(themeForm.getShowInRMFilters());
 
-        if (themeForm.getParentId() != null && themeForm.getParentId().longValue()!=0 ) {
+        if (themeForm.getParentId() != null && themeForm.getParentId() !=0 ) {
             ampTheme.setParentThemeId(ProgramUtil.getThemeById(themeForm.getParentId()));
             int indlevel = themeForm.getPrgLevel();
             int level = indlevel + 1;
-            ampTheme.setIndlevel(new Integer(level));
+            ampTheme.setIndlevel(level);
         } else {
             ampTheme.setParentThemeId(null);
             ampTheme.setIndlevel(0);
@@ -349,7 +349,7 @@ public class AddTheme extends Action {
 
     /**
      * fill form using theme values
-     * 
+     *
      * @param themeForm
      * @param ampTheme
      */

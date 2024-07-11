@@ -14,7 +14,6 @@
                 insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section)
                 values (nextval('amp_global_settings_seq'), 'Filter indicators by program','true','t_Boolean','Filter indicators by program', 'Programs');
 
-
                 CREATE OR REPLACE VIEW v_g_settings_indicator_programs AS
                 SELECT amp_program_settings_id AS id, name AS value FROM amp_program_settings;
 

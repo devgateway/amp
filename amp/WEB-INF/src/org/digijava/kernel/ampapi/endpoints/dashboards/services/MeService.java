@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -20,13 +19,13 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dto.BaseTargetValue;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.ProgramIndicatorValues;
 import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
@@ -37,16 +36,13 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
@@ -66,15 +62,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.time.Year;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static org.digijava.module.aim.util.IndicatorUtil.findIndicatorConnectionByLocationCategoryValue;
 
 
 public class MeService {
@@ -143,12 +136,14 @@ public class MeService {
         }
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
-        return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+        Map<Long, BaseTargetValue> baseTargetValues = getBaseTargetValues(params);
+
+        return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount, baseTargetValues);
     }
 
     public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
-        List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<ProgramIndicatorValues>();
-
+        List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<>();
+        Map<Long, BaseTargetValue> baseTargetValues = getBaseTargetValues(params);
         int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
 
         if (yearsCount < 5) {
@@ -189,7 +184,7 @@ public class MeService {
                     AmpIndicator existingIndicator = getIndicatorById(indicatorId);
                     // Check to see it the value is added to the same subProgram
                     if (existingIndicator.getProgram().getAmpThemeId().equals(subProgram.getAmpThemeId())) {
-                        IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
+                        IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount, baseTargetValues);
                         // Include indicators name
                         singelIndicatorYearValues.setIndicatorName(existingIndicator.getName());
                         indicatorValues.add(singelIndicatorYearValues);
@@ -197,7 +192,7 @@ public class MeService {
                 }
 
                 // As an update we need to return indicators with also no values and give them values of 0
-                addIndicatorsWithNoValues(params, subProgram.getAmpThemeId(), indicatorValues, yearsCount);
+                addIndicatorsWithNoValues(params, subProgram.getAmpThemeId(), indicatorValues, yearsCount, baseTargetValues);
 
                 subProgramValue.setIndicators(indicatorValues);
                 programIndicatorValues.add(subProgramValue);
@@ -207,8 +202,10 @@ public class MeService {
         return programIndicatorValues;
     }
 
-    private void addIndicatorsWithNoValues(SettingsAndFiltersParameters params, Long programId, List<IndicatorYearValues> indicatorValues, int yearsCount) {
-        //get all indicator for theme
+    private void addIndicatorsWithNoValues(SettingsAndFiltersParameters params, Long programId,
+                                           List<IndicatorYearValues> indicatorValues, int yearsCount,
+                                           Map<Long, BaseTargetValue> baseTargetValues) {
+
         List<IndicatorActivity> result = null;
         Session session = PersistenceManager.getRequestDBSession();
         String oql = "from " + AmpIndicator.class.getName() + " i ";
@@ -218,7 +215,7 @@ public class MeService {
         List<AmpIndicator> indicators = query.list();
         Map<Long, List<YearValue>> indicatorsWithYearValuesDummy = new HashMap<>();
         indicators.stream().filter(i -> !indicatorValues.stream().anyMatch(indicator -> indicator.getIndicator().equals(i))).collect(Collectors.toList()).forEach(indicator -> {
-            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(indicator, indicatorsWithYearValuesDummy, yearsCount);
+            IndicatorYearValues singelIndicatorYearValues = getIndicatorYearValues(indicator, indicatorsWithYearValuesDummy, yearsCount, baseTargetValues);
             // Include indicators name
             singelIndicatorYearValues.setIndicatorName(indicator.getName());
             indicatorValues.add(singelIndicatorYearValues);
@@ -263,18 +260,19 @@ public class MeService {
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
-                                                       final Map<Long, List<YearValue>> indicatorsWithYearValues, final int yearsCount) {
+                                                       final Map<Long, List<YearValue>> indicatorsWithYearValues,
+                                                       final int yearsCount, Map<Long, BaseTargetValue> baseTargetValues) {
         BigDecimal baseValue = BigDecimal.ZERO;
         BigDecimal targetValue = BigDecimal.ZERO;
-
-        if (indicator.getBaseValue() != null && indicator.getBaseValue().getValue() != null) {
-            baseValue = BigDecimal.valueOf(indicator.getBaseValue().getValue());
+        BaseTargetValue baseTargetValue = baseTargetValues.get(indicator.getIndicatorId());
+        if (baseTargetValue != null) {
+            if (baseTargetValue.getBase() != null) {
+                baseValue = baseTargetValue.getBase();
+            }
+            if (baseTargetValue.getTarget() != null) {
+                targetValue = baseTargetValue.getTarget();
+            }
         }
-
-        if (indicator.getTargetValue() != null && indicator.getTargetValue().getValue() != null) {
-            targetValue = BigDecimal.valueOf(indicator.getTargetValue().getValue());
-        }
-
         List<YearValue> yearValues = indicatorsWithYearValues.get(indicator.getIndicatorId());
 
         if (yearValues == null) {
@@ -442,6 +440,66 @@ public class MeService {
         modifiedParams.setFilters(filters);
 
         return modifiedParams;
+    }
+
+    public Map<Long, BaseTargetValue> getBaseTargetValues(SettingsAndFiltersParameters params) {
+        List<Long> countriesId = (List<Long>) params.getFilters().get("administrative-level-0");
+        List<Long> pillarsId = (List<Long>) params.getFilters().get("national-planning-objectives-level-1");
+        List<Long> donorsId = (List<Long>) params.getFilters().get("donor-agency");
+        StringBuilder query = new StringBuilder();
+        query.append(" select i.indicator_id, iv.value_type, sum(iv.value) ");
+        query.append(" FROM amp_indicator_connection ic ");
+        query.append(" JOIN amp_activity_location al ON ic.activity_location = al.amp_activity_location_id ");
+        query.append(" JOIN amp_indicator_values iv ON ic.id = iv.ind_connect_id ");
+        query.append(" join amp_indicator i on i.indicator_id = ic.indicator_id ");
+        query.append(" join amp_org_role o on o.activity = ic.activity_id ");
+        query.append(" where ic.sub_clazz = 'a' ");
+        query.append(" and iv.value_type in (0, 2) ");
+        if (pillarsId != null && !pillarsId.isEmpty()) {
+            query.append(" and (i.program_id = ");
+            query.append(org.dgfoundation.amp.Util.toCSString(pillarsId));
+            query.append(" or i.program_id in ");
+            query.append(" (select amp_theme_id from amp_theme where parent_theme_id = ");
+            query.append(org.dgfoundation.amp.Util.toCSString(pillarsId));
+            query.append(")) ");
+        }
+
+        if (countriesId != null && !countriesId.isEmpty()) {
+            query.append(" AND al.location_id in (");
+            query.append(org.dgfoundation.amp.Util.toCSString(countriesId));
+            query.append(")");
+        }
+        query.append(" and o.role = 1 ");
+        if (donorsId != null && !donorsId.isEmpty()) {
+            query.append(" and o.organisation in(");
+            query.append(org.dgfoundation.amp.Util.toCSString(donorsId));
+
+            query.append(" ) ");
+        }
+        query.append(" group by i.indicator_id, iv.value_type;");
+        Map<Long, BaseTargetValue> indicatorBaseTargetValues = new HashMap<>();
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection connection) throws SQLException {
+                RsInfo rsi = SQLUtils.rawRunQuery(connection, query.toString(), null);
+                ResultSet rs = rsi.rs;
+                while (rs.next()) {
+                    Long indicatorId = rs.getLong("indicator_id");
+                    int valueType = rs.getInt("value_type");
+                    BigDecimal value = rs.getBigDecimal("sum");
+                    BaseTargetValue baseTargetValue = indicatorBaseTargetValues.get(indicatorId);
+                    if (baseTargetValue == null) {
+                        baseTargetValue = new BaseTargetValue();
+                        indicatorBaseTargetValues.put(indicatorId, baseTargetValue);
+                    }
+                    if (valueType == 0) {
+                        baseTargetValue.setBase(value);
+                    } else {
+                        baseTargetValue.setTarget(value);
+                    }
+                }
+            }
+        });
+        return indicatorBaseTargetValues;
     }
 
     public Map<Long, List<YearValue>> getAllIndicatorYearValuesWithActualValues2(SettingsAndFiltersParameters params) {

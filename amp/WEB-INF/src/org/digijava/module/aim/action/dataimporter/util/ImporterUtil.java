@@ -197,7 +197,8 @@ public class ImporterUtil {
     {
         Cell cell = row.getCell(columnIndex); // Assuming the date is in the first column
         try {
-            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+            cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+            if (DateUtil.isCellDateFormatted(cell)) {
                 Date date = cell.getDateCellValue();
                 String formattedDate = formatDateFromDateObject(date);
                 logger.info(formattedDate);
@@ -665,7 +666,7 @@ public class ImporterUtil {
             }
         }
         if (ampActivityVersion.getOrgrole()!=null && !ampActivityVersion.getOrgrole().isEmpty()) {
-            Double perc =(double) 100/ampActivityVersion.getOrgrole().size();
+            double perc =(double) 100/ampActivityVersion.getOrgrole().size();
             for (AmpOrgRole ampOrgRole:ampActivityVersion.getOrgrole())
             {
                 if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {

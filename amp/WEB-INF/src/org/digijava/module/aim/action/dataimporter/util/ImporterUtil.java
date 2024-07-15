@@ -197,17 +197,18 @@ public class ImporterUtil {
         try {
             cell.setCellType(Cell.CELL_TYPE_NUMERIC);
             logger.info("Date TYpe: "+cell.getCellType());
-            if (DateUtil.isCellDateFormatted(cell)) {
+//            if (DateUtil.isCellDateFormatted(cell)) {
                 Date date = cell.getDateCellValue();
                 String formattedDate = formatDateFromDateObject(date);
                 logger.info(formattedDate);
                 return formattedDate;
-            } else {
-                logger.info("The cell does not contain a valid date.");
-                return null;
-            }
+//            } else {
+//                logger.info("The cell does not contain a valid date.");
+//                return null;
+//            }
         }catch(Exception e)
         {
+            logger.error("Error parsing date column",e);
             return null;
         }
 

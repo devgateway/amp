@@ -79,9 +79,7 @@ public class ImporterUtil {
          detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
          String typeOfAss = detailColumn>=0? getStringValueFromCell(row.getCell(detailColumn),false): "";
          int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
-         logger.info("Separate funding date index: {}",separateFundingDateColumn);
          String separateFundingDate = separateFundingDateColumn>=0? getDateFromExcel(row,separateFundingDateColumn): null;
-         logger.info("Separate funding date value: {}",separateFundingDate);
 
          int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "Currency"));
          String currencyCode=currencyCodeColumn>=0? getStringValueFromCell(row.getCell(currencyCodeColumn),true): CurrencyUtil.getDefaultCurrency().getCurrencyCode();
@@ -405,7 +403,7 @@ public class ImporterUtil {
 
 
 
-     private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String columnHeader, String separateFundingDate, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
+     private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String columnHeaderContainingYear, String separateFundingDate, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, String
              adjustmentType, String currencyCode, String componentName, Double exchangeRate) {
          // TODO: 27/06/2024 pick Month from file and use it in funding
          Session session = getSession();
@@ -419,7 +417,6 @@ public class ImporterUtil {
 
         String yearString;
         String fundingDate;
-        logger.info("Separate Funding date: {}",separateFundingDate);
         if (separateFundingDate!=null)
         {
             if (isCommonDateFormat(separateFundingDate)){
@@ -431,7 +428,7 @@ public class ImporterUtil {
             }
         }
         else {
-            yearString=findYearSubstring(columnHeader);
+            yearString=findYearSubstring(columnHeaderContainingYear);
             fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
 
         }

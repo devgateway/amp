@@ -416,6 +416,7 @@ public class ImporterUtil {
 
         String yearString;
         String fundingDate;
+        logger.info("Separate Funding date: {}",separateFundingDate);
         if (separateFundingDate!=null)
         {
             if (isCommonDateFormat(separateFundingDate)){

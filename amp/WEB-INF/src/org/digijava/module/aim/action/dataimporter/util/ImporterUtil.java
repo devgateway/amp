@@ -197,6 +197,7 @@ public class ImporterUtil {
         Cell cell = row.getCell(columnIndex); // Assuming the date is in the first column
         try {
             cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+            logger.info("Date TYpe: "+cell.getCellType());
             if (DateUtil.isCellDateFormatted(cell)) {
                 Date date = cell.getDateCellValue();
                 String formattedDate = formatDateFromDateObject(date);

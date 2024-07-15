@@ -492,9 +492,9 @@ public class MeService {
                         indicatorBaseTargetValues.put(indicatorId, baseTargetValue);
                     }
                     if (valueType == 0) {
-                        baseTargetValue.setBase(value);
-                    } else {
                         baseTargetValue.setTarget(value);
+                    } else {
+                        baseTargetValue.setBase(value);
                     }
                 }
             }

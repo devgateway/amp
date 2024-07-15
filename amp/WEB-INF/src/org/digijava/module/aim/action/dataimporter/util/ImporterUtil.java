@@ -79,7 +79,10 @@ public class ImporterUtil {
          detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
          String typeOfAss = detailColumn>=0? getStringValueFromCell(row.getCell(detailColumn),false): "";
          int separateFundingDateColumn=getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
+         logger.info("Separate funding date index: {}",separateFundingDateColumn);
          String separateFundingDate = separateFundingDateColumn>=0? getDateFromExcel(row,separateFundingDateColumn): null;
+         logger.info("Separate funding date value: {}",separateFundingDate);
+
          int currencyCodeColumn=getColumnIndexByName(sheet, getKey(config, "Currency"));
          String currencyCode=currencyCodeColumn>=0? getStringValueFromCell(row.getCell(currencyCodeColumn),true): CurrencyUtil.getDefaultCurrency().getCurrencyCode();
          if (existingActivity!=null)

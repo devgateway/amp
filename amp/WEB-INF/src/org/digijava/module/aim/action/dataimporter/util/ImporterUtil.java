@@ -833,23 +833,17 @@ public class ImporterUtil {
         try (PreparedStatement statement = PersistenceManager.getJdbcConnection().prepareStatement(sql)) {
             if (ampComponentFunding.getReportingOrganization() != null) {
                 statement.setLong(1, ampComponentFunding.getReportingOrganization().getAmpOrgId());
-                logger.info("Reporting Organization ID: " + ampComponentFunding.getReportingOrganization().getAmpOrgId());
             } else {
                 statement.setNull(1, Types.BIGINT);
-                logger.info("Reporting Organization ID: null");
             }
 
             statement.setLong(2, ampComponentFunding.getAdjustmentType().getId());
-            logger.info("Adjustment Type ID: " + ampComponentFunding.getAdjustmentType().getId());
 
             statement.setDouble(3, ampComponentFunding.getTransactionAmount());
-            logger.info("Transaction Amount: " + ampComponentFunding.getTransactionAmount());
 
             statement.setTimestamp(4, new java.sql.Timestamp(ampComponentFunding.getTransactionDate().getTime()));
-            logger.info("Transaction Date: " + new java.sql.Timestamp(ampComponentFunding.getTransactionDate().getTime()));
 
             statement.setLong(5, ampComponent.getAmpComponentId());
-            logger.info("AMP Component ID: " + ampComponent.getAmpComponentId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -860,7 +854,6 @@ public class ImporterUtil {
             }
         } catch (SQLException e) {
             logger.error("Error executing native query", e);
-            e.printStackTrace();
         }
 
         return false;

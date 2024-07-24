@@ -706,7 +706,6 @@ public class ImporterUtil {
         query.setParameter("activityId", activityId);
         query.setMaxResults(1);
         List<AmpActivityVersion> activityVersions = query.list();
-
         if (activityVersions != null && !activityVersions.isEmpty()) {
         Set<AmpFunding> ampFundings = activityVersions.get(0).getFunding();
         for (AmpFunding ampFunding : ampFundings) {

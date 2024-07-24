@@ -618,6 +618,8 @@ public class ImporterUtil {
                 if (componentName!=null && !componentName.isEmpty()) {
                     addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
                 }
+                logger.info("Updating expenditures ................");
+                updateExpendituresIfAny(response);
 
             }
         }
@@ -692,6 +694,33 @@ public class ImporterUtil {
             }
         }
     }
+    static void updateExpendituresIfAny(JsonApiResponse<ActivitySummary> response)
+    {
+        Long activityId = (Long) response.getContent().getAmpActivityId();
+        Session session = PersistenceManager.getRequestDBSession();
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        String hql = "FROM " + AmpActivityVersion.class.getName() + " a WHERE a.ampActivityId= :activityId";
+        Query query = session.createQuery(hql);
+        query.setParameter("activityId", activityId);
+        query.setMaxResults(1);
+        List<AmpActivityVersion> activityVersions = query.list();
+
+        if (activityVersions != null && !activityVersions.isEmpty()) {
+        Set<AmpFunding> ampFundings = activityVersions.get(0).getFunding();
+        for (AmpFunding ampFunding : ampFundings) {
+            for (AmpFundingDetail ampFundingDetail: ampFunding.getFundingDetails())
+            {
+                if (ampFundingDetail.getTransactionAmount()<0)
+                {
+                    ampFundingDetail.setTransactionType(2);
+                }
+            }
+            session.saveOrUpdate(ampFunding);
+        }
+        }
+    }
 
 
     static void addComponentsAndProjectCode(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) {
@@ -707,7 +736,7 @@ public class ImporterUtil {
         List<AmpActivityVersion> activityVersions = query.list();
 
         if (activityVersions != null && !activityVersions.isEmpty()) {
-            AmpActivityVersion ampActivityVersion = (AmpActivityVersion) query.list().get(0);
+            AmpActivityVersion ampActivityVersion = activityVersions.get(0);
             AmpComponent ampComponent = new AmpComponent();
             boolean found = false;
             logger.info("Component name: {}" ,componentName);

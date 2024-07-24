@@ -715,9 +715,10 @@ public class ImporterUtil {
                 if (ampFundingDetail.getTransactionAmount()<0)
                 {
                     ampFundingDetail.setTransactionType(2);
+                    session.saveOrUpdate(ampFundingDetail);
                 }
             }
-            session.saveOrUpdate(ampFunding);
+
         }
         }
     }

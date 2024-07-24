@@ -170,19 +170,25 @@ public class ExcelImporter {
                                 responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, "beneficiaryAgency");
                                 break;
                             case "Funding Item":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, true, "Actual", fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, true, false,"Actual", fundingItem, existing);
                                 break;
                             case "Planned Commitment":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Planned", fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false,false, "Planned", fundingItem, existing);
                                 break;
                             case "Planned Disbursement":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Planned", fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false,"Planned", fundingItem, existing);
+                                break;
+                            case "Planned Expenditure":
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, "Planned", fundingItem, existing);
                                 break;
                             case "Actual Commitment":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, "Actual", fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, false,"Actual", fundingItem, existing);
                                 break;
                             case "Actual Disbursement":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, "Actual", fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false,"Actual", fundingItem, existing);
+                                break;
+                            case "Actual Expenditure":
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, "Actual", fundingItem, existing);
                                 break;
                             case "Reporting Date":
                             default:

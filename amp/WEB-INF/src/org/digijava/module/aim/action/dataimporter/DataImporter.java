@@ -377,8 +377,10 @@ public class DataImporter extends Action {
         fieldsInfos.add("Implementing Agency");
         fieldsInfos.add("Actual Disbursement");
         fieldsInfos.add("Actual Commitment");
+        fieldsInfos.add("Actual Expenditure");
         fieldsInfos.add("Planned Disbursement");
         fieldsInfos.add("Planned Commitment");
+        fieldsInfos.add("Planned Expenditure");
         fieldsInfos.add("Funding Item");
         fieldsInfos.add("Transaction Date");
         fieldsInfos.add("Financing Instrument");

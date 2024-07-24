@@ -130,19 +130,25 @@ public class TxtDataImporter {
                         responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "beneficiaryAgency");
                         break;
                     case "Funding Item":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, true, "Actual", fundingItem, existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, true, false,"Actual", fundingItem, existing);
                         break;
                     case "Planned Commitment":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, "Planned", fundingItem, existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, false,"Planned", fundingItem, existing);
                         break;
                     case "Planned Disbursement":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, "Planned", fundingItem, existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, false,"Planned", fundingItem, existing);
+                        break;
+                    case "Planned Expenditure":
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, false,true, "Planned", fundingItem, existing);
                         break;
                     case "Actual Commitment":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, "Actual", fundingItem, existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, false,"Actual", fundingItem, existing);
                         break;
                     case "Actual Disbursement":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, "Actual", fundingItem, existing);
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, false,"Actual", fundingItem, existing);
+                        break;
+                    case "Actual Expenditure":
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, false,true, "Actual", fundingItem, existing);
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());

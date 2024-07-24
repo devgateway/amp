@@ -776,7 +776,7 @@ public class ImporterUtil {
                             {
                                 ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
                             }
-                            ampComponentFunding.setTransactionType(0);
+                            ampComponentFunding.setTransactionType(commitment.getTransaction_amount()<0?2:0);
                             ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(commitment.getAdjustment_type()));
                             ampComponentFunding.setCurrency(getAmpCurrencyById(commitment.getCurrency()));
                             ampComponentFunding.setTransactionAmount(commitment.getTransaction_amount());
@@ -807,7 +807,7 @@ public class ImporterUtil {
                             {
                                 ampComponentFunding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
                             }
-                            ampComponentFunding.setTransactionType(1);
+                            ampComponentFunding.setTransactionType(disbursement.getTransaction_amount()<0?2:1);
                             ampComponentFunding.setCurrency(getAmpCurrencyById(disbursement.getCurrency()));
                             ampComponentFunding.setAdjustmentType(getCategoryValueObjectById(disbursement.getAdjustment_type()));
                             ampComponentFunding.setTransactionAmount(disbursement.getTransaction_amount());

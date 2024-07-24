@@ -686,6 +686,7 @@ public class ImporterUtil {
                         {
                             ampFundingDetail.setTransactionAmount(0.0);
                         }
+                        ampFundingDetail.setTransactionAmount(Math.abs(ampFundingDetail.getTransactionAmount()));
                         session.saveOrUpdate(ampFundingDetail);
                     }
                 }

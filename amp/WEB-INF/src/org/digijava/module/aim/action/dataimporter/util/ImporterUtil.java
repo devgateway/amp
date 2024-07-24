@@ -423,7 +423,15 @@ public class ImporterUtil {
             fundingItem.getDisbursements().add(transaction);
         }
         if (expenditure) {
-            fundingItem.getExpenditures().add(transaction);
+            if (transaction.getTransaction_amount()==0)
+            {
+                transaction.setTransaction_amount(-1);
+            }
+            if (transaction.getTransaction_amount()>0)
+            {
+                transaction.setTransaction_amount(-transaction.getTransaction_amount());
+            }
+            fundingItem.getCommitments().add(transaction);
 
         }
 
@@ -674,6 +682,10 @@ public class ImporterUtil {
                 for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
                     if (ampFundingDetail.getTransactionAmount() < 0) {
                         ampFundingDetail.setTransactionType(2);
+                        if (ampFundingDetail.getTransactionAmount()==-1)
+                        {
+                            ampFundingDetail.setTransactionAmount(0.0);
+                        }
                         session.saveOrUpdate(ampFundingDetail);
                     }
                 }

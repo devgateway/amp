@@ -788,6 +788,10 @@ public class ImporterUtil {
 
 
     private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
+        if(ampComponent.getAmpComponentId()==null || ampComponentFunding.getAmpComponentFundingId()==null)
+        {
+            return false;
+        }
         String sql = "SELECT COUNT(*) FROM amp_component_funding WHERE rep_organization_id = ? " +
                 "AND adjustment_type = ? AND transaction_amount = ? " +
                 "AND transaction_date = ? AND amp_component_id = ?";

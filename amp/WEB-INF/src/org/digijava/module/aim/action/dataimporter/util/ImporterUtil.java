@@ -678,6 +678,7 @@ public class ImporterUtil {
         List<AmpActivityVersion> activityVersions = query.list();
         if (activityVersions != null && !activityVersions.isEmpty()) {
             Set<AmpFunding> ampFundings = activityVersions.get(0).getFunding();
+            logger.info("Activity Fundings found: "+ampFundings);
             for (AmpFunding ampFunding : ampFundings) {
                 for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
                     if (ampFundingDetail.getTransactionAmount() < 0) {

@@ -674,10 +674,10 @@ public class ImporterUtil {
         String hql = "FROM " + AmpActivityVersion.class.getName() + " a WHERE a.ampActivityId= :activityId";
         Query query = session.createQuery(hql);
         query.setParameter("activityId", activityId);
-        query.setMaxResults(1);
+//        query.setMaxResults(1);
         List<AmpActivityVersion> activityVersions = query.list();
         if (activityVersions != null && !activityVersions.isEmpty()) {
-            Set<AmpFunding> ampFundings = activityVersions.get(0).getFunding();
+            Set<AmpFunding> ampFundings = activityVersions.get(activityVersions.size()-1).getFunding();
             logger.info("Activity Fundings found: "+ampFundings);
             for (AmpFunding ampFunding : ampFundings) {
                 for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
@@ -693,6 +693,24 @@ public class ImporterUtil {
                     }
                 }
 
+            }
+            Set<AmpComponent> components = activityVersions.get(activityVersions.size()-1).getComponents();
+            for (AmpComponent ampComponent : components)
+            {
+                for (AmpComponentFunding ampComponentFunding:ampComponent.getFundings())
+                {
+                    if (ampComponentFunding.getTransactionAmount() < 0)
+                    {
+                        ampComponentFunding.setTransactionType(2);
+                        if (ampComponentFunding.getTransactionAmount()==-1)
+                        {
+                            ampComponentFunding.setTransactionAmount(0.0);
+                        }
+                        ampComponentFunding.setTransactionAmount(Math.abs(ampComponentFunding.getTransactionAmount()));
+                        session.saveOrUpdate(ampComponentFunding);
+                        logger.info("AmpComponent expenditure: "+ampComponentFunding);
+                    }
+                }
             }
         }
     }
@@ -764,10 +782,10 @@ public class ImporterUtil {
         {
             funding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
         }
-        funding.setTransactionType(defaultType);
+        funding.setTransactionAmount(transaction.getTransaction_amount());
+        funding.setTransactionType(transaction.getTransaction_amount()<0?2:defaultType);
         funding.setCurrency(getAmpCurrencyById(transaction.getCurrency()));
         funding.setAdjustmentType(getCategoryValueObjectById(transaction.getAdjustment_type()));
-        funding.setTransactionAmount(transaction.getTransaction_amount());
         funding.setTransactionDate(convertStringToDate(transaction.getTransaction_date()));
         return funding;
     }

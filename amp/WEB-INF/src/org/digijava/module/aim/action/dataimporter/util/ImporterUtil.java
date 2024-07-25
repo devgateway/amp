@@ -704,6 +704,7 @@ public class ImporterUtil {
 
         if (ampActivityVersion != null) {
             AmpComponent ampComponent = getOrCreateComponent(ampActivityVersion, componentName, componentCode);
+            ampComponent.setActivity(ampActivityVersion);
             processFundings(ampComponent, fundings, responsibleOrgId);
 
             boolean updateActivity = updateProjectCodeIfNeeded(ampActivityVersion, projectCode);
@@ -757,7 +758,10 @@ public class ImporterUtil {
         AmpComponentFunding funding = new AmpComponentFunding();
         funding.setComponent(ampComponent);
         funding.setReportingDate(new Date());
-        funding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
+        if (responsibleOrgId!=null)
+        {
+            funding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
+        }
         funding.setTransactionType(transaction.getTransaction_amount() < 0 ? 2 : defaultType);
         funding.setCurrency(getAmpCurrencyById(transaction.getCurrency()));
         funding.setAdjustmentType(getCategoryValueObjectById(transaction.getAdjustment_type()));

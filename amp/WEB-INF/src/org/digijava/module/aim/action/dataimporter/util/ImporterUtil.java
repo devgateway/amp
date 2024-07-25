@@ -688,6 +688,7 @@ public class ImporterUtil {
                         }
                         ampFundingDetail.setTransactionAmount(Math.abs(ampFundingDetail.getTransactionAmount()));
                         session.saveOrUpdate(ampFundingDetail);
+                        logger.info("AmpFunding expenditure: "+ampFundingDetail);
                     }
                 }
 
@@ -762,7 +763,7 @@ public class ImporterUtil {
         {
             funding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
         }
-        funding.setTransactionType(transaction.getTransaction_amount() < 0 ? 2 : defaultType);
+        funding.setTransactionType(defaultType);
         funding.setCurrency(getAmpCurrencyById(transaction.getCurrency()));
         funding.setAdjustmentType(getCategoryValueObjectById(transaction.getAdjustment_type()));
         funding.setTransactionAmount(transaction.getTransaction_amount());

@@ -44,7 +44,6 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
 public class DataImporter extends Action {
     static Logger logger = LoggerFactory.getLogger(DataImporter.class);
 
-
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // List of fields

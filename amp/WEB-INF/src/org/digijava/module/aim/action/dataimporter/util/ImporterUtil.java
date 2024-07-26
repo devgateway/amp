@@ -695,6 +695,7 @@ public class ImporterUtil {
 
             }
             Set<AmpComponent> components = activityVersions.get(activityVersions.size()-1).getComponents();
+            logger.info("Components: "+components);
             for (AmpComponent ampComponent : components)
             {
                 for (AmpComponentFunding ampComponentFunding:ampComponent.getFundings())

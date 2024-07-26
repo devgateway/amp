@@ -259,5 +259,21 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
+
+    @Override
+    public String toString() {
+        return "AmpComponentFunding{" +
+                "ampComponentFundingId=" + ampComponentFundingId +
+                ", transactionType=" + transactionType +
+                ", adjustmentType=" + adjustmentType +
+                ", transactionDate=" + transactionDate +
+                ", reportingDate=" + reportingDate +
+                ", transactionAmount=" + transactionAmount +
+                ", reportingOrganization=" + reportingOrganization +
+                ", componentSecondResponsibleOrganization=" + componentSecondResponsibleOrganization +
+                ", currency=" + currency +
+                ", description='" + description + '\'' +
+                ", component=" + component +
+                '}';
+    }
 }

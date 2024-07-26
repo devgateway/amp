@@ -822,6 +822,8 @@ public class ImporterUtil {
         }
         for (AmpComponentFunding ampComponentFunding1 : ampComponent.getFundings())
         {
+            logger.info("AmpComponentFunding here: "+ampComponentFunding);
+
             if (Objects.equals(ampComponentFunding.getTransactionAmount(), ampComponentFunding1.getTransactionAmount()) && ampComponentFunding.getTransactionDate()==ampComponentFunding1.getTransactionDate() && ampComponentFunding.getAdjustmentType()==ampComponentFunding1.getAdjustmentType() && ampComponentFunding.getReportingOrganization()==ampComponentFunding1.getReportingOrganization()){
                     logger.info("AmpComponentFunding has been found");
 

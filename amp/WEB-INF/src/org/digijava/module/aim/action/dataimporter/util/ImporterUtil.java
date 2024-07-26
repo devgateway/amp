@@ -813,8 +813,11 @@ public class ImporterUtil {
 
 
     private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
+        logger.info("AmpComponentFunding to search: "+ampComponentFunding);
+
         if(ampComponent.getAmpComponentId()==null)
         {
+            logger.info("Component is null");
             return false;
         }
         for (AmpComponentFunding ampComponentFunding1 : ampComponent.getFundings())

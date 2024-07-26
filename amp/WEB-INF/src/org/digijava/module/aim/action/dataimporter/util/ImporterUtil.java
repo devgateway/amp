@@ -825,6 +825,7 @@ public class ImporterUtil {
                 return true;
             }
         }
+        logger.info("AmpComponentFunding not found: "+ampComponentFunding);
 
 
         return false;

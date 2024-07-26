@@ -816,35 +816,15 @@ public class ImporterUtil {
         {
             return false;
         }
-        String sql = "SELECT COUNT(*) FROM amp_component_funding WHERE rep_organization_id = ? " +
-                "AND adjustment_type = ? AND transaction_amount = ? " +
-                "AND transaction_date = ? AND amp_component_id = ?";
+        for (AmpComponentFunding ampComponentFunding1 : ampComponent.getFundings())
+        {
+            if (Objects.equals(ampComponentFunding.getTransactionAmount(), ampComponentFunding1.getTransactionAmount()) && ampComponentFunding.getTransactionDate()==ampComponentFunding1.getTransactionDate() && ampComponentFunding.getAdjustmentType()==ampComponentFunding1.getAdjustmentType() && ampComponentFunding.getReportingOrganization()==ampComponentFunding1.getReportingOrganization()){
+                    logger.info("AmpComponentFunding has been found");
 
-        try (PreparedStatement statement = PersistenceManager.getJdbcConnection().prepareStatement(sql)) {
-            if (ampComponentFunding.getReportingOrganization() != null) {
-                statement.setLong(1, ampComponentFunding.getReportingOrganization().getAmpOrgId());
-            } else {
-                statement.setNull(1, Types.BIGINT);
+                return true;
             }
-
-            statement.setLong(2, ampComponentFunding.getAdjustmentType().getId());
-
-            statement.setDouble(3, ampComponentFunding.getTransactionAmount());
-
-            statement.setTimestamp(4, new java.sql.Timestamp(ampComponentFunding.getTransactionDate().getTime()));
-
-            statement.setLong(5, ampComponent.getAmpComponentId());
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    int count = resultSet.getInt(1);
-                    logger.info("Count: " + count);
-                    return count > 0;
-                }
-            }
-        } catch (SQLException e) {
-            logger.error("Error executing native query", e);
         }
+
 
         return false;
     }

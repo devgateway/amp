@@ -813,7 +813,7 @@ public class ImporterUtil {
 
 
     private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
-        if(ampComponent.getAmpComponentId()==null || ampComponentFunding.getAmpComponentFundingId()==null)
+        if(ampComponent.getAmpComponentId()==null)
         {
             return false;
         }

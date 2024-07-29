@@ -176,7 +176,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
                 };
         searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
-        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_LOCATION, location.getObject());
         add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
         add(searchIndicators);
     }

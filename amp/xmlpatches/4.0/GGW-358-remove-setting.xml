@@ -9,11 +9,11 @@
         <script>
             <lang delimiter=";" type="postgres">
                 delete
-                from amp_modules_visibility
-                where name = 'Filter By Indicator Location';
-                delete
                 from amp_modules_templates
                 where module = (select id from amp_modules_visibility where name = 'Filter By Indicator Location');
+                delete
+                from amp_modules_visibility
+                where name = 'Filter By Indicator Location';
                 drop table AMP_INDICATOR_LOCATION;</lang>
         </script>
     </apply>

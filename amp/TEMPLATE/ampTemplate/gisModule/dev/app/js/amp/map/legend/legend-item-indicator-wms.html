@@ -3,7 +3,10 @@
 
 <% if (status === 'loading') { %>
   <p><em data-18n="amp.gis:legend-loading">Loading...</em>></p>
-<% } else { %>
-  <img alt="legend" title="Image legend for <%= title %>" src="<%= legendSrc %>" />
+<% } else if(legendHtml!=null ){%>
+  <div><%=legendHtml%></div>
+  <%}
+  else{ %>
+  <img alt="legend" title="Image legend for <%= title %>" src="<%= legendSrc %>"/>
 <% } %>
 </span>

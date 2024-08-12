@@ -55,6 +55,7 @@ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
@@ -80,7 +81,6 @@ import java.util.stream.Collectors;
  * Class that holds entrypoing for GIS api methods
  *
  * @author ddimunzio@developmentgateway.org jdeanquin@developmentgateway.org
- *
  */
 @Path("gis")
 @Api("gis")
@@ -103,18 +103,18 @@ public class GisEndPoints {
             @ApiParam("filter") final PerformanceFilterParameters config) throws AmpApiException {
 
         List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
-        logger.info("Clustered points :"+c.size());
+        logger.info("Clustered points :" + c.size());
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
         for (ClusteredPoints clusteredPoints : c) {
-            logger.info("Point is : "+clusteredPoints);
+            logger.info("Point is : " + clusteredPoints);
 
             if (StringUtils.isNotBlank(clusteredPoints.getLon())
-                    && StringUtils.isNotBlank(clusteredPoints.getLat())){
+                    && StringUtils.isNotBlank(clusteredPoints.getLat())) {
                 FeatureGeoJSON point = getPoint(new Double(clusteredPoints.getLon()),
                         new Double(clusteredPoints.getLat()),
                         clusteredPoints.getActivityids(),
                         clusteredPoints.getAdmin(), clusteredPoints.getAdmId());
-                logger.info("Point is : "+point);
+                logger.info("Point is : " + point);
                 result.getFeatures().add(point);
             }
         }
@@ -144,14 +144,14 @@ public class GisEndPoints {
     public final FeatureCollectionGeoJSON getProjectSites(
             @ApiParam("filter") final PerformanceFilterParameters config,
             @QueryParam("startFrom") Integer startFrom,
-            @QueryParam("size")Integer size) throws AmpApiException {
+            @QueryParam("size") Integer size) throws AmpApiException {
         FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
-        List<AmpStructure> al = LocationService.getStructures( config);
+        List<AmpStructure> al = LocationService.getStructures(config);
         int start = 0;
-        int end = al.size() -1;
-        if (startFrom!=null && size!=null && startFrom < al.size()) {
+        int end = al.size() - 1;
+        if (startFrom != null && size != null && startFrom < al.size()) {
             start = startFrom;
-            if (al.size()>(startFrom + size)) {
+            if (al.size() > (startFrom + size)) {
                 end = startFrom + size;
             }
         }
@@ -214,6 +214,9 @@ public class GisEndPoints {
                     .getMapType());
             i.setType(type);
             i.setLayer(ampMapConfig.getLayer());
+            if (ampMapConfig.getLegendHtml() != null) {
+                i.setLegendHtml(HtmlUtils.htmlUnescape(ampMapConfig.getLegendHtml()));
+            }
             indicatorLayers.add(i);
         }
         return indicatorLayers;
@@ -280,11 +283,10 @@ public class GisEndPoints {
     @JsonView(Indicator.IndicatorView.class)
     public List<Indicator> getIndicators(@QueryParam("admLevel") AdmLevel admLevel) {
         List<AmpIndicatorLayer> indicators;
-        if (admLevel !=null) {
+        if (admLevel != null) {
             indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
             return IndicatorUtils.getApiIndicatorsForGis(indicators, false);
-        }
-        else {
+        } else {
             indicators = QueryUtil.getIndicatorLayers();
             return IndicatorUtils.getApiIndicatorsForGis(indicators, true);
         }
@@ -295,7 +297,7 @@ public class GisEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Get indicator & values")
     @JsonView(Indicator.IndicatorView.class)
-    public Indicator getIndicatorsById(@PathParam ("indicatorId") Long indicatorId) {
+    public Indicator getIndicatorsById(@PathParam("indicatorId") Long indicatorId) {
         return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId);
     }
 
@@ -306,7 +308,7 @@ public class GisEndPoints {
     @JsonView(Indicator.IndicatorView.class)
     public Indicator doGapAnalysisForIndicator(
             PerformanceFilterParameters input,
-            @PathParam ("indicatorId") Long indicatorId) {
+            @PathParam("indicatorId") Long indicatorId) {
         return IndicatorUtils.doGapAnalysis(indicatorId, input);
     }
 
@@ -361,7 +363,7 @@ public class GisEndPoints {
             name = "map-export-administrative-Locations.xls";
             wb = new ActivityLocationExporter(filters).export(name);
         }
-        webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
+        webResponse.setHeader("Content-Disposition", "attachment; filename=" + name);
 
         StreamingOutput streamOutput = new StreamingOutput() {
             public void write(OutputStream output) throws WebApplicationException {
@@ -420,7 +422,7 @@ public class GisEndPoints {
                 extraColumns.add(tokenizer.nextToken());
             }
         }
-        return ActivityService.getLastUpdatedActivities(extraColumns, limit,config);
+        return ActivityService.getLastUpdatedActivities(extraColumns, limit, config);
     }
 
 
@@ -448,7 +450,7 @@ public class GisEndPoints {
     @ApiMethod(ui = false, id = "hasEnabledPerformanceRules")
     @ApiOperation(
             value = "Provides information about the availability or not of enabled performance rules.",
-            notes = "This information is used for configuring the GIS UI.\n\n"
+            notes = "This information is used for configuring the GIS UI."
                     + "The performance rule toggle on GIS UI is only displayed if enabled performance rules are "
                     + "available.")
     public boolean hasEnabledPerformanceRules() {

@@ -450,7 +450,7 @@ public class GisEndPoints {
     @ApiMethod(ui = false, id = "hasEnabledPerformanceRules")
     @ApiOperation(
             value = "Provides information about the availability or not of enabled performance rules.",
-            notes = "This information is used for configuring the GIS UI."
+            notes = "This information is used for configuring the GIS UI.\n\n"
                     + "The performance rule toggle on GIS UI is only displayed if enabled performance rules are "
                     + "available.")
     public boolean hasEnabledPerformanceRules() {

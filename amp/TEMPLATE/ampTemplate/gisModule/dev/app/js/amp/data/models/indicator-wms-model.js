@@ -32,7 +32,6 @@ module.exports = Backbone.Model
             return this._wmsLoaded.promise();
         },
         loadAll: function (options) {
-            debugger;
             return when(this.load(options)).promise().done(function () {
                 $('#map-loading').hide();
             });

@@ -32,6 +32,7 @@ public class MapsConfigurationForm extends ActionForm {
 
     private boolean reset;
     private String legendNotes;
+    private String legendHtml;
 
 
     public FormFile getLegend() {
@@ -138,6 +139,8 @@ public class MapsConfigurationForm extends ActionForm {
             this.configName = null;
             this.count=null;
             this.legendNotes = null;
+            this.layer = null;
+            this.legendHtml = null;
         }
     }
     public void setReset(boolean reset) {
@@ -169,5 +172,13 @@ public class MapsConfigurationForm extends ActionForm {
 
     public void setLayer(String layer) {
         this.layer = layer;
+    }
+
+    public String getLegendHtml() {
+        return legendHtml;
+    }
+
+    public void setLegendHtml(String legendHtml) {
+        this.legendHtml = legendHtml;
     }
 }

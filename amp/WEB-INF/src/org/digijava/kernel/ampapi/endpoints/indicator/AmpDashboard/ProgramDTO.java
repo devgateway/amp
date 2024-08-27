@@ -1,6 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard;
 
 public class ProgramDTO {
+    public ProgramDTO() {
+
+    }
+
+    public ProgramDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     private Long id;
     private String name;
 

@@ -3,20 +3,13 @@ package org.digijava.module.message.jobs;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.*;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.MeService;
-import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.*;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
+import org.hibernate.jdbc.Work;
 import org.jetbrains.annotations.NotNull;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -24,11 +17,14 @@ import org.quartz.StatefulJob;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,143 +32,108 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
 
     protected static final Logger logger = Logger.getLogger(AmpCoreIndicatorFundingJob.class);
 
+    private static final Map<String, CoreIndicatorTypeDTO> indicatorMap = new HashMap<>();
+
+    static {
+        indicatorMap.put("Hectares of land under restoration",
+                new CoreIndicatorTypeDTO("M ha", "ha_under_restoration",
+                        "Hectares of land under restoration", 1000000D));
+        indicatorMap.put("Tonnes of Co2EQ sequestered",
+                new CoreIndicatorTypeDTO("M mt", "t_co2eq_sequestered",
+                        "Tonnes of Co2EQ sequestered", 1000000D));
+        indicatorMap.put("No of employment opportunities",
+                new CoreIndicatorTypeDTO("M", "no_employments",
+                        "No of employment opportunities", 1000000D));
+        indicatorMap.put("Quantity of renewable energy consumed annually in MWH",
+                new CoreIndicatorTypeDTO("M mwh", "r_energy_consumed",
+                        "Quantity of renewable energy consumed annually in MWH", 1000000D));
+        indicatorMap.put("Number of beneficiaries",
+                new CoreIndicatorTypeDTO("M", "no_beneficiaries", "Number of beneficiaries", 1000000D));
+    }
+
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        ReportSpecificationImpl
-                spec = new ReportSpecificationImpl("indicator-data", ArConstants.INDICATOR_TYPE);
-        spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
-        spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
-        spec.addColumn(new ReportColumn(ColumnConstants.INDICATOR_DONOR));
-        spec.addColumn(new ReportColumn(ColumnConstants.INDICATOR_NAME));
+        //TODO move to MEService
+        List<CoreIndicatorProgressDTO> resp = new ArrayList<>();
 
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_DONOR));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_NAME));
+        StringBuilder query = new StringBuilder();
+        query.append("        select cv.id core_type_id,  ");
+        query.append("        cv.category_value core_type_name,  ");
+        query.append("        al.location_id country_id,  ");
+        query.append("        cvl.location_name country_name,  ");
+        query.append("        org.amp_org_id donor_id,  ");
+        query.append("        org.name donor_name,  ");
+        query.append("        i.program_id program_id,  ");
+        query.append("        t.name program_name,  ");
+        query.append("       ROUND(CAST(SUM(CASE WHEN iv.value_type = 0 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_target,  ");
+        query.append("       ROUND(CAST(SUM(CASE WHEN iv.value_type = 1 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_actual  ");
+        query.append("FROM amp_indicator i  ");
+        query.append("         JOIN amp_indicator_connection ic ON ic.indicator_id = i.indicator_id  ");
+        query.append("         JOIN amp_indicator_values iv ON iv.ind_connect_id = ic.id  ");
+        query.append("         JOIN amp_category_value cv ON i.indicators_category = cv.id  ");
+        query.append("         JOIN amp_activity_location al ON ic.activity_location = al.amp_activity_location_id  ");
+        query.append("         JOIN amp_category_value_location cvl ON cvl.id = al.location_id  ");
+        query.append("         JOIN amp_org_role oro ON oro.activity = oro.activity  ");
+        query.append("         JOIN amp_organisation org ON oro.organisation = org.amp_org_id  ");
+        query.append("         JOIN amp_theme t on t.amp_theme_id = i.program_id  ");
+        query.append("         JOIN amp_activity aa on aa.amp_activity_id = oro.activity  ");
+        query.append("WHERE ic.sub_clazz = 'a'  ");
+        query.append("  AND iv.value_type IN (0, 1)  ");
+        //    public static final int TARGET = 0;
+        //    public static final int ACTUAL = 1;
+        query.append("  AND oro.role = 1              "); //-- donor  ");
+        query.append("GROUP BY cv.id,  ");
+        query.append("         cv.category_value,  ");
+        query.append("         al.location_id,  ");
+        query.append("         cvl.location_name,  ");
+        query.append("         org.amp_org_id,  ");
+        query.append("         org.name  ,  ");
+        query.append("         i.program_id,  ");
+        query.append("         t.name ");
+        query.append("ORDER BY cv.id,  ");
+        query.append("         cv.category_value,  ");
+        query.append("         al.location_id,  ");
+        query.append("         cvl.location_name,  ");
+        query.append("         org.amp_org_id,  ");
+        query.append("         org.name,  ");
+        query.append("         i.program_id,  ");
+        query.append("         t.name");
 
-        spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE));
-        spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_TARGET_VALUE));
-        spec.setSummaryReport(true);
-        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-        spec.setShowOriginalCurrency(false);
-        spec.setDisplayEmptyFundingRows(false);
-        ReportSettingsImpl reportSettings = new ReportSettingsImpl();
-        spec.setSettings(reportSettings);
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection connection) throws SQLException {
+                RsInfo rsi = SQLUtils.rawRunQuery(connection, query.toString(), null);
+                ResultSet rs = rsi.rs;
+                while (rs.next()) {
+                    Long coreTypeId = rs.getLong("core_type_id");
+                    String coreTypeName = rs.getString("core_type_name");
+                    Long countryId = rs.getLong("country_id");
+                    String countryName = rs.getString("country_name");
+                    Long donorId = rs.getLong("donor_id");
+                    String donorName = rs.getString("donor_name");
+                    String programName = rs.getString("program_name");
+                    Long programId = rs.getLong("program_id");
+                    Double actualValue = rs.getDouble("value_type_actual");
+                    Double targetValue = rs.getDouble("value_type_target");
 
-        new MeService().applySettingsAndFilters(new SettingsAndFiltersParameters(), spec);
-        GeneratedReport report = EndpointUtils.runReport(spec);
-        List<CoreIndicatorProgressDTO> resp = processReportData(report);
+                    CoreIndicatorProgressDTO coreIndicatorProgressDTO = new CoreIndicatorProgressDTO();
+                    coreIndicatorProgressDTO.setCountry(new CountryDTO(countryId, countryName));
+                    coreIndicatorProgressDTO.setDonor(new DonorDTO(donorId, donorName));
+                    coreIndicatorProgressDTO.setProgram(new ProgramDTO(programId, programName));
+                    CoreIndicatorValueDTO coreIndicatorValueDTO = new CoreIndicatorValueDTO();
+                    coreIndicatorValueDTO.setCoreIndicatorType(indicatorMap.get(coreTypeName));
+                    coreIndicatorValueDTO.setActualValue(actualValue);
+                    coreIndicatorValueDTO.setTargetValue(targetValue);
+                    List<CoreIndicatorValueDTO> coreIndicatorValues = new ArrayList<>();
+                    coreIndicatorValues.add(coreIndicatorValueDTO);
+                    coreIndicatorProgressDTO.setValues(coreIndicatorValues);
+                    resp.add(coreIndicatorProgressDTO);
+                }
+            }
+        });
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_URL);
         sendReportsToServer(resp, serverUrl + "/update-core-indicator-progress");
     }
 
-    private List<CoreIndicatorProgressDTO> processReportData(GeneratedReport report) {
-
-        ReportOutputColumn countryData = report.leafHeaders.get(0);
-        ReportOutputColumn pilar = report.leafHeaders.get(1);
-        ReportOutputColumn donorData = report.leafHeaders.get(2);
-        ReportOutputColumn indicatorsData = report.leafHeaders.get(3);
-
-        List<CoreIndicatorProgressDTO> ampDashboardCoreIndicator = new ArrayList<>();
-        for (ReportArea child : report.reportContents.getChildren()) {
-            TextCell countryDataCell = (TextCell) child.getContents().get(countryData);
-            if (child.getChildren() != null) {
-                for (ReportArea pilarData : child.getChildren()) {
-                    TextCell pilarCell = (TextCell) pilarData.getContents().get(pilar);
-                    for (ReportArea donor : pilarData.getChildren()) {
-                        TextCell donorCell = (TextCell) donor.getContents().get(donorData);
-                        CoreIndicatorProgressDTO fundingReport = new CoreIndicatorProgressDTO();
-                        DonorDTO donorDTO = new DonorDTO();
-                        CountryDTO countryDTO = new CountryDTO();
-                        ProgramDTO programDTO = new ProgramDTO();
-                        donorDTO.setName(donorCell.value.toString());
-                        countryDTO.setName(countryDataCell.value.toString());
-                        programDTO.setName(pilarCell.value.toString());
-                        fundingReport.setProgram(programDTO);
-                        fundingReport.setCountry(countryDTO);
-                        fundingReport.setDonor(donorDTO);
-                        List<CoreIndicatorValueDTO> valuesList = new ArrayList<CoreIndicatorValueDTO>();
-                        for (ReportArea indicator : donor.getChildren()) {
-                            CoreIndicatorValueDTO value = new CoreIndicatorValueDTO();
-                            TextCell indicatorCell = (TextCell) indicator.getContents().get(indicatorsData);
-//                                value.setIndicator(indicatorCell.value.toString());
-//                                value.setIndicator_id(indicatorCell.entityId);
-
-                            for (Map.Entry<ReportOutputColumn, ReportCell> entry : indicator.getContents().entrySet()) {
-                                ReportOutputColumn col = entry.getKey();
-
-                                if (col.parentColumn != null
-                                        && col.originalColumnName.equals(MeasureConstants.INDICATOR_ACTUAL_VALUE)
-                                        && col.parentColumn.parentColumn != null
-                                        && col.parentColumn.parentColumn.originalColumnName.equals(
-                                        NiReportsEngine.FUNDING_COLUMN_NAME)
-                                        && col.parentColumn.parentColumn.parentColumn == null) {
-                                    AmountCell cell = (AmountCell) entry.getValue();
-                                    BigDecimal actualValue = cell.extractValue();
-                                    value.setActualValue(actualValue.doubleValue());
-                                }
-                                if (col.parentColumn != null
-                                        && col.originalColumnName.equals(MeasureConstants.INDICATOR_TARGET_VALUE)
-                                        && col.parentColumn.parentColumn != null
-                                        && col.parentColumn.parentColumn.originalColumnName.equals(
-                                        NiReportsEngine.FUNDING_COLUMN_NAME)
-                                        && col.parentColumn.parentColumn.parentColumn == null) {
-                                    AmountCell cell = (AmountCell) entry.getValue();
-                                    BigDecimal targetValue = cell.extractValue();
-                                    value.setTargetValue(targetValue.doubleValue());
-                                }
-                            }
-
-                            // Add category value type for the indicator
-                            CoreIndicatorTypeDTO indicatorType = new CoreIndicatorTypeDTO();
-                            AmpIndicator existingInd = getIndicatorById(indicatorCell.entityId);
-                            if (existingInd != null && existingInd.getIndicatorsCategory() != null) {
-                                indicatorType.setName(existingInd.getIndicatorsCategory().getValue());
-                                if (indicatorType.getName().contains("Hectares of land under restoration")) {
-                                    indicatorType.setUnit("M ha");
-                                    indicatorType.setCoreType("ha_under_restoration");
-                                } else if (indicatorType.getName().contains("Tonnes of Co2EQ sequestered")) {
-                                    indicatorType.setUnit("M mt");
-                                    indicatorType.setCoreType("t_co2eq_sequestered");
-                                } else if (indicatorType.getName().contains("No of employment opportunities")) {
-                                    indicatorType.setUnit("M");
-                                    indicatorType.setCoreType("no_employments");
-                                } else if (indicatorType.getName().contains("Quantity of renewable energy consumed annually in MWH")) {
-                                    indicatorType.setUnit("M mwh");
-                                    indicatorType.setCoreType("r_energy_consumed");
-                                } else if (indicatorType.getName().contains("Number of beneficiaries")) {
-                                    indicatorType.setUnit("M");
-                                    indicatorType.setCoreType("no_beneficiaries");
-                                } else {
-                                    // Adding unknown here fo easy debug
-                                    indicatorType.setUnit("Unknown");
-                                    indicatorType.setCoreType("Unknown");
-                                }
-                            } else {
-                                indicatorType.setName("Unknown");
-                                indicatorType.setUnit("Unknown");
-                                indicatorType.setCoreType("Unknown");
-                            }
-                            value.setCoreIndicatorType(indicatorType);
-                            valuesList.add(value);
-                        }
-                        fundingReport.setValues(valuesList);
-                        ampDashboardCoreIndicator.add(fundingReport);
-                    }
-                }
-            }
-        }
-
-        return ampDashboardCoreIndicator;
-    }
-
-    private AmpIndicator getIndicatorById(Long indicatorId) {
-        try {
-            return IndicatorUtil.getIndicator(indicatorId);
-        } catch (DgException e) {
-            throw new RuntimeException("Failed to load indicator");
-        }
-    }
 
     public static void sendReportsToServer(List<CoreIndicatorProgressDTO> ampCoreIndicatorCoreData, String serverUrl) {
         try {

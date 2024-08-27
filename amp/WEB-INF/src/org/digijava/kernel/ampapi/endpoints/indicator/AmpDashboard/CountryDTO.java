@@ -1,6 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard;
 
 public class CountryDTO {
+    public CountryDTO() {
+    }
+
+    public CountryDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     private Long id;
     private String name;
 

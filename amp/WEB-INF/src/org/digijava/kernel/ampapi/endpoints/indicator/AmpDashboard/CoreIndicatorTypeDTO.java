@@ -7,6 +7,19 @@ public class CoreIndicatorTypeDTO {
     @JsonProperty("core-type")
     private String coreType;
     private String unit;
+    @JsonProperty("number-divider")
+    private double numberDivider;
+
+    public CoreIndicatorTypeDTO() {
+    }
+
+    public CoreIndicatorTypeDTO(String unit, String coreType, String name, double numberDivider) {
+        this.unit = unit;
+        this.coreType = coreType;
+        this.name = name;
+        this.numberDivider = numberDivider;
+
+    }
 
     public String getCoreType() {
         return coreType;
@@ -30,5 +43,13 @@ public class CoreIndicatorTypeDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getNumberDivider() {
+        return numberDivider;
+    }
+
+    public void setNumberDivider(double numberDivider) {
+        this.numberDivider = numberDivider;
     }
 }

@@ -130,7 +130,9 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
                 }
             }
         });
+        logger.error(resp.size() + " core indicators found");
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_URL);
+        logger.error("Sending core indicators to " + serverUrl);
         sendReportsToServer(resp, serverUrl + "/update-core-indicator-progress");
     }
 
@@ -138,14 +140,16 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
     public static void sendReportsToServer(List<CoreIndicatorProgressDTO> ampCoreIndicatorCoreData, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
+            logger.error("Sending data to amp dashboard");
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
+            logger.error("Connection created");
             // Create a Gson instance with custom serializer and Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(CoreIndicatorValueDTO.class, new CoreIndicatorValueDTOSerializer())
                     .create();
 
             String jsonData = gson.toJson(ampCoreIndicatorCoreData);
-
+            logger.error("Data to send: " + jsonData);
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {
                 // Write the JSON data to the output stream
@@ -158,10 +162,10 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
             // Check if the request was successful (e.g., HTTP 200 OK)
             if (responseCode == 200) {
                 // The data has been successfully sent to the server
-                logger.debug("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.error("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
             } else {
                 // Handle the error condition (e.g., log an error message)
-                logger.debug("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.error("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
             }
 
             // Close the connection

@@ -98,7 +98,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         query.append("         org.name,  ");
         query.append("         i.program_id,  ");
         query.append("         t.name");
-
+        logger.error(query.toString());
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection connection) throws SQLException {
                 RsInfo rsi = SQLUtils.rawRunQuery(connection, query.toString(), null);

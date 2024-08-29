@@ -187,7 +187,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         String authHeaderValue = "Basic " + encodedAuth;
 
         // Set the Authorization header
-        connection.setRequestProperty("Authorization", authHeaderValue);
+        //connection.setRequestProperty("Authorization", authHeaderValue);
 
         // Set the HTTP request method to POST
         connection.setRequestMethod("POST");

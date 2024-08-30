@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30863</jira>
+    <keyword>Add indicator report to visibility template</keyword>
+    <author>bmokandu</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_features_templates (template, feature)
+                SELECT
+                (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                (SELECT id AS feature FROM amp_features_visibility WHERE name = 'Indicator Report')
+                WHERE NOT EXISTS (
+                SELECT template FROM amp_features_templates
+                WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                AND feature = (SELECT id FROM amp_features_visibility WHERE name = 'Indicator Report')
+                );
+
+                    </lang>
+        </script>
+    </apply>
+</tns:patch>

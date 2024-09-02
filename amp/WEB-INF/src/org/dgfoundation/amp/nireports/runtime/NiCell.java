@@ -102,8 +102,8 @@ public class NiCell implements Comparable<NiCell> {
 
                 String mainLevelName = cell.mainLevel.get().dimensionUsage.instanceName;
                 int mainLevel = cell.mainLevel.get().level;
-                if (StringUtils.equalsIgnoreCase(mainLevelName, "national plan objective") && (mainLevel == 1)) {
-                    String sql = String.format("SELECT nol1.name as name FROM v_nationalobjectives_level_1 nol1 WHERE nol1.amp_activity_id = %d", activityId);
+                if (StringUtils.equalsIgnoreCase(mainLevelName, "national plan objective")) {
+                    String sql = String.format("SELECT nol.name as name FROM v_nationalobjectives_level_%d nol WHERE nol.amp_activity_id = %d",mainLevel, activityId);
                     PersistenceManager.getSession().doWork(connection -> {
                         RsInfo rsi = SQLUtils.rawRunQuery(connection, sql, null);
                         ResultSet rs = rsi.rs;

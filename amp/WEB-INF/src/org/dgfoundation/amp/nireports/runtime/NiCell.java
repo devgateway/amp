@@ -2,6 +2,8 @@ package org.dgfoundation.amp.nireports.runtime;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.NumberedCell;
@@ -12,10 +14,14 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,18 +81,56 @@ public class NiCell implements Comparable<NiCell> {
      */
     public NiCell advanceHierarchy(Cell newContents, Cell splitCell, Map<NiDimensionUsage, IdsAcceptor> acceptors) {
 //        return new NiCell(newContents, entity, hiersTracker.advanceHierarchy(splitCell), mergeAcceptors(acceptors));
-        return advanceHierachyFixForIndicators(newContents,splitCell,acceptors);
+        return advanceHierachyWithAVeryDirtyFixForIndicators(newContents,splitCell,acceptors);
     }
+    /**
+    *Offers a dirty fix for indicators splitting as we look for a better solution
+     * The problem was the report splits indicator values by percentage associated with the programs when MGDS Theme 1 is a hieararchy
+     * Ensures the indicator values are either 100% or 0 percent and avoid splitting by pillar
+     */
 
-    private NiCell advanceHierachyFixForIndicators(Cell newContents, Cell splitCell, Map<NiDimensionUsage, IdsAcceptor> acceptors)
+    private NiCell advanceHierachyWithAVeryDirtyFixForIndicators(Cell newContents, Cell splitCell, Map<NiDimensionUsage, IdsAcceptor> acceptors)
     {
-        List<String> cellNames = newContents.coordinates.keySet().stream().map(x->x.instanceName).collect(Collectors.toList());
+         List<String> cellNames = newContents.coordinates.keySet().stream().map(x->x.instanceName).collect(Collectors.toList());
+         Long activityId = newContents.activityId;
         if (!cellNames.isEmpty() && (StringUtils.containsIgnoreCase(cellNames.get(0),"indicator"))) {
-                PercentageTextCell cell = (PercentageTextCell) splitCell;
+            List<Long> ids = newContents.coordinates.values().stream().map(x->x.id).collect(Collectors.toList());
+            PercentageTextCell cell = (PercentageTextCell) splitCell;
                 cell.setPercentage(BigDecimal.valueOf(1));
-            Session session = PersistenceManager.getRequestDBSession();
-//            String sql= "SELECT t.id"
-//            Query query =
+                List<String> levelNames = new ArrayList<>();
+            if (cell.mainLevel.isPresent()) {
+
+                String mainLevelName = cell.mainLevel.get().dimensionUsage.instanceName;
+                int mainLevel = cell.mainLevel.get().level;
+                if (StringUtils.equalsIgnoreCase(mainLevelName, "national plan objective") && (mainLevel == 1)) {
+                    String sql = String.format("SELECT nol1.name as name FROM v_nationalobjectives_level_1 nol1 WHERE nol1.amp_activity_id = %d", activityId);
+                    PersistenceManager.getSession().doWork(connection -> {
+                        RsInfo rsi = SQLUtils.rawRunQuery(connection, sql, null);
+                        ResultSet rs = rsi.rs;
+                        while (rs.next()) {
+                            String levelName = rs.getString("name");
+                            levelNames.add(levelName);
+                        }
+                    });
+
+                }
+            }
+            if (!ids.isEmpty()) {
+                String sql = String.format("SELECT ind.indicator_id as id, th.name as theme_name FROM amp_indicator ind JOIN amp_theme th ON ind.program_id=th.amp_theme_id WHERE ind.indicator_id = %d",ids.get(0));
+                PersistenceManager.getSession().doWork(connection -> {
+                    RsInfo rsi = SQLUtils.rawRunQuery(connection, sql, null);
+                    ResultSet rs = rsi.rs;
+                    while (rs.next()) {
+                        String programName = rs.getString("theme_name");
+                        if (levelNames.contains(programName) && !StringUtils.equalsIgnoreCase(programName,cell.text))
+                        {
+                            cell.setPercentage(BigDecimal.ZERO);
+                        }
+
+
+                    }
+                });
+            }
             return new NiCell(newContents, entity, hiersTracker.advanceHierarchy(cell), mergeAcceptors(acceptors));
 
         }

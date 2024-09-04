@@ -91,51 +91,63 @@ public class NiCell implements Comparable<NiCell> {
 
     private NiCell advanceHierachyWithAVeryDirtyFixForIndicators(Cell newContents, Cell splitCell, Map<NiDimensionUsage, IdsAcceptor> acceptors)
     {
-         List<String> cellNames = newContents.coordinates.keySet().stream().map(x->x.instanceName).collect(Collectors.toList());
+         List<String> cellNames = newContents.coordinates.keySet().stream().map(x->x.instanceName.toLowerCase()).collect(Collectors.toList());
          Long activityId = newContents.activityId;
-        if (!cellNames.isEmpty() && (StringUtils.containsIgnoreCase(cellNames.get(0),"indicator"))) {
+        if (!cellNames.isEmpty() && cellNames.contains("indicator")) {
             List<Long> ids = newContents.coordinates.values().stream().map(x->x.id).collect(Collectors.toList());
-            PercentageTextCell cell = (PercentageTextCell) splitCell;
+            PercentageTextCell cell = convertCell(splitCell);
+            if(cell!=null) {
                 cell.setPercentage(BigDecimal.valueOf(1));
                 List<String> levelNames = new ArrayList<>();
-            if (cell.mainLevel.isPresent()) {
+                if (cell.mainLevel.isPresent()) {
 
-                String mainLevelName = cell.mainLevel.get().dimensionUsage.instanceName;
-                int mainLevel = cell.mainLevel.get().level;
-                if (StringUtils.equalsIgnoreCase(mainLevelName, "national plan objective")) {
-                    String sql = String.format("SELECT nol.name as name FROM v_nationalobjectives_level_%d nol WHERE nol.amp_activity_id = %d",mainLevel, activityId);
+                    String mainLevelName = cell.mainLevel.get().dimensionUsage.instanceName;
+                    int mainLevel = cell.mainLevel.get().level;
+                    if (StringUtils.equalsIgnoreCase(mainLevelName, "national plan objective")) {
+                        String sql = String.format("SELECT nol.name as name FROM v_nationalobjectives_level_%d nol WHERE nol.amp_activity_id = %d", mainLevel, activityId);
+                        PersistenceManager.getSession().doWork(connection -> {
+                            RsInfo rsi = SQLUtils.rawRunQuery(connection, sql, null);
+                            ResultSet rs = rsi.rs;
+                            while (rs.next()) {
+                                String levelName = rs.getString("name");
+                                levelNames.add(levelName);
+                            }
+                        });
+
+                    }
+                }
+                if (!ids.isEmpty()) {
+                    String sql = String.format("SELECT ind.indicator_id as id, th.name as theme_name FROM amp_indicator ind JOIN amp_theme th ON ind.program_id=th.amp_theme_id WHERE ind.indicator_id = %d", ids.get(0));
                     PersistenceManager.getSession().doWork(connection -> {
                         RsInfo rsi = SQLUtils.rawRunQuery(connection, sql, null);
                         ResultSet rs = rsi.rs;
                         while (rs.next()) {
-                            String levelName = rs.getString("name");
-                            levelNames.add(levelName);
+                            String programName = rs.getString("theme_name");
+                            if (levelNames.contains(programName) && !StringUtils.equalsIgnoreCase(programName, cell.text)) {
+                                cell.setPercentage(BigDecimal.ZERO);
+                            }
+
+
                         }
                     });
-
                 }
-            }
-            if (!ids.isEmpty()) {
-                String sql = String.format("SELECT ind.indicator_id as id, th.name as theme_name FROM amp_indicator ind JOIN amp_theme th ON ind.program_id=th.amp_theme_id WHERE ind.indicator_id = %d",ids.get(0));
-                PersistenceManager.getSession().doWork(connection -> {
-                    RsInfo rsi = SQLUtils.rawRunQuery(connection, sql, null);
-                    ResultSet rs = rsi.rs;
-                    while (rs.next()) {
-                        String programName = rs.getString("theme_name");
-                        if (levelNames.contains(programName) && !StringUtils.equalsIgnoreCase(programName,cell.text))
-                        {
-                            cell.setPercentage(BigDecimal.ZERO);
-                        }
+                return new NiCell(newContents, entity, hiersTracker.advanceHierarchy(cell), mergeAcceptors(acceptors));
 
-
-                    }
-                });
             }
-            return new NiCell(newContents, entity, hiersTracker.advanceHierarchy(cell), mergeAcceptors(acceptors));
 
         }
         return new NiCell(newContents, entity, hiersTracker.advanceHierarchy(splitCell), mergeAcceptors(acceptors));
 
+    }
+
+    private PercentageTextCell convertCell(Cell cell)
+    {
+        try {
+            return (PercentageTextCell) cell;
+        }catch (Exception e)
+        {
+            return null;
+        }
     }
 
     /**

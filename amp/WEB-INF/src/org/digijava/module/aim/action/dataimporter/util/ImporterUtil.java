@@ -596,8 +596,8 @@ public class ImporterUtil {
                 if (componentName != null && !componentName.isEmpty()) {
                     addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
                 }
-                logger.info("Updating expenditures ................");
-                updateExpendituresIfAny(response);
+//                logger.info("Updating expenditures ................");
+//                updateExpendituresIfAny(response);
 
             }
         }
@@ -689,7 +689,7 @@ public class ImporterUtil {
                         }
                         ampFundingDetail.setTransactionAmount(Math.abs(ampFundingDetail.getTransactionAmount()));
                         session.saveOrUpdate(ampFundingDetail);
-                        logger.info("AmpFunding expenditure: "+ampFundingDetail);
+                        logger.info("AmpFunding refund: "+ampFundingDetail);
                     }
                 }
 

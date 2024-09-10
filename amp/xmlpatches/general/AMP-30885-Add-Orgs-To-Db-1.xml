@@ -20,14 +20,14 @@
 
                 -- Insert into amp_organisation
                 INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id) VALUES
-                ((SELECT nextval('AMP_ORGANISATION_seq')), 'Youth & sports development center', 'YSDS', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
+                ((SELECT nextval('AMP_ORGANISATION_seq')), 'Youth &amp; sports development center', 'YSDS', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'Water resources co-ordination unit', 'WRCU', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'Gender Development Center', 'GDC', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
-                ((SELECT nextval('AMP_ORGANISATION_seq')), 'Center for renewable energy & energy eff', 'CREEE', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
+                ((SELECT nextval('AMP_ORGANISATION_seq')), 'Center for renewable energy &amp; energy eff', 'CREEE', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'Regional electricity regulatory authority', 'RERA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'PAP''s Finance Division', 'PFD', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'Peace fund', 'PF', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
-                ((SELECT nextval('AMP_ORGANISATION_seq')), 'Project Preparation & Development Unit', 'PPDU', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
+                ((SELECT nextval('AMP_ORGANISATION_seq')), 'Project Preparation &amp; Development Unit', 'PPDU', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'ECOWAS Regional Competition Authority', 'ERCA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'Regional Animal Health Center', 'RAHC', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS Commission' LIMIT 1)),
                 ((SELECT nextval('AMP_ORGANISATION_seq')), 'Regional Center for Disease Control', 'RCDC', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'WAHO' LIMIT 1));

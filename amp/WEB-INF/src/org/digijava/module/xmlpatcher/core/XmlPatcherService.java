@@ -126,15 +126,10 @@ public class XmlPatcherService extends AbstractServiceImpl {
                         ampPatch, null); //we don't record unmarshalling logs here. we do that when we run the patch
                 
                 XmlPatcherUtil.applyDeprecationTags(patch,log);
-            } catch (NoSuchAlgorithmException e) {
+            } catch (NoSuchAlgorithmException | IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e);
-            } catch (HibernateException e) {
-                logger.error(e.getMessage(), e);
-            } catch (SQLException e) {
+            } catch (HibernateException | SQLException e) {
                 logger.error(e.getMessage(), e);
             }
 
@@ -177,10 +172,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
                         XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
                                 serviceContext))));
-            } catch (NoSuchAlgorithmException e) {
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (NoSuchAlgorithmException | IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
@@ -299,11 +291,9 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 .getAllDiscoveredPatchNames();
         Map<String, AmpXmlPatch> patchesMap = XmlPatcherUtil.getAllDiscoveredPatchesMap();
 
-        Iterator<File> i = patchDirs.iterator();
-        while (i.hasNext()) {
-            File dir = i.next();
+        for (File dir : patchDirs) {
             XmlPatcherUtil.recordNewPatchesInDir(appPath, dir,
-                    allDiscoveredPatchNames,patchesMap);
+                    allDiscoveredPatchNames, patchesMap);
         }
     }
 

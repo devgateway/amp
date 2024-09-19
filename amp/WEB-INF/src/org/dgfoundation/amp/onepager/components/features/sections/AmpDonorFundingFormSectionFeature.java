@@ -301,7 +301,7 @@ public class AmpDonorFundingFormSectionFeature extends
                 subScript.add(new AttributePrepender("class", new Model<String>("subscript_role"), ""));
                 l.add(label);
                 l.add(subScript);
-                
+
                 item.add(l);
             }
 
@@ -360,7 +360,7 @@ public class AmpDonorFundingFormSectionFeature extends
             public void addItem(AmpOrgRole orgRole) {
                 addToOrganisationSection(orgRole.getOrganisation());
                 addItemToList(orgRole.getOrganisation(), orgRole);
-                
+
                 orgRolelist.updateModel();
             }
         };

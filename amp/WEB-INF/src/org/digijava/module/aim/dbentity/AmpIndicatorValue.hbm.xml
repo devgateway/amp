@@ -30,7 +30,8 @@
 		<many-to-one name="indicatorSource" column="indicator_source"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
-
+		<many-to-one name="activityLocation" column="activity_location"
+					 class="org.digijava.module.aim.dbentity.AmpActivityLocation" cascade="none" />
 
 	</class>
 </hibernate-mapping>

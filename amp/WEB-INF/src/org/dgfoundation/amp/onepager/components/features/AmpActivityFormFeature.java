@@ -1284,7 +1284,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     }
 
     protected void onErrorSaveAsDraftOrReject(FeedbackPanel feedbackPanel, AjaxRequestTarget target, Form<?> form) {
-        target.appendJavaScript("enableButtons2();");
+        target.appendJavaScript("enableButtons2();$('#save_overlay').hide();");
         formSubmitErrorHandle(form, target, feedbackPanel);
     }
 

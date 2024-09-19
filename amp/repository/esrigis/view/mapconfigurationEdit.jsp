@@ -159,7 +159,7 @@ div.fakefile2 input {
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>URL</digi:trn>
                             </td>
                             <td align=left class="map-configuration-cell">
-	                            <html:text property="url"></html:text>
+	                            <html:text property="url" size="75"></html:text>
                             </td>
                           </tr>
                           <tr>
@@ -191,7 +191,7 @@ div.fakefile2 input {
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Layer name</digi:trn>
                             </td>
                             <td align=left class="map-configuration-cell">
-	                            <html:text property="configName"></html:text>
+	                            <html:text property="configName" size="75"></html:text>
                             </td>
                           </tr>
                             <tr id="layers_name">
@@ -200,7 +200,7 @@ div.fakefile2 input {
                                     <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>WMS Layer</digi:trn>
                                 </td>
                                 <td align=left class="map-configuration-cell">
-                                    <html:text property="layer"></html:text>
+                                    <html:text property="layer" size="75"></html:text>
                                 </td>
                             </tr>
                             <tr id="legend_notes">
@@ -208,6 +208,14 @@ div.fakefile2 input {
                                 <td align="right" class="map-configuration-cell">Layer Notes</td>
                                 <td align="left" class="map-configuration-cell">
                                     <httml:textarea property="legendNotes" style="width: 350px; height: 50px;"
+                                    ></httml:textarea>
+                                </td>
+                            </tr>
+                            <tr id="legend_html">
+
+                                <td align="right" class="map-configuration-cell">HTML Legend</td>
+                                <td align="left" class="map-configuration-cell">
+                                    <httml:textarea property="legendHtml" style="width: 420px; height: 200px;"
                                     ></httml:textarea>
                                 </td>
                             </tr>
@@ -428,16 +436,22 @@ var updateMapType = function(){
 			$("#admin_1").show();
 			$("#admin_2").show();
             $("#layers_name").hide();
+            $("#legend_html").hide();
 		break;
 		case "11":
             $("#layers_name").show();
             $("#layer_name").show();
+            $("#legend_html").show();
+            $("#geo_id").hide();
+            $("#admin_1").hide();
+            $("#admin_2").hide();
             break;
 		default:
 			$("#geo_id").hide();
 			$("#admin_1").hide();
 			$("#admin_2").hide();
             $("#layers_name").hide();
+            $("#legend_html").hide();
 		break;
 	}
 

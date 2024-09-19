@@ -330,6 +330,12 @@ public class ActivityUtil {
             session.evict(object);
         }
     }
+    private static void updateFunding(AmpActivityVersion ampActivityVersion)
+    {
+    Session session = PersistenceManager.getRequestDBSession();
+    List<AmpFunding> fundings = session.createQuery("FROM "+ AmpFunding.class.getName()+" af WHERE af.ampActivityId=:activityId",AmpFunding.class).setParameter("activityId",ampActivityVersion.getAmpActivityId(), LongType.INSTANCE).list();
+
+    }
 
     private static void updateMultiStakeholderField(AmpActivityVersion a) {
         if (!Boolean.TRUE.equals(a.getMultiStakeholderPartnership())) {
@@ -1343,6 +1349,7 @@ public class ActivityUtil {
         }catch (Exception e)
         {
             logger.error("Error saving activity contact:",e);
+            throw e;
         }
     }
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,

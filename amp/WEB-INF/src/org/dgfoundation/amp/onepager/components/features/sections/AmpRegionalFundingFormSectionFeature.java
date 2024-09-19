@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -37,9 +38,12 @@ public class AmpRegionalFundingFormSectionFeature extends
      * @param am
      * @throws Exception
      */
+
+    protected AmpMEFormSectionFeature meFormSection;
     public AmpRegionalFundingFormSectionFeature(String id, String fmName,
-            final IModel<AmpActivityVersion> am) throws Exception {
+                                                final IModel<AmpActivityVersion> am, AmpComponentPanel meFormSectionFeature) throws Exception {
         super(id, fmName, am);
+        this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
         final IModel<Set<AmpRegionalFunding>> setModel = new PropertyModel<Set<AmpRegionalFunding>>(
                 am, "regionalFundings");
         if (setModel.getObject() == null)
@@ -85,7 +89,7 @@ public class AmpRegionalFundingFormSectionFeature extends
                 item.add(fundingItemFeature);
             }
         };
-
+        list.setOutputMarkupId(true);
         list.setReuseItems(true);
         add(list);
 
@@ -95,4 +99,11 @@ public class AmpRegionalFundingFormSectionFeature extends
         return list;
     }
 
+    public AmpMEFormSectionFeature getMeFormSection() {
+        return meFormSection;
+    }
+
+    public void setMeFormSection(AmpMEFormSectionFeature meFormSection) {
+        this.meFormSection = meFormSection;
+    }
 }

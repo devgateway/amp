@@ -3,9 +3,9 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -51,6 +51,7 @@ public class AmpMEIndicatorSearchModel extends
 
             Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
 
+            // Get activity location
             crit.setCacheable(false);
             if (input.trim().length() > 0) {
                 Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
@@ -62,24 +63,29 @@ public class AmpMEIndicatorSearchModel extends
                 crit.setMaxResults(maxResults);
             ret = crit.list();
 
-
-            // If not activity programs then do not return any indicator
-            if (ampActivityPrograms != null && !ampActivityPrograms.isEmpty()) {
-                Set<AmpTheme> programThemes = ampActivityPrograms.stream()
-                        .map(AmpActivityProgram::getProgram)
-                        .collect(Collectors.toSet());
-                Set<AmpTheme> programThemesClone = new HashSet<>(programThemes);
-                // Check if program has siblings and add them to themes to get all indicators for objectives in a program
-                for (AmpTheme program : programThemes) {
-                    if (program.getSiblings() != null) {
-                        programThemesClone.addAll(program.getSiblings());
+            // Re assign all indicators as filtered
+            filterAmpIndicators = ret;
+            // Check if the indicator filter by program is active
+            boolean filterByProgram = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM);
+            if(filterByProgram) {
+                // If not activity programs then do not return any indicator
+                if (ampActivityPrograms != null && !ampActivityPrograms.isEmpty()) {
+                    Set<AmpTheme> programThemes = ampActivityPrograms.stream()
+                            .map(AmpActivityProgram::getProgram)
+                            .collect(Collectors.toSet());
+                    Set<AmpTheme> programThemesClone = new HashSet<>(programThemes);
+                    // Check if program has siblings and add them to themes to get all indicators for objectives in a program
+                    for (AmpTheme program : programThemes) {
+                        if (program.getSiblings() != null) {
+                            programThemesClone.addAll(program.getSiblings());
+                        }
                     }
+
+
+                    filterAmpIndicators = ret.stream()
+                            .filter(indicator -> programThemesClone.contains(indicator.getProgram()))
+                            .collect(Collectors.toList());
                 }
-
-
-                filterAmpIndicators = ret.stream()
-                        .filter(indicator -> programThemesClone.contains(indicator.getProgram()))
-                        .collect(Collectors.toList());
             }
 
             return filterAmpIndicators;

@@ -33,6 +33,5 @@
 
 		<many-to-one name="group" column="amp_category_value_group_id"
 					 class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false"/>
-
 	</class>
 </hibernate-mapping>

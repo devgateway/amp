@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>GGW-358</jira>
+    <keyword>Remove indicator filter by location</keyword>
+    <author>jdeanquin</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                delete
+                from amp_modules_templates
+                where module = (select id from amp_modules_visibility where name = 'Filter By Indicator Location');
+                delete
+                from amp_modules_visibility
+                where name = 'Filter By Indicator Location';
+                drop table AMP_INDICATOR_LOCATION;</lang>
+        </script>
+    </apply>
+</tns:patch>

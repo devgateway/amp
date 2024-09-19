@@ -308,6 +308,4 @@ public class AmpCategoryValueLocations implements Identifiable,
         AmpCategoryValueLocations that = (AmpCategoryValueLocations) o;
         return Objects.equals(id, that.id);
     }
-
-
 }

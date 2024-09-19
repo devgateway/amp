@@ -62,7 +62,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
     protected List<AmpActivityLocation> parentLocations;
 
     public AmpMEItemFeaturePanel(String id, String fmName, IModel<AmpActivityLocation> location,
-                                 final IModel<AmpActivityVersion> conn, List<AmpActivityLocation> locations) {
+                                 final IModel<AmpActivityVersion> conn, List<AmpActivityLocation> locations, boolean isMultiCountry) {
         super(id, fmName, true);
         am = conn;
         parentLocations = locations;
@@ -71,7 +71,10 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         if (location.getObject().getLocation().getParentLocation() != null) {
             locationName = location.getObject().getLocation().getParentLocation().getName() + "[" + location.getObject().getLocation().getName() + "]";
         }
-        add(new Label("countryLocation", locationName));
+
+        Label countryLocationLabel = new Label("countryLocation", locationName);
+        countryLocationLabel.setVisibilityAllowed(isMultiCountry);
+        add(countryLocationLabel);
 
         final IModel<List<IndicatorActivity>> listModel = OnePagerUtil
                 .getReadOnlyListModelFromSetModel(new PropertyModel(conn, "indicators"));

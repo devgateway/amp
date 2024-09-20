@@ -95,6 +95,7 @@ public class GlobalSettingsConstants {
     public static final String PUBLIC_PORTAL = "Public Portal";
 
     public static final String PUBLIC_PORTAL_URL = "Public Portal URL";
+    public static final String GENERATE_REPORTS_AS_PUBLIC = "Generate Reports as Public User";
 
     public static final String REPORTS_EMPTY_VALUES_AS_ZERO_XLS = "Show empty values as zero in Reports export to XLS";
 

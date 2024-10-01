@@ -4,6 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
@@ -37,6 +41,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class AmpStructuresFormSectionFeature extends
@@ -306,6 +313,74 @@ public class AmpStructuresFormSectionFeature extends
 
        addbutton.getButton().add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
        add(addbutton);
+
+
+        AmpAjaxLinkField importStructures = new AmpAjaxLinkField("importStructures", "Import Structures", "Import Structures") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AmpStructure stru = new AmpStructure();
+                list.addItem(stru);
+                target.add(this.getParent());
+                target.add(containter);
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
+                list.goToLastPage();
+                boolean visible = pln.isVisible();
+                pln.setVisible(visible);
+            }
+        };
+
+        importStructures.getButton().add(new AttributeModifier("class", new Model("importStructures button_red_btm")));
+        add(importStructures);
+
+        AmpAjaxLinkField exportStructures = new AmpAjaxLinkField("exportStructures", "Export Structures", "Export Structures") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                try {
+                    logger.error("Downloading data");
+
+                    // Create a new Excel workbook
+                    XSSFWorkbook workbook = new XSSFWorkbook();
+                    XSSFSheet sheet = workbook.createSheet("Structures");
+
+                    // Create the header row
+                    XSSFRow headerRow = sheet.createRow(0);
+                    headerRow.createCell(0).setCellValue("Title");
+                    headerRow.createCell(1).setCellValue("Description");
+                    headerRow.createCell(2).setCellValue("Latitude");
+                    headerRow.createCell(3).setCellValue("Longitude");
+                    headerRow.createCell(4).setCellValue("Shape");
+
+                    int rowIndex = 1;
+                    for (Component child : list) {
+                        if (child instanceof ListItem) {
+                            ListItem<AmpStructure> listItem = (ListItem<AmpStructure>) child;
+                            AmpStructure structure = listItem.getModelObject();
+
+                            // Create a new row for each structure
+                            XSSFRow row = sheet.createRow(rowIndex);
+                            row.createCell(0).setCellValue(structure.getTitle());
+                            row.createCell(1).setCellValue(structure.getDescription());
+                            row.createCell(2).setCellValue(structure.getLatitude());
+                            row.createCell(3).setCellValue(structure.getLongitude());
+                            row.createCell(4).setCellValue(structure.getShape());
+
+                            rowIndex++;
+                        }
+                    }
+
+                    // Write the workbook to a file
+                    FileOutputStream fileOut = new FileOutputStream("structures.xlsx");
+                    workbook.write(fileOut);
+                    fileOut.close();
+
+                } catch (IOException e) {
+                    logger.error("Error exporting data to Excel", e);
+                }
+            }
+        };
+
+        exportStructures.getButton().add(new AttributeModifier("class", new Model("exportStructures button_blue_btm")));
+        add(exportStructures);
 
 
     }

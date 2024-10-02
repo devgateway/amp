@@ -4,6 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,8 +15,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -31,6 +39,7 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
+import org.dgfoundation.amp.onepager.components.features.CustomResourceLinkResourceLink;
 import org.dgfoundation.amp.onepager.components.features.ExportExcelResourceReference;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -320,26 +329,42 @@ public class AmpStructuresFormSectionFeature extends
        addbutton.getButton().add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
        add(addbutton);
 
+        final ModalWindow uploadModal = new ModalWindow("uploadModal");
 
+        final FileUploadField fileUploadField = new FileUploadField("fileUpload");
+
+        uploadModal.setContent(new WebMarkupContainer(uploadModal.getContentId()) {
+            @Override
+            protected void onInitialize() {
+                super.onInitialize();
+                add(fileUploadField);
+                add(new Button("uploadButton") {
+                    @Override
+                    public void onSubmit() {
+                        // Handle file upload and reading here
+                        try {
+                            handleFileUpload(fileUploadField.getFileUpload());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+            }
+        });
+
+// Add the modal to the page
+        add(uploadModal);
         AmpAjaxLinkField importStructures = new AmpAjaxLinkField("importStructures", "Import Structures", "Import Structures") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                AmpStructure stru = new AmpStructure();
-                list.addItem(stru);
-                target.add(this.getParent());
-                target.add(containter);
-                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
-                list.goToLastPage();
-                boolean visible = pln.isVisible();
-                pln.setVisible(visible);
+
             }
         };
 
         importStructures.getButton().add(new AttributeModifier("class", new Model("importStructures button_red_btm")));
         add(importStructures);
         ExportExcelResourceReference resourceReference = new ExportExcelResourceReference();
-        resourceReference.setList(list);
-        ResourceLink<Void> downloadLink = new ResourceLink<>("downloadLink",resourceReference );
+        CustomResourceLinkResourceLink<Void> downloadLink = new CustomResourceLinkResourceLink<>("downloadLink",resourceReference );
         downloadLink.setOutputMarkupId(true);
         add(downloadLink);
 
@@ -347,7 +372,8 @@ public class AmpStructuresFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 logger.info("Preparing to download data");
-
+                resourceReference.setList(list);
+                downloadLink.setReference(resourceReference);
                 // Trigger the non-AJAX file download
                 String downloadLinkMarkupId = downloadLink.getMarkupId();
                 target.appendJavaScript("setTimeout(function() { document.getElementById('" + downloadLinkMarkupId + "').click(); }, 100);");
@@ -391,6 +417,24 @@ public class AmpStructuresFormSectionFeature extends
     private boolean hasCoordinates(IModel<AmpStructure> structureModel) {
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
+    }
+
+    private void handleFileUpload(final FileUpload uploadedFile) throws IOException {
+        // Write the uploaded file to a temporary location
+        File tempFile = new File("temp_" + uploadedFile.getClientFileName());
+        uploadedFile.writeTo(tempFile);
+
+        try (InputStream inputStream = new FileInputStream(tempFile)) {
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            // ...
+        } catch (IOException e) {
+            // Handle exception
+        } catch (InvalidFormatException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // Delete the temporary file
+            tempFile.delete();
+        }
     }
 }
 

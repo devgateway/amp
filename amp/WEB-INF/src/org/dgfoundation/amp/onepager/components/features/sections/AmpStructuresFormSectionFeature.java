@@ -14,16 +14,24 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
+import org.dgfoundation.amp.onepager.components.features.ExportExcelResourceReference;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
@@ -41,9 +49,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class AmpStructuresFormSectionFeature extends
@@ -331,51 +337,20 @@ public class AmpStructuresFormSectionFeature extends
 
         importStructures.getButton().add(new AttributeModifier("class", new Model("importStructures button_red_btm")));
         add(importStructures);
+        ExportExcelResourceReference resourceReference = new ExportExcelResourceReference();
+        resourceReference.setList(list);
+        ResourceLink<Void> downloadLink = new ResourceLink<>("downloadLink",resourceReference );
+        downloadLink.setOutputMarkupId(true);
+        add(downloadLink);
 
         AmpAjaxLinkField exportStructures = new AmpAjaxLinkField("exportStructures", "Export Structures", "Export Structures") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                try {
-                    logger.error("Downloading data");
+                logger.info("Preparing to download data");
 
-                    // Create a new Excel workbook
-                    XSSFWorkbook workbook = new XSSFWorkbook();
-                    XSSFSheet sheet = workbook.createSheet("Structures");
-
-                    // Create the header row
-                    XSSFRow headerRow = sheet.createRow(0);
-                    headerRow.createCell(0).setCellValue("Title");
-                    headerRow.createCell(1).setCellValue("Description");
-                    headerRow.createCell(2).setCellValue("Latitude");
-                    headerRow.createCell(3).setCellValue("Longitude");
-                    headerRow.createCell(4).setCellValue("Shape");
-
-                    int rowIndex = 1;
-                    for (Component child : list) {
-                        if (child instanceof ListItem) {
-                            ListItem<AmpStructure> listItem = (ListItem<AmpStructure>) child;
-                            AmpStructure structure = listItem.getModelObject();
-
-                            // Create a new row for each structure
-                            XSSFRow row = sheet.createRow(rowIndex);
-                            row.createCell(0).setCellValue(structure.getTitle());
-                            row.createCell(1).setCellValue(structure.getDescription());
-                            row.createCell(2).setCellValue(structure.getLatitude());
-                            row.createCell(3).setCellValue(structure.getLongitude());
-                            row.createCell(4).setCellValue(structure.getShape());
-
-                            rowIndex++;
-                        }
-                    }
-
-                    // Write the workbook to a file
-                    FileOutputStream fileOut = new FileOutputStream("structures.xlsx");
-                    workbook.write(fileOut);
-                    fileOut.close();
-
-                } catch (IOException e) {
-                    logger.error("Error exporting data to Excel", e);
-                }
+                // Trigger the non-AJAX file download
+                String downloadLinkMarkupId = downloadLink.getMarkupId();
+                target.appendJavaScript("setTimeout(function() { document.getElementById('" + downloadLinkMarkupId + "').click(); }, 100);");
             }
         };
 
@@ -418,3 +393,5 @@ public class AmpStructuresFormSectionFeature extends
                 getCoordinates().size() > 0;
     }
 }
+
+

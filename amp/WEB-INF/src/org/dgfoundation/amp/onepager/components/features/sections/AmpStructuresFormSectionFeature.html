@@ -4,6 +4,7 @@
 				<span wicket:id="addbutton" />
 			</td>
 			<td colspan="2">
+				<div wicket:id="modalWindow"></div>
 				<span wicket:id="importStructures" />
 			</td>
 			<td colspan="2">
@@ -11,15 +12,7 @@
 				<button wicket:id="exportStructures" type="button">Export Structures</button>
 			</td>
 		</tr>
-	<div wicket:id="uploadModal" style="display: none;">
-		<div class="modal-content" >
-			<h2>Import Structures</h2>
-			<form>
-				<input wicket:id="fileUpload" type="file" />
-				<button wicket:id="uploadButton">Upload</button>
-			</form>
-		</div>
-	</div>
+
 		<tr>
 			<td colspan="2">
 				<span wicket:id="listWithPaginator">

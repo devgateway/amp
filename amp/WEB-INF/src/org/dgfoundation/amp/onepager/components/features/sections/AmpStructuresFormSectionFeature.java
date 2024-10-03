@@ -41,11 +41,13 @@ import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.features.CustomResourceLinkResourceLink;
 import org.dgfoundation.amp.onepager.components.features.ExportExcelResourceReference;
+import org.dgfoundation.amp.onepager.components.features.FileUploadModalPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.LatAndLongValidator;
+import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
 import org.dgfoundation.amp.onepager.helper.structure.ColorData;
 import org.dgfoundation.amp.onepager.helper.structure.CoordinateData;
 import org.dgfoundation.amp.onepager.helper.structure.MapData;
@@ -329,39 +331,18 @@ public class AmpStructuresFormSectionFeature extends
        addbutton.getButton().add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
        add(addbutton);
 
-        final ModalWindow uploadModal = new ModalWindow("uploadModal");
+        final ModalWindow modalWindow = new ModalWindow("modalWindow");
+        add(modalWindow);
 
-        final FileUploadField fileUploadField = new FileUploadField("fileUpload");
+        // Set the content of the modal window to the FileUploadModalPanel
+        modalWindow.setContent(new FileUploadModalPanel(modalWindow.getContentId(), modalWindow));
 
-        uploadModal.setContent(new WebMarkupContainer(uploadModal.getContentId()) {
-            @Override
-            protected void onInitialize() {
-                super.onInitialize();
-                add(fileUploadField);
-                add(new Button("uploadButton") {
-                    @Override
-                    public void onSubmit() {
-                        // Handle file upload and reading here
-                        try {
-                            handleFileUpload(fileUploadField.getFileUpload());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-            }
-        });
-
-// Add the modal to the page
-        add(uploadModal);
         AmpAjaxLinkField importStructures = new AmpAjaxLinkField("importStructures", "Import Structures", "Import Structures") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-
+                modalWindow.show(target); // Show the modal when clicked
             }
         };
-
-        importStructures.getButton().add(new AttributeModifier("class", new Model("importStructures button_red_btm")));
         add(importStructures);
         ExportExcelResourceReference resourceReference = new ExportExcelResourceReference();
         CustomResourceLinkResourceLink<Void> downloadLink = new CustomResourceLinkResourceLink<>("downloadLink",resourceReference );

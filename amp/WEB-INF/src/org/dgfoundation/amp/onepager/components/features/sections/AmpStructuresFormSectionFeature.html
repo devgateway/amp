@@ -3,21 +3,20 @@
 			<td colspan="2">
 				<span wicket:id="addbutton" />
 			</td>
-			<td colspan="2">
-
+			<td colspan="4">
 				<form wicket:id="form">
 					<input type="file" wicket:id="fileUpload" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument" />
-					<input wicket:id="importStructures" type="submit" value="Import Structures"/>
+					<button wicket:id="importStructures" type="submit" value="Import Structures">Import Structures</button>
 				</form>
 			</td>
-			<td colspan="2">
+			<td colspan="4">
 				<a wicket:id="downloadLink" style="display:none;">Download</a>
-				<button wicket:id="exportStructures" type="button">Export Structures</button>
+				<span wicket:id="exportStructures"/>
 			</td>
 		</tr>
 
 		<tr>
-			<td colspan="2">
+			<td colspan="12">
 				<span wicket:id="listWithPaginator">
 	                <table class="inside" wicket:id="list">
 						<tr>

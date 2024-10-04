@@ -18,19 +18,26 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.features.CustomResourceLinkResourceLink;
@@ -51,7 +58,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class AmpStructuresFormSectionFeature extends
@@ -324,14 +333,13 @@ public class AmpStructuresFormSectionFeature extends
 
 
         final FileUploadField fileUploadField = new FileUploadField("fileUpload");
+        fileUploadField.setOutputMarkupId(true);
 
-        // create the form
         final Form<?> form = new Form<Void>("form")
         {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onSubmit() {
-                // display uploaded info
                 FileUpload upload = fileUploadField.getFileUpload();
                 if (upload == null) {
                     logger.info("No file uploaded");
@@ -368,17 +376,56 @@ public class AmpStructuresFormSectionFeature extends
             }
 
         };
-        form.setMultiPart(true);  // Enable file upload
+        form.setMultiPart(true);
         form.setMaxSize(Bytes.megabytes(10));
         form.add(fileUploadField);
 
 
         Button importStructures = new Button("importStructures");
+//        importStructures.add(new AttributeModifier("disabled", "true"));
         importStructures.setOutputMarkupId(true);
         form.add(importStructures);
+        fileUploadField.add(new AjaxFormComponentUpdatingBehavior("change") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                importStructures.setEnabled(true);
+                importStructures.add(new AttributeModifier("disabled", (String) null)); // Enable the button
+                target.add(importStructures);
+
+            }
+        });
+
         add(form);
-        ExportExcelResourceReference resourceReference = new ExportExcelResourceReference();
-        CustomResourceLinkResourceLink<Void> downloadLink = new CustomResourceLinkResourceLink<>("downloadLink",resourceReference );
+
+
+        ResourceReference resourceReference = new ResourceReference("exportData-"+ System.currentTimeMillis()) {
+            @Override
+            public IResource getResource() {
+                return new AbstractResource() {
+                    @Override
+                    protected ResourceResponse newResourceResponse(Attributes attributes) {
+                        ResourceResponse response = new ResourceResponse();
+                        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                        response.setFileName("exported-structures-activity-"+am.getObject().getAmpId()+".xlsx");
+                        response.disableCaching();
+                        response.setWriteCallback(new WriteCallback() {
+                            @Override
+                            public void writeData(Attributes attributes) {
+                                try (OutputStream out = attributes.getResponse().getOutputStream()) {
+                                    writeExcelFile(out, list);
+                                } catch (IOException e) {
+                                    logger.error("Error writing data to file", e);
+                                }
+                            }
+                        });
+                        return response;
+                    }
+                };
+            }
+        };
+        ResourceLink<Void> downloadLink = new ResourceLink<>("downloadLink", resourceReference);
         downloadLink.setOutputMarkupId(true);
         add(downloadLink);
 
@@ -386,13 +433,12 @@ public class AmpStructuresFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 logger.info("Preparing to download data");
-                resourceReference.setList(list);
-                downloadLink.setReference(resourceReference);
-                // Trigger the non-AJAX file download
                 String downloadLinkMarkupId = downloadLink.getMarkupId();
-                target.appendJavaScript("setTimeout(function() { document.getElementById('" + downloadLinkMarkupId + "').click(); }, 100);");
+                target.add(list.getParent());
+                target.appendJavaScript("document.getElementById('" + downloadLinkMarkupId + "').click();");
             }
         };
+        add(exportStructures);
 
         exportStructures.getButton().add(new AttributeModifier("class", new Model("exportStructures button_blue_btm")));
         add(exportStructures);
@@ -414,6 +460,51 @@ public class AmpStructuresFormSectionFeature extends
                 return cell.getCellFormula();
             default:
                 return null;
+        }
+    }
+
+    private void writeExcelFile(OutputStream out,PagingListEditor<AmpStructure> list) throws IOException {
+        try(XSSFWorkbook workbook = new XSSFWorkbook()) {
+            // Create Excel sheet
+            XSSFSheet sheet = workbook.createSheet("Structures");
+
+            // Create header row
+            XSSFRow headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Title");
+            headerRow.createCell(1).setCellValue("Description");
+            headerRow.createCell(2).setCellValue("Latitude");
+            headerRow.createCell(3).setCellValue("Longitude");
+
+            int rowIndex = 1;
+            for (Component child : list) {
+                if (child instanceof ListItem) {
+                    ListItem<AmpStructure> listItem = (ListItem<AmpStructure>) child;
+                    AmpStructure structure = listItem.getModelObject();
+
+                    // Create a new row for each structure
+                    XSSFRow row = sheet.createRow(rowIndex);
+                    if (structure != null) {
+                        createCellIfNotNull(row, 0, structure.getTitle());
+                        createCellIfNotNull(row, 1, structure.getDescription());
+                        createCellIfNotNull(row, 2, structure.getLatitude());
+                        createCellIfNotNull(row, 3, structure.getLongitude());
+                    }
+                    rowIndex++;
+                }
+            }
+
+            // Write workbook content to the output stream
+            workbook.write(out);
+
+            // Respond with the written content
+        } catch (IOException e) {
+            logger.error("Error exporting data to Excel", e);
+        }
+    }
+
+    private void createCellIfNotNull(XSSFRow row, int columnIndex, Object value) {
+        if (value != null) {
+            row.createCell(columnIndex).setCellValue(value.toString());
         }
     }
 

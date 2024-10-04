@@ -8,24 +8,24 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@link Cell} which holds a text and a fractional number called "percentage". 
+ * A {@link Cell} which holds a text and a fractional number called "percentage".
  * The MetaInfo is always empty, while the coordinates are either empty or with a single entry, depending on the #mainLevel)
  * @author Dolghier Constantin
  *
  */
 public final class PercentageTextCell extends Cell {
-    
+
     /**
      * DUMMY SOZO
      * the non-null fractional number. 0.0 <= percentage <= 1.0
      */
-    public final BigDecimal percentage;
-    
+    public BigDecimal percentage;
+
     /**
      * the non-null text
      */
     public final String text;
-    
+
     /**
      * constructs an instance with the given parameters. Will throw a {@link RuntimeException} (or one of its subclasses) in case it is given an invalid input
      * @param text
@@ -44,11 +44,16 @@ public final class PercentageTextCell extends Cell {
         this.text = text;
     }
 
+    public void setPercentage(BigDecimal percentage)
+    {
+        this.percentage=percentage;
+    }
+
     @Override
     public PercentageTextCell changeOwnerId(long newActivityId) {
         return new PercentageTextCell(this.text, newActivityId, this.entityId, this.mainLevel, this.percentage);
     }
-    
+
     @Override
     public MetaInfoSet getMetaInfo() {
         return MetaInfoSet.empty();
@@ -58,7 +63,7 @@ public final class PercentageTextCell extends Cell {
     public BigDecimal getPercentage() {
         return percentage;
     }
-    
+
     @Override
     public int compareTo(Object o) {
         PercentageTextCell ptc = (PercentageTextCell) o;
@@ -69,7 +74,7 @@ public final class PercentageTextCell extends Cell {
             delta = Long.compare(activityId, ptc.activityId);
         return delta;
     }
-    
+
     @Override
     public String toString() {
         String entityStr = String.format(", eid: %d", this.entityId);

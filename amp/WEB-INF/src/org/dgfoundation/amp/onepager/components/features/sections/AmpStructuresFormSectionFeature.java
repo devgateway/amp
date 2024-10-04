@@ -7,47 +7,32 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.WebResponse;
-import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.util.lang.Bytes;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
-import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.features.CustomResourceLinkResourceLink;
 import org.dgfoundation.amp.onepager.components.features.ExportExcelResourceReference;
-import org.dgfoundation.amp.onepager.components.features.FileUploadModalPanel;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.LatAndLongValidator;
-import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
 import org.dgfoundation.amp.onepager.helper.structure.ColorData;
 import org.dgfoundation.amp.onepager.helper.structure.CoordinateData;
 import org.dgfoundation.amp.onepager.helper.structure.MapData;
@@ -331,19 +316,38 @@ public class AmpStructuresFormSectionFeature extends
        addbutton.getButton().add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
        add(addbutton);
 
-        final ModalWindow modalWindow = new ModalWindow("modalWindow");
-        add(modalWindow);
 
-        // Set the content of the modal window to the FileUploadModalPanel
-        modalWindow.setContent(new FileUploadModalPanel(modalWindow.getContentId(), modalWindow));
+        final FileUploadField fileUploadField = new FileUploadField("fileUpload");
 
-        AmpAjaxLinkField importStructures = new AmpAjaxLinkField("importStructures", "Import Structures", "Import Structures") {
+        // create the form
+        final Form<?> form = new Form<Void>("form")
+        {
+            private static final long serialVersionUID = 1L;
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                modalWindow.show(target); // Show the modal when clicked
+            protected void onSubmit()
+            {
+                // display uploaded info
+                FileUpload upload = fileUploadField.getFileUpload();
+                if (upload == null)
+                {
+                    logger.info("No file uploaded");
+                }
+                else
+                {
+                    logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
+                            Bytes.bytes(upload.getSize()).toString());
+                }
             }
         };
-        add(importStructures);
+        form.setMultiPart(true);  // Enable file upload
+        form.setMaxSize(Bytes.megabytes(10));
+        form.add(fileUploadField);
+
+
+        Button importStructures = new Button("importStructures");
+        importStructures.setOutputMarkupId(true);
+        form.add(importStructures);
+        add(form);
         ExportExcelResourceReference resourceReference = new ExportExcelResourceReference();
         CustomResourceLinkResourceLink<Void> downloadLink = new CustomResourceLinkResourceLink<>("downloadLink",resourceReference );
         downloadLink.setOutputMarkupId(true);

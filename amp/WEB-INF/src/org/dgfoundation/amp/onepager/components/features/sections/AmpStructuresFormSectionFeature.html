@@ -4,8 +4,11 @@
 				<span wicket:id="addbutton" />
 			</td>
 			<td colspan="2">
-				<div wicket:id="modalWindow"></div>
-				<span wicket:id="importStructures" />
+
+				<form wicket:id="form">
+					<input type="file" wicket:id="fileUpload" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument" />
+					<input wicket:id="importStructures" type="submit" value="Import Structures"/>
+				</form>
 			</td>
 			<td colspan="2">
 				<a wicket:id="downloadLink" style="display:none;">Download</a>

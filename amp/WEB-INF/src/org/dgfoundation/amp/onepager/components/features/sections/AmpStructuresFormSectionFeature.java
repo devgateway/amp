@@ -5,8 +5,14 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -324,20 +330,43 @@ public class AmpStructuresFormSectionFeature extends
         {
             private static final long serialVersionUID = 1L;
             @Override
-            protected void onSubmit()
-            {
+            protected void onSubmit() {
                 // display uploaded info
                 FileUpload upload = fileUploadField.getFileUpload();
-                if (upload == null)
-                {
+                if (upload == null) {
                     logger.info("No file uploaded");
-                }
-                else
-                {
+                } else {
                     logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
-                            Bytes.bytes(upload.getSize()).toString());
+                            Bytes.bytes(upload.getSize()));
+                    try {
+                        XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());
+                        XSSFSheet sheet = workbook.getSheetAt(0);
+                        Iterator<Row> rowIterator = sheet.iterator();
+                        rowIterator.next();
+
+                        while (rowIterator.hasNext()) {
+                            XSSFRow row = (XSSFRow) rowIterator.next();
+                            String title = getStringValueFromCell(row.getCell(0));
+                            String description = getStringValueFromCell(row.getCell(1));
+                            String latitude = getStringValueFromCell(row.getCell(2));
+                            String longitude = getStringValueFromCell(row.getCell(3));
+
+                            AmpStructure stru = new AmpStructure();
+                            stru.setTitle(title);
+                            stru.setDescription(description);
+                            stru.setLatitude(latitude);
+                            stru.setLongitude(longitude);
+                            list.addItem(stru);
+                            list.goToLastPage();
+                        }
+
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
+
         };
         form.setMultiPart(true);  // Enable file upload
         form.setMaxSize(Bytes.megabytes(10));
@@ -369,6 +398,23 @@ public class AmpStructuresFormSectionFeature extends
         add(exportStructures);
 
 
+    }
+    private static String getStringValueFromCell(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+        switch (cell.getCellType()) {
+            case Cell.CELL_TYPE_STRING:
+                return cell.getStringCellValue();
+            case Cell.CELL_TYPE_NUMERIC:
+                return String.valueOf(cell.getNumericCellValue());
+            case Cell.CELL_TYPE_BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case Cell.CELL_TYPE_FORMULA:
+                return cell.getCellFormula();
+            default:
+                return null;
+        }
     }
 
     public StructureData getDataFromStructureModel(IModel<AmpStructure> structureModel) {

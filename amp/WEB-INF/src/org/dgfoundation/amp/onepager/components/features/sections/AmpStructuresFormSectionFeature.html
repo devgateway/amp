@@ -1,19 +1,20 @@
 <wicket:extend>
 		<tr>
-			<td colspan="2">
+			<td colspan="4">
 				<span wicket:id="addbutton" />
 			</td>
-			<td colspan="4">
+			<td colspan="5">
 				<form wicket:id="form">
 					<input type="file" wicket:id="fileUpload" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument" />
 					<button wicket:id="importStructures" type="submit" value="Import Structures">Import Structures</button>
 				</form>
 			</td>
-			<td colspan="4">
+			<td colspan="5">
 				<a wicket:id="downloadLink" style="display:none;">Download</a>
 				<span wicket:id="exportStructures"/>
 			</td>
 		</tr>
+	<br>
 
 		<tr>
 			<td colspan="12">

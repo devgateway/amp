@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30885</jira>
+    <keyword>Add orgs to Db</keyword>
+    <author>bmokandu</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                -- Insert into amp_org_group
+                INSERT INTO amp_org_group (amp_org_grp_id, org_grp_name, org_grp_code, org_type) VALUES
+                ((SELECT nextval('AMP_ORG_GROUP_seq')), 'ECOWAS External Donors', 'EED', 3);
+
+                -- Insert into amp_organisation
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'THE EMBASSY OF SWEDEN', 'EOS',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'THE EMBASSY OF SWEDEN');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'WORLD BANK', 'WB',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'WORLD BANK');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'AFRICAN DEVELOPMENT BANK', 'ADB',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'AFRICAN DEVELOPMENT BANK');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'ROYAL DANISH EMBASSY', 'RDE',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'ROYAL DANISH EMBASSY');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'EMBASSY OF JAPAN IN NIGERIA', 'EJN',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'EMBASSY OF JAPAN IN NIGERIA');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'HEAD OF MISSION, EMBASSY OF SPAIN', 'HMES',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'HEAD OF MISSION, EMBASSY OF SPAIN');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'African Union Commission', 'AUC',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'African Union Commission');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'DFID', 'DFID',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'DFID');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'Chinese Cooperation', 'CC',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'Chinese Cooperation');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'SPAIN/NEPAD/NPCA', 'SNN',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'SPAIN/NEPAD/NPCA');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'Swedish Intl. Dev Cooperative Agenc', 'SIDCA',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'Swedish Intl. Dev Cooperative Agenc');
+
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                SELECT nextval('AMP_ORGANISATION_seq'), 'UN HIGH COMM.for REFUGEES', 'UNHCR',
+                (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'ECOWAS External Donors' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_organisation WHERE name = 'UN HIGH COMM.for REFUGEES');
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

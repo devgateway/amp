@@ -39,7 +39,7 @@ import org.digijava.module.aim.util.Output;
  */
 @TranslatableClass (displayName = "Component")
 public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable, Identifiable {
-    
+
     //IATI-check: to be ignored
 
     @InterchangeableId
@@ -84,7 +84,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         public int compare(AmpComponent o1, AmpComponent o2) {
             return staticCompare(o1, o2);
         }
-        
+
         public static int staticCompare(AmpComponent o1, AmpComponent o2) {
             if (o1 == null)
                 return 1;
@@ -103,7 +103,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     @Interchangeable(fieldTitle = COMPONENT_TYPE, importable = true, pickIdOnly = true,
             fmPath = "/Activity Form/Components/Component/Component Information/Component Type")
     private AmpComponentType type;
-    
+
     private String Url;
 
     public AmpActivityVersion getActivity() {
@@ -138,21 +138,21 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public AmpComponentType getType() {
         return type;
     }
     public void setType(AmpComponentType type) {
         this.type = type;
     }
-    
+
     public void setUrl(String url) {
         Url = url;
     }
     public String getUrl() {
         return Url;
     }
-    
+
     /**
      * A simple string comparison to sort components by title
      */
@@ -170,7 +170,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         AmpComponent target=(AmpComponent) obj;
         if (this.ampComponentId == null)
             return super.equals(obj);
-        
+
         if (target!=null && this.ampComponentId!=null){
             return (this.getAmpComponentId().equals(target.getAmpComponentId()));
         }
@@ -182,28 +182,28 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         return this.ampComponentId.hashCode();
     }
      */
-    
+
     public java.sql.Timestamp getCreationdate() {
         return creationdate;
     }
     public void setCreationdate(java.sql.Timestamp creationdate) {
         this.creationdate = creationdate;
     }
-    
+
     public Set<AmpComponentFunding> getFundings() {
         return fundings;
     }
-    
+
     public void setFundings(Set<AmpComponentFunding> fundings) {
         this.fundings = fundings;
     }
-    
+
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpComponent aux = (AmpComponent) obj;
         return this.getValue().equals(aux.getValue());
     }
-    
+
     private static final Comparator<AmpComponentFunding> COMPONENT_FUNDING_COMPARATOR = new Comparator<AmpComponentFunding>() {
         public int compare(AmpComponentFunding o1, AmpComponentFunding o2) {
             AmpComponentFunding aux1 = (AmpComponentFunding) o1;
@@ -225,7 +225,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        
+
         out.getOutputs().add(
                 new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
                         : "Empty Title" }));
@@ -243,15 +243,15 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         if (this.Url != null && !this.Url.trim().equals("")) {
             out.getOutputs().add(new Output(null, new String[] { "URL" }, new Object[] { this.Url }));
         }
-        
+
         List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings);
         auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
         Iterator<AmpComponentFunding> iter = auxFundings.iterator();
-        
+
         while(iter.hasNext()) {
             AmpComponentFunding funding = iter.next();
             String transactionType = "";
-            
+
             switch (funding.getTransactionType().intValue()) {
                 case 0:
                     transactionType = "Commitments";
@@ -269,45 +269,43 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                     transactionType = "MTEF Projection";
                     break;
             }
-            
+
             out.getOutputs().add(new Output(null, new String[] { "Trn" }, new Object[] { transactionType }));
             out.getOutputs().add(new Output(null, new String[] { "Value" }, new Object[] {
                              " " + funding.getAdjustmentType().getValue() + " - " , funding.getTransactionAmount(),
                             " ", funding.getCurrency(), " - ", funding.getTransactionDate()}));
         }
-        
-        
+
+
         return out;
     }
-    
+
     @Override
     public Object getValue() {
         StringBuffer ret = new StringBuffer();
         ret.append("-" + this.code+ "-" + this.description + "-" + this.Url + "-" + this.creationdate);
-        
+
         List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings);
         auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
         Iterator<AmpComponentFunding> iter = auxFundings.iterator();
-        
+
         while(iter.hasNext()) {
             AmpComponentFunding funding = iter.next();
             ret.append(funding.getTransactionType() + "-" + funding.getTransactionAmount() + "-" + funding.getCurrency() + "-" + funding.getTransactionDate());
         }
-        
+
         return ret.toString();
     }
-    
+
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpComponent auxComponent = (AmpComponent) clone();
         auxComponent.setActivity(newActivity);
         auxComponent.setAmpComponentId(null);
-        
-        if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {
+
+        if (auxComponent.getFundings() != null && !auxComponent.getFundings().isEmpty()) {
             Set<AmpComponentFunding> auxSetFundings = new HashSet<AmpComponentFunding>();
-            Iterator<AmpComponentFunding> it = auxComponent.getFundings().iterator();
-            while (it.hasNext()) {
-                AmpComponentFunding auxComponentFunding = it.next();
+            for (AmpComponentFunding auxComponentFunding : auxComponent.getFundings()) {
                 AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
                 newComponentFunding.setAmpComponentFundingId(null);
                 newComponentFunding.setComponent(auxComponent);
@@ -317,7 +315,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         } else {
             auxComponent.setFundings(null);
         }
-        
+
         return auxComponent;
     }
 
@@ -326,7 +324,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
     @Override
     public String toString() {
         return title;

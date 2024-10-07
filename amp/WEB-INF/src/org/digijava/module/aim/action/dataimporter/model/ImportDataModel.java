@@ -1,4 +1,6 @@
-package org.digijava.module.admin.util.model;
+package org.digijava.module.aim.action.dataimporter.model;
+
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,6 +9,8 @@ public class ImportDataModel {
     private Long internal_id;
     private String amp_id;
     private String project_title;
+
+    private String project_code;
     private String description;
     private String objective;
     private Object document_space;
@@ -18,15 +22,16 @@ public class ImportDataModel {
     private Set<Sector> secondary_sectors=new HashSet<>();
     private Set<Location> locations=new HashSet<>();
     private Set<DonorOrganization> donor_organization=new HashSet<>();
-    private Set<Object> responsible_organization=new HashSet<>();
-    private Set<Object> executing_agency=new HashSet<>();
+    private Set<Organization> responsible_organization=new HashSet<>();
+    private Set<Organization> beneficiary_agency=new HashSet<>();
+    private Set<Organization> executing_agency=new HashSet<>();
     private Set<Object> activity_internal_ids;
     private Set<Funding> fundings= new HashSet<>();
     private Set<Object> issues;
     private Long team;
     private PpcAmount ppc_amount;
-    private Set<Object> donor_contact_information;
-    private Set<Object> project_coordinator_contact_information;
+    private Set<AmpActivityContact> donor_contact_information;
+    private Set<AmpActivityContact> project_coordinator_contact_information;
     private Set<Object> sector_ministry_contact_information;
     private Set<Object> mofed_contact_information;
     private Set<Object> implementing_executing_agency_contact_information;
@@ -81,13 +86,26 @@ public class ImportDataModel {
     public void setProject_title(String project_title) {
         this.project_title = project_title;
     }
+    public String getProject_code() {
+        return project_code;
+    }
 
+    public void setProject_code(String project_code) {
+        this.project_code = project_code;
+    }
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public Set<Organization> getBeneficiary_agency() {
+        return beneficiary_agency;
+    }
+
+    public void setBeneficiary_agency(Set<Organization> beneficiary_agency) {
+        this.beneficiary_agency = beneficiary_agency;
     }
 
     public String getObjective() {
@@ -170,19 +188,19 @@ public class ImportDataModel {
         this.donor_organization = donor_organization;
     }
 
-    public Set<Object> getResponsible_organization() {
+    public Set<Organization> getResponsible_organization() {
         return responsible_organization;
     }
 
-    public void setResponsible_organization(Set<Object> responsible_organization) {
+    public void setResponsible_organization(Set<Organization> responsible_organization) {
         this.responsible_organization = responsible_organization;
     }
 
-    public Set<Object> getExecuting_agency() {
+    public Set<Organization> getExecuting_agency() {
         return executing_agency;
     }
 
-    public void setExecuting_agency(Set<Object> executing_agency) {
+    public void setExecuting_agency(Set<Organization> executing_agency) {
         this.executing_agency = executing_agency;
     }
 
@@ -226,19 +244,19 @@ public class ImportDataModel {
         this.ppc_amount = ppc_amount;
     }
 
-    public Set<Object> getDonor_contact_information() {
+    public Set<AmpActivityContact> getDonor_contact_information() {
         return donor_contact_information;
     }
 
-    public void setDonor_contact_information(Set<Object> donor_contact_information) {
+    public void setDonor_contact_information(Set<AmpActivityContact> donor_contact_information) {
         this.donor_contact_information = donor_contact_information;
     }
 
-    public Set<Object> getProject_coordinator_contact_information() {
+    public Set<AmpActivityContact> getProject_coordinator_contact_information() {
         return project_coordinator_contact_information;
     }
 
-    public void setProject_coordinator_contact_information(Set<Object> project_coordinator_contact_information) {
+    public void setProject_coordinator_contact_information(Set<AmpActivityContact> project_coordinator_contact_information) {
         this.project_coordinator_contact_information = project_coordinator_contact_information;
     }
 
@@ -488,6 +506,7 @@ public class ImportDataModel {
                 "internal_id=" + internal_id +
                 ", amp_id='" + amp_id + '\'' +
                 ", project_title='" + project_title + '\'' +
+                ", project_code='" + project_code + '\'' +
                 ", description='" + description + '\'' +
                 ", objective='" + objective + '\'' +
                 ", document_space=" + document_space +

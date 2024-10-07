@@ -99,8 +99,6 @@ import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 /**
  * Util class used to manipulate an activity
@@ -202,12 +200,12 @@ public class ActivityUtil {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
         }
     }
-    
+
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
             AmpTeamMember ampCurrentMember, boolean draft,
             Session session, SaveContext context, EditorStore editorStore, Site site) throws Exception {
-        
+
         boolean draftChange = detectDraftChange(a, draft);
         return saveActivityNewVersion(a, translations, cumulativeTranslations, ampCurrentMember, draft,
                 draftChange, session, context, editorStore, site);
@@ -313,7 +311,7 @@ public class ActivityUtil {
         saveAgreements(a, session, isActivityForm);
         saveContacts(a, session, (draft != draftChange), ampCurrentMember);
 
-        updateComponentFunding(a, session);
+        updateComponentFunding(a);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
@@ -354,7 +352,7 @@ public class ActivityUtil {
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
         return Boolean.TRUE.equals(a.getDraft()) != draft;
     }
-    
+
     public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
         // it would be nicer to rely upon AMP ID, but some old activities may lack it
         return a.getAmpActivityId() == null;
@@ -628,7 +626,7 @@ public class ActivityUtil {
         }
         return false;
     }
-    
+
     /**
      *  An activity can be rejected only if:
      *  1. the activity is not new
@@ -645,7 +643,7 @@ public class ActivityUtil {
         return BooleanUtils.isFalse(isNewActivity) && BooleanUtils.isFalse(isDraft)
                 && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
     }
-    
+
     /**
      * Detect if the teammember is approver of the workspace or is the teamlead of the ws
      *
@@ -742,29 +740,18 @@ public class ActivityUtil {
     }
 
 
-    private static void updateComponentFunding(AmpActivityVersion a, Session session) {
+    private static void updateComponentFunding(AmpActivityVersion a) {
         Set<AmpComponent> components = a.getComponents();
 
         if (components == null) {
             return;
         }
 
-        Iterator<AmpComponent> componentIterator = components.iterator();
-        while (componentIterator.hasNext()) {
-            AmpComponent ampComponent = componentIterator.next();
+        for (AmpComponent ampComponent : components) {
+            if (Hibernate.isInitialized(ampComponent.getFundings()) && (ampComponent.getFundings() != null)) {
 
-            if (Hibernate.isInitialized(ampComponent.getFundings())) {
-                if (ampComponent.getFundings() != null) {
-                    Iterator<AmpComponentFunding> ampComponentFundingsIterator = ampComponent.getFundings().iterator();
+                    ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
 
-                    while (ampComponentFundingsIterator.hasNext()) {
-                        AmpComponentFunding acf = ampComponentFundingsIterator.next();
-
-                        if (acf.getTransactionAmount() == null) {
-                            ampComponentFundingsIterator.remove();
-                        }
-                    }
-                }
             }
         }
     }
@@ -777,18 +764,14 @@ public class ActivityUtil {
         HashSet<AmpComments> delComm = s.getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS);
 
         if (delComm != null){
-            Iterator<AmpComments> di = delComm.iterator();
-            while (di.hasNext()) {
-                AmpComments tComm = (AmpComments) di.next();
+            for (AmpComments tComm : delComm) {
                 session.delete(tComm);
             }
         }
 
         if (newComm != null){
-            Iterator<AmpComments> ni = newComm.iterator();
-            while (ni.hasNext()) {
-                AmpComments tComm = (AmpComments) ni.next();
-                if (ActivityVersionUtil.isVersioningEnabled() && !draft){
+            for (AmpComments tComm : newComm) {
+                if (ActivityVersionUtil.isVersioningEnabled() && !draft) {
                     try {
                         tComm = (AmpComments) tComm.prepareMerge(a);
                     } catch (CloneNotSupportedException e) {
@@ -797,7 +780,7 @@ public class ActivityUtil {
                 }
 
                 if (tComm.getMemberId() == null)
-                    tComm.setMemberId(((AmpAuthWebSession)org.apache.wicket.Session.get()).getAmpCurrentMember());
+                    tComm.setMemberId(((AmpAuthWebSession) org.apache.wicket.Session.get()).getAmpCurrentMember());
                 if (tComm.getAmpActivityId() == null)
                     tComm.setAmpActivityId(a);
                 session.saveOrUpdate(tComm);

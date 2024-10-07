@@ -1,8 +1,13 @@
-package org.digijava.module.admin.util.model;
+package org.digijava.module.aim.action.dataimporter.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.digijava.module.aim.action.dataimporter.model.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties("expenditures")
 public class Funding {
     private Long funding_id;
     private Long donor_organization_id;
@@ -12,6 +17,10 @@ public class Funding {
     private Object reporting_date;
     private List<Transaction> commitments= new ArrayList<>();
     private List<Transaction> disbursements= new ArrayList<>();
+
+    @JsonProperty("expenditures")
+    private List<Transaction> expenditures= new ArrayList<>();
+
     private Long type_of_assistance;
     private Long financing_instrument;
     private Object funding_status;
@@ -49,6 +58,15 @@ public class Funding {
     public void setActual_completion_date(Object actual_completion_date) {
         this.actual_completion_date = actual_completion_date;
     }
+
+    public List<Transaction> getExpenditures() {
+        return expenditures;
+    }
+
+    public void setExpenditures(List<Transaction> expenditures) {
+        this.expenditures = expenditures;
+    }
+
 
     public Object getOriginal_completion_date() {
         return original_completion_date;

@@ -1229,7 +1229,7 @@ public class TeamMemberUtil {
         return currentAmpTeamMember;
     }
 
-    public static List getAmpTeamMembersbyDgUserId(Long userId) throws Exception {
+    public static List getAmpTeamMembersbyDgUserId(Long userId) {
 
         Session session = null;
         Query qry = null;

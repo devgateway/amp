@@ -1,18 +1,12 @@
 var fs = require('fs');
+var $ = require('jquery');
 var path = require('path');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(path.join(__dirname, 'wocat-item-adm-clusters.html'), 'utf8');
-var ProjectModel = Backbone.Model.extend({});
+var ProjectCollection = require('./project-collection');
+Backbone.$ = $;
 
-var ProjectCollection = Backbone.Collection.extend({
-    model: ProjectModel,
-    url: 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search',
-
-    parse: function(response) {
-        return response.content;
-    }
-});
 module.exports = Backbone.View.extend({
   tagName: 'tbody',
 

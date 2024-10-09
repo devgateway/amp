@@ -1,17 +1,17 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var DatasourcesTable = require('./wocat-table-view');
+var WocatTable = require('./wocat-table-view');
 var Template = fs.readFileSync(__dirname + '/wocat-template.html', 'utf8');
 
 module.exports = Backbone.View.extend({
 
-  className: 'datasources',
+  className: 'wocat',
 
   template: _.template(Template),
 
   events: {
-    'click a[href="#toggle-datasources-collapse"]': 'toggleDatasources'
+    'click a[href="#toggle-wocat-collapse"]': 'toggleWocat'
   },
 
   initialize: function(options) {
@@ -23,16 +23,16 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     self.$el.html(self.template());
-    var content = new DatasourcesTable({
+    var content = new WocatTable({
         app: this.app
       }).render().el;
 
-    self.$('.datasources-content', self.$el).html(content);
+    self.$('.wocat-content', self.$el).html(content);
     /* TODO Reintroduce the "Loading" image in the table template */
     return this;
   },
 
-  toggleDatasources: function() {
+  toggleWocat: function() {
     this.$el.toggleClass('expanded');
     return false; // stops it updating the url.
   }

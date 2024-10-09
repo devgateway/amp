@@ -1,24 +1,23 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var DatasourcesItem = require('./wocat-item-adm-clusters');
+var WocatItem = require('./wocat-item-adm-clusters');
 var Template = fs.readFileSync(__dirname + '/wocat-table-template.html', 'utf8');
+var ProjectCollection = require('./project-collection')
 
 module.exports = Backbone.View.extend({
 
-  className: 'datasourcesTable',
+  className: 'wocatTable',
 
   template: _.template(Template),
 
-  events: {
-    'click .load-more': 'loadMoreFromCollection'
-  },
+  // events: {
+  //   'click .load-more': 'loadMoreFromCollection'
+  // },
 
   initialize: function(options) {
     this.app = options.app;
-    this.collection = this.app.data.activities;
-    this.listenTo(this.app.data.filter, 'apply', this.refreshModel);
-    this.listenTo(this.app.data.settingsWidget, 'applySettings', this.refreshModel);
+    this.collection = new ProjectCollection();
     _.bindAll(this, 'render');
   },
 
@@ -35,27 +34,23 @@ module.exports = Backbone.View.extend({
 
     this.collection.load().then(function() {
       // drs: moved to do this after collection load?
-      var tableContent = new DatasourcesItem({
+      var tableContent = new WocatItem({
         collection: self.collection,
         app: self.app
       }).render().el;
 
-      var collection = self.collection.getPageDetails();
-      // collection.gisSettings = gisSettings.gisSettings;
-      collection.sectorsEnabled= app.data.generalSettings.get('gis-sectors-enabled');
-          collection.programsEnabled= app.data.generalSettings.get('gis-programs-enabled');
-      self.app.translator.translateDOM(
-        self.template(collection)).then(
-        function(newEl) {
-          self.$el.html(newEl);
-          self.updatePlannedActualUI();
-        });
+      // var collection = self.collection.getPageDetails();
+      // self.app.translator.translateDOM(
+      //   self.template(collection)).then(
+      //   function(newEl) {
+      //     self.$el.html(newEl);
+      //   });
 
-      if((self.collection.getPageDetails().currentPage + 1) >= self.collection.getPageDetails().totalPageCount){
-    	  self.$el.find('.load-more').addClass('load-more-hide');
-      }else{
-    	  self.$el.find('.load-more').removeClass('load-more-hide');
-      }
+      // if((self.collection.getPageDetails().currentPage + 1) >= self.collection.getPageDetails().totalPageCount){
+    	//   self.$el.find('.load-more').addClass('load-more-hide');
+      // }else{
+    	//   self.$el.find('.load-more').removeClass('load-more-hide');
+      // }
 
       // drs: review, inconsistant behaviour between chrome and FF
       if (!_.isEmpty(tableContent)) {
@@ -66,29 +61,6 @@ module.exports = Backbone.View.extend({
     });
 
     return this;
-  },
-
-  // If any of the 'planned' funding types are selected then the
-  // table should show planned comitments and dispursements,
-  // otherwise show actual values.
-  updatePlannedActualUI: function() {
-	  var self = this;
-	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
-      self.$('.setting-scc').hide();
-      self.$('.setting-executings').hide();
-	  if (selected.toLowerCase().indexOf('ssc') >= 0) {
-          self.$('.setting-actual').hide();
-          self.$('.setting-planned').hide();
-          self.$('.setting-donors').hide();
-          self.$('.setting-scc').show();
-          self.$('.setting-executings').show();
-      } else if (selected.toLowerCase().indexOf('planned') >= 0) {
-		  self.$('.setting-actual').hide();
-		  self.$('.setting-planned').show();
-	  } else {
-		  self.$('.setting-actual').show();
-		  self.$('.setting-planned').hide();
-	  }
   },
 
   toggleDatasources: function() {

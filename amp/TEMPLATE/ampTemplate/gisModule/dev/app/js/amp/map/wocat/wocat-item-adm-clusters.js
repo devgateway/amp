@@ -16,11 +16,11 @@ module.exports = Backbone.View.extend({
   },
 
 
-    render: function() {
+    render: function(page) {
         var self = this;
 
         // Create a new instance of the collection
-        var projects = new ProjectCollection([],{size:10, page:1});
+        var projects = new ProjectCollection([],{size:10, page:page});
 
         // Fetch the data from the API
         projects.fetch({

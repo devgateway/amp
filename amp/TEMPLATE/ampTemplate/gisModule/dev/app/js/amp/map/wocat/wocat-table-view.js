@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.collection = new ProjectCollection([], {size:10, page:1});
-    this.render();
+    _.bindAll(this, 'render');
   },
 
   // if filters change, fetch
@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
       var tableContent = new WocatItem({
         collection: collection,  // Pass the fetched collection
         app: self.app
-      }).render().el;
+      }).render(self.collection.page).el;
 
       // Append or process `tableContent` as needed
       if (!_.isEmpty(tableContent)) {

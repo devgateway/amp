@@ -32,6 +32,8 @@ module.exports = Backbone.View.extend({
                     // Access the necessary fields from the payload
                     var name = projectData.name || 'N/A';
                     var description = projectData.description || 'N/A';
+                    var formattedDescription = description.split(' ').length > 7 ? description.split(' ').slice(0, 7).join(' ') + '...' : description;
+
                     var compilerNames = projectData.compilerNames || 'N/A';
                     var thumbnail = projectData.thumbnail || 'default-thumbnail.jpg';  // Fallback thumbnail
                     var thumbnailDescription = projectData.thumbnailDescription || 'N/A';
@@ -43,7 +45,7 @@ module.exports = Backbone.View.extend({
                     // Append or render the content on the page using your template or directly
                     self.$el.append(self.template({
                         name: name,
-                        description: description,
+                        description: formattedDescription,
                         compilerNames: compilerNames,
                         thumbnail: thumbnail,
                         thumbnailDescription: formattedThumbnailDescription,

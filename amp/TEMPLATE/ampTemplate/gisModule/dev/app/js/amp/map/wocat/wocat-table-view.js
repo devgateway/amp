@@ -29,15 +29,36 @@ module.exports = Backbone.View.extend({
     });
   },
 
+  fetchCollection: function() {
+    var self = this;  // Reference to the current view
+
+    return new Promise(function(resolve, reject) {
+      self.collection.fetch({
+        success: function(collection, response, options) {
+          resolve(collection);  // Resolve the promise with the collection
+        },
+        error: function(collection, response, options) {
+          reject(response);  // Reject the promise with the error response
+        }
+      });
+    });
+  },
+
   render: function() {
     var self = this;
 
-    this.collection.fetch().then(function() {
-      // drs: moved to do this after collection load?
+    this.fetchCollection().then(function(collection) {
+      console.log("Collection: "+collection)
+      // Proceed with your logic after the collection has been fetched
       var tableContent = new WocatItem({
-        collection: self.collection,
+        collection: collection,  // Pass the fetched collection
         app: self.app
       }).render().el;
+
+      // Append or process `tableContent` as needed
+      self.$el.append(tableContent);
+    }).catch(function(error) {
+      console.error('Failed to fetch collection:', error);
 
       // var collection = self.collection.getPageDetails();
       // self.app.translator.translateDOM(

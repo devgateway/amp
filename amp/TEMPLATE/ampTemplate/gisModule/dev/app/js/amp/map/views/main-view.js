@@ -82,8 +82,8 @@ module.exports = Backbone.View.extend({
     headerContainer.append(this.basemapView.render().el);
 
     this.$el.append(this.legendView.render().el);
-    this.$el.append(this.datasourcesView.render().el);
     this.$el.append(this.wocatView.render().el);
+    this.$el.append(this.datasourcesView.render().el);
     this.$el.append(this.messageView.render().el);
 
     this.$el.append('<div id="map-loading" style="position: absolute;left: 50%;top: 50%;">' +

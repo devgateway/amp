@@ -97,6 +97,9 @@ module.exports = Backbone.View.extend({
     if (self.collection.totalElements === self.collection.pageSize)
     {
       self.$el.find('.load-more').addClass('load-more-hide');
+    }else
+    {
+      self.$el.find('.load-more').removeClass('load-more-hide');
     }
     self.collection.size+=10;
 
@@ -119,6 +122,10 @@ module.exports = Backbone.View.extend({
 
         if (currentPage + 1 >= totalPages) {
           self.$el.find('.load-more').addClass('load-more-hide');
+        }
+        else
+        {
+          self.$el.find('.load-more').removeClass('load-more-hide');
         }
       }).catch(function(error) {
         console.error('Failed to fetch more projects:', error);

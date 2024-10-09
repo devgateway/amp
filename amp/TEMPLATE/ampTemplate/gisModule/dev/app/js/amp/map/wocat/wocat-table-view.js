@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.collection = new ProjectCollection([], {size:10, page:1});
-    _.bindAll(this, 'render');
+    this.render();
   },
 
   // if filters change, fetch

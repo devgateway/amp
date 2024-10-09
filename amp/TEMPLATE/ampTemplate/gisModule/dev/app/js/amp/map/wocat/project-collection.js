@@ -6,6 +6,7 @@ module.exports = Backbone.Collection.extend({
     model: ProjectModel,
     url: 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search',
     parse: function(response) {
+        console.log("Response: " +response)
         return response.content;
     }
 });

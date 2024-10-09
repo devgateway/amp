@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/wocat-item-adm-clusters.html', 'utf8');
-var ProjectCollection = require('/project-collection')
+var ProjectCollection = require('./project-collection');
 
 module.exports = Backbone.View.extend({
   tagName: 'tbody',

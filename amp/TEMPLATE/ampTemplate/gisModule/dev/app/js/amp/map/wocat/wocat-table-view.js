@@ -55,7 +55,11 @@ module.exports = Backbone.View.extend({
       }).render().el;
 
       // Append or process `tableContent` as needed
-      self.$el.append(tableContent);
+      if (!_.isEmpty(tableContent)) {
+        self.$('table', self.$el).append(tableContent);
+      } else { //drs added otherwise FF won't add...
+        self.$('table').append(tableContent);
+      }
     }).catch(function(error) {
       console.error('Failed to fetch collection:', error);
     });
@@ -74,11 +78,7 @@ module.exports = Backbone.View.extend({
       // }
 
       // drs: review, inconsistant behaviour between chrome and FF
-      if (!_.isEmpty(tableContent)) {
-        self.$('table', self.$el).append(tableContent);
-      } else { //drs added otherwise FF won't add...
-        self.$('table').append(tableContent);
-      }
+
 
     return this;
   },

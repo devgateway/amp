@@ -11,13 +11,13 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
-  // events: {
-  //   'click .load-more': 'loadMoreFromCollection'
-  // },
+  events: {
+    'click .load-more': 'loadMoreFromWocatCollection'
+  },
 
   initialize: function(options) {
     this.app = options.app;
-    this.collection = new ProjectCollection();
+    this.collection = new ProjectCollection([], {size:10});
     _.bindAll(this, 'render');
   },
 
@@ -50,7 +50,7 @@ module.exports = Backbone.View.extend({
     this.fetchCollection().then(function(collection) {
       // Proceed with your logic after the collection has been fetched
       var tableContent = new WocatItem({
-        collection: collection,  // Pass the fetched collection
+        collection: collection.content,  // Pass the fetched collection
         app: self.app
       }).render().el;
 
@@ -66,7 +66,7 @@ module.exports = Backbone.View.extend({
 
       var collection = self.collection;
       self.app.translator.translateDOM(
-        self.template(collection)).then(
+        self.template(collection.content)).then(
         function(newEl) {
           self.$el.html(newEl);
         });
@@ -91,18 +91,45 @@ module.exports = Backbone.View.extend({
    *
    *
    **/
-  loadMoreFromCollection: function() {
+  loadMoreFromWocatCollection: function() {
+    console.log('Trying to load more from wocat collection');
     var self = this;
-    if (self.collection.getPageDetails().currentPosition < self.collection.getPageDetails().totalCount) {
-      if (!self.$el.find('.load-more').hasClass('disabled')) {
-        self.collection.fetchMore().done(function() {
-          self.render(); //TODO: (drs) just append the new ones...?
-        });
-      }
-      self.$el.find('.load-more').text('Loading...').addClass('disabled');
-    } else {
-    	self.$el.find('.load-more').addClass('load-more-hide');
+    if (self.collection.totalElements === self.collection.pageSize)
+    {
+      self.$el.find('.load-more').addClass('load-more-hide');
     }
+    self.collection.size+=10;
+
+    var currentPage = self.collection.currentPage;
+    var totalPages = self.collection.totalPages;
+
+    if (currentPage < totalPages) {
+      self.fetchCollection().then(function(moreProjects) {
+        var tableContent = new WocatItem({
+          collection: moreProjects,
+          app: self.app
+        }).render().el;
+
+        // Append or process `tableContent` as needed
+        if (!_.isEmpty(tableContent)) {
+          self.$('table', self.$el).append(tableContent);
+        } else { // For Firefox compatibility
+          self.$('table').append(tableContent);
+        }
+
+        if (currentPage + 1 >= totalPages) {
+          self.$el.find('.load-more').addClass('load-more-hide');
+        }
+      }).catch(function(error) {
+        console.error('Failed to fetch more projects:', error);
+      });
+    }
+
+
+
+
   }
+
+
 
 });

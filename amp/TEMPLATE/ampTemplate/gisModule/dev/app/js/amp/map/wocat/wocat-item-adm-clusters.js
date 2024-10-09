@@ -19,13 +19,13 @@ module.exports = Backbone.View.extend({
         var self = this;
 
         // Create a new instance of the collection
-        var projects = new ProjectCollection();
+        var projects = new ProjectCollection([],{size:10});
 
         // Fetch the data from the API
         projects.fetch({
             success: function(collection, response, options) {
                 // Iterate over the fetched data
-                collection.each(function(project) {
+                collection.content.each(function(project) {
                     var projectData = project.toJSON();
 
                     // Access the necessary fields from the payload

@@ -1,11 +1,8 @@
 var fs = require('fs');
-var $ = require('jquery');
-var path = require('path');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var Template = fs.readFileSync(path.join(__dirname, 'wocat-item-adm-clusters.html'), 'utf8');
-var ProjectCollection = require('./project-collection');
-Backbone.$ = $;
+var Template = fs.readFileSync(__dirname + '/wocat-item-adm-clusters.html', 'utf8');
+var ProjectCollection = require('/project-collection')
 
 module.exports = Backbone.View.extend({
   tagName: 'tbody',

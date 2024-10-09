@@ -3,7 +3,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var WocatItem = require('./wocat-item-adm-clusters');
 var Template = fs.readFileSync(__dirname + '/wocat-table-template.html', 'utf8');
-var ProjectCollection = require('./project-collection')
+var ProjectCollection = require('./project-collection');
 
 module.exports = Backbone.View.extend({
 

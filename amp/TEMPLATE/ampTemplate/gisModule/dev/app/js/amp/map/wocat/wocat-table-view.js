@@ -32,7 +32,7 @@ module.exports = Backbone.View.extend({
   render: function() {
     var self = this;
 
-    this.collection.load().then(function() {
+    this.collection.fetch().then(function() {
       // drs: moved to do this after collection load?
       var tableContent = new WocatItem({
         collection: self.collection,

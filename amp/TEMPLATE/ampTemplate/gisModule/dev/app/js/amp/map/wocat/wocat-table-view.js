@@ -4,7 +4,6 @@ var Backbone = require('backbone');
 var WocatItem = require('./wocat-item-adm-clusters');
 var Template = fs.readFileSync(__dirname + '/wocat-table-template.html', 'utf8');
 var ProjectCollection = require('./project-collection');
-
 module.exports = Backbone.View.extend({
 
   className: 'wocatTable',
@@ -17,7 +16,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    this.collection = new ProjectCollection([], {size:10});
+    this.collection = new ProjectCollection([], {size:10, page:1});
     _.bindAll(this, 'render');
   },
 
@@ -101,7 +100,8 @@ module.exports = Backbone.View.extend({
     {
       self.$el.find('.load-more').removeClass('load-more-hide');
     }
-    self.collection.size+=10;
+    self.collection.size=10;
+    self.collection.page+=1;
 
     var currentPage = self.collection.currentPage;
     var totalPages = self.collection.totalPages;

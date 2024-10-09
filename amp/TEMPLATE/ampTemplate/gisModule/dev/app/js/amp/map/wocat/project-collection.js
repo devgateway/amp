@@ -9,7 +9,8 @@ module.exports = Backbone.Collection.extend({
     // Override the URL function to include query parameters
     url: function() {
         var size = this.size || 10;
-        return AMP_WOCAT_API + '?size=' + size;
+        var page = this.page || 1;
+        return AMP_WOCAT_API + '?size=' + size+'&page=' + page;
     },
 
     parse: function(response) {
@@ -23,6 +24,9 @@ module.exports = Backbone.Collection.extend({
     initialize: function(models, options) {
         if (options && options.size) {
             this.size = options.size;
+        }
+        if (options && options.page) {
+            this.page = options.page;
         }
     }
 });

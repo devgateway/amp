@@ -3,6 +3,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/wocat-item-adm-clusters.html', 'utf8');
 var ProjectCollection = require('./project-collection');
+const WOCAT_API='https://qcat.wocat.net';
 
 module.exports = Backbone.View.extend({
   tagName: 'tbody',
@@ -19,7 +20,7 @@ module.exports = Backbone.View.extend({
         var self = this;
 
         // Create a new instance of the collection
-        var projects = new ProjectCollection([],{size:10});
+        var projects = new ProjectCollection([],{size:10, page:1});
 
         // Fetch the data from the API
         projects.fetch({
@@ -34,6 +35,7 @@ module.exports = Backbone.View.extend({
                     var compilerNames = projectData.compilerNames || 'N/A';
                     var thumbnail = projectData.thumbnail || 'default-thumbnail.jpg';  // Fallback thumbnail
                     var thumbnailDescription = projectData.thumbnailDescription || 'N/A';
+                    var formattedThumbnailDescription = thumbnailDescription.split(' ').length > 7 ? thumbnailDescription.split(' ').slice(0, 7).join(' ') + '...' : thumbnailDescription;
                     var publicationDate = projectData.publicationDate || 'N/A';
                     var institutionName = projectData.ampWocatInstitution ? projectData.ampWocatInstitution.institutionName : 'N/A';
                     var detailsUrl = projectData.detailsUrl || '#';
@@ -44,10 +46,10 @@ module.exports = Backbone.View.extend({
                         description: description,
                         compilerNames: compilerNames,
                         thumbnail: thumbnail,
-                        thumbnailDescription: thumbnailDescription,
+                        thumbnailDescription: formattedThumbnailDescription,
                         publicationDate: publicationDate,
                         institutionName: institutionName,
-                        detailsUrl: detailsUrl
+                        detailsUrl: WOCAT_API+detailsUrl
                     }));
                 });
             },

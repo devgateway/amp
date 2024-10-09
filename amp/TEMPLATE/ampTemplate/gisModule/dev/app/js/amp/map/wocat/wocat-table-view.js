@@ -48,7 +48,6 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     this.fetchCollection().then(function(collection) {
-      console.log("Collection: "+collection)
       // Proceed with your logic after the collection has been fetched
       var tableContent = new WocatItem({
         collection: collection,  // Pass the fetched collection
@@ -59,13 +58,14 @@ module.exports = Backbone.View.extend({
       self.$el.append(tableContent);
     }).catch(function(error) {
       console.error('Failed to fetch collection:', error);
+    });
 
-      // var collection = self.collection.getPageDetails();
-      // self.app.translator.translateDOM(
-      //   self.template(collection)).then(
-      //   function(newEl) {
-      //     self.$el.html(newEl);
-      //   });
+      var collection = self.collection;
+      self.app.translator.translateDOM(
+        self.template(collection)).then(
+        function(newEl) {
+          self.$el.html(newEl);
+        });
 
       // if((self.collection.getPageDetails().currentPage + 1) >= self.collection.getPageDetails().totalPageCount){
     	//   self.$el.find('.load-more').addClass('load-more-hide');
@@ -79,7 +79,6 @@ module.exports = Backbone.View.extend({
       } else { //drs added otherwise FF won't add...
         self.$('table').append(tableContent);
       }
-    });
 
     return this;
   },

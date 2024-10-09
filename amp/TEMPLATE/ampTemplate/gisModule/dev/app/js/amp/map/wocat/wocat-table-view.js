@@ -50,7 +50,7 @@ module.exports = Backbone.View.extend({
     this.fetchCollection().then(function(collection) {
       // Proceed with your logic after the collection has been fetched
       var tableContent = new WocatItem({
-        collection: collection.content,  // Pass the fetched collection
+        collection: collection,  // Pass the fetched collection
         app: self.app
       }).render().el;
 
@@ -66,7 +66,7 @@ module.exports = Backbone.View.extend({
 
       var collection = self.collection;
       self.app.translator.translateDOM(
-        self.template(collection.content)).then(
+        self.template(collection)).then(
         function(newEl) {
           self.$el.html(newEl);
         });

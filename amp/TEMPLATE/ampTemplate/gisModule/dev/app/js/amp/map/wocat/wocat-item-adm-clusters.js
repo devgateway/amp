@@ -25,7 +25,7 @@ module.exports = Backbone.View.extend({
         projects.fetch({
             success: function(collection, response, options) {
                 // Iterate over the fetched data
-                collection.content.each(function(project) {
+                collection.each(function(project) {
                     var projectData = project.toJSON();
 
                     // Access the necessary fields from the payload

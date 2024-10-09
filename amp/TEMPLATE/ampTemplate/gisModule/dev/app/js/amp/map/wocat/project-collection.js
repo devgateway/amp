@@ -13,7 +13,11 @@ module.exports = Backbone.Collection.extend({
     },
 
     parse: function(response) {
-        return response;  // Return the content from the API response
+        this.currentPage = response.currentPage;
+        this.totalPages = response.totalPages;
+        this.pageSize = response.pageSize;
+        this.totalElements = response.totalElements;
+        return response.content;
     },
 
     initialize: function(models, options) {

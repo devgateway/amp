@@ -107,29 +107,30 @@ module.exports = Backbone.View.extend({
     var totalPages = self.collection.totalPages;
 
     if (currentPage < totalPages) {
-      self.fetchCollection().then(function(moreProjects) {
-        var tableContent = new WocatItem({
-          collection: moreProjects,
-          app: self.app
-        }).render().el;
-
-        // Append or process `tableContent` as needed
-        if (!_.isEmpty(tableContent)) {
-          self.$('table', self.$el).append(tableContent);
-        } else { // For Firefox compatibility
-          self.$('table').append(tableContent);
-        }
-
-        if (currentPage + 1 >= totalPages) {
-          self.$el.find('.load-more').addClass('load-more-hide');
-        }
-        else
-        {
-          self.$el.find('.load-more').removeClass('load-more-hide');
-        }
-      }).catch(function(error) {
-        console.error('Failed to fetch more projects:', error);
-      });
+      self.render();
+      // self.fetchCollection().then(function(moreProjects) {
+      //   var tableContent = new WocatItem({
+      //     collection: moreProjects,
+      //     app: self.app
+      //   }).render().el;
+      //
+      //   // Append or process `tableContent` as needed
+      //   if (!_.isEmpty(tableContent)) {
+      //     self.$('table', self.$el).append(tableContent);
+      //   } else { // For Firefox compatibility
+      //     self.$('table').append(tableContent);
+      //   }
+      //
+      //   if (currentPage + 1 >= totalPages) {
+      //     self.$el.find('.load-more').addClass('load-more-hide');
+      //   }
+      //   else
+      //   {
+      //     self.$el.find('.load-more').removeClass('load-more-hide');
+      //   }
+      // }).catch(function(error) {
+      //   console.error('Failed to fetch more projects:', error);
+      // });
     }
 
 

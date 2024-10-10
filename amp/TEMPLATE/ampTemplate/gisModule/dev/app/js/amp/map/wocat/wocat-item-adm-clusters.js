@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend({
                     var formattedThumbnailDescription = thumbnailDescription.split(' ').length > 7 ? thumbnailDescription.split(' ').slice(0, 7).join(' ') + '...' : thumbnailDescription;
                     var publicationDate = projectData.publicationDate || 'N/A';
                     var institutionName = projectData.ampWocatInstitution ? projectData.ampWocatInstitution.institutionName : 'N/A';
-                    var detailsUrl = projectData.detailsUrl || '#';
+                    var detailsUrl = WOCAT_API + projectData.detailsUrl || '#';
 
                     // Append or render the content on the page using your template or directly
                     self.$el.append(self.template({
@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
                         thumbnailDescription: formattedThumbnailDescription,
                         publicationDate: publicationDate,
                         institutionName: institutionName,
-                        detailsUrl: WOCAT_API+detailsUrl
+                        detailsUrl: detailsUrl
                     }));
                 });
             },

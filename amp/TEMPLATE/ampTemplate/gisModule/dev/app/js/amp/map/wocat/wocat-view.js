@@ -33,8 +33,34 @@ module.exports = Backbone.View.extend({
   },
 
   toggleWocat: function() {
-    this.$el.toggleClass('expanded');
-    return false; // stops it updating the url.
+    this.$el.toggleClass('expanded');  // Toggle the expanded class
+    if (this.$el.hasClass('expanded')) {
+      this.centerElement();  // Center the element if it is expanded
+    }
+    return false;  // Prevent default URL behavior
+  },
+
+// Center the element in the middle of the page
+  centerElement: function() {
+    const element = this.$el;
+
+    // Get the dimensions of the window and the element
+    const windowWidth = $(window).width();
+    const windowHeight = $(window).height();
+    const elementWidth = element.outerWidth();
+    const elementHeight = element.outerHeight();
+
+    // Calculate centered position
+    const left = (windowWidth - elementWidth) / 2;
+    const top = (windowHeight - elementHeight) / 2;
+
+    // Apply the centered position styles
+    element.css({
+      position: 'fixed',  // Make the element position relative to the viewport
+      left: left + 'px',
+      top: top + 'px',
+      zIndex: 1000  // Adjust z-index to ensure it appears above other elements
+    });
   }
 
 

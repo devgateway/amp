@@ -69,13 +69,6 @@ module.exports = Backbone.View.extend({
           self.$el.html(newEl);
         });
 
-      // if((self.collection.getPageDetails().currentPage + 1) >= self.collection.getPageDetails().totalPageCount){
-    	//   self.$el.find('.load-more').addClass('load-more-hide');
-      // }else{
-    	//   self.$el.find('.load-more').removeClass('load-more-hide');
-      // }
-
-      // drs: review, inconsistant behaviour between chrome and FF
 
 
     return this;
@@ -85,10 +78,6 @@ module.exports = Backbone.View.extend({
     this.$el.toggleClass('expanded');
   },
 
-  /*TODO(thadk) do not redraw entire view and lose the user their scrolling *
-   *
-   *
-   **/
   loadMoreFromWocatCollection: function() {
     console.log('Trying to load more from Wocat collection');
     var self = this;

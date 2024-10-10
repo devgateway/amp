@@ -33,34 +33,64 @@ module.exports = Backbone.View.extend({
   },
 
   toggleWocat: function() {
-    this.$el.toggleClass('expanded');  // Toggle the expanded class
+    this.$el.toggleClass('expanded');  // Toggle the 'expanded' class
+
+    // Apply dynamic styles for centering the element
     if (this.$el.hasClass('expanded')) {
-      this.centerElement();  // Center the element if it is expanded
+      // Dynamically set styles when expanded
+      this.$el.css({
+        'display': 'block',
+        'width': '400px',            // Adjust as needed
+        'max-height': '80vh',        // Prevent it from growing too tall
+        'overflow-y': 'auto',        // Allow scrolling inside the window
+        'background-color': 'white',
+        'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.1)',
+        'border': '1px solid #ccc',
+        'padding': '20px',
+        'position': 'fixed',
+        'z-index': '1000'
+      });
+
+      // Center the element in the viewport
+      this.centerElement();
+    } else {
+      // Optionally, reset the styles when collapsed
+      this.$el.css({
+        'display': '',
+        'width': '',
+        'max-height': '',
+        'overflow-y': '',
+        'background-color': '',
+        'box-shadow': '',
+        'border': '',
+        'padding': '',
+        'position': '',
+        'z-index': ''
+      });
     }
-    return false;  // Prevent default URL behavior
+
+    return false; // Stops it from updating the URL
   },
 
-// Center the element in the middle of the page
   centerElement: function() {
     const element = this.$el;
 
-    // Get the dimensions of the window and the element
-    const windowWidth = $(window).width();
-    const windowHeight = $(window).height();
-    const elementWidth = element.outerWidth();
-    const elementHeight = element.outerHeight();
+    // Delay to ensure height is recalculated after the element is expanded
+    setTimeout(function() {
+      const windowWidth = $(window).width();
+      const windowHeight = $(window).height();
+      const elementWidth = element.outerWidth();
+      const elementHeight = element.outerHeight();
 
-    // Calculate centered position
-    const left = (windowWidth - elementWidth) / 2;
-    const top = (windowHeight - elementHeight) / 2;
+      const left = (windowWidth - elementWidth) / 2;
+      const top = (windowHeight - elementHeight) / 2;
 
-    // Apply the centered position styles
-    element.css({
-      position: 'fixed',  // Make the element position relative to the viewport
-      left: left + 'px',
-      top: top + 'px',
-      zIndex: 1000  // Adjust z-index to ensure it appears above other elements
-    });
+      // Apply the centered position styles
+      element.css({
+        'left': left + 'px',
+        'top': top + 'px'
+      });
+    }, 100);  // Small delay to recalculate the height after expansion
   }
 
 

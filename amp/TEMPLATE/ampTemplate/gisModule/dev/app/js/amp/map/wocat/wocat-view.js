@@ -41,12 +41,12 @@ module.exports = Backbone.View.extend({
       this.$el.css({
         'display': 'block',
         'width': '400px',            // Adjust as needed
-        'max-height': '80vh',        // Prevent it from growing too tall
+        'max-height': '50vh',        // Prevent it from growing too tall
         'overflow-y': 'auto',        // Allow scrolling inside the window
-        'background-color': 'white',
-        'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.1)',
-        'border': '1px solid #ccc',
-        'padding': '20px',
+        // 'background-color': 'white',
+        // 'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.1)',
+        // 'border': '1px solid #ccc',
+        // 'padding': '20px',
         'position': 'fixed',
         'z-index': '1000'
       });

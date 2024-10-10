@@ -40,8 +40,8 @@ module.exports = Backbone.View.extend({
       // Dynamically set styles when expanded
       this.$el.css({
         'display': 'block',
-        'width': '500px',            // Adjust as needed
-        'max-height': '50vh',        // Prevent it from growing too tall
+        'width': '570px',            // Adjust as needed
+        'max-height': '70vh',        // Prevent it from growing too tall
         'overflow-y': 'auto',        // Allow scrolling inside the window
         // 'background-color': 'white',
         // 'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -53,6 +53,10 @@ module.exports = Backbone.View.extend({
 
       // Center the element in the viewport
       this.centerElement();
+    }
+    else
+    {
+      this.$el.removeAttr('style');
     }
 
     return false; // Stops it from updating the URL

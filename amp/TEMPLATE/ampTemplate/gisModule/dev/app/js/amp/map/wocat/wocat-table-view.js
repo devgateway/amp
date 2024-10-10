@@ -116,7 +116,7 @@ module.exports = Backbone.View.extend({
         var tableContent = new WocatItem({
           collection: moreProjects,  // This is the new data fetched
           app: self.app
-        }).render().el;
+        }).render(self.collection.page).el;
 
         // Append the new rows to the existing table (without overwriting)
         if (!_.isEmpty(tableContent)) {

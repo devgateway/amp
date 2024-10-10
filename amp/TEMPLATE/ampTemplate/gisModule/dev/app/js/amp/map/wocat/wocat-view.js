@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend({
       // Dynamically set styles when expanded
       this.$el.css({
         'display': 'block',
-        'width': '400px',            // Adjust as needed
+        'width': '500px',            // Adjust as needed
         'max-height': '50vh',        // Prevent it from growing too tall
         'overflow-y': 'auto',        // Allow scrolling inside the window
         // 'background-color': 'white',
@@ -56,16 +56,7 @@ module.exports = Backbone.View.extend({
     } else {
       // Optionally, reset the styles when collapsed
       this.$el.css({
-        'display': '',
-        'width': '',
-        'max-height': '',
-        'overflow-y': '',
-        'background-color': '',
-        'box-shadow': '',
-        'border': '',
-        'padding': '',
-        'position': '',
-        'z-index': ''
+        'display': 'none'
       });
     }
 

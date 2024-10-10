@@ -18,14 +18,13 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.collection = new ProjectCollection([], {size:10, page:1});
     _.bindAll(this, 'render');
+    this.refreshModel();
   },
 
   // if filters change, fetch
   refreshModel: function() {
     var self = this;
-    this.collection.fetch().then(function() {
-      self.render();
-    });
+    self.render();
   },
 
   fetchCollection: function() {

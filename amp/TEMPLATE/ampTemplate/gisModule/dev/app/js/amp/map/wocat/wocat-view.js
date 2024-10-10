@@ -43,11 +43,8 @@ module.exports = Backbone.View.extend({
         'width': '500px',            // Adjust as needed
         'max-height': '100vh',        // Prevent it from growing too tall
         'overflow-y': 'auto',        // Allow scrolling inside the window
-        // 'background-color': 'white',
-        // 'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.1)',
-        // 'border': '1px solid #ccc',
-        // 'padding': '20px',
         'position': 'fixed',
+        'left':'389px',
         'z-index': '1000'
       });
 

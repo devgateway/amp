@@ -53,11 +53,6 @@ module.exports = Backbone.View.extend({
 
       // Center the element in the viewport
       this.centerElement();
-    } else {
-      // Optionally, reset the styles when collapsed
-      this.$el.css({
-        'display': 'none'
-      });
     }
 
     return false; // Stops it from updating the URL

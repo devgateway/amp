@@ -40,11 +40,10 @@ module.exports = Backbone.View.extend({
       // Dynamically set styles when expanded
       this.$el.css({
         'display': 'block',
-        'width': '500px',            // Adjust as needed
-        'max-height': '100vh',        // Prevent it from growing too tall
-        'overflow-y': 'auto',        // Allow scrolling inside the window
+        'width': '500px',
+        'max-height': '100vh',
+        'overflow-y': 'auto',
         'position': 'fixed',
-        'left':'389px',
         'z-index': '1000'
       });
 
@@ -69,9 +68,9 @@ module.exports = Backbone.View.extend({
       const elementWidth = element.outerWidth();
       const elementHeight = element.outerHeight();
 
-      const left = (windowWidth - elementWidth) / 2;
+      var left = (windowWidth - elementWidth) / 2;
       const top = (windowHeight - elementHeight) / 2;
-
+      left+=60;
       // Apply the centered position styles
       element.css({
         'left': left + 'px',

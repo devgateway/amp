@@ -33,35 +33,40 @@ module.exports = Backbone.View.extend({
   },
 
   toggleWocat: function() {
-    this.$el.toggleClass('expanded');  // Toggle the 'expanded' class
+    this.$el.toggleClass('expanded');
 
-    // Apply dynamic styles for centering the element
     if (this.$el.hasClass('expanded')) {
-      // Dynamically set styles when expanded
       this.$el.css({
         'display': 'block',
         'width': '500px',
         'max-height': '100vh',
         'overflow-y': 'auto',
         'position': 'fixed',
-        'z-index': '1000'
+        'z-index': '1000',
+        'transition': 'all 0.3s ease-in-out'
       });
 
-      // Center the element in the viewport
       this.centerElement();
-    }
-    else
-    {
-      this.$el.removeAttr('style');
+    } else {
+      // Add transition when collapsing
+      this.$el.css({
+        'transition': 'all 0.3s ease-in-out',
+        'width': '0',
+        'height': '0'
+      });
+
+      // Remove style attributes after the collapse animation completes
+      setTimeout(() => {
+        this.$el.removeAttr('style');
+      }, 300);
     }
 
-    return false; // Stops it from updating the URL
+    return false;
   },
 
   centerElement: function() {
     const element = this.$el;
 
-    // Delay to ensure height is recalculated after the element is expanded
     setTimeout(function() {
       const windowWidth = $(window).width();
       const windowHeight = $(window).height();
@@ -70,13 +75,15 @@ module.exports = Backbone.View.extend({
 
       var left = (windowWidth - elementWidth) / 2;
       const top = (windowHeight - elementHeight) / 2;
-      left+=60;
-      // Apply the centered position styles
+      left += 60;
+
       element.css({
         'left': left + 'px',
-        'top': top + 'px'
+        'top': top + 'px',
+        'position': 'fixed',
+        'transition': 'all 0.3s ease-in-out'
       });
-    }, 100);  // Small delay to recalculate the height after expansion
+    }, 100);
   }
 
 

@@ -34,6 +34,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -383,20 +384,21 @@ public class PublicPortalService {
 
     public static PublicTotalsByMeasure getCountByMeasure(SettingsAndFiltersParameters config) {
         PublicTotalsByMeasure result = new PublicTotalsByMeasure();
-        boolean fetchOnlyValidatedProjects = FeaturesUtil.getGlobalSettingValueBoolean("Fetch Only Validated/Ongoing Projects for Public Portal");
+        boolean fetchOnlyValidatedProjects = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FETCH_ONLY_VALIDATED_PROJECTS);
         if (fetchOnlyValidatedProjects) {
             Session session = PersistenceManager.getRequestDBSession();
             String ongoingProjectKey = TranslatorWorker.translateText("Project ongoing").toLowerCase();
-
+            logger.info("Project ongoing: " + ongoingProjectKey);
             Query query = session.createQuery(
                     "SELECT acv.id FROM " + AmpCategoryValue.class.getName() + " acv " +
-                            "JOIN acv.ampCategoryClass acc " +
-                            "WHERE acc.keyName = :keyName " +
+                            "WHERE acv.ampCategoryClass.keyName = :keyName " +
                             "AND LOWER(acv.value) = :translatedValue"
             );
-            query.setParameter("keyName", "activity_status");
-            query.setParameter("translatedValue", ongoingProjectKey);
+            query.setParameter("keyName", "activity_status", StringType.INSTANCE);
+            query.setParameter("translatedValue", ongoingProjectKey,StringType.INSTANCE);
             query.setCacheable(true);
+            logger.info("Query is: "+query.getQueryString());
+            logger.error("Query is: "+query.getQueryString());
 
             List<Long> ids = query.list();
             if (!ids.isEmpty()) {

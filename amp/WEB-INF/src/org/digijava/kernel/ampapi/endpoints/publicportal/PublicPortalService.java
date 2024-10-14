@@ -392,7 +392,7 @@ public class PublicPortalService {
             Query query = session.createQuery(
                     "SELECT acv.id FROM " + AmpCategoryValue.class.getName() + " acv " +
                             "WHERE acv.ampCategoryClass.keyName = " +"'activity_status' "+
-                            "AND LOWER(acv.value) = LOWER("+ongoingProjectKey+")"
+                            "AND LOWER(acv.value) = LOWER('"+ongoingProjectKey+"')"
             );
 //            query.setParameter("keyName", "activity_status", StringType.INSTANCE);
 //            query.setParameter("translatedValue", ongoingProjectKey,StringType.INSTANCE);

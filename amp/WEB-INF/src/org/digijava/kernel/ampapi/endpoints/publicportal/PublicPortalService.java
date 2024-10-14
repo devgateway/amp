@@ -401,6 +401,10 @@ public class PublicPortalService {
             logger.error("Query is: "+query.getQueryString());
 
             List<Long> ids = query.list();
+            if (config.getFilters()==null)
+            {
+                config.setFilters(new HashMap<>());
+            }
             if (!ids.isEmpty()) {
                 config.getFilters().put("status", ids.get(0));
             }

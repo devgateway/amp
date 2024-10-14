@@ -26,9 +26,14 @@ import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -80,7 +85,7 @@ public class PublicPortalService {
         applyFilterRules(config, spec, months);
         // configure project types
         ReportsUtil.configureProjectTypes(spec, config.getProjectType());
-        // do we need to include empty fundings in case no fundings are detected at all? 
+        // do we need to include empty fundings in case no fundings are detected at all?
         // normally, with healthy data, they are not visible due to the sorting rule
         spec.setDisplayEmptyFundingRows(true);
         List<String> projectTypeOptions = config.getProjectType();
@@ -378,6 +383,28 @@ public class PublicPortalService {
 
     public static PublicTotalsByMeasure getCountByMeasure(SettingsAndFiltersParameters config) {
         PublicTotalsByMeasure result = new PublicTotalsByMeasure();
+        boolean fetchOnlyValidatedProjects = FeaturesUtil.getGlobalSettingValueBoolean("Fetch Only Validated/Ongoing Projects for Public Portal");
+        if (fetchOnlyValidatedProjects) {
+            Session session = PersistenceManager.getRequestDBSession();
+            String ongoingProjectKey = TranslatorWorker.translateText("Project ongoing").toLowerCase();
+
+            Query query = session.createQuery(
+                    "SELECT acv.id FROM " + AmpCategoryValue.class.getName() + " acv " +
+                            "JOIN acv.ampCategoryClass acc " +
+                            "WHERE acc.keyName = :keyName " +
+                            "AND LOWER(acv.value) = :translatedValue"
+            );
+            query.setParameter("keyName", "activity_status");
+            query.setParameter("translatedValue", ongoingProjectKey);
+            query.setCacheable(true);
+
+            List<Long> ids = query.list();
+            if (!ids.isEmpty()) {
+                config.getFilters().put("status", ids.get(0));
+            }
+            config.getFilters().put("approval-status", 4);
+        }
+
         result.getMeasure().put("original", "Total Activities");
         result.getMeasure().put("translated", TranslatorWorker.translateText("Total Activities"));
 
@@ -437,4 +464,4 @@ public class PublicPortalService {
         });
         return result;
     }
-} 
+}

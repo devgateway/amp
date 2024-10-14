@@ -391,11 +391,11 @@ public class PublicPortalService {
             logger.info("Project ongoing: " + ongoingProjectKey);
             Query query = session.createQuery(
                     "SELECT acv.id FROM " + AmpCategoryValue.class.getName() + " acv " +
-                            "WHERE acv.ampCategoryClass.keyName = :keyName " +
-                            "AND LOWER(acv.value) = :translatedValue"
+                            "WHERE acv.ampCategoryClass.keyName = " +"'activity_status' "+
+                            "AND LOWER(acv.value) = LOWER("+ongoingProjectKey+")"
             );
-            query.setParameter("keyName", "activity_status", StringType.INSTANCE);
-            query.setParameter("translatedValue", ongoingProjectKey,StringType.INSTANCE);
+//            query.setParameter("keyName", "activity_status", StringType.INSTANCE);
+//            query.setParameter("translatedValue", ongoingProjectKey,StringType.INSTANCE);
             query.setCacheable(true);
             logger.info("Query is: "+query.getQueryString());
             logger.error("Query is: "+query.getQueryString());

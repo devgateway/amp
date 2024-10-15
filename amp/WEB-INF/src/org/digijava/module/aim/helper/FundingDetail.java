@@ -21,8 +21,7 @@ public class FundingDetail implements Serializable, Comparable
     private long indexId;
     private boolean checked;
     private int transactionType;
-    //private int adjustmentType;
-    
+
     private Date reportingDate;
     private AmpCategoryValue adjustmentTypeName;
     private AmpCategoryValue projectionTypeName;
@@ -40,27 +39,27 @@ public class FundingDetail implements Serializable, Comparable
     private Long ampComponentFundingId;
     private AmpOrganisation recipientOrganisation;
     private AmpRole recipientOrganisationRole;
-    
+
 
     private Long fundDetId;
     private String disbOrderId;
     private IPAContract contract;
-    private Boolean disbursementOrderRejected;        
+    private Boolean disbursementOrderRejected;
     private Long pledge;
     private AmpCategoryValue pledgename;
-    
+
     private Float capitalPercent;
-    
+
     private AmpOrganisation componentOrganisation;
     private AmpOrganisation componentSecondResponsibleOrganization;
     private String componentTransactionDescription;
-       
+
     private String attachedPledgeName;
-    
-    //instead of showing a specific date, this funding detail should show 
+
+    //instead of showing a specific date, this funding detail should show
     //the fiscal year, e.g. 2014/2015
     private String fiscalYear;
-    
+
     public Boolean disasterResponse;
 
     private String disbursementId;
@@ -290,11 +289,11 @@ public class FundingDetail implements Serializable, Comparable
     public void setAttachedPledgeName(String attachedPledgeName){
         this.attachedPledgeName = attachedPledgeName;
     }
-    
+
     public String getAttachedPledgeName(){
         return this.attachedPledgeName;
     }
-    
+
     public void setComponentOrganisation(AmpOrganisation compOrganisation) {
         this.componentOrganisation = compOrganisation;
     }
@@ -387,7 +386,7 @@ public class FundingDetail implements Serializable, Comparable
     public void setContract(IPAContract contract) {
         this.contract = contract;
     }
-    
+
     public String getFiscalYear() {
         return fiscalYear;
     }
@@ -395,7 +394,7 @@ public class FundingDetail implements Serializable, Comparable
     public void setFiscalYear(String fiscalYear) {
         this.fiscalYear = fiscalYear;
     }
-    
+
     public AmpCategoryValue getProjectionTypeName() {
         return projectionTypeName;
     }

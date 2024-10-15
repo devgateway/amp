@@ -26,9 +26,16 @@ import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -80,7 +87,7 @@ public class PublicPortalService {
         applyFilterRules(config, spec, months);
         // configure project types
         ReportsUtil.configureProjectTypes(spec, config.getProjectType());
-        // do we need to include empty fundings in case no fundings are detected at all? 
+        // do we need to include empty fundings in case no fundings are detected at all?
         // normally, with healthy data, they are not visible due to the sorting rule
         spec.setDisplayEmptyFundingRows(true);
         List<String> projectTypeOptions = config.getProjectType();
@@ -378,11 +385,49 @@ public class PublicPortalService {
 
     public static PublicTotalsByMeasure getCountByMeasure(SettingsAndFiltersParameters config) {
         PublicTotalsByMeasure result = new PublicTotalsByMeasure();
+        config = addSomeMoreFiltersForValidatedProjects(config);
+
         result.getMeasure().put("original", "Total Activities");
         result.getMeasure().put("translated", TranslatorWorker.translateText("Total Activities"));
 
         result.setCount(PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, false));
         return result;
+    }
+
+    private static SettingsAndFiltersParameters addSomeMoreFiltersForValidatedProjects(SettingsAndFiltersParameters config) {
+        boolean fetchOnlyValidatedProjects = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FETCH_ONLY_VALIDATED_PROJECTS);
+        if (fetchOnlyValidatedProjects) {
+            Session session = PersistenceManager.getRequestDBSession();
+            logger.error("Language: "+TLSUtils.getLangCode());
+            String ongoingProjectKey = TranslatorWorker.translateText("Project ongoing", TLSUtils.getLangCode(), TLSUtils.getSiteId()).toLowerCase();
+            logger.error("Project ongoing: " + ongoingProjectKey);
+            Query query = session.createQuery(
+                    "SELECT acv.id FROM " + AmpCategoryValue.class.getName() + " acv " +
+                            "WHERE acv.ampCategoryClass.keyName = " +"'activity_status' "+
+                            "AND LOWER(acv.value) = LOWER('"+ongoingProjectKey+"')"
+            );
+//            query.setParameter("keyName", "activity_status", StringType.INSTANCE);
+//            query.setParameter("translatedValue", ongoingProjectKey,StringType.INSTANCE);
+            query.setCacheable(true);
+            logger.error("Query is: "+query.getQueryString());
+
+            List<Long> ids = query.list();
+            logger.error("IDS are: "+ids);
+            if (config ==null)
+            {
+                config = new SettingsAndFiltersParameters();
+            }
+            if (config.getFilters()==null)
+            {
+                config.setFilters(new HashMap<>());
+            }
+            if (!ids.isEmpty()) {
+                config.getFilters().put("status", ids.get(0));
+            }
+            config.getFilters().put("approval-status", 4);
+        }
+        logger.error("Config: "+config);
+        return config;
     }
 
     public static PublicTopData searchProjects(ReportFormParameters formParams, Long reportId) {
@@ -437,4 +482,4 @@ public class PublicPortalService {
         });
         return result;
     }
-} 
+}

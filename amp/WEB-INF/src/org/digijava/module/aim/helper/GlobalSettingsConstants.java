@@ -15,6 +15,7 @@ public class GlobalSettingsConstants {
     public static final String MAX_INACTIVE_SESSION_INTERVAL = "Max Inactive Session Interval";
 
     public static final String NUMBER_OF_YEARS_IN_RANGE = "Number of Years in Range";
+    public static final String FETCH_ONLY_VALIDATED_PROJECTS = "Fetch Only Validated/Ongoing Projects for Public Portal";
 
     public static final String PUBLIC_VIEW = "Public View";
 

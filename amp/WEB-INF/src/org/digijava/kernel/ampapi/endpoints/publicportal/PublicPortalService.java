@@ -398,9 +398,9 @@ public class PublicPortalService {
         boolean fetchOnlyValidatedProjects = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FETCH_ONLY_VALIDATED_PROJECTS);
         if (fetchOnlyValidatedProjects) {
             Session session = PersistenceManager.getRequestDBSession();
-            logger.info("Language: "+TLSUtils.getLangCode());
+            logger.error("Language: "+TLSUtils.getLangCode());
             String ongoingProjectKey = TranslatorWorker.translateText("Project ongoing", TLSUtils.getLangCode(), TLSUtils.getSiteId()).toLowerCase();
-            logger.info("Project ongoing: " + ongoingProjectKey);
+            logger.error("Project ongoing: " + ongoingProjectKey);
             Query query = session.createQuery(
                     "SELECT acv.id FROM " + AmpCategoryValue.class.getName() + " acv " +
                             "WHERE acv.ampCategoryClass.keyName = " +"'activity_status' "+
@@ -409,9 +409,10 @@ public class PublicPortalService {
 //            query.setParameter("keyName", "activity_status", StringType.INSTANCE);
 //            query.setParameter("translatedValue", ongoingProjectKey,StringType.INSTANCE);
             query.setCacheable(true);
-            logger.info("Query is: "+query.getQueryString());
+            logger.error("Query is: "+query.getQueryString());
 
             List<Long> ids = query.list();
+            logger.error("IDS are: "+ids);
             if (config ==null)
             {
                 config = new SettingsAndFiltersParameters();
@@ -425,6 +426,7 @@ public class PublicPortalService {
             }
             config.getFilters().put("approval-status", 4);
         }
+        logger.error("Config: "+config);
         return config;
     }
 

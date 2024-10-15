@@ -27,6 +27,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -384,10 +385,21 @@ public class PublicPortalService {
 
     public static PublicTotalsByMeasure getCountByMeasure(SettingsAndFiltersParameters config) {
         PublicTotalsByMeasure result = new PublicTotalsByMeasure();
+        config = addSomeMoreFiltersForValidatedProjects(config);
+
+        result.getMeasure().put("original", "Total Activities");
+        result.getMeasure().put("translated", TranslatorWorker.translateText("Total Activities"));
+
+        result.setCount(PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, false));
+        return result;
+    }
+
+    private static SettingsAndFiltersParameters addSomeMoreFiltersForValidatedProjects(SettingsAndFiltersParameters config) {
         boolean fetchOnlyValidatedProjects = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.FETCH_ONLY_VALIDATED_PROJECTS);
         if (fetchOnlyValidatedProjects) {
             Session session = PersistenceManager.getRequestDBSession();
-            String ongoingProjectKey = TranslatorWorker.translateText("Project ongoing").toLowerCase();
+            logger.info("Language: "+TLSUtils.getLangCode());
+            String ongoingProjectKey = TranslatorWorker.translateText("Project ongoing", TLSUtils.getLangCode(), TLSUtils.getSiteId()).toLowerCase();
             logger.info("Project ongoing: " + ongoingProjectKey);
             Query query = session.createQuery(
                     "SELECT acv.id FROM " + AmpCategoryValue.class.getName() + " acv " +
@@ -398,9 +410,12 @@ public class PublicPortalService {
 //            query.setParameter("translatedValue", ongoingProjectKey,StringType.INSTANCE);
             query.setCacheable(true);
             logger.info("Query is: "+query.getQueryString());
-            logger.error("Query is: "+query.getQueryString());
 
             List<Long> ids = query.list();
+            if (config ==null)
+            {
+                config = new SettingsAndFiltersParameters();
+            }
             if (config.getFilters()==null)
             {
                 config.setFilters(new HashMap<>());
@@ -410,12 +425,7 @@ public class PublicPortalService {
             }
             config.getFilters().put("approval-status", 4);
         }
-
-        result.getMeasure().put("original", "Total Activities");
-        result.getMeasure().put("translated", TranslatorWorker.translateText("Total Activities"));
-
-        result.setCount(PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, false));
-        return result;
+        return config;
     }
 
     public static PublicTopData searchProjects(ReportFormParameters formParams, Long reportId) {

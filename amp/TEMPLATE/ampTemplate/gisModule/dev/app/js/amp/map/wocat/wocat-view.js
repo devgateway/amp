@@ -75,7 +75,7 @@ module.exports = Backbone.View.extend({
 
       var left = (windowWidth - elementWidth) / 2;
       const top = (windowHeight - elementHeight) / 2;
-      left += 60;
+      // left += 60;
 
       element.css({
         'left': left + 'px',

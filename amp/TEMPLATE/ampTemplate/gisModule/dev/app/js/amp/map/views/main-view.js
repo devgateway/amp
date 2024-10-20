@@ -73,7 +73,6 @@ module.exports = Backbone.View.extend({
     this.$el.html(this.template({map: this.mapEl}));
     this.$el.append(this.mapEl);
     this.map.invalidateSize();
-    var wocatInitiativesEnabled = this.app.generalSettings.get('wocat-initiatives-enabled');
     var headerContainer = this.$('#map-header > div');
     headerContainer.append(this.headerView.render().el);
     headerContainer.append(this.headerGapAnalysisView.render().el);
@@ -81,9 +80,7 @@ module.exports = Backbone.View.extend({
     headerContainer.append(this.basemapView.render().el);
 
     this.$el.append(this.legendView.render().el);
-    if (wocatInitiativesEnabled=='true') {
-      this.$el.append(this.wocatView.render().el);
-    }
+    this.$el.append(this.wocatView.render().el);
     this.$el.append(this.datasourcesView.render().el);
     this.$el.append(this.messageView.render().el);
 

@@ -16,7 +16,10 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    _.bindAll(this, 'render');
+    var wocatInitiativesEnabled = this.app.generalSettings.get('wocat-initiatives-enabled');
+    if (wocatInitiativesEnabled=='true') {
+      _.bindAll(this, 'render');
+    }
   },
 
   render: function() {

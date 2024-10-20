@@ -1,10 +1,11 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
+var countries = require('i18n-iso-countries');
 var Template = fs.readFileSync(__dirname + '/wocat-item-adm-clusters.html', 'utf8');
 var ProjectCollection = require('./project-collection');
 const WOCAT_API='https://qcat.wocat.net';
-
+countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 module.exports = Backbone.View.extend({
   tagName: 'tbody',
 
@@ -41,7 +42,7 @@ module.exports = Backbone.View.extend({
                     var publicationDate = projectData.publicationDate || 'N/A';
                     var institutionName = projectData.ampWocatInstitution ? projectData.ampWocatInstitution.institutionName : 'N/A';
                     var detailsUrl = WOCAT_API + projectData.detailsUrl || '#';
-
+                    var country = projectData.country?countries.getName(projectData.country, 'en'):'N/A';
                     // Append or render the content on the page using your template or directly
                     self.$el.append(self.template({
                         name: name,
@@ -51,7 +52,8 @@ module.exports = Backbone.View.extend({
                         thumbnailDescription: formattedThumbnailDescription,
                         publicationDate: publicationDate,
                         institutionName: institutionName,
-                        detailsUrl: detailsUrl
+                        detailsUrl: detailsUrl,
+                        country: country
                     }));
                 });
             },

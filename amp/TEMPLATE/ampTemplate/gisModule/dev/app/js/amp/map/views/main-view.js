@@ -81,7 +81,7 @@ module.exports = Backbone.View.extend({
     headerContainer.append(this.basemapView.render().el);
 
     this.$el.append(this.legendView.render().el);
-    if (wocatInitiativesEnabled) {
+    if (wocatInitiativesEnabled=='true') {
       this.$el.append(this.wocatView.render().el);
     }
     this.$el.append(this.datasourcesView.render().el);

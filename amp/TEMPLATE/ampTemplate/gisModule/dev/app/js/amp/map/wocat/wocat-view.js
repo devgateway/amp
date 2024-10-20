@@ -20,8 +20,8 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    $.when(this.app.generalSettings.loaded).done(function() {
-          var wocatInitiativesEnabled = this.app.generalSettings.get('wocat-initiatives-enabled');
+    $.when(this.app.data.generalSettings.loaded).done(function() {
+          var wocatInitiativesEnabled = this.app.data.generalSettings.get('wocat-initiatives-enabled');
           if (wocatInitiativesEnabled=='true') {
             var self = this;
 

@@ -80,7 +80,11 @@ module.exports = Backbone.View.extend({
     headerContainer.append(this.basemapView.render().el);
 
     this.$el.append(this.legendView.render().el);
-    this.$el.append(this.wocatView.render().el);
+    console.log("APp", this.app);
+    var wocatInitiativesEnabled = this.app.data.generalSettings.get('wocat-initiatives-enabled');
+    if (wocatInitiativesEnabled) {
+      this.$el.append(this.wocatView.render().el);
+    }
     this.$el.append(this.datasourcesView.render().el);
     this.$el.append(this.messageView.render().el);
 

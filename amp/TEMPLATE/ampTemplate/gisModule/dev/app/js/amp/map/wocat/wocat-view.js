@@ -16,8 +16,6 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    console.log("APp", this.app);
-
       _.bindAll(this, 'render');
   },
 
@@ -25,20 +23,26 @@ module.exports = Backbone.View.extend({
     var self = this;
     $.when(self.app.data.generalSettings.loaded).then(function() {
       var wocatInitiativesEnabled = self.app.data.generalSettings.get('wocat-initiatives-enabled');
+      console.log("APp", self.app);
       console.log("WocatInitiatives",wocatInitiativesEnabled);
           if (wocatInitiativesEnabled===true) {
-            self.$el.html(self.template());
-            var content = new WocatTable({
-              app: this.app
-            }).render().el;
+            self.$('.wocat').show();
 
-            self.$('.wocat-content', self.$el).html(content);
-
-            this.$el.append(this.wocatView.render().el);
-            /* TODO Reintroduce the "Loading" image in the table template */
-            return this;
+          }else
+          {
+            self.$('.wocat').hide();
           }
     });
+    self.$el.html(self.template());
+    var content = new WocatTable({
+      app: this.app
+    }).render().el;
+
+    self.$('.wocat-content', self.$el).html(content);
+
+    this.$el.append(this.wocatView.render().el);
+    /* TODO Reintroduce the "Loading" image in the table template */
+    return this;
   },
 
   toggleWocat: function() {

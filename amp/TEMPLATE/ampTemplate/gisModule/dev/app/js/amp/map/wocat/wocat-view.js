@@ -58,7 +58,7 @@ module.exports = Backbone.View.extend({
       this.$el.css({
         'display': 'block',
         'width': '500px',
-        'max-height': '100vh',
+        'max-height': '70vh',
         'overflow-y': 'auto',
         'position': 'fixed',
         'z-index': '1000',
@@ -94,7 +94,7 @@ module.exports = Backbone.View.extend({
 
       var left = (windowWidth - elementWidth) / 2;
       const top = (windowHeight - elementHeight) / 2;
-      left += 60;
+      left -= 200;
 
       element.css({
         'left': left + 'px',

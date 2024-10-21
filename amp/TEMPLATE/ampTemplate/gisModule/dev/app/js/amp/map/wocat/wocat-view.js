@@ -2,6 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var WocatTable = require('./wocat-table-view');
+const $ = require("jquery");
 var Template = fs.readFileSync(__dirname + '/wocat-template.html', 'utf8');
 
 module.exports = Backbone.View.extend({
@@ -28,7 +29,21 @@ module.exports = Backbone.View.extend({
       }).render().el;
 
     self.$('.wocat-content', self.$el).html(content);
-    /* TODO Reintroduce the "Loading" image in the table template */
+    self.app.data.generalSettings.load().then(function () {
+      $.when(self.app.data.generalSettings.loaded).then(function () {
+        console.log("App loaded",self.app);
+        var wocatInitiativesEnabled = self.app.data.generalSettings.get('wocat-initiatives-enabled');
+        console.log("Enabled", wocatInitiativesEnabled);
+        if (!wocatInitiativesEnabled) {
+          self.$('.wocat').hide();
+        }
+        else
+        {
+          self.$('.wocat').show();
+
+        }
+      });
+    });
     return this;
   },
 

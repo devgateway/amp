@@ -16,8 +16,11 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    var wocatInitiativesEnabled = this.app.generalSettings.get('wocat-initiatives-enabled');
-    _.bindAll(this, 'render');
+    console.log("APp", this.app);
+    var wocatInitiativesEnabled = this.app.data.generalSettings.get('wocat-initiatives-enabled');
+    if (wocatInitiativesEnabled) {
+      _.bindAll(this, 'render');
+    }
   },
 
   render: function() {
@@ -29,6 +32,8 @@ module.exports = Backbone.View.extend({
       }).render().el;
 
     self.$('.wocat-content', self.$el).html(content);
+
+      this.$el.append(this.wocatView.render().el);
     /* TODO Reintroduce the "Loading" image in the table template */
     return this;
   },

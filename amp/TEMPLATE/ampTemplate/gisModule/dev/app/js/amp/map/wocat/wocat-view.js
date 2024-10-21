@@ -25,18 +25,18 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var self = this;
+    self.$el.html(self.template());
+    var content = new WocatTable({
+      app: this.app
+    }).render().el;
+
+    self.$('.wocat-content', self.$el).html(content);
     self.app.data.user.load().then(function () {
       $.when(self.app.data.generalSettings.loaded).then(function () {
         console.log("App loaded",self.app);
         var wocatInitiativesEnabled = self.app.data.generalSettings.get('wocat-initiatives-enabled');
         console.log("Enabled", wocatInitiativesEnabled);
         if (wocatInitiativesEnabled) {
-          self.$el.html(self.template());
-          var content = new WocatTable({
-            app: this.app
-          }).render().el;
-
-          self.$('.wocat-content', self.$el).html(content);
           this.$el.append(this.wocatView.render().el);
         }
       });

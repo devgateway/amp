@@ -35,11 +35,15 @@ module.exports = Backbone.View.extend({
         var wocatInitiativesEnabled = self.app.data.generalSettings.get('wocat-initiatives-enabled');
         console.log("Enabled", wocatInitiativesEnabled);
         if (!wocatInitiativesEnabled) {
-          self.$('.wocat').hide();
+          this.$el.css({
+            'display': 'none'
+          });
         }
         else
         {
-          self.$('.wocat').show();
+          this.$el.css({
+            'display': 'block'
+          });
 
         }
       });

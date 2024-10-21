@@ -61,6 +61,7 @@
 "amp.gis:subtitle-export-copypaste": "Copy and paste this link to share this map",
 "amp.gis:menu-title-share": "Download the data in this map or share a link to it",
 "amp.gis:title-datasources": "Data Sources",
+"amp.gis:title-wocat": "Wocat Initiatives",
 "amp.gis:legend-desc": "Number of activities at this",
 "amp.gis:legend-popover": "If there are less than",
 "amp.gis:legend-popover-2": "points the map shows icons otherwise it will show coloured circles!",

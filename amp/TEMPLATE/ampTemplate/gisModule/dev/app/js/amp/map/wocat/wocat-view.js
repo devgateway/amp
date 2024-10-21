@@ -87,10 +87,10 @@ module.exports = Backbone.View.extend({
 
       var left = (windowWidth - elementWidth) / 2;
       const top = (windowHeight - elementHeight) / 2;
-      // left += 60;
+      left += 60;
 
       element.css({
-        'left': 800 + 'px',
+        'left': left + 'px',
         'top': top + 'px',
         'position': 'fixed',
         'transition': 'all 0.3s ease-in-out'

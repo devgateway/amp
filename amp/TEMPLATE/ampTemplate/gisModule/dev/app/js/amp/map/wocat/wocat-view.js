@@ -26,12 +26,10 @@ module.exports = Backbone.View.extend({
   render: function() {
     var self = this;
     self.$el.html(self.template());
-
     var content = new WocatTable({
       app: this.app
     }).render().el;
     self.$('.wocat-content', self.$el).html(content);
-
     this.$el.append(this.wocatView.render().el);
     self.app.data.user.load().then(function () {
       $.when(self.app.data.generalSettings.loaded).then(function () {
@@ -94,10 +92,10 @@ module.exports = Backbone.View.extend({
 
       var left = (windowWidth - elementWidth) / 2;
       const top = (windowHeight - elementHeight) / 2;
-      left += 60;
+      // left += 60;
 
       element.css({
-        'left': left + 'px',
+        'left': 800 + 'px',
         'top': top + 'px',
         'position': 'fixed',
         'transition': 'all 0.3s ease-in-out'

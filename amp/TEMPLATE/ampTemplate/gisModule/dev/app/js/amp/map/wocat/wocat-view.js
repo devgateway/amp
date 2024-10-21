@@ -35,13 +35,13 @@ module.exports = Backbone.View.extend({
         var wocatInitiativesEnabled = self.app.data.generalSettings.get('wocat-initiatives-enabled');
         console.log("Enabled", wocatInitiativesEnabled);
         if (!wocatInitiativesEnabled) {
-          this.$el.css({
+          self.$el.css({
             'display': 'none'
           });
         }
         else
         {
-          this.$el.css({
+          self.$el.css({
             'display': 'block'
           });
 

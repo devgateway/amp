@@ -16,33 +16,25 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
+    // console.log("APp", this.app);
+    // var wocatInitiativesEnabled = this.app.data.generalSettings.get('wocat-initiatives-enabled');
+    // console.log()
+    // if (wocatInitiativesEnabled===true) {
       _.bindAll(this, 'render');
+    // }
   },
 
   render: function() {
     var self = this;
-    $.when(self.app.data.generalSettings.loaded).then(function() {
-      var wocatInitiativesEnabled = self.app.data.generalSettings.get('wocat-initiatives-enabled');
-      console.log(" Self APP", self.app);
-      console.log(" Self APP Data", self.app.data);
-      console.log(" Self APP GeneralSettings", self.app.data.generalSettings);
-      console.log("WocatInitiatives",wocatInitiativesEnabled);
-          if (wocatInitiativesEnabled===true) {
-            self.$('.wocat').show();
 
-          }else
-          {
-            self.$('.wocat').hide();
-          }
-    });
     self.$el.html(self.template());
     var content = new WocatTable({
-      app: this.app
-    }).render().el;
+        app: this.app
+      }).render().el;
 
     self.$('.wocat-content', self.$el).html(content);
 
-    this.$el.append(this.wocatView.render().el);
+      this.$el.append(this.wocatView.render().el);
     /* TODO Reintroduce the "Loading" image in the table template */
     return this;
   },

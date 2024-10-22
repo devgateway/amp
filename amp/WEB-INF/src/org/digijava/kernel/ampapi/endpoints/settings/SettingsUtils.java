@@ -418,6 +418,7 @@ public class SettingsUtils {
                 FeaturesUtil.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST));
 
         settings.setProjectSites(FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
+        settings.setWocatInitiativesEnabled(FeaturesUtil.isVisibleFeature(GisConstants.WOCAT_INITIATIVES));
         settings.setProgramsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_PROGRAMS_ENABLED));
         settings.setSectorsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_SECTORS_ENABLED));
         settings.setMultiCountryEnabled(FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED));

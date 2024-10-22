@@ -2,15 +2,15 @@
 // note: color-blocks is in amp-widgets.less
 
 .load-more-hide{
-     display:none;
-    }
+  display:none;
+}
 
-.datasources {
+.wocat {
   z-index: @amp_map_footer_layers;
   position: absolute;
-  bottom: 0;
-  right: 270px;
-  width: 500px;
+  bottom: 0px;
+  right: 780px;
+  width: 300px;
   color: @amp_inverse;
   background: @amp_map_header_bg;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.333);
@@ -23,7 +23,7 @@
     text-align: right;
   }
 
-  .datasources-header > a {
+  .wocat-header > a {
     display: block;
     padding: 4px;
     color: #eee;
@@ -47,10 +47,13 @@
     &:hover:after {
       background: rgba(0, 0, 0, 0.25);
     }
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
 
-  .datasources-content {
-    max-height: 240px;
+  .wocat-content {
+    max-height: 600px;
     padding: 1em;
     font-size: 0.9em;
     overflow-y: scroll;
@@ -66,7 +69,7 @@
   }
 
   &:not(.expanded) {
-    .datasources-header > a {
+    .wocat-header > a {
       &:after {
         display: none;
       }
@@ -75,7 +78,7 @@
         border-width: 2px 0 0;
       }
     }
-    .datasources-content {
+    .wocat-content {
       height: 0;
       padding: 0;
     }

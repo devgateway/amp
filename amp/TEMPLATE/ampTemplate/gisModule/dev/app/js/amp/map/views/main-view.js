@@ -11,6 +11,7 @@ var MapHeaderPerformanceToggle = require('../views/map-header-performance-view')
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../legend/legend-view');
 var DataSourcesView = require('../datasources/datasources-view');
+var WocatView = require('../wocat/wocat-view');
 
 var ProjectSitesLayerView = require('../views/structures-view');
 var ADMClustersLayersView = require('../views/adm-clusters-view');
@@ -19,7 +20,6 @@ var MessageView = require('../views/message-view');
 
 var Basemaps = require('../collections/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
-
 
 module.exports = Backbone.View.extend({
 
@@ -54,11 +54,12 @@ module.exports = Backbone.View.extend({
 
     this.headerView = new MapHeaderView({app: this.app});
     this.GapViewModel = Backbone.Model.extend({defaults: {isGapAnalysisAvailable: false, isGapAnalysisSelected: false}});
-    
+
     this.headerGapAnalysisView = new MapHeaderGapAnalysisView({app: this.app, model: new this.GapViewModel()});
     this.headerPerformanceToggle = new MapHeaderPerformanceToggle({app: this.app, model: this.app.data.performanceToggleModel});
     this.legendView = new LegendView({app: this.app});
     this.datasourcesView = new DataSourcesView({app: this.app});
+    this.wocatView = new WocatView({app: this.app});
     this.basemapView = new BasemapGalleryView({
       map: this.map,
       collection: this.basemaps
@@ -72,7 +73,6 @@ module.exports = Backbone.View.extend({
     this.$el.html(this.template({map: this.mapEl}));
     this.$el.append(this.mapEl);
     this.map.invalidateSize();
-
     var headerContainer = this.$('#map-header > div');
     headerContainer.append(this.headerView.render().el);
     headerContainer.append(this.headerGapAnalysisView.render().el);
@@ -80,6 +80,7 @@ module.exports = Backbone.View.extend({
     headerContainer.append(this.basemapView.render().el);
 
     this.$el.append(this.legendView.render().el);
+    this.$el.append(this.wocatView.render().el);
     this.$el.append(this.datasourcesView.render().el);
     this.$el.append(this.messageView.render().el);
 

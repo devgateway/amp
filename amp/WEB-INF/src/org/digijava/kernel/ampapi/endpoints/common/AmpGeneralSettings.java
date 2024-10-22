@@ -11,6 +11,10 @@ public class AmpGeneralSettings {
     @JsonProperty("project-sites")
     private Boolean projectSites;
 
+
+    @JsonProperty("wocat-initiatives-enabled")
+    private Boolean wocatInitiativesEnabled;
+
     @JsonProperty("max-locations-icons")
     private Integer maxLocationsIcons;
 
@@ -285,6 +289,14 @@ public class AmpGeneralSettings {
 
     public void setHideEditableExportFormatsPublicView(Boolean hideEditableExportFormatsPublicView) {
         this.hideEditableExportFormatsPublicView = hideEditableExportFormatsPublicView;
+    }
+
+    public Boolean getWocatInitiativesEnabled() {
+        return wocatInitiativesEnabled;
+    }
+
+    public void setWocatInitiativesEnabled(Boolean wocatInitiativesEnabled) {
+        this.wocatInitiativesEnabled = wocatInitiativesEnabled;
     }
 
     public Boolean getDownloadMapSelector() {

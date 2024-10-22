@@ -22,6 +22,7 @@ public class GisConstants {
 
     public static final String USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST =  "Use icons for Sectors in Project List";
     public static final String PROJECT_SITES = "Project sites";
+    public static final String WOCAT_INITIATIVES = "Wocat Initiatives";
     public static final String DOWNLOAD_MAP_SELECTOR = "Download Map selector";
     public static final String MULTICOUNTRY_ENABLED="Multicountry Enabled";
     public static final   String GIS_SECTORS_ENABLED="Sectors Enabled";

@@ -101,9 +101,9 @@ COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-
 COPY TEMPLATE/reampv2 .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm ci
-RUN NODE_ENV=development npm run build
-RUN rm -rf node_modules
+    npm ci \
+    && npm run build:dev \
+    && rm -rf node_modules
 
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp

@@ -165,6 +165,8 @@ export function formatNumberWithSettings(currency, translations, settings, value
 
 // TODO: Unify with formatNumber();
 export function formatOnlyNumber(settings, value) {
+  if (settings.decimalSeparator==='.')
+    settings.decimalSeparator='';
   const formatString = `${settings.decimalSeparator}.${settings.precision}f`;
   const dividedValue = (settings.numberDivider && settings.numberDividerDescriptionKey)
     ? value / settings.numberDivider

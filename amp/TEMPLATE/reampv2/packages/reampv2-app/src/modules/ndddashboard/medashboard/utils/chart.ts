@@ -8,10 +8,7 @@ import {
     TARGET_VALUE_COLOR,
     SECTOR_COLOR
 } from "../../utils/constants";
-import React from "react";
 import {DataType} from "../components/charts/BarChart";
-import _ from 'lodash';
-import {DateUtil} from "../../../admin/indicator_manager/utils/dateFn";
 import dayjs from "dayjs";
 
 interface GaugeUtils {

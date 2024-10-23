@@ -93,40 +93,17 @@ RUN --mount=type=cache,target=/root/.npm \
     && npm run build \
     && rm -rf node_modules
 
-#FROM node as compile-reampv2
-#WORKDIR /tmp/amp/TEMPLATE/reampv2
-#COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
-#COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../ampTemplate/node_modules/amp-filter
-#COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
-#COPY TEMPLATE/reampv2 .
-#RUN --mount=type=cache,target=/root/.npm \
-#    --mount=type=ssh \
-#    npm ci \
-#    && npm run build \
-#    && rm -rf node_modules
-
 FROM node as compile-reampv2
-
 WORKDIR /tmp/amp/TEMPLATE/reampv2
-
-# Copy dependencies from other stages
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../ampTemplate/node_modules/amp-filter
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
-
-# Copy the template code
 COPY TEMPLATE/reampv2 .
-
-# Set the NODE_ENV to development
-ENV NODE_ENV=development
-
-# Install dependencies and run in development mode
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci
-
-# Instead of building for production, start in development mode
-CMD ["npm", "run", "start"]
+RUN NODE_ENV=development npm run build
+RUN rm -rf node_modules
 
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp

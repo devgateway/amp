@@ -102,7 +102,7 @@ COPY TEMPLATE/reampv2 .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci \
-    && npm run build:dev \
+    && npm run build --mode development \
     && rm -rf node_modules
 
 FROM maven:3.8.4-jdk-8 as compile-mvn

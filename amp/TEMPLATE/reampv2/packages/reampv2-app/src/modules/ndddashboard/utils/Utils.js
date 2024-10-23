@@ -138,6 +138,7 @@ export function formatNumber(currency, translations, value, precision, decimalSe
   if (decimalSeparator==='.')
     decimalSeparator='';
   const formatString = `${decimalSeparator}.${precision}f`;
+  console.log("Format String", formatString);
   const dividedValue = (numberDivider && numberDividerDescriptionKey) ? value / numberDivider : value;
   // eslint-disable-next-line max-len
   const txtVal = <b>{format(formatString)(dividedValue).replace(/[,]+/g, groupSeparator).replace(/[.]+/g, decimalSeparator)}</b>;

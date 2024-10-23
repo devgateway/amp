@@ -135,7 +135,10 @@ function getSuffixForLang(prefix, lang) {
 
 export function formatNumber(currency, translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
   numberDividerDescriptionKey) {
+  if (decimalSeparator==='.')
+    decimalSeparator='';
   const formatString = `${decimalSeparator}.${precision}f`;
+  console.log("Format String", formatString);
   const dividedValue = (numberDivider && numberDividerDescriptionKey) ? value / numberDivider : value;
   // eslint-disable-next-line max-len
   const txtVal = <b>{format(formatString)(dividedValue).replace(/[,]+/g, groupSeparator).replace(/[.]+/g, decimalSeparator)}</b>;
@@ -162,6 +165,8 @@ export function formatNumberWithSettings(currency, translations, settings, value
 
 // TODO: Unify with formatNumber();
 export function formatOnlyNumber(settings, value) {
+  if (settings.decimalSeparator==='.')
+    settings.decimalSeparator='';
   const formatString = `${settings.decimalSeparator}.${settings.precision}f`;
   const dividedValue = (settings.numberDivider && settings.numberDividerDescriptionKey)
     ? value / settings.numberDivider

@@ -3,7 +3,6 @@ import {Col, Nav, Row, Tab} from "react-bootstrap";
 import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 import PropTypes from "prop-types";
 import {useSelector} from "react-redux";
-import { MEPath, NDDPath } from '../utils/constants';
 
 const MainDashboardContainer = React.lazy(() => import('./MainDashboardContainer'));
 const MeDashboardContainer = React.lazy(() => import('../medashboard'));

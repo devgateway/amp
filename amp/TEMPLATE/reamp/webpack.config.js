@@ -24,7 +24,7 @@ config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
   }
 }));
 config.plugins.push(new webpack.DefinePlugin({'process.env': {
-		'NODE_ENV': JSON.stringify('development')
+		'NODE_ENV': JSON.stringify('PRODUCTION')
 	}
 }));
 config.plugins.push(new UglifyJsPlugin({

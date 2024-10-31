@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {TransitionGroup} from 'react-transition-group';
+import {TransitionGroup,CSSTransition} from 'react-transition-group';
 
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
@@ -259,15 +259,19 @@ class NestedDonutsProgramChart extends Component {
             }
         ] : [];
         return (
-            <TransitionGroup
-                /* key={selectedDirectProgram} */
-                transitionName="solar-chart"
-                transitionAppear
-                transitionLeave
-                transitionEnter
-                transitionEnterTimeout={TRANSITIONS}
-                transitionLeaveTimeout={TRANSITIONS}
-                transitionAppearTimeout={TRANSITIONS}>
+            <TransitionGroup>
+                <CSSTransition
+                    key="solarChart"
+                    classNames="solar-chart"
+                    appear
+                    enter
+                    exit
+                    timeout={{
+                        appear: TRANSITIONS,
+                        enter: TRANSITIONS,
+                        exit: TRANSITIONS
+                    }}
+                >
                 <Plot
                     key="solarChart"
                     data={

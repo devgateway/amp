@@ -17,7 +17,7 @@ import { removeFilter } from '../utils/Utils';
 
 export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
   console.log("fetchIndirectReportPending:", fetchIndirectReportPending);
-  console.log("fetchIndirectReportSuccess:", fetchIndirectReportSuccess);
+  console.log("fetchIndirectReportSuccess:", fetchIndirectReportSuccess(data[0]));
   console.log("fetchIndirectReportError:", fetchIndirectReportError);
   dispatch(fetchIndirectReportPending());
   const newSettings = { [FUNDING_TYPE]: fundingType, programIds, ...settings };
@@ -26,7 +26,10 @@ export const callReport = (fundingType, filters, programIds, settings) => dispat
   return Promise.all([fetchApiData({
     url: DIRECT_INDIRECT_REPORT,
     body
-  })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0])))
+  })]).then((data) => {
+    console.log("Data", data)
+    return dispatch(fetchIndirectReportSuccess(data[0]))
+  })
     .catch(error => dispatch(fetchIndirectReportError(error)));
 };
 

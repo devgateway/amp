@@ -33,6 +33,7 @@ export default (state = initialState, action) => {
         topLoadingPending: true
       };
     case FETCH_DIRECT_INDIRECT_NDD_SUCCESS: {
+      console.log("API payload", action.payload);
       return {
         ...state,
         nddLoadingPending: false,

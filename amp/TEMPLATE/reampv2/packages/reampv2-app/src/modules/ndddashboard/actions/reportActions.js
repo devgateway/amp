@@ -17,12 +17,10 @@ export function fetchIndirectReportPending() {
   };
 }
 
-export const fetchIndirectReportSuccess=(payload) =>{
-  return {
-    type: FETCH_DIRECT_INDIRECT_NDD_SUCCESS,
-    payload: payload
-  };
-}
+export const fetchIndirectReportSuccess = (payload) => ({
+  type: FETCH_DIRECT_INDIRECT_NDD_SUCCESS,
+  payload,
+});
 
 export function fetchIndirectReportError(error) {
   return {

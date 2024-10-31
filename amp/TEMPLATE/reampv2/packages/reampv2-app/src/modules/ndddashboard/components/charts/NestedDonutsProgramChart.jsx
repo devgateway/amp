@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {CSSTransitionGroup} from 'react-transition-group';
+import {TransitionGroup} from 'react-transition-group';
 
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
@@ -16,7 +16,6 @@ import {
 } from '../../utils/Utils';
 import ToolTip from '../tooltips/ToolTip';
 // eslint-disable-next-line no-unused-vars
-import styles from '../styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -260,7 +259,7 @@ class NestedDonutsProgramChart extends Component {
             }
         ] : [];
         return (
-            <CSSTransitionGroup
+            <TransitionGroup
                 /* key={selectedDirectProgram} */
                 transitionName="solar-chart"
                 transitionAppear
@@ -357,7 +356,7 @@ class NestedDonutsProgramChart extends Component {
                     className="pie-legend-wrapper">
                     {this.createTooltip()}
                 </div>
-            </CSSTransitionGroup>
+            </TransitionGroup>
         );
     }
 }
@@ -377,7 +376,7 @@ NestedDonutsProgramChart.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);

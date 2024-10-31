@@ -351,6 +351,8 @@ class NestedDonutsProgramChart extends Component {
                     onHover={event => this.onHover(event)}
                     onUnhover={() => this.onUnHover()}
                 />
+                </CSSTransition>
+
                 <div
                     style={{
                         display: (!showLegend ? 'none' : 'block'),

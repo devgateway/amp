@@ -27,8 +27,8 @@ export const callReport = (fundingType, filters, programIds, settings) => dispat
     body
   })]).then((data) => {
     console.log("Data", data[0])
-    const d = data[0];
-    console.log("fetchIndirectReportSuccess:", fetchIndirectReportSuccess(data[0]));
+    const d = fetchIndirectReportSuccess(data[0]);
+    console.log("fetchIndirectReportSuccess:", d);
     return dispatch(JSON.stringify(d))
   })
     .catch(error => dispatch(fetchIndirectReportError(error)));

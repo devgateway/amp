@@ -8,6 +8,7 @@ export default class SimpleLegend extends Component {
     const {
       data, getColor
     } = this.props;
+    console.log(data, getColor);
     let index = 0;
     return (
       <div className="simple-legend">
@@ -28,7 +29,10 @@ export default class SimpleLegend extends Component {
                   />
                   <span className="label">
                     {d.name.substring(0, 10)}
-                    <ReactTooltip place="top" effect="float" backgroundColor={getColor(d)} id={index.toString()} />
+                    <ReactTooltip place="top"
+                      effect="float"
+                      backgroundColor={getColor(d)}
+                      id={index.toString()} />
                   </span>
                 </li>
               );

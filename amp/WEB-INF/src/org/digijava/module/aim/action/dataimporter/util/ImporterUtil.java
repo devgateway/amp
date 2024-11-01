@@ -160,6 +160,18 @@ public class ImporterUtil {
 
     public static String getStringValueFromCell(Cell cell, boolean nullable) {
         try {
+            if (cell.getCellType()==Cell.CELL_TYPE_NUMERIC)
+            {
+                return String.valueOf(cell.getNumericCellValue());
+            }
+            if (cell.getCellType()==Cell.CELL_TYPE_BOOLEAN)
+            {
+                return String.valueOf(cell.getBooleanCellValue());
+            }
+            if (cell.getCellType()==Cell.CELL_TYPE_FORMULA)
+            {
+                return String.valueOf(cell.getCellFormula());
+            }
             return cell.getStringCellValue();
         } catch (Exception e) {
             logger.error("Error getting cell {} value: ", cell, e);

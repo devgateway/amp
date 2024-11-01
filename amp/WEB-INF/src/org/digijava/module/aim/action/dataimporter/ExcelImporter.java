@@ -72,6 +72,7 @@ public class ExcelImporter {
 
     private static void addDonorAgencyColumn(Sheet sheet, String donorAgencyValue) {
         // Get the header row, create if it doesn't exist
+        logger.info("Adding Ecowas column");
         Row headerRow = sheet.getRow(0);
         if (headerRow == null) {
             headerRow = sheet.createRow(0);
@@ -124,6 +125,7 @@ public class ExcelImporter {
 
     public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Process the batch of rows
+        logger.info("Batch values"+batch);
         SessionUtil.extendSessionIfNeeded(request);
         Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");

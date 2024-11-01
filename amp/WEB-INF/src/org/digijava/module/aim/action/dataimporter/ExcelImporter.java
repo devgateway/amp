@@ -92,6 +92,7 @@ public class ExcelImporter {
 
             Cell cell = row.createCell(donorAgencyColumnIndex);
             cell.setCellValue(donorAgencyValue);
+            logger.info("Row newly created: " + row);
         }
     }
 

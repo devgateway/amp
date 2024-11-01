@@ -5,6 +5,11 @@ public class Location {
     private Long location;
     private Double location_percentage;
 
+    public Location(Long location, Double location_percentage) {
+        this.location = location;
+        this.location_percentage = location_percentage;
+    }
+
     public Long getId() {
         return id;
     }

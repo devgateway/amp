@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
 
@@ -36,7 +37,7 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal)
     {
         logger.info("Processing txt file: " + file.getName());
         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
@@ -46,6 +47,9 @@ public class TxtDataImporter {
             Map<String, String> values;
             int batchNumber =1;
             while ((values = reader.readMap()) != null) {
+                if (isInternal) {
+                    values.put("Donor Agency", "ECOWAS");
+                }
                 batch.add(values);
 
                 if (batch.size() == BATCH_SIZE) {
@@ -112,7 +116,7 @@ public class TxtDataImporter {
                 Funding fundingItem = new Funding();
                 switch (entry.getValue()) {
                     case "Project Location":
-//                        ampActivityVersion.addLocation(new AmpActivityLocation());
+                        updateLocations(importDataModel, row.get(entry.getKey().trim()),session);
                         break;
                     case "Primary Sector":
                         updateSectors(importDataModel, row.get(entry.getKey().trim()), session, true);

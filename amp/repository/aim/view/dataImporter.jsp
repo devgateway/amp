@@ -250,6 +250,8 @@
     function uploadDataFile() {
       var formData = new FormData();
       var fileType = $('#file-type').val();
+      var internal = $('#internal').prop('checked');
+      console.log("Internal", internal);
       var dataSeparator = $('#data-separator').val();
       var existingConfig = $('#existing-config').val();
       console.log("Existing configuration: "  + existingConfig);
@@ -260,6 +262,7 @@
         return;
       }
       formData.append('dataFile', fileInput.files[0]);
+      formData.append('internal', internal);
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
@@ -407,9 +410,8 @@
 
   <br><br>
   <input type="text" id="existing-config" hidden="hidden"/>
-  <label for="internal">Internal</label><br>
-  <input type="hidden" name="internal" value="false">
-  <input type="checkbox" id="internal" name="internal" value="true">
+  <label for="internal">Internal</label>: <input type="checkbox" id="internal" name="internal">
+  <br><br>
 
   <input type="button" value="Upload" onclick="uploadDataFile()">
 

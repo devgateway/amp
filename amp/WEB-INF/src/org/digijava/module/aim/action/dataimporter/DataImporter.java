@@ -230,13 +230,14 @@ public class DataImporter extends Action {
                     int res = 0;
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
                     logger.info("Saved file record: {}",importedFilesRecord);
-                    logger.info("Internal: "+ dataImporterForm.isInternal());
+                    boolean isInternal= dataImporterForm.isInternal();
+                    logger.info("Internal: "+ isInternal);
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
 
                         // Process the file in batches
-                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res=TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs());
+                        res=TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal);
                     }
                     if (res != 1) {
                         // Handle error

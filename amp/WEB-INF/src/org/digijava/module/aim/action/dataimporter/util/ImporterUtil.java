@@ -523,7 +523,8 @@ public class ImporterUtil {
     }
 
     public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session) {
-        if (projectTitle.trim().isEmpty() && projectCode.trim().isEmpty()) {
+        if ((projectTitle == null || projectTitle.trim().isEmpty()) &&
+                (projectCode == null || projectCode.trim().isEmpty())) {
             return null;
         }
         if (!session.isOpen()) {
@@ -954,6 +955,43 @@ public class ImporterUtil {
 
 
 
+    }
+
+    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session)
+    {
+
+        if (ConstantsMap.containsKey("location_"+locationName)) {
+            Long location = ConstantsMap.get("location_"+locationName);
+            logger.info("In cache... sector "+"location_"+locationName+":"+location);
+            importDataModel.getLocations().add(new Location(location,100.00));
+        }
+        else {
+            if (!session.isOpen()) {
+                session = PersistenceManager.getRequestDBSession();
+            }
+
+            session.doWork(connection -> {
+                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE acvl.location_name = LOWER(?)";
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    // Set the name as a parameter to the prepared statement
+                    statement.setString(1, locationName.toLowerCase());
+
+                    // Execute the query and process the results
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            Long location = resultSet.getLong("location_id");
+                            importDataModel.getLocations().add(new Location(location,100.00));
+                            ConstantsMap.put("location_" + locationName, location);
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    logger.error("Error getting locations", e);
+                }
+            });
+
+
+        }
     }
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {

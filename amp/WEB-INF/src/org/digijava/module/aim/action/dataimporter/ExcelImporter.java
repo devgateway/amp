@@ -39,7 +39,7 @@ public class ExcelImporter {
     static Logger logger = LoggerFactory.getLogger(ExcelImporter.class);
     private static final int BATCH_SIZE = 1000;
 
-    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config) {
+    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal) {
         int res=0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(file)) {
@@ -50,6 +50,10 @@ public class ExcelImporter {
             for (int i = 0; i < numberOfSheets; i++) {
                 logger.info("Sheet number: " + i);
                 Sheet sheet = workbook.getSheetAt(i);
+                if (isInternal) {
+                    addDonorAgencyColumn(sheet, "ECOWAS");
+                }
+
                 processSheetInBatches(sheet, request,config, importedFilesRecord);
             }
 
@@ -64,6 +68,30 @@ public class ExcelImporter {
         logger.info("Finished processing file record id: "+importedFilesRecord.getId()+" with status: "+importedFilesRecord.getImportStatus());
         return res;
 
+    }
+
+    private static void addDonorAgencyColumn(Sheet sheet, String donorAgencyValue) {
+        // Get the header row, create if it doesn't exist
+        Row headerRow = sheet.getRow(0);
+        if (headerRow == null) {
+            headerRow = sheet.createRow(0);
+        }
+
+        // Set the header for the "Donor Agency" column
+        int donorAgencyColumnIndex = headerRow.getLastCellNum();
+        Cell headerCell = headerRow.createCell(donorAgencyColumnIndex);
+        headerCell.setCellValue("Donor Agency");
+
+        // Populate each row in the new column with the donor agency value
+        for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+            Row row = sheet.getRow(rowIndex);
+            if (row == null) {
+                row = sheet.createRow(rowIndex);
+            }
+
+            Cell cell = row.createCell(donorAgencyColumnIndex);
+            cell.setCellValue(donorAgencyValue);
+        }
     }
 
 
@@ -152,7 +180,7 @@ public class ExcelImporter {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
                             case "Project Location":
-//                        ampActivityVersion.addLocation(new AmpActivityLocation());
+                                 updateLocations(importDataModel,Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(),session);
                                 break;
                             case "Primary Sector":
                                 updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, true);

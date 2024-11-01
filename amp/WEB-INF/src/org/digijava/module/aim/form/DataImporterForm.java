@@ -10,6 +10,9 @@ public class DataImporterForm extends ActionForm {
     List<FieldInfo> fieldInfos =new ArrayList<>();
     private FormFile dataFile;
 
+
+    private boolean internal;
+
     public Set<String> getFileHeaders() {
         return fileHeaders;
     }
@@ -65,7 +68,13 @@ public class DataImporterForm extends ActionForm {
     public void setFieldInfos(List<FieldInfo> fieldInfos) {
         this.fieldInfos = fieldInfos;
     }
+    public boolean isInternal() {
+        return internal;
+    }
 
+    public void setInternal(boolean internal) {
+        this.internal = internal;
+    }
     @Override
     public String toString() {
         return "DataImporterForm{" +

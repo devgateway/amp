@@ -407,7 +407,10 @@
 
   <br><br>
   <input type="text" id="existing-config" hidden="hidden"/>
-<%--  <html:submit property="Upload">Upload</html:submit>--%>
+  <label for="internal">Internal</label><br>
+  <input type="hidden" name="internal" value="false">
+  <input type="checkbox" id="internal" name="internal" value="true">
+
   <input type="button" value="Upload" onclick="uploadDataFile()">
 
   <%--  </logic:notEmpty>--%>

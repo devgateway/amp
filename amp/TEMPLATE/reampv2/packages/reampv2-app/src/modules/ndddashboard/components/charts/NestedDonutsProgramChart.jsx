@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {CSSTransitionGroup} from 'react-transition-group';
+import {TransitionGroup,CSSTransition} from 'react-transition-group';
 
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
@@ -16,7 +16,6 @@ import {
 } from '../../utils/Utils';
 import ToolTip from '../tooltips/ToolTip';
 // eslint-disable-next-line no-unused-vars
-import styles from '../styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -260,15 +259,19 @@ class NestedDonutsProgramChart extends Component {
             }
         ] : [];
         return (
-            <CSSTransitionGroup
-                /* key={selectedDirectProgram} */
-                transitionName="solar-chart"
-                transitionAppear
-                transitionLeave
-                transitionEnter
-                transitionEnterTimeout={TRANSITIONS}
-                transitionLeaveTimeout={TRANSITIONS}
-                transitionAppearTimeout={TRANSITIONS}>
+            <TransitionGroup>
+                <CSSTransition
+                    key="solarChart"
+                    classNames="solar-chart"
+                    appear
+                    enter
+                    exit
+                    timeout={{
+                        appear: TRANSITIONS,
+                        enter: TRANSITIONS,
+                        exit: TRANSITIONS
+                    }}
+                >
                 <Plot
                     key="solarChart"
                     data={
@@ -348,6 +351,8 @@ class NestedDonutsProgramChart extends Component {
                     onHover={event => this.onHover(event)}
                     onUnhover={() => this.onUnHover()}
                 />
+                </CSSTransition>
+
                 <div
                     style={{
                         display: (!showLegend ? 'none' : 'block'),
@@ -357,7 +362,7 @@ class NestedDonutsProgramChart extends Component {
                     className="pie-legend-wrapper">
                     {this.createTooltip()}
                 </div>
-            </CSSTransitionGroup>
+            </TransitionGroup>
         );
     }
 }
@@ -377,7 +382,7 @@ NestedDonutsProgramChart.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);

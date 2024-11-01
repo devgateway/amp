@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { NDDTranslationContext } from '../StartUp';
 import ToolTip from '../tooltips/ToolTip';
 import { formatKMB, formatNumberWithSettings } from '../../utils/Utils';
-import SimpleLegend from '../../../../utils/components/SimpleLegend';
 import { CURRENCY_CODE } from '../../utils/constants';
+import SimpleLegend from '../../../../utils/components/SimpleLegend';
 
 const styles = {
   fontFamily: 'sans-serif',
@@ -61,7 +61,7 @@ class TopChart extends Component {
           data={data.values}
           getColor={this.getColor.bind(this)}
         />
-        <div style={{ height: '335px' }}>
+        <div style={{ height: '355px' }}>
           <ResponsiveBar
             data={transformedData}
             colors={this.getColor.bind(this)}

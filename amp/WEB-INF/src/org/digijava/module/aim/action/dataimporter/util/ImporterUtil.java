@@ -531,11 +531,11 @@ public class ImporterUtil {
             session = PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name OR a.projectCode = :projectCode";
+                "WHERE a.name = :name";
         Query query = session.createQuery(hql);
         query.setCacheable(true);
         query.setString("name", projectTitle);
-        query.setString("projectCode", projectCode);
+//        query.setString("projectCode", projectCode);
         List<AmpActivityVersion> ampActivityVersions = query.list();
         return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
     }

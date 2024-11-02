@@ -16,8 +16,10 @@
                 CREATE OR REPLACE VIEW v_amp_organisations AS
                 SELECT amp_org_id AS id, name AS value FROM amp_organisation;
 
-                insert into amp_global_settings(id,settingsName,settingsValue,possiblevalues,description, section)
-                values (nextval('amp_global_settings_seq'), 'Internal Ecowas Donor','(select max(id) from v_amp_organisations)','v_amp_organisations','Internal Ecowas Donor', 'funding');
+                INSERT INTO amp_global_settings(id, settingsName, settingsValue, possiblevalues, description, section)
+                VALUES (nextval('amp_global_settings_seq'), 'Internal Ecowas Donor',
+                (SELECT id FROM v_amp_organisations WHERE value = 'ECOWAS'),
+                'v_amp_organisations', 'Internal Ecowas Donor', 'funding');
             </lang>
         </script>
     </apply>

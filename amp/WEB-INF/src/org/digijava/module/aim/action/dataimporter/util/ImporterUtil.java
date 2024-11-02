@@ -971,6 +971,7 @@ public class ImporterUtil {
 
     public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session)
     {
+        logger.info("Updating locations");
 
         if (ConstantsMap.containsKey("location_"+locationName)) {
             Long location = ConstantsMap.get("location_"+locationName);
@@ -983,15 +984,16 @@ public class ImporterUtil {
             }
 
             session.doWork(connection -> {
-                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE acvl.location_name = LOWER(?)";
+                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     // Set the name as a parameter to the prepared statement
-                    statement.setString(1, locationName.toLowerCase());
+                    statement.setString(1, locationName);
 
                     // Execute the query and process the results
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
                             Long location = resultSet.getLong("location_id");
+                            logger.info("Location:"+location);
                             importDataModel.getLocations().add(new Location(location,100.00));
                             ConstantsMap.put("location_" + locationName, location);
                         }

@@ -12,7 +12,7 @@
             <lang delimiter=";" type="postgres">
                 insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section)
                 values (nextval('amp_global_settings_seq'), 'Recreate the views on the next server restart','true','t_Boolean','Recreate the views on the next server restart', 'general');
-
+                DROP VIEW IF EXISTS v_amp_organisations;
                 CREATE OR REPLACE VIEW v_amp_organisations AS
                 SELECT name AS id, name AS value FROM amp_organisation;
 

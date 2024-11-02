@@ -1056,7 +1056,7 @@ public class ImporterUtil {
             Query query;
             List<Long> organisations= new ArrayList<>();
             if (name!=null) {
-                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name) LIKE LOWER(:name)";
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name)=LOWER(:name)";
                  query = session.createQuery(hql);
                 query.setParameter("name", "%" + name + "%");
                 organisations = query.list();

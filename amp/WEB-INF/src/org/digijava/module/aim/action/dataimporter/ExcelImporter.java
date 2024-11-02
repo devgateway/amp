@@ -84,7 +84,7 @@ public class ExcelImporter {
         headerCell.setCellValue("Donor Agency");
 
         // Populate each row in the new column with the donor agency value
-        for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+        for (int rowIndex = 1; rowIndex <= sheet.getPhysicalNumberOfRows(); rowIndex++) {
             Row row = sheet.getRow(rowIndex);
             if (row == null) {
                 row = sheet.createRow(rowIndex);
@@ -193,6 +193,7 @@ public class ExcelImporter {
                                 updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, false);
                                 break;
                             case "Donor Agency":
+                                logger.info("Getting donor");
                                 updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, "donor");
                                 break;
                             case "Responsible Organization":

@@ -1058,7 +1058,7 @@ public class ImporterUtil {
             if (name!=null) {
                 hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name)=LOWER(:name)";
                  query = session.createQuery(hql);
-                query.setParameter("name", "%" + name + "%");
+                query.setParameter("name",  name);
                 organisations = query.list();
             }
             if (organisations.isEmpty() && (code!=null)) {

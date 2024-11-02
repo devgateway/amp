@@ -51,7 +51,7 @@ public class ExcelImporter {
                 logger.info("Sheet number: " + i);
                 Sheet sheet = workbook.getSheetAt(i);
                 if (isInternal) {
-                    addDonorAgencyColumn(sheet, "ECOWAS");
+                    sheet =addDonorAgencyColumn(sheet, "ECOWAS");
                 }
 
                 processSheetInBatches(sheet, request,config, importedFilesRecord);
@@ -70,7 +70,7 @@ public class ExcelImporter {
 
     }
 
-    private static void addDonorAgencyColumn(Sheet sheet, String donorAgencyValue) {
+    private static Sheet addDonorAgencyColumn(Sheet sheet, String donorAgencyValue) {
         // Get the header row, create if it doesn't exist
         logger.info("Adding Ecowas column");
         Row headerRow = sheet.getRow(0);
@@ -92,8 +92,9 @@ public class ExcelImporter {
 
             Cell cell = row.createCell(donorAgencyColumnIndex);
             cell.setCellValue(donorAgencyValue);
-            logger.info("Row newly created: " + row);
+            logger.info("Cell newly created: " + row.getCell(donorAgencyColumnIndex).getStringCellValue());
         }
+        return sheet;
     }
 
 

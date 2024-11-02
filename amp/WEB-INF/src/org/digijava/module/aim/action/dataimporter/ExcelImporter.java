@@ -86,7 +86,7 @@ public class ExcelImporter {
         headerCell.setCellValue("Donor Agency");
 
         // Populate each row in the new column with the donor agency value
-        for (int rowIndex = 1; rowIndex <= sheet.getPhysicalNumberOfRows(); rowIndex++) {
+        for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             Row row = sheet.getRow(rowIndex);
             if (row == null) {
                 row = sheet.createRow(rowIndex);

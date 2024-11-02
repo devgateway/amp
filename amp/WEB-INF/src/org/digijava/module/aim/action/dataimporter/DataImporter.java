@@ -235,7 +235,7 @@ public class DataImporter extends Action {
                     logger.info("Internal: "+ isInternal);
                     if (isInternal)
                     {
-                        dataImporterForm.getColumnPairs().put("Donor Agency", FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
+                        dataImporterForm.getColumnPairs().put("Donor Agency", "Donor Agency");
                     }
                     logger.info("Configuration"+ dataImporterForm.getColumnPairs());
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {

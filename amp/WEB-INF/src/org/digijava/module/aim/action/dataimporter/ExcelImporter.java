@@ -17,6 +17,7 @@ import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -51,8 +52,7 @@ public class ExcelImporter {
                 logger.info("Sheet number: " + i);
                 Sheet sheet = workbook.getSheetAt(i);
                 if (isInternal) {
-                    addDonorAgencyColumn(sheet, "ECOWAS");
-                    config.put("Donor Agency", "Donor Agency");
+                    addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
 
                 }
 

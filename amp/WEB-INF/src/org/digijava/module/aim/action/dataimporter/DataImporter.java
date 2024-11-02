@@ -22,6 +22,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.form.DataImporterForm;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StringType;
@@ -232,6 +233,11 @@ public class DataImporter extends Action {
                     logger.info("Saved file record: {}",importedFilesRecord);
                     boolean isInternal= dataImporterForm.isInternal();
                     logger.info("Internal: "+ isInternal);
+                    if (isInternal)
+                    {
+                        dataImporterForm.getColumnPairs().put("Donor Agency", FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
+                    }
+                    logger.info("Configuration"+ dataImporterForm.getColumnPairs());
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
 
                         // Process the file in batches

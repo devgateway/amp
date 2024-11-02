@@ -13,6 +13,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -46,13 +47,9 @@ public class TxtDataImporter {
             List<Map<String, String>> batch = new ArrayList<>();
             Map<String, String> values;
             int batchNumber =1;
-            if (isInternal)
-            {
-                config.put("Donor Agency", "Donor Agency");
-            }
             while ((values = reader.readMap()) != null) {
                 if (isInternal) {
-                    values.put("Donor Agency", "ECOWAS");
+                    values.put("Donor Agency", FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                 }
                 batch.add(values);
 

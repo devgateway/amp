@@ -46,6 +46,10 @@ public class TxtDataImporter {
             List<Map<String, String>> batch = new ArrayList<>();
             Map<String, String> values;
             int batchNumber =1;
+            if (isInternal)
+            {
+                config.put("Donor Agency", "Donor Agency");
+            }
             while ((values = reader.readMap()) != null) {
                 if (isInternal) {
                     values.put("Donor Agency", "ECOWAS");

@@ -14,7 +14,7 @@
                 values (nextval('amp_global_settings_seq'), 'Recreate the views on the next server restart','true','t_Boolean','Recreate the views on the next server restart', 'general');
 
                 CREATE OR REPLACE VIEW v_amp_organisations AS
-                SELECT amp_org_id AS id, name AS value FROM amp_organisation;
+                SELECT name AS id, name AS value FROM amp_organisation;
 
                 INSERT INTO amp_global_settings(id, settingsName, settingsValue, possiblevalues, description, section)
                 VALUES (nextval('amp_global_settings_seq'), 'Internal Ecowas Donor',

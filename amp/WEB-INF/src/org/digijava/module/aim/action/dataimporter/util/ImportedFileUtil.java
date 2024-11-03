@@ -5,6 +5,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,17 +37,30 @@ public class ImportedFileUtil {
 
     public static ImportedFilesRecord saveFile(File file, String filename) throws IOException, NoSuchAlgorithmException {
         Session session = PersistenceManager.getRequestDBSession();
-        String generatedHash = generateSHA256Hash(file);
-        logger.info("Saving File hash is " + generatedHash);
-        ImportedFilesRecord importedFilesRecord = new ImportedFilesRecord();
-        importedFilesRecord.setFileHash(generatedHash);
-        importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
-        importedFilesRecord.setFileName(filename);
-        session.saveOrUpdate(importedFilesRecord);
-        session.flush();
+        Transaction transaction = null;
+        ImportedFilesRecord importedFilesRecord = null;
+
+        try {
+            transaction = session.beginTransaction();
+            String generatedHash = generateSHA256Hash(file);
+            logger.info("Saving File hash is " + generatedHash);
+
+            importedFilesRecord = new ImportedFilesRecord();
+            importedFilesRecord.setFileHash(generatedHash);
+            importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
+            importedFilesRecord.setFileName(filename);
+
+            session.saveOrUpdate(importedFilesRecord);
+            session.flush();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();  // Roll back in case of an error
+            logger.error("Error saving ImportedFilesRecord: " + e.getMessage(), e);
+        }
+
         return importedFilesRecord;
     }
-
     public static void updateFileStatus(ImportedFilesRecord importDataModel, ImportStatus status) {
         logger.info("Updating file status to " + status);
         Session session = PersistenceManager.getRequestDBSession();

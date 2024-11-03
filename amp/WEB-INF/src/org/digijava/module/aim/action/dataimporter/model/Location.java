@@ -33,4 +33,13 @@ public class Location {
     public void setLocation_percentage(Double location_percentage) {
         this.location_percentage = location_percentage;
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", location=" + location +
+                ", location_percentage=" + location_percentage +
+                '}';
+    }
 }

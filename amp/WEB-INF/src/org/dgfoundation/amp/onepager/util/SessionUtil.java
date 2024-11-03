@@ -46,8 +46,8 @@ public class SessionUtil {
 
             // Extend session timeout if remaining time is 30 seconds or less
             if (remainingTime <= 30000) { // 30 seconds in milliseconds
-                // Extend session timeout to 130 minutes
-                session.setMaxInactiveInterval(1800); // 130 minutes * 60 seconds
+                // Extend session timeout to 30 minutes
+                session.setMaxInactiveInterval(1800); // 30 minutes * 60 seconds
                 logger.info("Session timeout extended to "+session.getMaxInactiveInterval());
             }
         }

@@ -46,12 +46,10 @@ public class ImportedFileUtil {
         query.setParameter("importStatus", ImportStatus.UPLOADED);
         query.setParameter("fileName", filename);
 
-        query.executeUpdate();
+//        query.executeUpdate();
 
-        // Retrieve the ID of the newly inserted record
-        String selectSql = "SELECT LAST_INSERT_ID()";
-        Query selectQuery = session.createSQLQuery(selectSql);
-        Long newId = ((Number) selectQuery.uniqueResult()).longValue();
+        Long newId = ((Number) query.uniqueResult()).longValue();
+
 
 
 

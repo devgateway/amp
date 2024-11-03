@@ -42,7 +42,7 @@ public class ImportedFileUtil {
         importedFilesRecord.setFileHash(generatedHash);
         importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
-        session.saveOrUpdate(importedFilesRecord);
+        session.save(importedFilesRecord);
         session.flush();
         return importedFilesRecord;
     }

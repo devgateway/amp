@@ -43,7 +43,7 @@ public class ImportedFileUtil {
         String sql = "INSERT INTO imported_files_record (file_hash, import_status, file_name) VALUES (:fileHash, :importStatus, :fileName)";
         Query query = session.createSQLQuery(sql);
         query.setParameter("fileHash", generatedHash);
-        query.setParameter("importStatus", ImportStatus.UPLOADED.name());
+        query.setParameter("importStatus", ImportStatus.UPLOADED);
         query.setParameter("fileName", filename);
 
         query.executeUpdate();

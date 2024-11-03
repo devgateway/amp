@@ -36,30 +36,14 @@ public class ImportedFileUtil {
 
     public static ImportedFilesRecord saveFile(File file, String filename) throws IOException, NoSuchAlgorithmException {
         Session session = PersistenceManager.getRequestDBSession();
-
         String generatedHash = generateSHA256Hash(file);
         logger.info("Saving File hash is " + generatedHash);
-
-        String sql = "INSERT INTO imported_files_record (id, file_hash, import_status, file_name) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), :fileHash, :importStatus, :fileName) RETURNING id";
-        Query query = session.createSQLQuery(sql);
-        query.setParameter("fileHash", generatedHash);
-        query.setParameter("importStatus", ImportStatus.UPLOADED);
-        query.setParameter("fileName", filename);
-
-//        query.executeUpdate();
-
-        Long newId = ((Number) query.uniqueResult()).longValue();
-
-
-
-
-        // Return the record with the populated ID
         ImportedFilesRecord importedFilesRecord = new ImportedFilesRecord();
-        importedFilesRecord.setId(newId);
         importedFilesRecord.setFileHash(generatedHash);
         importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
-
+        session.saveOrUpdate(importedFilesRecord);
+        session.flush();
         return importedFilesRecord;
     }
 

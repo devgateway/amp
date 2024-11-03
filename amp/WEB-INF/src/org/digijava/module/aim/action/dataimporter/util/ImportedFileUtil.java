@@ -40,7 +40,7 @@ public class ImportedFileUtil {
         String generatedHash = generateSHA256Hash(file);
         logger.info("Saving File hash is " + generatedHash);
 
-        String sql = "INSERT INTO imported_files_record (id, file_hash, import_status, file_name) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), :fileHash, :importStatus, :fileName)";
+        String sql = "INSERT INTO imported_files_record (id, file_hash, import_status, file_name) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), :fileHash, :importStatus, :fileName) RETURNING id";
         Query query = session.createSQLQuery(sql);
         query.setParameter("fileHash", generatedHash);
         query.setParameter("importStatus", ImportStatus.UPLOADED);

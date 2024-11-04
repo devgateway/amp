@@ -947,89 +947,83 @@ public class ImporterUtil {
 
 
 
-    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary) {
-        // Check cache first
-        if (ConstantsMap.containsKey("sector_" + name)) {
-            Long sectorId = ConstantsMap.get("sector_" + name);
-            logger.info("In cache... sector " + "sector_" + name + ":" + sectorId);
-            createSector(importDataModel, primary, sectorId);
-        } else {
-            // Ensure the session is open
+    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
+    {
+
+        if (ConstantsMap.containsKey("sector_"+name)) {
+            Long sectorId = ConstantsMap.get("sector_"+name);
+            logger.info("In cache... sector "+"sector_"+name+":"+sectorId);
+            createSector(importDataModel,primary,sectorId);
+        }
+        else {
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
 
-            // Define HQL query based on the primary flag
-            String hqlQuery = "SELECT ams.id FROM AmpSector ams " +
-                    "JOIN ams.ampSecScheme acc " +
-                    "WHERE LOWER(ams.name) = LOWER(:name) AND acc.name = :classificationName";
+            session.doWork(connection -> {
+                String query = primary ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'" : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    // Set the name as a parameter to the prepared statement
+                    statement.setString(1, name);
 
-            String classificationName = primary ? "Primary" : "Secondary";
+                    // Execute the query and process the results
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            Long ampSectorId = resultSet.getLong("amp_sector_id");
+                            createSector(importDataModel, primary, ampSectorId);
+                            ConstantsMap.put("sector_"+name, ampSectorId);
+                        }
+                    }
 
-            try {
-                // Execute the HQL query
-                List ampSectorIds = session.createQuery(hqlQuery)
-                        .setParameter("name", name)
-                        .setParameter("classificationName", classificationName)
-                        .list();
-                Long ampSectorId=null;
-                if (!ampSectorIds.isEmpty())
-                {
-                    ampSectorId = (Long) ampSectorIds.get(0);
+                } catch (SQLException e) {
+                    logger.error("Error getting sectors", e);
                 }
-
-                if (ampSectorId != null) {
-                    createSector(importDataModel, primary, ampSectorId);
-                    ConstantsMap.put("sector_" + name, ampSectorId);
-                } else {
-                    logger.info("Sector not found for: " + name);
-                }
-
-            } catch (Exception e) {
-                logger.error("Error getting sectors", e);
-            }
+            });
         }
+
+
+
     }
 
-    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session) {
+    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session)
+    {
         logger.info("Updating locations");
+        importDataModel.getLocations().add(new Location(48L,100.00));
 
-        // Check cache first
-        if (ConstantsMap.containsKey("location_" + locationName)) {
-            Long location = ConstantsMap.get("location_" + locationName);
-            logger.info("In cache... location " + "location_" + locationName + ":" + location);
-            importDataModel.getLocations().add(new Location(location, 100.00));
-        } else {
-            // Ensure the session is open
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
-            }
 
-            // Use HQL instead of native SQL with PreparedStatement
-            String hqlQuery = "SELECT acvl.id FROM AmpCategoryValueLocations acvl WHERE LOWER(acvl.name) = LOWER(:locationName)";
-            try {
-                // Execute the HQL query
-                List locations = session.createQuery(hqlQuery)
-                        .setParameter("locationName", locationName)
-                        .list();
-                Long location = null;
-                if (!locations.isEmpty())
-                {
-                    location=(Long) locations.get(0);
-                }
-
-                if (location != null) {
-                    logger.info("Location: " + location);
-                    importDataModel.getLocations().add(new Location(location, 100.00));
-                    ConstantsMap.put("location_" + locationName, location);
-                } else {
-                    logger.info("Location not found for: " + locationName);
-                }
-
-            } catch (Exception e) {
-                logger.error("Error getting locations", e);
-            }
-        }
+//        if (ConstantsMap.containsKey("location_"+locationName)) {
+//            Long location = ConstantsMap.get("location_"+locationName);
+//            logger.info("In cache... location "+"location_"+locationName+":"+location);
+//            importDataModel.getLocations().add(new Location(location,100.00));
+//        }
+//        else {
+//            if (!session.isOpen()) {
+//                session = PersistenceManager.getRequestDBSession();
+//            }
+//
+//            session.doWork(connection -> {
+//                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+//                try (PreparedStatement statement = connection.prepareStatement(query)) {
+//                    // Set the name as a parameter to the prepared statement
+//                    statement.setString(1, locationName);
+//
+//                    // Execute the query and process the results
+//                    try (ResultSet resultSet = statement.executeQuery()) {
+//                        while (resultSet.next()) {
+//                            Long location = resultSet.getLong("location_id");
+//                            logger.info("Location:"+location);
+//                            importDataModel.getLocations().add(new Location(location,100.00));
+//                            ConstantsMap.put("location_" + locationName, location);
+//                        }
+//                    }
+//
+//                } catch (SQLException e) {
+//                    logger.error("Error getting locations", e);
+//                }
+//            });
+//
+//
+//        }
     }
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {

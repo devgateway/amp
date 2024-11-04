@@ -947,42 +947,48 @@ public class ImporterUtil {
 
 
 
-    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
-    {
-
-        if (ConstantsMap.containsKey("sector_"+name)) {
-            Long sectorId = ConstantsMap.get("sector_"+name);
-            logger.info("In cache... sector "+"sector_"+name+":"+sectorId);
-            createSector(importDataModel,primary,sectorId);
-        }
-        else {
+    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary) {
+        // Check cache first
+        if (ConstantsMap.containsKey("sector_" + name)) {
+            Long sectorId = ConstantsMap.get("sector_" + name);
+            logger.info("In cache... sector " + "sector_" + name + ":" + sectorId);
+            createSector(importDataModel, primary, sectorId);
+        } else {
+            // Ensure the session is open
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
 
-            session.doWork(connection -> {
-                String query = primary ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'" : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
-                try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    // Set the name as a parameter to the prepared statement
-                    statement.setString(1, name);
+            // Define HQL query based on the primary flag
+            String hqlQuery = "SELECT ams.id FROM AmpSector ams " +
+                    "JOIN ams.ampSecScheme acc " +
+                    "WHERE LOWER(ams.name) = LOWER(:name) AND acc.name = :classificationName";
 
-                    // Execute the query and process the results
-                    try (ResultSet resultSet = statement.executeQuery()) {
-                        while (resultSet.next()) {
-                            Long ampSectorId = resultSet.getLong("amp_sector_id");
-                            createSector(importDataModel, primary, ampSectorId);
-                            ConstantsMap.put("sector_"+name, ampSectorId);
-                        }
-                    }
+            String classificationName = primary ? "Primary" : "Secondary";
 
-                } catch (SQLException e) {
-                    logger.error("Error getting sectors", e);
+            try {
+                // Execute the HQL query
+                List ampSectorIds = session.createQuery(hqlQuery)
+                        .setParameter("name", name)
+                        .setParameter("classificationName", classificationName)
+                        .list();
+                Long ampSectorId=null;
+                if (!ampSectorIds.isEmpty())
+                {
+                    ampSectorId = (Long) ampSectorIds.get(0);
                 }
-            });
+
+                if (ampSectorId != null) {
+                    createSector(importDataModel, primary, ampSectorId);
+                    ConstantsMap.put("sector_" + name, ampSectorId);
+                } else {
+                    logger.info("Sector not found for: " + name);
+                }
+
+            } catch (Exception e) {
+                logger.error("Error getting sectors", e);
+            }
         }
-
-
-
     }
 
     public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session) {
@@ -1003,13 +1009,13 @@ public class ImporterUtil {
             String hqlQuery = "SELECT acvl.id FROM AmpCategoryValueLocation acvl WHERE LOWER(acvl.locationName) = LOWER(:locationName)";
             try {
                 // Execute the HQL query
-                List<Long> locations = session.createQuery(hqlQuery)
+                List locations = session.createQuery(hqlQuery)
                         .setParameter("locationName", locationName)
                         .list();
                 Long location = null;
                 if (!locations.isEmpty())
                 {
-                    location=locations.get(0);
+                    location=(Long) locations.get(0);
                 }
 
                 if (location != null) {

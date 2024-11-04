@@ -992,7 +992,8 @@ public class ImporterUtil {
         if (ConstantsMap.containsKey("location_"+locationName)) {
             Long location = ConstantsMap.get("location_"+locationName);
             logger.info("In cache... location "+"location_"+locationName+":"+location);
-            importDataModel.getLocations().add(new Location(location,100.00));
+            importDataModel.setImplementation_location(location);
+//            importDataModel.getLocations().add(new Location(location,100.00));
         }
         else {
             if (!session.isOpen()) {
@@ -1011,8 +1012,8 @@ public class ImporterUtil {
                             Long location = resultSet.getLong("location_id");
                             Long impl_level = resultSet.getLong("implementation_level");
                             logger.info("Location:"+location);
-                            importDataModel.getLocations().add(new Location(location,100.00));
-                            importDataModel.setImplementation_level(impl_level);
+//                            importDataModel.getLocations().add(new Location(location,100.00));
+                            importDataModel.setImplementation_location(location);
                             ConstantsMap.put("location_" + locationName, location);
                         }
                     }

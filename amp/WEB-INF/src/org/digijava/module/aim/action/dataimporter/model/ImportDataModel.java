@@ -55,7 +55,7 @@ public class ImportDataModel {
     private Set<Object> activity_documents;
     private Long activity_status;
     private Long activity_budget;
-    private Object implementation_location;
+    private Long implementation_location;
     private Object cris_number;
     private Set<Program> national_plan_objective=new HashSet<>();
     private Set<Program> primary_programs=new HashSet<>();
@@ -430,11 +430,11 @@ public class ImportDataModel {
     }
 
 
-    public Object getImplementation_location() {
+    public Long getImplementation_location() {
         return implementation_location;
     }
 
-    public void setImplementation_location(Object implementation_location) {
+    public void setImplementation_location(Long implementation_location) {
         this.implementation_location = implementation_location;
     }
 

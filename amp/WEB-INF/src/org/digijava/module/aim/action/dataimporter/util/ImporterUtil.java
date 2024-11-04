@@ -40,6 +40,7 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -656,7 +657,10 @@ public class ImporterUtil {
                     transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType() != null ? ampFundingDetail.getAdjustmentType().getId() : adjType);
                     transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
                     if (ampFundingDetail.getTransactionDate() != null) {
-                        transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toString()));
+
+                        transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate().toString()));
                     }
                     transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
                     if (ampFundingDetail.getTransactionType() == 0) {
@@ -1131,7 +1135,7 @@ public class ImporterUtil {
             return -1;
         }catch (Exception e)
         {
-            logger.error("Error getting column index for "+columnName,e);
+//            logger.error("Error getting column index for "+columnName,e);
             return -1;
         }
 

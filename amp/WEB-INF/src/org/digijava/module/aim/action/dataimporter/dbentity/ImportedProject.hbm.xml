@@ -10,7 +10,7 @@
                 <param name="sequence">IMPORTED_PROJECT_SEQ</param>
             </generator>
         </id>
-        <many-to-one name="importedFilesRecord" column="imported_file_record_id" class="org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord" not-null="true"/>
+        <many-to-one name="importedFilesRecord" cascade="persist" column="imported_file_record_id" class="org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord" not-null="true"/>
 
         <property name="importResponse" column="import_response" type="java.lang.String" length="10000" />
         <property name="newProject" column="new_project" type="java.lang.Boolean" />

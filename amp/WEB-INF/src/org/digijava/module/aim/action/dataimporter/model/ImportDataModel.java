@@ -8,6 +8,9 @@ import java.util.Set;
 public class ImportDataModel {
     private Long internal_id;
     private String amp_id;
+
+
+    private Long implementation_level;
     private String project_title;
 
     private String project_code;
@@ -52,7 +55,6 @@ public class ImportDataModel {
     private Set<Object> activity_documents;
     private Long activity_status;
     private Long activity_budget;
-    private Object implementation_level;
     private Object implementation_location;
     private Object cris_number;
     private Set<Program> national_plan_objective=new HashSet<>();
@@ -174,6 +176,9 @@ public class ImportDataModel {
 
     public Set<Location> getLocations() {
         return locations;
+    }
+    public void setImplementation_level(Long implementation_level) {
+        this.implementation_level = implementation_level;
     }
 
     public void setLocations(Set<Location> locations) {
@@ -420,13 +425,10 @@ public class ImportDataModel {
         this.activity_budget = activity_budget;
     }
 
-    public Object getImplementation_level() {
+    public Long getImplementation_level() {
         return implementation_level;
     }
 
-    public void setImplementation_level(Object implementation_level) {
-        this.implementation_level = implementation_level;
-    }
 
     public Object getImplementation_location() {
         return implementation_location;

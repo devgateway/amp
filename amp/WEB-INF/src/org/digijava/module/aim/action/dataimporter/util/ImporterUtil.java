@@ -988,42 +988,42 @@ public class ImporterUtil {
     public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session)
     {
         logger.info("Updating locations");
-        importDataModel.getLocations().add(new Location(48L,48L,100.00));
+
+        if (ConstantsMap.containsKey("location_"+locationName)) {
+            Long location = ConstantsMap.get("location_"+locationName);
+            logger.info("In cache... location "+"location_"+locationName+":"+location);
+            importDataModel.getLocations().add(new Location(location,100.00));
+        }
+        else {
+            if (!session.isOpen()) {
+                session = PersistenceManager.getRequestDBSession();
+            }
+
+            session.doWork(connection -> {
+                String query = "SELECT acvl.id AS location_id, acvl.parent_category_value as implementation_level FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    // Set the name as a parameter to the prepared statement
+                    statement.setString(1, locationName);
+
+                    // Execute the query and process the results
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            Long location = resultSet.getLong("location_id");
+                            Long impl_level = resultSet.getLong("implementation_level");
+                            logger.info("Location:"+location);
+                            importDataModel.getLocations().add(new Location(location,100.00));
+                            importDataModel.setImplementation_level(impl_level);
+                            ConstantsMap.put("location_" + locationName, location);
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    logger.error("Error getting locations", e);
+                }
+            });
 
 
-//        if (ConstantsMap.containsKey("location_"+locationName)) {
-//            Long location = ConstantsMap.get("location_"+locationName);
-//            logger.info("In cache... location "+"location_"+locationName+":"+location);
-//            importDataModel.getLocations().add(new Location(location,100.00));
-//        }
-//        else {
-//            if (!session.isOpen()) {
-//                session = PersistenceManager.getRequestDBSession();
-//            }
-//
-//            session.doWork(connection -> {
-//                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
-//                try (PreparedStatement statement = connection.prepareStatement(query)) {
-//                    // Set the name as a parameter to the prepared statement
-//                    statement.setString(1, locationName);
-//
-//                    // Execute the query and process the results
-//                    try (ResultSet resultSet = statement.executeQuery()) {
-//                        while (resultSet.next()) {
-//                            Long location = resultSet.getLong("location_id");
-//                            logger.info("Location:"+location);
-//                            importDataModel.getLocations().add(new Location(location,100.00));
-//                            ConstantsMap.put("location_" + locationName, location);
-//                        }
-//                    }
-//
-//                } catch (SQLException e) {
-//                    logger.error("Error getting locations", e);
-//                }
-//            });
-//
-//
-//        }
+        }
     }
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {

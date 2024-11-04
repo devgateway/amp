@@ -262,7 +262,8 @@ public class ImporterUtil {
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"),
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"),
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS"),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"),
+                    DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy")
             );
 
             for (DateTimeFormatter formatter : formatters) {
@@ -338,7 +339,8 @@ public class ImporterUtil {
                 "yyyy/MM/dd",
                 "yyyy-MM-dd HH:mm:ss.S",
                 "yyyy-MM-dd HH:mm:ss",
-                "yyyy-MM-dd HH:mm:ss.SSS"
+                "yyyy-MM-dd HH:mm:ss.SSS",
+                "EEE MMM dd HH:mm:ss yyyy"
         );
 
         for (String dateFormat : dateFormats) {

@@ -997,7 +997,7 @@ public class ImporterUtil {
         // Check cache first
         if (ConstantsMap.containsKey("location_" + locationName)) {
             Long location = ConstantsMap.get("location_" + locationName);
-            logger.info("In cache... sector " + "location_" + locationName + ":" + location);
+            logger.info("In cache... location " + "location_" + locationName + ":" + location);
             importDataModel.getLocations().add(new Location(location, 100.00));
         } else {
             // Ensure the session is open

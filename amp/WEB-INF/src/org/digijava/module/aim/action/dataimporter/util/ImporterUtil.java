@@ -988,7 +988,7 @@ public class ImporterUtil {
     public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session)
     {
         logger.info("Updating locations");
-        importDataModel.getLocations().add(new Location(48L,100.00));
+        importDataModel.getLocations().add(new Location(48L,48L,100.00));
 
 
 //        if (ConstantsMap.containsKey("location_"+locationName)) {

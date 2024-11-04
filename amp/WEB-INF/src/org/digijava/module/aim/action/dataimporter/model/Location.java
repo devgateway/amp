@@ -10,6 +10,12 @@ public class Location {
         this.location_percentage = location_percentage;
     }
 
+    public Location(Long id, Long location, Double location_percentage) {
+        this.id = id;
+        this.location = location;
+        this.location_percentage = location_percentage;
+    }
+
     public Long getId() {
         return id;
     }

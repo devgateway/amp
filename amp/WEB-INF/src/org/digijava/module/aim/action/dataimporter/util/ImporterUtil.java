@@ -985,42 +985,44 @@ public class ImporterUtil {
 
     }
 
-    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session)
-    {
+    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session) {
         logger.info("Updating locations");
 
-        if (ConstantsMap.containsKey("location_"+locationName)) {
-            Long location = ConstantsMap.get("location_"+locationName);
-            logger.info("In cache... sector "+"location_"+locationName+":"+location);
-            importDataModel.getLocations().add(new Location(location,100.00));
-        }
-        else {
+        // Check cache first
+        if (ConstantsMap.containsKey("location_" + locationName)) {
+            Long location = ConstantsMap.get("location_" + locationName);
+            logger.info("In cache... sector " + "location_" + locationName + ":" + location);
+            importDataModel.getLocations().add(new Location(location, 100.00));
+        } else {
+            // Ensure the session is open
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
 
-            session.doWork(connection -> {
-                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
-                try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    // Set the name as a parameter to the prepared statement
-                    statement.setString(1, locationName);
-
-                    // Execute the query and process the results
-                    try (ResultSet resultSet = statement.executeQuery()) {
-                        while (resultSet.next()) {
-                            Long location = resultSet.getLong("location_id");
-                            logger.info("Location:"+location);
-                            importDataModel.getLocations().add(new Location(location,100.00));
-                            ConstantsMap.put("location_" + locationName, location);
-                        }
-                    }
-
-                } catch (SQLException e) {
-                    logger.error("Error getting locations", e);
+            // Use HQL instead of native SQL with PreparedStatement
+            String hqlQuery = "SELECT acvl.id FROM AmpCategoryValueLocation acvl WHERE LOWER(acvl.locationName) = LOWER(:locationName)";
+            try {
+                // Execute the HQL query
+                List<Long> locations = session.createQuery(hqlQuery)
+                        .setParameter("locationName", locationName)
+                        .list();
+                Long location = null;
+                if (!locations.isEmpty())
+                {
+                    location=locations.get(0);
                 }
-            });
 
+                if (location != null) {
+                    logger.info("Location: " + location);
+                    importDataModel.getLocations().add(new Location(location, 100.00));
+                    ConstantsMap.put("location_" + locationName, location);
+                } else {
+                    logger.info("Location not found for: " + locationName);
+                }
 
+            } catch (Exception e) {
+                logger.error("Error getting locations", e);
+            }
         }
     }
 

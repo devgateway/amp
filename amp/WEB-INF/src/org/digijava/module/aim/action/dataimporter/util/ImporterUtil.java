@@ -1006,7 +1006,7 @@ public class ImporterUtil {
             }
 
             // Use HQL instead of native SQL with PreparedStatement
-            String hqlQuery = "SELECT acvl.id FROM AmpCategoryValueLocation acvl WHERE LOWER(acvl.locationName) = LOWER(:locationName)";
+            String hqlQuery = "SELECT acvl.id FROM AmpCategoryValueLocations acvl WHERE LOWER(acvl.locationName) = LOWER(:locationName)";
             try {
                 // Execute the HQL query
                 List locations = session.createQuery(hqlQuery)

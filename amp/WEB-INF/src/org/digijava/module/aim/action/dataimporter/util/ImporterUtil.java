@@ -993,7 +993,6 @@ public class ImporterUtil {
             Long location = ConstantsMap.get("location_"+locationName);
             logger.info("In cache... location "+"location_"+locationName+":"+location);
             importDataModel.setImplementation_location(location);
-//            importDataModel.getLocations().add(new Location(location,100.00));
         }
         else {
             if (!session.isOpen()) {
@@ -1001,18 +1000,15 @@ public class ImporterUtil {
             }
 
             session.doWork(connection -> {
-                String query = "SELECT acvl.id AS location_id, acvl.parent_category_value as implementation_level FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    // Set the name as a parameter to the prepared statement
                     statement.setString(1, locationName);
 
-                    // Execute the query and process the results
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
                             Long location = resultSet.getLong("location_id");
-                            Long impl_level = resultSet.getLong("implementation_level");
                             logger.info("Location:"+location);
-//                            importDataModel.getLocations().add(new Location(location,100.00));
+                            importDataModel.getLocations().add(new Location(location,100.00));
                             importDataModel.setImplementation_location(location);
                             ConstantsMap.put("location_" + locationName, location);
                         }
@@ -1020,6 +1016,30 @@ public class ImporterUtil {
 
                 } catch (SQLException e) {
                     logger.error("Error getting locations", e);
+                }
+                if (ConstantsMap.containsKey("implementation_level_")) {
+                    Long implementationLevel = ConstantsMap.get("implementation_level_");
+                    logger.info("In cache... imp level "+"implementation_level:"+implementationLevel);
+                    importDataModel.setImplementation_level(implementationLevel);
+                }else {
+
+                    String query2 = "SELECT acv.id as implementation_level FROM amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id=acc.id WHERE LOWER(acv.category_value)=? AND LOWER(acc.keyname)=?";
+                    try (PreparedStatement statement = connection.prepareStatement(query2)) {
+                        statement.setString(1, "national");
+                        statement.setString(2, "implementation_level");
+
+                        try (ResultSet resultSet = statement.executeQuery()) {
+                            while (resultSet.next()) {
+                                Long implementationLevel = resultSet.getLong("implementation_level");
+                                logger.info("Imp level:" + implementationLevel);
+                                importDataModel.setImplementation_level(implementationLevel);
+                                ConstantsMap.put("implementation_level_", implementationLevel);
+                            }
+                        }
+
+                    } catch (SQLException e) {
+                        logger.error("Error getting locations", e);
+                    }
                 }
             });
 

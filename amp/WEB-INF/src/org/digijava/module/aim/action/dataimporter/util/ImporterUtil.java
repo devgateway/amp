@@ -161,16 +161,13 @@ public class ImporterUtil {
 
     public static String getStringValueFromCell(Cell cell, boolean nullable) {
         try {
-            if (cell.getCellType()==Cell.CELL_TYPE_NUMERIC)
-            {
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 return String.valueOf(cell.getNumericCellValue());
             }
-            if (cell.getCellType()==Cell.CELL_TYPE_BOOLEAN)
-            {
+            if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
                 return String.valueOf(cell.getBooleanCellValue());
             }
-            if (cell.getCellType()==Cell.CELL_TYPE_FORMULA)
-            {
+            if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) {
                 return String.valueOf(cell.getCellFormula());
             }
             return cell.getStringCellValue();
@@ -197,7 +194,7 @@ public class ImporterUtil {
 //            if (DateUtil.isCellDateFormatted(cell)) {
             String date = cell.getStringCellValue();
             String formattedDate = formatDateFromDateObject(date);
-            logger.info("Formatted Date: "+formattedDate);
+            logger.info("Formatted Date: " + formattedDate);
             return formattedDate;
 //            } else {
 //                logger.info("The cell does not contain a valid date.");
@@ -448,12 +445,10 @@ public class ImporterUtil {
             fundingItem.getDisbursements().add(transaction);
         }
         if (expenditure) {
-            if (transaction.getTransaction_amount()==0)
-            {
+            if (transaction.getTransaction_amount() == 0) {
                 transaction.setTransaction_amount(-1);
             }
-            if (transaction.getTransaction_amount()>0)
-            {
+            if (transaction.getTransaction_amount() > 0) {
                 transaction.setTransaction_amount(-transaction.getTransaction_amount());
             }
             fundingItem.getCommitments().add(transaction);
@@ -706,39 +701,34 @@ public class ImporterUtil {
 //        query.setMaxResults(1);
         List<AmpActivityVersion> activityVersions = query.list();
         if (activityVersions != null && !activityVersions.isEmpty()) {
-            Set<AmpFunding> ampFundings = activityVersions.get(activityVersions.size()-1).getFunding();
-            logger.info("Activity Fundings found: "+ampFundings);
+            Set<AmpFunding> ampFundings = activityVersions.get(activityVersions.size() - 1).getFunding();
+            logger.info("Activity Fundings found: " + ampFundings);
             for (AmpFunding ampFunding : ampFundings) {
                 for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
                     if (ampFundingDetail.getTransactionAmount() < 0) {
                         ampFundingDetail.setTransactionType(2);
-                        if (ampFundingDetail.getTransactionAmount()==-1)
-                        {
+                        if (ampFundingDetail.getTransactionAmount() == -1) {
                             ampFundingDetail.setTransactionAmount(0.0);
                         }
                         ampFundingDetail.setTransactionAmount(Math.abs(ampFundingDetail.getTransactionAmount()));
                         session.saveOrUpdate(ampFundingDetail);
-                        logger.info("AmpFunding refund: "+ampFundingDetail);
+                        logger.info("AmpFunding refund: " + ampFundingDetail);
                     }
                 }
 
             }
-            Set<AmpComponent> components = activityVersions.get(activityVersions.size()-1).getComponents();
-            logger.info("Components: "+components);
-            for (AmpComponent ampComponent : components)
-            {
-                for (AmpComponentFunding ampComponentFunding:ampComponent.getFundings())
-                {
-                    if (ampComponentFunding.getTransactionAmount() < 0)
-                    {
+            Set<AmpComponent> components = activityVersions.get(activityVersions.size() - 1).getComponents();
+            logger.info("Components: " + components);
+            for (AmpComponent ampComponent : components) {
+                for (AmpComponentFunding ampComponentFunding : ampComponent.getFundings()) {
+                    if (ampComponentFunding.getTransactionAmount() < 0) {
                         ampComponentFunding.setTransactionType(2);
-                        if (ampComponentFunding.getTransactionAmount()==-1)
-                        {
+                        if (ampComponentFunding.getTransactionAmount() == -1) {
                             ampComponentFunding.setTransactionAmount(0.0);
                         }
                         ampComponentFunding.setTransactionAmount(Math.abs(ampComponentFunding.getTransactionAmount()));
                         session.saveOrUpdate(ampComponentFunding);
-                        logger.info("AmpComponent expenditure: "+ampComponentFunding);
+                        logger.info("AmpComponent expenditure: " + ampComponentFunding);
                     }
                 }
             }
@@ -747,7 +737,7 @@ public class ImporterUtil {
 
 
     static void addComponentsAndProjectCode(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) {
-        Long activityId = (Long)response.getContent().getAmpActivityId();
+        Long activityId = (Long) response.getContent().getAmpActivityId();
         Session session = getSession();
 
         AmpActivityVersion ampActivityVersion = getActivityVersion(session, activityId);
@@ -762,7 +752,6 @@ public class ImporterUtil {
             saveOrUpdateComponent(session, ampActivityVersion, ampComponent, updateActivity);
         }
     }
-
 
 
     private static AmpActivityVersion getActivityVersion(Session session, Long activityId) {
@@ -808,12 +797,11 @@ public class ImporterUtil {
         AmpComponentFunding funding = new AmpComponentFunding();
         funding.setComponent(ampComponent);
         funding.setReportingDate(new Date());
-        if (responsibleOrgId!=null)
-        {
+        if (responsibleOrgId != null) {
             funding.setReportingOrganization(getAmpOrganisationById(responsibleOrgId));
         }
         funding.setTransactionAmount(transaction.getTransaction_amount());
-        funding.setTransactionType(transaction.getTransaction_amount()<0?2:defaultType);
+        funding.setTransactionType(transaction.getTransaction_amount() < 0 ? 2 : defaultType);
         funding.setCurrency(getAmpCurrencyById(transaction.getCurrency()));
         funding.setAdjustmentType(getCategoryValueObjectById(transaction.getAdjustment_type()));
         funding.setTransactionDate(convertStringToDate(transaction.getTransaction_date()));
@@ -842,30 +830,28 @@ public class ImporterUtil {
 
 
     private static boolean componentFundingExists(AmpComponentFunding ampComponentFunding, AmpComponent ampComponent) {
-        logger.info("AmpComponentFunding to search: "+ampComponentFunding);
+        logger.info("AmpComponentFunding to search: " + ampComponentFunding);
 
-        if(ampComponent.getAmpComponentId()==null)
-        {
+        if (ampComponent.getAmpComponentId() == null) {
             logger.info("Component is null");
             return false;
         }
-        for (AmpComponentFunding ampComponentFunding1 : ampComponent.getFundings())
-        {
-            logger.info("AmpComponentFunding here: "+ampComponentFunding);
+        for (AmpComponentFunding ampComponentFunding1 : ampComponent.getFundings()) {
+            logger.info("AmpComponentFunding here: " + ampComponentFunding);
 
-            if (Objects.equals(ampComponentFunding.getTransactionAmount(), ampComponentFunding1.getTransactionAmount()) && Objects.equals(ampComponentFunding.getTransactionDate(),ampComponentFunding1.getTransactionDate()) && Objects.equals(ampComponentFunding.getAdjustmentType(),ampComponentFunding1.getAdjustmentType()) && Objects.equals(ampComponentFunding.getReportingOrganization(),ampComponentFunding1.getReportingOrganization())){
-                    logger.info("AmpComponentFunding has been found");
+            if (Objects.equals(ampComponentFunding.getTransactionAmount(), ampComponentFunding1.getTransactionAmount()) && Objects.equals(ampComponentFunding.getTransactionDate(), ampComponentFunding1.getTransactionDate()) && Objects.equals(ampComponentFunding.getAdjustmentType(), ampComponentFunding1.getAdjustmentType()) && Objects.equals(ampComponentFunding.getReportingOrganization(), ampComponentFunding1.getReportingOrganization())) {
+                logger.info("AmpComponentFunding has been found");
 
                 return true;
             }
         }
-        logger.info("AmpComponentFunding not found: "+ampComponentFunding);
+        logger.info("AmpComponentFunding not found: " + ampComponentFunding);
 
 
         return false;
     }
 
-        public static Date convertStringToDate(String dateString) {
+    public static Date convertStringToDate(String dateString) {
         SimpleDateFormat[] formats = {
                 new SimpleDateFormat("dd/MM/yyyy"),
                 new SimpleDateFormat("MM/dd/yyyy"),
@@ -880,7 +866,6 @@ public class ImporterUtil {
         };
 
 
-
         for (SimpleDateFormat format : formats) {
             try {
                 return format.parse(dateString);
@@ -893,69 +878,63 @@ public class ImporterUtil {
         return null;
 
 
-
     }
-    private static AmpCategoryValue getCategoryValueObjectById(Long id)
-    {
-        Session session= PersistenceManager.getRequestDBSession();
+
+    private static AmpCategoryValue getCategoryValueObjectById(Long id) {
+        Session session = PersistenceManager.getRequestDBSession();
         if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getRequestDBSession();
         }
         String hql = "FROM " + AmpCategoryValue.class.getName() + " a " +
                 "WHERE a.id = :id";
-        Query query= session.createQuery(hql);
+        Query query = session.createQuery(hql);
         query.setParameter("id", id);
-        List<AmpCategoryValue> ampCategoryValues=query.list();
-        if (ampCategoryValues!=null && !ampCategoryValues.isEmpty())
-        {
+        List<AmpCategoryValue> ampCategoryValues = query.list();
+        if (ampCategoryValues != null && !ampCategoryValues.isEmpty()) {
             return ampCategoryValues.get(0);
         }
         return null;
     }
-    protected static AmpOrganisation getAmpOrganisationById(Long id)
-    {
-        Session session= PersistenceManager.getRequestDBSession();
+
+    protected static AmpOrganisation getAmpOrganisationById(Long id) {
+        Session session = PersistenceManager.getRequestDBSession();
         if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getRequestDBSession();
         }
         String hql = "FROM " + AmpOrganisation.class.getName() + " a " +
                 "WHERE a.ampOrgId = :id";
-        Query query= session.createQuery(hql);
+        Query query = session.createQuery(hql);
         query.setParameter("id", id);
-        List<AmpOrganisation> ampOrganisations=query.list();
-        if (ampOrganisations!=null && !ampOrganisations.isEmpty())
-        {
+        List<AmpOrganisation> ampOrganisations = query.list();
+        if (ampOrganisations != null && !ampOrganisations.isEmpty()) {
             return ampOrganisations.get(0);
         }
         return null;
     }
-    protected static AmpCurrency getAmpCurrencyById(Long id)
-    {
+
+    protected static AmpCurrency getAmpCurrencyById(Long id) {
         Session session = PersistenceManager.getRequestDBSession();
         if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getRequestDBSession();
         }
         String hql = "FROM " + AmpCurrency.class.getName() + " a " +
                 "WHERE a.ampCurrencyId = :id";
-        Query query= session.createQuery(hql);
+        Query query = session.createQuery(hql);
         query.setParameter("id", id);
-        List<AmpCurrency> ampCurrencies=query.list();
-        if (ampCurrencies!=null && !ampCurrencies.isEmpty())
+        List<AmpCurrency> ampCurrencies = query.list();
+        if (ampCurrencies != null && !ampCurrencies.isEmpty())
             return ampCurrencies.get(0);
         return null;
     }
 
 
+    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary) {
 
-    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary)
-    {
-
-        if (ConstantsMap.containsKey("sector_"+name)) {
-            Long sectorId = ConstantsMap.get("sector_"+name);
-            logger.info("In cache... sector "+"sector_"+name+":"+sectorId);
-            createSector(importDataModel,primary,sectorId);
-        }
-        else {
+        if (ConstantsMap.containsKey("sector_" + name)) {
+            Long sectorId = ConstantsMap.get("sector_" + name);
+            logger.info("In cache... sector " + "sector_" + name + ":" + sectorId);
+            createSector(importDataModel, primary, sectorId);
+        } else {
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
@@ -971,7 +950,7 @@ public class ImporterUtil {
                         while (resultSet.next()) {
                             Long ampSectorId = resultSet.getLong("amp_sector_id");
                             createSector(importDataModel, primary, ampSectorId);
-                            ConstantsMap.put("sector_"+name, ampSectorId);
+                            ConstantsMap.put("sector_" + name, ampSectorId);
                         }
                     }
 
@@ -982,19 +961,17 @@ public class ImporterUtil {
         }
 
 
-
     }
 
-    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session)
-    {
+    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session) {
         logger.info("Updating locations");
 
-        if (ConstantsMap.containsKey("location_"+locationName)) {
-            Long location = ConstantsMap.get("location_"+locationName);
-            logger.info("In cache... location "+"location_"+locationName+":"+location);
-            importDataModel.setImplementation_location(location);
-        }
-        else {
+        if (ConstantsMap.containsKey("location_" + locationName)) {
+            Long location = ConstantsMap.get("location_" + locationName);
+            logger.info("In cache... location " + "location_" + locationName + ":" + location);
+            importDataModel.getLocations().add(new Location(location, 100.00));
+
+        } else {
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
@@ -1007,9 +984,9 @@ public class ImporterUtil {
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
                             Long location = resultSet.getLong("location_id");
-                            logger.info("Location:"+location);
-                            importDataModel.getLocations().add(new Location(location,100.00));
-                            importDataModel.setImplementation_location(location);
+                            logger.info("Location:" + location);
+                            importDataModel.getLocations().add(new Location(location, 100.00));
+//                            importDataModel.setImplementation_location(location);
                             ConstantsMap.put("location_" + locationName, location);
                         }
                     }
@@ -1017,33 +994,45 @@ public class ImporterUtil {
                 } catch (SQLException e) {
                     logger.error("Error getting locations", e);
                 }
-                if (ConstantsMap.containsKey("implementation_level_")) {
-                    Long implementationLevel = ConstantsMap.get("implementation_level_");
-                    logger.info("In cache... imp level "+"implementation_level:"+implementationLevel);
-                    importDataModel.setImplementation_level(implementationLevel);
-                }else {
 
-                    String query2 = "SELECT acv.id as implementation_level FROM amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id=acc.id WHERE LOWER(acv.category_value)=? AND LOWER(acc.keyname)=?";
-                    try (PreparedStatement statement = connection.prepareStatement(query2)) {
-                        statement.setString(1, "national");
-                        statement.setString(2, "implementation_level");
-
-                        try (ResultSet resultSet = statement.executeQuery()) {
-                            while (resultSet.next()) {
-                                Long implementationLevel = resultSet.getLong("implementation_level");
-                                logger.info("Imp level:" + implementationLevel);
-                                importDataModel.setImplementation_level(implementationLevel);
-                                ConstantsMap.put("implementation_level_", implementationLevel);
-                            }
-                        }
-
-                    } catch (SQLException e) {
-                        logger.error("Error getting locations", e);
-                    }
-                }
             });
 
 
+        }
+        updateImpLevels(importDataModel,session);
+
+
+    }
+
+    public static void updateImpLevels(ImportDataModel importDataModel, Session session)
+    {
+        if (ConstantsMap.containsKey("implementation_level_")) {
+            Long implementationLevel = ConstantsMap.get("implementation_level_");
+            logger.info("In cache... imp level "+"implementation_level:"+implementationLevel);
+            importDataModel.setImplementation_level(implementationLevel);
+        }else {
+            if (!session.isOpen()) {
+                session = PersistenceManager.getRequestDBSession();
+            }
+
+            session.doWork(connection -> {
+            String query2 = "SELECT acv.id as implementation_level FROM amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id=acc.id WHERE LOWER(acv.category_value)=? AND LOWER(acc.keyname)=?";
+            try (PreparedStatement statement = connection.prepareStatement(query2)) {
+                statement.setString(1, "national");
+                statement.setString(2, "implementation_level");
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Long implementationLevel = resultSet.getLong("implementation_level");
+                        logger.info("Imp level:" + implementationLevel);
+                        importDataModel.setImplementation_level(implementationLevel);
+                        ConstantsMap.put("implementation_level_", implementationLevel);
+                    }
+                }
+
+            } catch (SQLException e) {
+                logger.error("Error getting imp levels", e);
+            }});
         }
     }
 

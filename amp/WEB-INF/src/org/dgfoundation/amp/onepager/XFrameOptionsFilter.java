@@ -19,7 +19,10 @@ public class XFrameOptionsFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        httpResponse.setHeader("X-Frame-Options", "SAMEORIGIN"); // or "SAMEORIGIN"
+        httpResponse.setHeader("Access-Control-Allow-Origin", "https://amp-ggw-pr-4349.stg.ampsite.net");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        httpResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with");
         chain.doFilter(request, response);
     }
 

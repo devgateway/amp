@@ -458,17 +458,18 @@ public class AmpStructuresFormSectionFeature extends
 
 
         form.add(fileUpload);
+        Button submit = new Button("ajaxSubmit");
 
-        AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Import Structures", true){
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                logger.info("Submitting form");
-                target.add(list);
-
-
-
-            }
-        };
+//        AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Import Structures", true){
+//            @Override
+//            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+//                logger.info("Submitting form");
+//                target.add(list);
+//
+//
+//
+//            }
+//        };
 
         form.add(submit);
         ResourceReference resourceReference = new ResourceReference("exportData-"+ System.currentTimeMillis()) {

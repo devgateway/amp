@@ -218,11 +218,14 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 
     @Override
     protected WebResponse newWebResponse(WebRequest webRequest, HttpServletResponse httpServletResponse) {
+        httpServletResponse.addHeader( "X-Frame-Options", "SAMEORIGIN" );
+        logger.info("Headers"+ httpServletResponse.getHeaderNames()+httpServletResponse.getHeader("X-Frame-Options"));
+
         return new ServletWebResponse((ServletWebRequest) webRequest, httpServletResponse) {
+
             @Override
             public void flush() {
                 // Add the X-Frame-Options header
-                getContainerResponse().addHeader("X-Frame-Options", "SAMEORIGIN");
                 try {
                     getContainerResponse().flushBuffer();
                 } catch (SocketException e) {

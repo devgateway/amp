@@ -4,10 +4,31 @@
 				<span wicket:id="addbutton" />
 			</td>
 			<td colspan="5">
-				<form wicket:id="form">
-					<input type="file" wicket:id="fileUpload" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument" />
-					<button style="background-color: #9fe170;" wicket:id="importStructures" type="submit" value="Import Structures">Import Structures</button>
-				</form>
+<!--				<form wicket:id="form">-->
+<!--					<input type="file" wicket:id="fileUpload" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument" />-->
+<!--					<button style="background-color: #9fe170;" wicket:id="importStructures" type="submit" value="Import Structures">Import Structures</button>-->
+<!--				</form>-->
+				<div wicket:id="resourcePanel" class="invisible-item">
+					<form wicket:id="form">
+						<table width="100%">
+
+							<tr>
+								<td colspan="2">
+									<div style="white-space: nowrap;" >
+										<span class="upfile" wicket:id="file" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<div class="clearing">
+										<span wicket:id="ajaxSubmit" class="resourceButtonPosition" />
+									</div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
 			</td>
 			<td colspan="5">
 				<a wicket:id="downloadLink" style="display:none;">Download</a>

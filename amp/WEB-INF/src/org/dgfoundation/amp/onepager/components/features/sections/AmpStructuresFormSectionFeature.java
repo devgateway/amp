@@ -20,6 +20,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -35,6 +36,8 @@ import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.upload.FileItem;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
@@ -42,10 +45,9 @@ import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.features.CustomResourceLinkResourceLink;
 import org.dgfoundation.amp.onepager.components.features.ExportExcelResourceReference;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.LatAndLongValidator;
+import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.structure.ColorData;
 import org.dgfoundation.amp.onepager.helper.structure.CoordinateData;
 import org.dgfoundation.amp.onepager.helper.structure.MapData;
@@ -57,6 +59,7 @@ import org.digijava.module.aim.util.StructuresUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -332,74 +335,145 @@ public class AmpStructuresFormSectionFeature extends
        add(addbutton);
 
 
-        final FileUploadField fileUploadField = new FileUploadField("fileUpload");
-        fileUploadField.setOutputMarkupId(true);
+//        final FileUploadField fileUploadField = new FileUploadField("fileUpload");
+//        fileUploadField.setOutputMarkupId(true);
+//
+//        final Form<?> form = new Form<Void>("form")
+//        {
+//            private static final long serialVersionUID = 1L;
+//            @Override
+//            protected void onSubmit() {
+//                FileUpload upload = fileUploadField.getFileUpload();
+//                if (upload == null) {
+//                    logger.info("No file uploaded");
+//                } else {
+//                    logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
+//                            Bytes.bytes(upload.getSize()));
+//                    try {
+//                        XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());
+//                        XSSFSheet sheet = workbook.getSheetAt(0);
+//                        Iterator<Row> rowIterator = sheet.iterator();
+//                        rowIterator.next();
+//
+//                        while (rowIterator.hasNext()) {
+//                            XSSFRow row = (XSSFRow) rowIterator.next();
+//                            String title = getStringValueFromCell(row.getCell(0));
+//                            String description = getStringValueFromCell(row.getCell(1));
+//                            String latitude = getStringValueFromCell(row.getCell(2));
+//                            String longitude = getStringValueFromCell(row.getCell(3));
+//
+//                            AmpStructure stru = new AmpStructure();
+//                            stru.setTitle(title);
+//                            stru.setDescription(description);
+//                            stru.setLatitude(latitude);
+//                            stru.setLongitude(longitude);
+//                            list.addItem(stru);
+//                            list.goToLastPage();
+//                        }
+//
+//
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
+//
+//        };
+//        form.setMultiPart(true);
+//        form.setMaxSize(Bytes.megabytes(10));
+//        form.add(fileUploadField);
+//
+//
+//        Button importStructures = new Button("importStructures");
+////        importStructures.add(new AttributeModifier("disabled", "true"));
+//        importStructures.setOutputMarkupId(true);
+//        form.add(importStructures);
+//        fileUploadField.add(new AjaxFormComponentUpdatingBehavior("change") {
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            protected void onUpdate(AjaxRequestTarget target) {
+//                importStructures.setEnabled(true);
+//                importStructures.add(new AttributeModifier("disabled", (String) null)); // Enable the button
+//                target.add(importStructures);
+//
+//            }
+//        });
+//
+//        add(form);
 
-        final Form<?> form = new Form<Void>("form")
-        {
-            private static final long serialVersionUID = 1L;
+        final Model<FileItem> fileItemModel = new Model<FileItem>();
+        FileUploadPanel fileUpload = new FileUploadPanel("file",String.valueOf(am.getObject().getAmpActivityId()), fileItemModel);
+        final Form<?> form = new Form<Void>("form") {
+
+
             @Override
             protected void onSubmit() {
-                FileUpload upload = fileUploadField.getFileUpload();
-                if (upload == null) {
-                    logger.info("No file uploaded");
-                } else {
-                    logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
-                            Bytes.bytes(upload.getSize()));
-                    try {
-                        XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());
-                        XSSFSheet sheet = workbook.getSheetAt(0);
-                        Iterator<Row> rowIterator = sheet.iterator();
-                        rowIterator.next();
+                if (fileItemModel.getObject() != null) {
+                    FileUpload upload = new FileUpload(fileItemModel.getObject());
+                    if (upload == null) {
+                        logger.info("No file uploaded");
+                    } else {
+                        logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
+                                Bytes.bytes(upload.getSize()));
+                        try {
+                            XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());
+                            XSSFSheet sheet = workbook.getSheetAt(0);
+                            Iterator<Row> rowIterator = sheet.iterator();
+                            rowIterator.next();
 
-                        while (rowIterator.hasNext()) {
-                            XSSFRow row = (XSSFRow) rowIterator.next();
-                            String title = getStringValueFromCell(row.getCell(0));
-                            String description = getStringValueFromCell(row.getCell(1));
-                            String latitude = getStringValueFromCell(row.getCell(2));
-                            String longitude = getStringValueFromCell(row.getCell(3));
+                            while (rowIterator.hasNext()) {
+                                XSSFRow row = (XSSFRow) rowIterator.next();
+                                String title = getStringValueFromCell(row.getCell(0));
+                                String description = getStringValueFromCell(row.getCell(1));
+                                String latitude = getStringValueFromCell(row.getCell(2));
+                                String longitude = getStringValueFromCell(row.getCell(3));
 
-                            AmpStructure stru = new AmpStructure();
-                            stru.setTitle(title);
-                            stru.setDescription(description);
-                            stru.setLatitude(latitude);
-                            stru.setLongitude(longitude);
-                            list.addItem(stru);
-                            list.goToLastPage();
+                                AmpStructure stru = new AmpStructure();
+                                stru.setTitle(title);
+                                stru.setDescription(description);
+                                stru.setLatitude(latitude);
+                                stru.setLongitude(longitude);
+                                list.addItem(stru);
+                                list.goToLastPage();
+                                fileItemModel.setObject(null);
+                            }
+                        } catch (Exception e) {
+                            logger.error("Error reading excel file", e);
                         }
-
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
                 }
-            }
 
+                }
         };
-        form.setMultiPart(true);
-        form.setMaxSize(Bytes.megabytes(10));
-        form.add(fileUploadField);
 
 
-        Button importStructures = new Button("importStructures");
-//        importStructures.add(new AttributeModifier("disabled", "true"));
-        importStructures.setOutputMarkupId(true);
-        form.add(importStructures);
-        fileUploadField.add(new AjaxFormComponentUpdatingBehavior("change") {
-            private static final long serialVersionUID = 1L;
+        WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
+//        rc.add(new AttributeModifier("id", getToggleId()));
+        rc.add(form);
+//        rc.add(name);
+        rc.add(fileUpload);
+        rc.setOutputMarkupId(true);
+        add(rc);
 
+
+        form.add(fileUpload);
+
+        // create the ajax button used to submit the form
+        org.dgfoundation.amp.onepager.components.fields.AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Add", true){
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                importStructures.setEnabled(true);
-                importStructures.add(new AttributeModifier("disabled", (String) null)); // Enable the button
-                target.add(importStructures);
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                logger.info("Submitting form");
+//                if (fileItemModel.getObject() != null)
+//                    tmp.setFile(new FileUpload(fileItemModel.getObject()));
+                target.add(list);
+
+
 
             }
-        });
+        };
 
-        add(form);
-
-
+        form.add(submit);
         ResourceReference resourceReference = new ResourceReference("exportData-"+ System.currentTimeMillis()) {
             @Override
             public IResource getResource() {

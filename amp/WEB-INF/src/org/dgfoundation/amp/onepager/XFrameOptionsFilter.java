@@ -23,6 +23,7 @@ public class XFrameOptionsFilter implements Filter {
         httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         httpResponse.setHeader("Access-Control-Max-Age", "3600");
         httpResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+        httpResponse.setHeader("X-Frame-Options", "SAMEORIGIN");
         chain.doFilter(request, response);
     }
 

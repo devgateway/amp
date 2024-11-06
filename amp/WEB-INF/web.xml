@@ -19,7 +19,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>XFrameOptionsFilter</filter-name>
-		<url-pattern>/wicket/onepager/*</url-pattern>
+		<url-pattern>/wicket/*</url-pattern>
 	</filter-mapping>
 	<filter>
 		<filter-name>javamelody</filter-name>

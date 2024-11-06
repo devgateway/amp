@@ -73,6 +73,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
             IS_DEVELOPMENT_MODE = true;
         }
 
+
         //getResourceSettings().setStripJavaScriptCommentsAndWhitespace(true);
         //getResourceSettings().setAddLastModifiedTimeToResourceReferenceUrl(true);
         //TODO:
@@ -218,9 +219,6 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 
     @Override
     protected WebResponse newWebResponse(WebRequest webRequest, HttpServletResponse httpServletResponse) {
-        httpServletResponse.addHeader( "X-Frame-Options", "SAMEORIGIN" );
-        logger.info("Headers"+ httpServletResponse.getHeaderNames()+httpServletResponse.getHeader("X-Frame-Options"));
-
         return new ServletWebResponse((ServletWebRequest) webRequest, httpServletResponse) {
 
             @Override

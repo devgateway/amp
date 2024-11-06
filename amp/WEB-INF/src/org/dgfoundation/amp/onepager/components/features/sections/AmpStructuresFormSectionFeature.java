@@ -460,12 +460,10 @@ public class AmpStructuresFormSectionFeature extends
         form.add(fileUpload);
 
         // create the ajax button used to submit the form
-        org.dgfoundation.amp.onepager.components.fields.AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Add", true){
+        org.dgfoundation.amp.onepager.components.fields.AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Import Structures", true){
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 logger.info("Submitting form");
-//                if (fileItemModel.getObject() != null)
-//                    tmp.setFile(new FileUpload(fileItemModel.getObject()));
                 target.add(list);
 
 

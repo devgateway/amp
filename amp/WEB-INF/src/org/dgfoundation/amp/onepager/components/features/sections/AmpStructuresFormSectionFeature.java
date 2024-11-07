@@ -390,7 +390,14 @@ public class AmpStructuresFormSectionFeature extends
 
 
         form.add(fileUpload);
-        Button submit = new Button("ajaxSubmit");
+        AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Add", true) {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                // TODO: 07/11/2024 Add your code here
+            }
+        };
+
         submit.add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
 
 

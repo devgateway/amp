@@ -435,9 +435,6 @@ public class AmpStructuresFormSectionFeature extends
         };
         add(exportStructures);
 
-        exportStructures.getButton().add(new AttributeModifier("class", new Model("addStructure button_blue_btm")));
-        add(exportStructures);
-
 
     }
     private static String getStringValueFromCell(Cell cell) {

@@ -73,7 +73,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         query.append("         JOIN amp_category_value cv ON i.indicators_category = cv.id  ");
         query.append("         JOIN amp_activity_location al ON ic.activity_location = al.amp_activity_location_id  ");
         query.append("         JOIN amp_category_value_location cvl ON cvl.id = al.location_id  ");
-        query.append("         JOIN amp_org_role oro ON oro.activity = oro.activity  ");
+        query.append("         JOIN amp_org_role oro ON oro.activity = ic.activity_id  ");
         query.append("         JOIN amp_organisation org ON oro.organisation = org.amp_org_id  ");
         query.append("         JOIN amp_theme t on t.amp_theme_id = i.program_id  ");
         query.append("         JOIN amp_activity aa on aa.amp_activity_id = oro.activity  ");

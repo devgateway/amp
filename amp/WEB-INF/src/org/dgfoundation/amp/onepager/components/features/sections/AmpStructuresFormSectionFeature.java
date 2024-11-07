@@ -335,72 +335,6 @@ public class AmpStructuresFormSectionFeature extends
        add(addbutton);
 
 
-//        final FileUploadField fileUploadField = new FileUploadField("fileUpload");
-//        fileUploadField.setOutputMarkupId(true);
-//
-//        final Form<?> form = new Form<Void>("form")
-//        {
-//            private static final long serialVersionUID = 1L;
-//            @Override
-//            protected void onSubmit() {
-//                FileUpload upload = fileUploadField.getFileUpload();
-//                if (upload == null) {
-//                    logger.info("No file uploaded");
-//                } else {
-//                    logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
-//                            Bytes.bytes(upload.getSize()));
-//                    try {
-//                        XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());
-//                        XSSFSheet sheet = workbook.getSheetAt(0);
-//                        Iterator<Row> rowIterator = sheet.iterator();
-//                        rowIterator.next();
-//
-//                        while (rowIterator.hasNext()) {
-//                            XSSFRow row = (XSSFRow) rowIterator.next();
-//                            String title = getStringValueFromCell(row.getCell(0));
-//                            String description = getStringValueFromCell(row.getCell(1));
-//                            String latitude = getStringValueFromCell(row.getCell(2));
-//                            String longitude = getStringValueFromCell(row.getCell(3));
-//
-//                            AmpStructure stru = new AmpStructure();
-//                            stru.setTitle(title);
-//                            stru.setDescription(description);
-//                            stru.setLatitude(latitude);
-//                            stru.setLongitude(longitude);
-//                            list.addItem(stru);
-//                            list.goToLastPage();
-//                        }
-//
-//
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            }
-//
-//        };
-//        form.setMultiPart(true);
-//        form.setMaxSize(Bytes.megabytes(10));
-//        form.add(fileUploadField);
-//
-//
-//        Button importStructures = new Button("importStructures");
-////        importStructures.add(new AttributeModifier("disabled", "true"));
-//        importStructures.setOutputMarkupId(true);
-//        form.add(importStructures);
-//        fileUploadField.add(new AjaxFormComponentUpdatingBehavior("change") {
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            protected void onUpdate(AjaxRequestTarget target) {
-//                importStructures.setEnabled(true);
-//                importStructures.add(new AttributeModifier("disabled", (String) null)); // Enable the button
-//                target.add(importStructures);
-//
-//            }
-//        });
-//
-//        add(form);
 
         final Model<FileItem> fileItemModel = new Model<FileItem>();
         FileUploadPanel fileUpload = new FileUploadPanel("file",String.valueOf(am.getObject().getAmpActivityId()), fileItemModel);
@@ -449,9 +383,7 @@ public class AmpStructuresFormSectionFeature extends
 
 
         WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
-//        rc.add(new AttributeModifier("id", getToggleId()));
         rc.add(form);
-//        rc.add(name);
         rc.add(fileUpload);
         rc.setOutputMarkupId(true);
         add(rc);
@@ -459,17 +391,8 @@ public class AmpStructuresFormSectionFeature extends
 
         form.add(fileUpload);
         Button submit = new Button("ajaxSubmit");
+        submit.add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
 
-//        AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Import Structures", true){
-//            @Override
-//            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-//                logger.info("Submitting form");
-//                target.add(list);
-//
-//
-//
-//            }
-//        };
 
         form.add(submit);
         ResourceReference resourceReference = new ResourceReference("exportData-"+ System.currentTimeMillis()) {
@@ -512,7 +435,7 @@ public class AmpStructuresFormSectionFeature extends
         };
         add(exportStructures);
 
-        exportStructures.getButton().add(new AttributeModifier("class", new Model("exportStructures button_blue_btm")));
+        exportStructures.getButton().add(new AttributeModifier("class", new Model("addStructure button_blue_btm")));
         add(exportStructures);
 
 

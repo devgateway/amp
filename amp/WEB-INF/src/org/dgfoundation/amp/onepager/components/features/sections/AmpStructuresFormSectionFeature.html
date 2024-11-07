@@ -7,7 +7,11 @@
 				<div wicket:id="resourcePanel">
 					<form wicket:id="form">
 						<table width="40%">
-
+							<tr>
+								<td colspan="2">
+									<button wicket:id="ajaxSubmit" >Import Structures</button>
+								</td>
+							</tr>
 							<tr>
 								<td colspan="2">
 									<div style="white-space: nowrap;" >
@@ -15,15 +19,11 @@
 									</div>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2">
-										<button wicket:id="ajaxSubmit" >Import Structures</button>
-								</td>
-							</tr>
+
 						</table>
 					</form>
 				</div>
-				<br><br>
+				<br>
 			</td>
 			<td colspan="3">
 				<a wicket:id="downloadLink" style="display:none;">Download</a>

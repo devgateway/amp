@@ -10,6 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("new_report")
 @Api("new_report")
@@ -21,9 +22,9 @@ public class NewReportEndpoint {
 @GET
 @Path("/options")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public String getReportFilterOptions(@QueryParam("type") @DefaultValue("activity_name") String type)
+    public List<String> getReportFilterOptions(@QueryParam("type") @DefaultValue("activity_name") String type)
     {
-        return null;
+        return NewreportService.getFilterOptions(type);
     }
 
 }

@@ -1,11 +1,7 @@
 
 import React, {useEffect, useState} from 'react';
 import { Container } from 'semantic-ui-react';
-import CountriesList from './CountriesList';
-import ProjectsList from './ProjectsList';
-import InstitutionsList from './InstitutionsList';
-import LanguagesList from './LanguagesList';
-import TypesList from './TypesList';
+
 import CustomDataTable from './CustomDataTable';
 
 import { useDispatch } from 'react-redux';

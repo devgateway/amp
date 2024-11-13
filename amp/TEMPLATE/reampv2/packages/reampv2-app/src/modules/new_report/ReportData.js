@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Container } from 'semantic-ui-react';
 import CountriesList from './CountriesList';
 import ProjectsList from './ProjectsList';
@@ -8,13 +8,11 @@ import LanguagesList from './LanguagesList';
 import TypesList from './TypesList';
 import CustomDataTable from './CustomDataTable';
 
-import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Select from 'react-select';
-import {loadWocatProjects} from "../reducers/api"; // Ensure you have installed react-select or adjust accordingly
-import { injectIntl } from 'react-intl';
+import {loadFilterOptions} from "./api";
 
-const CountriesList = ({type,selected,onSelect}) => {
+const FiltersList = ({type,selected,onSelect}) => {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,9 +20,9 @@ const CountriesList = ({type,selected,onSelect}) => {
         onSelect(selectedOption ? selectedOption.value : '');
     };
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchOptions = async () => {
             try {
-                const response = await loadWocatProjects();
+                const response = await loadFilterOptions(type);
                 // console.log("Projects: " + response)
                 setData(response); // Adjust this line based on the actual response structure
             } catch (error) {
@@ -34,13 +32,13 @@ const CountriesList = ({type,selected,onSelect}) => {
             }
         };
 
-        fetchProjects();
+        fetchOptions();
     }, [dispatch]);
 
     // Ensure data is an array
-    const options = Array.isArray(data) ? data.map(project => ({
-        value: project.projectId,
-        label: project.projectName
+    const options = Array.isArray(data) ? data.map(item => ({
+        value: item,
+        label: item
     })) : [];
 
     if (loading) {
@@ -56,7 +54,7 @@ const CountriesList = ({type,selected,onSelect}) => {
             value={options.find(option => option.value === selected) || null}
             onChange={option => onSelect(option ? option.value : '')}
             options={options}
-            placeholder="Wocat Project"
+            placeholder={`Select ${type}`}
             className="basic-single"
             isSearchable
             isLoading={loading}
@@ -90,19 +88,22 @@ const ReportData = () => {
             <Container className="body" style={{ margin: '0 auto', maxWidth: '1200px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', gap: '10px' }}>
                     <div style={{ flex: 1 }}>
-                        <CountriesList selected={selectedCountry} onSelect={setSelectedCountry} />
+                        <FiltersList type={'core_type_name'} selected={selectedCoreType} onSelect={setSelectedCoreType} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <ProjectsList selected={selectedProject} onSelect={setSelectedProject} />
+                        <FiltersList type={'country_name'} selected={selectedCountry} onSelect={setSelectedCountry} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <InstitutionsList selected={selectedInstitution} onSelect={setSelectedInstitution} />
+                        <FiltersList  type={'donor_name'} selected={selectedDonor} onSelect={setSelectedDonor} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <LanguagesList selected={selectedLanguage} onSelect={setSelectedLanguage} />
+                        <FiltersList type={'indicator_name'} selected={selectedIndicator} onSelect={setSelectedIndicator} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <TypesList selected={selectedType} onSelect={setSelectedType} />
+                        <FiltersList type={'program_name'} selected={selectedProgram} onSelect={setSelectedProgram} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <FiltersList type={'activity_name'} selected={selectedActivity} onSelect={setSelectedActivity} />
                     </div>
                 </div>
                 <div style={{ marginBottom: '20px', textAlign: 'center' }}>

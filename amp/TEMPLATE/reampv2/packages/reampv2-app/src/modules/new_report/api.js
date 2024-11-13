@@ -1,5 +1,6 @@
 const API_ROOT='';
 const NEW_REPORT_API='/rest/new_report';
+const OPTIONS_URL='/options';
 export const loadReportData = async (size, page, filters) => {
     const params = new URLSearchParams({
         size,
@@ -18,7 +19,7 @@ export const loadReportData = async (size, page, filters) => {
 export const loadFilterOptions = async (type) => {
     const params = new URLSearchParams({});
     params.append('type', type);
-    return get(`${NEW_REPORT_API}?${params.toString()}`);
+    return get(`${NEW_REPORT_API}${OPTIONS_URL}?${params.toString()}`);
 };
 
 

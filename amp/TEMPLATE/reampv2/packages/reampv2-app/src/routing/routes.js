@@ -1,10 +1,12 @@
 import {lazy, Suspense} from "react";
 import NavigationManager from "../NavigationManager";
 import { Outlet } from "react-router-dom";
+import NewReportApp from "../modules/new_report";
 
 const SSCDashboardApp = lazy(() => import('../modules/sscdashboard'));
 const AdminApps = lazy(() => import('../modules/admin/Admin.routes'));
 const NDDDashboardApp = lazy(() => import('../modules/ndddashboard'));
+const NewReportApp = lazy(() => import('../modules/new_report'));
 const GeocoderApp = lazy(() => import('../modules/geocoder'));
 const AmpOfflineApp = lazy(() => import('../modules/ampoffline/Download'));
 const ReportGeneratorApp = lazy(() => import('../modules/report_generator'));
@@ -41,6 +43,14 @@ const routes = [
                 element: (
                     <Suspense fallback={<div className="loading"></div>}>
                         <NDDDashboardApp />
+                    </Suspense>
+                )
+            },
+            {
+                path: "new_report/*",
+                element: (
+                    <Suspense fallback={<div className="loading"></div>}>
+                        <NewReportApp />
                     </Suspense>
                 )
             },

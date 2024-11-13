@@ -1,7 +1,6 @@
 import {lazy, Suspense} from "react";
 import NavigationManager from "../NavigationManager";
 import { Outlet } from "react-router-dom";
-import NewReportApp from "../modules/new_report";
 
 const SSCDashboardApp = lazy(() => import('../modules/sscdashboard'));
 const AdminApps = lazy(() => import('../modules/admin/Admin.routes'));

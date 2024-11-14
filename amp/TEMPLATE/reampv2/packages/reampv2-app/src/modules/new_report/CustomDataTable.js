@@ -6,7 +6,7 @@ import {loadReportData} from "./api";
 
 const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, selectedIndicator, selectedProgram, selectedActivity }) => {
     const [data, setData] = useState([]);
-    const [totalRows, setTotalRows] = useState([]);
+    const [totalRows, setTotalRows] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);

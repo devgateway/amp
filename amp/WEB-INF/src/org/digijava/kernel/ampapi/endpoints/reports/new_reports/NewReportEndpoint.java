@@ -10,7 +10,9 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Path("new_report")
 @Api("new_report")
@@ -25,6 +27,18 @@ public class NewReportEndpoint {
     public List<String> getReportFilterOptions(@QueryParam("type") @DefaultValue("activity_name") String type)
     {
         return NewreportService.getFilterOptions(type);
+    }
+
+
+    @ApiOperation("Return new report data")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Filter options", response = ReportDesigner.class))
+    @ApiMethod(id = "report")
+    @POST
+    @Path("")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public List<Map<String, Object>> getReportData(Map<String, String> filters) throws SQLException {
+        return NewreportService.getData(filters);
     }
 
 }

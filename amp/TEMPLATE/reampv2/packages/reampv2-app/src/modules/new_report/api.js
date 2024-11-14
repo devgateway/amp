@@ -2,18 +2,9 @@ const API_ROOT='';
 const NEW_REPORT_API='/rest/new_report';
 const OPTIONS_URL='/options';
 export const loadReportData = async (size, page, filters) => {
-    const params = new URLSearchParams({
-        size,
-        page,
-    });
-
-    Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-            params.append(key, value);
-        }
-    });
-
-    return get(`${NEW_REPORT_API}?${params.toString()}`);
+    filters['size'] = size+'';
+    filters['page'] = page+'';
+    return post(`${NEW_REPORT_API}`,filters,false);
 };
 
 export const loadFilterOptions = async (type) => {

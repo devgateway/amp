@@ -6,12 +6,14 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class NewreportService {
 private static final Logger logger  = LoggerFactory.getLogger(NewreportService.class);
-    private static final String QUERY =
+    private static final String BASE_QUERY =
             "SELECT cv.id AS core_type_id, " +
                     "       cv.category_value AS core_type_name, " +
                     "       al.location_id AS country_id, " +
@@ -38,11 +40,83 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "JOIN amp_activity aa ON aa.amp_activity_id = oro.activity " +
                     "WHERE ic.sub_clazz = 'a' " +
                     "  AND iv.value_type IN (0, 1) " +
-                    "  AND oro.role = 1 " +
-                    "GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
-                    "         i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name " +
-                    "ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
-                    "         i.program_id, t.name, aa.amp_activity_id, aa.name";
+                    "  AND oro.role = 1 ";
+    public static List<Map<String, Object>> getData(Map<String, String> filters) throws SQLException {
+        StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
+        int page = Integer.parseInt(filters.get("page"));
+        int size = Integer.parseInt(filters.get("size"));
+        // Dynamically build the WHERE clause based on filters
+        if (filters.containsKey("core_type_name") && !filters.get("core_type_name").isEmpty()) {
+            queryBuilder.append(" AND cv.category_value = ? ");
+        }
+        if (filters.containsKey("country_name") && !filters.get("country_name").isEmpty()) {
+            queryBuilder.append(" AND cvl.location_name = ? ");
+        }
+        if (filters.containsKey("donor_name") && !filters.get("donor_name").isEmpty()) {
+            queryBuilder.append(" AND org.name = ? ");
+        }
+        if (filters.containsKey("indicator_name") && !filters.get("indicator_name").isEmpty()) {
+            queryBuilder.append(" AND i.name = ? ");
+        }
+        if (filters.containsKey("program_name") && !filters.get("program_name").isEmpty()) {
+            queryBuilder.append(" AND t.name = ? ");
+        }
+        if (filters.containsKey("activity_name") && !filters.get("activity_name").isEmpty()) {
+            queryBuilder.append(" AND aa.name = ? ");
+        }
+
+        // Add GROUP BY and ORDER BY clauses
+        queryBuilder.append("GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
+                .append("i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name ")
+                .append("ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
+                .append("i.program_id, t.name, aa.amp_activity_id, aa.name");
+        int offset = (page - 1) * size;
+        queryBuilder.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        List<Map<String, Object>> results = new ArrayList<>();
+        try (PreparedStatement stmt = PersistenceManager.getJdbcConnection().prepareStatement(queryBuilder.toString())) {
+            int index = 0;
+            if (filters.containsKey("core_type_name") && !filters.get("core_type_name").isEmpty()) {
+                stmt.setString(index++, filters.get("core_type_name"));
+            }
+            if (filters.containsKey("country_name") && !filters.get("country_name").isEmpty()) {
+                stmt.setString(index++, filters.get("country_name"));
+            }
+            if (filters.containsKey("donor_name") && !filters.get("donor_name").isEmpty()) {
+                stmt.setString(index++, filters.get("donor_name"));
+            }
+            if (filters.containsKey("indicator_name") && !filters.get("indicator_name").isEmpty()) {
+                stmt.setString(index++, filters.get("indicator_name"));
+            }
+            if (filters.containsKey("program_name") && !filters.get("program_name").isEmpty()) {
+                stmt.setString(index++, filters.get("program_name"));
+            }
+            if (filters.containsKey("activity_name") && !filters.get("activity_name").isEmpty()) {
+                stmt.setString(index++, filters.get("activity_name"));
+            }
+            stmt.setInt(index++, offset);
+            stmt.setInt(index++, size);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("core_type_id", rs.getInt("core_type_id"));
+                    row.put("core_type_name", rs.getString("core_type_name"));
+                    row.put("country_id", rs.getInt("country_id"));
+                    row.put("country_name", rs.getString("country_name"));
+                    row.put("donor_id", rs.getInt("donor_id"));
+                    row.put("donor_name", rs.getString("donor_name"));
+                    row.put("indicator_id", rs.getInt("indicator_id"));
+                    row.put("indicator_name", rs.getString("indicator_name"));
+                    row.put("program_id", rs.getInt("program_id"));
+                    row.put ("program_name", rs.getString("program_name"));
+                    row.put("activity_id", rs.getInt("activity_id"));
+                    row.put("activity_name", rs.getString("activity_name"));
+                    results.add(row);
+                }
+            }
+        }
+        return results;
+    }
     public static List<String> getFilterOptions(String type) {
         if (!Arrays.asList("core_type_name", "country_name", "donor_name", "indicator_name", "program_name", "activity_name")
                 .contains(type)) {
@@ -50,7 +124,13 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         }
 
         // Modify the query to retrieve only the distinct values for the specified type column
-        String filterQuery = "SELECT DISTINCT " + type + " FROM (" + QUERY + ") AS filtered_data";
+        StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
+        queryBuilder.append("GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
+                .append("i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name ")
+                .append("ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
+                .append("i.program_id, t.name, aa.amp_activity_id, aa.name");
+
+        String filterQuery = "SELECT DISTINCT " + type + " FROM (" + queryBuilder + ") AS filtered_data";
 
         List<String> options;
 

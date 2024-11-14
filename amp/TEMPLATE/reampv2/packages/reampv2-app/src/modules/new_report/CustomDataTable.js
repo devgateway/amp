@@ -28,7 +28,6 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                 program_name: selectedProgram,
                 activity_name: selectedActivity,
             });
-            console.log("Response,",JSON.stringify(response))
             setData(response.content);
             setTotalRows(response.totalElements);
         } catch (err) {
@@ -52,12 +51,12 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
 
 
     const columns = [
+        { name: 'Project/Activity', selector: row => row.activity_name, sortable: true },
         { name: 'Indicator', selector: row => row.indicator_name, sortable: true },
         { name: 'Type', selector: row => row.core_type_name, sortable: true },
         { name: 'Country', selector: row => row.country_name, sortable: true },
         { name: 'Donor', selector: row => row.donor_name, sortable: true },
         { name: 'Program', selector: row => row.program_name, sortable: true },
-        { name: 'Activity', selector: row => row.activity_name, sortable: true },
 
     ];
 

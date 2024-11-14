@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import Select from 'react-select';
 import {loadFilterOptions} from "./api";
 
-const FiltersList = ({type,selected,onSelect}) => {
+const FiltersList = ({type, name,selected,onSelect}) => {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ const FiltersList = ({type,selected,onSelect}) => {
             value={options.find(option => option.value === selected) || null}
             onChange={option => onSelect(option ? option.value : '')}
             options={options}
-            placeholder={`Select ${type}`}
+            placeholder={`Filter by ${name}`}
             className="basic-single"
             isSearchable
             isLoading={loading}
@@ -84,22 +84,22 @@ const ReportData = () => {
             <Container className="body" style={{ margin: '0 auto', maxWidth: '1200px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', gap: '10px' }}>
                     <div style={{ flex: 1 }}>
-                        <FiltersList type={'core_type_name'} selected={selectedCoreType} onSelect={setSelectedCoreType} />
+                        <FiltersList type={'core_type_name'} name={'Core Type'} selected={selectedCoreType} onSelect={setSelectedCoreType} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <FiltersList type={'country_name'} selected={selectedCountry} onSelect={setSelectedCountry} />
+                        <FiltersList type={'country_name'} name={'Country'} selected={selectedCountry} onSelect={setSelectedCountry} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <FiltersList  type={'donor_name'} selected={selectedDonor} onSelect={setSelectedDonor} />
+                        <FiltersList  type={'donor_name'} name={'Donor'} selected={selectedDonor} onSelect={setSelectedDonor} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <FiltersList type={'indicator_name'} selected={selectedIndicator} onSelect={setSelectedIndicator} />
+                        <FiltersList type={'indicator_name'} name={'Indicator'} selected={selectedIndicator} onSelect={setSelectedIndicator} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <FiltersList type={'program_name'} selected={selectedProgram} onSelect={setSelectedProgram} />
+                        <FiltersList type={'program_name'} name={'Program'} selected={selectedProgram} onSelect={setSelectedProgram} />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <FiltersList type={'activity_name'} selected={selectedActivity} onSelect={setSelectedActivity} />
+                        <FiltersList type={'activity_name'} name={'Project/Activity'} selected={selectedActivity} onSelect={setSelectedActivity} />
                     </div>
                 </div>
                 <div style={{ marginBottom: '20px', textAlign: 'center' }}>

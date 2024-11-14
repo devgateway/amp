@@ -109,12 +109,7 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
     return (
         <div className={fullScreen ? 'full-screen-container' : ''}>
             <div style={{ marginBottom: '20px', textAlign: 'right' }}>
-                <div onClick={toggleFullScreen} style={{ cursor: 'pointer', display: 'inline-block', marginRight: '10px' }}>
-                    {fullScreen
-                        ? <img src={process.env.PUBLIC_URL + '/full_screen_off.png'} alt="Exit Fullscreen" style={{ width: '20px', height: '20px' }} />
-                        : <img src={process.env.PUBLIC_URL + '/full_screen_on.png'} alt="Fullscreen" style={{ width: '20px', height: '20px' }} />
-                    }
-                </div>
+
                 <CSVLink
                     data={selectedRows.length > 0 ? selectedRows : data}
                     filename={`projectList-${currentPage}-${perPage}-data.csv`}
@@ -132,6 +127,12 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                 >
                     Export Data
                 </CSVLink>
+                <div onClick={toggleFullScreen} style={{ cursor: 'pointer', display: 'inline-block', marginRight: '10px' }}>
+                    {fullScreen
+                        ? <img src={process.env.PUBLIC_URL + '/full_screen_on.png'} alt="Fullscreen" style={{ width: '20px', height: '20px' }} />
+                        : <img src={process.env.PUBLIC_URL + '/full_screen_off.png'} alt="Exit Fullscreen" style={{ width: '20px', height: '20px' }} />
+                    }
+                </div>
             </div>
             <DataTable
                 columns={columns}

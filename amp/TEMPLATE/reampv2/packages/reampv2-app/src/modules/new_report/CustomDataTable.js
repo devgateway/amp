@@ -109,9 +109,12 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
     return (
         <div className={fullScreen ? 'full-screen-container' : ''}>
             <div style={{ marginBottom: '20px', textAlign: 'right' }}>
-                <button onClick={toggleFullScreen} className="btn btn-secondary" style={{ marginRight: '10px' }}>
-                    {fullScreen ? 'Exit Full Screen' : 'Full Screen'}
-                </button>
+                <div onClick={toggleFullScreen} style={{ cursor: 'pointer', display: 'inline-block', marginRight: '10px' }}>
+                    {fullScreen
+                        ? <img src={process.env.PUBLIC_URL + '/full_screen_off.png'} alt="Exit Fullscreen" style={{ width: '20px', height: '20px' }} />
+                        : <img src={process.env.PUBLIC_URL + '/full_screen_on.png'} alt="Fullscreen" style={{ width: '20px', height: '20px' }} />
+                    }
+                </div>
                 <CSVLink
                     data={selectedRows.length > 0 ? selectedRows : data}
                     filename={`projectList-${currentPage}-${perPage}-data.csv`}

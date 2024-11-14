@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { CSVLink } from 'react-csv';
 import { loadReportData } from "./api";
-import './CustomDataTable.css'; // Optional: Add CSS file for additional styles if needed
 import './DataTable.css'
 const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, selectedIndicator, selectedProgram, selectedActivity }) => {
     const [data, setData] = useState([]);

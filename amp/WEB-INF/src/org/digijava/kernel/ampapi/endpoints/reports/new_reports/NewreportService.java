@@ -27,7 +27,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "       aa.amp_activity_id AS activity_id, " +
                     "       aa.name AS activity_name, " +
                     "       ROUND(CAST(SUM(CASE WHEN iv.value_type = 0 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_target, " +
-                    "       ROUND(CAST(SUM(CASE WHEN iv.value_type = 1 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_actual " +
+                    "       ROUND(CAST(SUM(CASE WHEN iv.value_type = 1 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_actual, " +
                     "       COUNT(*) OVER() AS total_count " +
                     "FROM amp_indicator i " +
                     "JOIN amp_indicator_connection ic ON ic.indicator_id = i.indicator_id " +

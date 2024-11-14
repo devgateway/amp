@@ -42,7 +42,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
                     "         i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name " +
                     "ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
-                    "         i.program_id, t.name, aa.amp_activity_id, aa.name;";
+                    "         i.program_id, t.name, aa.amp_activity_id, aa.name";
     public static List<String> getFilterOptions(String type) {
         if (!Arrays.asList("core_type_name", "country_name", "donor_name", "indicator_name", "program_name", "activity_name")
                 .contains(type)) {

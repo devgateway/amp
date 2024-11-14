@@ -1,21 +1,23 @@
 import React, {Component} from "react";
-import {applyMiddleware, createStore} from "redux";
-import rootReducer from "../ndddashboard/reducers/rootReducer";
+import ReportData from "./ReportData";
+import {applyMiddleware, compose, createStore} from "redux";
+import rootReducer from "../report_generator/reducers/rootReducer";
 import thunk from "redux-thunk";
 import {Provider} from "react-redux";
-import Startup from "../ndddashboard/components/StartUp";
-import defaultTrnPack from "../ndddashboard/config/initialTranslations.json";
-import NDDDashboardRouter from "../ndddashboard/components/NDDDashboard.router";
-import ReportData from "./ReportData";
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 class NewReportApp extends Component {
     constructor(props) {
         super(props);
+        this.store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)));
     }
 
     render() {
         return (
-             <ReportData />
+            <Provider store={this.store}>
+
+            <ReportData />
+            </Provider>
         );
     }
 }

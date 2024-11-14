@@ -71,10 +71,10 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                 .append("ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
                 .append("i.program_id, t.name, aa.amp_activity_id, aa.name");
         int offset = (page - 1) * size;
-        queryBuilder.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        queryBuilder.append(" OFFSET ? LIMIT ?");
         List<Map<String, Object>> results = new ArrayList<>();
         try (PreparedStatement stmt = PersistenceManager.getJdbcConnection().prepareStatement(queryBuilder.toString())) {
-            int index = 0;
+            int index = 1;
             if (filters.containsKey("core_type_name") && !filters.get("core_type_name").isEmpty()) {
                 stmt.setString(index++, filters.get("core_type_name"));
             }

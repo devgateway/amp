@@ -13,9 +13,9 @@ class NewReportApp extends Component {
     }
 
     render() {
+        document.title = 'Indicator Report'
         return (
             <Provider store={this.store}>
-
             <ReportData />
             </Provider>
         );

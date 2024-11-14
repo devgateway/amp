@@ -55,7 +55,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         List<String> options;
 
         Session session = PersistenceManager.getRequestDBSession();
-        Query query = session.createQuery(filterQuery);
+        Query query = session.createNativeQuery(filterQuery);
         options = query.getResultList();
         return options;
     }

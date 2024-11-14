@@ -28,6 +28,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "       aa.name AS activity_name, " +
                     "       ROUND(CAST(SUM(CASE WHEN iv.value_type = 0 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_target, " +
                     "       ROUND(CAST(SUM(CASE WHEN iv.value_type = 1 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_actual " +
+                    "       COUNT(*) OVER() AS total_count " +
                     "FROM amp_indicator i " +
                     "JOIN amp_indicator_connection ic ON ic.indicator_id = i.indicator_id " +
                     "JOIN amp_indicator_values iv ON iv.ind_connect_id = ic.id " +
@@ -41,7 +42,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "WHERE ic.sub_clazz = 'a' " +
                     "  AND iv.value_type IN (0, 1) " +
                     "  AND oro.role = 1 ";
-    public static List<Map<String, Object>> getData(Map<String, String> filters) throws SQLException {
+    public static Map<String, Object> getData(Map<String, String> filters) throws SQLException {
         StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
         int page = Integer.parseInt(filters.get("page"));
         int size = Integer.parseInt(filters.get("size"));
@@ -73,6 +74,8 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         int offset = (page - 1) * size;
         queryBuilder.append(" OFFSET ? LIMIT ?");
         List<Map<String, Object>> results = new ArrayList<>();
+        Map<String, Object> finalResult = new HashMap<>();
+        long count = 0L;
         try (PreparedStatement stmt = PersistenceManager.getJdbcConnection().prepareStatement(queryBuilder.toString())) {
             int index = 1;
             if (filters.containsKey("core_type_name") && !filters.get("core_type_name").isEmpty()) {
@@ -111,11 +114,14 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     row.put ("program_name", rs.getString("program_name"));
                     row.put("activity_id", rs.getInt("activity_id"));
                     row.put("activity_name", rs.getString("activity_name"));
+                    count = rs.getLong("total_count");
                     results.add(row);
                 }
             }
         }
-        return results;
+        finalResult.put("content", results);
+        finalResult.put("totalElements", count);
+        return finalResult;
     }
     public static List<String> getFilterOptions(String type) {
         if (!Arrays.asList("core_type_name", "country_name", "donor_name", "indicator_name", "program_name", "activity_name")

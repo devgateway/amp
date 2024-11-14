@@ -37,7 +37,7 @@ public class NewReportEndpoint {
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public List<Map<String, Object>> getReportData(Map<String, String> filters) throws SQLException {
+    public Map<String, Object> getReportData(Map<String, String> filters) throws SQLException {
         return NewreportService.getData(filters);
     }
 

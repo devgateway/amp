@@ -137,7 +137,7 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                         fontSize: '16px'
                     }}
                 >
-                    Export Page Data
+                    Export Data
                 </CSVLink>
             </div>
             <DataTable

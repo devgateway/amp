@@ -127,10 +127,10 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                 >
                     Export Data
                 </CSVLink>
-                <div onClick={toggleFullScreen} style={{ cursor: 'pointer', display: 'inline-block', marginRight: '10px' }}>
+                <div onClick={toggleFullScreen} style={{ cursor: 'pointer', display: 'inline-block', marginLeft: '20px' }}>
                     {fullScreen
-                        ? <img src={process.env.PUBLIC_URL + '/full_screen_on.png'} alt="Fullscreen" style={{ width: '20px', height: '20px' }} />
-                        : <img src={process.env.PUBLIC_URL + '/full_screen_off.png'} alt="Exit Fullscreen" style={{ width: '20px', height: '20px' }} />
+                        ? <img src={process.env.PUBLIC_URL + '/full_screen_on.png'} alt="Fullscreen" style={{ width: '40px', height: '40px' }} />
+                        : <img src={process.env.PUBLIC_URL + '/full_screen_off.png'} alt="Exit Fullscreen" style={{ width: '40px', height: '40px' }} />
                     }
                 </div>
             </div>

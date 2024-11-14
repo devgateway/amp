@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { CSVLink } from 'react-csv';
-
-import {loadReportData} from "./api";
-
+import { loadReportData } from "./api";
+import './CustomDataTable.css'; // Optional: Add CSS file for additional styles if needed
+import './DataTable.css'
 const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, selectedIndicator, selectedProgram, selectedActivity }) => {
     const [data, setData] = useState([]);
     const [totalRows, setTotalRows] = useState(0);
@@ -11,15 +11,16 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
-
     const [selectedRows, setSelectedRows] = useState([]);
+    const [fullScreen, setFullScreen] = useState(false); // State for full-screen mode
 
     const handleRowSelected = (state) => {
         setSelectedRows(state.selectedRows);
     };
+
     const fetchData = async (page, size) => {
         try {
-            console.log("size, page", size,page)
+            console.log("size, page", size, page);
             const response = await loadReportData(size, page, {
                 core_type_name: selectedCoreType,
                 country_name: selectedCountry,
@@ -40,15 +41,16 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
 
     useEffect(() => {
         fetchData(currentPage, perPage);
-    }, [currentPage, perPage,selectedCoreType, selectedCountry, selectedDonor, selectedIndicator,selectedProgram,selectedActivity]);
+    }, [currentPage, perPage, selectedCoreType, selectedCountry, selectedDonor, selectedIndicator, selectedProgram, selectedActivity]);
+
     const truncateText = (text, len) => {
         const words = text?.split(' ');
-        if (words?.length > len) {
-            return `${words.slice(0, 10).join(' ')}...`;
-        }
-        return text;
+        return words?.length > len ? `${words.slice(0, len).join(' ')}...` : text;
     };
 
+    const toggleFullScreen = () => {
+        setFullScreen(!fullScreen);
+    };
 
     const columns = [
         { name: 'Project/Activity', selector: row => row.activity_name, sortable: true },
@@ -57,29 +59,26 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
         { name: 'Country', selector: row => row.country_name, sortable: true },
         { name: 'Donor', selector: row => row.donor_name, sortable: true },
         { name: 'Program', selector: row => row.program_name, sortable: true },
-
     ];
-
-
 
     const customStyles = {
         headRow: {
             style: {
-                backgroundColor: '#78c800', // Header background color
-                color: '#333', // Header text color
-                fontWeight: 'bold', // Header font weight
+                backgroundColor: '#78c800',
+                color: '#333',
+                fontWeight: 'bold',
             },
         },
         headCells: {
             style: {
-                padding: '10px', // Header cell padding
+                padding: '10px',
             },
         },
         cells: {
             style: {
-                padding: '10px', // Cell padding
-                whiteSpace: 'normal', // Allow text to wrap
-                wordWrap: 'break-word', // Break long words
+                padding: '10px',
+                whiteSpace: 'normal',
+                wordWrap: 'break-word',
             },
         },
         rows: {
@@ -89,42 +88,34 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                 },
                 '&:hover': {
                     backgroundColor: '#ddd',
-                    cursor: 'pointer'
-
+                    cursor: 'pointer',
                 },
             },
         },
     };
-    const handlePageChange = page => {
-        setCurrentPage(page);
-    };
 
+    const handlePageChange = (page) => setCurrentPage(page);
     const handlePerRowsChange = async (newPerPage, page) => {
         setPerPage(newPerPage);
         setCurrentPage(page);
-        await fetchData(page, newPerPage); // Fetch new data based on newPerPage
+        await fetchData(page, newPerPage);
     };
 
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error.message}</div>;
+    if (data?.length === 0) return <div>No data</div>;
 
-    if (loading) {
-        return <div>loading</div>;
-    }
-
-    if (error) {
-        return <div> {error.message}</div>;
-    }
-
-    if (data?.length === 0) {
-        return <div>No data</div>;
-    }
-    let pageSizes=totalRows>500?[10, 25, 50, 100, 500,totalRows]:[10, 25, 50, 100, 500]
+    let pageSizes = totalRows > 500 ? [10, 25, 50, 100, 500, totalRows] : [10, 25, 50, 100, 500];
 
     return (
-        <div>
+        <div className={fullScreen ? 'full-screen-container' : ''}>
             <div style={{ marginBottom: '20px', textAlign: 'right' }}>
+                <button onClick={toggleFullScreen} className="btn btn-secondary" style={{ marginRight: '10px' }}>
+                    {fullScreen ? 'Exit Full Screen' : 'Full Screen'}
+                </button>
                 <CSVLink
                     data={selectedRows.length > 0 ? selectedRows : data}
-                    filename={"projectList-"+currentPage+"-"+perPage+"-data.csv"}
+                    filename={`projectList-${currentPage}-${perPage}-data.csv`}
                     className="btn btn-primary"
                     target="_blank"
                     style={{
@@ -134,7 +125,7 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                         padding: '10px 20px',
                         borderRadius: '5px',
                         cursor: 'pointer',
-                        fontSize: '16px'
+                        fontSize: '16px',
                     }}
                 >
                     Export Data
@@ -149,11 +140,10 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                 onSelectedRowsChange={handleRowSelected}
                 paginationPerPage={perPage}
                 paginationRowsPerPageOptions={pageSizes}
-                paginationTotalRows={totalRows} // Update this with the total number of rows from your API
+                paginationTotalRows={totalRows}
                 onChangePage={handlePageChange}
                 onChangeRowsPerPage={handlePerRowsChange}
                 customStyles={customStyles}
-
             />
         </div>
     );

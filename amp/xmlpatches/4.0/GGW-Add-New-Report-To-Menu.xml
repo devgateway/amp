@@ -14,8 +14,8 @@
                 (SELECT id FROM amp_modules_visibility WHERE name = 'REPORTING' AND parent IS NULL));
 
                 INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'),
-                (SELECT id from amp_menu_entry where name='Reports' and parent_id is null), 'Indicator Report', 'Indicator Report', null, '/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/new_report', null,
-                (SELECT max(m.position) + 1 FROM amp_menu_entry m JOIN amp_menu_entry pm ON m.parent_id = pm.id WHERE pm.name = 'Reports' AND pm.parent_id IS NULL), null);
+                (SELECT id from amp_menu_entry where name='Reports Menu' and parent_id is null), 'Indicator Report', 'Indicator Report', null, '/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/new_report', null,
+                (SELECT max(m.position) + 1 FROM amp_menu_entry m JOIN amp_menu_entry pm ON m.parent_id = pm.id WHERE pm.name = 'Reports Menu' AND pm.parent_id IS NULL), null);
 
                 INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 

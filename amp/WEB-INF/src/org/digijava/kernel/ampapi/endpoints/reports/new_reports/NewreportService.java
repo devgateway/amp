@@ -42,86 +42,90 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "WHERE ic.sub_clazz = 'a' " +
                     "  AND iv.value_type IN (0, 1) " +
                     "  AND oro.role = 1 ";
+
+    private static final String GROUP_BY = "GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
+                            "i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name ";
+    private  static final String ORDER_BY = "ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
+                            "i.program_id, t.name, aa.amp_activity_id, aa.name ";
+
+
     public static Map<String, Object> getData(Map<String, String> filters) throws SQLException {
         StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
-        int page = Integer.parseInt(filters.get("page"));
-        int size = Integer.parseInt(filters.get("size"));
-        // Dynamically build the WHERE clause based on filters
-        if (filters.containsKey("core_type_name") && !filters.get("core_type_name").isEmpty()) {
-            queryBuilder.append(" AND cv.category_value = ? ");
-        }
-        if (filters.containsKey("country_name") && !filters.get("country_name").isEmpty()) {
-            queryBuilder.append(" AND cvl.location_name = ? ");
-        }
-        if (filters.containsKey("donor_name") && !filters.get("donor_name").isEmpty()) {
-            queryBuilder.append(" AND org.name = ? ");
-        }
-        if (filters.containsKey("indicator_name") && !filters.get("indicator_name").isEmpty()) {
-            queryBuilder.append(" AND i.name = ? ");
-        }
-        if (filters.containsKey("program_name") && !filters.get("program_name").isEmpty()) {
-            queryBuilder.append(" AND t.name = ? ");
-        }
-        if (filters.containsKey("activity_name") && !filters.get("activity_name").isEmpty()) {
-            queryBuilder.append(" AND aa.name = ? ");
-        }
+        Map<Integer, String> filterValues = new HashMap<>();
 
-        // Add GROUP BY and ORDER BY clauses
-        queryBuilder.append("GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
-                .append("i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name ")
-                .append("ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
-                .append("i.program_id, t.name, aa.amp_activity_id, aa.name");
-        int offset = (page - 1) * size;
+        // Build WHERE clause dynamically
+        buildWhereClause(filters, queryBuilder, filterValues);
+        queryBuilder.append(GROUP_BY).append(ORDER_BY);
+
+        // Add pagination
         queryBuilder.append(" OFFSET ? LIMIT ?");
+
         List<Map<String, Object>> results = new ArrayList<>();
         Map<String, Object> finalResult = new HashMap<>();
-        long count = 0L;
+        long totalElements = 0L;
+
         try (PreparedStatement stmt = PersistenceManager.getJdbcConnection().prepareStatement(queryBuilder.toString())) {
-            int index = 1;
-            if (filters.containsKey("core_type_name") && !filters.get("core_type_name").isEmpty()) {
-                stmt.setString(index++, filters.get("core_type_name"));
-            }
-            if (filters.containsKey("country_name") && !filters.get("country_name").isEmpty()) {
-                stmt.setString(index++, filters.get("country_name"));
-            }
-            if (filters.containsKey("donor_name") && !filters.get("donor_name").isEmpty()) {
-                stmt.setString(index++, filters.get("donor_name"));
-            }
-            if (filters.containsKey("indicator_name") && !filters.get("indicator_name").isEmpty()) {
-                stmt.setString(index++, filters.get("indicator_name"));
-            }
-            if (filters.containsKey("program_name") && !filters.get("program_name").isEmpty()) {
-                stmt.setString(index++, filters.get("program_name"));
-            }
-            if (filters.containsKey("activity_name") && !filters.get("activity_name").isEmpty()) {
-                stmt.setString(index++, filters.get("activity_name"));
-            }
-            stmt.setInt(index++, offset);
-            stmt.setInt(index++, size);
+            // Set filter values and pagination parameters
+            setFilterValues(stmt, filterValues);
+            int page = Integer.parseInt(filters.getOrDefault("page", "1"));
+            int size = Integer.parseInt(filters.getOrDefault("size", "10"));
+            stmt.setInt(filterValues.size() + 1, (page - 1) * size); // Offset
+            stmt.setInt(filterValues.size() + 2, size);             // Limit
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Map<String, Object> row = new HashMap<>();
-                    row.put("core_type_id", rs.getInt("core_type_id"));
-                    row.put("core_type_name", rs.getString("core_type_name"));
-                    row.put("country_id", rs.getInt("country_id"));
-                    row.put("country_name", rs.getString("country_name"));
-                    row.put("donor_id", rs.getInt("donor_id"));
-                    row.put("donor_name", rs.getString("donor_name"));
-                    row.put("indicator_id", rs.getInt("indicator_id"));
-                    row.put("indicator_name", rs.getString("indicator_name"));
-                    row.put("program_id", rs.getInt("program_id"));
-                    row.put ("program_name", rs.getString("program_name"));
-                    row.put("activity_id", rs.getInt("activity_id"));
-                    row.put("activity_name", rs.getString("activity_name"));
-                    count = rs.getLong("total_count");
-                    results.add(row);
+                    results.add(extractRow(rs));
+                    totalElements = rs.getLong("total_count");
                 }
             }
         }
+
         finalResult.put("content", results);
-        finalResult.put("totalElements", count);
+        finalResult.put("totalElements", totalElements);
         return finalResult;
+    }
+
+    private static void buildWhereClause(Map<String, String> filters, StringBuilder queryBuilder, Map<Integer, String> filterValues) {
+        int index = 1;
+        Map<String, String> columnMapping = new HashMap<>();
+
+                columnMapping.put("core_type_name", "cv.category_value");
+                columnMapping.put("country_name", "cvl.location_name");
+                columnMapping.put("donor_name", "org.name");
+                columnMapping.put("indicator_name", "i.name");
+                columnMapping.put("program_name", "t.name");
+                columnMapping.put("activity_name", "aa.name");
+
+
+        for (Map.Entry<String, String> filter : filters.entrySet()) {
+            if (columnMapping.containsKey(filter.getKey()) && !filter.getValue().isEmpty()) {
+                queryBuilder.append(" AND ").append(columnMapping.get(filter.getKey())).append(" = ? ");
+                filterValues.put(index++, filter.getValue());
+            }
+        }
+    }
+
+    private static void setFilterValues(PreparedStatement stmt, Map<Integer, String> filterValues) throws SQLException {
+        for (Map.Entry<Integer, String> entry : filterValues.entrySet()) {
+            stmt.setString(entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static Map<String, Object> extractRow(ResultSet rs) throws SQLException {
+        Map<String, Object> row = new HashMap<>();
+        row.put("core_type_id", rs.getInt("core_type_id"));
+        row.put("core_type_name", rs.getString("core_type_name"));
+        row.put("country_id", rs.getInt("country_id"));
+        row.put("country_name", rs.getString("country_name"));
+        row.put("donor_id", rs.getInt("donor_id"));
+        row.put("donor_name", rs.getString("donor_name"));
+        row.put("indicator_id", rs.getInt("indicator_id"));
+        row.put("indicator_name", rs.getString("indicator_name"));
+        row.put("program_id", rs.getInt("program_id"));
+        row.put("program_name", rs.getString("program_name"));
+        row.put("activity_id", rs.getInt("activity_id"));
+        row.put("activity_name", rs.getString("activity_name"));
+        return row;
     }
     public static List<String> getFilterOptions(String type) {
         if (!Arrays.asList("core_type_name", "country_name", "donor_name", "indicator_name", "program_name", "activity_name")
@@ -130,13 +134,9 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         }
 
         // Modify the query to retrieve only the distinct values for the specified type column
-        StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
-        queryBuilder.append("GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
-                .append("i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name ")
-                .append("ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, ")
-                .append("i.program_id, t.name, aa.amp_activity_id, aa.name");
 
-        String filterQuery = "SELECT DISTINCT " + type + " FROM (" + queryBuilder + ") AS filtered_data";
+
+        String filterQuery = "SELECT DISTINCT " + type + " FROM (" + BASE_QUERY + GROUP_BY + ORDER_BY + ") AS filtered_data";
 
         List<String> options;
 

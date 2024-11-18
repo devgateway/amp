@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.reports.new_reports;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NewreportService {
 private static final Logger logger  = LoggerFactory.getLogger(NewreportService.class);
@@ -51,6 +54,12 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
 
     public static Map<String, Object> getData(Map<String, String> filters) throws SQLException {
         StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
+        String statusQuery = " AND aa.approval_status IN (:statuses) ";
+        String placeholders = AmpARFilter.VALIDATED_ACTIVITY_STATUS.stream()
+                .map(ApprovalStatus::getDbName)
+                .collect(Collectors.joining(","));
+        statusQuery=statusQuery.replace(":statuses", placeholders);
+        queryBuilder.append(statusQuery);
         Map<Integer, String> filterValues = new HashMap<>();
 
         // Build WHERE clause dynamically
@@ -66,6 +75,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
 
         try (PreparedStatement stmt = PersistenceManager.getJdbcConnection().prepareStatement(queryBuilder.toString())) {
             // Set filter values and pagination parameters
+
             setFilterValues(stmt, filterValues);
             int page = Integer.parseInt(filters.getOrDefault("page", "1"));
             int size = Integer.parseInt(filters.getOrDefault("size", "10"));

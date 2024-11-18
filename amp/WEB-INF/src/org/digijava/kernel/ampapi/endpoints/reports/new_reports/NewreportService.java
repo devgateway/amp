@@ -125,6 +125,8 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         row.put("program_name", rs.getString("program_name"));
         row.put("activity_id", rs.getInt("activity_id"));
         row.put("activity_name", rs.getString("activity_name"));
+        row.put("actual_value", rs.getString("value_type_actual"));
+        row.put("target_value", rs.getString("value_type_target"));
         return row;
     }
     public static List<String> getFilterOptions(String type) {

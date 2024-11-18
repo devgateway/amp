@@ -58,6 +58,8 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
         { name: 'Country', selector: row => row.country_name, sortable: true, wrap:true },
         { name: 'Donor', selector: row => row.donor_name, sortable: true, wrap: true },
         { name: 'Program', selector: row => row.program_name, sortable: true },
+        { name: 'Target Value', selector: row => row.target_value, sortable: true },
+        { name: 'Actual Value', selector: row => row.target_value, sortable: true },
     ];
 
     const customStyles = {

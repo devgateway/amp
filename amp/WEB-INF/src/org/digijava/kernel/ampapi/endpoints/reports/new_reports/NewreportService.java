@@ -56,7 +56,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
         String statusQuery = " AND aa.approval_status IN (:statuses) ";
         String placeholders = AmpARFilter.VALIDATED_ACTIVITY_STATUS.stream()
-                .map(ApprovalStatus::getDbName)
+                .map(status -> "'" + status.getDbName() + "'")
                 .collect(Collectors.joining(","));
         statusQuery=statusQuery.replace(":statuses", placeholders);
         queryBuilder.append(statusQuery);

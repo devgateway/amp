@@ -55,20 +55,20 @@ module.exports = Backbone.Collection.extend({
 
   triggerWocatSelection: function(isWocatSelected) {
     var self = this;
-    self.app.data.wocat = isWocatSelected;
+    // self.app.data.wocat = isWocatSelected;
     console.log('Wocat selected:', isWocatSelected);
 
-    if (isWocatSelected) {
-      // Refresh models to reflect the Wocat state
-      self.app.data.admClusters.fetch({
-        success: function() {
-          console.log('admClusters refreshed successfully with Wocat.');
-        },
-        error: function() {
-          console.error('Failed to refresh admClusters with Wocat.');
-        }
-      });
-    }
+    // if (isWocatSelected) {
+    //   // Refresh models to reflect the Wocat state
+    //   self.app.data.admClusters.fetch({
+    //     success: function() {
+    //       console.log('admClusters refreshed successfully with Wocat.');
+    //     },
+    //     error: function() {
+    //       console.error('Failed to refresh admClusters with Wocat.');
+    //     }
+    //   });
+    // }
   },
 
   toggleSelect: function(model) {

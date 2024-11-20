@@ -38,7 +38,7 @@ module.exports = Backbone.Model
               if (newActivityIds.length > 0) {
                 feature.properties.activityid = newActivityIds;
               }
-              this.model.set(response);
+              model.set(response);
             });
 
         });

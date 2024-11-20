@@ -3,6 +3,7 @@ package org.digijava.module.message.jobs;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.indicator.AmpDashboard.*;
@@ -27,6 +28,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
@@ -82,6 +84,14 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         query.append("        WHERE ic.sub_clazz = 'a'  ");
         query.append("        AND iv.value_type IN (0, 1)  ");
         query.append("        AND oro.role = 1  ");
+        String statusQuery = " AND aa.approval_status IN (:statuses) ";
+        String placeholders = AmpARFilter.VALIDATED_ACTIVITY_STATUS.stream()
+                .map(status -> "'" + status.getDbName() + "'")
+                .collect(Collectors.joining(","));
+
+        statusQuery = statusQuery.replace(":statuses", placeholders);
+        query.append(statusQuery);
+
         query.append("        GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name,  ");
         query.append("        i.program_id, t.name, i.indicator_id, i.name  ");
         query.append("        ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name,  ");

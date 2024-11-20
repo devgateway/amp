@@ -21,12 +21,21 @@ module.exports = BaseControlView.extend({
 
   initialize: function() {
     var self = this;
-
+      var RadioButtonModel = Backbone.Model.extend({
+          defaults: {
+              selected: false
+          }
+      });
+      var newRadioButton = new RadioButtonModel({
+          id: 'wocat',
+          name: 'Wocat',
+          title: 'Wocat'
+      });
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
     this._loaded = this.app.data.admClusters.load().then(function() {
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
-        [self.app.data.structuresMenu]
+        [self.app.data.structuresMenu,newRadioButton]
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
             if (model.id === 'wocat') {

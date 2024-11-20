@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import DataTable from 'react-data-table-component';
-import { CSVLink } from 'react-csv';
-import { loadReportData } from "./api";
+import {CSVLink} from 'react-csv';
+import {loadReportData} from "./api";
 import './DataTable.css'
-const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, selectedIndicator, selectedProgram, selectedActivity }) => {
+
+const CustomDataTable = ({
+                             selectedCoreType,
+                             selectedCountry,
+                             selectedDonor,
+                             selectedIndicator,
+                             selectedProgram,
+                             selectedActivity,
+                             showOnlyValidated
+                         }) => {
     const [data, setData] = useState([]);
     const [totalRows, setTotalRows] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -19,7 +28,6 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
 
     const fetchData = async (page, size) => {
         try {
-            console.log("size, page", size, page);
             const response = await loadReportData(size, page, {
                 core_type_name: selectedCoreType,
                 country_name: selectedCountry,
@@ -27,12 +35,16 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                 indicator_name: selectedIndicator,
                 program_name: selectedProgram,
                 activity_name: selectedActivity,
+                show_only_validate: showOnlyValidated
             });
             setData(response.content);
             setTotalRows(response.totalElements);
         } catch (err) {
-            setError(err);
-            console.error('Error fetching data:', err);
+            if (err.status === 401) {
+                window.location.href = '/';
+            } else {
+                setError(err);
+            }
         } finally {
             setLoading(false);
         }
@@ -40,7 +52,7 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
 
     useEffect(() => {
         fetchData(currentPage, perPage);
-    }, [currentPage, perPage, selectedCoreType, selectedCountry, selectedDonor, selectedIndicator, selectedProgram, selectedActivity]);
+    }, [currentPage, perPage, selectedCoreType, selectedCountry, selectedDonor, selectedIndicator, selectedProgram, selectedActivity, showOnlyValidated]);
 
     const truncateText = (text, len) => {
         const words = text?.split(' ');
@@ -52,14 +64,14 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
     };
 
     const columns = [
-        { name: 'Project/Activity', selector: row => row.activity_name, sortable: true },
-        { name: 'Indicator', selector: row => row.indicator_name, sortable: true },
-        { name: 'Type', selector: row => row.core_type_name, sortable: true },
-        { name: 'Country', selector: row => row.country_name, sortable: true, wrap:true },
-        { name: 'Donor', selector: row => row.donor_name, sortable: true, wrap: true },
-        { name: 'Program', selector: row => row.program_name, sortable: true },
-        { name: 'Target Value', selector: row => row.target_value, sortable: true },
-        { name: 'Actual Value', selector: row => row.target_value, sortable: true },
+        {name: 'Type', selector: row => row.core_type_name, sortable: true},
+        {name: 'Indicator', selector: row => row.indicator_name, sortable: true},
+        {name: 'Sub-pilar', selector: row => row.program_name, sortable: true},
+        {name: 'Country', selector: row => row.country_name, sortable: true, wrap: true},
+        {name: 'Donor', selector: row => row.donor_name, sortable: true, wrap: true},
+        {name: 'Project/Activity', selector: row => row.activity_name, sortable: true},
+        {name: 'Target Value', selector: row => row.target_value, sortable: true},
+        {name: 'Actual Value', selector: row => row.target_value, sortable: true},
     ];
 
     const customStyles = {
@@ -110,7 +122,7 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
 
     return (
         <div className={fullScreen ? 'full-screen-container' : ''}>
-            <div style={{ marginBottom: '20px', textAlign: 'right' }}>
+            <div style={{marginBottom: '20px', textAlign: 'right'}}>
 
                 <CSVLink
                     data={selectedRows.length > 0 ? selectedRows : data}
@@ -129,10 +141,13 @@ const CustomDataTable = ({ selectedCoreType, selectedCountry, selectedDonor, sel
                 >
                     Export Data
                 </CSVLink>
-                <div onClick={toggleFullScreen} style={{ cursor: 'pointer', display: 'inline-block', marginLeft: '20px' }}>
+                <div onClick={toggleFullScreen}
+                     style={{cursor: 'pointer', display: 'inline-block', marginLeft: '20px'}}>
                     {fullScreen
-                        ? <img src={process.env.PUBLIC_URL + '/full_screen_on.png'} alt="Fullscreen" style={{ width: '40px', height: '40px' }} />
-                        : <img src={process.env.PUBLIC_URL + '/full_screen_off.png'} alt="Exit Fullscreen" style={{ width: '40px', height: '40px' }} />
+                        ? <img src={process.env.PUBLIC_URL + '/full_screen_on.png'} alt="Fullscreen"
+                               style={{width: '40px', height: '40px'}}/>
+                        : <img src={process.env.PUBLIC_URL + '/full_screen_off.png'} alt="Exit Fullscreen"
+                               style={{width: '40px', height: '40px'}}/>
                     }
                 </div>
             </div>

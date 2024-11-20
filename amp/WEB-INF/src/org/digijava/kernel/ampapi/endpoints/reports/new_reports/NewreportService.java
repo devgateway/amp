@@ -4,10 +4,12 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class NewreportService {
-private static final Logger logger  = LoggerFactory.getLogger(NewreportService.class);
+    private static final Logger logger = LoggerFactory.getLogger(NewreportService.class);
     private static final String BASE_QUERY =
             "SELECT cv.id AS core_type_id, " +
                     "       cv.category_value AS core_type_name, " +
@@ -36,7 +38,8 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "JOIN amp_indicator_connection ic ON ic.indicator_id = i.indicator_id " +
                     "JOIN amp_indicator_values iv ON iv.ind_connect_id = ic.id " +
                     "LEFT JOIN amp_category_value cv ON i.indicators_category = cv.id " +
-                    "JOIN amp_activity_location al ON ic.activity_location = al.amp_activity_location_id " +
+                    "JOIN amp_activity_location al ON (ic.activity_location = al.amp_activity_location_id and " +
+                    "                                           iv.activity_location = al.amp_activity_location_id)" +
                     "JOIN amp_category_value_location cvl ON cvl.id = al.location_id " +
                     "JOIN amp_org_role oro ON oro.activity = ic.activity_id " +
                     "JOIN amp_organisation org ON oro.organisation = org.amp_org_id " +
@@ -47,9 +50,9 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
                     "  AND oro.role = 1 ";
 
     private static final String GROUP_BY = "GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
-                            "i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name ";
-    private  static final String ORDER_BY = "ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
-                            "i.program_id, t.name, aa.amp_activity_id, aa.name ";
+            "i.program_id, t.name, aa.amp_activity_id, aa.name, i.indicator_id, i.name ";
+    private static final String ORDER_BY = "ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name, " +
+            "i.program_id, t.name, aa.amp_activity_id, aa.name ";
 
 
     public static Map<String, Object> getData(Map<String, String> filters) throws SQLException {
@@ -58,8 +61,10 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         String placeholders = AmpARFilter.VALIDATED_ACTIVITY_STATUS.stream()
                 .map(status -> "'" + status.getDbName() + "'")
                 .collect(Collectors.joining(","));
-        statusQuery=statusQuery.replace(":statuses", placeholders);
-        queryBuilder.append(statusQuery);
+        if (filters.get("show_only_validate").equals("true")) {
+            statusQuery = statusQuery.replace(":statuses", placeholders);
+            queryBuilder.append(statusQuery);
+        }
         Map<Integer, String> filterValues = new HashMap<>();
 
         // Build WHERE clause dynamically
@@ -73,22 +78,26 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         Map<String, Object> finalResult = new HashMap<>();
         long totalElements = 0L;
 
-        try (PreparedStatement stmt = PersistenceManager.getJdbcConnection().prepareStatement(queryBuilder.toString())) {
-            // Set filter values and pagination parameters
+        totalElements = PersistenceManager.doReturningWorkInTransaction(conn -> {
+            long rTotalElements = 0L;
+            try (PreparedStatement stmt = conn.prepareStatement(queryBuilder.toString())) {
+                // Set filter values and pagination parameters
 
-            setFilterValues(stmt, filterValues);
-            int page = Integer.parseInt(filters.getOrDefault("page", "1"));
-            int size = Integer.parseInt(filters.getOrDefault("size", "10"));
-            stmt.setInt(filterValues.size() + 1, (page - 1) * size); // Offset
-            stmt.setInt(filterValues.size() + 2, size);             // Limit
+                setFilterValues(stmt, filterValues);
+                int page = Integer.parseInt(filters.getOrDefault("page", "1"));
+                int size = Integer.parseInt(filters.getOrDefault("size", "10"));
+                stmt.setInt(filterValues.size() + 1, (page - 1) * size); // Offset
+                stmt.setInt(filterValues.size() + 2, size);             // Limit
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    results.add(extractRow(rs));
-                    totalElements = rs.getLong("total_count");
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        results.add(extractRow(rs));
+                        rTotalElements = rs.getLong("total_count");
+                    }
                 }
             }
-        }
+            return rTotalElements;
+        });
 
         finalResult.put("content", results);
         finalResult.put("totalElements", totalElements);
@@ -99,12 +108,12 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         int index = 1;
         Map<String, String> columnMapping = new HashMap<>();
 
-                columnMapping.put("core_type_name", "cv.category_value");
-                columnMapping.put("country_name", "cvl.location_name");
-                columnMapping.put("donor_name", "org.name");
-                columnMapping.put("indicator_name", "i.name");
-                columnMapping.put("program_name", "t.name");
-                columnMapping.put("activity_name", "aa.name");
+        columnMapping.put("core_type_name", "cv.category_value");
+        columnMapping.put("country_name", "cvl.location_name");
+        columnMapping.put("donor_name", "org.name");
+        columnMapping.put("indicator_name", "i.name");
+        columnMapping.put("program_name", "t.name");
+        columnMapping.put("activity_name", "aa.name");
 
 
         for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -139,6 +148,7 @@ private static final Logger logger  = LoggerFactory.getLogger(NewreportService.c
         row.put("target_value", rs.getDouble("value_type_target"));
         return row;
     }
+
     public static List<String> getFilterOptions(String type) {
         if (!Arrays.asList("core_type_name", "country_name", "donor_name", "indicator_name", "program_name", "activity_name")
                 .contains(type)) {

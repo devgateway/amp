@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesigner;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,21 +19,20 @@ import java.util.Map;
 @Api("new_report")
 public class NewReportEndpoint {
     @ApiOperation("Retrieve the options required for a particular filter type")
-@ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "filter options",
-        response = ReportDesigner.class))
-@ApiMethod(id = "options")
-@GET
-@Path("/options")
-@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public List<String> getReportFilterOptions(@QueryParam("type") @DefaultValue("activity_name") String type)
-    {
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "filter options",
+            response = ReportDesigner.class))
+    @ApiMethod(id = "options")
+    @GET
+    @Path("/options")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public List<String> getReportFilterOptions(@QueryParam("type") @DefaultValue("activity_name") String type) {
         return NewreportService.getFilterOptions(type);
     }
 
 
     @ApiOperation("Return new report data")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Filter options", response = ReportDesigner.class))
-    @ApiMethod(id = "report")
+    @ApiMethod(authTypes = {AuthRule.IN_WORKSPACE}, id = "report")
     @POST
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)

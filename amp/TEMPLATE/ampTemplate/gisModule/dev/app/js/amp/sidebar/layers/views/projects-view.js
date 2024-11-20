@@ -30,7 +30,8 @@ module.exports = BaseControlView.extend({
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
             if (model.id === 'wocat') {
-                console.log('Wocat radio button toggled.');
+
+                console.log('Wocat radio button toggled.', model);
             }
         });
 

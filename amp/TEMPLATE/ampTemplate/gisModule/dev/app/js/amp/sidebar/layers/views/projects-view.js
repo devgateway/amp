@@ -1,5 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
+var Backbone = require('backbone');
 
 var RadioListCollection = require('../collections/radio-list-collection');
 

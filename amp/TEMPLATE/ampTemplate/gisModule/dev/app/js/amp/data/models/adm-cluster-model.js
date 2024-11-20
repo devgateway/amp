@@ -3,6 +3,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
+const AMP_WOCAT_API= 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=BFA';
 
 
 module.exports = Backbone.Model
@@ -10,16 +11,72 @@ module.exports = Backbone.Model
   url: '/rest/gis/cluster',
 
   initialize: function() {
+    this.on('sync', this.handleSync);
 
   },
 
-  attachListeners: function() {
+          handleSync: async function (model, response, options) {
+            console.log('Original response from /cluster:', response);
+
+            // Check if the response has features
+            if (!response || !response.features) {
+              console.error('No features found in response!');
+              return;
+            }
+
+            const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=BFA';
+
+            try {
+              // Step 1: Fetch totalElements
+              const totalElementsResponse = await fetch(AMP_WOCAT_API);
+              const totalElementsData = await totalElementsResponse.json();
+
+              const totalElements = totalElementsData.totalElements;
+              if (!totalElements) {
+                console.error('Failed to fetch totalElements.');
+                return;
+              }
+
+              console.log(`Total elements for AMP WOCAT API: ${totalElements}`);
+
+              // Step 2: Fetch full content data
+              const contentResponse = await fetch(`${AMP_WOCAT_API}&page=1&size=${totalElements}`);
+              const contentData = await contentResponse.json();
+
+              if (!contentData.content) {
+                console.error('Failed to fetch content data.');
+                return;
+              }
+
+              console.log('Fetched content data:', contentData);
+
+              // Step 3: Extract IDs from content and replace activityIds
+              const newActivityIds = contentData.content.map(item => item.id);
+
+              response.features.forEach(feature => {
+                if (feature.properties.admName === 'Burkina Faso') {
+                  console.log('Replacing activityIds for Burkina Faso...');
+                  feature.properties.activityid = newActivityIds;
+                }
+              });
+
+              console.log('Modified response:', response);
+
+              // Optionally, update the model
+              this.set(response);
+            } catch (error) {
+              console.error('Error in handleSync:', error);
+            }
+          },
+
+
+      attachListeners: function() {
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
 
-    this.listenTo(this.collection.filter, 'apply', this.refreshModel);    
-    this.listenTo(this.collection.settingsWidget, 'applySettings', this.refreshModel);    
+    this.listenTo(this.collection.filter, 'apply', this.refreshModel);
+    this.listenTo(this.collection.settingsWidget, 'applySettings', this.refreshModel);
     this.listenTo(this.collection.performanceToggleModel, 'change:isPerformanceToggleSelected', this.refreshModel);
   },
 
@@ -52,12 +109,13 @@ module.exports = Backbone.Model
     filter.settings = this.collection.settingsWidget.toAPIFormat();
 
     filter.filters = filter.filters || {};
+    filter.filters.wocat=true;
     filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
-    
+
     if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
-      filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');	
+      filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');
     }
-   
+
     options = _.defaults((options || {}), {
       type: 'POST',
       data: JSON.stringify(filter)

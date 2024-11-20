@@ -28,6 +28,11 @@ module.exports = BaseControlView.extend({
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]
       ));
+        self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
+            if (model.id === 'wocat') {
+                console.log('Wocat radio button toggled.');
+            }
+        });
 
 
       // register state:

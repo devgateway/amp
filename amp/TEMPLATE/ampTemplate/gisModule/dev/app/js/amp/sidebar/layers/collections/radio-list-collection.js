@@ -11,6 +11,14 @@ module.exports = Backbone.Collection.extend({
      * They are an array of all the lists that should be iteratively
      *  unticked when this one is ticked (and vice versa)
      **/
+
+    // Add the "Wocat" radio button model to the collection
+    this.add({
+      id: 'wocat',
+      name: 'Wocat',
+      selected: false // Initially unselected
+    });
+
     if (options && options.siblingGroupList) {
       this.siblingGroupList = options.siblingGroupList;
     } else {
@@ -33,10 +41,34 @@ module.exports = Backbone.Collection.extend({
 
     $('#map-loading').show();
     model.set('selected', true);
+    // If "Wocat" is selected, update the app state and refresh models
+    if (model.id === 'wocat') {
+      this.triggerWocatSelection(true);
+    } else {
+      this.triggerWocatSelection(false);
+    }
   },
 
   unselect: function(model) {
     model.unset('selected');
+  },
+
+  triggerWocatSelection: function(isWocatSelected) {
+    var self = this;
+    self.app.data.wocat = isWocatSelected;
+    console.log('Wocat selected:', isWocatSelected);
+
+    if (isWocatSelected) {
+      // Refresh models to reflect the Wocat state
+      self.app.data.admClusters.fetch({
+        success: function() {
+          console.log('admClusters refreshed successfully with Wocat.');
+        },
+        error: function() {
+          console.error('Failed to refresh admClusters with Wocat.');
+        }
+      });
+    }
   },
 
   toggleSelect: function(model) {

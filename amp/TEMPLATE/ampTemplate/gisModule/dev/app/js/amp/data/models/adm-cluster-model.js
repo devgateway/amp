@@ -30,15 +30,15 @@ module.exports = Backbone.Model
         response.features.forEach((feature) => {
           var country = countries.getAlpha3Code(feature.properties.admName, 'en');
 
-            console.log('Fetching activityIds for Burkina Faso...');
+            console.log('Fetching activityIds for ',feature.properties.admName);
 
             // Fetch new activity IDs for the given country
             this.fetchWocat(country).then((newActivityIds) => {
-              console.log("New activityIds:", newActivityIds);
+              console.log("New activityIds:", newActivityIds , "for ", feature.properties.admName);
               if (newActivityIds.length > 0) {
                 feature.properties.activityid = newActivityIds;
               }
-              model.set(response);
+              this.model.set(response);
             });
 
         });

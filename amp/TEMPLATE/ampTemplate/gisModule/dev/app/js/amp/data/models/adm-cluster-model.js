@@ -3,6 +3,8 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
+var countries = require('i18n-iso-countries');
+countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 const AMP_WOCAT_API= 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=BFA';
 
 
@@ -11,11 +13,11 @@ module.exports = Backbone.Model
   url: '/rest/gis/cluster',
 
   initialize: function() {
-    this.on('sync', this.handleSync);
+    this.on('sync', this.modifySync);
 
   },
 
-      handleSync: function (model, response, options) {
+      modifySync: function (model, response, options) {
         console.log('Original response from /cluster:', response);
 
         // Check if the response has features
@@ -24,10 +26,31 @@ module.exports = Backbone.Model
           return;
         }
 
-        const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=BFA';
+        // Use an arrow function to maintain the correct `this`
+        response.features.forEach((feature) => {
+          var country = countries.getAlpha3Code(feature.properties.admName, 'en');
+
+            console.log('Fetching activityIds for Burkina Faso...');
+
+            // Fetch new activity IDs for the given country
+            this.fetchWocat(country).then((newActivityIds) => {
+              console.log("New activityIds:", newActivityIds);
+              if (newActivityIds.length > 0) {
+                feature.properties.activityid = newActivityIds;
+              }
+              model.set(response);
+            });
+
+        });
+
+        console.log('Modified response:', response);
+      },
+
+      fetchWocat: function (country) {
+        const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=' + country;
 
         // Step 1: Fetch totalElements
-        fetch(AMP_WOCAT_API)
+        return fetch(AMP_WOCAT_API)
             .then(function(response) {
               return response.json();
             })
@@ -35,7 +58,7 @@ module.exports = Backbone.Model
               const totalElements = totalElementsData.totalElements;
               if (!totalElements) {
                 console.error('Failed to fetch totalElements.');
-                return;
+                return [];
               }
 
               console.log('Total elements for AMP WOCAT API:', totalElements);
@@ -49,32 +72,27 @@ module.exports = Backbone.Model
             .then(function(contentData) {
               if (!contentData.content) {
                 console.error('Failed to fetch content data.');
-                return;
+                return [];
               }
 
               console.log('Fetched content data:', contentData);
 
-              // Step 3: Extract IDs from content and replace activityIds
+              // Step 3: Extract IDs from content and return them
               const newActivityIds = contentData.content.map(function(item) {
                 return item.id;
               });
 
-              response.features.forEach(function(feature) {
-                if (feature.properties.admName === 'Burkina Faso') {
-                  console.log('Replacing activityIds for Burkina Faso...');
-                  feature.properties.activityid = newActivityIds;
-                }
-              });
-
-              console.log('Modified response:', response);
-
-              // Optionally, update the model
-              model.set(response);
+              return newActivityIds;
             })
             .catch(function(error) {
-              console.error('Error in handleSync:', error);
+              console.error('Error in fetchWocat:', error);
+              return []; // Return an empty array in case of error
             });
       },
+
+
+
+
 
 
       attachListeners: function() {

@@ -46,7 +46,6 @@ def updateGitHubCommitStatus(context, message, state) {
         ]
     ])
 }
-
 def codeVersion
 def countries
 def environment

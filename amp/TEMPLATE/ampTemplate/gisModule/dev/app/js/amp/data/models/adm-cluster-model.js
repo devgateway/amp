@@ -15,34 +15,38 @@ module.exports = Backbone.Model
 
   },
 
-          handleSync: async function (model, response, options) {
-            console.log('Original response from /cluster:', response);
+      handleSync: function (model, response, options) {
+        console.log('Original response from /cluster:', response);
 
-            // Check if the response has features
-            if (!response || !response.features) {
-              console.error('No features found in response!');
-              return;
-            }
+        // Check if the response has features
+        if (!response || !response.features) {
+          console.error('No features found in response!');
+          return;
+        }
 
-            const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=BFA';
+        const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=BFA';
 
-            try {
-              // Step 1: Fetch totalElements
-              const totalElementsResponse = await fetch(AMP_WOCAT_API);
-              const totalElementsData = await totalElementsResponse.json();
-
+        // Step 1: Fetch totalElements
+        fetch(AMP_WOCAT_API)
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(totalElementsData) {
               const totalElements = totalElementsData.totalElements;
               if (!totalElements) {
                 console.error('Failed to fetch totalElements.');
                 return;
               }
 
-              console.log(`Total elements for AMP WOCAT API: ${totalElements}`);
+              console.log('Total elements for AMP WOCAT API:', totalElements);
 
               // Step 2: Fetch full content data
-              const contentResponse = await fetch(`${AMP_WOCAT_API}&page=1&size=${totalElements}`);
-              const contentData = await contentResponse.json();
-
+              return fetch(`${AMP_WOCAT_API}&page=1&size=${totalElements}`);
+            })
+            .then(function(contentResponse) {
+              return contentResponse.json();
+            })
+            .then(function(contentData) {
               if (!contentData.content) {
                 console.error('Failed to fetch content data.');
                 return;
@@ -51,9 +55,11 @@ module.exports = Backbone.Model
               console.log('Fetched content data:', contentData);
 
               // Step 3: Extract IDs from content and replace activityIds
-              const newActivityIds = contentData.content.map(item => item.id);
+              const newActivityIds = contentData.content.map(function(item) {
+                return item.id;
+              });
 
-              response.features.forEach(feature => {
+              response.features.forEach(function(feature) {
                 if (feature.properties.admName === 'Burkina Faso') {
                   console.log('Replacing activityIds for Burkina Faso...');
                   feature.properties.activityid = newActivityIds;
@@ -63,11 +69,12 @@ module.exports = Backbone.Model
               console.log('Modified response:', response);
 
               // Optionally, update the model
-              this.set(response);
-            } catch (error) {
+              model.set(response);
+            })
+            .catch(function(error) {
               console.error('Error in handleSync:', error);
-            }
-          },
+            });
+      },
 
 
       attachListeners: function() {

@@ -16,9 +16,35 @@ module.exports = Backbone.Collection
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.performanceToggleModel = options.performanceToggleModel;
+    this.wocat = false;
 
     this.listenTo(this, 'sync', this._setDefault);
   },
+
+      reloadWithWocat: function(wocatValue) {
+        this.wocat = wocatValue; // Ensure the value is a boolean
+        console.log("Wocat: " + wocatValue);
+        console.log("Wocat2: " + this.wocat);
+
+        // Pass `wocat` as a parameter to the models
+        var self = this;
+        this.each(function(model) {
+          console.log("Wocat3: " + self.wocat);
+          model.set('wocat', self.wocat);
+        });
+
+        // Fetch collection with the wocat parameter
+        return this.fetch({
+          reset: true,
+          data: { wocat: this.wocat }, // Add the wocat flag to the query parameters
+          success: function(collection, response, options) {
+            console.log('Collection reloaded successfully with wocat:', self.wocat);
+          },
+          error: function(collection, response, options) {
+            console.error('Failed to reload the collection with wocat:', self.wocat);
+          }
+        });
+      },
 
   parse: function(data) {
     data = _.sortBy(data, function(regionLevel) {

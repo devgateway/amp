@@ -10,13 +10,20 @@ const AMP_WOCAT_API= 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?count
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
+
   url: '/rest/gis/cluster',
 
   initialize: function() {
-    this.on('sync', this.modifySync);
+    this.on('sync', this.onSync);
 
   },
-
+      onSync: function(model, response, options) {
+        if (this.collection && this.collection.wocat) {
+          this.modifySync(model, response, options);
+        } else {
+          console.log('Wocat is false; skipping modifySync.');
+        }
+      },
       modifySync: function (model, response, options) {
         console.log('Original response from /cluster:', response);
 

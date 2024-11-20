@@ -40,7 +40,12 @@ module.exports = BaseControlView.extend({
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
             if (model.id === 'wocat') {
-
+                if (model.selected)
+                {
+                    self.app.data.admClusters.reloadWithWocat(true).then(function() {
+                        console.log('Cluster collection refreshed with wocat enabled.');
+                    });
+                }
                 console.log('Wocat radio button toggled.', model);
             }
         });

@@ -43,7 +43,7 @@ module.exports = Backbone.Collection
         };
         this.load().then(function ()
         {
-          log.info("Wocat reloaded loaded")
+          console.log("Wocat reloaded loaded")
         })
 
       },

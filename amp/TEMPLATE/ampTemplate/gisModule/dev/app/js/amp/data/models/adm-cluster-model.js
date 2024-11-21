@@ -14,23 +14,21 @@ module.exports = Backbone.Model
   url: '/rest/gis/cluster',
 
   initialize: function(attributes, options) {
-    // this.wocat = options.wocat;
-    console.log("Final wocat", options.wocat)
+    console.log("Options",options)
+    this.wocat = options.wocat;
+      this.on('sync', this.onSync);
+  },
+      onSync: function(model, response, options) {
+        console.log("Options in sync",options)
+        console.log("Final wocat", this.wocat)
 
-    this.fetch({
-      success: (model, response, fetchOptions) => {
-        console.log("Fetch successful.");
-        if (options.wocat) {
-          // Additional processing after fetch
-          this.modifySync(model, response, { wocat: this.wocat });
+        const wocat =  this.wocat;
+        if (wocat) {
+          this.modifySync(model, response, { wocat });
+        } else {
+          console.log('Wocat is false; skipping modifySync.');
         }
       },
-      error: (model, response) => {
-        console.error("Error fetching model:", response);
-      }
-    });
-  },
-
       modifySync: function (model, response, options) {
         console.log('Original response from /cluster:', response);
 
@@ -103,6 +101,10 @@ module.exports = Backbone.Model
               return []; // Return an empty array in case of error
             });
       },
+
+
+
+
 
 
       attachListeners: function() {

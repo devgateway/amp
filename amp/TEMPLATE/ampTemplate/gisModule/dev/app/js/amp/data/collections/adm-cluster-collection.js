@@ -32,7 +32,15 @@ module.exports = Backbone.Collection
           console.log("Wocat3: " + self.wocat);
           model.set('wocat', self.wocat);
         });
-        this.model = new ADMClusterModel({}, { wocat: self.wocat});
+
+        this.model = function(attrs, options) {
+          console.log("Wocat", this.wocat);
+          if (self.wocat) {
+            return new ADMClusterModel(attrs, _.extend({}, options, { wocat: self.wocat }));
+          } else {
+            return new ADMClusterModel(attrs, options);
+          }
+        };
 
         return this.fetch({
           reset: true,

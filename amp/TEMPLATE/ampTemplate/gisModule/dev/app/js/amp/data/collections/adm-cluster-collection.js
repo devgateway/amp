@@ -41,15 +41,23 @@ module.exports = Backbone.Collection
             return new ADMClusterModel(attrs, options);
           }
         };
-        this.fetch().then(() => {
-          console.log("Reloading cluster")
-          this.each(model => {
-            model.set('wocat', this.wocat)
-            model.refreshModel();
-          });
-
-
-        });
+        this.reset(); // Clear the collection if necessary
+        this.fetch()
+            .then(() => {
+              console.log("Reloading cluster");
+              this.each(model => {
+                console.log("Model: " + model);
+                model.set('wocat', this.wocat);
+                if (typeof model.refreshModel === 'function') {
+                  model.refreshModel();
+                } else {
+                  console.warn("refreshModel is not defined on model", model);
+                }
+              });
+            })
+            .catch(err => {
+              console.error("Error fetching collection:", err);
+            });
 
       },
 

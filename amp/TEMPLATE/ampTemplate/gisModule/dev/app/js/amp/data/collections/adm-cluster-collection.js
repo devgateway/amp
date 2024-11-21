@@ -25,29 +25,8 @@ module.exports = Backbone.Collection
   },
 
       reloadWithWocat: function() {
-        // Ensure `wocatValue` is boolean
+      localStorage.setItem("isWocat", this.wocat);
 
-        console.log("Reloading with wocat:", this.wocat);
-
-        // Reset the collection if necessary (clears all models)
-        this.reset();
-
-        // Fetch the collection data with `wocat` as a parameter
-        this.fetch({
-          success: (collection) => {
-            console.log("Fetch successful. Updating models with wocat:", this.wocat);
-
-            // Update each model with the `wocat` property
-            collection.each((model) => {
-              model.set('wocat', this.wocat);
-            });
-
-            console.log("All models updated successfully.");
-          },
-          error: (collection, response) => {
-            console.error("Error fetching collection:", response);
-          }
-        });
       },
 
 

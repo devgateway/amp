@@ -117,10 +117,10 @@ module.exports = Backbone.View.extend({
         });
         return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
       },
-      onEachFeature: function (feature, layer) {    	  
+      onEachFeature: function (feature, layer) {
     	  self._onEachFeature(feature, layer, admLayer);
       }
-    	  
+
     });
   },
 
@@ -157,6 +157,7 @@ module.exports = Backbone.View.extend({
 
   // Create pop-ups
   _onEachFeature: function(feature, layer, admLayer) {
+    console.log("IS Wocat", localStorage.getItem("isWocat"));
     if (feature.properties) {
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;

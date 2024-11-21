@@ -187,19 +187,19 @@ module.exports = Backbone.View.extend({
                 {maxWidth: 500, offset: new L.Point(0, -16)}
             );
           }
-          else
-          {
-            var activities = feature.properties.activityid;
-            layer._clusterId = feature.properties.admName;
-            feature.properties.admLevel = admLayer.get('title');
-            feature.properties.wocat = false;
-            // temp. will be template.
-            layer.bindPopup(feature.properties.admName +
-                ' has ' + activities.length +
-                ' projects. <br><img src="img/loading-icon.gif" />',
-                {maxWidth: 500, offset: new L.Point(0, -16)}
-            );
-          }
+          // else
+          // {
+          //   var activities = feature.properties.activityid;
+          //   layer._clusterId = feature.properties.admName;
+          //   feature.properties.admLevel = admLayer.get('title');
+          //   feature.properties.wocat = false;
+          //   // temp. will be template.
+          //   layer.bindPopup(feature.properties.admName +
+          //       ' has ' + activities.length +
+          //       ' projects. <br><img src="img/loading-icon.gif" />',
+          //       {maxWidth: 500, offset: new L.Point(0, -16)}
+          //   );
+          // }
         }
         // else {
         //   console.log("Wocat is unchecked!");

@@ -65,6 +65,7 @@ module.exports = BaseControlView.extend({
           }
         },
         set: function(id) {
+            console.log("Trying to set layer for: ",id)
           if (id) {
             var selectedModel = self.projectLayerCollection.findWhere({title: id});
             self.projectLayerCollection.select(selectedModel);

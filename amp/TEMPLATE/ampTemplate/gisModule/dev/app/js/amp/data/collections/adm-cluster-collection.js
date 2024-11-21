@@ -27,12 +27,14 @@ module.exports = Backbone.Collection
       // if filters change and layer is selected update it.
       refreshColletion: function() {
         // this forces next 'load' call to do a fresh fetch.
-        console.log("Refreshing model. Model is:", this);
+        console.log("Refreshing collection. Collection is:", this);
 
         delete this._loaded;
 
         // if (this.attributes.selected) {
-          this.load();
+          this.load().then(function() {
+            console.log("Loaded collection")
+          })
         // }
       },
 

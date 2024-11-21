@@ -41,10 +41,10 @@ module.exports = Backbone.Collection
             return new ADMClusterModel(attrs, options);
           }
         };
-        this.load().then(function ()
-        {
-          console.log("Wocat reloaded loaded")
-        })
+        this.fetch().then(() => {
+          console.log("Reloading cluster")
+          this.each(model => model.set('wocat', this.wocat));
+        });
 
       },
 

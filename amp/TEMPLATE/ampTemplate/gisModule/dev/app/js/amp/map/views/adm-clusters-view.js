@@ -157,11 +157,13 @@ module.exports = Backbone.View.extend({
 
   // Create pop-ups
   _onEachFeature: function(feature, layer, admLayer) {
-    console.log("IS Wocat", localStorage.getItem("isWocat"));
+    console.log("IS Wocat", this.collection.wocat);
     if (feature.properties) {
+      feature.properties.activityid = this.collection.wocat===true?feature.properties.wocatActivities:feature.properties.activityid;
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
+      feature.properties.wocat = this.collection.wocat;
       // temp. will be template.
       layer.bindPopup(feature.properties.admName +
         ' has ' +  activities.length +

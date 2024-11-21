@@ -17,22 +17,18 @@ module.exports = Backbone.Model
     // this.wocat = options.wocat;
     console.log("Final wocat", options.wocat)
 
-    if (options.wocat === true) {
     this.fetch({
       success: (model, response, fetchOptions) => {
-        console.log("Fetch successful. Calling onSync...");
-
-        this.modifySync(model, response, {wocat: options.wocat});
-
+        console.log("Fetch successful.");
+        if (options.wocat) {
+          // Additional processing after fetch
+          this.modifySync(model, response, { wocat: this.wocat });
+        }
       },
       error: (model, response) => {
         console.error("Error fetching model:", response);
       }
     });
-  } else {
-            console.log('Wocat is false; skipping sync.');
-          }
-    this.sync();
   },
 
       modifySync: function (model, response, options) {

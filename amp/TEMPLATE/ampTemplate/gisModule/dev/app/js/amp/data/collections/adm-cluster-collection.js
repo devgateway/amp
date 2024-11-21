@@ -32,7 +32,7 @@ module.exports = Backbone.Collection
         delete this._loaded;
 
         // if (this.attributes.selected) {
-          this.load().then(function() {
+          this.fetch().then(function() {
             console.log("Loaded collection")
           })
         // }

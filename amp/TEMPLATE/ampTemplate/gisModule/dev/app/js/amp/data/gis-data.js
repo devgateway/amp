@@ -97,6 +97,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
 	    this.admClusters = new ADMClusters([], {
 	      boundaries: this.boundaries,
+	      wocat: false,
 	      filter: this.filter,
 	      settingsWidget: this.settingsWidget,
 	      performanceToggleModel: this.performanceToggleModel

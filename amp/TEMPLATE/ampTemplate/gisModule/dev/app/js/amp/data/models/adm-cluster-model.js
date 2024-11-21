@@ -15,11 +15,12 @@ module.exports = Backbone.Model
 
   initialize: function(attributes, options) {
     console.log("Options",options)
+    this.wocat = options.wocat;
       this.on('sync', this.onSync);
-
-
   },
       onSync: function(model, response, options) {
+        console.log("Options in sync",options)
+
         const wocat = options.wocat || this.wocat;
         console.log("Final wocat", wocat)
         if (wocat) {

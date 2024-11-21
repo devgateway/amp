@@ -102,11 +102,6 @@ module.exports = Backbone.Model
             });
       },
 
-
-
-
-
-
       attachListeners: function() {
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
@@ -120,6 +115,8 @@ module.exports = Backbone.Model
   // if filters change and layer is selected update it.
   refreshModel: function() {
     // this forces next 'load' call to do a fresh fetch.
+    console.log("Refreshing model. Selected:", this.get('selected'));
+
     delete this._loaded;
 
     if (this.get('selected')) {
@@ -127,44 +124,46 @@ module.exports = Backbone.Model
     }
   },
 
-  fetch: function(options) {
-    var filter = {};
+      fetch: function(options) {
+        var filter = {};
 
-    // TODO: move lastFetchXhr code into a mixin or something...
-    //Stop last fetch before doing new one.
-    //request is between initialized(0) and complete(4).
-    if (this.lastFetchXhr && this.lastFetchXhr.readyState > 0 && this.lastFetchXhr.readyState < 4) {
-      this.lastFetchXhr.abort();
-    }
+        if (this.lastFetchXhr && this.lastFetchXhr.readyState > 0 && this.lastFetchXhr.readyState < 4) {
+          console.log("Aborting previous fetch...");
+          this.lastFetchXhr.abort();
+        }
 
-    // get filters
-    if (this.collection.filter) {
-      _.extend(filter, this.collection.filter.serialize());
-    }
+        if (this.collection.filter) {
+          _.extend(filter, this.collection.filter.serialize());
+        }
 
-    // TODO: verify settings works..
-    filter.settings = this.collection.settingsWidget.toAPIFormat();
+        filter.settings = this.collection.settingsWidget.toAPIFormat();
+        filter.filters = filter.filters || {};
+        filter.filters.wocat = true;
+        filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
-    filter.filters = filter.filters || {};
-    filter.filters.wocat=true;
-    filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
+        if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') !== null) {
+          filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');
+        }
 
-    if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
-      filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');
-    }
+        options = _.defaults(options || {}, {
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(filter)
+        });
 
-    options = _.defaults((options || {}), {
-      type: 'POST',
-      data: JSON.stringify(filter)
-    });
+        console.log("Fetching data with filter:", filter);
 
-    this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
-    this.lastFetchXhr.done(function(response, status, xhr) {
-      this.trigger('sync', this, response, options);
-    }.bind(this));
-    return this.lastFetchXhr;
+        this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
 
-  },
+        this.lastFetchXhr.done(function(response, status, xhr) {
+          console.log("Fetch successful:", response);
+          this.trigger('sync', this, response, options); // Ensure sync is triggered
+        }.bind(this)).fail(function(xhr, status, error) {
+          console.error("Fetch failed:", status, error);
+        });
+
+        return this.lastFetchXhr;
+      },
 
   loadBoundary: function() {
     var boundaries = this.collection.boundaries.where({admLevel: this.get('value')});

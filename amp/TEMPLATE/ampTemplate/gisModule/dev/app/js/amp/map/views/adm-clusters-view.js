@@ -22,6 +22,10 @@ module.exports = Backbone.View.extend({
         this.map = options.map;
         this.collection = this.app.data.admClusters;
         this.isWocatChecked = false; // Track Wocat state
+        console.log("App here",this.app);
+        if (!this.app.eventAggregator) {
+          this.app.eventAggregator = _.extend({}, Backbone.Events);
+        }
         this.listenTo(this.app.data.admClusters, 'show', this.showLayer);
         this.listenTo(this.app.data.admClusters, 'hide', this.hideLayer);
         this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);

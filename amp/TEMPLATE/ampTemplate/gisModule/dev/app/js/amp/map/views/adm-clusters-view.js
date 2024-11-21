@@ -7,6 +7,7 @@ var TopojsonLibrary = require('../../../libs/local/topojson.js');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
+var WocatADMTemplate = fs.readFileSync(__dirname + '/../templates/wocat-map-adm-template.html', 'utf8');
 
 var ClusterPopupView = require('../views/cluster-popup-view');
 
@@ -14,17 +15,33 @@ module.exports = Backbone.View.extend({
   leafletLayerMap: {},
 
   admTemplate: _.template(ADMTemplate),
+  wocatAdmTemplate: _.template(WocatADMTemplate),
 
-  initialize: function(options) {
-    this.app = options.app;
-    this.map = options.map;
-    this.collection = this.app.admClusters;
+      initialize: function (options) {
+        this.app = options.app;
+        this.map = options.map;
+        this.collection = this.app.admClusters;
+        this.isWocatChecked = false; // Track Wocat state
 
-    this.listenTo(this.app.data.admClusters, 'show', this.showLayer);
-    this.listenTo(this.app.data.admClusters, 'hide', this.hideLayer);
-    this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);
+        this.listenTo(this.app.data.admClusters, 'show', this.showLayer);
+        this.listenTo(this.app.data.admClusters, 'hide', this.hideLayer);
+        this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);
 
-  },
+        // Event listener for radio button state
+        this.app.eventAggregator.on('radio:checked', (eventData) => {
+          if (eventData.id === 'wocat') {
+            this.isWocatChecked = eventData.selected;
+            console.log("Wocat state updated:", this.isWocatChecked);
+
+            // Refresh visible layers to reflect the state change
+            this.collection.each((admLayer) => {
+              if (admLayer.get('selected')) {
+                this.refreshLayer(admLayer);
+              }
+            });
+          }
+        });
+      },
 
   render: function() {
     app.translator.translateDOM($('.cluster-popup'));
@@ -32,54 +49,46 @@ module.exports = Backbone.View.extend({
   },
 
 
-  showLayer: function(admLayer) {
-	var self = this;
-    var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
+      showLayer: function (admLayer) {
+        var self = this;
+        var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
 
-    // if it's not loaded yet, we need to load it.
-    if (_.isUndefined(leafletLayerGroup)) {
-      leafletLayerGroup = this.leafletLayerMap[admLayer.cid] = new L.layerGroup([]);
-      admLayer.load().then(_.bind(function() {
-        self._createClusters(admLayer, leafletLayerGroup);
-      }, this));
-      admLayer.loadAll().done(function() {
-        self.boundary = self.getNewBoundary(admLayer);
-        leafletLayerGroup.addLayer(self.boundary);
-        self.moveBoundaryBack();
+        if (_.isUndefined(leafletLayerGroup)) {
+          leafletLayerGroup = this.leafletLayerMap[admLayer.cid] = new L.layerGroup([]);
+          admLayer.load().then(function () {
+            self._createClusters(admLayer, leafletLayerGroup);
+          });
+          admLayer.loadAll().done(function () {
+            self.boundary = self.getNewBoundary(admLayer);
+            leafletLayerGroup.addLayer(self.boundary);
+            self.moveBoundaryBack();
+            $('#map-loading').hide();
+          });
+        } else {
+          $('#map-loading').hide();
+        }
+
+        if (admLayer.get('selected')) {
+          this.map.addLayer(leafletLayerGroup);
+        }
+      },
+
+      refreshLayer: function (admLayer) {
+        var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
+        if (leafletLayerGroup) {
+          leafletLayerGroup.clearLayers();
+          leafletLayerGroup.addLayer(this.getNewADMLayer(admLayer, this.isWocatChecked));
+
+          this.boundary = this.getNewBoundary(admLayer);
+          if (this.boundary) {
+            leafletLayerGroup.addLayer(this.boundary);
+            this.moveBoundaryBack();
+          }
+        } else if (!admLayer.models) {
+          this.showLayer(admLayer);
+        }
         $('#map-loading').hide();
-      });
-    } else {
-      // else layer is already loaded.
-      $('#map-loading').hide();
-    }
-
-    if (admLayer.get('selected')) {
-      this.map.addLayer(leafletLayerGroup);
-    }
-  },
-
-  //TODO: make sure still selected
-  refreshLayer: function(admLayer) {
-    var self = this;
-    var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
-    if (leafletLayerGroup) {
-      leafletLayerGroup.clearLayers();
-      self._createClusters(admLayer, leafletLayerGroup);
-
-      this.boundary = self.getNewBoundary(admLayer);
-      if (this.boundary) {
-        leafletLayerGroup.addLayer(this.boundary);
-        this.moveBoundaryBack();
-        $('#map-loading').hide();
-      }
-
-    } else {
-      // don't listen to event if admLayer is actually the entire collection.
-      if (!admLayer.models) {
-        this.showLayer(admLayer);
-      }
-    }
-  },
+      },
 
   moveBoundaryBack: function() {
     if (this.boundary && this.boundary._map) {
@@ -104,23 +113,26 @@ module.exports = Backbone.View.extend({
     }
   },
 
-  getNewADMLayer: function(admLayer) {
+  getNewADMLayer: function (admLayer, isWocatChecked) {
     var self = this;
 
     return new L.geoJson(admLayer.get('features'), {
-      pointToLayer: function(feature, latlng) {
-        var htmlString = self.admTemplate(feature);
+      pointToLayer: function (feature, latlng) {
+        var htmlString = isWocatChecked
+            ? self.wocatAdmTemplate(feature)
+            : self.admTemplate(feature);
+
         var myIcon = L.divIcon({
           className: 'map-adm-icon',
           html: htmlString,
-          iconSize: [60, 50]
+          iconSize: [60, 50],
         });
-        return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
+
+        return L.marker(latlng, { icon: myIcon }); // L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: function (feature, layer) {
-    	  self._onEachFeature(feature, layer, admLayer);
-      }
-
+        self._onEachFeature(feature, layer, admLayer, isWocatChecked);
+      },
     });
   },
 
@@ -156,33 +168,22 @@ module.exports = Backbone.View.extend({
 
 
   // Create pop-ups
-  _onEachFeature: function (feature, layer, admLayer) {
+  _onEachFeature: function (feature, layer, admLayer, isWocatChecked) {
     if (feature.properties) {
-      var activities = feature.properties.activityid;
+      var activities = isWocatChecked
+          ? feature.properties.wocatActivities
+          : feature.properties.activityid;
+
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
-      feature.properties.wocat = false;
+      feature.properties.wocat = isWocatChecked;
 
-      // Initial popup binding
+      // Bind popup with template
       layer.bindPopup(
-          `${feature.properties.admName} has ${activities.length} projects. <br><img src="img/loading-icon.gif" />`,
+          `${feature.properties.admName} has ${activities.length} projects. 
+             <br><img src="img/loading-icon.gif" />`,
           { maxWidth: 500, offset: new L.Point(0, -16) }
       );
-
-      // Event listener for 'radio:checked'
-      this.app.eventAggregator.on('radio:checked', (eventData) => {
-        if (eventData.id === 'wocat') {
-          console.log("Wocat checked")
-          feature.properties.wocat = !!eventData.selected;
-
-          // Update popup with the new data
-          activities = feature.properties.wocatActivities;
-          layer.bindPopup(
-              `${feature.properties.admName} has ${activities.length} projects. <br><img src="img/loading-icon.gif" />`,
-              { maxWidth: 500, offset: new L.Point(0, -16) }
-          );
-        }
-      });
     }
   },
 });

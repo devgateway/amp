@@ -45,6 +45,11 @@ module.exports = BaseControlView.extend({
                     self.app.data.admClusters.reloadWithWocat(true);
                 }
             }
+            else
+            {
+                self.app.data.admClusters.reloadWithWocat(false);
+            }
+            this.render();
         });
 
 

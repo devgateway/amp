@@ -15,20 +15,10 @@ module.exports = Backbone.Model
 
   initialize: function(attributes, options) {
     console.log("Options in model",options)
-    this.wocat = options.wocat;
-      this.on('sync', this.onSync);
-  },
-      onSync: function(model, response, options) {
-        console.log("Options in sync",options)
-        console.log("Final wocat", this.wocat)
 
-        const wocat =  this.wocat;
-        if (wocat===true) {
-          this.modifySync(model, response, { wocat });
-        } else {
-          console.log('Wocat is false; skipping modifySync.');
-        }
-      },
+      this.on('sync', this.modifySync);
+  },
+
       modifySync: function (model, response, options) {
         console.log('Original response from /cluster:', response);
 
@@ -48,7 +38,8 @@ module.exports = Backbone.Model
             this.fetchWocat(country).then((newActivityIds) => {
               console.log("New activityIds:", newActivityIds , "for ", feature.properties.admName);
               if (newActivityIds.length > 0) {
-                feature.properties.activityid = newActivityIds;
+                // feature.properties.activityid = newActivityIds;
+                feature.properties.wocatActivities = newActivityIds;
               }
               model.set(response);
             });
@@ -119,7 +110,7 @@ module.exports = Backbone.Model
 
     delete this._loaded;
 
-    if (this.attributes.selected) {
+    if (this.get('selected')) {
       this.load();
     }
   },
@@ -138,7 +129,6 @@ module.exports = Backbone.Model
 
         filter.settings = this.collection.settingsWidget.toAPIFormat();
         filter.filters = filter.filters || {};
-        filter.filters.wocat = true;
         filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
         if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') !== null) {

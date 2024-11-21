@@ -38,19 +38,19 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
 
     static {
         indicatorMap.put("Hectares of land under restoration",
-                new CoreIndicatorTypeDTO("M ha", "ha_under_restoration",
-                        "Hectares of land under restoration", 1000000D));
+                new CoreIndicatorTypeDTO("m ha", "ha_under_restoration",
+                        "Hectares of land under restoration", 1000D));
         indicatorMap.put("Tonnes of Co2EQ sequestered",
-                new CoreIndicatorTypeDTO("M mt", "t_co2eq_sequestered",
-                        "Tonnes of Co2EQ sequestered", 1000000D));
+                new CoreIndicatorTypeDTO("m mt", "t_co2eq_sequestered",
+                        "Tonnes of Co2EQ sequestered", 1000D));
         indicatorMap.put("No of employment opportunities",
-                new CoreIndicatorTypeDTO("M", "no_employments",
-                        "No of employment opportunities", 1000000D));
+                new CoreIndicatorTypeDTO("m", "no_employments",
+                        "No of employment opportunities", 1000D));
         indicatorMap.put("Quantity of renewable energy consumed annually in MWH",
-                new CoreIndicatorTypeDTO("M mwh", "r_energy_consumed",
-                        "Quantity of renewable energy consumed annually in MWH", 1000000D));
+                new CoreIndicatorTypeDTO("m mwh", "r_energy_consumed",
+                        "Quantity of renewable energy consumed annually in MWH", 1000D));
         indicatorMap.put("Number of beneficiaries",
-                new CoreIndicatorTypeDTO("M", "no_beneficiaries", "Number of beneficiaries", 1000000D));
+                new CoreIndicatorTypeDTO("m", "no_beneficiaries", "Number of beneficiaries", 1000D));
     }
 
     @Override

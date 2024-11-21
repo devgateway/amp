@@ -49,7 +49,7 @@ module.exports = BaseControlView.extend({
             {
                 self.app.data.admClusters.reloadWithWocat(false);
             }
-            this.render();
+            // this.render();/
         });
 
 

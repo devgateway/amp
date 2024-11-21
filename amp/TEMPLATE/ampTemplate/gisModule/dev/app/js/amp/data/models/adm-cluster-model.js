@@ -32,6 +32,7 @@ module.exports = Backbone.Model
   } else {
             console.log('Wocat is false; skipping sync.');
           }
+    this.sync();
   },
 
       modifySync: function (model, response, options) {
@@ -106,10 +107,6 @@ module.exports = Backbone.Model
               return []; // Return an empty array in case of error
             });
       },
-
-
-
-
 
 
       attachListeners: function() {

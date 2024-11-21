@@ -43,7 +43,7 @@ module.exports = BaseControlView.extend({
             {
                 console.log("Cluster in view ", self.app.data.admClusters)
                 if (model.attributes.selected) {
-                    this.app.data.admClusters.options['wocat'] = true;
+                    self.app.data.admClusters.wocat = true;
                 }
             }
       // self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');

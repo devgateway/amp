@@ -17,6 +17,7 @@ var data = new GISData();
 var url = new URLService();
 var state = new State({ url: url, saved: data.savedMaps, autoinit: true, prefix: ['saved/', 'report/']});
 var constants = new Constants();
+var Backbone = require('backbone');
 
 var app = new App({
 	  url: url,
@@ -24,6 +25,7 @@ var app = new App({
 	  state: state
 });
 
+var EventAggregator = _.extend({}, Backbone.Events);
 
 
 //if saved data is loading, wait till its ready
@@ -32,7 +34,7 @@ if(state.loadPromise){
 		setSavedLanguage().then(function(){
 			configureApp();
 		});
-	});	
+	});
 } else {
 	configureApp();
 }
@@ -46,11 +48,11 @@ function setSavedLanguage(){
 	if(lang){
 		$.get( '/rest/translations/languages/' + lang, function() {}).always(function(){
 			deferred.resolve();
-		});		
+		});
 	}else{
 		deferred.resolve();
 	}
-	return deferred;	
+	return deferred;
 }
 
 //get language in saved map
@@ -62,7 +64,7 @@ function getLanguageFromState(){
 			lang = stateBlob.settings.language
 		}
 	}
-	return lang;	
+	return lang;
 }
 
 
@@ -78,6 +80,7 @@ function configureApp() {
 			app.constants = constants;
 			app.createViews();
 			app.data.load();
+			app.eventAggregator = EventAggregator;
 
 			// initialize everything that doesn't need to touch the DOM
 			$(document).ready(function () {

@@ -157,6 +157,13 @@ module.exports = Backbone.View.extend({
 
   // Create pop-ups
   _onEachFeature: function(feature, layer, admLayer) {
+    this.app.eventAggregator.on('wocat:checked', function(eventData) {
+      if (eventData.selected) {
+        console.log("Wocat is checked!");
+      } else {
+        console.log("Wocat is unchecked!");
+      }
+    });
     console.log("Clusters now", this.app.data.admClusters);
     if (feature.properties) {
       feature.properties.activityid = this.app.data.admClusters.wocat===true?feature.properties.wocatActivities:feature.properties.activityid;

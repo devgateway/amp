@@ -48,11 +48,13 @@ module.exports = Backbone.Collection
               this.each(model => {
                 console.log("Model: " + model);
                 model.set('wocat', this.wocat);
-                if (typeof model.refreshModel === 'function') {
-                  model.load();
-                } else {
-                  console.warn("refreshModel is not defined on model", model);
-                }
+                model.load();
+
+                // if (typeof model.load === 'function') {
+                //   model.load();
+                // } else {
+                //   console.warn("refreshModel is not defined on model", model);
+                // }
               });
             });
 

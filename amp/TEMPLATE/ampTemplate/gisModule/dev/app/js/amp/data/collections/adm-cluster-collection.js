@@ -42,15 +42,6 @@ module.exports = Backbone.Collection
           }
         };
 
-        return this.fetch({
-          reset: true,
-          success: function(collection, response, options) {
-            console.log('Collection reloaded successfully with wocat:', self.wocat);
-          },
-          error: function(collection, response, options) {
-            console.error('Failed to reload the collection with wocat:', self.wocat);
-          }
-        });
       },
 
   parse: function(data) {

@@ -6,7 +6,6 @@ var RadioListCollection = require('../collections/radio-list-collection');
 
 var BaseControlView = require('../../base-control/base-control-view');
 var OptionView = require('./option-view');
-const ADMClusters = require("../../../data/collections/adm-cluster-collection");
 
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
 var RadioOptionTemplate = fs.readFileSync(__dirname + '/../templates/radio-option-template.html', 'utf8');
@@ -45,14 +44,7 @@ module.exports = BaseControlView.extend({
             {
                 if (model.attributes.selected) {
                     self.app.data.admClusters.wocat = true;
-                    self.app.data.admClusters=
-                        new ADMClusters([], {
-                            boundaries: self.app.data.admClusters.boundaries,
-                            wocat: true,
-                            filter: self.app.data.admClusters.filter,
-                            settingsWidget: self.app.data.admClusters.settingsWidget,
-                            performanceToggleModel: self.app.data.admClusters.performanceToggleModel
-                        });
+                    self.app.data.admClusters.trigger('change:select');
                 }
             }
       // self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');

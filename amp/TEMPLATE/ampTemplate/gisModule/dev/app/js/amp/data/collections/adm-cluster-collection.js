@@ -21,8 +21,20 @@ module.exports = Backbone.Collection
     this.model = function(attrs, options) {
       return new ADMClusterModel(attrs, _.extend({}, options, { wocat: this.wocat }));
     };
+    this.listenTo(this, 'change:select', this.refreshColletion);
     this.listenTo(this, 'sync', this._setDefault);
   },
+      // if filters change and layer is selected update it.
+      refreshColletion: function() {
+        // this forces next 'load' call to do a fresh fetch.
+        console.log("Refreshing model. Model is:", this);
+
+        delete this._loaded;
+
+        // if (this.attributes.selected) {
+          this.load();
+        // }
+      },
 
 
   parse: function(data) {

@@ -36,21 +36,21 @@ module.exports = BaseControlView.extend({
     this._loaded = this.app.data.admClusters.load().then(function() {
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
-        [self.app.data.structuresMenu,newRadioButton]
+        [self.app.data.structuresMenu]
       ));
-        self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
-            if (model.id === 'wocat') {
-                if (model.attributes.selected)
-                {
-                    self.app.data.admClusters.reloadWithWocat(true);
-                }
-            }
-            else
-            {
-                self.app.data.admClusters.reloadWithWocat(false);
-            }
-            // this.render();/
-        });
+        // self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
+        //     if (model.id === 'wocat') {
+        //         if (model.attributes.selected)
+        //         {
+        //             self.app.data.admClusters.reloadWithWocat(true);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         self.app.data.admClusters.reloadWithWocat(false);
+        //     }
+        //     // this.render();/
+        // });
 
 
       // register state:

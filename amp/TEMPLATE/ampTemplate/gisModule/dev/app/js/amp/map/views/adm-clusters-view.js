@@ -22,10 +22,6 @@ module.exports = Backbone.View.extend({
         this.map = options.map;
         this.collection = this.app.data.admClusters;
         this.isWocatChecked = false; // Track Wocat state
-        console.log("App here",this.app);
-        if (!this.app.eventAggregator) {
-          this.app.eventAggregator = _.extend({}, Backbone.Events);
-        }
         this.listenTo(this.app.data.admClusters, 'show', this.showLayer);
         this.listenTo(this.app.data.admClusters, 'hide', this.hideLayer);
         this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);
@@ -37,11 +33,12 @@ module.exports = Backbone.View.extend({
             console.log("Wocat state updated:", this.isWocatChecked);
 
             // Refresh visible layers to reflect the state change
-            this.collection.each((admLayer) => {
-              if (admLayer.get('selected')) {
-                this.refreshLayer(admLayer);
-              }
-            });
+            this.refreshLayer(this.collection);
+            // this.collection.each((admLayer) => {
+            //   if (admLayer.get('selected')) {
+            //     this.refreshLayer(admLayer);
+            //   }
+            // });
           }
         });
       },
@@ -77,6 +74,7 @@ module.exports = Backbone.View.extend({
       },
 
       refreshLayer: function (admLayer) {
+        console.log("Adm layer", admLayer);
         var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
         if (leafletLayerGroup) {
           leafletLayerGroup.clearLayers();

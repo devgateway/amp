@@ -34,9 +34,9 @@ module.exports = BaseControlView.extend({
       });
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
     this._loaded = this.app.data.admClusters.load().then(function() {
-        self.projectLayerCollection = new RadioListCollection(_.union(
+      self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
-        [self.app.data.structuresMenu],newRadioButton
+        [self.app.data.structuresMenu, newRadioButton]
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
       self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');

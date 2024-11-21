@@ -44,13 +44,14 @@ module.exports = BaseControlView.extend({
             {
                 if (model.attributes.selected) {
                     self.app.data.admClusters.wocat = true;
+
                 }
             }
             else {
                 self.app.data.admClusters.wocat = false;
 
             }
-      // self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');
+            self.app.data.admClusters.reloadWithWocat();
 
         });
 

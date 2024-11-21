@@ -14,7 +14,7 @@ module.exports = Backbone.Model
   url: '/rest/gis/cluster',
 
   initialize: function(attributes, options) {
-    console.log("Options",options)
+    console.log("Options in model",options)
     this.wocat = options.wocat;
       this.on('sync', this.onSync);
   },

@@ -11,32 +11,19 @@ module.exports = Backbone.Collection
   url: '/rest/gis/clusters',
 
   initialize: function(models, options) {
+    console.log("Options in collection", options);
     // TODO: probably pass app or data here instead?
     this.boundaries = options.boundaries;
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
     this.performanceToggleModel = options.performanceToggleModel;
-    this.wocat = false;
-
+    this.wocat = options.wocat;
+    this.model = function(attrs, options) {
+      return new ADMClusterModel(attrs, _.extend({}, options, { wocat: this.wocat }));
+    };
     this.listenTo(this, 'sync', this._setDefault);
   },
 
-      reloadWithWocat: function(wocatValue) {
-        this.wocat = wocatValue;
-
-        // Clear the collection and reset the model factory
-        this.reset();
-        this.model = function(attrs, options) {
-          return new ADMClusterModel(attrs, _.extend({}, options, { wocat: this.wocat }));
-        }.bind(this);
-
-        // Fetch the data and update models on success
-        this.fetch().then(() => {
-          this.each(model => {
-            model.set('wocat', this.wocat);
-          });
-        });
-      },
 
   parse: function(data) {
     data = _.sortBy(data, function(regionLevel) {

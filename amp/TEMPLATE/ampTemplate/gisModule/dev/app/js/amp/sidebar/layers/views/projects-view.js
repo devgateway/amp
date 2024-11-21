@@ -39,7 +39,13 @@ module.exports = BaseControlView.extend({
         [self.app.data.structuresMenu, newRadioButton]
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
-      self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');
+            if (model.id ==='wocat')
+            {
+                if (model.attributes.selected) {
+                    self.app.data.admClusters.options.wocat = true;
+                }
+            }
+      // self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');
 
         });
 

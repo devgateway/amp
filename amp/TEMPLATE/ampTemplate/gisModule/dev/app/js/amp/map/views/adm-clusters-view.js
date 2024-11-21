@@ -156,66 +156,40 @@ module.exports = Backbone.View.extend({
 
 
   // Create pop-ups
-  _onEachFeature: function(feature, layer, admLayer) {
-    var wocatEnabled = false;
-
+  _onEachFeature: function (feature, layer, admLayer) {
     if (feature.properties) {
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
       feature.properties.wocat = false;
-      // temp. will be template.
-      layer.bindPopup(feature.properties.admName +
-          ' has ' + activities.length +
-          ' projects. <br><img src="img/loading-icon.gif" />',
-          {maxWidth: 500, offset: new L.Point(0, -16)}
+
+      // Initial popup binding
+      layer.bindPopup(
+          `${feature.properties.admName} has ${activities.length} projects. <br><img src="img/loading-icon.gif" />`,
+          { maxWidth: 500, offset: new L.Point(0, -16) }
       );
 
-      this.app.eventAggregator.on('radio:checked', function(eventData) {
-        if (eventData.selected) {
-          console.log("Radio is checked!");
-          if (eventData.id === 'wocat') {
-            feature.properties.activityid = feature.properties.wocatActivities;
-            var activities = feature.properties.activityid;
-            layer._clusterId = feature.properties.admName;
-            feature.properties.admLevel = admLayer.get('title');
+      // Event listener for 'radio:checked'
+      this.app.eventAggregator.on('radio:checked', (eventData) => {
+        if (eventData.id === 'wocat') {
+          if (eventData.selected) {
+            // Wocat enabled
+            feature.properties.activityid = feature.properties.wocatActivities || [];
             feature.properties.wocat = true;
-            // temp. will be template.
-            layer.bindPopup(feature.properties.admName +
-                ' has ' + activities.length +
-                ' projects. <br><img src="img/loading-icon.gif" />',
-                {maxWidth: 500, offset: new L.Point(0, -16)}
-            );
+          } else {
+            // Wocat disabled, revert to default activities
+            feature.properties.activityid = feature.properties.activityid || [];
+            feature.properties.wocat = false;
           }
-          // else
-          // {
-          //   var activities = feature.properties.activityid;
-          //   layer._clusterId = feature.properties.admName;
-          //   feature.properties.admLevel = admLayer.get('title');
-          //   feature.properties.wocat = false;
-          //   // temp. will be template.
-          //   layer.bindPopup(feature.properties.admName +
-          //       ' has ' + activities.length +
-          //       ' projects. <br><img src="img/loading-icon.gif" />',
-          //       {maxWidth: 500, offset: new L.Point(0, -16)}
-          //   );
-          // }
-        }
-        // else {
-        //   console.log("Wocat is unchecked!");
-        //   var activities = feature.properties.activityid;
-        //   layer._clusterId = feature.properties.admName;
-        //   feature.properties.admLevel = admLayer.get('title');
-        //   feature.properties.wocat = false;
-        //   // temp. will be template.
-        //   layer.bindPopup(feature.properties.admName +
-        //       ' has ' + activities.length +
-        //       ' projects. <br><img src="img/loading-icon.gif" />',
-        //       {maxWidth: 500, offset: new L.Point(0, -16)}
-        //   );
-        // }
-      });
 
+          // Update popup with the new data
+          activities = feature.properties.activityid;
+          layer.bindPopup(
+              `${feature.properties.admName} has ${activities.length} projects. <br><img src="img/loading-icon.gif" />`,
+              { maxWidth: 500, offset: new L.Point(0, -16) }
+          );
+        }
+      });
     }
-  }
+  },
 });

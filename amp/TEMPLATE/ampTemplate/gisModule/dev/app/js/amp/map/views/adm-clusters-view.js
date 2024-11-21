@@ -157,9 +157,9 @@ module.exports = Backbone.View.extend({
 
   // Create pop-ups
   _onEachFeature: function(feature, layer, admLayer) {
-    console.log("IS Wocat", this.app.admClusters.wocat);
+    console.log("Clusters now", this.app.data.admClusters);
     if (feature.properties) {
-      feature.properties.activityid = this.app.admClusters.wocat===true?feature.properties.wocatActivities:feature.properties.activityid;
+      feature.properties.activityid = this.app.data.admClusters.wocat===true?feature.properties.wocatActivities:feature.properties.activityid;
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');

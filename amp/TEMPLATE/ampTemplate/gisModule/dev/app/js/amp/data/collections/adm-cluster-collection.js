@@ -32,6 +32,7 @@ module.exports = Backbone.Collection
         this.each(function(model) {
           model.set('wocat', wocatValue);
         });
+        this.load();
       },
 
   parse: function(data) {

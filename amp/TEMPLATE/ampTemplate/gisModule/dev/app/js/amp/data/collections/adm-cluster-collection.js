@@ -22,17 +22,27 @@ module.exports = Backbone.Collection
   },
 
       reloadWithWocat: function(wocatValue) {
-        this.wocat = wocatValue;
-        this.model = function(attrs, options) {
-          console.log("Wocat reload", wocatValue);
-          return new ADMClusterModel(attrs, _.extend({}, options, { wocat: wocatValue }));
-        };
+        this.wocat = wocatValue; // Ensure the value is a boolean
+        console.log("Wocat: " + wocatValue);
+        console.log("Wocat2: " + this.wocat);
 
-        // Update existing models
+        // Pass `wocat` as a parameter to the models
+        var self = this;
         this.each(function(model) {
-          model.set('wocat', wocatValue);
+          console.log("Wocat3: " + self.wocat);
+          model.set('wocat', self.wocat);
         });
-        this.load();
+        this.model = new ADMClusterModel({}, { wocat: self.wocat});
+
+        return this.fetch({
+          reset: true,
+          success: function(collection, response, options) {
+            console.log('Collection reloaded successfully with wocat:', self.wocat);
+          },
+          error: function(collection, response, options) {
+            console.error('Failed to reload the collection with wocat:', self.wocat);
+          }
+        });
       },
 
   parse: function(data) {

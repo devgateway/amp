@@ -14,12 +14,14 @@ module.exports = Backbone.Model
   url: '/rest/gis/cluster',
 
   initialize: function(attributes, options) {
-    this.on('sync', this.onSync);
+    console.log("Options",options)
+      this.on('sync', this.onSync);
+
 
   },
       onSync: function(model, response, options) {
         const wocat = options.wocat || this.wocat;
-        console.log("Options", options);
+        console.log("Final wocat", wocat)
         if (wocat) {
           this.modifySync(model, response, { wocat });
         } else {

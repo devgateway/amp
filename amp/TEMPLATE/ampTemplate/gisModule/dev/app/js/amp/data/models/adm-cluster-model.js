@@ -17,7 +17,6 @@ module.exports = Backbone.Model
     console.log("Options",options)
     this.wocat = options.wocat;
       this.on('sync', this.onSync);
-      this.fetch();
   },
       onSync: function(model, response, options) {
         console.log("Options in sync",options)

@@ -43,7 +43,12 @@ module.exports = Backbone.Collection
         };
         this.fetch().then(() => {
           console.log("Reloading cluster")
-          this.each(model => model.set('wocat', this.wocat));
+          this.each(model => {
+            model.set('wocat', this.wocat)
+            model.refreshModel();
+          });
+
+
         });
 
       },

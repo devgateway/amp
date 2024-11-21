@@ -115,11 +115,11 @@ module.exports = Backbone.Model
   // if filters change and layer is selected update it.
   refreshModel: function() {
     // this forces next 'load' call to do a fresh fetch.
-    console.log("Refreshing model. Selected:", this.get('selected'));
+    console.log("Refreshing model. Model is:", this);
 
     delete this._loaded;
 
-    if (this.get('selected')) {
+    if (this.attributes.selected) {
       this.load();
     }
   },

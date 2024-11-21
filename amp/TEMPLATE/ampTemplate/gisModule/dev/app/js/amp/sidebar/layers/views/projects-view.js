@@ -39,7 +39,6 @@ module.exports = BaseControlView.extend({
         [self.app.data.structuresMenu,newRadioButton]
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
-            model.set('selected', model.attributes.selected);
             if (model.id === 'wocat') {
                 if (model.attributes.selected)
                 {

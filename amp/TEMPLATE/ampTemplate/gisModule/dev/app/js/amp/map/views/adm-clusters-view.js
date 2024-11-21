@@ -36,13 +36,15 @@ module.exports = Backbone.View.extend({
             console.log("Wocat state updated:", this.isWocatChecked);
 
             // Refresh visible layers to reflect the state change
-            this.refreshLayer(this.collection);
-            this.showLayer(this.collection);
+            // this.refreshLayer(this.app.data.admClusters);
+            // this.showLayer(this.collection);
             // this.collection.each((admLayer) => {
             //   if (admLayer.get('selected')) {
             //     this.refreshLayer(admLayer);
             //   }
             // });
+            this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
+            this.app.data.admClusters.trigger('show', this.app.data.admClusters);
           }
         });
       },

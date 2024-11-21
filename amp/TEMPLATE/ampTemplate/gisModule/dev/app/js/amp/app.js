@@ -23,10 +23,10 @@ var Backbone = require('backbone');
 var app = new App({
 	  url: url,
 	  data: data,
-	  state: state
+	  state: state,
+	eventAggregator: _.extend({}, Backbone.Events)
 });
 
-var EventAggregator = _.extend({}, Backbone.Events);
 
 
 //if saved data is loading, wait till its ready
@@ -81,7 +81,6 @@ function configureApp() {
 			app.constants = constants;
 			app.createViews();
 			app.data.load();
-			app.eventAggregator = EventAggregator;
 
 			// initialize everything that doesn't need to touch the DOM
 			$(document).ready(function () {

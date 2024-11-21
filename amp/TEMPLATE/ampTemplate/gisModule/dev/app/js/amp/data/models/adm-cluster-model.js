@@ -23,7 +23,7 @@ module.exports = Backbone.Model
         console.log("Final wocat", this.wocat)
 
         const wocat =  this.wocat;
-        if (wocat) {
+        if (wocat===true) {
           this.modifySync(model, response, { wocat });
         } else {
           console.log('Wocat is false; skipping modifySync.');

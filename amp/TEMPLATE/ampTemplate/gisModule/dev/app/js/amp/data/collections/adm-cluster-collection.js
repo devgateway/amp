@@ -54,9 +54,6 @@ module.exports = Backbone.Collection
                   console.warn("refreshModel is not defined on model", model);
                 }
               });
-            })
-            .catch(err => {
-              console.error("Error fetching collection:", err);
             });
 
       },

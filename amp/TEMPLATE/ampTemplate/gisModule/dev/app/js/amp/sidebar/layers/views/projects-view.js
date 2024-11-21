@@ -41,7 +41,7 @@ module.exports = BaseControlView.extend({
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
             if (model.id ==='wocat')
             {
-                console.log("Options in view ", this.app.data.admClusters.options)
+                console.log("Cluster in view ", self.app.data.admClusters)
                 if (model.attributes.selected) {
                     this.app.data.admClusters.options['wocat'] = true;
                 }

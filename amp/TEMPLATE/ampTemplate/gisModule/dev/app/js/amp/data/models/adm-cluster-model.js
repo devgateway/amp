@@ -22,7 +22,7 @@ module.exports = Backbone.Model
       onSync: function(model, response, options) {
         console.log("Options in sync",options)
 
-        const wocat = options.wocat || this.wocat;
+        const wocat = options && options.wocat !== undefined ? options.wocat : this.wocat;
         console.log("Final wocat", wocat)
         if (wocat) {
           this.modifySync(model, response, { wocat });

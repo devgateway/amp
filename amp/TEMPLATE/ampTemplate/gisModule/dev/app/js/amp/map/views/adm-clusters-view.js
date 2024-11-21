@@ -163,7 +163,7 @@ module.exports = Backbone.View.extend({
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
-      feature.properties.wocat = this.collection.wocat;
+      feature.properties.wocat = this.app.data.admClusters.wocat;
       // temp. will be template.
       layer.bindPopup(feature.properties.admName +
         ' has ' +  activities.length +

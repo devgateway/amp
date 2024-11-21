@@ -41,8 +41,9 @@ module.exports = BaseControlView.extend({
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
             if (model.id ==='wocat')
             {
+                console.log("Options in view ", self.app.data.admClusters.options)
                 if (model.attributes.selected) {
-                    self.app.data.admClusters.options.wocat = true;
+                    self.app.data.admClusters.options['wocat'] = true;
                 }
             }
       // self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');

@@ -7,6 +7,11 @@
   <% } else { %>
 <div class="map-circle large">
   <% } %>
+  <% if(properties.wocat == 'true') { %>
+  <%= properties.wocatActivities.length %>
+  <% } else { %>
   <%= properties.activityid.length %>
+  <% } %>
+
 </div>
 <div class="map-circle-label"><%= properties.admName %></div>

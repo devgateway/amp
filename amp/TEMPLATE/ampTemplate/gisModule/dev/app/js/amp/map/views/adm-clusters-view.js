@@ -172,18 +172,11 @@ module.exports = Backbone.View.extend({
       // Event listener for 'radio:checked'
       this.app.eventAggregator.on('radio:checked', (eventData) => {
         if (eventData.id === 'wocat') {
-          if (eventData.selected) {
-            // Wocat enabled
-            feature.properties.activityid = feature.properties.wocatActivities || [];
-            feature.properties.wocat = true;
-          } else {
-            // Wocat disabled, revert to default activities
-            feature.properties.activityid = feature.properties.activityid || [];
-            feature.properties.wocat = false;
-          }
+          console.log("Wocat checked")
+          feature.properties.wocat = !!eventData.selected;
 
           // Update popup with the new data
-          activities = feature.properties.activityid;
+          activities = feature.properties.wocatActivities;
           layer.bindPopup(
               `${feature.properties.admName} has ${activities.length} projects. <br><img src="img/loading-icon.gif" />`,
               { maxWidth: 500, offset: new L.Point(0, -16) }

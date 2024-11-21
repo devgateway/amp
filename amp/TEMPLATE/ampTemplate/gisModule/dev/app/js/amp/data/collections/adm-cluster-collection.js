@@ -49,7 +49,7 @@ module.exports = Backbone.Collection
                 console.log("Model: " + model);
                 model.set('wocat', this.wocat);
                 if (typeof model.refreshModel === 'function') {
-                  model.refreshModel();
+                  model.load();
                 } else {
                   console.warn("refreshModel is not defined on model", model);
                 }

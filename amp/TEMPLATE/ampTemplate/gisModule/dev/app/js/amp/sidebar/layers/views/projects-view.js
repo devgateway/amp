@@ -42,9 +42,7 @@ module.exports = BaseControlView.extend({
             if (model.id === 'wocat') {
                 if (model.attributes.selected)
                 {
-                    self.app.data.admClusters.reloadWithWocat(true).then(function() {
-                        console.log('Cluster collection refreshed with wocat enabled.');
-                    });
+                    self.app.data.admClusters.reloadWithWocat(true);
                 }
             }
         });

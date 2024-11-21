@@ -40,6 +40,7 @@ module.exports = BaseControlView.extend({
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
             console.log("Cluster in view ", self.app.data.admClusters);
+            self.app.data.admClusters.wocat = model.id==='wocat';
                 if (model.attributes.selected) {
                     self.app.eventAggregator.trigger('radio:checked', { selected: true,id:model.id });
                 } else {

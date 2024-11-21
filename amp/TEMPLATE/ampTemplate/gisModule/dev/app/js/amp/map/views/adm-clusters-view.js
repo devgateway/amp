@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
         this.app = options.app;
         this.map = options.map;
         this.collection = this.app.data.admClusters;
-        this.isWocatChecked = false; // Track Wocat state
+        this.isWocatChecked = this.app.data.admClusters.wocat; // Track Wocat state
         if (!this.app.eventAggregator) {
           this.app.eventAggregator = _.extend({}, Backbone.Events);
         }
@@ -30,14 +30,14 @@ module.exports = Backbone.View.extend({
         this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);
 
         // Event listener for radio button state
-        this.app.eventAggregator.on('radio:checked', (eventData) => {
-          if (eventData.id === 'wocat') {
-            this.isWocatChecked = eventData.selected;
-            console.log("Wocat state updated:", this.isWocatChecked);
-            this.app.data.admClusters.trigger('show', this.app.data.admClusters);
-            this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
-          }
-        });
+        // this.app.eventAggregator.on('radio:checked', (eventData) => {
+        //   if (eventData.id === 'wocat') {
+        //     this.isWocatChecked = eventData.selected;
+        //     console.log("Wocat state updated:", this.isWocatChecked);
+        //     this.app.data.admClusters.trigger('show', this.app.data.admClusters);
+        //     this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
+        //   }
+        // });
       },
 
   render: function() {

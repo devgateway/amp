@@ -157,20 +157,23 @@ module.exports = Backbone.View.extend({
 
   // Create pop-ups
   _onEachFeature: function(feature, layer, admLayer) {
+    var wocatEnabled = false;
     this.app.eventAggregator.on('wocat:checked', function(eventData) {
       if (eventData.selected) {
         console.log("Wocat is checked!");
+        wocatEnabled=true;
       } else {
         console.log("Wocat is unchecked!");
+        wocatEnabled = false;
       }
     });
     console.log("Clusters now", this.app.data.admClusters);
     if (feature.properties) {
-      feature.properties.activityid = this.app.data.admClusters.wocat===true?feature.properties.wocatActivities:feature.properties.activityid;
+      feature.properties.activityid = wocatEnabled===true?feature.properties.wocatActivities:feature.properties.activityid;
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
-      feature.properties.wocat = this.app.data.admClusters.wocat;
+      feature.properties.wocat = wocatEnabled;
       // temp. will be template.
       layer.bindPopup(feature.properties.admName +
         ' has ' +  activities.length +

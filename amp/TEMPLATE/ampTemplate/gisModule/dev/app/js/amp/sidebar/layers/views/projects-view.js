@@ -40,18 +40,12 @@ module.exports = BaseControlView.extend({
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
             console.log("Cluster in view ", self.app.data.admClusters);
-            if (model.id === 'wocat') {
                 if (model.attributes.selected) {
-                    self.app.data.admClusters.wocat = true;
-                    self.app.eventAggregator.trigger('wocat:checked', { selected: true });
+                    self.app.eventAggregator.trigger('radio:checked', { selected: true,id:model.id });
                 } else {
-                    self.app.data.admClusters.wocat = false;
-                    self.app.eventAggregator.trigger('wocat:checked', { selected: false });
+                    self.app.eventAggregator.trigger('radio:checked', { selected: false, id:model.id });
                 }
-            } else {
-                self.app.data.admClusters.wocat = false;
-            }
-            self.app.data.admClusters.reloadWithWocat();
+
         });
 
 

@@ -34,17 +34,8 @@ module.exports = Backbone.View.extend({
           if (eventData.id === 'wocat') {
             this.isWocatChecked = eventData.selected;
             console.log("Wocat state updated:", this.isWocatChecked);
-
-            // Refresh visible layers to reflect the state change
-            // this.refreshLayer(this.app.data.admClusters);
-            // this.showLayer(this.collection);
-            // this.collection.each((admLayer) => {
-            //   if (admLayer.get('selected')) {
-            //     this.refreshLayer(admLayer);
-            //   }
-            // });
-            this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
             this.app.data.admClusters.trigger('show', this.app.data.admClusters);
+            this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
           }
         });
       },
@@ -56,6 +47,7 @@ module.exports = Backbone.View.extend({
 
 
       showLayer: function (admLayer) {
+        console.log("Showing layer")
         var self = this;
         var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
 
@@ -80,7 +72,7 @@ module.exports = Backbone.View.extend({
       },
 
       refreshLayer: function (admLayer) {
-        console.log("Adm layer", admLayer);
+        console.log("Refreshing layer", admLayer);
         var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
         if (leafletLayerGroup) {
           leafletLayerGroup.clearLayers();
@@ -114,6 +106,8 @@ module.exports = Backbone.View.extend({
   },
 
   hideLayer: function(admLayer) {
+    console.log("Hiding layer", admLayer);
+
     var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
     if (leafletLayerGroup) {
       this.map.removeLayer(leafletLayerGroup);

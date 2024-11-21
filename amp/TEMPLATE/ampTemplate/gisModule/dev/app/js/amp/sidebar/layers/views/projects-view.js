@@ -32,25 +32,17 @@ module.exports = BaseControlView.extend({
           name: 'Wocat',
           title: 'Wocat'
       });
+      self.app.data.admClusters.models.add(newRadioButton);
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
     this._loaded = this.app.data.admClusters.load().then(function() {
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]
       ));
-        // self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
-        //     if (model.id === 'wocat') {
-        //         if (model.attributes.selected)
-        //         {
-        //             self.app.data.admClusters.reloadWithWocat(true);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         self.app.data.admClusters.reloadWithWocat(false);
-        //     }
-        //     // this.render();/
-        // });
+        self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
+      self.app.data.admClusters.reloadWithWocat(model.id === 'wocat');
+
+        });
 
 
       // register state:

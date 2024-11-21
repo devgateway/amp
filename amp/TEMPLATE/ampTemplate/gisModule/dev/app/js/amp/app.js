@@ -8,6 +8,7 @@ var GISData = require('./data/gis-data');
 var App = require('./gis/views/gis-main');
 
 var $ = require('jquery');
+var _ = require('underscore');
 var State = require('amp-state/index'); //require('./services/state');
 var translator = require('./services/translator');
 var WindowTitle = require('./services/title');

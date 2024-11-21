@@ -159,7 +159,11 @@ module.exports = Backbone.Model
     });
 
     this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
+    this.lastFetchXhr.done(function(response, status, xhr) {
+      this.trigger('sync', this, response, options);
+    }.bind(this));
     return this.lastFetchXhr;
+
   },
 
   loadBoundary: function() {

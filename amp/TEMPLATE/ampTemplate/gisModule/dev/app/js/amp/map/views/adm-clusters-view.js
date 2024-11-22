@@ -114,8 +114,9 @@ module.exports = Backbone.View.extend({
         console.log("Feature: " + feature);
         var htmlString = self.admTemplate(feature);
 
-        if (feature.properties.wocat===true)
+        if (feature.properties.admLevel==='Wocat')
         {
+          console.log("Setting wocat template")
            htmlString = self.wocatAdmTemplate(feature);
         }
         var myIcon = L.divIcon({

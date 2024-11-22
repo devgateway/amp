@@ -247,7 +247,7 @@ module.exports = Backbone.View.extend({
   _loadMoreProjects: function(cluster) {
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
-      console.log("Wocat activities",this.cluster.properties.wocatCountryData);
+      console.log("Wocat activities",self.cluster.properties.wocatCountryData);
 	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
 
 	  // hide load more button if all activities loaded.
@@ -288,10 +288,10 @@ module.exports = Backbone.View.extend({
 			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
 			  return activity;
 		  });
-          if (this.cluster.properties.wocatCountryData && this.cluster.properties.wocatCountryData.length>0)
+          if (self.cluster.properties.wocatCountryData && self.cluster.properties.wocatCountryData.length>0)
           {
               self.tempDOM.find('.project-list').append(
-                  self.wocatProjectListTemplate({activities: this.cluster.properties.wocatCountryData})
+                  self.wocatProjectListTemplate({activities: self.cluster.properties.wocatCountryData})
               );
           }else
           {

@@ -39,8 +39,7 @@ module.exports = BaseControlView.extend({
         [self.app.data.structuresMenu, newRadioButton]
       ));
         self.listenTo(self.projectLayerCollection, 'toggleSelect', function(model) {
-            console.log("Cluster in view ", self.app.data.admClusters);
-            self.app.data.admClusters.wocat = model.id==='wocat';
+            console.log('Radio button toggled:', model.id, model.attributes.selected);            self.app.data.admClusters.wocat = model.id==='wocat';
                 if (model.attributes.selected) {
                     self.app.eventAggregator.trigger('radio:checked', { selected: true,id:model.id });
                 } else {

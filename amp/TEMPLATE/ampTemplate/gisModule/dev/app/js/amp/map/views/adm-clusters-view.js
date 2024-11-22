@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
         this.app = options.app;
         this.map = options.map;
         this.collection = this.app.data.admClusters;
-        this.isWocatChecked = this.app.data.admClusters.wocat; // Track Wocat state
+        this.isWocatChecked = false; // Track Wocat state
         if (!this.app.eventAggregator) {
           this.app.eventAggregator = _.extend({}, Backbone.Events);
         }
@@ -30,14 +30,16 @@ module.exports = Backbone.View.extend({
         this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);
 
         // Event listener for radio button state
-        // this.app.eventAggregator.on('radio:checked', (eventData) => {
-        //   if (eventData.id === 'wocat') {
-        //     this.isWocatChecked = eventData.selected;
-        //     console.log("Wocat state updated:", this.isWocatChecked);
-        //     this.app.data.admClusters.trigger('show', this.app.data.admClusters);
-        //     this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
-        //   }
-        // });
+        this.app.eventAggregator.on('radio:checked', (eventData) => {
+          console.log('Radio button toggled:', model.id, model.attributes.selected);
+          console.log('Radio event:', eventData.id, eventData.selected, 'Wocat checked:', this.isWocatChecked);
+          if (eventData.id === 'wocat') {
+            this.isWocatChecked = eventData.selected;
+            console.log("Wocat state updated:", this.isWocatChecked);
+            this.app.data.admClusters.trigger('show', this.app.data.admClusters);
+            this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
+          }
+        });
       },
 
   render: function() {
@@ -47,8 +49,7 @@ module.exports = Backbone.View.extend({
 
 
       showLayer: function (admLayer) {
-        console.log("Showing layer")
-        var self = this;
+        console.log('Show layer for ADM:', admLayer.cid, 'Wocat:', this.isWocatChecked);        var self = this;
         var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
 
         if (_.isUndefined(leafletLayerGroup)) {
@@ -72,11 +73,13 @@ module.exports = Backbone.View.extend({
       },
 
       refreshLayer: function (admLayer) {
-        console.log("Refreshing layer", admLayer);
+        console.log("Refreshing layer for ADM:", admLayer.cid, "Wocat:", this.isWocatChecked);
         var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
+
         if (leafletLayerGroup) {
           leafletLayerGroup.clearLayers();
-          leafletLayerGroup.addLayer(this.getNewADMLayer(admLayer, this.isWocatChecked));
+          var newLayer = this.getNewADMLayer(admLayer, this.isWocatChecked);
+          leafletLayerGroup.addLayer(newLayer);
 
           this.boundary = this.getNewBoundary(admLayer);
           if (this.boundary) {
@@ -84,8 +87,10 @@ module.exports = Backbone.View.extend({
             this.moveBoundaryBack();
           }
         } else if (!admLayer.models) {
+          console.log("Layer group missing; recreating for ADM:", admLayer.cid);
           this.showLayer(admLayer);
         }
+
         $('#map-loading').hide();
       },
 
@@ -97,7 +102,7 @@ module.exports = Backbone.View.extend({
 
   _createClusters: function(admLayer, leafletLayerGroup) {
     var self = this;
-    var clusters = this.getNewADMLayer(admLayer);
+    var clusters = this.getNewADMLayer(admLayer, this.isWocatChecked);
     leafletLayerGroup.addLayer(clusters);
     clusters.on('popupopen', function(e) {
       var clusterPopupView = new ClusterPopupView({app: self.app}, e.popup, admLayer);
@@ -170,6 +175,7 @@ module.exports = Backbone.View.extend({
 
   // Create pop-ups
   _onEachFeature: function (feature, layer, admLayer, isWocatChecked) {
+    console.log('Processing feature:', feature.properties, 'Wocat:', isWocatChecked);
     if (feature.properties) {
       var activities = isWocatChecked
           ? feature.properties.wocatActivities

@@ -7,6 +7,7 @@ var TopojsonLibrary = require('../../../libs/local/topojson.js');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
+var WocatADMTemplate = fs.readFileSync(__dirname + '/../templates/wocat-adm-template.html', 'utf8');
 
 var ClusterPopupView = require('../views/cluster-popup-view');
 
@@ -14,6 +15,7 @@ module.exports = Backbone.View.extend({
   leafletLayerMap: {},
 
   admTemplate: _.template(ADMTemplate),
+  wocatAdmTemplate: _.template(WocatADMTemplate),
 
   initialize: function(options) {
     this.app = options.app;
@@ -109,7 +111,13 @@ module.exports = Backbone.View.extend({
 
     return new L.geoJson(admLayer.get('features'), {
       pointToLayer: function(feature, latlng) {
+        console.log("Feature: " + feature);
         var htmlString = self.admTemplate(feature);
+
+        if (feature.properties.wocat===true)
+        {
+           htmlString = self.wocatAdmTemplate(feature);
+        }
         var myIcon = L.divIcon({
           className: 'map-adm-icon',
           html: htmlString,
@@ -117,10 +125,10 @@ module.exports = Backbone.View.extend({
         });
         return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
       },
-      onEachFeature: function (feature, layer) {    	  
+      onEachFeature: function (feature, layer) {
     	  self._onEachFeature(feature, layer, admLayer);
       }
-    	  
+
     });
   },
 

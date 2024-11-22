@@ -5,6 +5,7 @@ var RadioListCollection = require('../collections/radio-list-collection');
 
 var BaseControlView = require('../../base-control/base-control-view');
 var OptionView = require('./option-view');
+var ADMClusterModel = require('../../../data/models/adm-cluster-model');
 
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
 var RadioOptionTemplate = fs.readFileSync(__dirname + '/../templates/radio-option-template.html', 'utf8');
@@ -23,7 +24,14 @@ module.exports = BaseControlView.extend({
     var self = this;
 
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
-    this._loaded = this.app.data.admClusters.load().then(function() {
+      var newModel = new ADMClusterModel({
+          id: 'wocat',
+          title: 'Wocat',
+          selected: false
+      });
+      this.app.data.admClusters.add(newModel);
+
+      this._loaded = this.app.data.admClusters.load().then(function() {
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]
@@ -54,11 +62,11 @@ module.exports = BaseControlView.extend({
   render: function() {
 	  var self = this;
 	  BaseControlView.prototype.render.apply(this);
-	  // add content	  
+	  // add content
 	  $.when(self.app.data.generalSettings.loaded, this._loaded).then(function() {
 		//check if we need to show Project Sites
-		  var foundPS = self.app.data.generalSettings.get('project-sites'); 		  
-		  if (foundPS !== true) {			  
+		  var foundPS = self.app.data.generalSettings.get('project-sites');
+		  if (foundPS !== true) {
 			  //need to remove project-sites
 			  //find the index of project-sites in projectLayerCollection
 			  var index = undefined;
@@ -67,8 +75,8 @@ module.exports = BaseControlView.extend({
 					  index = i;
 				  }
 			  }
-			  self.projectLayerCollection.models.splice(index, 1);  
-		  } 
+			  self.projectLayerCollection.models.splice(index, 1);
+		  }
 		  self.$('.content', self.el).html(self.template({title: self.title}));
 		  self.$('.layer-selector', self.el).html(self.projectLayerCollection.map(function(cluster) {
 			  return (new OptionView({
@@ -77,7 +85,7 @@ module.exports = BaseControlView.extend({
 			  })).render().el;
 		  }));
 	  });
-	  
+
 	  return this;
   }
 

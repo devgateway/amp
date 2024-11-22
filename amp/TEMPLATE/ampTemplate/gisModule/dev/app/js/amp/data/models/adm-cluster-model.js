@@ -36,12 +36,12 @@ module.exports = Backbone.Model
                 // Fetch new activity IDs for the given country
                 return this.fetchWocat(country).then(function (responseObject) {
                     var newActivityIds = responseObject.ids;
-                    if (!newActivityIds)
+                    if (newActivityIds===undefined)
                     {
                         newActivityIds =[]
                     }
                     var data = responseObject.data;
-                    if (!data)
+                    if (data===undefined)
                     {
                         data =[]
                     }

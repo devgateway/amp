@@ -19,39 +19,47 @@ module.exports = Backbone.Model
         this.on('sync', this.modifySync);
       },
 
-      modifySync: function (model, response, options) {
-        console.log('Original response from /cluster:', response);
+        modifySync: function (model, response, options) {
+            console.log('Original response from /cluster:', response);
 
-        // Check if the response has features
-        if (!response || !response.features) {
-          console.error('No features found in response!');
-          return;
-        }
-
-        // Use an arrow function to maintain the correct `this`
-        response.features.forEach((feature) => {
-          var country = countries.getAlpha3Code(feature.properties.admName, 'en');
-
-          console.log('Fetching activityIds for ',feature.properties.admName);
-
-          // Fetch new activity IDs for the given country
-          this.fetchWocat(country).then((newActivityIds) => {
-            console.log("New activityIds:", newActivityIds , "for ", feature.properties.admName);
-            if (newActivityIds.length > 0) {
-              if (this.get('id')==='wocat') {
-                  feature.properties.wocat = true;
-                  feature.properties.wocatActivities = newActivityIds;
-                feature.properties.activityid = newActivityIds;
-              }
-              // feature.properties.wocatActivities = newActivityIds;
+            // Check if the response has features
+            if (!response || !response.features) {
+                console.error('No features found in response!');
+                return;
             }
-            model.set(response);
-          });
 
-        });
+            // Create an array of promises to handle all fetchWocat calls
+            let promises = [];
 
-        console.log('Modified response:', response);
-      },
+            // Use an arrow function to maintain the correct `this`
+            response.features.forEach((feature) => {
+                var country = countries.getAlpha3Code(feature.properties.admName, 'en');
+
+                console.log('Fetching activityIds for ', feature.properties.admName);
+
+                // Fetch new activity IDs for the given country
+                let fetchPromise = this.fetchWocat(country).then((newActivityIds) => {
+                    console.log("New activityIds:", newActivityIds, "for ", feature.properties.admName);
+                    if (newActivityIds.length > 0) {
+                        if (this.get('id') === 'wocat') {
+                            feature.properties.wocat = true;
+                            feature.properties.wocatActivities = newActivityIds;
+                            feature.properties.activityid = newActivityIds;
+                        }
+                    }
+                });
+
+                promises.push(fetchPromise);
+            });
+
+            // Wait for all fetchWocat calls to finish, then update the model
+            Promise.all(promises).then(() => {
+                console.log('Modified response:', response);
+                model.set(response); // Update the model with the modified response
+            }).catch((error) => {
+                console.error('Error in modifying response:', error);
+            });
+        },
 
       fetchWocat: function (country) {
         const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=' + country;

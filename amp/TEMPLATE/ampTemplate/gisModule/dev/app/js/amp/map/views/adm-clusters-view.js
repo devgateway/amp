@@ -111,7 +111,7 @@ module.exports = Backbone.View.extend({
 
     return new L.geoJson(admLayer.get('features'), {
       pointToLayer: function(feature, latlng) {
-        console.log("Feature: " + feature);
+        console.log("Feature: " + JSON.stringify(feature));
         var htmlString = self.admTemplate(feature);
 
         if (feature.properties.admLevel==='Wocat')

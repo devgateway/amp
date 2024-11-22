@@ -39,6 +39,8 @@ module.exports = Backbone.Model
             console.log("New activityIds:", newActivityIds , "for ", feature.properties.admName);
             if (newActivityIds.length > 0) {
               if (this.get('id')==='wocat') {
+                  feature.properties.wocat = true;
+                  feature.properties.wocatActivities = newActivityIds;
                 feature.properties.activityid = newActivityIds;
               }
               // feature.properties.wocatActivities = newActivityIds;

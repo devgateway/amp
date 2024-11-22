@@ -306,7 +306,7 @@ module.exports = Backbone.View.extend({
           if (self.cluster.properties.wocatCountryData && self.cluster.properties.wocatCountryData.length>0)
           {
               self.tempDOM.find('.project-list').append(
-                  self.wocatProjectListTemplate({activities: wocatData})
+                  self.wocatProjectListTemplate({activities: wocatData,wocatUrl: 'https://qcat.wocat.net'})
               );
           }else
           {

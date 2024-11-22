@@ -2,7 +2,7 @@
 <% _.each(obj.activities, function(activityJSON){ %>
 <tr>
     <td>
-        <a target="_blank" href="<%= activityJSON.detailsUrl %>" title="<%= activityJSON["name"] %>">
+        <a target="_blank" href="<%= obj.wocatUrl + activityJSON.detailsUrl %>" title="<%= activityJSON["name"] %>">
         <%= (activityJSON["name"].length > 35 ? activityJSON["name"].substring(0, 33)+'...': activityJSON["name"]) %>
         </a>
     </td>

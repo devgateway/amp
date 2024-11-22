@@ -37,7 +37,7 @@ module.exports = Backbone.Model
                 return this.fetchWocat(country).then(function (responseObject) {
                     var newActivityIds = responseObject.ids;
                     var data = responseObject.data;
-                    console.log("New activityIds:", responseObject, "for", feature.properties.admName, "data",data);
+                    console.log("New activityIds:", newActivityIds, "for", feature.properties.admName, "data",data);
                     if (this.get('id') === 'wocat') {
                         feature.properties.wocat = true;
                         feature.properties.wocatActivities = newActivityIds;
@@ -90,7 +90,7 @@ module.exports = Backbone.Model
                 return item.id;
               });
 
-              return {ids:newActivityIds,data:contentData.content};
+              return {ids:newActivityIds.length>0?newActivityIds:[],data:contentData.content};
             })
             .catch(function(error) {
               console.error('Error in fetchWocat:', error);

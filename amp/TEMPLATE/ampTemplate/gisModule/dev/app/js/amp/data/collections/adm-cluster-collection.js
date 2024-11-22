@@ -21,13 +21,8 @@ module.exports = Backbone.Collection
     this.model = function(attrs, options) {
       return new ADMClusterModel(attrs, _.extend({}, options, { wocat: this.wocat }));
     };
-    this.listenTo(this, 'sync', this._setDefault);
+    // this.listenTo(this, 'sync', this._setDefault);
   },
-
-      reloadWithWocat: function() {
-      localStorage.setItem("isWocat", this.wocat);
-
-      },
 
 
 

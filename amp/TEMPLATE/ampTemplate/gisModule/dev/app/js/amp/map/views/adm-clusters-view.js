@@ -34,10 +34,15 @@ module.exports = Backbone.View.extend({
           // console.log('Radio button toggled:', model.id, model.attributes.selected);
           console.log('Radio event:', eventData.id, eventData.selected, 'Wocat checked:', this.isWocatChecked);
           if (eventData.id === 'wocat') {
-            this.isWocatChecked = eventData.selected;
+            this.isWocatChecked = true;
             console.log("Wocat state updated:", this.isWocatChecked);
-            this.app.data.admClusters.trigger('show', this.app.data.admClusters);
             this.app.data.admClusters.trigger('sync', this.app.data.admClusters);
+            this.app.data.admClusters.trigger('show', this.app.data.admClusters);
+          }
+          else
+          {
+            this.isWocatChecked = false;
+
           }
         });
       },
@@ -73,6 +78,7 @@ module.exports = Backbone.View.extend({
       },
 
       refreshLayer: function (admLayer) {
+        console.log("LAYER", admLayer);
         console.log("Refreshing layer for ADM:", admLayer.cid, "Wocat:", this.isWocatChecked);
         var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
 

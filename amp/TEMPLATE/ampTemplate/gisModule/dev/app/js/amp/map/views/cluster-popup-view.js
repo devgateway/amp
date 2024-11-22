@@ -46,7 +46,6 @@ module.exports = Backbone.View.extend({
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;
               });
-      console.log("Wocat activities",this.cluster.properties.wocatCountryData);
 
       // this.cluster.gisSettings = gisSettings.gisSettings;
                 this.cluster.sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');

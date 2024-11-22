@@ -25,6 +25,7 @@ public class GisConstants {
     public static final String DOWNLOAD_MAP_SELECTOR = "Download Map selector";
     public static final String MULTICOUNTRY_ENABLED="Multicountry Enabled";
     public static final   String GIS_SECTORS_ENABLED="Sectors Enabled";
+    public static final   String SHOW_WOCAT="Show Wocat in Map";
     public static final   String GIS_PROGRAMS_ENABLED="Programs Enabled";
     public static final   String LOGIN_REQUIRED ="Login Required";
     public static final String ADM0 = "adm-0";

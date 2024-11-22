@@ -5,7 +5,7 @@ var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var countries = require('i18n-iso-countries');
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
-const AMP_WOCAT_API= 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=BFA';
+const AMP_WOCAT_API= 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=';
 
 
 module.exports = Backbone.Model
@@ -20,7 +20,6 @@ module.exports = Backbone.Model
       },
 
         modifySync: function (response) {
-            console.log('Original response from /cluster:', response);
 
             // Check if the response has features
             if (!response || !response.features) {
@@ -31,7 +30,6 @@ module.exports = Backbone.Model
             // Create an array of promises to handle all fetchWocat calls
             var promises = response.features.map(function (feature) {
                 var country = countries.getAlpha3Code(feature.properties.admName, 'en');
-                console.log('Fetching activityIds for', feature.properties.admName);
 
                 // Fetch new activity IDs for the given country
                 return this.fetchWocat(country).then(function (responseObject) {
@@ -45,7 +43,6 @@ module.exports = Backbone.Model
                     {
                         data =[]
                     }
-                    console.log("New activityIds:", newActivityIds, "for", feature.properties.admName, "data",data);
                     if (this.get('id') === 'wocat') {
                         feature.properties.wocat = true;
                         feature.properties.wocatActivities = newActivityIds;
@@ -63,10 +60,10 @@ module.exports = Backbone.Model
         },
 
       fetchWocat: function (country) {
-        const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=' + country;
+        const api = AMP_WOCAT_API+ country;
 
         // Step 1: Fetch totalElements
-        return fetch(`${AMP_WOCAT_API}`)
+        return fetch(`${api}`)
             .then(function(contentResponse) {
               return contentResponse.json();
             })
@@ -76,7 +73,6 @@ module.exports = Backbone.Model
                 return [];
               }
 
-              console.log('Fetched content data:', contentData);
 
               // Step 3: Extract IDs from content and return them
               const newActivityIds = contentData.content.map(function(item) {

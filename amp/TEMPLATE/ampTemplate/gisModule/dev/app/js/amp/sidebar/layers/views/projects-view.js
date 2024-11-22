@@ -28,7 +28,8 @@ module.exports = BaseControlView.extend({
 
       this._loaded = this.app.data.admClusters.load().then(function() {
             var wocatEnabled =self.app.data.generalSettings.get('gis-show-wocat');
-            if (wocatEnabled) {
+          console.log("Wocat enabled",wocatEnabled)
+            if (wocatEnabled===true) {
                 var originalModel = self.app.data.admClusters.get('adm-0');
                 console.log("Found adm-0", originalModel);
 

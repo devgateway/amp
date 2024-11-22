@@ -26,6 +26,8 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.popup = popup;
     this.admLayer = admLayer;
+      console.log("Wocat activities",this.cluster.properties.wocatCountryData);
+
   },
 
   render: function() {
@@ -235,6 +237,7 @@ module.exports = Backbone.View.extend({
   _loadMoreProjects: function(cluster) {
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
+      console.log("Wocat activities",this.cluster.properties.wocatCountryData);
 	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
 
 	  // hide load more button if all activities loaded.

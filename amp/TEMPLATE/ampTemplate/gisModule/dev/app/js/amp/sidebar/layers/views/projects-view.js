@@ -30,7 +30,7 @@ module.exports = BaseControlView.extend({
           console.log("Clusters", self.app.data.admClusters);
 
           // Find the model with id 'adm-0'
-          var originalModel = self.app.data.admClusters.models.findWhere({ id: 'adm-0' });
+          var originalModel = self.app.data.admClusters.get('adm-0');
           console.log("Found adm-0", originalModel);
 
           // Ensure the model exists before cloning

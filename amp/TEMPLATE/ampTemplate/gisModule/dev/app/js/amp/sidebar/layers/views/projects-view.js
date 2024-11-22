@@ -27,10 +27,10 @@ module.exports = BaseControlView.extend({
 
 
       this._loaded = this.app.data.admClusters.load().then(function() {
-          console.log("Settings,", JSON.stringify(this.app.data.generalSettings))
-            var wocatEnabled =this.app.data.generalSettings.get('gis-show-wocat');
-          console.log("Wocat enabled",wocatEnabled)
-            if (wocatEnabled===true) {
+          // console.log("Settings,", JSON.stringify(this.app.data.generalSettings))
+          //   var wocatEnabled =this.app.data.generalSettings.get('gis-show-wocat');
+          // console.log("Wocat enabled",wocatEnabled)
+          //   if (wocatEnabled===true) {
                 var originalModel = self.app.data.admClusters.get('adm-0');
                 console.log("Found adm-0", originalModel);
 
@@ -56,7 +56,7 @@ module.exports = BaseControlView.extend({
                 } else {
                     console.error("Model with id 'adm-0' not found");
                 }
-            }
+            // }
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]

@@ -8,7 +8,9 @@ var nvd3 = window.nv;
 var util = require('../../../libs/local/chart-util');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
+var WocatProjectListTemplate = fs.readFileSync(__dirname + '/../templates/wocat-project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
+var WocatTemplate = fs.readFileSync(__dirname + '/../templates/wocat-cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 
 //TODO: put cluster popup code in own folder,
@@ -16,7 +18,9 @@ var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/
 // TODO: remove tempDOM and use this.$el
 module.exports = Backbone.View.extend({
   template: _.template(Template),
+  wocatTemplate: _.template(WocatTemplate),
   projectListTemplate: _.template(ProjectListTemplate),
+  wocatProjectListTemplate: _.template(WocatProjectListTemplate),
   PAGE_SIZE: 50,
   _currentPage: 0,
 
@@ -49,8 +53,13 @@ module.exports = Backbone.View.extend({
                 this.cluster.programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
                  this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
               // get appropriate cluster model:
-              if (this.cluster) {
-                  popup.setContent(this.template(this.cluster));
+      popup.setContent(this.template(this.cluster));
+
+      if (this.cluster) {
+                    if (this.cluster.properties.wocatCountryData && this.cluster.properties.wocatCountryData.length>0)
+                    {
+                        popup.setContent(this.wocatTemplate(this.cluster));
+                    }
                   this.tempDOM = $(popup._contentNode);
 
                   this._generateCharts();
@@ -279,10 +288,20 @@ module.exports = Backbone.View.extend({
 			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
 			  return activity;
 		  });
+          if (this.cluster.properties.wocatCountryData && this.cluster.properties.wocatCountryData.length>0)
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.wocatProjectListTemplate({activities: this.cluster.properties.wocatCountryData})
+              );
+          }else
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.projectListTemplate({activities: activityFormatted})
+              );
+          }
 
-		  self.tempDOM.find('.project-list').append(
-				  self.projectListTemplate({activities: activityFormatted})
-		  );
+
+
 
 	  });
   }

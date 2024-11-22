@@ -31,7 +31,7 @@ module.exports = Backbone.View.extend({
 
         // Event listener for radio button state
         this.app.eventAggregator.on('radio:checked', (eventData) => {
-          console.log('Radio button toggled:', model.id, model.attributes.selected);
+          // console.log('Radio button toggled:', model.id, model.attributes.selected);
           console.log('Radio event:', eventData.id, eventData.selected, 'Wocat checked:', this.isWocatChecked);
           if (eventData.id === 'wocat') {
             this.isWocatChecked = eventData.selected;

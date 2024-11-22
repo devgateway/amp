@@ -90,7 +90,7 @@ module.exports = Backbone.Model
                 return item.id;
               });
 
-              return {ids:newActivityIds.length>0?newActivityIds:[],data:contentData.content};
+              return {ids:contentData.content.length>0?newActivityIds:[],data:contentData.content};
             })
             .catch(function(error) {
               console.error('Error in fetchWocat:', error);

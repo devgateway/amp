@@ -36,7 +36,7 @@ module.exports = Backbone.Model
                 // Fetch new activity IDs for the given country
                 return this.fetchWocat(country).then(function (newActivityIds) {
                     console.log("New activityIds:", newActivityIds, "for", feature.properties.admName);
-                    if (newActivityIds.length > 0 && this.get('id') === 'wocat') {
+                    if (this.get('id') === 'wocat') {
                         feature.properties.wocat = true;
                         feature.properties.wocatActivities = newActivityIds;
                         feature.properties.activityid = newActivityIds;

@@ -24,14 +24,14 @@ module.exports = BaseControlView.extend({
     var self = this;
 
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
-      var newModel = new ADMClusterModel({
-          id: 'wocat',
-          title: 'Wocat',
-          selected: false
-      });
-      this.app.data.admClusters.add(newModel);
+
 
       this._loaded = this.app.data.admClusters.load().then(function() {
+          var anotherModel =self.app.data.admClusters.models.findWhere(id,'adm-0');
+          console.log("Found adm0", anotherModel);
+          anotherModel.id='wocat';
+          anotherModel.title='Wocat';
+          self.app.data.admClusters.add(anotherModel);
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]

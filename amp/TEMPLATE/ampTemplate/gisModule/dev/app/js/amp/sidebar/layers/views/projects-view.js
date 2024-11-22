@@ -51,8 +51,6 @@ module.exports = BaseControlView.extend({
                   self.app.data.admClusters.trigger('update', self.app.data.admClusters);
 
                   console.log("Added cloned model to collection:", clonedModel);
-              }).catch(function(error) {
-                  console.error("Error saving cloned model:", error);
               });
           } else {
               console.error("Model with id 'adm-0' not found");

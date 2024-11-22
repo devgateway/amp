@@ -66,22 +66,7 @@ module.exports = Backbone.Model
         const AMP_WOCAT_API = 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=' + country;
 
         // Step 1: Fetch totalElements
-        return fetch(AMP_WOCAT_API)
-            .then(function(response) {
-              return response.json();
-            })
-            .then(function(totalElementsData) {
-              const totalElements = totalElementsData.totalElements;
-              if (!totalElements) {
-                console.error('Failed to fetch totalElements.');
-                return [];
-              }
-
-              console.log('Total elements for AMP WOCAT API:', totalElements);
-
-              // Step 2: Fetch full content data
-              return fetch(`${AMP_WOCAT_API}&page=1&size=${totalElements}`);
-            })
+        return fetch(`${AMP_WOCAT_API}`)
             .then(function(contentResponse) {
               return contentResponse.json();
             })

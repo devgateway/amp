@@ -39,10 +39,21 @@ module.exports = BaseControlView.extend({
                   id: 'wocat',
                   title: 'Wocat'
               });
-              clonedModel.save();
-              self.app.data.admClusters.add(clonedModel);
 
-              console.log("Added cloned model:", clonedModel);
+              // Save the cloned model (if needed to persist on the server)
+              clonedModel.save().then(function() {
+                  console.log("Saved cloned model:", clonedModel);
+
+                  // Add the cloned model to the collection
+                  self.app.data.admClusters.add(clonedModel);
+
+                  // Manually trigger an event to notify the collection about the update
+                  self.app.data.admClusters.trigger('update', self.app.data.admClusters);
+
+                  console.log("Added cloned model to collection:", clonedModel);
+              }).catch(function(error) {
+                  console.error("Error saving cloned model:", error);
+              });
           } else {
               console.error("Model with id 'adm-0' not found");
           }

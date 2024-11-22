@@ -27,6 +27,7 @@ module.exports = BaseControlView.extend({
 
 
       this._loaded = this.app.data.admClusters.load().then(function() {
+          console.log("Clusters",self.app.data.admClusters)
           var anotherModel =self.app.data.admClusters.models.findWhere(id,'adm-0');
           console.log("Found adm0", anotherModel);
           anotherModel.id='wocat';

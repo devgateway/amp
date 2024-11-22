@@ -27,12 +27,30 @@ module.exports = BaseControlView.extend({
 
 
       this._loaded = this.app.data.admClusters.load().then(function() {
-          console.log("Clusters",self.app.data.admClusters)
-          var anotherModel =self.app.data.admClusters.models.findWhere(id,'adm-0');
-          console.log("Found adm0", anotherModel);
-          anotherModel.id='wocat';
-          anotherModel.title='Wocat';
-          self.app.data.admClusters.add(anotherModel);
+          console.log("Clusters", self.app.data.admClusters);
+
+          // Find the model with id 'adm-0'
+          var originalModel = self.app.data.admClusters.models.findWhere({ id: 'adm-0' });
+          console.log("Found adm-0", originalModel);
+
+          // Ensure the model exists before cloning
+          if (originalModel) {
+              // Clone the model
+              var clonedModel = originalModel.clone();
+
+              // Modify the cloned model's attributes
+              clonedModel.set({
+                  id: 'wocat',  // New id for the cloned model
+                  title: 'Wocat' // New title for the cloned model
+              });
+
+              // Add the cloned model to the collection
+              self.app.data.admClusters.add(clonedModel);
+
+              console.log("Added cloned model:", clonedModel);
+          } else {
+              console.error("Model with id 'adm-0' not found");
+          }
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]

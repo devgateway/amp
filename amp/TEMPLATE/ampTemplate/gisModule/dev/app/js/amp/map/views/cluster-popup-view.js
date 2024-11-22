@@ -249,14 +249,29 @@ module.exports = Backbone.View.extend({
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
       console.log("Wocat activities",self.cluster.properties.wocatCountryData);
 	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+      var wocatData;
+      if (self.cluster.properties.wocatCountryData)
+      {
+          wocatData = self.cluster.properties.wocatCountryData.slice(startIndex, startIndex+this.PAGE_SIZE);
+      }
 
 	  // hide load more button if all activities loaded.
-	  if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
-		  this.tempDOM.find('.load-more').hide();
-	  } else {
-		  this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
-				  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
-	  }
+      if (self.cluster.properties.wocatCountryData)
+      {
+          if (startIndex + this.PAGE_SIZE >= this.cluster.properties.wocatActivities.length) {
+              this.tempDOM.find('.load-more').hide();
+          } else {
+              this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
+                  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.wocatActivities.length);
+          }
+      }else {
+          if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
+              this.tempDOM.find('.load-more').hide();
+          } else {
+              this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
+                  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
+          }
+      }
 
 	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {
 		  self.tempDOM.find('#projects-pane .loading').remove();
@@ -291,7 +306,7 @@ module.exports = Backbone.View.extend({
           if (self.cluster.properties.wocatCountryData && self.cluster.properties.wocatCountryData.length>0)
           {
               self.tempDOM.find('.project-list').append(
-                  self.wocatProjectListTemplate({activities: self.cluster.properties.wocatCountryData})
+                  self.wocatProjectListTemplate({activities: wocatData})
               );
           }else
           {

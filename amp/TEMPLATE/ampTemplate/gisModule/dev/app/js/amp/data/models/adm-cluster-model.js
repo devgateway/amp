@@ -16,30 +16,28 @@ module.exports = Backbone.Model
       initialize: function(attributes, options) {
         console.log("Options in model",options)
 
-        this.on('sync', this.modifySync);
+        // this.on('sync', this.modifySync);
       },
 
-        modifySync: function (model, response, options) {
+        modifySync: async function (response) {
             console.log('Original response from /cluster:', response);
 
             // Check if the response has features
             if (!response || !response.features) {
                 console.error('No features found in response!');
-                return;
+                return response; // Return early if there's no valid response
             }
 
             // Create an array of promises to handle all fetchWocat calls
-            let promises = [];
+            let promises = response.features.map(async (feature) => {
+                const country = countries.getAlpha3Code(feature.properties.admName, 'en');
+                console.log('Fetching activityIds for', feature.properties.admName);
 
-            // Use an arrow function to maintain the correct `this`
-            response.features.forEach((feature) => {
-                var country = countries.getAlpha3Code(feature.properties.admName, 'en');
+                try {
+                    // Fetch new activity IDs for the given country
+                    const newActivityIds = await this.fetchWocat(country);
+                    console.log("New activityIds:", newActivityIds, "for", feature.properties.admName);
 
-                console.log('Fetching activityIds for ', feature.properties.admName);
-
-                // Fetch new activity IDs for the given country
-                let fetchPromise = this.fetchWocat(country).then((newActivityIds) => {
-                    console.log("New activityIds:", newActivityIds, "for ", feature.properties.admName);
                     if (newActivityIds.length > 0) {
                         if (this.get('id') === 'wocat') {
                             feature.properties.wocat = true;
@@ -47,18 +45,16 @@ module.exports = Backbone.Model
                             feature.properties.activityid = newActivityIds;
                         }
                     }
-                });
-
-                promises.push(fetchPromise);
+                } catch (error) {
+                    console.error("Failed to fetch activityIds for", feature.properties.admName, error);
+                }
             });
 
-            // Wait for all fetchWocat calls to finish, then update the model
-            Promise.all(promises).then(() => {
-                console.log('Modified response:', response);
-                model.set(response); // Update the model with the modified response
-            }).catch((error) => {
-                console.error('Error in modifying response:', error);
-            });
+            // Wait for all promises to resolve
+            await Promise.all(promises);
+
+            // Return the modified response
+            return response;
         },
 
       fetchWocat: function (country) {
@@ -127,45 +123,60 @@ module.exports = Backbone.Model
         }
       },
 
-      fetch: function(options) {
-        var filter = {};
+            fetch: function (options) {
+                var filter = {};
 
-        if (this.lastFetchXhr && this.lastFetchXhr.readyState > 0 && this.lastFetchXhr.readyState < 4) {
-          console.log("Aborting previous fetch...");
-          this.lastFetchXhr.abort();
-        }
+                if (this.lastFetchXhr && this.lastFetchXhr.readyState > 0 && this.lastFetchXhr.readyState < 4) {
+                    console.log("Aborting previous fetch...");
+                    this.lastFetchXhr.abort();
+                }
 
-        if (this.collection.filter) {
-          _.extend(filter, this.collection.filter.serialize());
-        }
+                if (this.collection.filter) {
+                    _.extend(filter, this.collection.filter.serialize());
+                }
 
-        filter.settings = this.collection.settingsWidget.toAPIFormat();
-        filter.filters = filter.filters || {};
-        filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
+                filter.settings = this.collection.settingsWidget.toAPIFormat();
+                filter.filters = filter.filters || {};
+                filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
-        if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') !== null) {
-          filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');
-        }
+                if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') !== null) {
+                    filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');
+                }
 
-        options = _.defaults(options || {}, {
-          type: 'POST',
-          contentType: 'application/json',
-          data: JSON.stringify(filter)
-        });
+                options = _.defaults(options || {}, {
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filter),
+                });
 
-        console.log("Fetching data with filter:", filter);
+                console.log("Fetching data with filter:", filter);
 
-        this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
+                // Perform the fetch
+                this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
 
-        this.lastFetchXhr.done(function(response, status, xhr) {
-          console.log("Fetch successful:", response);
-          this.trigger('sync', this, response, options); // Ensure sync is triggered
-        }.bind(this)).fail(function(xhr, status, error) {
-          console.error("Fetch failed:", status, error);
-        });
+                // Intercept and modify the response
+                const modifiedPromise = this.lastFetchXhr.then(
+                    async function (response) {
+                        console.log("Original response:", response);
 
-        return this.lastFetchXhr;
-      },
+                        // Modify the response (await the async modifySync)
+                        const modifiedResponse = await this.modifySync(response);
+                        console.log("Modified response:", modifiedResponse);
+
+                        // Trigger 'sync' event with the modified response
+                        this.trigger('sync', this, modifiedResponse, options);
+
+                        return modifiedResponse; // Return the modified response
+                    }.bind(this),
+                    function (error) {
+                        console.error("Fetch failed:", error);
+                        return Promise.reject(error); // Forward the error
+                    }
+                );
+
+                // Return a Promise-compatible jqXHR that resolves to the modified response
+                return Object.assign(this.lastFetchXhr, modifiedPromise);
+            },
 
       loadBoundary: function() {
         var boundaries = this.collection.boundaries.where({admLevel: this.get('value')});

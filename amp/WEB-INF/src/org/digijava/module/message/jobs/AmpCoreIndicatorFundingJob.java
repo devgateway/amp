@@ -39,18 +39,18 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
     static {
         indicatorMap.put("Hectares of land under restoration",
                 new CoreIndicatorTypeDTO("K ha", "ha_under_restoration",
-                        "Hectares of land under restoration", 1000D));
+                        "Hectares of land under restoration", 1000D, 1));
         indicatorMap.put("Tonnes of Co2EQ sequestered",
                 new CoreIndicatorTypeDTO("K mt", "t_co2eq_sequestered",
-                        "Tonnes of Co2EQ sequestered", 1000D));
+                        "Tonnes of Co2EQ sequestered", 1000D, 2));
         indicatorMap.put("No of employment opportunities",
                 new CoreIndicatorTypeDTO("K", "no_employments",
-                        "No of employment opportunities", 1000D));
+                        "No of employment opportunities", 1000D, 3));
         indicatorMap.put("Quantity of renewable energy consumed annually in MWH",
                 new CoreIndicatorTypeDTO("K mwh", "r_energy_consumed",
-                        "Quantity of renewable energy consumed annually in MWH", 1000D));
+                        "Quantity of renewable energy consumed annually in MWH", 1000D, 4));
         indicatorMap.put("Number of beneficiaries",
-                new CoreIndicatorTypeDTO("K", "no_beneficiaries", "Number of beneficiaries", 1000D));
+                new CoreIndicatorTypeDTO("K", "no_beneficiaries", "Number of beneficiaries", 1000D, 5));
     }
 
     @Override
@@ -68,6 +68,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         query.append("        i.name                                                                               AS indicator_name,  ");
         query.append("        i.program_id                                                                         AS program_id,  ");
         query.append("        t.name                                                                               AS program_name,  ");
+        query.append("        t.parent_theme_id                                                                    AS parent_theme_id,  ");
         query.append("        ROUND(CAST(SUM(CASE WHEN iv.value_type = 0 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_target,  ");
         query.append("        ROUND(CAST(SUM(CASE WHEN iv.value_type = 1 THEN iv.value ELSE 0 END) AS NUMERIC), 2) AS value_type_actual  ");
         query.append("        FROM amp_indicator i  ");
@@ -93,7 +94,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         query.append(statusQuery);
 
         query.append("        GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name,  ");
-        query.append("        i.program_id, t.name, i.indicator_id, i.name  ");
+        query.append("        i.program_id, t.name, i.indicator_id, i.name, t.parent_theme_id  ");
         query.append("        ORDER BY cv.id, cv.category_value, al.location_id, cvl.location_name, org.amp_org_id, org.name,  ");
         query.append("        i.program_id, t.name  ");
 
@@ -112,11 +113,12 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
                     Long programId = rs.getLong("program_id");
                     Double actualValue = rs.getDouble("value_type_actual");
                     Double targetValue = rs.getDouble("value_type_target");
+                    Long parentId = rs.getLong("parent_theme_id");
 
                     CoreIndicatorProgressDTO coreIndicatorProgressDTO = new CoreIndicatorProgressDTO();
                     coreIndicatorProgressDTO.setCountry(new CountryDTO(countryId, countryName));
                     coreIndicatorProgressDTO.setDonor(new DonorDTO(donorId, donorName));
-                    coreIndicatorProgressDTO.setProgram(new ProgramDTO(programId, programName));
+                    coreIndicatorProgressDTO.setProgram(new ProgramDTO(programId, programName, parentId));
                     CoreIndicatorValueDTO coreIndicatorValueDTO = new CoreIndicatorValueDTO();
                     coreIndicatorValueDTO.setCoreIndicatorType(indicatorMap.get(coreTypeName));
                     coreIndicatorValueDTO.setActualValue(actualValue);

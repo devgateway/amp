@@ -108,6 +108,11 @@ public class AmpGeneralSettings {
     @JsonProperty("gis-sectors-enabled")
     private Boolean sectorsEnabled;
 
+
+
+    @JsonProperty("gis-show-wocat")
+    private Boolean wocatEnabled;
+
     @JsonProperty("gis-programs-enabled")
     private Boolean programsEnabled;
 
@@ -194,7 +199,13 @@ public class AmpGeneralSettings {
     public String getNumberFormat() {
         return numberFormat;
     }
+    public Boolean getWocatEnabled() {
+        return wocatEnabled;
+    }
 
+    public void setWocatEnabled(Boolean wocatEnabled) {
+        this.wocatEnabled = wocatEnabled;
+    }
     public void setNumberFormat(String numberFormat) {
         this.numberFormat = numberFormat;
     }

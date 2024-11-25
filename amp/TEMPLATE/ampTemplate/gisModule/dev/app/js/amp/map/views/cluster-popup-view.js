@@ -8,7 +8,9 @@ var nvd3 = window.nv;
 var util = require('../../../libs/local/chart-util');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
+var WocatProjectListTemplate = fs.readFileSync(__dirname + '/../templates/wocat-project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
+var WocatTemplate = fs.readFileSync(__dirname + '/../templates/wocat-cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 
 //TODO: put cluster popup code in own folder,
@@ -16,7 +18,9 @@ var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/
 // TODO: remove tempDOM and use this.$el
 module.exports = Backbone.View.extend({
   template: _.template(Template),
+  wocatTemplate: _.template(WocatTemplate),
   projectListTemplate: _.template(ProjectListTemplate),
+  wocatProjectListTemplate: _.template(WocatProjectListTemplate),
   PAGE_SIZE: 50,
   _currentPage: 0,
 
@@ -26,6 +30,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.popup = popup;
     this.admLayer = admLayer;
+
   },
 
   render: function() {
@@ -41,13 +46,19 @@ module.exports = Backbone.View.extend({
               this.cluster = _.find(featureCollection, function (feature) {
                   return feature.properties.admName === popup._source._clusterId;
               });
-              // this.cluster.gisSettings = gisSettings.gisSettings;
+
+      // this.cluster.gisSettings = gisSettings.gisSettings;
                 this.cluster.sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');
                 this.cluster.programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
                  this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
               // get appropriate cluster model:
-              if (this.cluster) {
-                  popup.setContent(this.template(this.cluster));
+      popup.setContent(this.template(this.cluster));
+
+      if (this.cluster) {
+                    if (this.cluster.properties.wocatCountryData && this.cluster.properties.wocatCountryData.length>0)
+                    {
+                        popup.setContent(this.wocatTemplate(this.cluster));
+                    }
                   this.tempDOM = $(popup._contentNode);
 
                   this._generateCharts();
@@ -235,15 +246,31 @@ module.exports = Backbone.View.extend({
   _loadMoreProjects: function(cluster) {
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
+      console.log("Wocat activities",self.cluster.properties.wocatCountryData);
 	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+      var wocatData;
+      if (self.cluster.properties.wocatCountryData)
+      {
+          wocatData = self.cluster.properties.wocatCountryData.slice(startIndex, startIndex+this.PAGE_SIZE);
+      }
 
 	  // hide load more button if all activities loaded.
-	  if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
-		  this.tempDOM.find('.load-more').hide();
-	  } else {
-		  this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
-				  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
-	  }
+      if (self.cluster.properties.wocatCountryData)
+      {
+          if (startIndex + this.PAGE_SIZE >= this.cluster.properties.wocatActivities.length) {
+              this.tempDOM.find('.load-more').hide();
+          } else {
+              this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
+                  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.wocatActivities.length);
+          }
+      }else {
+          if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
+              this.tempDOM.find('.load-more').hide();
+          } else {
+              this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
+                  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
+          }
+      }
 
 	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {
 		  self.tempDOM.find('#projects-pane .loading').remove();
@@ -275,10 +302,20 @@ module.exports = Backbone.View.extend({
 			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
 			  return activity;
 		  });
+          if (self.cluster.properties.wocatCountryData && self.cluster.properties.wocatCountryData.length>0)
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.wocatProjectListTemplate({activities: wocatData,wocatUrl: 'https://qcat.wocat.net'})
+              );
+          }else
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.projectListTemplate({activities: activityFormatted})
+              );
+          }
 
-		  self.tempDOM.find('.project-list').append(
-				  self.projectListTemplate({activities: activityFormatted})
-		  );
+
+
 
 	  });
   }

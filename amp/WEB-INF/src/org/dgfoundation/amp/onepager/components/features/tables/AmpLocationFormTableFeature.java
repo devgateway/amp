@@ -94,13 +94,8 @@ public class AmpLocationFormTableFeature extends
                     }
                 }
 
-                Comparator<AmpActivityLocation> comparator = new Comparator<AmpActivityLocation>() {
-                    @Override
-                    public int compare(AmpActivityLocation o1, AmpActivityLocation o2) {
-                        return o1.getLocation().getAutoCompleteLabel().compareTo(
-                                o2.getLocation().getAutoCompleteLabel());
-                    }
-                };
+                Comparator<AmpActivityLocation> comparator = (o1, o2) -> o1.getLocation().getAutoCompleteLabel().compareTo(
+                        o2.getLocation().getAutoCompleteLabel());
 
                 ret.sort(comparator);
                 return ret;

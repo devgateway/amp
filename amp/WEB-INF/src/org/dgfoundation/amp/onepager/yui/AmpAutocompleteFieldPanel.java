@@ -32,7 +32,9 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -92,11 +94,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * The button that shows all options
      */
     private WebMarkupContainer toggleButton;
+    private boolean rtll = true;
 
     /**
      * Message indicator - loading panel or
      */
-    private WebMarkupContainer indicator;
+    private final WebMarkupContainer indicator;
 
     /**
      * If YUI client side datasource cache should be used (some instances of this control may require no cache)
@@ -176,6 +179,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
         this(id,
                 fmName, "",
                 objectListModelClass);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     /**
@@ -190,6 +195,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             String fmName, String aditionalTooltipKey,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
         this(id, fmName, aditionalTooltipKey, false, objectListModelClass, false);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     /**
@@ -206,6 +213,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
         this(id, fmName, hideLabel, false, objectListModelClass, "");
         this.useCache = useCache;
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
 
@@ -220,6 +229,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             String fmName,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
         this(id, fmName, false, objectListModelClass, useCache);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     public AmpAutocompleteFieldPanel(
@@ -229,6 +240,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
             final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName, final String autoCompeleteVar, String aditionalTooltipKey, boolean showTooltipIfLabelHidden) {
         this(id, fmName, aditionalTooltipKey, hideLabel, objectListModelClass, clazz, jsName, autoCompeleteVar, showTooltipIfLabelHidden);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     public AmpAutocompleteFieldPanel(
@@ -239,17 +252,18 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName, final String autoCompeleteVar, boolean showTooltipIfLabelHidden) {
         //super(id, null, fmName, hideLabel );
         super(id, null, showTooltipIfLabelHidden, aditionalTooltipKey, fmName, hideLabel, "", false);
-        this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
+        this.modelParams = new HashMap<>();
         this.objectListModelClass = objectListModelClass;
         toggleButton = new WebMarkupContainer("toggleButton");
         toggleButton.setOutputMarkupId(true);
         add(toggleButton);
-        textField = new TextField<String>("text", new Model<String>());
+        textField = new TextField<>("text", new Model<>());
         textField.setOutputMarkupId(true);
         add(textField);
         container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
         add(container);
+        indicator = new WebMarkupContainer("indicator");
         add(new YuiAutoCompleteBehavior() {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
@@ -275,22 +289,21 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                  * that is why jquery's $(document).ready has been added here
                  */
 
-                String disableControl = "true";
-                if (textField.getParent().isEnabled()) {
-                    disableControl = "false";
-                }
-                response.render(OnDomReadyHeaderItem.forScript("$(document).ready(function() {" + getJsVarName()
+//
+                boolean disableControl = !textField.getParent().isEnabled();
+                String script="$(document).ready(function() {" + getJsVarName()
                         + " = new YAHOO.widget." + autoCompeleteVar + "('"
                         + textField.getMarkupId() + "', '" + getCallbackUrl()
-                        + "', '" + container.getMarkupId() + "', '"
-                        + toggleButton.getMarkupId() + "', '"
-                        + indicator.getMarkupId() + "', " + useCache + ", " + disableControl + ", "
-                        + SiteUtils.isEffectiveLangRTL() + ");"
-                        + "});"));
+                        + "', '" + container.getMarkupId() + "','"+toggleButton.getMarkupId()+"','"+indicator.getMarkupId()+"',"+true+
+                        ","+disableControl+","+ rtll +");"
+                        + "});";
+
+                logger.info("Script js: "+script);
+                response.render(OnDomReadyHeaderItem.forScript(script));
             }
         });
 
-        indicator = new WebMarkupContainer("indicator");
+
         indicator.setOutputMarkupId(true);
         add(indicator);
 
@@ -338,6 +351,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             boolean hideLabel, boolean showTooltipIfLabelHidden,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, String additionalTooltipKey) {
         this(id, fmName, additionalTooltipKey, hideLabel, objectListModelClass, showTooltipIfLabelHidden);
+        rtll=SiteUtils.isEffectiveLangRTL();
 
     }
 
@@ -353,6 +367,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             boolean hideLabel,
             Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean showTooltipIfLabelHidden) {
         this(id, fmName, aditionalTooltipKey, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js", "WicketAutoComplete", showTooltipIfLabelHidden);
+        rtll=SiteUtils.isEffectiveLangRTL();
+
     }
 
     /**
@@ -490,17 +506,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
                     .newInstance(input, language, modelParams);
             return newInstance.getObject();
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException |
+                 IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
@@ -512,7 +519,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * @return
      */
     protected CHOICE getSelectedChoice(Long objId) {
-        return (CHOICE) PersistenceManager.getSession().get(objClass, objId);
+        return PersistenceManager.getSession().get(objClass, objId);
     }
 
     /**

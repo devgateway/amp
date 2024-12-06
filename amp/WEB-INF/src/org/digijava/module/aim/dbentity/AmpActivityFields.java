@@ -722,7 +722,7 @@ LoggerIdentifiable, Cloneable {
      * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
      */
     @Interchangeable(fieldTitle = "Indicators", fmPath = "/Activity Form/M&E", importable = true,
-            validators = @Validators(unique = "/Activity Form/M&E/Unique MEs Validator"))
+            validators = @Validators(unique = "/Activity Form/M&E/ME Item Location/Unique MEs Validator"))
     @VersionableCollection(fieldTitle = "Indicators")
     protected Set<IndicatorActivity> indicators = new HashSet<>();
 
@@ -1324,15 +1324,10 @@ LoggerIdentifiable, Cloneable {
             return activityContacts;
         }
 
-        public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
-            if (this.activityContacts == null) {
-                this.activityContacts = activityContacts;
-            } else {
-                this.activityContacts.clear();
-                if (activityContacts==null)activityContacts=new HashSet<>();
-                this.activityContacts.addAll(activityContacts);
-            }
-        }
+    public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
+
+        this.activityContacts = activityContacts;
+    }
 
         /**
          * @return Returns the statusReason.
@@ -2160,18 +2155,25 @@ LoggerIdentifiable, Cloneable {
             this.crisNumber = crisNumber;
         }
 
+    private <T> void setSet(Set<T> targetSet, Set<T> sourceSet) {
+        if (targetSet != null) {
+            if (sourceSet == null || sourceSet.isEmpty()) {
+                targetSet.clear();
+            } else {
+                targetSet.clear();
+                targetSet.addAll(sourceSet);
+            }
+        } else {
+            throw new IllegalArgumentException("Target set cannot be null.");
+        }
+    }
+
+    public void setContracts(Set<IPAContract> contracts) {
+        this.contracts = contracts;
+    }
+
         public Set<IPAContract> getContracts() {
             return contracts;
-        }
-
-        public void setContracts(Set<IPAContract> contracts) {
-            if (this.contracts == null) {
-                this.contracts = contracts;
-            } else {
-                this.contracts.clear();
-                if (contracts==null)contracts=new HashSet<>();
-                this.contracts.addAll(contracts);
-            }
         }
 
 
@@ -2307,16 +2309,11 @@ LoggerIdentifiable, Cloneable {
             return regionalObservations;
         }
 
-        public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
-            if (this.regionalObservations == null) {
-                this.regionalObservations = regionalObservations;
-            } else {
-                this.regionalObservations.clear();
-                if (regionalObservations==null)regionalObservations=new HashSet<>();
-                this.regionalObservations.addAll(regionalObservations);
-            }
-        }
 
+    public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
+        this.regionalObservations = regionalObservations;
+
+    }
 
 
         public String getEmail() {

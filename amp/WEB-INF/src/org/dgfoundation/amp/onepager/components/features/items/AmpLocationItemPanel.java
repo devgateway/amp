@@ -2,6 +2,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -15,11 +16,13 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -130,8 +133,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-
                 // remove any regional funding with this region
+                if (canDeleteLocation(target, am, model)) return;
                 if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.
                         equalsCategoryValue(model.getObject().getLocation().getParentCategoryValue())) {
                     final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(am, "regionalFundings");
@@ -154,10 +157,11 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                     disablePercentagesForInternational.setObject(false);
                     locationTable.getSearchLocations().setVisibilityAllowed(true);
                 }
+                findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature()
+                        .getMeFormSection().clearLocations(model.getObject().getLocation());
                 locationTable.reloadValidationFields(target);
                 setModel.getObject().remove(model.getObject());
-
-
+                send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
                 target.add(list.getParent());
                 list.removeAll();
             }
@@ -165,6 +169,25 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
         };
         add(delLocation);
     }
+
+    public static boolean canDeleteLocation(AjaxRequestTarget target, final IModel<AmpActivityVersion> am,
+                                            final IModel<AmpActivityLocation> model) {
+        if (am.getObject().getIndicators() != null
+                && !am.getObject().getIndicators().isEmpty()
+                && (model == null || model.getObject() == null ||
+                am.getObject().getIndicators().stream().anyMatch(indicator ->
+                        indicator.getActivityLocation() != null &&
+                                indicator.getActivityLocation().getLocation().getName().
+                                        equals(model.getObject().getLocation().getName())))) {
+            String translatedMessage = TranslatorUtil.getTranslation("Cannot delete location with indicators");
+            String alert = "alert('" + translatedMessage + "');";
+            target.appendJavaScript(alert);
+
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     protected void onConfigure() {

@@ -20,9 +20,16 @@ import lodash from 'lodash';
 
 const MySwal = withReactContent(Swal);
 
+const ascendingOptions = [
+  { value: true, label: 'True' },
+  { value: false, label: 'False' }
+];
+
 interface AddNewIndicatorModalProps extends DefaultComponentProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  filterBySector: boolean;
+  filterByProgram: boolean;
 }
 
 interface IndicatorFormValues {
@@ -39,7 +46,7 @@ interface IndicatorFormValues {
 }
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
-  const { show, setShow, translations } = props;
+  const { show, setShow, translations, filterBySector, filterByProgram } = props;
 
   const ascendingOptions = [
     { value: true, label: translations["amp.indicatormanager:true"] },
@@ -391,37 +398,41 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   </Form.Group>
                 </Row>
 
-                <Row className={styles.view_row}>
-                  <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
-                    <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
-                    {
-                      sectors.length > 0 ? (
-                        <Select
-                          isMulti
-                          name="sectors"
-                          placeholder={translations["amp.indicatormanager:select"]}
-                          options={sectors}
-                          onChange={(values) => {
-                            // set the formik value with the selected values and remove the label
-                            const selectedValues = values.map((value: any) => parseInt(value.value))
-                            props.setFieldValue('sectors', selectedValues);
-                          }}
-                          isClearable
-                          getOptionValue={(option) => option.value}
-                          onBlur={props.handleBlur}
-                          className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
-                          classNamePrefix="select"
-                        />
-                      ) : (
-                            <Select
-                                name="sectors"
-                                isDisabled={true}
-                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                            />
-                      )
-                    }
-                  </Form.Group>
-                </Row>
+                {filterBySector && (
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
+                        <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
+                        {
+                          (sectors.length > 0) ? (
+                              <Select
+                                  isMulti
+                                  name="sectors"
+                                  placeholder={translations["amp.indicatormanager:select"]}
+
+                                  options={sectors}
+                                  onChange={(values) => {
+                                    // set the formik value with the selected values and remove the label
+                                    const selectedValues = values.map((value: any) => parseInt(value.value))
+                                    props.setFieldValue('sectors', selectedValues);
+                                  }}
+                                  isClearable
+                                  getOptionValue={(option) => option.value}
+                                  onBlur={props.handleBlur}
+                                  className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
+                                  classNamePrefix="select"
+                              />
+                          ) : (
+                              <Select
+                                  name="sectors"
+                                  isDisabled={true}
+                                  defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                              />
+                          )
+                        }
+                      </Form.Group>
+                    </Row>
+                )}
+
 
                 <Row className={styles.view_row}>
                 <Form.Group className={styles.view_one_item} controlId="formIndicatorCategories">
@@ -455,40 +466,42 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   </Form.Group>
                 </Row>
 
-                <Row className={styles.view_row}>
-                  <Form.Group className={styles.view_one_item} controlId="programScheme">
-                    <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
-                    {
-                      programSchemes.length > 0 ? (
-                        <Select
-                          name="programScheme"
-                          options={programSchemes}
-                          placeholder={translations["amp.indicatormanager:select"]}
-                          onChange={(selectedValue) => {
-                            // set the formik value with the selected values and remove the label
-                            if (selectedValue) {
-                              handleProgramSchemeChange(selectedValue.value, props);
-                            }else {
-                              handleProgramSchemeChange(null, props);
-                              setProgramFieldVisible(false);
-                            }
-                          }}
-                          isClearable
-                          getOptionValue={(option) => option.value}
-                          onBlur={props.handleBlur}
-                          className={`basic-multi-select ${styles.input_field}`}
-                          classNamePrefix="select"
-                        />
-                      ) : (
-                          <Select
-                              name="programScheme"
-                              isDisabled={true}
-                              defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                          />
-                      )
-                    }
-                  </Form.Group>
-                </Row>
+                {filterByProgram && (
+                    <>
+                      <Row className={styles.view_row}>
+                        <Form.Group className={styles.view_one_item} controlId="programScheme">
+                          <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
+                          {
+                            programSchemes.length > 0 ? (
+                                <Select
+                                    name="programScheme"
+                                    options={programSchemes}
+                                    placeholder={translations["amp.indicatormanager:select"]}
+                                    onChange={(selectedValue) => {
+                                        // set the formik value with the selected values and remove the label
+                                        if (selectedValue) {
+                                            handleProgramSchemeChange(selectedValue.value, props);
+                                        }else {
+                                            handleProgramSchemeChange(null, props);
+                                            setProgramFieldVisible(false);
+                                        }
+                                    }}
+                                    isClearable
+                                    getOptionValue={(option) => option.value}
+                                    onBlur={props.handleBlur}
+                                    className={`basic-multi-select ${styles.input_field}`}
+                                    classNamePrefix="select"
+                                />
+                            ) : (
+                                <Select
+                                    name="programScheme"
+                                    isDisabled={true}
+                                    defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                                />
+                            )
+                          }
+                        </Form.Group>
+                      </Row>
 
                 {programFieldVisible && (
                   <Row className={styles.view_row}>
@@ -521,6 +534,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Form.Group>
                   </Row>
 
+                      )}
+                    </>
                 )}
 
                 <Form.Group as={Col}>

@@ -22,12 +22,17 @@ public class IndicatorYearValues {
 
     private BigDecimal targetValue;
 
+    private String indicatorName;
+
     public IndicatorYearValues(AmpIndicator indicator, BigDecimal baseValue, List<YearValue> actualValues,
                                BigDecimal targetValue) {
         this.indicator = indicator;
         this.baseValue = baseValue;
         this.actualValues = actualValues;
         this.targetValue = targetValue;
+    }
+
+    public IndicatorYearValues() {
     }
 
     public AmpIndicator getIndicator() {
@@ -44,5 +49,13 @@ public class IndicatorYearValues {
 
     public BigDecimal getTargetValue() {
         return targetValue;
+    }
+
+    public String getIndicatorName() {
+        return indicatorName;
+    }
+
+    public void setIndicatorName(String indicatorName) {
+        this.indicatorName = indicatorName;
     }
 }

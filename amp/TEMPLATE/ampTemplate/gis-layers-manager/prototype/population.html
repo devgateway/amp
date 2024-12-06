@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GIS Layers Manager</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/fileinput.min.css">
+    <script>
+    var next = function(stepName){
+        $("[aria-controls='" + stepName + "']").click();
+    }
+    </script>
+	<style >
+	.dd-selected {
+    overflow: hidden;
+    display: block;
+    padding: 10px;
+    font-weight: bold;
+    }
+   .dd-selected-description-truncated {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.dd-desc {
+    color: #aaa;
+    display: block;
+    overflow: hidden;
+    font-weight: normal;
+    line-height: 1.4em;
+}
+
+.dd-options {
+    border: solid 1px #ccc;
+    border-top: none;
+    list-style: none;
+    box-shadow: 0px 1px 5px #ddd;
+    display: none;
+    position: absolute;
+    z-index: 2000;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    overflow: auto;
+}
+
+.dd-select {
+    border-radius: 2px;
+    border: solid 1px #ccc;
+    position: relative;
+    cursor: pointer;
+}
+
+.dd-pointer-down {
+    border: solid 5px transparent;
+    border-top: solid 5px #000;
+}
+.dd-pointer {
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -3px;
+}
+	</style>
+</head>
+<body>    
+    <div class="container" style="width:50%">    
+     <div class="panel panel-default">
+                    <div class="panel-heading"><strong>Set Population Layers</strong></div>
+                        <div class="panel-body">                              
+                             <label for="adm-level-id">Region:&nbsp;</label>
+							<select name="adm-level-id"><option value="null">- Select Layer &nbsp; -</option>
+							</select> <br>
+							<label for="adm-level-id">Zone: &nbsp;&nbsp;&nbsp;</label>
+							<select name="adm-level-id"><option value="null">- Select Layer &nbsp; -</option>
+							</select> <br>
+							<label for="adm-level-id">District:&nbsp;</label>
+							<select name="adm-level-id"><option value="null">- Select Layer &nbsp; -</option>
+							</select> <br>
+                             <div style="text-align:right;padding:10px;">
+                            <button type="button" class="btn btn-primary navbar-btn" style="width:200px;" onclick="next('definemeasurelabels')">Save</button>
+                             </div>
+						   </div>
+                                                             
+                        </div>                       
+                        
+    </div>
+</body>
+</html>
+    

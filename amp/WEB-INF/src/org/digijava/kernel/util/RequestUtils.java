@@ -232,9 +232,9 @@ public class RequestUtils {
         if (res == null)
         {
             res = new Locale("en", "");
-            String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
-            logger.error(errMsg);
-            ExceptionHelper.printReducedStacktrace(logger);
+//            String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
+//            logger.error(errMsg);
+//            ExceptionHelper.printReducedStacktrace(logger);
         }
         return res;
     }

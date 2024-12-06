@@ -74,7 +74,7 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Sectors", AmpSectorsFormSectionFeature.class.getName(), 7, false),
         new OnepagerSection(DONOR_FUNDING_SECTION_NAME, AmpDonorFundingFormSectionFeature.class.getName(), 9, false),
         new OnepagerSection("Organizations", AmpRelatedOrganizationsFormSectionFeature.class.getName(), 8, false,true, AmpDonorFundingFormSectionFeature.class.getName()),
-        new OnepagerSection(REGIONAL_FUNDING_SECTION_NAME, AmpRegionalFundingFormSectionFeature.class.getName(), 10, false),
+        new OnepagerSection(REGIONAL_FUNDING_SECTION_NAME, AmpRegionalFundingFormSectionFeature.class.getName(), 10, false, true, AmpMEFormSectionFeature.class.getName()),
         new OnepagerSection(COMPONENTS_SECTION_NAME, AmpComponentsFormSectionFeature.class.getName(), 11, false),
         new OnepagerSection("Structures", AmpStructuresFormSectionFeature.class.getName(), 12, false),
         new OnepagerSection("Issues Section", AmpIssuesFormSectionFeature.class.getName(), 13, false),

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30853</jira>
+    <author>bmokandu</author>
+    <description>Add GIS Mode options</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+DELETE FROM amp_category_value_location WHERE location_name='Ecowas Multicountry';
+DELETE FROM amp_category_value_location WHERE location_name='GGW Multicountry';
+INSERT INTO amp_category_value_location (id, parent_category_value, location_name, code, iso, iso3)
+VALUES
+    (
+        nextval('amp_category_value_location_seq'),
+        (
+            SELECT acv.id
+            FROM amp_category_value acv
+            WHERE acv.category_value ='Administrative Level 0'
+              AND acv.amp_category_class_id=(SELECT id FROM amp_category_class cls WHERE cls.keyname='implementation_location')
+        ),
+        'Ecowas Multicountry',
+        '0000',
+        'WS',
+        'WAS'
+    ),
+    (
+        nextval('amp_category_value_location_seq'),
+        (
+            SELECT acv.id
+            FROM amp_category_value acv
+            WHERE acv.category_value ='Administrative Level 0'
+              AND acv.amp_category_class_id=(SELECT id FROM amp_category_class cls WHERE cls.keyname='implementation_location')
+        ),
+        'GGW Multicountry',
+        '0001',
+        'GG',
+        'GGW'
+    );
+DROP VIEW IF EXISTS v_g_gis_options;
+CREATE OR REPLACE VIEW v_g_gis_options AS SELECT iso as id, location_name || '-' || iso AS value FROM amp_category_value_location WHERE iso IS NOT NULL AND iso3 IS NOT NULL;
+DELETE from amp_global_settings where settingsname='GIS Mode';
+INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
+    ((select max(id) + 1 FROM amp_global_settings), 'GIS Mode', (select id from v_g_gis_options where LOWER(id)=LOWER((SELECT settingsvalue FROM amp_global_settings ags WHERE ags.settingsname='Default Country'))), 'v_g_gis_options', 'GIS Mode. Select GGW or Ecowas as needed or Single country', 'gis');
+
+select id, value from v_g_gis_options;
+
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

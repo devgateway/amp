@@ -452,6 +452,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
         degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);
         degenerate_dimension(ColumnConstants.STATUS, "v_status", catsDimension, true);
+        degenerate_dimension(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", catsDimension, true);
         no_dimension(ColumnConstants.STRUCTURES_COLUMN, "v_structures");
         degenerate_dimension(ColumnConstants.TYPE_OF_ASSISTANCE, "v_terms_assist", catsDimension);
         degenerate_dimension(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation", catsDimension);
@@ -519,7 +520,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_PHONE, "v_proj_coordr_cont_phone");
         no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_TITLE, "v_proj_coordr_cont_title");
         no_entity(ColumnConstants.PROPOSED_PROJECT_LIFE, "v_proposed_project_life");
-        no_entity(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", true);
+
         no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_EMAIL, "v_sect_min_cont_email");
         no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_FAX, "v_sect_min_cont_fax");
         no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_NAME, "v_sect_min_cont_name");
@@ -1077,7 +1078,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             Map<Long, String> dbColumns = SQLUtils.collectKeyValue(conn, "SELECT columnid, columnname FROM amp_columns");
             Set<String> columnNamestoBeMigrated = dbColumns.values().stream()
                     .filter(z -> this.measures.containsKey(z) && !this.columns.containsKey(z)).collect(Collectors.toSet());
-            if (columnNamestoBeMigrated.size() > 0) {
+            if (!columnNamestoBeMigrated.isEmpty()) {
                 List<String> columnNames = Arrays.asList("amp_report_id", "measureid", "order_id");
                 String columnNamesJoined = SQLUtils.generateCSV(columnNamestoBeMigrated.stream().map(z -> String.format("'%s'", z)).collect(Collectors.toList()));
                 String query = String.format("SELECT arc.amp_report_id, am.measureid, counts.order_id FROM amp_report_column arc " +
@@ -1169,7 +1170,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
                 MeasuresVisibility.resetMeasuresList();
             }
-            return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
+            return toBeAdded.stream().map(Object::toString).collect(Collectors.toSet());
         });
     }
 
@@ -1243,6 +1244,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
 
         return this;
     }

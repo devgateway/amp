@@ -11,6 +11,7 @@ import org.dgfoundation.amp.onepager.components.MEListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -21,8 +22,9 @@ import org.digijava.module.aim.dbentity.IndicatorActivity;
  * */
 public class AmpMEActualValuesFormTableFeaturePanel extends AmpMEValuesFormTableFeaturePanel {
     private static Logger logger = Logger.getLogger(AmpMEActualValuesFormTableFeaturePanel.class);
-    public AmpMEActualValuesFormTableFeaturePanel(String id, IModel<AmpIndicator> model, IModel<IndicatorActivity> indicatorActivity, String fmName, boolean hideLeadingNewLine, int titleHeaderColSpan) throws Exception {
-        super(id, model, indicatorActivity, fmName, hideLeadingNewLine, 7);
+    public AmpMEActualValuesFormTableFeaturePanel(String id, IModel<AmpIndicator> model, IModel<IndicatorActivity> indicatorActivity, IModel<AmpActivityLocation> location,
+                                                  String fmName, boolean hideLeadingNewLine, int titleHeaderColSpan) throws Exception {
+        super(id, model, indicatorActivity,location, fmName, hideLeadingNewLine, 7);
         try {
             list = new MEListEditor<AmpIndicatorValue>("listIndicators", setModel) {
                 @Override

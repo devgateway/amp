@@ -23,11 +23,17 @@ import lodash from 'lodash';
 
 const MySwal = withReactContent(Swal);
 
+const ascendingOptions = [
+  { value: true, label: 'True' },
+  { value: false, label: 'False' }
+];
 
 interface EditIndicatorModalProps extends DefaultComponentProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   indicator: IndicatorObjectType;
+  filterBySector: boolean;
+  filterByProgram: boolean;
 }
 
 interface IndicatorFormValues {
@@ -37,20 +43,14 @@ interface IndicatorFormValues {
   sectors: any[];
   ascending: boolean;
   creationDate?: string;
-  programId: string;
+  programId: string | any;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
   indicatorsCategory?: string;
 }
 
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
-  const { show, setShow, indicator, translations } = props;
-
-  const ascendingOptions = [
-    { value: true, label: translations["amp.indicatormanager:true"] },
-    { value: false, label: translations["amp.indicatormanager:false"] }
-  ];
-
+  const { show, setShow, indicator, translations, filterBySector, filterByProgram } = props;
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
 
@@ -139,7 +139,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
       const programScheme: ProgramSchemeType = programsReducer.programSchemes.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
-        const children = extractChildrenFromProgramScheme(programScheme)
+        const children = extractChildrenFromProgramScheme(programScheme);
         const programData = children.map((program: any) => ({
           value: program.id.toString(),
           label: program.name
@@ -164,7 +164,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const handleProgramSchemeChange = (selectedOption: any, props: FormikProps<IndicatorFormValues>) => {
     setSelectedProgramSchemeId(selectedOption);
-    props.setFieldValue("programId", '');
+    props.setFieldValue("programId", null);
     setProgramFieldVisible(false);
   };
 
@@ -205,7 +205,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
       return {
         value: sectorId.toString(),
-        label: translations["amp.indicatormanager:sector-not-found"]
+        label: 'Sector not found'
       }
     });
 
@@ -221,6 +221,16 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
           value: foundProgramScheme.ampProgramSettingsId.toString(),
           label: foundProgramScheme.name
         })
+
+        if (foundProgramScheme.startDate) {
+          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.startDate || ''));
+          setBaseOriginalValueDateDisabled(true);
+        }
+
+        if (foundProgramScheme.endDate) {
+          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.formatJavascriptDate(foundProgramScheme.endDate || ''));
+          setTargetOriginalValueDateDisabled(true);
+        }
       }
     }
   }
@@ -261,7 +271,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     if (updateIndicatorReducer.loading) {
       MySwal.fire({
         icon: 'info',
-        title: `${translations["amp.indicatormanager:updating-indicator"]}...`,
+        title: 'Updating Indicator...',
         timer: 18000
       });
       return;
@@ -270,7 +280,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     if (!updateIndicatorReducer.loading && !updateIndicatorReducer.error && updateIndicatorReducer?.indicator?.id) {
       MySwal.fire({
         icon: 'success',
-        title: translations["amp.indicatormanager:indicator-updated-successfully"],
+        title: 'Indicator updated successfully',
         timer: 3000
       }).then(() => {
         handleClose();
@@ -281,7 +291,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
     MySwal.fire({
       icon: 'error',
-      title: translations["amp.indicatormanager:error"],
+      title: 'Oops...',
       text: updateIndicatorReducer.loading ? translations["amp.indicatormanager:save-failed"] : updateIndicatorReducer.error,
     });
   }, [updateIndicatorReducer]);
@@ -345,10 +355,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
           if (selectedProgramSchemeId && !programId) {
             MySwal.fire({
-              title: translations['amp.indicatormanager:error'],
+              title: 'Error',
               text: translations['amp.indicatormanager:errors-program-is-required'],
               icon: 'error',
-              confirmButtonText: translations['amp.indicatormanager:ok'],
+              confirmButtonText: 'Ok',
             })
 
             return;
@@ -452,14 +462,13 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         onChange={(value) => {
                           props.setFieldValue("ascending", value?.value);
                         }}
-                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? translations["amp.indicatormanager:true"] : translations["amp.indicatormanager:false"] }}
+                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? "True" : "False" }}
                       />
                     </Form.Group>
 
                     <Form.Group className={styles.view_item} controlId="formCreationDate">
                       <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
                       <DateInput
-                          translations={translations}
                         name="creationDate"
                         value={props.values.creationDate}
                         disabled
@@ -473,38 +482,38 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     </Form.Group>
                   </Row>
 
-                  <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
-                      <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
-                      {
-                        (sectors.length > 0 && defaultSectors !== undefined)? (
-                          <Select
-                            isMulti
-                            name="sectors"
-                            options={sectors}
-                            placeholder={translations["amp.indicatormanager:select"]}
-                            onChange={(values) => {
-                              // set the formik value with the selected values and remove the label
-                              const selectedValues = values.map((value: any) => parseInt(value.value))
-                              setDefaultSectors(values as any);
-                              props.setFieldValue('sectors', selectedValues);
-                            }}
-                            onBlur={props.handleBlur}
-                            className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
-                            classNamePrefix="select"
-                            value={defaultSectors}
-                          />
+                  {filterBySector && (
+                      <Row className={styles.view_row}>
+                        <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
+                          <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
+                          {
+                            (sectors.length > 0 && defaultSectors !== undefined)? (
+                                <Select
+                                    isMulti
+                                    name="sectors"
+                                    options={sectors}
+                                    onChange={(values) => {
+                                      // set the formik value with the selected values and remove the label
+                                      const selectedValues = values.map((value: any) => parseInt(value.value))
+                                      setDefaultSectors(values as any);
+                                      props.setFieldValue('sectors', selectedValues);
+                                    }}
+                                    onBlur={props.handleBlur}
+                                    className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
+                                    classNamePrefix="select"
+                                    value={defaultSectors}
+                                />
 
-                        ) : (
-                            <Select
-                                isDisabled={true}
-                                placeholder={translations["amp.indicatormanager:select"]}
-                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                            />
-                        )
-                      }
-                    </Form.Group>
-                  </Row>
+                            ) : (
+                                <Select
+                                    isDisabled={true}
+                                />
+                            )
+                          }
+                        </Form.Group>
+                      </Row>
+                  )}
+
 
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="formIndicatorCategories">
@@ -514,13 +523,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                                 name="indicatorsCategory"
                                 options={categories}
-                                placeholder={translations["amp.indicatormanager:select"]}
                                 onChange={(selectedValue) => {
                                   // set the formik value with the selected values and remove the label
-                                  if (selectedValue) {
                                     setDefaultCategory(selectedValue)
                                     props.setFieldValue('indicatorsCategory', selectedValue?.value);
-                                  }
                                 }}
                                 isClearable
                                 getOptionValue={(option) => option.value}
@@ -533,88 +539,80 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                                 name="categories"
                                 isDisabled={true}
-                                placeholder={translations["amp.indicatormanager:select"]}
-                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         )
                       }
                     </Form.Group>
                   </Row>
 
-                  <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_one_item} controlId="programScheme">
-                      <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
-                      {
-                        !programsReducer.loading && programSchemes.length > 0 ? (
-                          <Select
-                            name="programScheme"
-                            options={programSchemes}
-                            placeholder={translations["amp.indicatormanager:select"]}
-                            onChange={(selectedValue) => {
-                              // set the formik value with the selected values and remove the label
-                              if (selectedValue) {
-                                setDefaultProgramScheme(selectedValue);
-                                handleProgramSchemeChange(selectedValue.value, props);
-                              }else {
-                                setDefaultProgramScheme(null);
-                                setSelectedProgramSchemeId(null);
-                                handleProgramSchemeChange(null, props);
-                                setProgramFieldVisible(false);
-                              }
-                            }}
-                            isClearable
-                            onBlur={props.handleBlur}
-                            className={`basic-multi-select ${styles.input_field}`}
-                            classNamePrefix="select"
-                            defaultValue={defaultProgramScheme}
-                          />
-                        ) : (
-                        <>
-                      {!programsReducer.loading && (
-                        <Select
-                        isDisabled={true}
-                        defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                    />
-                    )}
-                  </>
-                        )
-                      }
-                    </Form.Group>
-                  </Row>
+                  {filterByProgram && (
+                      <>
+                        <Row className={styles.view_row}>
+                          <Form.Group className={styles.view_one_item} controlId="programScheme">
+                            <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
+                            {
+                              programSchemes.length > 0 ? (
+                                  <Select
+                                      name="programScheme"
+                                      options={programSchemes}
+                                      onChange={(selectedValue) => {
+                                        // set the formik value with the selected values and remove the label
+                                        if (selectedValue) {
+                                          setDefaultProgramScheme(selectedValue);
+                                          handleProgramSchemeChange(selectedValue.value, props);
+                                        }
+                                      }}
+                                      isClearable
+                                      getOptionValue={(option) => option.value}
+                                      onBlur={props.handleBlur}
+                                      className={`basic-multi-select ${styles.input_field}`}
+                                      classNamePrefix="select"
+                                      value={defaultProgramScheme}
+                                  />
+                              ) : (
+                                  <Select
+                                      isDisabled={true}
+                                      defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                                  />
+                              )
+                            }
+                          </Form.Group>
+                        </Row>
 
-                  {programFieldVisible && (
-                    <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_one_item} controlId="programs">
-                        <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
-                        {
-                          (programs.length > 0) ? (
-                            <Select
-                              name="programs"
-                              options={programs}
-                              placeholder={translations["amp.indicatormanager:select"]}
-                              onChange={(selectedValue) => {
-                                // set the formik value with the selected values and remove the label
-                                if (selectedValue) props.setFieldValue('programId', parseInt(selectedValue?.value) );
-                              }}
-                              isClearable
-                              getOptionValue={(option) => option.value}
-                              onBlur={props.handleBlur}
-                              className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
-                              classNamePrefix="select"
-                              defaultValue={defaultProgram}
-                            />
-                          ) :
-                            <Select
-                              name="programs"
-                              isDisabled={true}
-                              defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                            />
-                        }
+                        {programFieldVisible && (
+                            <Row className={styles.view_row}>
+                              <Form.Group className={styles.view_one_item} controlId="programs">
+                                <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
+                                {
+                                  (programs.length > 0) ? (
+                                          <Select
+                                              name="programs"
+                                              options={programs}
+                                              onChange={(selectedValue) => {
+                                                // set the formik value with the selected values and remove the label
+                                                props.setFieldValue("programId", selectedValue?.value);
+                                              }}
+                                              isClearable
+                                              getOptionValue={(option) => option.value}
+                                              onBlur={props.handleBlur}
+                                              className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
+                                              classNamePrefix="select"
+                                              defaultValue={defaultProgram}
+                                          />
+                                      ) :
+                                      <Select
+                                          name="programs"
+                                          isDisabled={true}
+                                          defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
+                                      />
+                                }
+                              </Form.Group>
+                            </Row>
 
-                      </Form.Group>
-                    </Row>
-
+                        )}
+                      </>
                   )}
+
 
                   <Form.Group as={Col}>
                     <Row className={styles.view_row}>
@@ -643,7 +641,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                         <DateInput
-                            translations={translations}
                           value={props.values.base?.originalValueDate}
                           onChange={(value) => {
                             if (value) {
@@ -687,7 +684,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
                         <DateInput
-                            translations={translations}
                           value={props.values.base.revisedValueDate}
                           onChange={(value) =>{
                             if (value) {
@@ -732,7 +728,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
                         <DateInput
-                            translations={translations}
                           value={props.values.target.originalValueDate}
                           onChange={(value) => {
                             if (value) {
@@ -772,7 +767,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                         <DateInput
-                            translations={translations}
                           value={props.values.target.revisedValueDate}
                           onChange={(value) => {
                             if (value) {

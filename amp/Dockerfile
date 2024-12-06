@@ -7,10 +7,23 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
 FROM node as compile-amp-translate
+
+# Create a directory for the app within the Docker image
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
-COPY TEMPLATE/ampTemplate/node_modules/amp-translate .
+
+# Copy only the package.json and package-lock.json files
+COPY TEMPLATE/ampTemplate/node_modules/amp-translate/package*.json ./
+
+# Install dependencies
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
+
+# Copy the rest of the application code
+COPY TEMPLATE/ampTemplate/node_modules/amp-translate ./
+
+# Continue with your build steps if needed
+
+
 
 FROM node as compile-amp-boilerplate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
@@ -34,8 +47,11 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-settings
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+COPY TEMPLATE/ampTemplate/node_modules/amp-settings/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
+COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+# HACK otherwise amp-settings won't compile!
+COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build

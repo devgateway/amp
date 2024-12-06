@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class AmpActivitySectorDiscriminationConfigurer implements DiscriminationConfigurer {
 
-    private Memoizer<Map<String, AmpClassificationConfiguration>> map = new Memoizer<>(this::loadAll);
+    private final Memoizer<Map<String, AmpClassificationConfiguration>> map = new Memoizer<>(this::loadAll);
 
     private Map<String, AmpClassificationConfiguration> loadAll() {
         List<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();

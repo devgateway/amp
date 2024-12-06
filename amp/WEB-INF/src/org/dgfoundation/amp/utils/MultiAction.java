@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class MultiAction extends Action {
 
-    private static Logger logger = Logger.getLogger(MultiAction.class);
+    private static final Logger logger = Logger.getLogger(MultiAction.class);
 
     /**
      * @param mapping object list to be passed to other modes

@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class AmpActivityProgramDiscriminatorConfigurer implements DiscriminationConfigurer {
 
-    private Memoizer<Map<String, AmpActivityProgramSettings>> programSettingsByName =
+    private final Memoizer<Map<String, AmpActivityProgramSettings>> programSettingsByName =
             new Memoizer<>(this::loadProgramSettings);
 
     private Map<String, AmpActivityProgramSettings> loadProgramSettings() {

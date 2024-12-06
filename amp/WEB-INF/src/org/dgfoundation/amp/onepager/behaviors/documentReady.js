@@ -32,8 +32,8 @@ function isScrolledIntoView(docViewTop, docViewBottom, elem){
     var elemTop = $(elem).offset().top;
     var elemBottom = elemTop + $(elem).height();
 
-    return (((elemBottom >= docViewTop) && (elemBottom <= docViewBottom)) 
-      || ((elemTop <= docViewBottom) && (elemTop >= docViewTop)) 
+    return (((elemBottom >= docViewTop) && (elemBottom <= docViewBottom))
+      || ((elemTop <= docViewBottom) && (elemTop >= docViewTop))
       || ((elemTop <= docViewTop) && (elemBottom >= docViewBottom)));
 }
 
@@ -56,23 +56,21 @@ function adjustQuickLinks(){
 	var contentMarginTop = $('#stepHead').offset().top;
 	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55;
 	var rightMenuHeight = $('#rightMenu').height();
-	
 	// the initial position of the right menu should be below the next menu
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;
 	}
-	
 	var leftPositionOfRightMenu = 0;
-	
+
 	if ((($(window).scrollTop() + rightMenuHeight) > contentHeight)) {
 		var menuTop = contentHeight + contentMarginTop - rightMenuHeight;
-		
+
 		// the initial position of the right menu should be below the next menu
 		// 130px is the height of the navigation bar (header). The menu should be always located below the header
 		if (menuTop < 130) {
 			menuTop = 130;
 		}
-		
+
 		$('#rightMenu').css('position', 'absolute');
 		$('#rightMenu').css('top', menuTop + "px");
 		leftPositionOfRightMenu = getLeftPositionOfRightMenu(true);
@@ -81,14 +79,12 @@ function adjustQuickLinks(){
 		$('#rightMenu').css('top', contentMarginTop + "px");
 		leftPositionOfRightMenu = getLeftPositionOfRightMenu(false);
 	}
-
 	$('#rightMenu').css('left', leftPositionOfRightMenu + "px");
 
 	if (onepagerMode) {
 		computateVisibleSections();
 	}
 }
-
 //Manage the position of the right menu in AF on initialization
 function initQuickLinksInRtlMode(){
 
@@ -97,12 +93,10 @@ function initQuickLinksInRtlMode(){
 	var rightMenuHeight = $('#rightMenu').height();
 	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
 	var rightMenuWidth = $('#rightMenu').width();
-
 	// the initial position of the right menu should be below the next menu
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;
 	}
-
 	var rightMenuLeftPosition = (window.outerWidth - $('#stepHead').outerWidth()) / 2 + INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU - $('#rightMenu').width();
 
 	if ($(window).width() < (contentWidth + rightMenuWidth + DISTANCE_BETWEEN_CONTENT_AND_MENU)) {
@@ -113,14 +107,10 @@ function initQuickLinksInRtlMode(){
 	$('#rightMenu').css('top', contentMarginTop + "px");
 	$('#rightMenu').css('left', rightMenuLeftPosition + "px");
 }
-
-
-
 function highlightQItem(currentItem){
 	$('#qListItems').find('li').removeClass('quickListHighlight');
 	$(currentItem).parent().parent().addClass('quickListHighlight');
 }
-
 function showSection(itemId){
 	if (onepagerMode){
 		$('#' + itemId).parent().parent().siblings('div:first').show();
@@ -185,7 +175,7 @@ function rightMenuEnable(){
 function pageLeaveConfirmationEnabler(){
 	window.onbeforeunload = function (e) {
 		  e = e || window.event;
-		  
+
 		  // For IE and Firefox prior to version 4
 		  if (e) {
 			  if (navigator.appName == 'Microsoft Internet Explorer') {
@@ -242,6 +232,41 @@ function switchTabs(lastIndex) {
 	}
 }
 
+function indicatorTabs(lastIndex) {
+	if (isTabView) {
+		$('div[data-is_location_tab=true]').each(function(index) {
+			$(this).appendTo("#theLocationIndicatorContent");
+		});
+
+		var loader = new YAHOO.util.YUILoader({
+			base : "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/",
+			require : [ "tabview" ],
+			onSuccess : function() {
+				var myFundingTabs = new YAHOO.widget.TabView("indicatorTabs");
+				if (lastIndex == -1) {// if its -1 we go the the last one
+					var newIndex = myFundingTabs.get('tabs').length - 1;
+					myFundingTabs
+						.selectTab(myFundingTabs.get('tabs').length - 1);
+				} else {
+					if (lastIndex >= 0) { // if its grater or equals than 0 we
+						// focus on that tab
+						myFundingTabs.selectTab(lastIndex);
+						$('div[data-is_location_tab=true]').find(
+							".organization_box_content").last().find(
+							".collapsable").first().show();
+					} else {
+						// if no index is provided we focuse on the first tab
+						if (myFundingTabs.get('tabs').length > 0) {
+							myFundingTabs.selectTab(0);
+						}
+					}
+				}
+			}
+		});
+		loader.insert();
+	}
+}
+
 function getLeftPositionOfRightMenu(isAbsolutePosition) {
 	var contentMarginLeft = $('#stepHead').offset().left;
 	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
@@ -284,16 +309,17 @@ $(document).ready(function(){
 	pageLeaveConfirmationEnabler();
 	if(isTabView){
 		switchTabs();
+		indicatorTabs();
 	}
 
   setOpentip();
-	
+
 	// change the min-height of the main content div when the height of the right menu is greater than DEFAULT_MAIN_BODY_MIN_HEIGHT
 	// the 20px value is used to make the distance between the lower point of the menu and the footer to be minimal
-	$("#mainBodyContent").css("min-height", function(){ 
+	$("#mainBodyContent").css("min-height", function(){
 		// this is the defaul min height. Taken from AmpHeaderFooter.html
 		var DEFAULT_MAIN_BODY_MIN_HEIGHT = 440;
-		
+
 	    return $('#rightMenu').height() > DEFAULT_MAIN_BODY_MIN_HEIGHT ? ($('#rightMenu').height() - 20) : DEFAULT_MAIN_BODY_MIN_HEIGHT;
 	});
 

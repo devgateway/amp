@@ -71,7 +71,7 @@ public final class OnePagerUtil {
             @Override
             public List<T> getObject() {
                 if(setModel.getObject()==null) return new ArrayList<T>();
-                return new ArrayList<T>(setModel.getObject());
+                return new ArrayList<>(setModel.getObject());
             }
         };
 
@@ -95,11 +95,11 @@ public final class OnePagerUtil {
 
             @Override
             public List<T> getObject() {
-                TreeSet<T> ts = new TreeSet<T>(c);
+                TreeSet<T> ts = new TreeSet<>(c);
                 Set<T> filteredSet = setModel.getObject().stream().filter(filterPredicate).collect(Collectors.toSet());
                 ts.addAll(filteredSet);
                 
-                return new ArrayList<T>(ts);
+                return new ArrayList<>(ts);
             }
         };
 
@@ -154,8 +154,6 @@ public final class OnePagerUtil {
                 Component component = m.get(i);
                 if(component instanceof AmpComponentPanel) {
                     FMUtil.changeFmEnabled(component, enabled);
-                } else {
-                    
                 }
                 cascadeFmEnabled(target, enabled, component);
             }

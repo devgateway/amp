@@ -584,6 +584,8 @@ public class PersistenceManager {
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();
         }
+//        sess.clear();
+
         addSessionToStackTraceMap(sess);
         return sess;
     }
@@ -730,7 +732,7 @@ public class PersistenceManager {
             return false;
         throw new RuntimeException("cannot convert object " + obj + " to boolean");
     }
-    
+
     public static StatelessSession openNewStatelessSession() {
         return sf.openStatelessSession();
     }

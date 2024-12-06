@@ -117,6 +117,7 @@ public class AmpLocationSearchModel extends
 
         predicates.add(builder.equal(root.get("deleted"), false));
         //check fro locations with children if location = admin_0
+        logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
 
         if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(cvLayer) &&
                 DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE)) {

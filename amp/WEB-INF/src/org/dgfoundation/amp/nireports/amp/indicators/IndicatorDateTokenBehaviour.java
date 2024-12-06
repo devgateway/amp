@@ -37,7 +37,7 @@ public class IndicatorDateTokenBehaviour extends DateTokenBehaviour {
     public NiDateCell doHorizontalReduce(List<NiCell> cells) {
         Map<Long, LocalDate> entityIdsValues = new HashMap<>();
         List<LocalDate> values = new ArrayList<>();
-        cells.stream().filter(distinctByIndicator()).sorted(indicatorCellComparator).forEach(niCell -> {
+        cells.stream().sorted(indicatorCellComparator).forEach(niCell -> {
             DateCell cell = (DateCell) niCell.getCell();
             entityIdsValues.put(cell.entityId, cell.date);
             values.add(cell.date);

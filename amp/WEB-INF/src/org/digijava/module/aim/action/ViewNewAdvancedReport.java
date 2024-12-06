@@ -74,8 +74,8 @@ public class ViewNewAdvancedReport extends Action {
         // on DRC: wget "http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=3309" >/dev/null
         ReportExecutor executor = AmpReportsSchema.getExecutor();
         GeneratedReport output = executor.executeReport(
-                ReportSpecificationImpl.buildFor("simple report", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                ReportSpecificationImpl.buildFor("simple report",
+                        Collections.singletonList(ColumnConstants.PROJECT_TITLE),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                         null, 
                         GroupingCriteria.GROUPING_QUARTERLY));

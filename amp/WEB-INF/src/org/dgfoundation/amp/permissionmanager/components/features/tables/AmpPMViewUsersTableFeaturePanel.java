@@ -51,8 +51,7 @@ public class AmpPMViewUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
     public AmpPMViewUsersTableFeaturePanel(String id, IModel<AmpTeam> model, String fmName, boolean hideLeadingNewLine) throws Exception {
         super(id, model, fmName, hideLeadingNewLine);
 
-        Set<TeamMember> col = new TreeSet<TeamMember>(); 
-        col.addAll(TeamMemberUtil.getAllTeamMembers(model.getObject().getAmpTeamId()));
+        Set<TeamMember> col = new TreeSet<TeamMember>(TeamMemberUtil.getAllTeamMembers(model.getObject().getAmpTeamId()));
         final IModel<Set<TeamMember>> setModel = new Model((Serializable) col);
         AbstractReadOnlyModel<List<TeamMember>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
         
@@ -66,8 +65,8 @@ public class AmpPMViewUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
                 AttributeModifier srcModifier = null;
                 TeamMember t = item.getModelObject();
                 if(item.getModelObject().getTeamHead()) 
-                    userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MANAGER_IMG_SRC)));
-                else userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MEMBER_IMG_SRC)));
+                    userImgSrc.add(new AttributeModifier("src",new Model<>(PMUtil.WORKSPACE_MANAGER_IMG_SRC)));
+                else userImgSrc.add(new AttributeModifier("src",new Model<>(PMUtil.WORKSPACE_MEMBER_IMG_SRC)));
                 item.add(userImgSrc);
                 item.add(new Label("userLabel", item.getModelObject().getMemberName()));
                 item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));

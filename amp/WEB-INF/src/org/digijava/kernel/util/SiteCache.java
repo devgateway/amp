@@ -41,7 +41,7 @@ public class SiteCache implements Runnable {
     private static Logger logger = I18NHelper.getKernelLogger(SiteCache.class);
     private static final String appScopeKey = SiteCache.class.getName();
 
-    public class CachedSite {
+    public static class CachedSite {
 
         public CachedSite(Site site) {
             this.site = site;
@@ -459,9 +459,8 @@ public class SiteCache implements Runnable {
         }
 
         SiteDomain siteDomain = null;
-        Iterator iter = siteDomainPathes.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry item = (Map.Entry) iter.next();
+        for (Object o : siteDomainPathes.entrySet()) {
+            Map.Entry item = (Map.Entry) o;
             if (path.startsWith(item.getKey() + "/")) {
                 siteDomain = (SiteDomain) item.getValue();
                 break;

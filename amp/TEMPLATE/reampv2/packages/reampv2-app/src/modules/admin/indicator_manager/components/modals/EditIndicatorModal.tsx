@@ -469,6 +469,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     <Form.Group className={styles.view_item} controlId="formCreationDate">
                       <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
                       <DateInput
+                          translations={translations}
                         name="creationDate"
                         value={props.values.creationDate}
                         disabled
@@ -641,6 +642,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                         <DateInput
+                            translations={translations}
                           value={props.values.base?.originalValueDate}
                           onChange={(value) => {
                             if (value) {
@@ -684,6 +686,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
                         <DateInput
+                            translations={translations}
                           value={props.values.base.revisedValueDate}
                           onChange={(value) =>{
                             if (value) {
@@ -728,6 +731,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
                         <DateInput
+                            translations={translations}
                           value={props.values.target.originalValueDate}
                           onChange={(value) => {
                             if (value) {
@@ -767,6 +771,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                         <DateInput
+                            translations={translations}
                           value={props.values.target.revisedValueDate}
                           onChange={(value) => {
                             if (value) {

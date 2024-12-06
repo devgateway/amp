@@ -1275,7 +1275,7 @@ public class DbUtil {
 
     public static void saveOrUpdate(Object object) {
         Session session = PersistenceManager.getSession();
-        session.update(object);
+        session.saveOrUpdate(object);
     }
 
     public static void updateField(String className, Long id, String fieldName, Object newValue) {

@@ -392,7 +392,7 @@ public final class XmlPatcherUtil {
     public static List<AmpXmlPatch> getAllDiscoveredUnclosedPatches()
             throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
-        session.clear();
+//        session.clear();
         Query query = session
                 .createQuery("from " + AmpXmlPatch.class.getName()
                         + " p WHERE p.state NOT IN ("

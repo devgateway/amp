@@ -241,7 +241,6 @@ public class XmlPatcherService extends AbstractServiceImpl {
             //applying deprecation tags -read all deprecate tags in all patches
             //and flag deprecated the patches mentioned
             List<AmpXmlPatch> rawPatches = XmlPatcherUtil.getAllDiscoveredUnclosedPatches();
-            logger.info("rawPatches: " + rawPatches);
 
             processDeprecation(rawPatches, serviceContext);
 

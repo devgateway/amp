@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>AMP-30853</jira>
     <author>bmokandu</author>
-    <description>Update Cape Verde to correct Name.</description>
+    <description>Update Gis MAx and Min date ranges.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[

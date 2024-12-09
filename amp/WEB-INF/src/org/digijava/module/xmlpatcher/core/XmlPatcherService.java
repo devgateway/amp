@@ -233,6 +233,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
             java.sql.Connection conn = PersistenceManager.getJdbcConnection();
             conn.prepareStatement("UPDATE amp_xml_patch set state=0 WHERE patch_id similar to '((v)|(z)|(zz))%' AND location ='xmlpatches/general/views/' AND state=4;").executeUpdate();
             conn.close();
+            PersistenceManager.getRequestDBSession().flush();
 
             //discover newly added patches
             performPatchDiscovery(serviceContext.getRealPath("/"));

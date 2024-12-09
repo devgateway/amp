@@ -209,16 +209,17 @@ public class PersistenceManager {
         // print open sessions
         boolean found=false;
         synchronized (sessionStackTraceMap) {
-            for (Session session : PersistenceManager.sessionStackTraceMap.keySet()) {
-                if (session.isOpen()) {
-                    found = true;
+            Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
+            while (iterator.hasNext()) {
+                Session session = (Session) iterator.next();
+                if(session.isOpen()) {
+                    found=true;
                     Object o[] = sessionStackTraceMap.get(session);
                     StackTraceElement[] stackTraceElements = (StackTraceElement[]) o[1];
-                    logger.info("Session opened " + (System.currentTimeMillis() - (Long) o[0]) + " miliseconds ago is still open. Will force closure, recorded stack trace: ");
-                    for (int i = 3; i < stackTraceElements.length && i < 8; i++)
-                        logger.info(stackTraceElements[i].toString());
+                    logger.info("Session opened "+(System.currentTimeMillis()-(Long)o[0])+" miliseconds ago is still open. Will force closure, recorded stack trace: ");
+                    for (int i = 3; i < stackTraceElements.length && i < 8; i++) logger.info(stackTraceElements[i].toString());
                     logger.info("Forcing Hibernate session close...");
-                    try {
+                    try  {
                         session.clear();
                         session.close();
                         logger.info("Hibernate Session Close succeeded");
@@ -576,18 +577,17 @@ public class PersistenceManager {
         if (!currentSessionIsManaged) {
             throw new IllegalStateException("Called outside of managed session context.");
         }
-        try (Session sess = sf().getCurrentSession()) {
-            sess.setFlushMode(FlushModeType.AUTO);
+        Session sess = sf().getCurrentSession();
+        sess.setFlushMode(FlushModeType.AUTO);
 
-            Transaction transaction = sess.getTransaction();
-            if (transaction == null || !transaction.isActive()) {
-                sess.beginTransaction();
-            }
+        Transaction transaction = sess.getTransaction();
+        if (transaction == null || !transaction.isActive()) {
+            sess.beginTransaction();
+        }
 //        sess.clear();
 
-            addSessionToStackTraceMap(sess);
-            return sess;
-        }
+        addSessionToStackTraceMap(sess);
+        return sess;
     }
 
     /**

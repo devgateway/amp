@@ -127,7 +127,7 @@ module.exports = Backbone.View.extend({
         colour = layerModel.palette.colours.find(function(colour) {
         	return colour.get('test').call(colour, featureValue);
         });
-          console.log("Colour: " + colour)
+          console.log("Colour: " + JSON.stringify(colour))
         if (!colour) {
           colour = {hex: function() {return '#354';}};
           console.warn('No colour matched for the value ' + featureValue);

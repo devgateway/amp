@@ -120,10 +120,10 @@ module.exports = Backbone.View.extend({
     var layer = new L.geoJson(null, {
       style: function(feature) {
         featureValue = feature.properties.value;
-          console.log("Feature : " + feature)
+          console.log("Feature : " + JSON.stringify(feature))
         // sets colour for each polygon
-          console.log("Layer model: " + layerModel)
-          console.log("Layer colours: " + layerModel.palette.colours)
+          console.log("Layer model: " + JSON.stringify(layerModel))
+          console.log("Layer colours: " + JSON.stringify(layerModel.palette.colours))
         colour = layerModel.palette.colours.find(function(colour) {
         	return colour.get('test').call(colour, featureValue);
         });

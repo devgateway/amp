@@ -122,11 +122,12 @@ module.exports = Backbone.View.extend({
         featureValue = feature.properties.value;
           console.log("Feature : " + JSON.stringify(feature))
         // sets colour for each polygon
-          console.log("Layer model: " + JSON.stringify(layerModel))
+        //   console.log("Layer model: " + JSON.stringify(layerModel))
           console.log("Layer colours: " + JSON.stringify(layerModel.palette.colours))
         colour = layerModel.palette.colours.find(function(colour) {
         	return colour.get('test').call(colour, featureValue);
         });
+          console.log("Colour: " + colour)
         if (!colour || featureValue == null) {
           colour = {hex: function() {return '#354';}};
           console.warn('No colour matched for the value ' + featureValue);

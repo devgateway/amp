@@ -128,7 +128,7 @@ module.exports = Backbone.View.extend({
         	return colour.get('test').call(colour, featureValue);
         });
           console.log("Colour: " + JSON.stringify(colour))
-        if (!colour) {
+        if (!colour  || featureValue == null) {
           colour = {hex: function() {return '#354';}};
           console.warn('No colour matched for the value ' + featureValue);
 

@@ -112,43 +112,33 @@ module.exports = Backbone.View.extend({
     app.mapView.headerGapAnalysisView.model.set('isGapAnalysisSelected', false);
   },
 
-  getNewGeoJSONLayer: function(layerModel) {
-    var featureValue;
-    var colour;
-    var self = this;
+    getNewGeoJSONLayer: function(layerModel) {
+        var featureValue;
+        var colour;
+        var self = this;
 
-    var layer = new L.geoJson(null, {
-      style: function(feature) {
-        featureValue = feature.properties.value;
-          console.log("Feature : " + JSON.stringify(feature))
-        // sets colour for each polygon
-        //   console.log("Layer model: " + JSON.stringify(layerModel))
-          console.log("Layer colours: " + JSON.stringify(layerModel.palette.colours))
-        colour = layerModel.palette.colours.find(function(colour) {
-        	return colour.get('test').call(colour, featureValue);
+        return new L.geoJson(layerModel.get('geoJSON'), {
+            style: function(feature) {
+                featureValue = feature.properties.value;
+                // sets colour for each polygon
+                colour = layerModel.palette.colours.find(function(colour) {
+                    return colour.get('test').call(colour, featureValue);
+                });
+                if (!colour || featureValue == null) {
+                    colour = {hex: function() {return '#354';}};
+                    console.warn('No colour matched for the value ' + featureValue);
+
+                }
+                return {
+                    color: colour.hex(),
+                    weight: 2,
+                    opacity: 0.9,
+                    fillOpacity: 0.6
+                };
+            },
+            onEachFeature: function(feature, layer) {self.tmpFundingOnEachFeature(feature, layer, layerModel);}
         });
-          console.log("Colour: " + JSON.stringify(colour))
-        if (!colour  || featureValue == null) {
-          colour = {hex: function() {return '#354';}};
-          console.warn('No colour matched for the value ' + featureValue);
-
-        }
-        return {
-          color: colour.hex(),
-          weight: 2,
-          opacity: 0.9,
-          fillOpacity: 0.6
-        };
-      },
-      onEachFeature: function(feature, layer) {self.tmpFundingOnEachFeature(feature, layer, layerModel);}
-    });
-
-    layerModel.get('geoJSONs').forEach(function(geoJSON) {
-      layer.addData(geoJSON);
-    });
-
-    return layer;
-  },
+    },
 
   // used to hilight the geojson layer on click, show popup, and unhilight after.
   tmpFundingOnEachFeature: function(feature, layer, layerModel) {

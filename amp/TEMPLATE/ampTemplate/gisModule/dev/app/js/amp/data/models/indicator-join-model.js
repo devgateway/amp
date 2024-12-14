@@ -278,6 +278,7 @@ loadAll: function(options) {
 				})
 			});
 		});
+	  console.log("GEOJSONS",geoJSONs)
     this.set('geoJSONs', geoJSONs);
   }
 

@@ -235,7 +235,7 @@ loadAll: function(options) {
    	   this.minValue = this._getMinValue();
    	   this.valuesAreIntegers = this._valuesAreIntegers();
    },
-  _joinDataWithBoundaries: function(features) {
+  _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var values = _.map(this.get('values'), function(value){
     	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId;
     	return value;
@@ -251,33 +251,57 @@ loadAll: function(options) {
     var admKey = parseInt(this.get('adminLevel').substring(4), 10);
 
 		// copy boundary geoJSON, and inject data
-		var geoJSONs = features.map(function(feature) {
-    	return _.extend({}, feature, {
-				features: _.map(feature.features, function(feature) {
-					// replace boundary properties with {value: value}
-					// TODO... keep the existing properties and just add value?
-					// replacing for now, to save weight
+		// var geoJSONs = features.map(function(feature) {
+    	// return _.extend({}, feature, {
+		// 		features: _.map(feature.features, function(feature) {
+		// 			// replace boundary properties with {value: value}
+		// 			// TODO... keep the existing properties and just add value?
+		// 			// replacing for now, to save weight
+		//
+		// 			var admCode = feature.properties['ID_0'];
+		// 			for (var i = 1; i <= admKey; i++) {
+		// 				admCode =  feature.properties['ID_' + i];
+		// 			}
+		// 			feature.id = admCode ? $.trim(admCode) : admCode;
+		// 			feature.properties.name = feature.properties['NAME_' + admKey] || '';
+		//
+		// 			var value = null;
+		// 			if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
+		// 				value = indexedValues[feature.id].value;
+		// 			}
+		//
+		// 			return _.extend(feature, {
+		// 				properties: _.extend(feature.properties, {
+		// 					value: value
+		// 				})
+		// 			});
+		// 		})
+		// 	});
+		// });
 
-					var admCode = feature.properties['ID_0'];
-					for (var i = 1; i <= admKey; i++) {
-						admCode =  feature.properties['ID_' + i];
-					}
-					feature.id = admCode ? $.trim(admCode) : admCode;
-					feature.properties.name = feature.properties['NAME_' + admKey] || '';
+	  var geoJSONs = _.extend({}, boundaryGeoJSON, {
+		  features: _.map(boundaryGeoJSON.features, function(feature) {
+			  // replace boundary properties with {value: value}
+			  // TODO... keep the existing properties and just add value?
+			  // replacing for now, to save weight
+			  var admCode = feature.properties['ID_0'];
+			  for (var i = 1; i <= admKey; i++) {
+				  admCode =  feature.properties['ID_' + i];
+			  }			  feature.id = admCode ? $.trim(admCode) : admCode;
+			  feature.properties.name = feature.properties['NAME_' + admKey] || '';
 
-					var value = null;
-					if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
-						value = indexedValues[feature.id].value;
-					}
+			  var value = null;
+			  if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
+				  value = indexedValues[feature.id].value;
+			  }
 
-					return _.extend(feature, {
-						properties: _.extend(feature.properties, {
-							value: value
-						})
-					});
-				})
-			});
-		});
+			  return _.extend(feature, {
+				  properties: _.extend(feature.properties, {
+					  value: value
+				  })
+			  });
+		  })
+	  });
 	  console.log("GEOJSONS",geoJSONs)
     this.set('geoJSONs', geoJSONs);
   }

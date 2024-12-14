@@ -260,7 +260,7 @@ loadAll: function(options) {
 
 					var admCode = feature.properties['ID_0'];
 					for (var i = 1; i <= admKey; i++) {
-						admCode += ':' + feature.properties['ID_' + i];
+						admCode =  feature.properties['ID_' + i];
 					}
 					feature.id = admCode ? $.trim(admCode) : admCode;
 					feature.properties.name = feature.properties['NAME_' + admKey] || '';

@@ -258,7 +258,7 @@ loadAll: function(options) {
 					// TODO... keep the existing properties and just add value?
 					// replacing for now, to save weight
 
-					var admCode =  feature.properties['ID_' + i];
+					var admCode =  feature.properties['ID_' + admKey];
 					feature.id = admCode ? $.trim(admCode) : admCode;
 					feature.properties.name = feature.properties['NAME_' + admKey] || '';
 					var value = null;

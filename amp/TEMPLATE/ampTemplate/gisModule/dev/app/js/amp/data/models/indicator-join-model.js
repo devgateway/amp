@@ -28,17 +28,17 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
-    
-    this.listenTo(this, 'change:values', function() {   
-    	this.analyzeValues(); 
+
+    this.listenTo(this, 'change:values', function() {
+    	this.analyzeValues();
     	this.updatePaletteRange();
         this.trigger('valuesChanged', this);
      });
-    
+
     this.listenTo(this, 'change:selectedGapAnalysis', function(blah, show) {
         this.trigger('sync', this);
     });
-       
+
     // We listen to the "apply" event on filter widget and trigger a "filter" event that will be listened by our view.
     // This way the view will also receive this model as parameter.
     this.listenTo(app.data.filter, 'apply', function(blah, show) {
@@ -47,7 +47,7 @@ module.exports = Backbone.Model
     this.listenTo(app.data.settingsWidget, 'applySettings', function(blah, show) {
         this.trigger('applySettings', this);
     });
-    this.initializePalette();        
+    this.initializePalette();
   },
   initializePalette: function() {
 	  var numStops = this.get('classes') || 5;
@@ -60,13 +60,13 @@ module.exports = Backbone.Model
 			  var multiColorSet = [];
 			  _.each(this.get('colorRamp'),function(colorRamp) {
 				  multiColorSet.push(husl.fromHex(colorRamp.color));
-			  });           	
-			  this.palette.set('multiColorSet', multiColorSet);         
+			  });
+			  this.palette.set('multiColorSet', multiColorSet);
 		  } else {
 			  var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
 			  this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
-		  }      
-	  } 
+		  }
+	  }
   },
   loadBoundary: function() {
     // Phil's ideal way of being able to join with non-hosted boundaries.:
@@ -94,11 +94,11 @@ module.exports = Backbone.Model
   },
 
 loadAll: function(options) {
-	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
+	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){
 		  this.url = INDICATOR_LAYER_URL + this.getId();
 	  }else if(this.get('type') === 'Indicator Layers'){
 		  this.url = '/rest/gis/indicator-layers/' + this.get('id');
-	  }	
+	  }
 	  return when(this.load(options), this.loadBoundary()).promise().done(function() {
 		  $('#map-loading').hide();
 	  });
@@ -107,31 +107,31 @@ loadAll: function(options) {
 	  var id = this.get('id');
 	  if(typeof this.get('id') === 'string' || this.get('id') instanceof String){
 		  id = parseInt(this.get('id').replace( /^\D+/g, ''));
-      }	
+      }
 	  return id
   },
-  fetch: function(){	
+  fetch: function(){
 	  var self = this;
 	  var isGapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
 	  var httpMethod = isGapAnalysis || this.attributes.isStoredInLocalStorage ? 'POST' : 'GET';
-	  var settings = app.data.settingsWidget.toAPIFormat();	  
+	  var settings = app.data.settingsWidget.toAPIFormat();
 	  var filter = {};
-	  
+
 	  if (app.data.filter) {
 		  _.extend(filter, app.data.filter.serialize());
-	  }	  	  	  
-	  
-	  if (this.attributes.isStoredInLocalStorage === true) {		  
+	  }
+
+	  if (this.attributes.isStoredInLocalStorage === true) {
 	     return this._fetchLocalLayer(httpMethod, filter, settings, isGapAnalysis);
 	  } else {
 		return this._fetchServerLayer(httpMethod, filter, settings, isGapAnalysis);
-	  }	  
+	  }
   },
   _fetchLocalLayer: function(httpMethod, filter, settings, isGapAnalysis) {
 	  IndicatorLayerLocalStorage.cleanUp();
 	  var layer = IndicatorLayerLocalStorage.findById(this.getId());
 	  if (!_.isUndefined(layer)) {
-		  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
+		  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
 		  var params = {};
 		  params.type = httpMethod;
 		  if (isGapAnalysis) {
@@ -245,6 +245,8 @@ loadAll: function(options) {
     if(indexedValues["null"]) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
+	  console.log("THIS IS:  ",this)
+	  console.log("Indexed values:  ",indexedValues)
 
     var admKey = parseInt(this.get('adminLevel').substring(4), 10);
 

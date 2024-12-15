@@ -47,6 +47,9 @@ public class AmpGeneralSettings {
     @JsonProperty("default-date-format")
     private String defaultDateFormat;
 
+    @JsonProperty("default-gis-country")
+    private String defaultGISCountry;
+
     @JsonProperty("hide-editable-export-formats-public-view")
     private Boolean hideEditableExportFormatsPublicView;
     @JsonProperty("hide-contacts-public-view")
@@ -278,6 +281,13 @@ public class AmpGeneralSettings {
         return defaultDateFormat;
     }
 
+    public String getDefaultGISCountry() {
+        return defaultGISCountry;
+    }
+
+    public void setDefaultGISCountry(String defaultGISCountry) {
+        this.defaultGISCountry = defaultGISCountry;
+    }
     public void setDefaultDateFormat(String defaultDateFormat) {
         this.defaultDateFormat = defaultDateFormat;
     }

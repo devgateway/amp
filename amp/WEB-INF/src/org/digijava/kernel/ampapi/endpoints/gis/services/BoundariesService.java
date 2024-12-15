@@ -39,11 +39,11 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = "";
-        String country=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue("GIS Mode"));
+        String country=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_COUNTRY));
         if (country.length()==2) {
 
             path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
-            if (country.equalsIgnoreCase("ZZ"))
+            if (country.equalsIgnoreCase("ZZ") || country.equalsIgnoreCase("GG"))
             {
                 path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
 

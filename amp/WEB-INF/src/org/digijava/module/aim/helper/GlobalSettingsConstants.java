@@ -70,6 +70,7 @@ public class GlobalSettingsConstants {
     public static final String GROUP_SEPARATOR = "Default Grouping Separator";
 
     public static final String DEFAULT_DATE_FORMAT = "Default Date Format";
+    public static final String GIS_COUNTRY = "GIS Country";
 
     public static final String SITE_DOMAIN = "Site Domain";
 

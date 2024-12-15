@@ -265,12 +265,7 @@ loadAll: function(options) {
 					if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
 						value = indexedValues[feature.id].value;
 					}
-					var defCountry = app.data.generalSettings.get('default-gis-country');
-					console.log("Default country",defCountry)
-					if (defCountry!=='WS' && defCountry!=='ZZ' && defCountry!=='GG')
-					{
-						feature.properties['BELT']=false;
-					}
+
 
 					return _.extend(feature, {
 						properties: _.extend(feature.properties, {

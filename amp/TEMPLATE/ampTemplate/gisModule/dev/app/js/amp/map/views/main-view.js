@@ -54,7 +54,7 @@ module.exports = Backbone.View.extend({
 
     this.headerView = new MapHeaderView({app: this.app});
     this.GapViewModel = Backbone.Model.extend({defaults: {isGapAnalysisAvailable: false, isGapAnalysisSelected: false}});
-    
+
     this.headerGapAnalysisView = new MapHeaderGapAnalysisView({app: this.app, model: new this.GapViewModel()});
     this.headerPerformanceToggle = new MapHeaderPerformanceToggle({app: this.app, model: this.app.data.performanceToggleModel});
     this.legendView = new LegendView({app: this.app});
@@ -121,6 +121,12 @@ module.exports = Backbone.View.extend({
             onEachFeature: updateOuterBounds,
             style: function (feature) {
               // Check if the "NAME" attribute is "extra"
+              var defCountry = app.data.generalSettings.get('default-gis-country');
+              console.log("Default country",defCountry)
+              if (defCountry!=='WS' && defCountry!=='ZZ' && defCountry!=='GG')
+              {
+                feature.properties['BELT']=false;
+              }
               if (feature.properties['BELT'] === true) {
                 return {
                   color: '#29343F',

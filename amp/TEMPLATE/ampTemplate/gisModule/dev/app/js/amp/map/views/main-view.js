@@ -123,7 +123,7 @@ module.exports = Backbone.View.extend({
               // Check if the "NAME" attribute is "extra"
               var defCountry = app.data.generalSettings.get('default-gis-country');
               console.log("Default country",defCountry)
-              if (defCountry!=='WS' && defCountry!=='ZZ' && defCountry!=='GG')
+              if (defCountry.toLowerCase()!=='ws' && defCountry.toLowerCase()!=='zz' && defCountry.toLowerCase()!=='gg')
               {
                 feature.properties['BELT']=false;
               }

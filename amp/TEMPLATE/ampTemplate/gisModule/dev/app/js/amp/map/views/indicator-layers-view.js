@@ -119,6 +119,16 @@ module.exports = Backbone.View.extend({
 
         return new L.geoJson(layerModel.get('geoJSONs'), {
             style: function(feature) {
+                var defCountry = app.data.generalSettings.get('default-gis-country');
+
+                console.log("Default country",defCountry)
+                if (defCountry==='WS' || defCountry==='ZZ' || defCountry==='GG')
+                {
+                    if (!feature.properties['BELT']||feature.properties['BELT']===null)
+                    {
+                        return;
+                    }
+                }
                 featureValue = feature.properties.value;
                 // sets colour for each polygon
                 colour = layerModel.palette.colours.find(function(colour) {

@@ -245,8 +245,7 @@ loadAll: function(options) {
     if(indexedValues["null"]) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
-	  console.log("THIS IS:  ",this)
-	  console.log("Indexed values:  ",indexedValues)
+
 
     var admKey = parseInt(this.get('adminLevel').substring(4), 10);
 
@@ -275,7 +274,6 @@ loadAll: function(options) {
 				})
 			});
 		});
-	  console.log("GEOJSONS",geoJSONs)
     this.set('geoJSONs', geoJSONs);
   }
 

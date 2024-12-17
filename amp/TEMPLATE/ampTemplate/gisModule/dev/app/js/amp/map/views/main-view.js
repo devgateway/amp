@@ -130,7 +130,7 @@ module.exports = Backbone.View.extend({
               if (feature.properties['BELT'] === true) {
                 return {
                   color: '#29343F',
-                  fillColor: 'green', // Set green color for the feature with NAME 'extra'
+                  fillColor: 'green', // Set green color for the feature with 'BELT' as true
                   weight: 1.4,
                   dashArray: '1'
                 };

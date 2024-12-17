@@ -131,7 +131,6 @@ module.exports = Backbone.View.extend({
                 }
                 return {
                     color: colour.hex(),
-                    fillColor: 'none',
                     weight: 2,
                     opacity: 0.9,
                     fillOpacity: 0.6

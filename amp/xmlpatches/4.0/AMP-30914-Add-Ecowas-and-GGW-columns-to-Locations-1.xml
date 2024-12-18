@@ -8,29 +8,26 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-            -- Add boolean to check if loaction is ecowas or GGW
-			DO $$
+DO $$
 BEGIN
-    -- Check and add 'is_ecowas' column if it doesn't exist
-    IF NOT EXISTS (
-        SELECT 1
-        FROM information_schema.columns
-        WHERE table_name = 'amp_category_value_location'
-          AND column_name = 'is_ecowas'
-    ) THEN
-        ALTER TABLE amp_category_value_location
-        ADD COLUMN is_ecowas BOOLEAN DEFAULT FALSE;
-    END IF;
-
-    -- Check and add 'is_ggw' column if it doesn't exist
+    -- Add `is_ggw` column if it doesn't exist
     IF NOT EXISTS (
         SELECT 1
         FROM information_schema.columns
         WHERE table_name = 'amp_category_value_location'
           AND column_name = 'is_ggw'
     ) THEN
-        ALTER TABLE amp_category_value_location
-        ADD COLUMN is_ggw BOOLEAN DEFAULT FALSE;
+        ALTER TABLE amp_category_value_location ADD COLUMN is_ggw BOOLEAN DEFAULT FALSE;
+    END IF;
+
+    -- Add `is_ecowas` column if it doesn't exist
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_name = 'amp_category_value_location'
+          AND column_name = 'is_ecowas'
+    ) THEN
+        ALTER TABLE amp_category_value_location ADD COLUMN is_ecowas BOOLEAN DEFAULT FALSE;
     END IF;
 END $$;
 

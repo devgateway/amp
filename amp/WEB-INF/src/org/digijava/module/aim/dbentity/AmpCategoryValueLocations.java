@@ -39,7 +39,7 @@ public class AmpCategoryValueLocations implements Identifiable,
     private String iso3;
     private String fullName;
 
-    public boolean isEcowas() {
+    public Boolean isEcowas() {
         return ecowas;
     }
 
@@ -47,7 +47,7 @@ public class AmpCategoryValueLocations implements Identifiable,
         this.ecowas = ecowas;
     }
 
-    public boolean isGgw() {
+    public Boolean isGgw() {
         return ggw;
     }
 

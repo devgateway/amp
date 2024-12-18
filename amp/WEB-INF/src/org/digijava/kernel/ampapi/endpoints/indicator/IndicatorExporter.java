@@ -112,15 +112,6 @@ public class IndicatorExporter {
     {
         Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
         Set<AmpCategoryValueLocations> allLocations = DynLocationManagerUtil.getLocationsByLayer(ampCategoryValue);
-        Session dbSession = PersistenceManager.getRequestDBSession();
-        String queryString = "select loc from "
-                + AmpCategoryValueLocations.class.getName()
-                + " loc where (loc.parentCategoryValue=:cvId) "
-                + " and (loc.deleted != true)";
-        Query qry = dbSession.createQuery(queryString);
-        qry.setParameter("cvId", ampCategoryValue.getId(), LongType.INSTANCE);
-        qry.setCacheable(true);
-        allLocations.addAll(qry.list());
         AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
         logger.info("Locations: " + allLocations);
         if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg"))

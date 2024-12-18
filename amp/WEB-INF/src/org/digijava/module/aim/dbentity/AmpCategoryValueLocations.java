@@ -55,8 +55,8 @@ public class AmpCategoryValueLocations implements Identifiable,
         this.ggw = ggw;
     }
 
-    private boolean ecowas;
-    private boolean ggw;
+    private boolean ecowas=false;
+    private boolean ggw=false;
 
     private Boolean deleted;
 

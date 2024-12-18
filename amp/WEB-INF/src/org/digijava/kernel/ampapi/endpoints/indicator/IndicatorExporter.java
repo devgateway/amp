@@ -125,12 +125,14 @@ public class IndicatorExporter {
         logger.info("Locations: " + allLocations);
         if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg"))
         {
-            locations = allLocations.stream().filter(AmpCategoryValueLocations::isGgw).collect(Collectors.toSet());
-
+            locations = allLocations.stream()
+                    .filter(loc -> loc != null && Boolean.TRUE.equals(loc.isGgw()))
+                    .collect(Collectors.toSet());
 
         } else if (defCountry.getIso().equalsIgnoreCase("ws")) {
-        locations = allLocations.stream().filter(AmpCategoryValueLocations::isEcowas).collect(Collectors.toSet());
-        }
+            locations = allLocations.stream()
+                    .filter(loc -> loc != null && Boolean.TRUE.equals(loc.isEcowas()))
+                    .collect(Collectors.toSet());        }
         else {
             locations.add(DynLocationManagerUtil.getDefaultCountry());
 

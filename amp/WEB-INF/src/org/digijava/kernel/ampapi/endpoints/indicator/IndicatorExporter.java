@@ -113,7 +113,6 @@ public class IndicatorExporter {
         Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
         Set<AmpCategoryValueLocations> allLocations = DynLocationManagerUtil.getLocationsByLayer(ampCategoryValue);
         AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
-        logger.info("Locations: " + allLocations);
         if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg"))
         {
             locations = allLocations.stream()

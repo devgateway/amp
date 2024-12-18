@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30853</jira>
+    <author>bmokandu</author>
+    <description>Add boolean to check if loaction is ecowas or GGW</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+            -- Add boolean to check if loaction is ecowas or GGW
+			DO $$
+BEGIN
+    -- Check and add 'is_ecowas' column if it doesn't exist
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_name = 'amp_category_value_location'
+          AND column_name = 'is_ecowas'
+    ) THEN
+        ALTER TABLE amp_category_value_location
+        ADD COLUMN is_ecowas BOOLEAN DEFAULT FALSE;
+    END IF;
+
+    -- Check and add 'is_ggw' column if it doesn't exist
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_name = 'amp_category_value_location'
+          AND column_name = 'is_ggw'
+    ) THEN
+        ALTER TABLE amp_category_value_location
+        ADD COLUMN is_ggw BOOLEAN DEFAULT FALSE;
+    END IF;
+END $$;
+
+-- Update for GGW countries
+UPDATE AMP_CATEGORY_VALUE_LOCATION
+SET is_ggw = TRUE
+WHERE UPPER(iso) IN (
+    'BF', 'TD', 'DJ', 'ER', 'ET',
+    'ML', 'MR', 'NE', 'NG', 'SN', 'SD'
+);
+-- Update for Ecowas countries
+UPDATE AMP_CATEGORY_VALUE_LOCATION
+SET is_ecowas = TRUE
+WHERE UPPER(iso) IN (
+    'BJ', 'BF', 'CV', 'CI', 'GM',
+    'GH', 'GN', 'GW', 'LR', 'ML',
+    'NE', 'NG', 'SN', 'SL', 'TG'
+);
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

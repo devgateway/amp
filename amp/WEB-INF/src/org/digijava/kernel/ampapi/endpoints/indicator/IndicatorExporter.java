@@ -17,11 +17,12 @@ import javax.ws.rs.core.StreamingOutput;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
  * Indicator Endpoint utility methods
- * 
+ *
  * @author apicca
  */
 public class IndicatorExporter {
@@ -55,7 +56,7 @@ public class IndicatorExporter {
         for (int i = 0; i < cellIndex; i++) {
             sheet.autoSizeColumn(i);
         }
-    
+
         StreamingOutput streamOutput = output -> {
             try {
                 wb.write(output);
@@ -64,12 +65,12 @@ public class IndicatorExporter {
                 throw new WebApplicationException(e);
             }
         };
-        
+
         String fileName = String.format("export-indicator-layer-%s.xls", categoryValue.getLabel());
-    
+
         Response.ResponseBuilder responseBuilder = Response.ok(streamOutput, new MediaType("application", "xls"))
                 .header("content-disposition", "attachment; filename = " + fileName);
-        
+
         return responseBuilder.build();
     }
 
@@ -84,7 +85,7 @@ public class IndicatorExporter {
     public static void populateIndicatorLayerTableValues(HSSFSheet sheet,int rowIndex, AmpCategoryValue categoryValue, String name) {
         Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
         if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(categoryValue)) {
-            locations.add(DynLocationManagerUtil.getDefaultCountry());
+            locations = getTopLevelCountries(categoryValue);
         } else {
             locations = DynLocationManagerUtil.getLocationsByLayer(categoryValue);
         }
@@ -101,6 +102,28 @@ public class IndicatorExporter {
             }
 
         }
+
+    }
+    private static Set<AmpCategoryValueLocations> getTopLevelCountries(AmpCategoryValue ampCategoryValue)
+    {
+        Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
+        Set<AmpCategoryValueLocations> allLocations = DynLocationManagerUtil.getLocationsByLayer(ampCategoryValue);
+
+        AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
+
+        if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg"))
+        {
+            locations = allLocations.stream().filter(AmpCategoryValueLocations::isGgw).collect(Collectors.toSet());
+
+
+        } else if (defCountry.getIso().equalsIgnoreCase("ws")) {
+        locations = allLocations.stream().filter(AmpCategoryValueLocations::isEcowas).collect(Collectors.toSet());
+        }
+        else {
+            locations.add(DynLocationManagerUtil.getDefaultCountry());
+
+        }
+        return locations;
 
     }
 

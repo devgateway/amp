@@ -17,6 +17,8 @@
 			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false" />
 		<property name="description" column="description" type="text" />
 		<property name="gsLat" column="gs_lat" type="java.lang.String" />
+		<property name="ecowas" column="is_ecowas" type="java.lang.Boolean" />
+		<property name="ggw" column="is_ggw" type="java.lang.Boolean" />
 		<property name="gsLong" column="gs_long" type="java.lang.String" />
 		<property name="geoCode" column="geo_code" type="java.lang.String" />
 		<property name="code" column="code" type="java.lang.String" />

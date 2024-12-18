@@ -43,7 +43,7 @@ public class AmpCategoryValueLocations implements Identifiable,
         return ecowas;
     }
 
-    public void setEcowas(boolean ecowas) {
+    public void setEcowas(Boolean ecowas) {
         this.ecowas = ecowas;
     }
 
@@ -51,7 +51,7 @@ public class AmpCategoryValueLocations implements Identifiable,
         return ggw;
     }
 
-    public void setGgw(boolean ggw) {
+    public void setGgw(Boolean ggw) {
         this.ggw = ggw;
     }
 

@@ -3,12 +3,16 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -108,9 +112,17 @@ public class IndicatorExporter {
     {
         Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
         Set<AmpCategoryValueLocations> allLocations = DynLocationManagerUtil.getLocationsByLayer(ampCategoryValue);
-
+        Session dbSession = PersistenceManager.getRequestDBSession();
+        String queryString = "select loc from "
+                + AmpCategoryValueLocations.class.getName()
+                + " loc where (loc.parentCategoryValue=:cvId) "
+                + " and (loc.deleted != true)";
+        Query qry = dbSession.createQuery(queryString);
+        qry.setParameter("cvId", ampCategoryValue.getId(), LongType.INSTANCE);
+        qry.setCacheable(true);
+        allLocations.addAll(qry.list());
         AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
-
+        logger.info("Locations: " + allLocations);
         if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg"))
         {
             locations = allLocations.stream().filter(AmpCategoryValueLocations::isGgw).collect(Collectors.toSet());

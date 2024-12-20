@@ -73,6 +73,11 @@ public class IndicatorImporter {
                     selectedAdmLevel = admLevelValue;
                     if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(admLevelValue)) {
                         isCountryLevel = true;
+                        AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
+
+                        if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg") || defCountry.getIso().equalsIgnoreCase("ws")) {
+                        isCountryLevel =false;
+                        }
                     }
                     break;
                 }
@@ -152,7 +157,7 @@ public class IndicatorImporter {
         if(locationIndicatorValueList.isEmpty()) {
             errors.addApiErrorMessage(IndicatorErrors.INVALID_IMPORT_NO_VALUE, null);
         }
-        
+
         return locationIndicatorValueList;
     }
 
@@ -172,7 +177,7 @@ public class IndicatorImporter {
     }
 
     public static IndicatorImporterResult importIndicator(InputStream uploadedInputStream, long admLevelId) {
-        
+
         byte[] fileData;
         try {
             fileData = org.apache.commons.io.IOUtils.toByteArray(uploadedInputStream);

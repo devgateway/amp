@@ -110,16 +110,16 @@ public class IndicatorExporter {
     }
     private static Set<AmpCategoryValueLocations> getTopLevelCountries(AmpCategoryValue ampCategoryValue)
     {
-        Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
+        Set<AmpCategoryValueLocations> locations = new HashSet<>();
         Set<AmpCategoryValueLocations> allLocations = DynLocationManagerUtil.getLocationsByLayer(ampCategoryValue);
-        AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
-        if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg"))
+        String defCountry = DynLocationManagerUtil.getDefaultCountry().getIso();
+        if (defCountry.equalsIgnoreCase("zz"))
         {
             locations = allLocations.stream()
                     .filter(loc -> loc != null && Boolean.TRUE.equals(loc.isGgw()))
                     .collect(Collectors.toSet());
 
-        } else if (defCountry.getIso().equalsIgnoreCase("ws")) {
+        } else if (defCountry.equalsIgnoreCase("ws")) {
             locations = allLocations.stream()
                     .filter(loc -> loc != null && Boolean.TRUE.equals(loc.isEcowas()))
                     .collect(Collectors.toSet());        }

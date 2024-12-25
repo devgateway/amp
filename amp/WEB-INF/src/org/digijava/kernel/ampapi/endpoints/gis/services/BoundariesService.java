@@ -6,6 +6,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.action.DynamicLocationManager;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -39,11 +41,11 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = "";
-        String country=Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_COUNTRY));
-        if (country.length()==2) {
+        String country= DynLocationManagerUtil.getDefaultCountryIso();
+        if (country!=null) {
 
             path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
-            if (country.equalsIgnoreCase("ZZ") || country.equalsIgnoreCase("GG"))
+            if (country.equalsIgnoreCase("ZZ"))
             {
                 path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
 
@@ -53,7 +55,7 @@ public class BoundariesService {
 
             }
             logger.info("SELECTED COUNTRY: " + country);
-            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("GG") && !country.equalsIgnoreCase("ZZ")) {
+            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("ZZ")) {
 
                 path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
 

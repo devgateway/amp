@@ -73,9 +73,9 @@ public class IndicatorImporter {
                     selectedAdmLevel = admLevelValue;
                     if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(admLevelValue)) {
                         isCountryLevel = true;
-                        AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
+                        String  defCountry = DynLocationManagerUtil.getDefaultCountryIso();
 
-                        if (defCountry.getIso().equalsIgnoreCase("zz")||defCountry.getIso().equalsIgnoreCase("gg") || defCountry.getIso().equalsIgnoreCase("ws")) {
+                        if (defCountry.equalsIgnoreCase("zz")|| defCountry.equalsIgnoreCase("ws")) {
                         isCountryLevel =false;
                         }
                     }

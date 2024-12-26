@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -63,6 +64,7 @@ public class OnePager extends AmpHeaderFooter {
 
     protected AmpActivityModel am;
 //  protected AmpActivityModel activityModelForSave;
+    static String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
 
     static OnepagerSection[] staticOnepagerSectionList = {
         new OnepagerSection("Identification",AmpIdentificationFormSectionFeature.class.getName(), 1, false),
@@ -81,7 +83,7 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Regional Observations", AmpRegionalObservationsFormSectionFeature.class.getName(), 14, false),
         new OnepagerSection("Contacts", AmpContactsFormSectionFeature.class.getName(), 15, false),
         new OnepagerSection("Contracts", AmpContractingFormSectionFeature.class.getName(), 16, false),
-        new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false),
+        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 17, false),
         new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 18, false),
         new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 19, false),
         new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
@@ -272,9 +274,9 @@ public class OnePager extends AmpHeaderFooter {
 
     /**
      * Decodes a URL in the form:
-     * 
-     * /mountpoint/paramName1/paramValue1/paramName2/paramValue2 
-     * 
+     *
+     * /mountpoint/paramName1/paramValue1/paramName2/paramValue2
+     *
      * (i.e. a URL using the pre wicket 1.5 Hybrid URL strategy)
      */
     public PageParameters decodePageParameters(Request request)
@@ -284,7 +286,7 @@ public class OnePager extends AmpHeaderFooter {
         Iterator<String> segment = request.getUrl().getSegments().iterator();
         if (segment.hasNext())
             segment.next();
-        
+
         while (segment.hasNext()){
             String key = segment.next();
             String value = null;
@@ -293,7 +295,7 @@ public class OnePager extends AmpHeaderFooter {
             if (value != null)
                 parameters.add(key, value);
         }
-        
+
         return parameters.isEmpty() ? null : parameters;
     }
 

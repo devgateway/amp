@@ -14,7 +14,7 @@
                 delete
                 from amp_modules_visibility
                 where name = 'Filter By Indicator Location';
-                drop table AMP_INDICATOR_LOCATION;</lang>
+                drop table IF EXISTS AMP_INDICATOR_LOCATION;</lang>
         </script>
     </apply>
 </tns:patch>

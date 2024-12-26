@@ -420,6 +420,7 @@ public class SettingsUtils {
         settings.setProjectSites(FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
         settings.setProgramsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_PROGRAMS_ENABLED));
         settings.setSectorsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_SECTORS_ENABLED));
+        settings.setWocatEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisConstants.SHOW_WOCAT));
         settings.setMultiCountryEnabled(FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED));
         settings.setLoginRequired(FeaturesUtil.isVisibleFeature(GisConstants.LOGIN_REQUIRED));
 
@@ -486,7 +487,6 @@ public class SettingsUtils {
 
         settings.setIndicatorFilterBySector(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR));
         settings.setIndicatorFilterByProgram(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM));
-        settings.setIndicatorFilterByLocation(FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION));
         settings.setNumberOfIndicatorsInDashboard(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.NUMBER_OF_INDICATORS_IN_DASHBOARD));
 
         return settings;

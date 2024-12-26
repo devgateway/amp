@@ -106,6 +106,7 @@
     "zeroclipboard": "2.2.0"
   },
   "dependencies": {
-    "chokidar": "1.0.0-rc5"
+    "chokidar": "1.0.0-rc5",
+    "i18n-iso-countries": "^7.12.0"
   }
 }

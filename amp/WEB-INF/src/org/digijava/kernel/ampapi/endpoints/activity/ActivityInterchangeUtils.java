@@ -322,7 +322,7 @@ public final class ActivityInterchangeUtils {
                         AmpIndicator ind = new AmpIndicator();
                         ind.setIndicatorId((Long) indicator.get("indicator"));
 
-                        IndicatorActivity result = null;
+                        List<IndicatorActivity> results = null;
                         AmpActivityVersion activity = null;
 
                         try {
@@ -330,24 +330,20 @@ public final class ActivityInterchangeUtils {
                         } catch (DgException e) {
                             throw new RuntimeException(e);
                         }
+                            results = IndicatorUtil.findActivityIndicatorConnections(activity, ind);
 
-
-                        try {
-                            result = IndicatorUtil.findActivityIndicatorConnection(activity, ind);
-                        } catch (DgException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        if (result != null && result.getValues() != null) {
-                            for (AmpIndicatorValue indicatorValue : result.getValues()) {
-                                actualValues.add(new HashMap<String, Object>() {{
-                                    put("comment", indicatorValue.getComment());
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
-                                    Date valueDate = indicatorValue.getValueDate();
-                                    String formattedDate = dateFormat.format(valueDate);
-                                    put("date", formattedDate);
-                                    put("value", indicatorValue.getValue());
-                                }});
+                        for (IndicatorActivity result : results) {
+                            if (result != null && result.getValues() != null) {
+                                for (AmpIndicatorValue indicatorValue : result.getValues()) {
+                                    actualValues.add(new HashMap<String, Object>() {{
+                                        put("comment", indicatorValue.getComment());
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
+                                        Date valueDate = indicatorValue.getValueDate();
+                                        String formattedDate = dateFormat.format(valueDate);
+                                        put("date", formattedDate);
+                                        put("value", indicatorValue.getValue());
+                                    }});
+                                }
                             }
                         }
 

@@ -23,10 +23,6 @@ import lodash from 'lodash';
 
 const MySwal = withReactContent(Swal);
 
-const ascendingOptions = [
-  { value: true, label: 'True' },
-  { value: false, label: 'False' }
-];
 
 interface EditIndicatorModalProps extends DefaultComponentProps {
   show: boolean;
@@ -51,6 +47,12 @@ interface IndicatorFormValues {
 
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const { show, setShow, indicator, translations, filterBySector, filterByProgram } = props;
+
+  const ascendingOptions = [
+    { value: true, label: translations["amp.indicatormanager:true"] },
+    { value: false, label: translations["amp.indicatormanager:false"] }
+  ];
+
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
 
@@ -205,7 +207,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
       return {
         value: sectorId.toString(),
-        label: 'Sector not found'
+        label: translations["amp.indicatormanager:sector-not-found"]
       }
     });
 
@@ -271,7 +273,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     if (updateIndicatorReducer.loading) {
       MySwal.fire({
         icon: 'info',
-        title: 'Updating Indicator...',
+        title: `${translations["amp.indicatormanager:updating-indicator"]}...`,
         timer: 18000
       });
       return;
@@ -280,7 +282,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     if (!updateIndicatorReducer.loading && !updateIndicatorReducer.error && updateIndicatorReducer?.indicator?.id) {
       MySwal.fire({
         icon: 'success',
-        title: 'Indicator updated successfully',
+        title: translations["amp.indicatormanager:indicator-updated-successfully"],
         timer: 3000
       }).then(() => {
         handleClose();
@@ -291,7 +293,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
     MySwal.fire({
       icon: 'error',
-      title: 'Oops...',
+      title: translations["amp.indicatormanager:error"],
       text: updateIndicatorReducer.loading ? translations["amp.indicatormanager:save-failed"] : updateIndicatorReducer.error,
     });
   }, [updateIndicatorReducer]);
@@ -355,10 +357,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
           if (selectedProgramSchemeId && !programId) {
             MySwal.fire({
-              title: 'Error',
+              title: translations['amp.indicatormanager:error'],
               text: translations['amp.indicatormanager:errors-program-is-required'],
               icon: 'error',
-              confirmButtonText: 'Ok',
+              confirmButtonText: translations['amp.indicatormanager:ok'],
             })
 
             return;
@@ -462,7 +464,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         onChange={(value) => {
                           props.setFieldValue("ascending", value?.value);
                         }}
-                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? "True" : "False" }}
+                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? translations["amp.indicatormanager:true"] : translations["amp.indicatormanager:false"] }}
                       />
                     </Form.Group>
 
@@ -524,6 +526,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                                 name="indicatorsCategory"
                                 options={categories}
+                                placeholder={translations["amp.indicatormanager:select"]}
                                 onChange={(selectedValue) => {
                                   // set the formik value with the selected values and remove the label
                                     setDefaultCategory(selectedValue)
@@ -540,6 +543,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <Select
                                 name="categories"
                                 isDisabled={true}
+                                placeholder={translations["amp.indicatormanager:select"]}
+                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
                             />
                         )
                       }

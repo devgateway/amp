@@ -261,8 +261,9 @@ public class ConfigLoaderListener
                 jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
             throw new IncompatibleEnvironmentException("JDBC driver version ("+metaData.getDriverVersion()+") is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
         
+        logger.info("+++++++++++++++++");
         logger.info("Database compatibility OK.");
-        
+
         PersistenceManager.closeQuietly(connection);
     }
     
@@ -271,8 +272,13 @@ public class ConfigLoaderListener
      * @throws IncompatibleEnvironmentException
      */
     private void checkOtherVMParameters() throws IncompatibleEnvironmentException {
-        String awtHeadless=System.getProperty("java.awt.headless");
-        if(awtHeadless==null || !"true".equalsIgnoreCase(awtHeadless)) throw new IncompatibleEnvironmentException("Please add -Djava.awt.headless=true to the VM parameters. This is required in order to get the charts work properly");
+        String awtHeadless = System.getProperty("java.awt.headless");
+        Properties properties = System.getProperties();
+        System.out.println("=== System Properties ===");
+        properties.forEach((key, value) -> System.out.println(key + ": " + value));
+        System.out.println("=== End System Properties ===dd");
+        if (awtHeadless == null || !"true".equalsIgnoreCase(awtHeadless))
+            throw new IncompatibleEnvironmentException("Please add dd -Djava.awt.headless=true to the VM parameters. This is required in order to get the charts work properly");
     }
     
     private Map getModuleContextInitializers() throws ClassNotFoundException,

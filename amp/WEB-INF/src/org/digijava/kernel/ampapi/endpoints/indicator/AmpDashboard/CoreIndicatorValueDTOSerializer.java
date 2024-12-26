@@ -20,7 +20,9 @@ public class CoreIndicatorValueDTOSerializer implements JsonSerializer<CoreIndic
             JsonObject coreIndicatorTypeJson = new JsonObject();
             coreIndicatorTypeJson.addProperty("name", coreIndicatorType.getName());
             coreIndicatorTypeJson.addProperty("core-type", coreIndicatorType.getCoreType());
+            coreIndicatorTypeJson.addProperty("number-divider", coreIndicatorType.getNumberDivider());
             coreIndicatorTypeJson.addProperty("unit", coreIndicatorType.getUnit());
+            coreIndicatorTypeJson.addProperty("order", coreIndicatorType.getOrder());
             jsonObject.add("core-indicator-type", coreIndicatorTypeJson);
         }
 

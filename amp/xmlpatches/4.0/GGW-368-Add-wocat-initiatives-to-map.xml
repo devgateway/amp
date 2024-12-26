@@ -10,7 +10,7 @@
             <lang delimiter=";" type="postgres">
                 insert into amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
                 values
-                (nextval('amp_global_settings_seq'), 'Show Wocat in Map', 'true', 't_Boolean', 'Show Wocat in Map', 'general', false);
+                ((select max(id) + 1 FROM amp_global_settings), 'Show Wocat in Map', 'true', 't_Boolean', 'Show Wocat in Map', 'general', false);
             </lang>
         </script>
     </apply>

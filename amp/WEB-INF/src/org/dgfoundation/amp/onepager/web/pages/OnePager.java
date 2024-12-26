@@ -66,6 +66,8 @@ public class OnePager extends AmpHeaderFooter {
 //  protected AmpActivityModel activityModelForSave;
     static String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
 
+
+
     static OnepagerSection[] staticOnepagerSectionList = {
         new OnepagerSection("Identification",AmpIdentificationFormSectionFeature.class.getName(), 1, false),
         new OnepagerSection("Activity Internal IDs", AmpInternalIdsFormSectionFeature.class.getName(), 2, false),

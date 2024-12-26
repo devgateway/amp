@@ -136,7 +136,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                                 GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
                         if ("false".equals(mixedImplementationLocation)) {
                             Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-                            if (set != null && set.size() > 0) {
+                            if (set != null && !set.isEmpty()) {
                                 if (canDeleteLocation(target, am, null)) {
                                     implementationLevel.getChoiceModel().setObject(
                                             new HashSet<>(Collections.singletonList(previousImplementationLevel)));

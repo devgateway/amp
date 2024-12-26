@@ -406,7 +406,10 @@ public class AmpLocationFormTableFeature extends
                 }
             }
         }
-        regionalFundingFeature.getMeFormSection().updateAmpLocationModel(activityLocation);
+        String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
+        if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
+            regionalFundingFeature.getMeFormSection().updateAmpLocationModel(activityLocation);
+        }
 
         set.add(activityLocation);
     }

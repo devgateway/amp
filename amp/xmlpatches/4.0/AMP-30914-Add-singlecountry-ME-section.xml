@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>AMP-30914</jira>
     <author>bmokandu</author>
-    <description>Manually add conflicting M&E section to DB if not exists.</description>
+    <description>Manually add conflicting M&amp;E section to DB if not exists.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[

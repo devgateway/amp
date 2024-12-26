@@ -296,7 +296,7 @@ public class DynLocationManagerUtil {
             }
 
             for (Country country : countries) {
-                if (country.getIso3() != null && country.getIso3().length() > 0
+                if (country.getIso3() != null && !country.getIso3().isEmpty()
                         && iso3ToLocationsMap.get(country.getIso3()) != null) {
                     continue;
                 }
@@ -317,7 +317,7 @@ public class DynLocationManagerUtil {
             HashMap<String, Country> iso3ToDgCountriesMap = new HashMap<String, Country>();
             for (Country country : countries) {
                 namesToDgCountriesMap.put(country.getCountryName(), country);
-                if (country.getIso3() != null && country.getIso3().length() > 0) {
+                if (country.getIso3() != null && !country.getIso3().isEmpty()) {
                     iso3ToDgCountriesMap.put(country.getIso3(), country);
                 }
                 if (country.getCountryId() != null
@@ -331,7 +331,7 @@ public class DynLocationManagerUtil {
                     if (namesToDgCountriesMap.get(location.getName()) == null) {
                         Country country = null;
                         if (location.getIso3() != null
-                                && location.getIso3().length() > 0)
+                                && !location.getIso3().isEmpty())
                             country = iso3ToDgCountriesMap.get(location
                                     .getIso3());
                         if (country == null)
@@ -732,7 +732,7 @@ public class DynLocationManagerUtil {
     }
     public static String getDefaultCountryIso()
     {
-        return getDefaultCountry().getIso();
+        return getDefaultCountry()!=null?getDefaultCountry().getIso():null;
     }
 
     public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException

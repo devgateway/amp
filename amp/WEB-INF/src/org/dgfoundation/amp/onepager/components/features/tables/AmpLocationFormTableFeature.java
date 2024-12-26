@@ -376,7 +376,7 @@ public class AmpLocationFormTableFeature extends
         AmpActivityLocation activityLocation = new AmpActivityLocation();
 
         activityLocation.setLocation(choice);
-        if (disablePercentagesForInternational.getObject()) {
+        if (Boolean.TRUE.equals(disablePercentagesForInternational.getObject())) {
             AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
             if (choice.getId().longValue() == defCountry.getId().longValue()
                     || defCountry.getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
@@ -395,7 +395,7 @@ public class AmpLocationFormTableFeature extends
         activityLocation.setActivity(am.getObject());
 
         if (setModel.getObject() == null)
-            setModel.setObject(new HashSet<AmpActivityLocation>());
+            setModel.setObject(new HashSet<>());
 
         Set<AmpActivityLocation> set = setModel.getObject();
         if (isCountryNational) {

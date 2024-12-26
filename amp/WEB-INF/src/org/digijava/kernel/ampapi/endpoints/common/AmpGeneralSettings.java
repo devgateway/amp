@@ -111,8 +111,6 @@ public class AmpGeneralSettings {
     @JsonProperty("gis-sectors-enabled")
     private Boolean sectorsEnabled;
 
-
-
     @JsonProperty("gis-show-wocat")
     private Boolean wocatEnabled;
 

@@ -88,4 +88,16 @@ public class OnepagerSection implements Serializable{
     public void setDependentClassName(String dependentClassName) {
         this.dependentClassName = dependentClassName;
     }
+
+    @Override
+    public String toString() {
+        return "OnepagerSection{" +
+                "className='" + className + '\'' +
+                ", position=" + position +
+                ", folded=" + folded +
+                ", name='" + name + '\'' +
+                ", dependent=" + dependent +
+                ", dependentClassName='" + dependentClassName + '\'' +
+                '}';
+    }
 }

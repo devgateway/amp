@@ -85,14 +85,14 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Regional Observations", AmpRegionalObservationsFormSectionFeature.class.getName(), 14, false),
         new OnepagerSection("Contacts", AmpContactsFormSectionFeature.class.getName(), 15, false),
         new OnepagerSection("Contracts", AmpContractingFormSectionFeature.class.getName(), 16, false),
-        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 17, false),
-        new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 18, false),
-        new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 19, false),
-        new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
-        new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
-        new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false),
-        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 23, false),
-        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 24, false)
+        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 18, false),
+        new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 19, false),
+        new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 20, false),
+        new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 21, false),
+        new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 22, false),
+        new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 23, false),
+        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 24, false),
+        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 25, false)
 
         };
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);
@@ -404,6 +404,7 @@ public class OnePager extends AmpHeaderFooter {
             }
 
             public List<AmpComponentPanel> initObjects() {
+                logger.info("Initializing sections:"+sectionsList);
                 Iterator<OnepagerSection> it = sectionsList.iterator();
                 LinkedList<AmpComponentPanel> ret = new LinkedList<AmpComponentPanel>();
                 HashMap<String, AmpComponentPanel> temp = new HashMap<String, AmpComponentPanel>();
@@ -448,12 +449,7 @@ public class OnePager extends AmpHeaderFooter {
     }
 
     public static void sortSections(List<OnepagerSection> list){
-        Collections.sort(list, new Comparator<OnepagerSection>() {
-            @Override
-            public int compare(OnepagerSection o1, OnepagerSection o2) {
-                return o1.getPosition() - o2.getPosition();
-            }
-        });
+        list.sort(Comparator.comparingInt(OnepagerSection::getPosition));
     }
 
     private static List<OnepagerSection> loadPositions() {

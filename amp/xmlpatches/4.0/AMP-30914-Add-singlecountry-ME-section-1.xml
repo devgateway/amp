@@ -9,7 +9,7 @@
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
             INSERT INTO AMP_ONEPAGER_SECTION (className, folded, position)
-            SELECT 'org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature', false, 17
+            SELECT 'org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature', false, 18
             WHERE NOT EXISTS (
                 SELECT 1
                 FROM AMP_ONEPAGER_SECTION

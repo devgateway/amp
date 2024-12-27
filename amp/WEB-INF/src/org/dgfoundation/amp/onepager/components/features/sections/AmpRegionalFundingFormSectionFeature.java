@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 /**
  * The regionalfunding section of the activity form.
- * 
+ *
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpRegionalFundingFormSectionFeature extends
@@ -40,10 +41,21 @@ public class AmpRegionalFundingFormSectionFeature extends
      */
 
     protected AmpMEFormSectionFeature meFormSection;
+    protected org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature singleCountryMeFormSection;
     public AmpRegionalFundingFormSectionFeature(String id, String fmName,
                                                 final IModel<AmpActivityVersion> am, AmpComponentPanel meFormSectionFeature) throws Exception {
         super(id, fmName, am);
-        this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
+                        String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
+                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
+                    this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
+
+                }
+                else
+                {
+                    this.singleCountryMeFormSection = (org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature) meFormSectionFeature;
+
+                }
+
         final IModel<Set<AmpRegionalFunding>> setModel = new PropertyModel<Set<AmpRegionalFunding>>(
                 am, "regionalFundings");
         if (setModel.getObject() == null)

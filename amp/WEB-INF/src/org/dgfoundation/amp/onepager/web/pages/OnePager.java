@@ -350,6 +350,8 @@ public class OnePager extends AmpHeaderFooter {
             private static final long serialVersionUID = 1L;
             private List<AmpComponentPanel> list = null;
             private AmpComponentPanel initObject(OnepagerSection os, List<OnepagerSection> features, HashMap<String, AmpComponentPanel> temp){
+                logger.info("Temp: " + temp);
+                logger.info("OS: "+os);
                 AmpComponentPanel existing = temp.get(os.getClassName());
                 if (existing != null)
                     return existing;
@@ -500,6 +502,10 @@ public class OnePager extends AmpHeaderFooter {
                 if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature"))
                 {
                     section.setClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
+                }
+                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature"))
+                {
+                    section.setDependentClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
                 }
             }
         }

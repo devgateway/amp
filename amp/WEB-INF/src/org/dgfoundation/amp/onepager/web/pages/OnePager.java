@@ -493,7 +493,7 @@ public class OnePager extends AmpHeaderFooter {
     {
         logger.info("Checking for multi country");
         String defCountryIso = DynLocationManagerUtil.getDefaultCountryIso();
-        if (defCountryIso!=null && defCountryIso.equalsIgnoreCase("zz"))
+        if (defCountryIso!=null && !defCountryIso.equalsIgnoreCase("zz"))
         {
             for (OnepagerSection section: returnList)
             {

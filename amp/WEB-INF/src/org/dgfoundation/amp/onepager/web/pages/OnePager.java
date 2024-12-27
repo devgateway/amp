@@ -475,7 +475,7 @@ public class OnePager extends AmpHeaderFooter {
                 if (!found)
                     returnList.add(localOs);
             }
-//            checkIfMultiCountry(returnList);
+            checkIfMultiCountry(returnList);
             checkOrder(returnList);
             saveOnce(session, returnList);
             sortSections(returnList);

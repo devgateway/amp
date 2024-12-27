@@ -158,11 +158,11 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                     disablePercentagesForInternational.setObject(false);
                     locationTable.getSearchLocations().setVisibilityAllowed(true);
                 }
-                String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
-                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
+//                String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
+//                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
                     findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature()
                             .getMeFormSection().clearLocations(model.getObject().getLocation());
-                }
+//                }
                 locationTable.reloadValidationFields(target);
                 setModel.getObject().remove(model.getObject());
                 send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));

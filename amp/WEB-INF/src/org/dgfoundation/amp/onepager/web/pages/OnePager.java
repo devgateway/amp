@@ -479,6 +479,7 @@ public class OnePager extends AmpHeaderFooter {
             checkOrder(returnList);
             saveOnce(session, returnList);
             sortSections(returnList);
+            checkIfMultiCountry(returnList);
             return returnList;
         } catch (Exception e) {
             logger.error("Can't load onepager section positions:", e);
@@ -486,6 +487,25 @@ public class OnePager extends AmpHeaderFooter {
             return null;
         } finally {
            PersistenceManager.closeSession(session);
+        }
+    }
+    private static void checkIfMultiCountry(List<OnepagerSection> returnList)
+    {
+        logger.info("Checking for multi country");
+        String defCountryIso = DynLocationManagerUtil.getDefaultCountryIso();
+        if (defCountryIso!=null && !defCountryIso.equalsIgnoreCase("zz"))
+        {
+            for (OnepagerSection section: returnList)
+            {
+                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature"))
+                {
+                    section.setClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
+                }
+                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature"))
+                {
+                    section.setDependentClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
+                }
+            }
         }
     }
 

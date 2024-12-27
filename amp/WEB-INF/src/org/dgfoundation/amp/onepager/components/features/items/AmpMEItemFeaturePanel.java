@@ -4,9 +4,7 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -14,7 +12,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.events.ProgramSelectedEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
@@ -22,7 +19,6 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 
 import org.digijava.module.aim.dbentity.*;
@@ -32,11 +28,8 @@ import org.digijava.module.aim.util.DbUtil;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author aartimon@dginternational.org

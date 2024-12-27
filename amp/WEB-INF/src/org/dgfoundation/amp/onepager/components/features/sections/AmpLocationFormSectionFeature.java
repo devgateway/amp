@@ -149,8 +149,12 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                                 locationsTable.getSearchLocations().setVisibilityAllowed(true);
                                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
                                 target.add(locationsTable);
-                                getRegionalFundingFeature().getMeFormSection().clearLocations(null);
-                                send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
+                                String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
+                                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
+                                    getRegionalFundingFeature().getMeFormSection().clearLocations(null);
+                                    send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
+
+                                }
 
                             }
                         }

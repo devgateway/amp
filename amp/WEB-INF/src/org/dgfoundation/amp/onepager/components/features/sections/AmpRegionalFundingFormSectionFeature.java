@@ -11,10 +11,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import java.util.Set;
 
 /**
  * The regionalfunding section of the activity form.
- * 
+ *
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpRegionalFundingFormSectionFeature extends
@@ -38,16 +40,23 @@ public class AmpRegionalFundingFormSectionFeature extends
      * @param am
      * @throws Exception
      */
+    static String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
 
+    protected AmpMultiCountryMEFormSectionFeature multiCountryMEFormSectionFeature;
     protected AmpMEFormSectionFeature meFormSection;
     public AmpRegionalFundingFormSectionFeature(String id, String fmName,
                                                 final IModel<AmpActivityVersion> am, AmpComponentPanel meFormSectionFeature) throws Exception {
         super(id, fmName, am);
-        this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
+        if (defCountry!=null && defCountry.equalsIgnoreCase("zz")) {
+            this.multiCountryMEFormSectionFeature = (AmpMultiCountryMEFormSectionFeature) meFormSectionFeature;
+        }
+        else {
+            this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
+        }
         final IModel<Set<AmpRegionalFunding>> setModel = new PropertyModel<Set<AmpRegionalFunding>>(
                 am, "regionalFundings");
         if (setModel.getObject() == null)
-            setModel.setObject(new HashSet());
+            setModel.setObject(new HashSet<>());
 
         final IModel<Set<AmpActivityLocation>> locationModel = new PropertyModel<Set<AmpActivityLocation>>(
                 am, "locations");
@@ -99,11 +108,11 @@ public class AmpRegionalFundingFormSectionFeature extends
         return list;
     }
 
-    public AmpMEFormSectionFeature getMeFormSection() {
-        return meFormSection;
+    public AmpMultiCountryMEFormSectionFeature getMeFormSection() {
+        return multiCountryMEFormSectionFeature;
     }
 
-    public void setMeFormSection(AmpMEFormSectionFeature meFormSection) {
-        this.meFormSection = meFormSection;
+    public void setMeFormSection(AmpMultiCountryMEFormSectionFeature meFormSection) {
+        this.multiCountryMEFormSectionFeature = meFormSection;
     }
 }

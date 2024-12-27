@@ -4,7 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.web.pages;
 
-import net.sf.saxon.om.One;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -79,21 +78,21 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Sectors", AmpSectorsFormSectionFeature.class.getName(), 7, false),
         new OnepagerSection(DONOR_FUNDING_SECTION_NAME, AmpDonorFundingFormSectionFeature.class.getName(), 9, false),
         new OnepagerSection("Organizations", AmpRelatedOrganizationsFormSectionFeature.class.getName(), 8, false,true, AmpDonorFundingFormSectionFeature.class.getName()),
-        new OnepagerSection(REGIONAL_FUNDING_SECTION_NAME, AmpRegionalFundingFormSectionFeature.class.getName(), 10, false, true, AmpMEFormSectionFeature.class.getName()),
+        new OnepagerSection(REGIONAL_FUNDING_SECTION_NAME, AmpRegionalFundingFormSectionFeature.class.getName(), 10, false, true, AmpMultiCountryMEFormSectionFeature.class.getName()),
         new OnepagerSection(COMPONENTS_SECTION_NAME, AmpComponentsFormSectionFeature.class.getName(), 11, false),
         new OnepagerSection("Structures", AmpStructuresFormSectionFeature.class.getName(), 12, false),
         new OnepagerSection("Issues Section", AmpIssuesFormSectionFeature.class.getName(), 13, false),
         new OnepagerSection("Regional Observations", AmpRegionalObservationsFormSectionFeature.class.getName(), 14, false),
         new OnepagerSection("Contacts", AmpContactsFormSectionFeature.class.getName(), 15, false),
         new OnepagerSection("Contracts", AmpContractingFormSectionFeature.class.getName(), 16, false),
-        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 18, false),
-        new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 19, false),
-        new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 20, false),
-        new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 21, false),
-        new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 22, false),
-        new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 23, false),
-        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 24, false),
-        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 25, false)
+        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMultiCountryMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 17, false),
+        new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 18, false),
+        new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 19, false),
+        new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
+        new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
+        new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false),
+        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 23, false),
+        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 24, false)
 
         };
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);
@@ -499,7 +498,7 @@ public class OnePager extends AmpHeaderFooter {
         {
             for (OnepagerSection section: returnList)
             {
-                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature"))
+                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpMultiCountryMEFormSectionFeature"))
                 {
                     section.setClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
                 }

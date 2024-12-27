@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -157,8 +158,11 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                     disablePercentagesForInternational.setObject(false);
                     locationTable.getSearchLocations().setVisibilityAllowed(true);
                 }
-                findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature()
-                        .getMeFormSection().clearLocations(model.getObject().getLocation());
+                String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
+                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
+                    findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature()
+                            .getMeFormSection().clearLocations(model.getObject().getLocation());
+                }
                 locationTable.reloadValidationFields(target);
                 setModel.getObject().remove(model.getObject());
                 send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));

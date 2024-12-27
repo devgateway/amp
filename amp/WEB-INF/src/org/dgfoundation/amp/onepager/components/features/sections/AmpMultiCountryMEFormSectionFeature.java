@@ -4,22 +4,16 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.*;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
 import org.dgfoundation.amp.onepager.events.LocationChangedEvent;
-import org.dgfoundation.amp.onepager.events.ProgramSelectedEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
-import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
-import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.DbUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +29,7 @@ import java.util.TreeMap;
  * updated by @author dmbugua@developmentgateway.org
  * @since December 28, 2023
  */
-public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
+public class AmpMultiCountryMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     protected ListView<AmpActivityLocation> tabsList;
 
@@ -47,8 +41,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     final List<AmpActivityLocation> locations;
 
-    public AmpMEFormSectionFeature(String id, String fmName,
-                                   final IModel<AmpActivityVersion> am) throws Exception {
+    public AmpMultiCountryMEFormSectionFeature(String id, String fmName,
+                                               final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
         this.fmType = AmpFMTypes.MODULE;
 

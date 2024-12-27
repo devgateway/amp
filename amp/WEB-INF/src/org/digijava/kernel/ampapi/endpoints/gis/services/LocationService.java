@@ -170,7 +170,6 @@ public class LocationService {
         }
 
         Set<Long> activitiesId = getActivitiesForFiltering(config, adminLevel);
-        logger.info("Activities ids: " + activitiesId);
 
         final ValueWrapper<String> qry = new ValueWrapper<String>(null);
         if (adminLevel.equals("Administrative Level 0")) {
@@ -206,7 +205,6 @@ public class LocationService {
                 + " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
                 + " order by acvl.root_location_id,al.amp_activity_id";
         }
-        logger.info("Query: " + qry.value);
 
         try {
             PersistenceManager.getSession().doWork(connection -> {

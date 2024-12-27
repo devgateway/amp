@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.web.pages;
 
+import net.sf.saxon.om.One;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -475,7 +476,7 @@ public class OnePager extends AmpHeaderFooter {
                 if (!found)
                     returnList.add(localOs);
             }
-
+            checkIfMultiCountry(returnList);
             checkOrder(returnList);
             saveOnce(session, returnList);
             sortSections(returnList);
@@ -486,6 +487,21 @@ public class OnePager extends AmpHeaderFooter {
             return null;
         } finally {
            PersistenceManager.closeSession(session);
+        }
+    }
+    private static void checkIfMultiCountry(List<OnepagerSection> returnList)
+    {
+        logger.info("Checking for multi country");
+        String defCountryIso = DynLocationManagerUtil.getDefaultCountryIso();
+        if (defCountryIso!=null && defCountryIso.equalsIgnoreCase("zz"))
+        {
+            for (OnepagerSection section: returnList)
+            {
+                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature"))
+                {
+                    section.setClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
+                }
+            }
         }
     }
 

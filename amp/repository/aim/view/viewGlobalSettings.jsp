@@ -407,12 +407,12 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 
 																		<% }else if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Gis Country".trim())) {%>
 																		<html:select property="gsfValue" styleClass="inp-text;width:100%" value='<%=globalSett.getGlobalSettingsValue()%>'>
-																			<logic:iterate name="aimGlobalSettingsForm" property="possibleValues" id="global">
+																			<logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
 																				<!-- Check if MultiCountryEnabled is false -->
 																				<logic:equal name="aimGlobalSettingsForm" property="multiCountryEnabled" value="false">
 																					<!-- Exclude 'ecowas' and 'ggw' -->
-																					<logic:notEqual name="global" property="key" value="Ecowas Multicountry">
-																						<logic:notEqual name="global" property="key" value="GGW Multicountry">
+																					<logic:notEqual name="global" property="key" value="WS">
+																						<logic:notEqual name="global" property="key" value="GG">
 																							<html:option value="${global.key}">${global.value}</html:option>
 																						</logic:notEqual>
 																					</logic:notEqual>

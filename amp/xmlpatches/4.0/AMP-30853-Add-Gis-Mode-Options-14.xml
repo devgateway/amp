@@ -24,19 +24,6 @@ VALUES
         '0000',
         'WS',
         'WAS'
-    ),
-    (
-        nextval('amp_category_value_location_seq'),
-        (
-            SELECT acv.id
-            FROM amp_category_value acv
-            WHERE acv.category_value ='Administrative Level 0'
-              AND acv.amp_category_class_id=(SELECT id FROM amp_category_class cls WHERE cls.keyname='implementation_location')
-        ),
-        'GGW Multicountry',
-        '0001',
-        'GG',
-        'GGW'
     );
 DROP VIEW IF EXISTS v_g_gis_options;
 CREATE OR REPLACE VIEW v_g_gis_options AS SELECT iso as id, location_name || '-' || iso AS value FROM amp_category_value_location WHERE iso IS NOT NULL AND iso3 IS NOT NULL;

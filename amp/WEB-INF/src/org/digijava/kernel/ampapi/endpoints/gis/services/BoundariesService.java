@@ -6,8 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.action.DynamicLocationManager;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -20,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
@@ -41,7 +38,7 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = "";
-        String country= DynLocationManagerUtil.getDefaultCountryIso();
+        String country= DynLocationManagerUtil.getInstanceCountry();
         if (country!=null) {
 
             path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";

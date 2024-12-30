@@ -158,7 +158,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                     disablePercentagesForInternational.setObject(false);
                     locationTable.getSearchLocations().setVisibilityAllowed(true);
                 }
-                                String defCountry = DynLocationManagerUtil.getDefaultCountryIso();
+                String defCountry = DynLocationManagerUtil.getInstanceCountry();
                 if (defCountry != null && defCountry.equalsIgnoreCase("zz"))
                 {
                 findParent(AmpLocationFormSectionFeature.class).getRegionalFundingFeature()

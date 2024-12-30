@@ -11,6 +11,7 @@ import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.admin.util.DbUtil;
@@ -24,6 +25,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.currencyrates.CurrencyRatesService;
 
 import javax.servlet.ServletContext;
@@ -41,12 +43,12 @@ public class GlobalSettings extends Action {
         // probably should flush all RCD from all sessions
         //session.removeAttribute(ArConstants.REPORTS_Z_FILTER);
         // TODO-CONSTANTIN should we:
-        // 1) clean data for ALL sessions? (correct but disruptive) 
+        // 1) clean data for ALL sessions? (correct but disruptive)
         // 2) clean data for current session? (kinda useless for an admin)
         // 3) do nothing?
         ReportContextData.clearSession();
     }
-    
+
     @SuppressWarnings("unchecked")
     public ActionForward execute(ActionMapping mapping, ActionForm form,
     HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
@@ -63,13 +65,14 @@ public class GlobalSettings extends Action {
                     return mapping.findForward("index");
                 }
             }
-        
+
         GlobalSettingsForm gsForm = (GlobalSettingsForm) form;
+        gsForm.setMultiCountryEnabled(multiCountryEnabled());
         if(request.getParameter("save")!=null){
             String save = request.getParameter("save");
             logger.info(" this is the action "+save);
             flushSessionObjects(session);
-    
+
             logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
             dailyCurrencyRatesChanges(gsForm);
             try {
@@ -79,10 +82,10 @@ public class GlobalSettings extends Action {
                 errors.add("title", ae);
             }
             auditTrialCleanerChanges(gsForm);
-            refreshGlobalSettingsCache  = true;         
+            refreshGlobalSettingsCache  = true;
         }
-        
-        
+
+
         if (request.getParameter("saveAll") != null) {
             flushSessionObjects(session);
             String allValues = gsForm.getAllValues();
@@ -91,7 +94,7 @@ public class GlobalSettings extends Action {
             AmpGlobalSettings baseCurrencyGS = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.BASE_CURRENCY);
             while (token.hasMoreTokens()) {
                 String element = URLDecoder.decode(token.nextToken(), "UTF-8");
-                String[] nameValue = element.split("=");                
+                String[] nameValue = element.split("=");
                 Long id = getLongOrNull(nameValue[0]);
                 String newValue = nameValue.length < 2 ? "" : nameValue[1];
                 if (projectValidationSetting.getGlobalId().equals(id) && !newValue.equals(projectValidationSetting.getGlobalSettingsValue())) {
@@ -112,7 +115,7 @@ public class GlobalSettings extends Action {
                     errors.add("title", ae);
                 }
             }
-            
+
             //this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
             //ActionMessages errors = new ActionMessages();
             refreshGlobalSettingsCache  = true;
@@ -120,22 +123,22 @@ public class GlobalSettings extends Action {
             auditTrialCleanerChanges();
             DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE).clear();
         }
-        
+
         List<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
         if (refreshGlobalSettingsCache) {
             FeaturesUtil.buildGlobalSettingsCache(col);
             //FeaturesUtil.logGlobalSettingsCache();
             org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
             globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
-            FeaturesUtil.switchLogicInstance();         
-            
+            FeaturesUtil.switchLogicInstance();
+
             ServletContext ampContext = this.getServlet().getServletContext();
-            
+
             AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
             AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
             FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
-            
+
             // update menu if support email changed
             MenuStructure.recreate();
         }
@@ -147,9 +150,9 @@ public class GlobalSettings extends Action {
             {
                 ampGS.setListOfValues(ampGS.getGlobalSettingsValue().split(";"));
             }
-            
+
             gsForm.setGlobalSettingType(ampGS.getGlobalSettingsName(), ampGS.getGlobalSettingsPossibleValues());
-            
+
             /**
              *  Getting the name of the criteria for possible values:
              *  if v_view_name => the values are taken from the specified view
@@ -160,7 +163,7 @@ public class GlobalSettings extends Action {
             Map<String, String> possibleValuesDictionary    = null;
             if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
                 possibleValues              = DbUtil.getPossibleValues(possibleValuesTable);
-                possibleValuesDictionary    = new HashMap<String, String>();
+                possibleValuesDictionary    = new HashMap<>();
                 for(KeyValue keyValue:possibleValues){
                     possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
                 }
@@ -170,14 +173,20 @@ public class GlobalSettings extends Action {
         }
         Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
         gsForm.setCountryNameCol(countries);
-        
+
         if (regenerateCCExchanteRates)
             CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 
         saveErrors(request, errors);
         return mapping.findForward("viewGS");
     }
-    
+    private static boolean multiCountryEnabled()
+    {
+        boolean isEnabled = FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED);
+        logger.info("Multi enabled: " + isEnabled);
+        return isEnabled;
+    }
+
     /**
      * updates workspaces's validation depending whether the GlobalSettings has changed to "off" or  "on"
      * @param gsNewValue
@@ -187,7 +196,7 @@ public class GlobalSettings extends Action {
         if (gsNewValue.toLowerCase().equals("on")) {
             query += " SET validation='" + Constants.PROJECT_VALIDATION_FOR_ALL_EDITS
                     + "' WHERE validation='" + Constants.PROJECT_VALIDATION_OFF + "'";
-        } 
+        }
         else if (gsNewValue.toLowerCase().equals("off")) {
             query += " SET validation='" + Constants.PROJECT_VALIDATION_OFF + "'";
         }
@@ -195,7 +204,7 @@ public class GlobalSettings extends Action {
             .createQuery(query)
             .executeUpdate();
     }
-    
+
     /**
      * parses a String as a Long. Returns null in case it fails to do so
      * @param s
@@ -210,10 +219,10 @@ public class GlobalSettings extends Action {
 
     @SuppressWarnings("unchecked")
     private void dailyCurrencyRatesChanges() {
-        
+
         String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_ENALBLED);
         boolean update = (value.compareToIgnoreCase("On") == 0);
-        
+
         String hour = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR);
         String timeout = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_TIMEOUT);
 
@@ -224,9 +233,9 @@ public class GlobalSettings extends Action {
             CurrencyRatesService.stopCurrencyRatesService();
         }
     }
-    
+
     /**
-     * 
+     *
      */
     private void auditTrialCleanerChanges() {
         String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
@@ -240,9 +249,9 @@ public class GlobalSettings extends Action {
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param gsForm
      */
     private void auditTrialCleanerChanges(GlobalSettingsForm gsForm){
@@ -258,7 +267,7 @@ public class GlobalSettings extends Action {
             }
         }
     }
-    
+
     /**
      * @param gsForm
      */
@@ -275,7 +284,7 @@ public class GlobalSettings extends Action {
                     String timeout=null;
                     for(AmpGlobalSettings ampGS : ampGSCollection)
                     {
-                        
+
                         if(ampGS.getGlobalSettingsName().compareTo(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR)==0){
                             hour=ampGS.getGlobalSettingsValue();
                         }
@@ -284,7 +293,7 @@ public class GlobalSettings extends Action {
                         }
                     }
                     CurrencyRatesService.startCurrencyRatesService(hour, timeout );
-                    
+
                 }else{
                     CurrencyRatesService.stopCurrencyRatesService();
                 }
@@ -303,7 +312,7 @@ public class GlobalSettings extends Action {
             }
         }
     }
-    
+
 
 
 
@@ -353,7 +362,7 @@ public class GlobalSettings extends Action {
                 case 4:
                 case 6:
                 case 9:
-                case 11: 
+                case 11:
                     maxDays = 30;
                     break;
                 case 2:

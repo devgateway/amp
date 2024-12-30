@@ -42,7 +42,7 @@ public class BoundariesService {
         if (country!=null) {
 
             path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
-            if (country.equalsIgnoreCase("ZZ"))
+            if (country.equalsIgnoreCase("ZZ") || country.equalsIgnoreCase("GG"))
             {
                 path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
 
@@ -52,7 +52,7 @@ public class BoundariesService {
 
             }
             logger.info("SELECTED COUNTRY: " + country);
-            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("ZZ")) {
+            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("ZZ") && !country.equalsIgnoreCase("GG")) {
 
                 path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
 

@@ -398,12 +398,33 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 
 																	<logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 
-																		<%if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Country".trim())) {%>
+																		<% if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Country".trim())) {%>
 																		<html:select property="gsfValue" styleClass="inp-text;width:100%" value='<%=globalSett.getGlobalSettingsValue()%>' >
 																			<logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
 																				<html:option value="${global.key}">${global.value}</html:option>
 																			</logic:iterate>
 																		</html:select>
+
+																		<% }else if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Gis Country".trim())) {%>
+																		<html:select property="gsfValue" styleClass="inp-text;width:100%" value='<%=globalSett.getGlobalSettingsValue()%>'>
+																			<logic:iterate name="aimGlobalSettingsForm" property="possibleValues" id="global">
+																				<!-- Check if MultiCountryEnabled is false -->
+																				<logic:equal name="aimGlobalSettingsForm" property="multiCountryEnabled" value="false">
+																					<!-- Exclude 'ecowas' and 'ggw' -->
+																					<logic:notEqual name="global" property="value" value="WS">
+																						<logic:notEqual name="global" property="value" value="GG">
+																							<html:option value="${global.key}">${global.value}</html:option>
+																						</logic:notEqual>
+																					</logic:notEqual>
+																				</logic:equal>
+
+																				<!-- If MultiCountryEnabled is true, include all options -->
+																				<logic:notEqual name="aimGlobalSettingsForm" property="multiCountryEnabled" value="false">
+																					<html:option value="${global.key}">${global.value}</html:option>
+																				</logic:notEqual>
+																			</logic:iterate>
+																		</html:select>
+
 																		<%
 																		} else if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Number Format".trim())) {
 																		%>

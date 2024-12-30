@@ -411,8 +411,8 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																				<!-- Check if MultiCountryEnabled is false -->
 																				<logic:equal name="aimGlobalSettingsForm" property="multiCountryEnabled" value="false">
 																					<!-- Exclude 'ecowas' and 'ggw' -->
-																					<logic:notEqual name="global" property="value" value="WS">
-																						<logic:notEqual name="global" property="value" value="GG">
+																					<logic:notEqual name="global" property="key" value="Ecowas Multicountry">
+																						<logic:notEqual name="global" property="key" value="GGW Multicountry">
 																							<html:option value="${global.key}">${global.value}</html:option>
 																						</logic:notEqual>
 																					</logic:notEqual>

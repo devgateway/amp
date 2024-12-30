@@ -19,6 +19,7 @@ import org.digijava.module.aim.exception.DynLocationStructuralException;
 import org.digijava.module.aim.exception.DynLocationStructureStringException;
 import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.aim.form.DynLocationManagerForm.Option;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -732,7 +733,7 @@ public class DynLocationManagerUtil {
     }
     public static String getInstanceCountry()
     {
-        return FeaturesUtil.getGlobalSettingValue(CategoryConstants.GIS_COUNTRY);
+        return FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_COUNTRY);
     }
 
     public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException

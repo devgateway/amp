@@ -182,9 +182,7 @@ public class GlobalSettings extends Action {
     }
     private static boolean multiCountryEnabled()
     {
-        boolean isEnabled = FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED);
-        logger.info("Multi enabled: " + isEnabled);
-        return isEnabled;
+        return FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED);
     }
 
     /**

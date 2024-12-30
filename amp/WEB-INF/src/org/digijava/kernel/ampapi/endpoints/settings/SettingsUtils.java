@@ -449,7 +449,7 @@ public class SettingsUtils {
         settings.setRtlDirection(SiteUtils.isEffectiveLangRTL());
 
         settings.setDefaultDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
-        settings.setDefaultGISCountry(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_COUNTRY));
+        settings.setDefaultGISCountry(DynLocationManagerUtil.getInstanceCountry());
         settings.setHideEditableExportFormatsPublicView(!FeaturesUtil.showEditableExportFormats());
 
         settings.setDownloadMapSelector(FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR));

@@ -39,20 +39,19 @@ public class BoundariesService {
     public static List<Boundary> getBoundaries() {
         String path = "";
         String country= DynLocationManagerUtil.getInstanceCountry();
+        logger.info("SELECTED COUNTRY: " + country);
         if (country!=null) {
 
-            path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
             if (country.equalsIgnoreCase("ZZ") || country.equalsIgnoreCase("GG"))
             {
                 path = CONTEXT_PATH + BOUNDARY_PATH + "ggw-regional-list.json";
 
             }
-            if (country.equalsIgnoreCase("WS")) {
+            else if (country.equalsIgnoreCase("WS")) {
                 path = CONTEXT_PATH + BOUNDARY_PATH + "ecowas-regional-list.json";
 
             }
-            logger.info("SELECTED COUNTRY: " + country);
-            if (!country.equalsIgnoreCase("WS") && !country.equalsIgnoreCase("ZZ") && !country.equalsIgnoreCase("GG")) {
+            else {
 
                 path = CONTEXT_PATH + BOUNDARY_PATH + country.toUpperCase() + File.separator + "list.json";
 

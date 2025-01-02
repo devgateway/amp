@@ -23,6 +23,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
@@ -31,6 +32,7 @@ import org.hibernate.type.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.Collator;
@@ -2279,6 +2281,45 @@ public class DbUtil {
         }
         return responses;
     }
+    /**
+     * Automatically clears all related collections of an entity to avoid cascading errors.
+     *
+     * @param session      the Hibernate session
+     * @param parentEntity the parent entity to clear collections for
+     */
+    public static void clearAllRelatedCollections(Session session, Object parentEntity) {
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            // Get all declared fields of the entity
+            Field[] fields = parentEntity.getClass().getDeclaredFields();
+
+            for (Field field : fields) {
+                // Check if the field is a collection (List, Set, etc.)
+                if (Collection.class.isAssignableFrom(field.getType())) {
+                    field.setAccessible(true); // Make the field accessible
+                    Collection<?> collection = (Collection<?>) field.get(parentEntity);
+
+                    if (collection != null && !collection.isEmpty()) {
+                        // Clear the collection
+                        collection.clear();
+
+                        // If the field is marked as a Hibernate collection, update it in the session
+                        session.evict(parentEntity); // Evict the entity to detach it
+                        session.update(parentEntity); // Re-attach it with the cleared collection
+                    }
+                }
+            }
+
+            // Persist the changes
+            session.update(parentEntity);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException("Failed to clear related collections", e);
+        }
+    }
 
     /*
      * get amp ME indicator value of a particular activity specified by ampActId
@@ -2295,7 +2336,7 @@ public class DbUtil {
             qry.setParameter("ampActId", ampActId, LongType.INSTANCE);
             col = qry.list();
         } catch (Exception e1) {
-            logger.error("could not retrieve AmpReportSector " + e1.getMessage());
+            logger.error("could not retrieve indicators " + e1.getMessage());
             e1.printStackTrace(System.out);
         }
         return col;

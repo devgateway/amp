@@ -34,6 +34,7 @@
     <form-bean name="aimFiscalCalendarForm" type="org.digijava.module.aim.form.FiscalCalendarForm" />
     <form-bean name="aimAddFiscalCalForm" type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
     <form-bean name="aimOrgManagerForm" type="org.digijava.module.aim.form.OrgManagerForm" />
+    <form-bean name="dataImporterForm" type="org.digijava.module.aim.form.DataImporterForm" />
     <form-bean name="aimAddOrgForm" type="org.digijava.module.aim.form.AddOrgForm" />
     <form-bean name="aimOrgTypeManagerForm" type="org.digijava.module.aim.form.OrgTypeManagerForm" />
 	<form-bean name="aimAddOrgTypeForm" type="org.digijava.module.aim.form.AddOrgTypeForm" />

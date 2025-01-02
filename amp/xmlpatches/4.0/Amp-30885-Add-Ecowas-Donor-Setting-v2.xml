@@ -11,13 +11,13 @@
         <script>
             <lang delimiter=";" type="postgres">
                 insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section)
-                values (nextval('amp_global_settings_seq'), 'Recreate the views on the next server restart','true','t_Boolean','Recreate the views on the next server restart', 'general');
+                values ((SELECT MAX(id) + 1 FROM amp_global_settings), 'Recreate the views on the next server restart','true','t_Boolean','Recreate the views on the next server restart', 'general');
                 DROP VIEW IF EXISTS v_amp_organisations;
                 CREATE OR REPLACE VIEW v_amp_organisations AS
                 SELECT name AS id, name AS value FROM amp_organisation;
 
                 INSERT INTO amp_global_settings(id, settingsName, settingsValue, possiblevalues, description, section)
-                VALUES (nextval('amp_global_settings_seq'), 'Internal Ecowas Donor',
+                VALUES ((SELECT MAX(id) + 1 FROM amp_global_settings), 'Internal Ecowas Donor',
                 (SELECT id FROM v_amp_organisations WHERE value = 'ECOWAS'),
                 'v_amp_organisations', 'Internal Ecowas Donor', 'funding');
             </lang>

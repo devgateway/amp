@@ -178,6 +178,7 @@
 <feature:display name="IATI Importer" module="Tools"></feature:display>
 <feature:display name="AutoGeocoder" module="Tools"></feature:display>
 <feature:display name="Address Book" module="Tools"></feature:display>
+<feature:display name="Data Importer" module="Tools"></feature:display>
 <field:display name="Unassigned Activities" feature="Workspace Info"></field:display>
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>
 <field:display name="Archived Activities" feature="Workspace Info"></field:display>
@@ -203,15 +204,15 @@
 <feature:display name="Create Message Form" module="Messages"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
 <feature:display name="Step1" module="Custom Fields"></feature:display>
-<feature:display name="Disbursement Orders" module="Funding"></feature:display> 
-<feature:display name="Documents Tab" module="Document"></feature:display> 
-<feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
+<feature:display name="Disbursement Orders" module="Funding"></feature:display>
+<feature:display name="Documents Tab" module="Document"></feature:display>
+<feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Donor Report" module="Report Types"></feature:display>
 <feature:display name="Indicator Report" module="Report Types"></feature:display>
-<feature:display name="Edit Activity" module="Previews"></feature:display> 
-<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
-<feature:display name="Event Tab" module="Messages"></feature:display> 
-<feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
+<feature:display name="Edit Activity" module="Previews"></feature:display>
+<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display>
+<feature:display name="Event Tab" module="Messages"></feature:display>
+<feature:display name="Filter Button" module="Report and Tab Options"></feature:display>
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Page Size" module="Report and Tab Options"></feature:display>
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display>

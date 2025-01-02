@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurrency"
+           table="IMPORTED_PROJECT_CURRENCY">
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native">
+                <param name="sequence">IMPORTED_PROJECT_CURRENCY_ID</param>
+            </generator>
+        </id>
+        <property name="importedProjectName" column="imported_project_name" type="java.lang.String" />
+        <property name="currencyCode" column="currency_code" type="java.lang.String" />
+
+
+    </class>
+
+</hibernate-mapping>

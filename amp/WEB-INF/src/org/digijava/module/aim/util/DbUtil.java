@@ -2290,7 +2290,7 @@ public class DbUtil {
     public static void clearAllRelatedCollections(Session session, Object parentEntity) {
         Transaction transaction = null;
         try {
-            transaction = session.beginTransaction();
+            transaction = session.getTransaction();
 
             // Get all declared fields of the entity
             Field[] fields = parentEntity.getClass().getDeclaredFields();

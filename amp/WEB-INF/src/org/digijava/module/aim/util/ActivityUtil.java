@@ -1648,6 +1648,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     deleteFullActivityContent(ampActivityVersion, session);
                     // Remove associations with AmpCategoryValue
                     ampActivityVersion.getCategories().clear();
+                    if (!session.isOpen())
+                    {
+                        session = PersistenceManager.openNewSession();
+                    }
                     Set<AmpActivitySector> sectors = ampActivityVersion.getSectors();// query to fetch related sectors by amp_activity_id
                     for (AmpActivitySector sector : sectors) {
                         session.delete(sector);

@@ -124,7 +124,6 @@ module.exports = Backbone.View.extend({
               console.log("Settings",self.app.data.generalSettings);
               var defCountry = self.app.data.generalSettings.get('default-gis-country');
               console.log("Default GIS country",defCountry)
-              console.log("Default Test",self.app.data.generalSettings.get('default-date-format'))
               if (defCountry.toLowerCase()!=='ws' && defCountry.toLowerCase()!=='zz' && defCountry.toLowerCase()!=='gg')
               {
                 feature.properties['BELT']=false;

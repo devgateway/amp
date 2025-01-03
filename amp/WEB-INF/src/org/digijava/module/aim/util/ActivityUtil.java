@@ -1718,7 +1718,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         ActivityUtil.deleteActivityContent(ampAct,session);
         Long ampActId = ampAct.getAmpActivityId();
         //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
-        DbUtil.clearAllRelatedCollections(session,ampAct);
+//        DbUtil.clearAllRelatedCollections(session,ampAct);
         ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
         }
 

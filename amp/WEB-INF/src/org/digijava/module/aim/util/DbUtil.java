@@ -2311,7 +2311,6 @@ public class DbUtil {
                     }
                 }
             }
-
             // Persist the changes
             session.update(parentEntity);
             transaction.commit();

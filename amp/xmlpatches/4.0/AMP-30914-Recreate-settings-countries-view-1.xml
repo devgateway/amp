@@ -11,6 +11,7 @@
         <script>
             <lang delimiter=";" type="postgres">
                 UPDATE dg_countries set iso='zz' WHERE country_name='Multi-country';
+                UPDATE amp_category_value_location set iso='zz' WHERE location_name='Multi-country';
                 CREATE OR REPLACE VIEW v_g_settings_countries AS SELECT dg_countries.iso AS id, dg_countries.country_name AS value FROM dg_countries ORDER BY dg_countries.country_name;;;
             </lang>
         </script>

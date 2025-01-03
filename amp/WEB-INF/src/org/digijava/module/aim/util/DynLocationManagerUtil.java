@@ -733,7 +733,7 @@ public class DynLocationManagerUtil {
     }
     public static String getDefCountryIso()
     {
-        return getDefaultCountry().getIso();
+        return FeaturesUtil.getDefaultCountryIso();
     }
     public static String getGISCountry()
     {

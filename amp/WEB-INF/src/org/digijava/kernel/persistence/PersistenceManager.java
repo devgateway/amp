@@ -250,9 +250,8 @@ public class PersistenceManager {
         try {
             config = DigiConfigManager.getConfig();
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Initializing persistence manager");
-            }
+            logger.debug("Initializing persistence manager");
+
 
             // load kernel hibernate classes
             HibernateClassLoader.initialize(config);

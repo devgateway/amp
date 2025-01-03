@@ -121,7 +121,8 @@ module.exports = Backbone.View.extend({
             onEachFeature: updateOuterBounds,
             style: function (feature) {
               // Check if the "NAME" attribute is "extra"
-              var defCountry = app.data.generalSettings.get('default-gis-country');
+              console.log("Settings",self.app.data.generalSettings);
+              var defCountry = self.app.data.generalSettings.get('default-gis-country');
               console.log("Default country",defCountry)
               if (defCountry.toLowerCase()!=='ws' && defCountry.toLowerCase()!=='zz' && defCountry.toLowerCase()!=='gg')
               {

@@ -45,7 +45,7 @@ public class AmpRegionalFundingFormSectionFeature extends
     public AmpRegionalFundingFormSectionFeature(String id, String fmName,
                                                 final IModel<AmpActivityVersion> am, AmpComponentPanel meFormSectionFeature) throws Exception {
         super(id, fmName, am);
-                        String defCountry = DynLocationManagerUtil.getInstanceCountry();
+                        String defCountry = DynLocationManagerUtil.getDefCountryIso();
                 if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
                     this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
 

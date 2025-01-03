@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.digijava.module.aim.util.LocationConstants.ECOWAS_ISO_CODE;
 import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
 
 public class BoundariesService {
@@ -39,7 +38,7 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = "";
-        String country= DynLocationManagerUtil.getInstanceCountry();
+        String country= DynLocationManagerUtil.getGISCountry();
         logger.info("SELECTED COUNTRY: " + country);
         if (country!=null) {
 
@@ -60,7 +59,7 @@ public class BoundariesService {
         }
 
 
-        if (!FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE) && !DynLocationManagerUtil.getDefaultCountry().getIso().equalsIgnoreCase(ECOWAS_ISO_CODE))
+        if (!FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
         {
             String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
             if (countryIso != null) {

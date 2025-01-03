@@ -149,7 +149,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                                 locationsTable.getSearchLocations().setVisibilityAllowed(true);
                                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
                                 target.add(locationsTable);
-                                String defCountry = DynLocationManagerUtil.getInstanceCountry();
+                                String defCountry = DynLocationManagerUtil.getDefCountryIso();
                 if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
 
                     getRegionalFundingFeature().getMeFormSection().clearLocations(null);

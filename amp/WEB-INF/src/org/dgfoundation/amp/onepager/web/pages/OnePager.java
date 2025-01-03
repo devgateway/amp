@@ -64,7 +64,7 @@ public class OnePager extends AmpHeaderFooter {
 
     protected AmpActivityModel am;
 //  protected AmpActivityModel activityModelForSave;
-    static String defCountry = DynLocationManagerUtil.getInstanceCountry();
+    static String defCountry = DynLocationManagerUtil.getDefCountryIso();
 
 
 
@@ -492,7 +492,7 @@ public class OnePager extends AmpHeaderFooter {
     private static void checkIfMultiCountry(List<OnepagerSection> returnList)
     {
         logger.info("Checking for multi country");
-        String defCountryIso = DynLocationManagerUtil.getInstanceCountry();
+        String defCountryIso = DynLocationManagerUtil.getDefCountryIso();
         if (defCountryIso!=null && !defCountryIso.equalsIgnoreCase("zz"))
         {
             for (OnepagerSection section: returnList)

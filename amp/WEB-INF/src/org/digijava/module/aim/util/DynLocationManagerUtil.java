@@ -731,9 +731,14 @@ public class DynLocationManagerUtil {
         return DynLocationManagerUtil.getLocationByIso(
                 FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
     }
-    public static String getInstanceCountry()
+    public static String getDefCountryIso()
+    {
+        return getDefaultCountry().getIso();
+    }
+    public static String getGISCountry()
     {
         return FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_COUNTRY);
+
     }
 
     public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException

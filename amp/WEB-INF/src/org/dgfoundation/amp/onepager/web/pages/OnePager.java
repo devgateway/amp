@@ -85,14 +85,14 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Regional Observations", AmpRegionalObservationsFormSectionFeature.class.getName(), 14, false),
         new OnepagerSection("Contacts", AmpContactsFormSectionFeature.class.getName(), 15, false),
         new OnepagerSection("Contracts", AmpContractingFormSectionFeature.class.getName(), 16, false),
-        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 18, false),
-        new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 19, false),
-        new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 20, false),
-        new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 21, false),
-        new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 22, false),
-        new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 23, false),
-        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 24, false),
-        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 25, false)
+        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 17, false),
+        new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 18, false),
+        new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 19, false),
+        new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
+        new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
+        new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false),
+        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 23, false),
+        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 24, false)
 
         };
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);

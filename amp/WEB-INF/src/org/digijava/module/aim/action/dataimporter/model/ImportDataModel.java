@@ -49,6 +49,7 @@ public class ImportDataModel {
     private Object iati_last_update_date;
     private Object approved_by;
     private Object approval_date;
+    private Long approval_status;
     private Object archived;
     private Set<Object> indicators;
     private Set<Object> activity_documents;
@@ -376,6 +377,13 @@ public class ImportDataModel {
         this.approval_date = approval_date;
     }
 
+    public Long getApproval_status() {
+        return approval_status;
+    }
+
+    public void setApproval_status(Long approval_status) {
+        this.approval_status = approval_status;
+    }
 
     public Object getArchived() {
         return archived;
@@ -535,6 +543,7 @@ public class ImportDataModel {
                 ", iati_last_update_date=" + iati_last_update_date +
                 ", approved_by=" + approved_by +
                 ", approval_date=" + approval_date +
+                ", approval_status=" + approval_status +
                 ", archived=" + archived +
                 ", indicators=" + indicators +
                 ", activity_documents=" + activity_documents +

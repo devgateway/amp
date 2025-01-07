@@ -162,7 +162,6 @@ public class ExcelImporter {
                 int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
                 String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(row.getCell(projectCodeColumn),false) : "";
                 importDataModel.setProject_code(projectCode);
-                importDataModel.setAmp_id(projectCode);
 
                 int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
                 String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(row.getCell(projectTitleColumn),false) : "";
@@ -240,7 +239,7 @@ public class ExcelImporter {
                 logger.info("Fundings at this point: {}",fundings);
 
 
-                importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
+                importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing, projectCode);
 
             }
         }

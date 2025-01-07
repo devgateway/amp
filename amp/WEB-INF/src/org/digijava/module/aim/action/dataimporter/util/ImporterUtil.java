@@ -549,7 +549,7 @@ public class ImporterUtil {
             session = PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name OR a.projectCode = :projectCode OR a.ampId = :projectCode";
+                "WHERE a.name = :name OR a.projectCode = :projectCode";
         Query query = session.createQuery(hql);
         query.setCacheable(true);
         query.setParameter("name", projectTitle, StringType.INSTANCE);
@@ -561,9 +561,10 @@ public class ImporterUtil {
     public static void setStatus(ImportDataModel importDataModel) {
         Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
         importDataModel.setActivity_status(statusId);
+        importDataModel.setApproval_status(Long.valueOf(ApprovalStatus.started.getId()));
     }
 
-    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
+    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing, String projectCode) throws JsonProcessingException {
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
@@ -609,11 +610,13 @@ public class ImporterUtil {
                 importedProject.setImportStatus(ImportStatus.FAILED);
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
+                Long activityId = (Long) response.getContent().getAmpActivityId();
+                updateProjectCode(activityId, importDataModel.getProject_code());
                 logger.info("Successfully imported the project. Now adding component if present");
                 logger.info("--------------------------------");
                 logger.info("Component name at start: " + componentName);
                 if (componentName != null && !componentName.isEmpty()) {
-                    addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
+                    addComponents(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
                 }
 //                logger.info("Updating expenditures ................");
 //                updateExpendituresIfAny(response);
@@ -630,6 +633,16 @@ public class ImporterUtil {
 //        session.flush();
 
         logger.info("Imported project: " + importedProject);
+    }
+    private static  void updateProjectCode(Long activityId, String projectCode)
+    {
+        logger.info("Updating Project Code: " + projectCode);
+        Session session = PersistenceManager.getRequestDBSession();
+        String hql = "UPDATE AmpActivityVersion SET projectCode = :newCode WHERE ampActivityId = :activityId";
+        Query query = session.createQuery(hql);
+        query.setParameter("newCode", projectCode);
+        query.setParameter("activityId", activityId);
+        query.executeUpdate();
     }
 
     private static void updateFundingAndOrgsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
@@ -734,7 +747,7 @@ public class ImporterUtil {
     }
 
 
-    static void addComponentsAndProjectCode(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) {
+    static void addComponents(JsonApiResponse<ActivitySummary> response, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, String projectCode) {
         Long activityId = (Long) response.getContent().getAmpActivityId();
         Session session = getSession();
 
@@ -745,9 +758,7 @@ public class ImporterUtil {
             ampComponent.setActivity(ampActivityVersion);
             processFundings(ampComponent, fundings, responsibleOrgId);
 
-            boolean updateActivity = updateProjectCodeIfNeeded(ampActivityVersion, projectCode);
-
-            saveOrUpdateComponent(session, ampActivityVersion, ampComponent, updateActivity);
+            saveOrUpdateComponent(session, ampActivityVersion, ampComponent);
         }
     }
 
@@ -814,7 +825,8 @@ public class ImporterUtil {
         return false;
     }
 
-    private static void saveOrUpdateComponent(Session session, AmpActivityVersion ampActivityVersion, AmpComponent ampComponent, boolean updateActivity) {
+    private static void saveOrUpdateComponent(Session session, AmpActivityVersion ampActivityVersion, AmpComponent ampComponent) {
+        boolean updateActivity=false;
         if (!ampActivityVersion.getComponents().contains(ampComponent)) {
             ampActivityVersion.getComponents().add(ampComponent);
             updateActivity = true;

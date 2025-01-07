@@ -105,7 +105,6 @@ public class TxtDataImporter {
 
             importDataModel.setProject_title(projectTitle);
             importDataModel.setProject_code(projectCode);
-            importDataModel.setAmp_id(projectCode);
             importDataModel.setDescription(projectDesc);
 
             String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
@@ -164,7 +163,7 @@ public class TxtDataImporter {
 
             }
 
-            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings,existing);
+            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings,existing, projectCode);
 
         }
 

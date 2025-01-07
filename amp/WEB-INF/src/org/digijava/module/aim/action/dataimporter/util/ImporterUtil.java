@@ -549,7 +549,7 @@ public class ImporterUtil {
             session = PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name OR a.projectCode = :projectCode";
+                "WHERE a.name = :name OR a.projectCode = :projectCode OR a.ampId = :projectCode";
         Query query = session.createQuery(hql);
         query.setCacheable(true);
         query.setParameter("name", projectTitle, StringType.INSTANCE);

@@ -161,8 +161,8 @@ public class ExcelImporter {
 
                 int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
                 String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(row.getCell(projectCodeColumn),false) : "";
-                projectCode ="1-"+projectCode;
                 importDataModel.setProject_code(projectCode);
+                importDataModel.setAmp_id(projectCode);
 
                 int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
                 String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(row.getCell(projectTitleColumn),false) : "";

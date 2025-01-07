@@ -83,13 +83,4 @@ public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public String toString() {
-        return "AmpActivityGroup{" +
-                "ampActivityGroupId=" + ampActivityGroupId +
-                ", version=" + version +
-                ", ampActivityLastVersion=" + ampActivityLastVersion +
-                '}';
-    }
 }

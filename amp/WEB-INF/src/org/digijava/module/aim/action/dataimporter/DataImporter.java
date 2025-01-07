@@ -103,31 +103,35 @@ public class DataImporter extends Action {
                         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
 
                         try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
-                            String[] headers = reader.readNext(); // Read the first line which contains headers
+                            String[] headers = reader.readNext(); // Read the first line which contains selectTag
 
                             if (headers != null) {
                                 // Print each header
                                 headersSet.addAll(Arrays.asList(headers));
                             } else {
-                                logger.info("File is empty or does not contain headers.");
+                                logger.info("File is empty or does not contain selectTag.");
                             }
                         } catch (IOException | CsvValidationException e) {
-                            logger.error("An error occurred during extraction of headers.",e);
+                            logger.error("An error occurred during extraction of selectTag.",e);
                         }
 
                     }
                 }
                 headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
-                StringBuilder headers = new StringBuilder();
-                headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
+                StringBuilder selectTag = new StringBuilder();
+                selectTag.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
                 for (String option : headersSet) {
-                    headers.append("<option>").append(option).append("</option>");
+                    selectTag.append("<option>").append(option).append("</option>");
                 }
-                headers.append("</select>");
-                logger.info("Headers"+ headers);
-                String encodedHeaders = URLEncoder.encode(headers.toString(), "UTF-8");
+                selectTag.append("</select>");
+                logger.info("Headers"+ selectTag);
+//                String encodedHeaders = URLEncoder.encode(selectTag.toString(), "UTF-8");
 
-                response.setHeader("selectTag", encodedHeaders);
+//                response.setHeader("selectTag", encodedHeaders);
+                response.setContentType("text/html");
+                PrintWriter writer = response.getWriter();
+                writer.println(selectTag.toString());
+
 
                 response.setHeader("updatedMap", "");
 

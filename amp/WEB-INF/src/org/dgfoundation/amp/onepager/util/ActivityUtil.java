@@ -250,6 +250,7 @@ public class ActivityUtil {
             //we need to create a group for this activity
             AmpActivityGroup tmpGroup = new AmpActivityGroup();
             tmpGroup.setAmpActivityLastVersion(a);
+            session.merge(tmpGroup);
             session.save(tmpGroup);
 //            tmpGroup.setAmpActivityGroupId(id);
             a.setAmpActivityGroup(tmpGroup);

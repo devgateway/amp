@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
     private static final long serialVersionUID = 1L;
-    
+
     @JsonIgnore
     private Long ampActivityGroupId;
 
@@ -20,10 +20,10 @@ public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
 
     @JsonIgnore
     private AmpActivityVersion ampActivityLastVersion;
-    
+
     @JsonIgnore
     private boolean autoClosedOnExpiration = false;
-    
+
     @JsonIgnore
     private Set<AmpActivityVersion> activities;
 
@@ -58,17 +58,17 @@ public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
     public void setActivities(Set<AmpActivityVersion> activities) {
         this.activities = activities;
     }
-    
+
     public void setAutoClosedOnExpiration(boolean autoClosedOnExpiration)
     {
         this.autoClosedOnExpiration = autoClosedOnExpiration;
     }
-    
+
     public boolean getAutoClosedOnExpiration()
     {
         return autoClosedOnExpiration;
     }
-    
+
     @Override
     @JsonIgnore
     public Object getIdentifier() {
@@ -82,5 +82,14 @@ public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AmpActivityGroup{" +
+                "ampActivityGroupId=" + ampActivityGroupId +
+                ", version=" + version +
+                ", ampActivityLastVersion=" + ampActivityLastVersion +
+                '}';
     }
 }

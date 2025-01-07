@@ -227,8 +227,9 @@
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
       xhr.onload = function () {
         if (xhr.status === 200) {
-          if (xhr.getResponseHeader('selectTag') && xhr.getResponseHeader('selectTag').length >= 1) {
-            document.getElementById('headers').innerHTML = xhr.getResponseHeader('selectTag');
+          var body= xhr.responseText;
+          if (body && body.length >= 1) {
+            document.getElementById('headers').innerHTML = body;
             alert("The template has been successfully uploaded.");
             document.getElementById("otherComponents").removeAttribute("hidden");
             $('#add-field').show();

@@ -164,6 +164,7 @@
     <form-bean name="SetBudgetProgramForm" type="org.digijava.module.budget.form.SetBudgetProgramForm" />
     <form-bean name="DepartmentsManagerForm" type="org.digijava.module.aim.form.DepartmentsManagerForm" />
     <form-bean name="EditDepartmentForm" type="org.digijava.module.aim.form.EditDepartmentForm" />
+    <form-bean name="viewImportProgressForm" type="org.digijava.module.aim.form.ImportProgressForm" />
 
     <form-bean name="aimAddContactForm" type="org.digijava.module.aim.uicomponents.form.AddContactComponentForm"/>
     <form-bean name="exportTableForm" type="org.digijava.module.aim.form.ExportTableForm"/>
@@ -1355,6 +1356,9 @@
     <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
     <action name="dataImporterForm" path="/aim/dataImporter" type="org.digijava.module.aim.action.dataimporter.DataImporter">
       <forward name="importData" path="/showLayout.do?layout=dataImporter" />
+    </action>
+    <action name="viewImportProgressForm" path="/aim/viewImportProgress" type="org.digijava.module.aim.action.ViewImportProgress">
+      <forward name="viewImportProgress" path="/showLayout.do?layout=viewImportProgress" />
     </action>
      <action name="quartzJobManagerForm" scope="session" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">
        <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />

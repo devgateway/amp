@@ -46,7 +46,7 @@ public class ImportedFileUtil {
         importedFilesRecord.setFileName(filename);
         session.saveOrUpdate(importedFilesRecord);
         transaction.commit();
-        session.flush();
+//        session.flush();
         return importedFilesRecord;
     }
 

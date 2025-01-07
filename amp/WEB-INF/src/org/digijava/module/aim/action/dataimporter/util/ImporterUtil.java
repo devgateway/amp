@@ -579,7 +579,6 @@ public class ImporterUtil {
                 });
         JsonApiResponse<ActivitySummary> response;
         logger.info("Existing ?" + existing);
-        logger.info("Data model object: " + importDataModel);
         if (importDataModel.getProject_title().trim().isEmpty() && importDataModel.getProject_code().trim().isEmpty()) {
             logger.info("Project title and code are empty. Skipping import");
             importedProject.setImportStatus(ImportStatus.SKIPPED);
@@ -588,6 +587,7 @@ public class ImporterUtil {
         if (existing == null) {
             logger.info("New activity");
             importedProject.setNewProject(true);
+            logger.info("Data model object: " + map);
             response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
         } else {
             logger.info("Existing activity");
@@ -600,9 +600,12 @@ public class ImporterUtil {
             importDataModel.setProject_title(existing.getName());
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : existing.getProjectCode());
             updateFundingAndOrgsWithAlreadyExisting(existing, importDataModel);
+
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
+            logger.info("Data model object: " + map);
+
             response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
         }
         if (response != null) {

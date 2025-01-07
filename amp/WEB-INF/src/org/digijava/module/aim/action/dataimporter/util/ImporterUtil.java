@@ -23,6 +23,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StringType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -548,11 +549,11 @@ public class ImporterUtil {
             session = PersistenceManager.getRequestDBSession();
         }
         String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name";
+                "WHERE a.name = :name OR a.projectCode = :projectCode";
         Query query = session.createQuery(hql);
         query.setCacheable(true);
-        query.setString("name", projectTitle);
-//        query.setString("projectCode", projectCode);
+        query.setParameter("name", projectTitle, StringType.INSTANCE);
+        query.setParameter("projectCode", projectCode, StringType.INSTANCE);
         List<AmpActivityVersion> ampActivityVersions = query.list();
         return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
     }

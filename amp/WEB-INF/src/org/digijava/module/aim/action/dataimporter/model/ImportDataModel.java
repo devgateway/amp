@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action.dataimporter.model;
 
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class ImportDataModel {
     private Object iati_last_update_date;
     private Object approved_by;
     private Object approval_date;
-    private Long approval_status=4L;
+    private ApprovalStatus approval_status;
     private Object archived;
     private Set<Object> indicators;
     private Set<Object> activity_documents;
@@ -377,11 +378,11 @@ public class ImportDataModel {
         this.approval_date = approval_date;
     }
 
-    public Long getApproval_status() {
+    public ApprovalStatus getApproval_status() {
         return approval_status;
     }
 
-    public void setApproval_status(Long approval_status) {
+    public void setApproval_status(ApprovalStatus approval_status) {
         this.approval_status = approval_status;
     }
 

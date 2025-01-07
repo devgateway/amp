@@ -561,7 +561,7 @@ public class ImporterUtil {
     public static void setStatus(ImportDataModel importDataModel) {
         Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
         importDataModel.setActivity_status(statusId);
-        importDataModel.setApproval_status(Long.valueOf(ApprovalStatus.started.getId()));
+        importDataModel.setApproval_status(ApprovalStatus.started);
     }
 
     public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing, String projectCode) throws JsonProcessingException {

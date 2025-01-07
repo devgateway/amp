@@ -5,6 +5,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ public class ImportedFileUtil {
 
     public static ImportedFilesRecord saveFile(File file, String filename) throws IOException, NoSuchAlgorithmException {
         Session session = PersistenceManager.getRequestDBSession();
+        Transaction transaction = session.getTransaction();
         String generatedHash = generateSHA256Hash(file);
         logger.info("Saving File hash is " + generatedHash);
         ImportedFilesRecord importedFilesRecord = new ImportedFilesRecord();
@@ -43,6 +45,7 @@ public class ImportedFileUtil {
         importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
         importedFilesRecord.setFileName(filename);
         session.saveOrUpdate(importedFilesRecord);
+        transaction.commit();
         session.flush();
         return importedFilesRecord;
     }

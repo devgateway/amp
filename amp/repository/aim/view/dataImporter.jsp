@@ -228,7 +228,6 @@
       xhr.onload = function () {
         if (xhr.status === 200) {
           var body= xhr.responseText;
-          console.log("Response : " + body);
           if (body && body.length >= 1) {
             document.getElementById('headers').innerHTML = body;
             alert("The template has been successfully uploaded.");

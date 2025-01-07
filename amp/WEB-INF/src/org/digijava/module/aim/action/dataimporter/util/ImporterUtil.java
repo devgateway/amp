@@ -626,7 +626,7 @@ public class ImporterUtil {
             session = PersistenceManager.getRequestDBSession();
         }
         session.saveOrUpdate(importedProject);
-        session.flush();
+//        session.flush();
 
         logger.info("Imported project: " + importedProject);
     }

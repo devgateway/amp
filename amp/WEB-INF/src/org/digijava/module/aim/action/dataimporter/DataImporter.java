@@ -54,9 +54,9 @@ public class DataImporter extends Action {
         List<String> configNames= getConfigNames();
         request.setAttribute("configNames", configNames);
         DataImporterForm dataImporterForm = (DataImporterForm) form;
+        logger.info(" this is the action " + request.getParameter("action"));
 
         if (Objects.equals(request.getParameter("action"), "configByName")) {
-            logger.info(" this is the action " + request.getParameter("action"));
             String configName = request.getParameter("configName");
             Map<String, String> config= getConfigByName(configName);
             dataImporterForm.setColumnPairs(config);
@@ -76,10 +76,10 @@ public class DataImporter extends Action {
 
 
             if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
-            logger.info(" this is the action " + request.getParameter("action"));
             if (request.getParameter("uploadTemplate") != null) {
-                logger.info(" this is the action " + request.getParameter("uploadTemplate"));
                 Set<String> headersSet = new HashSet<>();
+                logger.info("FileType: " + request.getParameter("fileType"));
+                logger.info("Upload Template: " + request.getParameter("uploadTemplate"));
 
                 if (request.getParameter("fileType") != null) {
                     InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
@@ -124,6 +124,7 @@ public class DataImporter extends Action {
                     headers.append("<option>").append(option).append("</option>");
                 }
                 headers.append("</select>");
+                logger.info("Headers"+ headers);
                 String encodedHeaders = URLEncoder.encode(headers.toString(), "UTF-8");
 
                 response.setHeader("selectTag", encodedHeaders);
@@ -138,7 +139,6 @@ public class DataImporter extends Action {
 
 
             if (Objects.equals(request.getParameter("action"), "addField")) {
-                logger.info(" this is the action " + request.getParameter("action"));
 
                 String columnName = request.getParameter("columnName");
                 String selectedField = request.getParameter("selectedField");
@@ -159,7 +159,6 @@ public class DataImporter extends Action {
 
 
             if (Objects.equals(request.getParameter("action"), "removeField")) {
-                logger.info(" this is the action " + request.getParameter("action"));
 
                 String columnName = request.getParameter("columnName");
                 String selectedField = request.getParameter("selectedField");
@@ -180,7 +179,6 @@ public class DataImporter extends Action {
             }
 
             if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
-                logger.info("This is the action " + request.getParameter("action"));
                 String fileName = dataImporterForm.getDataFile().getFileName();
                 String tempDirPath = System.getProperty("java.io.tmpdir");
                 File tempDir = new File(tempDirPath);

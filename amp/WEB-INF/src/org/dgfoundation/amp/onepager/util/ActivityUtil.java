@@ -115,10 +115,6 @@ public class ActivityUtil {
     public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
         EditorStore editorStore;
-        logger.info(saveContext.getSource());
-        logger.info(saveContext.isPrepareToSave());
-        logger.info(saveContext.isRejected());
-        logger.info(saveContext.isUpdateActivityStatus());
         if (saveContext.getSource() == ActivitySource.ACTIVITY_FORM) {
             session = AmpActivityModel.getHibernateSession();
 
@@ -215,26 +211,19 @@ public class ActivityUtil {
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
-                a.setMember(new HashSet<>());
-                if (tmpGroup == null) {
+                if (tmpGroup == null){
                     //we need to create a group for this activity
                     tmpGroup = new AmpActivityGroup();
                     tmpGroup.setAmpActivityLastVersion(a);
 
-                    //TODO this is a temporary status for the case when we have a new activity and we want to create a new version
-                    a.setApprovalStatus(ApprovalStatus.started);
-                    Long id = (Long) session.save(tmpGroup);
-                    tmpGroup.setAmpActivityGroupId(id);
-                    a.setAmpActivityGroup(tmpGroup);
-                    if (a.getAmpActivityId() == null)
-                        session.save(a);
-                    else
-                        session.merge(a);
-
+                    session.save(tmpGroup);
                 }
 
-                session.flush();
-
+                a.setAmpActivityGroup(tmpGroup);
+                a.setMember(new HashSet<>());
+                a.setAmpActivityId(null);
+                if (oldA.getAmpActivityId() != null)
+                    session.evict(oldA);
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
             }
@@ -250,10 +239,12 @@ public class ActivityUtil {
             //we need to create a group for this activity
             AmpActivityGroup tmpGroup = new AmpActivityGroup();
             tmpGroup.setAmpActivityLastVersion(a);
-            session.merge(tmpGroup);
-            session.save(tmpGroup);
+//            session.merge(tmpGroup);
+//            session.save(tmpGroup);
 //            tmpGroup.setAmpActivityGroupId(id);
             a.setAmpActivityGroup(tmpGroup);
+            session.save(tmpGroup);
+
 
         }
 //        session.flush();

@@ -257,7 +257,6 @@ public class ActivityUtil {
 
         }
 //        session.flush();
-
         setCreationTimeOnStructureImages(a);
 
         AmpActivityGroup group = a.getAmpActivityGroup();

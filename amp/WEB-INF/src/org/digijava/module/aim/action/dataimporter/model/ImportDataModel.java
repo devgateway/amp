@@ -49,7 +49,7 @@ public class ImportDataModel {
     private Object iati_last_update_date;
     private Object approved_by;
     private Object approval_date;
-    private Long approval_status;
+    private Long approval_status=4L;
     private Object archived;
     private Set<Object> indicators;
     private Set<Object> activity_documents;

@@ -1357,7 +1357,7 @@
     <action name="dataImporterForm" path="/aim/dataImporter" type="org.digijava.module.aim.action.dataimporter.DataImporter">
       <forward name="importData" path="/showLayout.do?layout=dataImporter" />
     </action>
-    <action name="viewImportProgressForm" path="/aim/viewImportProgress" type="org.digijava.module.aim.action.ViewImportProgress">
+    <action name="viewImportProgressForm" path="/aim/viewImportProgress" type="org.digijava.module.aim.action.dataimporter.ViewImportProgress">
       <forward name="viewImportProgress" path="/showLayout.do?layout=viewImportProgress" />
     </action>
      <action name="quartzJobManagerForm" scope="session" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">

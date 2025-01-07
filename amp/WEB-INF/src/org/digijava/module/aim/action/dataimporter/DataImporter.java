@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
@@ -122,7 +124,9 @@ public class DataImporter extends Action {
                     headers.append("<option>").append(option).append("</option>");
                 }
                 headers.append("</select>");
-                response.setHeader("selectTag", headers.toString());
+                String encodedHeaders = URLEncoder.encode(headers.toString(), "UTF-8");
+
+                response.setHeader("selectTag", encodedHeaders);
 
                 response.setHeader("updatedMap", "");
 

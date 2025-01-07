@@ -246,7 +246,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
 
-                newActivity.getAmpActivityGroup().setVersion(-1L);
+//                newActivity.getAmpActivityGroup().setVersion(-1L);
                 // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init
                 if (!rules.isTrackEditors()) {
                     Long createdById = oldActivity.getActivityCreator().getAmpTeamMemId();

@@ -594,9 +594,9 @@ public class ImporterUtil {
             importedProject.setNewProject(false);
             importDataModel.setInternal_id(existing.getAmpActivityId());
             importDataModel.setAmp_id(existing.getAmpId());
-//            ActivityGroup activityGroup = new ActivityGroup();
-//            activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
-//            importDataModel.setActivity_group(activityGroup);
+            ActivityGroup activityGroup = new ActivityGroup();
+            activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
+            importDataModel.setActivity_group(activityGroup);
             importDataModel.setProject_title(existing.getName());
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : existing.getProjectCode());
             updateFundingAndOrgsWithAlreadyExisting(existing, importDataModel);

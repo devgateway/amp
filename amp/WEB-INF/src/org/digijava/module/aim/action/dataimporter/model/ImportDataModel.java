@@ -62,7 +62,7 @@ public class ImportDataModel {
     private Set<Program> primary_programs=new HashSet<>();
     private Set<Program> secondary_programs=new HashSet<>();
     private Set<Program> tertiary_programs=new HashSet<>();
-//    private ActivityGroup activity_group;
+    private ActivityGroup activity_group;
     private Long modified_by;
     private Long activity_type;
 
@@ -479,13 +479,13 @@ public class ImportDataModel {
         this.tertiary_programs = tertiary_programs;
     }
 
-//    public ActivityGroup getActivity_group() {
-//        return activity_group;
-//    }
+    public ActivityGroup getActivity_group() {
+        return activity_group;
+    }
 
-//    public void setActivity_group(ActivityGroup activity_group) {
-//        this.activity_group = activity_group;
-//    }
+    public void setActivity_group(ActivityGroup activity_group) {
+        this.activity_group = activity_group;
+    }
 
     public Long getModified_by() {
         return modified_by;
@@ -557,7 +557,7 @@ public class ImportDataModel {
                 ", primary_programs=" + primary_programs +
                 ", secondary_programs=" + secondary_programs +
                 ", tertiary_programs=" + tertiary_programs +
-//                ", activity_group=" + activity_group +
+                ", activity_group=" + activity_group +
                 ", modified_by=" + modified_by +
                 ", activity_type=" + activity_type +
                 '}';

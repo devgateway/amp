@@ -68,8 +68,10 @@ public class DataImporter extends Action {
 
             // Send response
             response.setContentType("application/json");
-            response.getWriter().write(json);
+            PrintWriter writer =response.getWriter();
+            writer.write(json);
             response.setCharacterEncoding("UTF-8");
+            writer.close();
 
             return null;
         }
@@ -131,6 +133,7 @@ public class DataImporter extends Action {
                 response.setContentType("text/html");
                 PrintWriter writer = response.getWriter();
                 writer.println(selectTag.toString());
+                writer.close();
 
 
                 response.setHeader("updatedMap", "");

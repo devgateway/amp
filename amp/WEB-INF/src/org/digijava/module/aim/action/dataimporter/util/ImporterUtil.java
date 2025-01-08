@@ -654,6 +654,7 @@ public class ImporterUtil {
             Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, "");
             Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "");
             Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, "");
+            logger.info("Existing funding:"+ampActivityVersion.getFunding());
             for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
                 Funding funding = new Funding();
                 funding.setDonor_organization_id(ampFunding.getAmpDonorOrgId().getAmpOrgId());

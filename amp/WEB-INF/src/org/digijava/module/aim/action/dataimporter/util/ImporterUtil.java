@@ -679,8 +679,10 @@ public class ImporterUtil {
                         funding.getDisbursements().add(transaction);
                     }
                 }
+                importDataModel.getFundings().add(funding);
 
             }
+
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
             double perc = (double) 100 / ampActivityVersion.getOrgrole().size();

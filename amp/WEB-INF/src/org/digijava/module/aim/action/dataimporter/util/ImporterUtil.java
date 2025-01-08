@@ -679,6 +679,7 @@ public class ImporterUtil {
                         funding.getDisbursements().add(transaction);
                     }
                 }
+                logger.info("Funding: "+funding);
                 importDataModel.getFundings().add(funding);
 
             }

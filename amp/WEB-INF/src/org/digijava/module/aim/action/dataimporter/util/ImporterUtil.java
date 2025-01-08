@@ -673,6 +673,14 @@ public class ImporterUtil {
                                 .toLocalDate().toString()));
                     }
                     transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
+                    for (Funding funding1: importDataModel.getFundings())
+                    {
+                        if (funding1.equals(funding))
+                        {
+                            funding = funding1;
+                            break;
+                        }
+                    }
                     if (ampFundingDetail.getTransactionType() == 0) {
                         funding.getCommitments().add(transaction);
                     } else if (ampFundingDetail.getTransactionType() == 1) {
@@ -681,6 +689,8 @@ public class ImporterUtil {
                 }
                 logger.info("Funding: "+funding);
                 importDataModel.getFundings().add(funding);
+                logger.info("All fundings: "+importDataModel.getFundings());
+
 
             }
 

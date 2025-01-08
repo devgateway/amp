@@ -89,7 +89,6 @@ public class Transaction {
                 ", fixed_exchange_rate=" + fixed_exchange_rate +
                 '}';
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

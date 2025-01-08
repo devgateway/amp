@@ -799,7 +799,7 @@ public class ImporterUtil {
         }
     }
 
-    private static void processTransactions(AmpComponent ampComponent, List<Transaction> transactions, Long responsibleOrgId, int defaultType) {
+    private static void processTransactions(AmpComponent ampComponent, Set<Transaction> transactions, Long responsibleOrgId, int defaultType) {
         for (Transaction transaction : transactions) {
             AmpComponentFunding ampComponentFunding = createFunding(ampComponent, transaction, responsibleOrgId, defaultType);
             if (!componentFundingExists(ampComponentFunding, ampComponent)) {

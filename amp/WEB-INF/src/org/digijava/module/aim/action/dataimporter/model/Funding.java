@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @JsonIgnoreProperties("expenditures")
 public class Funding {
@@ -14,11 +16,11 @@ public class Funding {
     private Object actual_completion_date;
     private Object original_completion_date;
     private Object reporting_date;
-    private List<Transaction> commitments= new ArrayList<>();
-    private List<Transaction> disbursements= new ArrayList<>();
+    private Set<Transaction> commitments= new HashSet<>();
+    private Set<Transaction> disbursements= new HashSet<>();
 
     @JsonProperty("expenditures")
-    private List<Transaction> expenditures= new ArrayList<>();
+    private Set<Transaction> expenditures= new HashSet<>();
 
     private Long type_of_assistance;
     private Long financing_instrument;
@@ -58,11 +60,11 @@ public class Funding {
         this.actual_completion_date = actual_completion_date;
     }
 
-    public List<Transaction> getExpenditures() {
+    public Set<Transaction> getExpenditures() {
         return expenditures;
     }
 
-    public void setExpenditures(List<Transaction> expenditures) {
+    public void setExpenditures(Set<Transaction> expenditures) {
         this.expenditures = expenditures;
     }
 
@@ -83,19 +85,19 @@ public class Funding {
         this.reporting_date = reporting_date;
     }
 
-    public List<Transaction> getCommitments() {
+    public Set<Transaction> getCommitments() {
         return commitments;
     }
 
-    public void setCommitments(List<Transaction> commitments) {
+    public void setCommitments(Set<Transaction> commitments) {
         this.commitments = commitments;
     }
 
-    public List<Transaction> getDisbursements() {
+    public Set<Transaction> getDisbursements() {
         return disbursements;
     }
 
-    public void setDisbursements(List<Transaction> transactions) {
+    public void setDisbursements(Set<Transaction> transactions) {
         this.disbursements = transactions;
     }
 
@@ -156,6 +158,19 @@ public class Funding {
                 ", group_versioned_funding=" + group_versioned_funding +
                 ", source_role=" + source_role +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Funding)) return false;
+        Funding funding = (Funding) o;
+        return Objects.equals(getDonor_organization_id(), funding.getDonor_organization_id()) && Objects.equals(getType_of_assistance(), funding.getType_of_assistance()) && Objects.equals(getFinancing_instrument(), funding.getFinancing_instrument()) && Objects.equals(getFunding_status(), funding.getFunding_status()) && Objects.equals(getSource_role(), funding.getSource_role());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDonor_organization_id(), getType_of_assistance(), getFinancing_instrument(), getFunding_status(), getSource_role());
     }
 
     // Getters and setters

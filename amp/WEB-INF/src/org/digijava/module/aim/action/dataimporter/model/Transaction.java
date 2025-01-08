@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action.dataimporter.model;
 
+import java.util.Objects;
+
 public class Transaction {
     private Long transaction_id;
     private Long adjustment_type;
@@ -86,6 +88,19 @@ public class Transaction {
                 ", currency=" + currency +
                 ", fixed_exchange_rate=" + fixed_exchange_rate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transaction)) return false;
+        Transaction that = (Transaction) o;
+        return Double.compare(getTransaction_amount(), that.getTransaction_amount()) == 0 && Objects.equals(getAdjustment_type(), that.getAdjustment_type()) && Objects.equals(getTransaction_date(), that.getTransaction_date()) && Objects.equals(getCurrency(), that.getCurrency()) && Objects.equals(getFixed_exchange_rate(), that.getFixed_exchange_rate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAdjustment_type(), getTransaction_date(), getTransaction_amount(), getCurrency(), getFixed_exchange_rate());
     }
 
     // Getters and setters

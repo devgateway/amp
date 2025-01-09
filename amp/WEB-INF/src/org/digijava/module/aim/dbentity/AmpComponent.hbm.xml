@@ -16,11 +16,11 @@
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />
 
 		<many-to-one name="activity" column="amp_activity_id" index="i_activity"
-					 class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete"/>
+					 class="org.digijava.module.aim.dbentity.AmpActivityVersion"/>
 
 		<many-to-one name="type" column="type"
 			class="org.digijava.module.aim.dbentity.AmpComponentType" cascade="none" />
-			
+
 		<set name="fundings" cascade="all-delete-orphan" table="AMP_COMPONENT_FUNDING" order-by="transactionDate asc">
 			<cache usage="read-write" />
 			<key column="amp_component_id" />

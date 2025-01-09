@@ -191,7 +191,7 @@ public class ImporterUtil {
         logger.info("Cell type:" + cell.getCellType());
         try {
             // Check if the cell is a date type
-            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 // Get the date value from the cell
                 Date date = cell.getDateCellValue();
                 logger.info("Date Value: " + date);

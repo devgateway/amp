@@ -318,7 +318,7 @@ public class ActivityUtil {
         updateIndirectPrograms(a, session);
 
         logAudit(ampCurrentMember, a, newActivity);
-//        session.flush();
+        session.flush();
 
         return a;
     }

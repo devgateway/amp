@@ -289,6 +289,7 @@ public class ImporterUtil {
 
 
     private static String formatDateFromDateObject(String date) {
+        // List of date formats to try
         List<SimpleDateFormat> formatters = Arrays.asList(
                 new SimpleDateFormat("yyyy-MM-dd"),
                 new SimpleDateFormat("dd/MM/yyyy"),
@@ -298,34 +299,41 @@ public class ImporterUtil {
                 new SimpleDateFormat("dd-MM-yyyy"),
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S"),
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS"),
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"),
+                new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy"), // For "Wed Jan 31 00:00:00 UTC 2024"
+                new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss zzz"), // Alternative similar pattern
+                new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz"), // For "Wed, 31 Jan 2024 00:00:00 UTC"
+                new SimpleDateFormat("EEE MMM dd yyyy") // For "Wed Jan 31 2024"
         );
 
         String formattedDate = null;
 
-        // Check if date is in year-only format (e.g., "2024")
+        // Check if the date is in year-only format (e.g., "2024")
         if (Pattern.matches("\\d{4}", date)) {
             try {
                 // Parse the year and create a Date object for January 1 of that year
                 Date januaryFirst = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-01-01");
                 return new SimpleDateFormat("yyyy-MM-dd").format(januaryFirst); // Return as "yyyy-MM-dd"
             } catch (ParseException e) {
-                // Log error if needed, or handle exception for invalid date format
+                logger.error("Error parsing year-only format: {}", e.getMessage());
             }
         }
 
-        // Try other date formats if not year-only
+        // Try parsing with each date format
         for (SimpleDateFormat formatter : formatters) {
             try {
                 Date parsedDate = formatter.parse(date);
                 formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(parsedDate); // Convert to "yyyy-MM-dd"
-                break;
+                return formattedDate;
             } catch (ParseException e) {
-                logger.error("Invalid date format: {}",e.getMessage());
+                // Log or ignore and try the next format
+                logger.debug("Invalid date format for pattern {}: {}", formatter.toPattern(), e.getMessage());
             }
         }
 
-        return formattedDate;
+        // Log and return null if no format matches
+        logger.error("Unable to parse date: {}", date);
+        return null;
     }
 
 

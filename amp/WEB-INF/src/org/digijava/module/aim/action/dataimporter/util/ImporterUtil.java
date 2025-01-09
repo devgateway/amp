@@ -187,19 +187,14 @@ public class ImporterUtil {
     private static String getDateFromExcel(Row row, int columnIndex) {
         logger.info("Date column:"+columnIndex);
         Cell cell = row.getCell(columnIndex);
-        logger.info("Date cell: "+cell);
         try {
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            logger.info("Date TYpe: " + cell.getCellType());
-//            if (DateUtil.isCellDateFormatted(cell)) {
+            logger.info("Date Type: " + cell.getCellType());
             String date = cell.getStringCellValue();
+            logger.info("Date string"+date);
             String formattedDate = formatDateFromDateObject(date);
             logger.info("Formatted Date: " + formattedDate);
             return formattedDate;
-//            } else {
-//                logger.info("The cell does not contain a valid date.");
-//                return null;
-//            }
         } catch (Exception e) {
             logger.error("Error parsing date column", e);
             return null;
@@ -318,7 +313,7 @@ public class ImporterUtil {
                 formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(parsedDate); // Convert to "yyyy-MM-dd"
                 break;
             } catch (ParseException e) {
-                // Continue to next formatter
+                logger.error("Invalid date format: {}",e.getMessage());
             }
         }
 

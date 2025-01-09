@@ -185,7 +185,9 @@ public class ImporterUtil {
     }
 
     private static String getDateFromExcel(Row row, int columnIndex) {
-        Cell cell = row.getCell(columnIndex); // Assuming the date is in the first column
+        logger.info("Date column:"+columnIndex);
+        Cell cell = row.getCell(columnIndex);
+        logger.info("Date cell: "+cell);
         try {
             cell.setCellType(Cell.CELL_TYPE_STRING);
             logger.info("Date TYpe: " + cell.getCellType());

@@ -189,7 +189,7 @@ public class ImporterUtil {
         logger.info("Date column:" + columnIndex);
         Cell cell = row.getCell(columnIndex);
         try {
-            logger.info("Cell type:" + cell.getCellType())
+            logger.info("Cell type:" + cell.getCellType());
             // Check if the cell is a date type
             if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 // Get the date value from the cell

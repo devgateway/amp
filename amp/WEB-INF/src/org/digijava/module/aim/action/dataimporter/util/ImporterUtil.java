@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
@@ -185,21 +186,27 @@ public class ImporterUtil {
     }
 
     private static String getDateFromExcel(Row row, int columnIndex) {
-        logger.info("Date column:"+columnIndex);
+        logger.info("Date column:" + columnIndex);
         Cell cell = row.getCell(columnIndex);
         try {
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            logger.info("Date Type: " + cell.getCellType());
-            String date = cell.getStringCellValue();
-            logger.info("Date string"+date);
-            String formattedDate = formatDateFromDateObject(date);
-            logger.info("Formatted Date: " + formattedDate);
-            return formattedDate;
+            // Check if the cell is a date type
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+                // Get the date value from the cell
+                Date date = cell.getDateCellValue();
+                logger.info("Date Value: " + date);
+                // Format the date as a string
+                String formattedDate = formatDateFromDateObject(String.valueOf(date));
+                logger.info("Formatted Date: " + formattedDate);
+                return formattedDate;
+            } else {
+                // If the cell is not a date, return an empty string or handle accordingly
+                logger.error("Cell is not a valid date type");
+                return null;
+            }
         } catch (Exception e) {
             logger.error("Error parsing date column", e);
             return null;
         }
-
     }
 
     private static void saveCurrencyCode(String currencyCode, String projectName) {

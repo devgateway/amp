@@ -69,7 +69,7 @@ stage('Build') {
         println "AMP Version: ${codeVersion}"
 
         countries = sh(returnStdout: true,
-                script: "ssh -o StrictHostKeyChecking=no ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"

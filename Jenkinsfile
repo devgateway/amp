@@ -67,15 +67,33 @@ stage('Build') {
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
-        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}'"
-        sh "ssh-copy-id jenkins@${environment}"
+
+        // Define paths for SSH key
+        def sshKeyPath = "/tmp/id_rsa"
+
+        // Generate the SSH key pair (private and public)
+        sh """
+        mkdir -p ~/.ssh
+        ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ${sshKeyPath} -N ''
+    """
+
+        // Copy the public key to the remote server using SSH
+        sh """
+        ssh -o StrictHostKeyChecking=no -i ${sshKeyPath} jenkins@${environment} 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' < ${sshKeyPath}.pub
+    """
+
+        // Execute the SSH command
         countries = sh(returnStdout: true,
-                script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh -o StrictHostKeyChecking=no -i ${sshKeyPath} jenkins@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
+
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
             currentBuild.result = 'FAILURE'
         }
+
+        // Clean up generated SSH keys
+        sh "rm -f ${sshKeyPath} ${sshKeyPath}.pub"
     }
 
     timeout(15) {

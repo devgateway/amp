@@ -165,7 +165,6 @@ stage('Deploy') {
         }
     }
 }
-
 // Retry deploy with the same country.
 stage('Deploy again') {
     if (deployed) {

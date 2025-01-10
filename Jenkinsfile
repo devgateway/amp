@@ -69,8 +69,7 @@ stage('Build') {
         println "AMP Version: ${codeVersion}"
 
         // Define paths for SSH key
-        def sshKeyPath = "/tmp/id_rsa"
-
+        def sshKeyPath = "~/.ssh/id_rsa"
         // Generate the SSH key pair (private and public)
         sh """
         mkdir -p ~/.ssh

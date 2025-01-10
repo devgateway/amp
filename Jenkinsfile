@@ -67,11 +67,14 @@ stage('Build') {
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
+        //Used in the initial generation of keys when working with a new jenkins instance
+        //****************************************************************
 //        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
-        sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
-        sh "cat /root/.ssh/id_rsa.pub"
+//        sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
+//        sh "cat /root/.ssh/id_rsa.pub"
+        //******************************************************
         countries = sh(returnStdout: true,
-                script: "ssh jenkins@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
@@ -97,7 +100,7 @@ stage('Build') {
 
     println "amp url is ${ampUrl}"
 
-    node {
+    node('docker') {
         checkout scm
 
         def image = "${dockerRepo}amp/webapp:${tag}"
@@ -144,7 +147,7 @@ stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            dbVersion = sh(returnStdout: true, script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
             sh "ssh ${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"

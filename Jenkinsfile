@@ -67,9 +67,13 @@ stage('Build') {
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
+        sh """
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts
+        """
 
         countries = sh(returnStdout: true,
-                script: "ssh bmokandu@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"

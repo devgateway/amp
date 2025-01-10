@@ -69,7 +69,7 @@ stage('Build') {
         println "AMP Version: ${codeVersion}"
 //        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
         sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
-        sh "ssh-copy-id jenkins@${environment}"
+        sh "cat /root/.ssh/id_rsa.pub"
         countries = sh(returnStdout: true,
                 script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()

@@ -61,7 +61,7 @@ stage('Build') {
 
     println "Using environment: ${environment}"
 
-    node {
+    node('ansible') {
         checkout scm
 
 
@@ -145,9 +145,10 @@ def deployed = false
 
 // If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
-    node {
+    node('ansible') {
         try {
             // Find latest database version compatible with ${codeVersion}
+            sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
             sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
             dbVersion = sh(returnStdout: true, script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 

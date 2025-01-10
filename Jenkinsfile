@@ -51,6 +51,7 @@ def countries
 def environment
 
 stage('Build') {
+    agent {label 'ansible'}
     timeout(15) {
         milestone()
         environment = input(

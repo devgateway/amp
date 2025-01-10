@@ -68,18 +68,14 @@ stage('Build') {
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
 
-        sshagent(credentials: ['8ace77bf-6c58-432a-b11b-a67da4143af0']) {
-            countries = sh(returnStdout: true,
-                    script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
-                    .trim()
-        }
+        countries = sh(returnStdout: true,
+                script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
             currentBuild.result = 'FAILURE'
         }
     }
-    println "Found countries... next"
-
 
     timeout(15) {
         milestone()

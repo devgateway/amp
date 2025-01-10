@@ -64,6 +64,7 @@ stage('Build') {
     node {
         checkout scm
 
+
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"

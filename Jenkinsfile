@@ -76,6 +76,8 @@ stage('Build') {
             currentBuild.result = 'FAILURE'
         }
     }
+    println "Found countries... next"
+
 
     timeout(15) {
         milestone()

@@ -141,7 +141,6 @@ stage('Build') {
     }
 }
 def deployed = false
-
 // If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
     node('ansible') {

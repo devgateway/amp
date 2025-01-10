@@ -67,7 +67,7 @@ stage('Build') {
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
-        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
+//        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
         sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
         sh "ssh-copy-id jenkins@${environment}"
         countries = sh(returnStdout: true,

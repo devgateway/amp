@@ -67,7 +67,6 @@ stage('Build') {
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
-        sh "ssh-keygen -R ampdev.aws.devgateway.org"
         countries = sh(returnStdout: true,
                 script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()

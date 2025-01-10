@@ -153,7 +153,6 @@ stage('Deploy') {
 
             // Deploy AMP
             sh "ssh ${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
-
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
             deployed = true

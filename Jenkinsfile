@@ -71,7 +71,7 @@ stage('Build') {
         sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
         sh "cat /root/.ssh/id_rsa.pub"
         countries = sh(returnStdout: true,
-                script: "ssh jenkins${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh jenkins@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"

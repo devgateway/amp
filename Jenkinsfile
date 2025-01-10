@@ -148,6 +148,7 @@ stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
+            sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
             dbVersion = sh(returnStdout: true, script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP

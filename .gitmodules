@@ -9,4 +9,4 @@
 	url = git@github.com:devgateway/amp-filter.git
 [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-settings"]
 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-settings
-	url = git@github.com/devgateway/amp-settings.git
+	url = git@github.com:devgateway/amp-settings.git

@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * PermissionUtil.java TODO description here
- * 
+ *
  * @author mihai
  * @package org.digijava.module.gateperm.util
  * @since 05.09.2007
@@ -36,12 +36,12 @@ import java.util.*;
 public final class PermissionUtil {
     private static Logger logger = Logger.getLogger(PermissionUtil.class);
 
-    
+
     private static final String gateDefLocation="/classes/org/digijava/module/gateperm/gates";
     private static final String gateDefPackage="org.digijava.module.gateperm.gates";
 
     /**
-     * gets the gate permissions scope. The scope is the place to put external objects needed by gates logical evaluation 
+     * gets the gate permissions scope. The scope is the place to put external objects needed by gates logical evaluation
      * (like the current user) which are not the permissible istelf (so objects other than the current object on which the
      * permission query is invoked on)
      * @param session
@@ -52,11 +52,11 @@ public final class PermissionUtil {
         if(scope==null) return resetScope(session);
         return scope;
     }
-    
+
     public static String removeTabs(String text) {
         return text.replace("\t", "");
     }
-    
+
     public static String removeTabsNewlines(String text) {
         return removeTabs(text).replace("\r\n", " ").replace("\n", " ");
     }
@@ -68,13 +68,13 @@ public final class PermissionUtil {
     public static Map resetScope(HttpSession session) {
         Map scope = (Map) session.getAttribute(GatePermConst.SCOPE);
         if (scope == null) {
-            scope = new HashMap();
+            scope = new HashMap<>();
             session.setAttribute(GatePermConst.SCOPE, scope);
         } else {
             scope.clear();
         }
         return scope;
-    }   
+    }
     /**
      * flushes the gate permissions scope
      * @param request
@@ -83,15 +83,15 @@ public final class PermissionUtil {
     public static Map resetScope(HttpServletRequest request) {
         Map scope = (Map) request.getAttribute(GatePermConst.SCOPE);
         if (scope == null) {
-            scope = new HashMap();
+            scope = new HashMap<>();
             request.setAttribute(GatePermConst.SCOPE, scope);
         } else {
             scope.clear();
         }
         return scope;
     }
-    
-    
+
+
     /**
      * Deletes a permission and removes any references to objects associated with it
      * @param id the id of the permission to be removed
@@ -101,35 +101,33 @@ public final class PermissionUtil {
      */
     public static void deletePermission(Long id) throws HibernateException, SQLException, DgException{
         Session hs = PersistenceManager.getRequestDBSession();
-        Permission p = (Permission) hs.get(Permission.class, id);
-        
+        Permission p = hs.get(Permission.class, id);
+
         Set<CompositePermission> compositeLinkedPermissions = p.getCompositeLinkedPermissions();
         Iterator<CompositePermission> i=compositeLinkedPermissions.iterator();
         while (i.hasNext()) {
-            CompositePermission element = (CompositePermission) i.next();
+            CompositePermission element = i.next();
             element.getPermissions().remove(p);
             i.remove();
             hs.saveOrUpdate(element);
          }
-        
-        
+
+
         Set<PermissionMap> permissibleObjects = p.getPermissibleObjects();
-        Iterator<PermissionMap> ii=permissibleObjects.iterator();
-        while (ii.hasNext()) {
-            PermissionMap permissionMap = (PermissionMap) ii.next();
+        for (PermissionMap permissionMap : permissibleObjects) {
             p.getPermissibleObjects().remove(permissionMap);
             hs.saveOrUpdate(p);
         }
         hs.delete(p);
     }
-    
+
     public static boolean arrayContains(Object[] a,Object o) {
         for (int i = 0; i < a.length; i++) {
             if(o.equals(a[i])) return true;
         }
         return false;
     }
-    
+
     /**
      * Puts an objects in the permission scope. This will be later used by a gate to evaluate if an action is allowed or not
      * @param session the http session (where the scope lies)
@@ -143,8 +141,8 @@ public final class PermissionUtil {
             logger.debug("Object ["+key+"] with value ["+value.toString()+"] has been placed in the permission scope");
         }
     }
-    
-    
+
+
     public static void putInScope(HttpServletRequest request, MetaInfo key, Object value) {
         Map scope = getScope(request);
         scope.put(key, value);
@@ -154,13 +152,13 @@ public final class PermissionUtil {
         }
 
     }
-    
+
     /**
      * gets the gate permissions scope. The scope is the place to put external
      * objects needed by gates logical evaluation (like the current user) which
      * are not the permissible istelf (so objects other than the current object
      * on which the permission query is invoked on)
-     * 
+     *
      * @param session
      * @return
      */
@@ -183,7 +181,7 @@ public final class PermissionUtil {
         Map scope = getScope(session);
         return scope.get(key);
     }
-    
+
     /**
      * Removes the object associated with the given key, if any, from the permissions scope
      * @param session
@@ -192,10 +190,10 @@ public final class PermissionUtil {
      */
     public static void removeFromScope(HttpSession session,MetaInfo key) {
         Map scope=getScope(session);
-        scope.remove(key);      
+        scope.remove(key);
     }
-    
-    
+
+
     /**
      * list here all the available gates in the system. Since subclass search
      * through reflection is not supported by Java, we need a list with them
@@ -204,7 +202,7 @@ public final class PermissionUtil {
     public static synchronized Class[] getAvailableGates(ServletContext sc) {
         String realPath = sc.getRealPath("/WEB-INF/");
         if(GatePermConst.availableGatesSingleton!=null) return GatePermConst.availableGatesSingleton;
-        
+
         File dir = new File(realPath+gateDefLocation);
         FileFilter filter = new FileFilter() {
             public boolean accept(File f) {
@@ -215,28 +213,28 @@ public final class PermissionUtil {
         ArrayList<Class> gateFiles=new ArrayList<Class>();
         if(!dir.isDirectory()) throw new RuntimeException("Gate definition path is invalid! Should be a directory:"+dir.getAbsolutePath());
         File[] files = dir.listFiles(filter);
-        for (int i = 0; i < files.length; i++) {
-            String className = files[i].getName().substring(0, files[i].getName().length()-6);
+        for (File file : files) {
+            String className = file.getName().substring(0, file.getName().length() - 6);
             try {
-                Class c=Class.forName(gateDefPackage+"."+className);
-                if(Gate.class.isAssignableFrom(c)) gateFiles.add(c);                
+                Class c = Class.forName(gateDefPackage + "." + className);
+                if (Gate.class.isAssignableFrom(c)) gateFiles.add(c);
             } catch (ClassNotFoundException e) {
                 logger.error(e.getMessage(), e);
-                throw new RuntimeException("ClassNotFundingException occured "+e);
+                throw new RuntimeException("ClassNotFundingException occured " + e);
             }
         }
         GatePermConst.availableGatesSingleton=gateFiles.toArray(new Class[0]);
         GatePermConst.availableGatesBySimpleNames=new Hashtable<String, Class>();
-        for (Class c : gateFiles) 
+        for (Class c : gateFiles)
             GatePermConst.availableGatesBySimpleNames.put(c.getSimpleName(), c);
-        
+
         return GatePermConst.availableGatesSingleton;
     }
-    
-    
-    
-    
- 
+
+
+
+
+
     public static List<Permission> getAllPermissions() throws DgException {
         Session session = null;
 
@@ -259,8 +257,8 @@ public final class PermissionUtil {
             Query query = session.createQuery(" from " + Permission.class.getName()+" p WHERE p.name=:permissionName");
             query.setParameter("permissionName", name);
             List list = query.list();
-
-            if(list.size()>0) return (Permission) list.get(0);
+            if (!list.isEmpty())
+                return (Permission) list.get(0);
             return null;
         } catch (HibernateException e) {
             logger.error(e.getMessage(), e);
@@ -268,8 +266,8 @@ public final class PermissionUtil {
         }
         }
 
-    
-    
+
+
     public static List<Permission> getAllUnDedicatedPermissions() {
     Session session = null;
     try {
@@ -283,7 +281,7 @@ public final class PermissionUtil {
     }
     }
 
-    
+
     public static List<Permission> getAllDedicatedCompositePermissions() {
         Session session = null;
 
@@ -298,8 +296,8 @@ public final class PermissionUtil {
             throw new RuntimeException("HibernateException Exception encountered", e);
         }
         }
-    
-    
+
+
     public static Set<AmpPMFieldPermissionViewer> getAllAmpPMFieldPermissionViewers(Class permClass) {
     Session session = null;
     try {
@@ -310,12 +308,11 @@ public final class PermissionUtil {
         query.setParameter("categoryName", permClass.getSimpleName());
         List col = query.list();
         Set<AmpPMFieldPermissionViewer> ret = new TreeSet<AmpPMFieldPermissionViewer>();
-        Iterator i = col.iterator();
-        while (i.hasNext()) {
-        PermissionMap element = (PermissionMap) i.next();
+        for (Object o : col) {
+            PermissionMap element = (PermissionMap) o;
             //ret.put(element.getObjectIdentifier(), element);
-        AmpPMFieldPermissionViewer v = new AmpPMFieldPermissionViewer(element);
-        ret.add(v);
+            AmpPMFieldPermissionViewer v = new AmpPMFieldPermissionViewer(element);
+            ret.add(v);
         }
         return ret;
     } catch (HibernateException e) {
@@ -323,7 +320,7 @@ public final class PermissionUtil {
         throw new RuntimeException("HibernateException Exception encountered", e);
     }
     }
-    
+
     public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
     Session session = null;
     try {
@@ -345,25 +342,25 @@ public final class PermissionUtil {
         throw new RuntimeException("HibernateException Exception encountered", e);
     }
     }
-    
+
     public static void cleanGlobalPermissionMapForPermissibleClass(Class permClass) {
         Session session = null;
       try {
         session = PersistenceManager.getSession();
-        
+
       Query query = session.createQuery("delete from "+PermissionMap.class.getName()+
               " WHERE permissibleCategory=:categoryName AND objectIdentifier is null");
         query.setParameter("categoryName", permClass.getSimpleName());
         query.executeUpdate();
-        
+
       } catch (HibernateException e) {
         logger.error(e.getMessage(), e);
         throw new RuntimeException( "HibernateException Exception encountered", e);
     }
     }
-        
-     
-    
+
+
+
     public static Long getGlobalPermissionMapIdForPermissibleClass(Class permClass) {
     Session session = null;
       try {
@@ -373,7 +370,7 @@ public final class PermissionUtil {
         query.setParameter("categoryName", permClass.getSimpleName());
         List col = query.list();
         if(col.size()==0) return null;
-        PermissionMap pm= (PermissionMap) col.get(0);     
+        PermissionMap pm= (PermissionMap) col.get(0);
         return pm.getId();
     } catch (HibernateException e) {
         logger.error(e.getMessage(), e);
@@ -393,15 +390,15 @@ public final class PermissionUtil {
             query.setParameter("categoryName", permClass.getSimpleName());
             List col = query.list();
             if(col.size()==0) return null;
-            PermissionMap pm= (PermissionMap) col.get(0);     
+            PermissionMap pm= (PermissionMap) col.get(0);
             return pm;
         } catch (HibernateException e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException( "HibernateException Exception encountered", e);
         }
         }
-    
-    
+
+
     public static Permission getGlobalPermissionForPermissibleClass(Class permClass) {
     Session session = null;
       try {
@@ -411,15 +408,15 @@ public final class PermissionUtil {
         query.setParameter("categoryName", permClass.getSimpleName());
         List col = query.list();
         if(col.size()==0) return null;
-        PermissionMap pm= (PermissionMap) col.get(0);    
+        PermissionMap pm= (PermissionMap) col.get(0);
         return pm.getPermission();
     } catch (HibernateException e) {
         logger.error(e.getMessage(), e);
         throw new RuntimeException( "HibernateException Exception encountered", e);
-    }     
+    }
     }
 
-    
+
     /**
      * Gets the permission map assigned to the given permissible. Ignores any global permission, if any
      * @param obj
@@ -436,12 +433,12 @@ public final class PermissionUtil {
         query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
         List col = query.list();
 
-        
+
         if (col.size() == 0)
         return null;
 
         return (PermissionMap) col.get(0);
-    
+
     } catch (HibernateException e) {
         logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
@@ -466,7 +463,7 @@ public final class PermissionUtil {
         query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
         query.setCacheable(true);
         List col = query.list();
-        
+
 
         if (col.size() == 0)
         return null;
@@ -485,12 +482,12 @@ public final class PermissionUtil {
     } catch (HibernateException e) {
         logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
-    } 
+    }
     }
 
-    
-    
-    
+
+
+
 
     public static PermissionMap getPermissionMapForPermissible(Object permissibleIdentifier,Class permissibleClass) {
     Session session = null;
@@ -508,11 +505,10 @@ public final class PermissionUtil {
 
         if (col.size() == 1)
         return (PermissionMap) col.get(0);
-        Iterator i = col.iterator();
-        while (i.hasNext()) {
-        PermissionMap element = (PermissionMap) i.next();
-        if (element.getObjectIdentifier() != null)
-            return element;
+        for (Object o : col) {
+            PermissionMap element = (PermissionMap) o;
+            if (element.getObjectIdentifier() != null)
+                return element;
         }
 
         return null;
@@ -523,8 +519,8 @@ public final class PermissionUtil {
     }
     }
 
-    
-    
+
+
     public static Identifiable getIdentifiableByClusterIdentifier(String clusterIdentifier,Class permissibleClass) {
         Session session = null;
         try {
@@ -533,7 +529,7 @@ public final class PermissionUtil {
             //get the cluster identifier (if any) from the db. if the cluster id is not available in the db then instantiating all
             //objects is the only way to get it
             String clusterPropertyName = Permissible.getPermissiblePropertyName(permissibleClass, Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID);
-    
+
             if(clusterPropertyName==null) {
                  Query query = session.createQuery("SELECT p from " + permissibleClass.getName());
                  List<ClusterIdentifiable> col = query.list();
@@ -542,21 +538,21 @@ public final class PermissionUtil {
                 }
                 return null;
             }
-            
+
             Query query = session.createQuery("SELECT p from " + permissibleClass.getName()
                 + " p WHERE p."+clusterPropertyName+"=:objectId");
             query.setParameter("objectId", clusterIdentifier);
-          
+
             List col = query.list();
 
-            if (col.size() == 0)
-            return null;
+            if (col.isEmpty())
+                return null;
 
             if (col.size() > 1) {
-                logger.error("Non Unique Cluster Identifier !");
+                logger.error("Non Unique Cluster Identifier !. Found "+col.size()+ " objects");
                 //throw new RuntimeException("Cluster Identifier "+clusterIdentifier+" identified more than one local object for class "+permissibleClass);
             }
-            
+
             return  (Identifiable) col.get(0);
 
         } catch (HibernateException e) {
@@ -565,17 +561,17 @@ public final class PermissionUtil {
         }
         }
 
-    
 
-    
-    public static List<PermissionMap> getAllPermissionMapsForPermission(Long permissionId) throws DgException, HibernateException { 
+
+
+    public static List<PermissionMap> getAllPermissionMapsForPermission(Long permissionId) throws DgException, HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
         Query q = session.createQuery("from "+PermissionMap.class.getName()+" p WHERE p.permission.id = :permissionId");
         q.setParameter("permissionId", permissionId);
         return q.list();
     }
-    
-    
+
+
     public static Map<Long, String> getAllPermissibleObjectLabelsForPermissibleClass(Class permClass) {
     Map<Long, String> ret = new HashMap<Long, String>();
     Session session = null;
@@ -608,9 +604,9 @@ public final class PermissionUtil {
         PermissionMap globalPermissionMapForPermissibleClass=null;
         if (globalPermissionMapIdForPermissibleClass == null)
             globalPermissionMapForPermissibleClass = new PermissionMap();
-        else 
-            globalPermissionMapForPermissibleClass = (PermissionMap) hs.get(PermissionMap.class,globalPermissionMapIdForPermissibleClass ); 
-        
+        else
+            globalPermissionMapForPermissibleClass = (PermissionMap) hs.get(PermissionMap.class,globalPermissionMapIdForPermissibleClass );
+
         if(permissionId.longValue()==0 && globalPermissionMapForPermissibleClass.getId()==null)  {
              return null;// mapping.getInputForward();
         } else if(permissionId.longValue()==0) {
@@ -618,15 +614,15 @@ public final class PermissionUtil {
             hs.flush();
         //  pf.setPermissionId(new Long(0));
         //  PersistenceManager.releaseSession(hs);
-            return hs;//mapping.getInputForward();      
+            return hs;//mapping.getInputForward();
         }
-        
+
         globalPermissionMapForPermissibleClass.setObjectIdentifier(null);
         globalPermissionMapForPermissibleClass.setPermissibleCategory(permissibleCategory);
         Permission p = (Permission) hs.get(Permission.class, permissionId);
-        globalPermissionMapForPermissibleClass.setPermission(p);    
+        globalPermissionMapForPermissibleClass.setPermission(p);
         hs.saveOrUpdate(globalPermissionMapForPermissibleClass);
-        
+
         hs.flush();
 
         return null;//mapping.getInputForward();

@@ -195,6 +195,7 @@ public class TeamMemberUtil {
         } else {
             session.delete(teamMember);
         }
+        session.flush();
     }
 
     private static boolean hasInfoRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {

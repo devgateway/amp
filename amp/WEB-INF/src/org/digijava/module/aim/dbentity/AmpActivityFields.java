@@ -286,7 +286,7 @@ LoggerIdentifiable, Cloneable {
 
 //  @Interchangeable(fieldTitle = "Contracts", importable = true, fmPath="/Activity Form/Contracts")
     @VersionableCollection(fieldTitle = "Contracts")
-    protected Set<IPAContract> contracts;
+    protected Set<IPAContract> contracts = new HashSet<>();
 
     //TTIL
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LOCATIONS, importable = true,

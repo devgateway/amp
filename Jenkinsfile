@@ -34,16 +34,16 @@ def updateGitHubCommitStatus(context, message, state) {
     commitSha = sh(returnStdout: true, script: "git rev-parse ${ref}").trim()
 
     step([
-        $class: 'GitHubCommitStatusSetter',
-        reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
-        commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
-        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
-        statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
-        errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-        statusResultSource: [
-            $class: "ConditionalStatusResultSource",
-            results: [[$class: "AnyBuildResult", message: message, state: state]]
-        ]
+            $class: 'GitHubCommitStatusSetter',
+            reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
+            commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
+            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+            statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
+            errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+            statusResultSource: [
+                    $class: "ConditionalStatusResultSource",
+                    results: [[$class: "AnyBuildResult", message: message, state: state]]
+            ]
     ])
 }
 def codeVersion

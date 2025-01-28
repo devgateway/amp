@@ -167,6 +167,23 @@ public class ExcelImporter {
                 String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(row.getCell(projectTitleColumn),false) : "";
                 importDataModel.setProject_title(projectTitle);
 
+                int proposedStartDateColumn = getColumnIndexByName(sheet, getKey(config, "Proposed Start Date"));
+                String proposedStartDate = proposedStartDateColumn >= 0 ? getDateFromExcel(row, proposedStartDateColumn) : null;
+                importDataModel.setProposed_start_date(proposedStartDate);
+
+                int originalCompletionDateColumn = getColumnIndexByName(sheet, getKey(config, "Proposed Completion Date"));
+                String originalCompletionDate = originalCompletionDateColumn >= 0 ? getDateFromExcel(row, originalCompletionDateColumn) : null;
+                importDataModel.setOriginal_completion_date(originalCompletionDate);
+
+                int actualStartDateColumn = getColumnIndexByName(sheet, getKey(config, "Actual Start Date"));
+                String actualStartDate = actualStartDateColumn >= 0 ? getDateFromExcel(row, actualStartDateColumn) : null;
+                importDataModel.setActual_start_date(actualStartDate);
+
+                int actualCompletionDateColumn = getColumnIndexByName(sheet, getKey(config, "Actual Completion Date"));
+                String actualCompletionDate = actualCompletionDateColumn >= 0 ? getDateFromExcel(row, actualCompletionDateColumn) : null;
+                importDataModel.setActual_completion_date(actualCompletionDate);
+
+
                 int projectDescColumn = getColumnIndexByName(sheet, getKey(config, "Project Description"));
                 String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(row.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);

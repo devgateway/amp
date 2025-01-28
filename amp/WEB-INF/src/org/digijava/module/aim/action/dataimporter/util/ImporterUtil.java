@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
@@ -185,7 +184,7 @@ public class ImporterUtil {
         }
     }
 
-    private static String getDateFromExcel(Row row, int columnIndex) {
+    public static String getDateFromExcel(Row row, int columnIndex) {
         logger.info("Date column:" + columnIndex);
         Cell cell = row.getCell(columnIndex);
         try {
@@ -250,7 +249,7 @@ public class ImporterUtil {
     }
 
 
-    private static String getFundingDate(String dateString) {
+    private static String getDateInGoodFormat(String dateString) {
         LocalDate date = LocalDate.now();
         if (isCommonDateFormat(dateString)) {
             List<DateTimeFormatter> formatters = Arrays.asList(
@@ -426,15 +425,15 @@ public class ImporterUtil {
         String fundingDate;
         if (separateFundingDate != null) {
             if (isCommonDateFormat(separateFundingDate)) {
-                fundingDate = getFundingDate(separateFundingDate);
+                fundingDate = getDateInGoodFormat(separateFundingDate);
             } else {
                 yearString = findYearSubstring(separateFundingDate);
-                fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+                fundingDate = yearString != null ? getDateInGoodFormat(yearString) : getDateInGoodFormat("2000");
 
             }
         } else {
             yearString = findYearSubstring(columnHeaderContainingYear);
-            fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+            fundingDate = yearString != null ? getDateInGoodFormat(yearString) : getDateInGoodFormat("2000");
 
         }
 
@@ -681,7 +680,7 @@ public class ImporterUtil {
                     transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
                     if (ampFundingDetail.getTransactionDate() != null) {
 
-                        transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
+                        transaction.setTransaction_date(getDateInGoodFormat(ampFundingDetail.getTransactionDate().toInstant()
                                 .atZone(ZoneId.systemDefault())
                                 .toLocalDate().toString()));
                     }

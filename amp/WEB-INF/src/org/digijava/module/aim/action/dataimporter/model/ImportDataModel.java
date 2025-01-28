@@ -21,7 +21,7 @@ public class ImportDataModel {
     private boolean is_draft;
     private Object last_imported_at;
     private Object last_imported_by;
-    private Object original_completion_date;
+    private String original_completion_date;
     private Set<Sector> primary_sectors=new HashSet<>();
     private Set<Sector> secondary_sectors=new HashSet<>();
     private Set<Location> locations=new HashSet<>();
@@ -40,10 +40,10 @@ public class ImportDataModel {
     private Set<Object> mofed_contact_information;
     private Set<Object> implementing_executing_agency_contact_information;
     private Set<Object> structures;
-    private Object proposed_start_date;
-    private Object actual_start_date;
-    private Object actual_approval_date;
-    private Object actual_completion_date;
+    private String proposed_start_date;
+    private String actual_start_date;
+    private String actual_approval_date;
+    private String actual_completion_date;
     private Long created_by;
     private String creation_date;
     private String update_date;
@@ -155,7 +155,7 @@ public class ImportDataModel {
         return original_completion_date;
     }
 
-    public void setOriginal_completion_date(Object original_completion_date) {
+    public void setOriginal_completion_date(String original_completion_date) {
         this.original_completion_date = original_completion_date;
     }
 
@@ -302,7 +302,7 @@ public class ImportDataModel {
         return proposed_start_date;
     }
 
-    public void setProposed_start_date(Object proposed_start_date) {
+    public void setProposed_start_date(String proposed_start_date) {
         this.proposed_start_date = proposed_start_date;
     }
 
@@ -310,7 +310,7 @@ public class ImportDataModel {
         return actual_start_date;
     }
 
-    public void setActual_start_date(Object actual_start_date) {
+    public void setActual_start_date(String actual_start_date) {
         this.actual_start_date = actual_start_date;
     }
 
@@ -318,7 +318,7 @@ public class ImportDataModel {
         return actual_approval_date;
     }
 
-    public void setActual_approval_date(Object actual_approval_date) {
+    public void setActual_approval_date(String actual_approval_date) {
         this.actual_approval_date = actual_approval_date;
     }
 
@@ -326,7 +326,7 @@ public class ImportDataModel {
         return actual_completion_date;
     }
 
-    public void setActual_completion_date(Object actual_completion_date) {
+    public void setActual_completion_date(String actual_completion_date) {
         this.actual_completion_date = actual_completion_date;
     }
 

@@ -406,6 +406,10 @@ public class DataImporter extends Action {
         fieldsInfos.add("Component Name");
         fieldsInfos.add("Component Code");
         fieldsInfos.add("Beneficiary Agency");
+        fieldsInfos.add("Proposed Start Date");
+        fieldsInfos.add("Proposed Completion Date");
+        fieldsInfos.add("Actual Start Date");
+        fieldsInfos.add("Actual Completion Date");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

@@ -101,9 +101,17 @@ public class TxtDataImporter {
             String projectCode= row.get(getKey(config, "Project Code"));
             String projectTitle= row.get(getKey(config, "Project Title"));
             String projectDesc= row.get(getKey(config, "Project Description"));
+            String proposedStartDate= row.get(getKey(config, "Proposed Start Date"));
+            String proposedEndDate= row.get(getKey(config, "Proposed Completion Date"));
+            String actualStartDate= row.get(getKey(config, "Actual Start Date"));
+            String actualEndDate= row.get(getKey(config, "Actual Completion Date"));
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
 
             importDataModel.setProject_title(projectTitle);
+            importDataModel.setActual_start_date(actualStartDate);
+            importDataModel.setActual_completion_date(actualEndDate);
+            importDataModel.setProposed_start_date(proposedStartDate);
+            importDataModel.setOriginal_completion_date(proposedEndDate);
             importDataModel.setProject_code(projectCode);
             importDataModel.setDescription(projectDesc);
 

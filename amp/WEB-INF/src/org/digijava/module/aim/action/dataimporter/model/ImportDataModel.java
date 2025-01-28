@@ -22,6 +22,8 @@ public class ImportDataModel {
     private Object last_imported_at;
     private Object last_imported_by;
     private String original_completion_date;
+
+    private String proposed_completion_date;
     private Set<Sector> primary_sectors=new HashSet<>();
     private Set<Sector> secondary_sectors=new HashSet<>();
     private Set<Location> locations=new HashSet<>();
@@ -34,6 +36,14 @@ public class ImportDataModel {
     private Set<Object> issues;
     private Long team;
     private PpcAmount ppc_amount;
+    public String getProposed_completion_date() {
+        return proposed_completion_date;
+    }
+
+    public void setProposed_completion_date(String proposed_completion_date) {
+        this.proposed_completion_date = proposed_completion_date;
+    }
+
     private Set<AmpActivityContact> donor_contact_information;
     private Set<AmpActivityContact> project_coordinator_contact_information;
     private Set<Object> sector_ministry_contact_information;
@@ -538,6 +548,7 @@ public class ImportDataModel {
                 ", actual_start_date=" + actual_start_date +
                 ", actual_approval_date=" + actual_approval_date +
                 ", actual_completion_date=" + actual_completion_date +
+                ", proposed_completion_date=" + proposed_completion_date +
                 ", created_by=" + created_by +
                 ", creation_date='" + creation_date + '\'' +
                 ", update_date='" + update_date + '\'' +

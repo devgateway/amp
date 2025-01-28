@@ -112,6 +112,7 @@ public class TxtDataImporter {
             importDataModel.setActual_completion_date(actualEndDate);
             importDataModel.setProposed_start_date(proposedStartDate);
             importDataModel.setOriginal_completion_date(proposedEndDate);
+            importDataModel.setProposed_completion_date(proposedEndDate);
             importDataModel.setProject_code(projectCode);
             importDataModel.setDescription(projectDesc);
 

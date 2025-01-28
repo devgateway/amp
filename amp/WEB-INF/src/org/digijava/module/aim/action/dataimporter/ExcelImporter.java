@@ -174,6 +174,7 @@ public class ExcelImporter {
                 int originalCompletionDateColumn = getColumnIndexByName(sheet, getKey(config, "Proposed Completion Date"));
                 String originalCompletionDate = originalCompletionDateColumn >= 0 ? getDateFromExcel(row, originalCompletionDateColumn) : null;
                 importDataModel.setOriginal_completion_date(originalCompletionDate);
+                importDataModel.setProposed_completion_date(originalCompletionDate);
 
                 int actualStartDateColumn = getColumnIndexByName(sheet, getKey(config, "Actual Start Date"));
                 String actualStartDate = actualStartDateColumn >= 0 ? getDateFromExcel(row, actualStartDateColumn) : null;

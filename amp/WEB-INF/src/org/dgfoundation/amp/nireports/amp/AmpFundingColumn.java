@@ -1,5 +1,21 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -61,7 +77,7 @@ import static java.util.stream.Collectors.toCollection;
  * @author Dolghier Constantin
  *
  */
-public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
+public class AmpFundingColumn extends AmpAmountColumn {
 
     /**
      * {@link #getName()} in case this column is used to fetch "Donor Funding"

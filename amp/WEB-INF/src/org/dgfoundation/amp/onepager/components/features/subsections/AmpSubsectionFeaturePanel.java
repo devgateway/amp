@@ -29,12 +29,11 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
      */
     public AmpSubsectionFeaturePanel(String id, String fmName){
         this(id, fmName,null);
-        
+
     }
 
     /**
      * @param id
-     * @param fmName
      * @param model
      * @throws Exception
      */
@@ -80,7 +79,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
             add(summary);
         }
     }
-    
+
     public TransparentWebMarkupContainer getSlider() {
         return slider;
     }

@@ -39,9 +39,12 @@ public class AmpIndicator implements Serializable, Identifiable
     @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")
     private Set<AmpSector> sectors;
 //    @Interchangeable(fieldTitle="Comments")
+
+    private AmpTheme program;
+
     private String comments;
 //    @Interchangeable(fieldTitle="Unit")
-        private String unit;
+    private String unit;
     /**
      * Indicator connections with activities.
      * Elements in this set contains activity and values assigned to this activity-indicator connections.
@@ -59,6 +62,8 @@ public class AmpIndicator implements Serializable, Identifiable
      */
     
     private Set<IndicatorTheme> valuesTheme;
+
+    private Set<AmpIndicatorGlobalValue> indicatorValues;
 
     @Interchangeable(fieldTitle="Indicator Category")
     private AmpCategoryValue indicatorsCategory;
@@ -112,9 +117,19 @@ public class AmpIndicator implements Serializable, Identifiable
     public Set<AmpSector> getSectors() {
         return sectors;
     }
+
     public void setSectors(Set<AmpSector> sectors) {
         this.sectors = sectors;
     }
+
+    public AmpTheme getProgram() {
+        return program;
+    }
+
+    public void setProgram(AmpTheme program) {
+        this.program = program;
+    }
+
     public boolean isDefaultInd() {
         return defaultInd;
     }
@@ -165,5 +180,27 @@ public class AmpIndicator implements Serializable, Identifiable
     @Override
     public Object getIdentifier() {
         return indicatorId;
+    }
+
+    public Set<AmpIndicatorGlobalValue> getIndicatorValues() {
+        return indicatorValues;
+    }
+
+    public void setIndicatorValues(final Set<AmpIndicatorGlobalValue> indicatorValues) {
+        this.indicatorValues = indicatorValues;
+    }
+
+    public AmpIndicatorGlobalValue getBaseValue() {
+        return indicatorValues.stream()
+                .filter(AmpIndicatorGlobalValue::isBaseValue)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public AmpIndicatorGlobalValue getTargetValue() {
+        return indicatorValues.stream()
+                .filter(AmpIndicatorGlobalValue::isTargetValue)
+                .findFirst()
+                .orElse(null);
     }
 }

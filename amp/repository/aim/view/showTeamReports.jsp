@@ -684,12 +684,12 @@ $(document).ready(function() {
 							</c:set>
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
-									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
+									<a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator/${report.ampReportId}" title="${translation}">
 										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:when>
 								<c:otherwise>
-									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
+									<a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator/${report.ampReportId}" title="${translation}">
 										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:otherwise>
@@ -719,7 +719,7 @@ $(document).ready(function() {
 										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
 									</c:if>
 								</c:set>
-								<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
+								<a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator/${report.ampReportId}" title="${translation}">
 									<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 								</a>
 								<c:set var="translation">

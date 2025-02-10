@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.form.AddOrgGroupForm;
@@ -81,9 +82,9 @@ public class EditOrgGroup extends Action {
             AmpOrgType ot = DbUtil.getAmpOrgType(editForm.getOrgTypeId());
             ampGrp.setOrgType(ot);
             ARUtil.clearOrgGroupTypeDimensions();
-            
-            
-            
+
+
+
             if (DbUtil.checkAmpOrgGroupDuplication(ampGrp.getOrgGrpName(), groupId)) {
 //              if (deleted != null) {
 //                  the org. group has existed before and has been softdeleted -> let's restore it
@@ -93,20 +94,21 @@ public class EditOrgGroup extends Action {
                     ActionMessages errors = new ActionMessages();
                     errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationGroupManager.duplicateGroupName"));
                     saveErrors(request, errors);
-                    //if(editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().longValue()!=0) editForm.setAction("edit"); 
+                    //if(editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().longValue()!=0) editForm.setAction("edit");
                     //else editForm.setAction("create");
                     if (editForm.getAmpOrgId() != null) return mapping.findForward("popup");
                     else return mapping.findForward("forward");
 //              }
             }
-            
 
-            if ((editForm.getAmpOrgGrpId().longValue() ==0)||(editForm.getAmpOrgGrpId().longValue() ==-1)) {
+
+            if (editForm.getAmpOrgId() != null || (editForm.getAmpOrgGrpId().longValue() == 0) || (editForm.getAmpOrgGrpId().longValue() == -1)) {
                 DbUtil.add(ampGrp);
                 if (editForm.getAmpOrgId() != null) {
+                    //I force the commit because by any reason the commit is not done here (in "added" works fine)
+                    PersistenceManager.flushAndCommit(PersistenceManager.getSession());
                     editForm.setFlag("refreshParent");
                     return mapping.findForward("popup");
-                    
                 } else {
                     return mapping.findForward("added");
                 }
@@ -124,7 +126,7 @@ public class EditOrgGroup extends Action {
         }
 
         if ("delete".equals(action)) {
-            
+
             Iterator itr1 = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId()).iterator();
             if (itr1.hasNext()) {
                 //means there are organizations referencing this org group

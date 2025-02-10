@@ -1,5 +1,6 @@
 package org.digijava.module.categorymanager.dbentity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -18,11 +19,17 @@ import java.util.*;
  */
 public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable{
     @PossibleValueId
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("ampCategoryClass")
     private AmpCategoryClass ampCategoryClass;
     @PossibleValueValue
+    @JsonProperty("value")
     private String value;
+    @JsonProperty("index")
     private Integer index;
+    @JsonProperty("deleted")
     private Boolean deleted = false;
     
     private Set<AmpActivityVersion> activities;
@@ -201,7 +208,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
             return false;
         }
         AmpCategoryValue a = (AmpCategoryValue) o;
-        return this.getId().equals(a.getId());
+        return Objects.equals(this.getId(),a.getId());
     }
 
     @Override

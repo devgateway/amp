@@ -82,7 +82,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
         if (o == null) return false;
         if (!(o instanceof FundingPledges)) return false;
         FundingPledges p = (FundingPledges)o;
-        return this.getId().equals(p.getId());
+        return Objects.equals(this.getId(),p.getId());
     }
     
     @Override

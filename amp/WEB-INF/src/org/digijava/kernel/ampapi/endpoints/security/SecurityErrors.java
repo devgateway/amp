@@ -50,4 +50,29 @@ public class SecurityErrors {
     public static final ApiErrorMessage USER_SUSPENDED = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 13,
             "User Suspsended");
 
+    public static final ApiErrorMessage FILL_FORM_CORRECTLY = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 14,
+            "Please fill the form correctly");
+
+    public static final ApiErrorMessage EMAIL_NOT_EQUAL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 15,
+            "Email should be equal to repeat email.");
+    public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_EQUAL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 16,
+            "Notification email should be equal to repeat notification email.");
+
+    public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_NULL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 17,
+            "Notification email and repeat notification email should not be empty.");
+
+    public static final ApiErrorMessage NOT_VALID_EMAIL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 18,
+            "Please use valid email address.");
+
+    public static final ApiErrorMessage USER_EMAIL_EXISTS = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 19,
+            "User with the same email exists, please use another email.");
+
+    public static final ApiErrorMessage PASSWORD_VALIDATION = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 20,
+            "Please enter a password which meets the minimum password requirements.");
+
+    public static final ApiErrorMessage USER_ID_INVALID = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 21,
+            "Please provide the correct user id.");
+
+    public static final ApiErrorMessage PASSWORD_FIELD_REQUIRED = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 22,
+            "Password fields are required.");
 }

@@ -5,8 +5,8 @@
 
 <digi-config>
     <smtp>
-		 <host>localhost</host>
-		 <from>system@digijava.org</from>
+		<host>ampdevde.aws.devgateway.org</host>
+		<from>noreply@developmentgateway.org</from>
 	</smtp>
 
 	

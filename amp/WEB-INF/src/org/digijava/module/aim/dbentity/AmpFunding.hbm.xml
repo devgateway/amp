@@ -42,10 +42,10 @@
         <property name="capitalSpendingPercentage" column="capital_spend_percent" type="float" />
 
         <property name="loanTerms" column="loan_terms" type="text" />
-        
+
         <property name="orderNumber" column="order_number" type="java.lang.Integer" />
         <property name="index" column="index" type="java.lang.Integer" />
-        
+
         <property name="ratificationDate" column="ratification_date" type="java.util.Date" />
         <property name="gracePeriod" column="grace_period" type="java.lang.Integer" />
         <property name="interestRate" column="interest_rate" type="java.lang.Float" />
@@ -58,10 +58,10 @@
 		<property name="projectProblems" column="project_problems" type="java.lang.String" />
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"
-			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
-			
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" />
+
 		<many-to-one name="sourceRole" column="source_role_id"
-			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />				
+			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />
 
 		<!--  <many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>	 -->
 
@@ -71,8 +71,8 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingDetail" />
 		</set>
 
-		<many-to-one cascade="delete" name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
-			
+		<many-to-one name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
+
 		<many-to-one name="typeOfAssistance" column="type_of_assistance_category_va"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="financingInstrument" column="financing_instr_category_value"
@@ -97,12 +97,12 @@
 			<key column="amp_funding_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingMTEFProjection" />
 		</set>
-		
+
 		<many-to-one name="agreement" column="agreement"
 			class="org.digijava.module.aim.dbentity.AmpAgreement" cascade="none" />
 
 		<property name="effectiveFundingDate" column="effective_funding_date" type="java.util.Date" />
 		<property name="fundingClosingDate" column="funding_closing_date" type="java.util.Date" />
-			
+
 	</class>
 </hibernate-mapping>

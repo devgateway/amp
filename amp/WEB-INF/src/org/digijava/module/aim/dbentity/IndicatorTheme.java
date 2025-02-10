@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
 
+import java.util.Set;
+
 /**
  * Program Indicator.
  * this class defines connection between indicator and program (Theme). Most fields are defined in parent class.

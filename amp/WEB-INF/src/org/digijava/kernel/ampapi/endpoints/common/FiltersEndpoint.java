@@ -3,27 +3,37 @@ package org.digijava.kernel.ampapi.endpoints.common;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.filters.*;
 import org.digijava.kernel.ampapi.endpoints.util.*;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.request.TLSUtils;
 
-import javax.ws.rs.*;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
  * Filters Endpoint
  *
  * @author Viorel Chihai
- * 
  */
 @Path("filters")
 @Api("filters")
 public class FiltersEndpoint {
 
-    public FiltersEndpoint() { }
+    public FiltersEndpoint() {
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -130,9 +140,21 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Organizations' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each organization type.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Filter data",
+            response = FilterList.class))
     @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS)
-    public FilterList getOrganizations() {
-        return FiltersManager.getInstance().getOrganizationFilterList();
+    public Response getOrganizations() {
+        return PublicServices.buildOkResponseWithOriginHeaders(
+                FiltersManager.getInstance().getOrganizationFilterList());
+    }
+
+    @OPTIONS
+    @Path("/organizations")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeOrganizations() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     /**
@@ -149,9 +171,20 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Programs' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each program settings.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Filter data",
+            response = FilterList.class))
     @FilterDefinition(tab = EPConstants.TAB_PROGRAMS)
-    public FilterList getPrograms() {
-        return FiltersManager.getInstance().getProgramFilterList();
+    public Response getPrograms() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getProgramFilterList());
+    }
+
+    @OPTIONS
+    @Path("/programs")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describePrograms() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     /**
@@ -169,8 +202,19 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Sectors' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each sector scheme.")
-    public FilterList getSectors() {
-        return FiltersManager.getInstance().getSectorFilterList();
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Filter data",
+            response = FilterList.class))
+    public Response getSectors() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getSectorFilterList());
+    }
+
+    @OPTIONS
+    @Path("/sectors")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeSectors() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     /**
@@ -188,11 +232,23 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Locations' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each country.")
-    public FilterList getLocations(@ApiParam(value = "Retrieve all countries, default false")
-                                   @QueryParam("showAllCountries") @DefaultValue("false") boolean showAllCountries,
-                                   @ApiParam(value = "Retrieve first level location, default false")
-                                   @QueryParam("firstLevelOnly") @DefaultValue("false") boolean firstLevelOnly) {
-        return FiltersManager.getInstance().getLocationFilterList(showAllCountries, firstLevelOnly);
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Filter data",
+            response = FilterList.class))
+    public Response getLocations(@ApiParam(value = "Retrieve all countries, default false")
+                                 @QueryParam("showAllCountries") @DefaultValue("false") boolean showAllCountries,
+                                 @ApiParam(value = "Retrieve first level location, default false")
+                                 @QueryParam("firstLevelOnly") @DefaultValue("false") boolean firstLevelOnly) {
+        return PublicServices.buildOkResponseWithOriginHeaders(
+                FiltersManager.getInstance().getLocationFilterList(showAllCountries, firstLevelOnly));
+    }
+
+    @OPTIONS
+    @Path("/locations")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeLocations() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     /**
@@ -279,8 +335,19 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Activity Status' values.")
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.STATUS)
-    public FilterList getActivityStatus() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.STATUS);
+    public Response getActivityStatus() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().
+                getCategoryValueFilter(FiltersConstants.STATUS));
+    }
+
+
+    @OPTIONS
+    @Path("/activityStatus")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeActivityStatus() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     /**

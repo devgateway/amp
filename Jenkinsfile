@@ -72,15 +72,15 @@ stage('Build') {
         //****************************************************************
         sh """
         # Remove existing keys to avoid conflicts
-        rm -f ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
+        #rm -f ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     
         # Generate a new SSH key
-        ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''
+        #ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''
 
         cat ~/.ssh/id_rsa.pub
     
         # Add the public key to the target server (ignoring if it's already added)
-        ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa.pub jenkins@ampdev.aws.devgateway.org || echo 'Key already exists'
+        #ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa.pub jenkins@ampdev.aws.devgateway.org || echo 'Key already exists'
     
         # Add the server to known_hosts to avoid interactive prompts
         ssh-keyscan -H ampdev.aws.devgateway.org >> ~/.ssh/known_hosts

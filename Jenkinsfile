@@ -76,6 +76,8 @@ stage('Build') {
     
         # Generate a new SSH key
         ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''
+
+        cat ~/.ssh/id_rsa.pub
     
         # Add the public key to the target server (ignoring if it's already added)
         ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa.pub jenkins@ampdev.aws.devgateway.org || echo 'Key already exists'

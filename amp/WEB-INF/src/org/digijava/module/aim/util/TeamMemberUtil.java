@@ -194,6 +194,7 @@ public class TeamMemberUtil {
             teamMember.setDeleted(true);
         } else {
             session.delete(teamMember);
+            session.flush();
         }
     }
 

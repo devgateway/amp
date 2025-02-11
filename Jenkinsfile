@@ -70,10 +70,7 @@ stage('Build') {
         println "AMP Version: ${codeVersion}"
         //Used in the initial generation of keys when working with a new jenkins instance
         //****************************************************************
-        sh """
-        rm -f ~/.ssh/id_rsa ~/.ssh/id_rsa.pub  # Remove existing keys (if any)
-        ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''
-        """
+//        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
         sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
 //        sh "cat /root/.ssh/id_rsa.pub"
         //******************************************************

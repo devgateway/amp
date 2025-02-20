@@ -34,6 +34,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 import org.hibernate.Session;
+import org.hibernate.collection.internal.PersistentSet;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 
@@ -116,7 +117,7 @@ LoggerIdentifiable, Cloneable {
     //protected String govAgreementNumber;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID)
-    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
+    @PermissibleProperty(type={PermissibleProperty.PROPERTY_TYPE_ID})
     @VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
     protected Long ampActivityId ;
 
@@ -127,7 +128,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_TITLE, importable = true,
             fmPath = "/Activity Form/Identification/Project Title",
             interValidators = @InterchangeableValidator(RequiredValidator.class))
-    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
+    @PermissibleProperty(type={PermissibleProperty.PROPERTY_TYPE_LABEL})
     @VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
     @TranslatableField
     protected String name ;
@@ -286,7 +287,7 @@ LoggerIdentifiable, Cloneable {
 
 //  @Interchangeable(fieldTitle = "Contracts", importable = true, fmPath="/Activity Form/Contracts")
     @VersionableCollection(fieldTitle = "Contracts")
-    protected Set<IPAContract> contracts;
+    protected Set<IPAContract> contracts= new HashSet<>();
 
     //TTIL
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LOCATIONS, importable = true,
@@ -455,7 +456,7 @@ LoggerIdentifiable, Cloneable {
 
 //  @Interchangeable(fieldTitle = "Regional Observations", importable = true, fmPath = "/Activity Form/Regional Observations")
     @VersionableCollection(fieldTitle = "Regional Observations")
-    protected Set<AmpRegionalObservation> regionalObservations;
+    protected Set<AmpRegionalObservation> regionalObservations= new HashSet<>();
 
     @Interchangeable(fieldTitle = "Line Ministry Observations", importable = true,
             fmPath = "/Activity Form/Line Ministry Observations")
@@ -2165,13 +2166,15 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            if (this.contracts == null) {
+            if (contracts instanceof PersistentSet)
+            {
                 this.contracts = contracts;
-            } else {
+            }
+            else {
                 this.contracts.clear();
-                if (contracts==null)contracts=new HashSet<>();
                 this.contracts.addAll(contracts);
             }
+
         }
 
 
@@ -2308,11 +2311,10 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
-            if (this.regionalObservations == null) {
+            if (regionalObservations instanceof PersistentSet) {
                 this.regionalObservations = regionalObservations;
             } else {
                 this.regionalObservations.clear();
-                if (regionalObservations==null)regionalObservations=new HashSet<>();
                 this.regionalObservations.addAll(regionalObservations);
             }
         }
@@ -2341,7 +2343,14 @@ LoggerIdentifiable, Cloneable {
 
         public void setLineMinistryObservations(
                 Set<AmpLineMinistryObservation> lineMinistryObservations) {
-            this.lineMinistryObservations = lineMinistryObservations;
+            if(lineMinistryObservations instanceof PersistentSet) {
+                this.lineMinistryObservations = lineMinistryObservations;
+            }
+            else
+            {
+                this.lineMinistryObservations.clear();
+                this.lineMinistryObservations.addAll(lineMinistryObservations);
+            }
         }
 
         public Boolean getIndirectOnBudget() {

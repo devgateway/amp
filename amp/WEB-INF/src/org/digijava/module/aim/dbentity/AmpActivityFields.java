@@ -34,6 +34,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 import org.hibernate.Session;
+import org.hibernate.collection.internal.PersistentSet;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 
@@ -2165,11 +2166,10 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            if (this.contracts == null) {
+            if (contracts instanceof PersistentSet) {
                 this.contracts = contracts;
             } else {
                 this.contracts.clear();
-                if (contracts==null)contracts=new HashSet<>();
                 this.contracts.addAll(contracts);
             }
         }
@@ -2308,11 +2308,10 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
-            if (this.regionalObservations == null) {
+            if (this.regionalObservations instanceof PersistentSet) {
                 this.regionalObservations = regionalObservations;
             } else {
                 this.regionalObservations.clear();
-                if (regionalObservations==null)regionalObservations=new HashSet<>();
                 this.regionalObservations.addAll(regionalObservations);
             }
         }

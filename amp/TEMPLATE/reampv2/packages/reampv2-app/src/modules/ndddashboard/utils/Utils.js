@@ -72,8 +72,9 @@ export function getCustomColor(item, program) {
 
 export function getGradient(colorFrom, colorTwo, maxGradient = MAX_GRADIENTS) {
   const colorGradient = new Gradient('', maxGradient);
+  console.log("From",colorFrom, "to", colorTwo,"Gradient", maxGradient);
 
-  colorGradient.setGradient(colorFrom, colorTwo);
+  colorGradient.setGradient(colorFrom?colorFrom:'#00ff00', colorTwo);
   return colorGradient.getArray();
 }
 
@@ -133,6 +134,17 @@ function getSuffixForLang(prefix, lang) {
   return prefix;
 }
 
+export const formatNumberByPattern = (value, pattern, locale ) => {
+  // Extract decimal places from pattern (e.g., "#,##0.###" -> max 3 decimals)
+  const decimalPart = pattern.split(".")[1] || "";
+  const maxDecimals = decimalPart.length; // Count number of '#' after the decimal
+
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 0, // The pattern suggests it allows no trailing zeros
+    maximumFractionDigits: maxDecimals,
+    useGrouping: true // Enable thousands separator
+  }).format(value);
+};
 export function formatNumber(currency, translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
   numberDividerDescriptionKey) {
   if (decimalSeparator==='.')

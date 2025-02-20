@@ -214,6 +214,7 @@ class NestedDonutsProgramChart extends Component {
             const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
             // const val = formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, program.amount, true);
             const val = appendCurrency(settings[CURRENCY_CODE], translations,program.formattedAmount,globalSettings.numberDivider, globalSettings.numberDividerDescriptionKey)
+            console.log("Amount",val);
             const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
             return (
                 <ToolTip

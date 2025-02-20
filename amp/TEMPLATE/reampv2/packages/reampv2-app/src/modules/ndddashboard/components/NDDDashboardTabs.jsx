@@ -47,7 +47,6 @@ const NDDDashboardTabs = (props)  => {
             <Tab eventKey="ndd" title={translations["amp.ndd.dashboard:ndd-dashboard"]}>
                 <Col style={{
                     backgroundColor: "#f5f5f5",
-                    paddingTop: 25,
                     borderRadius: 5,
                 }}>
                     <Suspense fallback={<div className="loading" />}>
@@ -82,7 +81,6 @@ const NDDDashboardTabs = (props)  => {
             <Tab eventKey="me" title={translations["amp.ndd.dashboard:me-dashboard"]}>
                 <Col style={{
                     backgroundColor: "#f5f5f5",
-                    paddingTop: 25,
                     borderRadius: 5,
                 }}>
                     <Suspense fallback={<div className="loading" />}>

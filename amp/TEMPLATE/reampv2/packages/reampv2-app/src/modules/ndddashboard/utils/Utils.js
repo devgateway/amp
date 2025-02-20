@@ -165,6 +165,22 @@ export function formatNumber(currency, translations, value, precision, decimalSe
   );
 }
 
+
+export function appendCurrency(currency, translations, value, numberDivider,
+                             numberDividerDescriptionKey) {
+
+  return (
+      <>
+        {String(value)}
+        {' '}
+        {currency}
+        {numberDivider && numberDividerDescriptionKey
+            ? ` (${translations[`amp.ndd.dashboard:${numberDividerDescriptionKey}`]})`
+            : null}
+      </>
+  );
+}
+
 export function formatNumberWithSettings(currency, translations, settings, value, useUnits) {
   if (useUnits) {
     return formatNumber(currency, translations, value, settings.precision, settings.decimalSeparator,

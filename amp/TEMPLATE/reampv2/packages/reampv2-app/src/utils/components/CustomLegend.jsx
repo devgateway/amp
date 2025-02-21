@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import EllipsisText from 'react-ellipsis-text';
 import PropTypes from 'prop-types';
-import { formatOnlyNumber } from '../../modules/ndddashboard/utils/Utils';
+import {formatNumberByPattern, formatOnlyNumber} from '../../modules/ndddashboard/utils/Utils';
 
 export default class CustomLegend extends Component {
   render() {
@@ -43,7 +43,7 @@ export default class CustomLegend extends Component {
                         className="label amount">
                         {/* eslint-disable-next-line no-nested-ternary */}
                         {translations && settings && currency
-                          ? formatOnlyNumber(settings, d.amount)
+                          ? formatNumberByPattern( d.amount,settings, "en-US")
                           : formatter
                             ? formatter.format(d.amount)
                             : d.amount}

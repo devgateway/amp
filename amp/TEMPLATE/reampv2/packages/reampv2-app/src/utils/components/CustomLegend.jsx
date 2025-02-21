@@ -43,7 +43,7 @@ export default class CustomLegend extends Component {
                         className="label amount">
                         {/* eslint-disable-next-line no-nested-ternary */}
                         {translations && settings && currency
-                          ? formatNumberByPattern( d.amount,settings, "en-US")
+                          ? formatNumberByPattern( d.amount,settings.numberFormat, "en-US")
                           : formatter
                             ? formatter.format(d.amount)
                             : d.amount}

@@ -140,10 +140,12 @@ export const formatNumberByPattern = (value, pattern, locale ) => {
   const maxDecimals = decimalPart.length; // Count number of '#' after the decimal
 
   return new Intl.NumberFormat(locale, {
-    minimumFractionDigits: 0, // The pattern suggests it allows no trailing zeros
+    minimumFractionDigits: 0,
     maximumFractionDigits: maxDecimals,
-    useGrouping: true // Enable thousands separator
-  }).format(value);
+    useGrouping: true
+  }).formatToParts(value).map(part =>
+      part.type === 'group' ? ' ' : part.value
+  ).join('');
 };
 export function formatNumber(currency, translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
   numberDividerDescriptionKey) {
@@ -171,7 +173,7 @@ export function appendCurrency(currency, translations, value, numberDivider,
 
   return (
       <>
-        {String(value)}
+        {value}
         {' '}
         {currency}
         {numberDivider && numberDividerDescriptionKey
@@ -179,6 +181,11 @@ export function appendCurrency(currency, translations, value, numberDivider,
             : null}
       </>
   );
+}
+export function formatNumberAndAppendCurrency(value,currency, translations, settings)
+{
+  const newVal = formatNumberByPattern(value,settings.numberFormat,"en-US");
+  return appendCurrency(currency, translations, newVal, settings.numberDivider, settings.numberDividerDescriptionKey)
 }
 
 export function formatNumberWithSettings(currency, translations, settings, value, useUnits) {

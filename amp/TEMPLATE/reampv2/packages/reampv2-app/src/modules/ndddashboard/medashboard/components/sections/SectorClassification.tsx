@@ -12,7 +12,6 @@ import EllipsisText from "react-ellipsis-text";
 import { Tooltip }  from "react-tooltip";
 import NoData from "../NoData";
 import {setSelectedSectorState} from "../../reducers/fetchSectorClassificationReducer";
-import useTranslate from "../../utils/translate";
 
 const CustomLegend = ({ data }) => (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
@@ -32,7 +31,6 @@ const CustomLegend = ({ data }) => (
         ))}
     </div>
 );
-const t = useTranslate();
 
 interface SectorProgressProps {
     translations?: any,
@@ -173,7 +171,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                     }}
                                     className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                    {sectorClassification.map((item, index: number) => (<option key={index} value={item.id}>{t(item.name)}</option>))}
+                                    {sectorClassification.map((item, index: number) => (<option key={index} value={item.id}>{translations['amp.ndd.dashboard:me-' + item.name.toLowerCase()]}</option>))}
                                 </select>
                             )}
                             <span className="cheat-lineheight" />

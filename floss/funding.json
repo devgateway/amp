@@ -7,7 +7,7 @@
     "email": "info@developmentgateway.org",
     "description": "Development Gateway, Inc. (DG) is an international non-profit organization that provides technical tools and advisory services to country governments and development organizations. Since 2000, Development Gateway: An IREX Venture (DG) has built tools, systems, and dashboards that make development data easier to gather, use, and understand, in over 90 countries around the world. We enhance transparency and efficiency in agriculture, health, extractives, information management, and cross-cutting global policy fields. Our partnerships with governments, institutions, and communities help ensure they have the information needed to make or shape decisions. We identify barriers to and solutions for increased data use, and apply in-the-weeds knowledge to incorporate rigorous learnings and inform the global community.",
     "webpageUrl": {
-      "url": "https://developmentgateway.org/"
+      "url": "https://developmentgateway.org/",
       "wellKnown": "https://developmentgateway.org/floss-funding-manifest.txt"
     }
   },

@@ -1,0 +1,93 @@
+{
+  "version": "v1.0.0",
+  "entity": {
+    "type": "organisation",
+    "role": "owner",
+    "name": "Development Gateway, Inc.",
+    "email": "info@developmentgateway.org",
+    "description": "Development Gateway, Inc. (DG) is an international non-profit organization that provides technical tools and advisory services to country governments and development organizations. Since 2000, Development Gateway: An IREX Venture (DG) has built tools, systems, and dashboards that make development data easier to gather, use, and understand, in over 90 countries around the world. We enhance transparency and efficiency in agriculture, health, extractives, information management, and cross-cutting global policy fields. Our partnerships with governments, institutions, and communities help ensure they have the information needed to make or shape decisions. We identify barriers to and solutions for increased data use, and apply in-the-weeds knowledge to incorporate rigorous learnings and inform the global community.",
+    "webpageUrl": {
+      "url": "https://developmentgateway.org/"
+    }
+  },
+  "projects": [
+    {
+      "guid": "amp",
+      "name": "Aid Management Platform",
+      "description": "Through the Aid Management Program (AMP), DG is the leading global provider of Aid Information Management Systems (AIMS). The program includes not just software, but also training, ongoing support, and a peer network of other AMP country partners. AMP helps governments and development partners gather, access, and monitor information on development activities, with the goal of increasing aid effectiveness. It includes a robust software application – the Aid Management Platform (AMP) – as well as training and policy support for sustainable program management.",
+      "webpageUrl": {
+        "url": "https://devgateway.github.io/amp/"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/devgateway/amp"
+      },
+      "licenses": [
+        "spdx:GPL-3.0"
+      ],
+      "tags": [
+        "aims",
+        "public-goods",
+        "digital-public-goods"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "dg-bank",
+        "type": "bank",
+        "description": "Please contact us for bank details at info@developmentgateway.org"
+      }
+    ],
+    "plans": [
+      {
+        "guid": "replace-struts-jsp",
+        "status": "inactive",
+        "name": "Upgrade the app to use more recent technology",
+        "description": "AMP is a very old tool, some parts of it still rely on technologies such as Apache Struts 1.x and JSP which was discontinued a long time ago. We plan to get rid of this technology and upgrade to something that is maintained.",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "one-time",
+        "channels": [
+          "dg-bank"
+        ]
+      },
+      {
+        "guid": "start-empty",
+        "status": "inactive",
+        "name": "Modify the tool to start with empty database",
+        "description": "The AMP software now requires a database with some existing predefined data. This makes it difficult to start anew or to make the tool more broadly available to the community. We need to update the code to make it work with a minimal set of data that is for example created upon startup, if missing",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "one-time",
+        "channels": [
+          "dg-bank"
+        ]
+      },
+      {
+        "guid": "replace-xmlpatcher",
+        "status": "inactive",
+        "name": "Replace XMLPatcher with Liquibase",
+        "description": "AMP has been created before robust database change management tools such as Liquibase or Flyway were created. Long time ago, we developed a module that would do similar tasks but was maintained by us internally. https://github.com/devgateway/amp/tree/develop/amp/xmlpatches However we do not currently have resources to do this and would like to port AMP to Liquibase, which is a separate project open source project that does more or less the same job https://www.liquibase.com",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "one-time",
+        "channels": [
+          "dg-bank"
+        ]
+      },
+      {
+        "guid": "general-support-security",
+        "status": "inactive",
+        "name": "General tech support and maintenance",
+        "description": "Running such a complex tool with so many java libraries, spring framework/security dependencies without installing security updates regularily is slowly going to bring the project to an abandonware status. When we work with implementations, we do our best to keep the updates done, but we do not have a separate fund to maintain the tool and it is always something that falls behind.",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "yearly",
+        "channels": [
+          "dg-bank"
+        ]
+      }
+    ]
+  }
+}

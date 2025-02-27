@@ -365,11 +365,11 @@ public class AmpDonorFundingFormSectionFeature extends
                     }
                 }
                 logger.info("Enabled for user " + currentUser.getName() + ":" + enabled);
-                fg.setEnabled(enabled);
                 item.add(fg);
                 AmpAuthWebSession session = (AmpAuthWebSession) getSession();
                 PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
                 PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
+                item.setEnabled(enabled);
 
             }
 

@@ -46,8 +46,8 @@ public class FundingOrganisationGate extends AbstractOrgRoleGate {
 
         //we get the team
         FundingOrganization org = (FundingOrganization) getObjectFromScope(GatePermConst.ScopeKeys.CURRENT_ORG,
-                false);
-        logger.info("Funding Organization"+org.getOrgName());
+                true);
+        logger.info("Current Organization"+org);
         for (AmpOrganisation ampOrg : orgs) {
             logger.info("Org" + ampOrg.getName());
             if (ampOrg.getAmpOrgId().equals(org.getAmpOrgId()))

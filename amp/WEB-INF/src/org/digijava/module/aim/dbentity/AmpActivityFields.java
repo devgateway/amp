@@ -1063,7 +1063,15 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setActivityDocuments(Set<AmpActivityDocument> activityDocuments) {
-            this.activityDocuments = activityDocuments;
+            if (this.activityDocuments instanceof PersistentSet) {
+                this.activityDocuments = activityDocuments;
+            } else {
+                if(this.activityDocuments==null) {
+                    this.activityDocuments = new HashSet<>(activityDocuments);
+                }
+                this.activityDocuments.clear();
+                this.activityDocuments.addAll(activityDocuments);
+            }
         }
 
         /**
@@ -2311,6 +2319,9 @@ LoggerIdentifiable, Cloneable {
             if (this.regionalObservations instanceof PersistentSet) {
                 this.regionalObservations = regionalObservations;
             } else {
+                if(this.regionalObservations==null) {
+                    this.regionalObservations = new HashSet<>(regionalObservations);
+                }
                 this.regionalObservations.clear();
                 this.regionalObservations.addAll(regionalObservations);
             }

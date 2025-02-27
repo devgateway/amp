@@ -27,6 +27,8 @@ public class FundingOrganisationGate extends AbstractOrgRoleGate {
     public FundingOrganisationGate(Map scope, Queue<String> parameters) {
         super(scope, parameters);
     }
+    public FundingOrganisationGate() {
+    }
     @Override
     public boolean logic() throws Exception {
         TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);

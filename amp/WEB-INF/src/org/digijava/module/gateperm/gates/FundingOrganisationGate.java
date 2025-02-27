@@ -9,6 +9,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
+import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -21,6 +23,12 @@ public class FundingOrganisationGate extends AbstractOrgRoleGate {
 
     private static final String  DESCRIPTION = "gives access if the current user is part of the organization with the given id";
 
+
+    public FundingOrganisationGate(Map scope, Queue<String> parameters) {
+        super(scope, parameters);
+    }
+    public FundingOrganisationGate() {
+    }
     @Override
     public boolean logic() throws Exception {
         TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);

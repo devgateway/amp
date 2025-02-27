@@ -46,21 +46,21 @@
     </appender>
 
     <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
-    <logger name="org.apache" level="INFO" />
+    <logger name="org.apache" level="ERROR" />
 
     <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
-    <logger name="org.quartz" level="INFO" />
-    <logger name="org.springframework.security" level="TRACE" />
+    <logger name="org.quartz" level="ERROR" />
+    <logger name="org.springframework.security" level="ERROR" />
 
-    <logger name="org.digijava" level="INFO" /> <!-- DEBUG default -->
+    <logger name="org.digijava" level="ERROR" /> <!-- DEBUG default -->
 
-    <logger name="org.dgfoundation" level="INFO" /> <!-- DEBUG default -->
+    <logger name="org.dgfoundation" level="ERROR" /> <!-- DEBUG default -->
 
     <!-- SET to DEBUG to see wicket page render times -->
     <logger name="org.apache.wicket.devutils.inspector.RenderPerformanceListener" level="DEBUG" />
 
     <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
-    <logger name="javax.enterprise.resource.webcontainer.jsf" level="INFO" />
+    <logger name="javax.enterprise.resource.webcontainer.jsf" level="ERROR" />
 
     <logger name="org.hibernate" level="ERROR" />
 

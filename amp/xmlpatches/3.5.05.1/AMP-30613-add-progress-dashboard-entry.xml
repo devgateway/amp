@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+<jira>AMP-30613</jira>
+<keyword>Add Progress dashboards entry into amp modules</keyword>
+<author>timothygachengo</author>
+<apply>
+    <script>
+        <lang delimiter=";" type="postgres">
+            INSERT into amp_modules_visibility (id, name, description, haslevel, parent) values
+            (nextval('amp_modules_visibility_seq'), 'Progress Tracking Dashboards', 'Progress Tracking Dashboards', null, null);
+            DELETE FROM amp_visibility_rule_amp_features_visibility WHERE feature_id = (SELECT id from amp_features_visibility WHERE name='NDD Dashboard');
+            DELETE FROM amp_features_visibility WHERE name = 'NDD Dashboard';
+
+            INSERT INTO amp_features_visibility (id, name, description, haslevel, parent)  values
+            (nextval('amp_features_visibility_seq'), 'NDD Dashboard', 'NDD Dashboard', true, (SELECT id from amp_modules_visibility WHERE name='Progress Tracking Dashboards'));
+
+            INSERT INTO amp_features_visibility (id, name, description, haslevel, parent) values (nextval('amp_features_visibility_seq'), 'M&amp;E Dashboard', 'M&amp;E Dashboard', true, (SELECT id from amp_modules_visibility WHERE name='Progress Tracking Dashboards'));
+        </lang>
+    </script>
+</apply>
+</tns:patch>

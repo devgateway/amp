@@ -328,15 +328,14 @@
                     <td align="center" style="padding-bottom:10px;">
                       <html:checkbox property="notificationEmailEnabled" style="width: auto" styleId="notificationEmailEnabled"/>
                     </td>
-                    <td>&nbsp;</td>
-                    <td colspan=2>
+                    <td>
                       <table width="100%">
                         <tr id="notificationEmailRow">
-                          <td class=f-names noWrap style="padding-bottom:10px;">
+                          <td class=f-names noWrap width="200" style="padding-bottom:10px;">
                             <FONT color=red>*</FONT>
                             <digi:trn>Notification Email</digi:trn>
                           </td>
-                          <td align="right" style="padding-bottom:10px;">
+                          <td align="right" valign="top" style="padding-bottom:10px;display: inline-block;">
                             <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/>
                           </td>
                         </tr>

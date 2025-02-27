@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpIndicatorValueDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.AmpIndicatorPossibleValuesProvider;
+import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -26,7 +27,7 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
     private Long id;
 
     /**
-     * Indicator. this field is mandatory. It defines indicator in connection with activity, theme or team. 
+     * Indicator. this field is mandatory. It defines indicator in connection with activity, theme or team.
      */
     @PossibleValues(AmpIndicatorPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Indicator", importable = true, pickIdOnly = true, uniqueConstraint = true)
@@ -35,18 +36,10 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
     /**
      * Indicator values.
      */
-    @InterchangeableDiscriminator(discriminatorField = "valueType",
-            configurer = AmpIndicatorValueDiscriminationConfigurer.class, settings = {
-            @Interchangeable(fieldTitle = "Base", discriminatorOption = "" + AmpIndicatorValue.BASE,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Base Value", importable = true),
-            @Interchangeable(fieldTitle = "Target", discriminatorOption = "" + AmpIndicatorValue.TARGET,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Target Value", importable = true),
-            @Interchangeable(fieldTitle = "Revised", discriminatorOption = "" + AmpIndicatorValue.REVISED,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Revised Value", importable = true),
-            @Interchangeable(fieldTitle = "Actual", discriminatorOption = "" + AmpIndicatorValue.ACTUAL,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Current Value", importable = true)})
+    @Interchangeable(fieldTitle = "Indicator Values", importable = true, fmPath = "/Activity Form/M&E/ME Item/Actual Values")
+    @VersionableCollection(fieldTitle = "Indicator Values")
     protected Set<AmpIndicatorValue> values = new HashSet<>();
-    
+
     public Long getId() {
         return id;
     }

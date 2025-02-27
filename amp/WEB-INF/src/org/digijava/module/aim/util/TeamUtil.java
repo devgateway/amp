@@ -856,7 +856,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 //session.flush();
-            member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
+            member = session.load(AmpTeamMember.class, id);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -879,7 +879,6 @@ public class TeamUtil {
                 team.setTeamLead(member);
                 session.saveOrUpdate(team);
             }
-            session.flush();
             User user = session.load(User.class, member.getUser().getId());
             String qryStr = "select grp from " + Group.class.getName()
                 + " grp " + "where (grp.key=:key) and (grp.site=:sid)";
@@ -887,10 +886,13 @@ public class TeamUtil {
             qry.setParameter("key", Group.EDITORS, StringType.INSTANCE);
             qry.setParameter("sid", site.getId(), LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
-            Group group = null;
-            if(itr.hasNext())
-                group = (Group) itr.next();
+            Group group =(Group) qry.stream().findAny().orElse(null);
+//            if(itr.hasNext())
+//                group = (Group) itr.next();
             user.getGroups().add(group);
+            session.saveOrUpdate(user);
+            session.flush();
+
             //tx.commit();
             logger.debug("User added to group " + group.getName());
         } catch(Exception e) {

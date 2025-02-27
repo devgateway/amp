@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30613</jira>
+    <keyword>Add Number of indicators in global settings</keyword>
+    <author>timothygachengo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
+                VALUES (nextval('amp_global_settings_seq'), 'Number of indicators in M&amp;E Dashboard', '5', 't_Integer', 'Number of Indicators that can be displayed in the M&amp;E Dashboard', 'general', null)
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

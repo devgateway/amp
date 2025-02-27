@@ -149,5 +149,11 @@
 "amp.dashboard:chart-tooltip-download-chart[title]":"Download image or table",
 "amp.dashboard:chart-tooltip-expand-chart[title]":"Expand chart",
 "amp.dashboard:chart-tooltip-collapse-chart[title]":"Collapse chart",
-"amp.dashboard:chart-tooltip-heatmap-chart[title]":"View heat map"
+"amp.dashboard:chart-tooltip-heatmap-chart[title]":"View heat map",
+"amp.dashboard:chart-TopPrograms": "Top Programs",
+"amp.dashboard:chart-TopPrograms-others": "Others",
+"amp.dashboard:prgscheme-national-plan-objective": "National Plan Objective",
+"amp.dashboard:prgscheme-primary-program": "Primary Program",
+"amp.dashboard:prgscheme-secondary-program": "Secondary Program",
+"amp.dashboard:prgscheme-tertiary-program": "Tertiary Program"
 }

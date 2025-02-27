@@ -82,8 +82,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                 return -1;
             if (o1.getTitle() == null)
                 return 1;
-            int ret = o1.getTitle().compareTo(o2.getTitle());
-            return ret;
+            return o1.getTitle().compareTo(o2.getTitle());
         }
     }
 

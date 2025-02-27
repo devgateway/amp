@@ -549,16 +549,9 @@ public class DgUtil {
      */
     public static String decodeBase64(String string) {
         try {
-            try {
-                return new String(new sun.misc.BASE64Decoder().decodeBuffer(
-                    URLDecoder.decode(string, "UTF-8")));
-            }
-            catch (UnsupportedEncodingException ex) {
-                logger.error("Could not decode Base64", ex);
-                throw new RuntimeException(ex);
-            }
-        }
-        catch (IOException ex) {
+            return new String(Base64.getDecoder().decode(URLDecoder.decode(string, "UTF-8")), "UTF-8");
+
+        } catch (UnsupportedEncodingException ex) {
             logger.error("Could not decode Base64", ex);
             throw new RuntimeException(ex);
         }

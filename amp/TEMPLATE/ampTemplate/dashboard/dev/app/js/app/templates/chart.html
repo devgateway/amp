@@ -16,7 +16,7 @@
 	      <% } %>
       </div>
     </div>
-	
+
     <div class="panel-body">
       <div class="chart-container">
         <h3 class="dash-chart-diagnostic text-center"></h3>
@@ -66,16 +66,25 @@
 
       </div><!-- buttons in .pull-right -->
 
-      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>
-        <form class="form-inline dash-form dash-adj-type" role="form">
-          <select class="form-control like-btn-sm ftype-options">
-            <option>...</option>
-            <!-- gets populated after settings load -->
-          </select>
-          <span class="cheat-lineheight"></span>
-        </form>
-      <% } %>
-      
+        <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>
+          <form class="form-inline dash-form dash-adj-type" role="form">
+            <select class="form-control like-btn-sm ftype-options" style=" width: 180px; text-overflow: ellipsis;">
+              <option>...</option>
+              <!-- gets populated after settings load -->
+            </select>
+            <span class="cheat-lineheight"></span>
+          </form>
+        <% } %>
+
+        <% if (model.get('programType') && model.get('showProgramType') === true) { %>
+          <form class="form-inline dash-form dash-program-type" role="form">
+            <select class="form-control like-btn-sm program-options" style="width: 180px; text-overflow: ellipsis;">
+              <option>...</option>
+            </select>
+            <span class="cheat-lineheight"></span>
+          </form>
+        <% } %>
+
       <% if (model.get('chartType') === 'fragmentation') { %>
 		<form class="form-inline dash-form dash-xaxis-options" role="form">
         	<select class="form-control like-btn-sm xaxis-options">

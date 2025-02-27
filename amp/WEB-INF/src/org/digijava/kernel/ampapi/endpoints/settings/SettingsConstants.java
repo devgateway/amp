@@ -77,7 +77,11 @@ public class SettingsConstants {
     public static final String REPORT_DEFAULT_MAX_YEAR_RANGE = "report-default-max-year-range";
     public static final String REPORT_DEFAULT_MIN_YEAR_RANGE = "report-default-min-year-range";
 
+    public static final String PROGRAM_SETTINGS = "program-settings";
+    public static final String INDICATOR_FILTER_BY_SECTOR = "indicator-filter-by-sector";
+    public static final String INDICATOR_FILTER_BY_PROGRAM = "indicator-filter-by-program";
 
+    public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "number-of-indicators-in-dashboard";
 
 
     /** {id, value} map for settings fields ID-NAME map */
@@ -103,6 +107,10 @@ public class SettingsConstants {
         put(YEAR_FROM, "From:");
         put(YEAR_TO, "To:");
         put(YEAR_ALL, "All");
+        put(PROGRAM_SETTINGS, "Program Settings");
+        put(INDICATOR_FILTER_BY_SECTOR, "Filter by Sector");
+        put(INDICATOR_FILTER_BY_PROGRAM, "Filter by Program");
+        put(NUMBER_OF_INDICATORS_IN_DASHBOARD, "Number of indicators in M&E Dashboard");
         put(SORT_COLUMN, GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN);
         put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
         put(LIMIT_FILE_TO_UPLOAD, GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);

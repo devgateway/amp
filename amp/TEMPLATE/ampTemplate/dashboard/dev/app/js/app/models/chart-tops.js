@@ -10,10 +10,11 @@ module.exports = ChartModel.extend({
     limit: 5,
     title: '',
     bigN: 0,
-    chartType: 'top'
+    chartType: 'top',
+    showProgramType: false
   },
 
-  _prepareTranslations: function() {
+  _prepareTranslations: function () {
     var topBaseLanguage = {};
 
     /* Prepare the translations for the chart */
@@ -29,28 +30,32 @@ module.exports = ChartModel.extend({
     topBaseLanguage[chartName + 'others'] = 'Others';
 
     this.localizedTopChart = this.app.translator.translateList(topBaseLanguage)
-      .done(_(function(localizedTopChartKeyVal) {
+      .done(_(function (localizedTopChartKeyVal) {
         this.localizedLookup = localizedTopChartKeyVal;
       }).bind(this));
+
+    if (this.get('name') === 'Top Programs') {
+      this.set('showProgramType', true);
+    }
   },
 
-  parse: function(data) {
-	this.set('title', data.title);
-	  
+  parse: function (data) {
+    this.set('title', data.title);
+
     if (!this.localizedLookup) {
       // we can't procede if we don't have translations yet :(
       // this code should now be unreachable, but y'never know...
       this.app.report('Loading error', [
-      'Translations for the application were not loaded before rendering']);
+        'Translations for the application were not loaded before rendering']);
     }
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
     this.localizedOthers = this.localizedLookup[chartName + 'others'];
     if (this.localizedOthers === undefined) {
-    	console.error('missing translation in .json file: ' + chartName + 'others');
+      console.error('missing translation in .json file: ' + chartName + 'others');
     }
 
-    var values = _(data.values.slice()).map(function(v) {
+    var values = _(data.values.slice()).map(function (v) {
       var cleanName = v.name.replace(/[ :.]/g, '');
       var localizedName = v.name;
       if (this.localizedLookup[chartName + cleanName]) {
@@ -69,33 +74,33 @@ module.exports = ChartModel.extend({
     if (_(_(values).pluck('x')).uniq().length < values.length) {
       this.app.report('Data Error',
         ['The data for ' + this.get('name') + ' was inconsistent due to duplicate keys',
-        'The chart will be shown, but it may have errors or other issues as a result.']);
+          'The chart will be shown, but it may have errors or other issues as a result.']);
     }
 
-    if (data.maxLimit > values.length) { 	
-    	var other = {
-    			x: this.localizedOthers,
-    			y: data.total -  // total minus the sum of what we have
-                _.chain(values).pluck('y').reduce(function(l, r) { return l + r; }, 0).value(),
-                color: '#777',
-                special: 'others'
-        };
-        //AMP-18740: We changed the EP to send raw numbers expressed in units so we need to apply the GS here.
-    	other.z = common.formatNumber(other.y / app.generalSettings.numberDivider);
+    if (data.maxLimit > values.length) {
+      var other = {
+        x: this.localizedOthers,
+        y: data.total -  // total minus the sum of what we have
+          _.chain(values).pluck('y').reduce(function (l, r) { return l + r; }, 0).value(),
+        color: '#777',
+        special: 'others'
+      };
+      //AMP-18740: We changed the EP to send raw numbers expressed in units so we need to apply the GS here.
+      other.z = common.formatNumber(other.y / app.generalSettings.numberDivider);
 
-    	var isRtl = app.generalSettings.get("rtl-direction");
-    	if (isRtl) {
-    		values.unshift(other);
-    	} else {
-    		values.push(other);
-    	}
+      var isRtl = app.generalSettings.get("rtl-direction");
+      if (isRtl) {
+        values.unshift(other);
+      } else {
+        values.push(other);
+      }
     }
 
-    data.processed = [{values: values}];
+    data.processed = [{ values: values }];
     return data;
   },
 
-  fetch: function(options) {
+  fetch: function (options) {
     options = _.defaults(
       options || {},
       { url: this.url + '?' + param(this.pick('limit')) });

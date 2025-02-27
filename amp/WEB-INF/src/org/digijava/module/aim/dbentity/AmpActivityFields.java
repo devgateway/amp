@@ -1063,7 +1063,7 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setActivityDocuments(Set<AmpActivityDocument> activityDocuments) {
-            if (this.activityDocuments instanceof PersistentSet) {
+            if (activityDocuments instanceof PersistentSet) {
                 this.activityDocuments = activityDocuments;
             } else {
                 if(this.activityDocuments==null) {
@@ -2316,7 +2316,7 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
-            if (this.regionalObservations instanceof PersistentSet) {
+            if (regionalObservations instanceof PersistentSet) {
                 this.regionalObservations = regionalObservations;
             } else {
                 if(this.regionalObservations==null) {

@@ -57,7 +57,6 @@ public class FundingOrganisationGate extends AbstractOrgRoleGate {
             }
         }
         return false;
-
     }
 
     @Override

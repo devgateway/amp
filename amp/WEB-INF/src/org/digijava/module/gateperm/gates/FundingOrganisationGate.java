@@ -17,7 +17,7 @@ import java.util.Set;
  * Gives access to users who are members of the given organization
  */
 public class FundingOrganisationGate extends AbstractOrgRoleGate {
-    public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER  };
+    public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER, GatePermConst.ScopeKeys.CURRENT_ORG  };
 
     public static final MetaInfo[] PARAM_INFO  = new MetaInfo[] { new MetaInfo("organizationId","the id of the organization that has access") };
 

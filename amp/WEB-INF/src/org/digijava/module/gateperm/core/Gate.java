@@ -16,7 +16,7 @@ import java.util.Queue;
 
 /**
  * Gate.java TODO description here
- * 
+ *
  * @author mihai
  * @package org.digijava.module.gateperm.core
  * @since 23.08.2007
@@ -93,7 +93,7 @@ public abstract class Gate extends PropertyListable {
         for (int i = 0; mandatoryScopeKeys() != null
                 && i < mandatoryScopeKeys().length; i++) {
             Object object =  scope.get(mandatoryScopeKeys()[i]);
-            
+
             if (!scope.containsKey(mandatoryScopeKeys()[i]))
                 throw new NotBoundGateInputException(
                         "Mandatory scope parameter '" + mandatoryScopeKeys()[i]
@@ -102,8 +102,8 @@ public abstract class Gate extends PropertyListable {
         }
 
         try {
-            if(parameters!=null && parameters.size()>0) 
-                logger.debug("Parameters: "+parameters); 
+            if(parameters!=null && parameters.size()>0)
+                logger.debug("Parameters: "+parameters);
                 boolean b=logic();
                 logger.debug("Gate "+this.getClass().getSimpleName()+" "+(b?"approves":"rejects")+" access. Gate state is: "+state);
             return b;
@@ -114,8 +114,8 @@ public abstract class Gate extends PropertyListable {
     }
 
     /**
-     * overriden by subclasses to implement Gate logic
-     * 
+     * overridden by subclasses to implement Gate logic
+     *
      * @return true if the gate is open for the given inputs + parameters
      */
     public abstract boolean logic() throws Exception;

@@ -17,13 +17,13 @@ import java.util.Map;
 
 
 /**
- * GateConstants.java 
+ * GateConstants.java
  * @author mihai
  * @package org.digijava.module.gateperm.core
  * @since 05.09.2007
  */
 public final class GatePermConst {
-    
+
     public static Class[] availableGatesSingleton=null;
     public static Hashtable<String,Class> availableGatesBySimpleNames = null;
 
@@ -34,16 +34,16 @@ public final class GatePermConst {
      */
     public static final Class[] availablePermissibles = new Class[] {AmpActivityVersion.class,
         AmpModulesVisibility.class,
-        AmpFeaturesVisibility.class, 
+        AmpFeaturesVisibility.class,
         AmpFieldsVisibility.class };
 
     public static Hashtable<String,Class> availablePermissiblesBySimpleNames = null;
-    
+
     /**
      * Add here all the new actions that you may need to implement. Do not
      * forget to add them into getImplementedActions for your Permissible
      * GateConstants.Actions TODO description here
-     * 
+     *
      * @author mihai
      * @package org.digijava.module.gateperm.core
      * @since 05.09.2007
@@ -57,13 +57,14 @@ public final class GatePermConst {
 
         public static final String PUBLISH = "PUBLISH";
     }
-    
+
     public static final class ScopeKeys {
         public static final MetaInfo PERMISSIBLE=new MetaInfo("permissible","object to which the gate is associated");
         public static final MetaInfo ACTIVITY=new MetaInfo("activity","the currently edited activity");
         public static final MetaInfo CURRENT_MEMBER= new MetaInfo("currentMember","TeamMember object for the currently logged in user");
         public static final MetaInfo CURRENT_USER= new MetaInfo("currentUser","User object for the currently logged in user");
         public static final MetaInfo CURRENT_ORG= new MetaInfo("currentOrg","Current displayed organisation");
+        public static final MetaInfo CURRENT_COMPONENT= new MetaInfo("currentComponent","Current displayed component");
         public static final MetaInfo CURRENT_ORG_ROLE= new MetaInfo("currentOrgRole","Current displayed organisation role as string");
         public static final MetaInfo CURRENT_DONOR_ORGANISATION = new MetaInfo("currentDonorOrganisation",
                 "Current donor organisation as LONG");
@@ -71,11 +72,12 @@ public final class GatePermConst {
                 "in iteration in the funding popup");
         public static final MetaInfo CURRENT_REGION = new MetaInfo("currentRegion", "Current displayed region");
     }
-    
-    public static final Map<String,MetaInfo> scopeKeysMap 
+
+    public static final Map<String,MetaInfo> scopeKeysMap
     = Collections.unmodifiableMap(new HashMap<String,MetaInfo>() {{
         put(ScopeKeys.PERMISSIBLE.getCategory(), ScopeKeys.PERMISSIBLE);
         put(ScopeKeys.ACTIVITY.getCategory(), ScopeKeys.ACTIVITY);
+        put(ScopeKeys.CURRENT_COMPONENT.getCategory(), ScopeKeys.CURRENT_COMPONENT);
         put(ScopeKeys.CURRENT_MEMBER.getCategory(), ScopeKeys.CURRENT_MEMBER);
         put(ScopeKeys.CURRENT_ORG.getCategory(), ScopeKeys.CURRENT_ORG);
         put(ScopeKeys.CURRENT_ORG_ROLE.getCategory(), ScopeKeys.CURRENT_ORG_ROLE);
@@ -83,11 +85,11 @@ public final class GatePermConst {
     }});
 
 
-    
+
     public static final String SCOPE="GATEPERM_SCOPE";
-    
+
     public static final String ACTION_MODE="ACTION_MODE";
-    
+
     public static final String UPDATED_PERMISSIONS="updatedPermissions";
     public static final String ADDED_PERMISSIONS="addedPermissions";
 }

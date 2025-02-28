@@ -366,7 +366,7 @@ public class AmpDonorFundingFormSectionFeature extends
                         }
 
                     }
-                    if(!TeamUtil.getCurrentUser().getName().equalsIgnoreCase("atl@amp.org")) {
+                    if(!TeamUtil.getCurrentUser().getEmail().equalsIgnoreCase("atl@amp.org")) {
                         item.setEnabled(isEnabled);
                     }
                 }

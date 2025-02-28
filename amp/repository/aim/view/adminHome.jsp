@@ -230,6 +230,21 @@
                             </td>
                           </tr>
                         </module:display>
+
+                        <module:display name="Sector Mapping" parentModule="ADMINISTRATIVE SECTION">
+                          <tr>
+                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td class="admin_box_label">
+                              <c:set var="translation">
+                                <digi:trn invisibleLinks="true">Click here to view Sector Mapping</digi:trn>
+                              </c:set>
+                              <a href="/TEMPLATE/reampv2/build/index.html#/sector-mapping" title="${translation}">
+                                <digi:trn>Sector Mapping</digi:trn>
+                              </a>
+                            </td>
+                          </tr>
+                        </module:display>
+
                         <module:display name="Fiscal Calendar Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>

@@ -47,6 +47,9 @@ public class WorkspaceGroupGate extends Gate {
         if (userTeam == null) {
             return false;
         }
+        if (userTeam.getWorkspaceGroup() == null) {
+            return false;
+        }
         return workspaceGroupIds.stream().filter(workspaceGroupId
                 -> workspaceGroupId.equals(userTeam.getWorkspaceGroup().getId())).count() > 0;
     }

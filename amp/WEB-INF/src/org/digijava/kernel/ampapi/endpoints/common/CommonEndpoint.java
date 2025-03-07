@@ -76,6 +76,15 @@ public class CommonEndpoint implements AmpEndpoint {
         return PublicServices.buildOkResponseWithOriginHeaders(FMService.getFMSettingsResult(config));
     }
 
+    @OPTIONS
+    @Path("/fm/flatAsResponse")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeFMSettingsFlatAsResponse() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
     @POST
     @Path("/fm-by-ws-member")
     @Produces(MediaType.APPLICATION_JSON)

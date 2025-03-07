@@ -66,6 +66,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -774,6 +775,15 @@ public class Reports {
         return exporter.executor.newInstance().exportReport(report, dualReport);
     }
 
+    @OPTIONS
+    @Path("/report/columns")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeGetAllowedColumns() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
     @GET
     @Path("/report/columns")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -786,6 +796,15 @@ public class Reports {
         }
 
         return columnToDisplayName;
+    }
+
+    @OPTIONS
+    @Path("/report/measures")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeGetAllowedMeasures() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @GET

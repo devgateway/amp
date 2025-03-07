@@ -19,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,15 +58,6 @@ public class CommonEndpoint implements AmpEndpoint {
         return FMService.getFMSettingsResult(config);
     }
 
-    @OPTIONS
-    @Path("/fm/flat")
-    @ApiOperation(
-            value = "Describe options for endpoint",
-            notes = "Enables Cross-Origin Resource Sharing for endpoint")
-    public Response describeGetFMSettingsFlat() {
-        return PublicServices.buildOkResponseWithOriginHeaders("");
-    }
-
     @POST
     @Path("/fm/flatAsResponse")
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,6 +76,16 @@ public class CommonEndpoint implements AmpEndpoint {
     public Response describeFMSettingsFlatAsResponse() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
+
+    @OPTIONS
+    @Path("/fm/flat")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeGetFMSettingsFlat() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
 
     @POST
     @Path("/fm-by-ws-member")

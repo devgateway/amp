@@ -66,6 +66,15 @@ public class CommonEndpoint implements AmpEndpoint {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
+    @POST
+    @Path("/fm/flatAsResponse")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui = false, name = "fm", id = "")
+    @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options in flat mode.")
+    public Response getFMSettingsFlatAsResponse(
+            @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
+        return PublicServices.buildOkResponseWithOriginHeaders(FMService.getFMSettingsResult(config));
+    }
 
     @POST
     @Path("/fm-by-ws-member")

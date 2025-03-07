@@ -821,6 +821,14 @@ public class Reports {
         return measuresToDisplayName;
     }
 
+    @GET
+    @Path("/report/measuresAsResponse")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Get columns")
+    public final Response getAllowedMeasuresAsResponse() {
+        Map<String, String> measures = getAllowedMeasures();
+        return PublicServices.buildOkResponseWithOriginHeaders(measures);
+    }
 
     @POST
     @Path("/report/saveTab/{report_id}")

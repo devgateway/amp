@@ -811,6 +811,15 @@ public class Reports {
         return PublicServices.buildOkResponseWithOriginHeaders(measures);
     }
 
+    @OPTIONS
+    @Path("/report/measuresAsResponse")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeAllowedMeasuresAsResponse() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
     @POST
     @Path("/report/saveTab/{report_id}")
     @Produces(MediaType.APPLICATION_JSON)

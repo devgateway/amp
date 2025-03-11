@@ -59,11 +59,14 @@ public class MeService {
     }
 
 
-    public List<MEIndicatorDTO> getIndicatorsByProgram (Long programId) {
+    public List<MEIndicatorDTO> getIndicatorsByProgram(Long programId) {
         Set<AmpIndicator> programIndicators = null;
 
         try {
             programIndicators = IndicatorUtil.getThemeIndicators(programId);
+            if (programIndicators == null) {
+                return Collections.emptyList();
+            }
         } catch (Exception e) {
             throw new ApiRuntimeException(NOT_FOUND,
                     ApiError.toError("Program with id " + programId + " does not exist"));

@@ -103,6 +103,8 @@ public class IndirectProgramUpdater {
                             AmpActivityIndirectProgram.PERCENTAGE_PRECISION);
                 } else {
                     sr = null;
+                    sr = PercentagesUtil.split(new BigDecimal("100"), indirectPrograms.size(),
+                            AmpActivityIndirectProgram.PERCENTAGE_PRECISION);
                 }
 
                 for (int i = 0; i < indirectPrograms.size(); i++) {

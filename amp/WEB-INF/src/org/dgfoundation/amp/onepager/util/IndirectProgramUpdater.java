@@ -74,8 +74,7 @@ public class IndirectProgramUpdater {
             if (srcParentProgram != null) {
                 Set<AmpTheme> dstParentPrograms = mapping.computeIfAbsent(srcParentProgram, p -> newSetComparingById());
 
-                mapping.getOrDefault(srcProgram, emptySet()).stream()
-                        .map(AmpTheme::getParentThemeId)
+                mapping.getOrDefault(srcProgram, emptySet())
                         .forEach(dstParentPrograms::add);
 
                 if (!queued.contains(srcParentProgram)) {
@@ -108,7 +107,7 @@ public class IndirectProgramUpdater {
 
                 for (int i = 0; i < indirectPrograms.size(); i++) {
                     ap.addIndirectProgram(new AmpActivityIndirectProgram(indirectPrograms.get(i),
-                            sr == null ? BigDecimal.ZERO : sr.getValueFor(i)));
+                            sr == null ? null : sr.getValueFor(i)));
                 }
             }
         });

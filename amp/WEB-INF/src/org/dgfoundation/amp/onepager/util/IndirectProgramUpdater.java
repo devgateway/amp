@@ -108,7 +108,7 @@ public class IndirectProgramUpdater {
 
                 for (int i = 0; i < indirectPrograms.size(); i++) {
                     ap.addIndirectProgram(new AmpActivityIndirectProgram(indirectPrograms.get(i),
-                            sr == null ? BigDecimal.valueOf(0) : sr.getValueFor(i)));
+                            sr == null ? BigDecimal.ZERO : sr.getValueFor(i)));
                 }
             }
         });

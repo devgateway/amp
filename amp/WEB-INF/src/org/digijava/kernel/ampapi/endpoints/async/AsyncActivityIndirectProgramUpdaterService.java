@@ -45,22 +45,7 @@ public class AsyncActivityIndirectProgramUpdaterService {
                             + "            (select settingsvalue::BIGINT "
                             + "             from amp_global_settings "
                             + "             where settingsname = 'NPD Default Primary Program') "
-                            + "        and ap.program_setting = aps.amp_program_settings_id "
-                            + "        and exists( "
-                            + "              select 1 "
-                            + "              from amp_activity a, "
-                            + "                   amp_activities_categoryvalues aacv, "
-                            + "                   amp_category_class acc, "
-                            + "                   amp_category_value acv, "
-                            + "                   amp_global_settings gs "
-                            + "              where a.amp_activity_id = aacv.amp_activity_id "
-                            + "                and acv.amp_category_class_id = acc.id "
-                            + "                and acc.keyname = 'activity_status' "
-                            + "                and acv.id = aacv.amp_categoryvalue_id "
-                            + "                and gs.settingsvalue::BIGINT = acv.id "
-                            + "                and gs.settingsname = 'Closed activity status' "
-                            + "                and ap.amp_activity_id = a.amp_activity_id"
-                            + "          )";
+                            + "        and ap.program_setting = aps.amp_program_settings_id ";
                     ampActivityIds.addAll(SQLUtils.fetchLongs(conn, query));
                 });
             });

@@ -2174,7 +2174,7 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            if (contracts instanceof PersistentSet) {
+            if (contracts instanceof PersistentSet || contracts == null) {
                 this.contracts = contracts;
             } else {
                 this.contracts.clear();

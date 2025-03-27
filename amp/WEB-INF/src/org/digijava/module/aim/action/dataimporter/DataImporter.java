@@ -122,6 +122,9 @@ public class DataImporter extends Action {
                     headers.append("<option>").append(option).append("</option>");
                 }
                 headers.append("</select>");
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html;charset=UTF-8");
+
                 response.setHeader("selectTag", headers.toString());
 
                 response.setHeader("updatedMap", "");

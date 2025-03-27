@@ -23,6 +23,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StringType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -551,7 +552,7 @@ public class ImporterUtil {
                 "WHERE a.name = :name";
         Query query = session.createQuery(hql);
         query.setCacheable(true);
-        query.setString("name", projectTitle);
+        query.setParameter("name", projectTitle, StringType.INSTANCE);
 //        query.setString("projectCode", projectCode);
         List<AmpActivityVersion> ampActivityVersions = query.list();
         return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
@@ -560,6 +561,7 @@ public class ImporterUtil {
     public static void setStatus(ImportDataModel importDataModel) {
         Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
         importDataModel.setActivity_status(statusId);
+        importDataModel.setApproval_status(ApprovalStatus.started.getId());
     }
 
     public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {

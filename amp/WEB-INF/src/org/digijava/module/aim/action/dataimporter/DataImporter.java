@@ -125,8 +125,7 @@ public class DataImporter extends Action {
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("text/html;charset=UTF-8");
 
-                response.setHeader("selectTag", headers.toString());
-
+                response.getWriter().write(headers.toString());
                 response.setHeader("updatedMap", "");
 
                 dataImporterForm.getColumnPairs().clear();

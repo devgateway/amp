@@ -225,10 +225,13 @@
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
+      xhr.setRequestHeader("Accept", "text/html");  // Ensure response is HTML
+
       xhr.onload = function () {
         if (xhr.status === 200) {
-          if (xhr.getResponseHeader('selectTag') && xhr.getResponseHeader('selectTag').length >= 1) {
-            document.getElementById('headers').innerHTML = xhr.getResponseHeader('selectTag');
+          if (xhr.responseText && xhr.responseText.trim().length >= 1) {
+            // Set response HTML inside the headers div
+            document.getElementById('headers').innerHTML = xhr.responseText;
             alert("The template has been successfully uploaded.");
             document.getElementById("otherComponents").removeAttribute("hidden");
             $('#add-field').show();
@@ -236,16 +239,17 @@
             $('#selected-field').show();
             $(".fields-table").load(location.href + " .fields-table");
           } else {
-            console.error("Unable to extract headers.Please  check the file format and try again");
-            alert("Unable to extract headers.Please  check the file format and try again");
+            console.error("Unable to extract headers. Please check the file format and try again.");
+            alert("Unable to extract headers. Please check the file format and try again.");
           }
         } else {
           console.error('Error:', xhr.status);
+          alert("File upload failed. Please try again.");
         }
       };
+
       xhr.send(formData);
     }
-
 
     function uploadDataFile() {
       var formData = new FormData();

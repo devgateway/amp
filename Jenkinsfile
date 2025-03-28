@@ -114,7 +114,6 @@ stage('Build') {
                 sshagent(credentials: ['GitHubDgReadOnlyKey']) {
                     withEnv(['DOCKER_BUILDKIT=1']) {
                         sh "ssh-add -L"
-                        sh "docker system prune -a --volumes -f"
                         sh "docker build " +
                                 "--progress=plain " +
                                 "--ssh default " +
